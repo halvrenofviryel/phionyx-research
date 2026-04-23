@@ -6,7 +6,7 @@
 [![License](https://img.shields.io/badge/license-AGPL--3.0-blue.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 
-Phionyx Core SDK is a deterministic AI runtime derived from the [Echoism](https://phionyx.ai/papers/phionyx) ontological framework. It treats LLM outputs as noisy sensor measurements rather than direct decisions, enabling reproducible, auditable, and governance-grade AI systems.
+Phionyx Core SDK is a deterministic AI runtime derived from the Echoism ontological framework. It treats LLM outputs as noisy sensor measurements rather than direct decisions, enabling reproducible, auditable, and governance-grade AI systems.
 
 ---
 
@@ -24,8 +24,8 @@ Phionyx Core SDK is a deterministic AI runtime derived from the [Echoism](https:
 
 ## 📚 Documentation
 
-- **Architecture Paper**: [Phionyx: A Deterministic AI Runtime Architecture](https://phionyx.ai/papers/phionyx) — arXiv preprint
-- **Evaluation Standard**: [Phionyx Evaluation Standard v0.1](https://github.com/phionyx-research/phionyx-evaluation-standard) — Vendor-independent evaluation framework
+- **Architecture Paper**: Phionyx: A Deterministic AI Runtime Architecture — arXiv preprint (submission pending)
+- **Evaluation Standard**: Phionyx Evaluation Standard v0.1 — Vendor-independent evaluation framework (publication pending)
 
 ---
 
@@ -183,7 +183,7 @@ active = get_active_profile()
 
 ### Template Configurations
 
-Example configurations are available in `config/templates/`:
+Example configurations are available in `phionyx_core/config/templates/`:
 
 - `profile_templates.py` - Example profile configurations
 - `kpi_thresholds_template.yaml` - Example KPI thresholds
@@ -236,7 +236,7 @@ pytest --cov=phionyx_core tests/
 
 - **`get_canonical_blocks()`**: Get canonical block order (46 blocks in v3.8.0; pass `version="3.7.0"` for legacy 45-block order)
 
-See [API Reference Documentation](docs/API_REFERENCE.md) for detailed API documentation.
+See [API Reference Documentation](phionyx_core/docs/API_REFERENCE.md) for detailed API documentation.
 
 ---
 
@@ -257,8 +257,8 @@ Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for gui
 ## 🔗 Links
 
 - **Website**: https://phionyx.ai
-- **arXiv Paper**: https://phionyx.ai/papers/phionyx
-- **Evaluation Standard**: https://github.com/phionyx-research/phionyx-evaluation-standard
+- **arXiv Paper**: Submission pending
+- **Evaluation Standard**: Publication pending
 - **GitHub**: https://github.com/halvrenofviryel/phionyx-research
 
 ---
