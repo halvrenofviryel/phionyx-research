@@ -1,0 +1,222 @@
+// Phionyx v4 Protocol Buffers — 13 Canonical Schemas
+// ====================================================
+// Phase 1: Proto definitions only (no server yet)
+// Phase 2: gRPC server alongside REST
+// Phase 3: gRPC internal, REST+gRPC external
+
+syntax = "proto3";
+
+package phionyx.v4;
+
+option go_package = "phionyx/v4";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/struct.proto";
+
+// 1. InputSignal
+message InputSignal {
+  string conversation_id = 1;
+  int32 turn_id = 2;
+  string message_id = 3;
+  string user_text = 4;
+  string user_text_sha256 = 5;
+  int64 client_timestamp_ms = 6;
+  string source_module = 7;
+  string signal_type = 8;  // user_text, system_event, sensor_data, agent_message
+  repeated string modalities = 9;
+  int32 priority = 10;
+  string trace_id = 11;
+  string correlation_id = 12;
+  google.protobuf.Timestamp timestamp_utc = 13;
+  google.protobuf.Struct metadata = 14;
+}
+
+// 2. PerceptualFrame
+message PerceptualFrame {
+  float a_meas = 1;
+  float v_meas = 2;
+  float h_meas = 3;
+  float confidence = 4;
+  string modality = 5;
+  float salience = 6;
+  repeated string semantic_tags = 7;
+  map<string, float> intent_vector = 8;
+  string source_signal_id = 9;
+  google.protobuf.Timestamp frame_timestamp = 10;
+}
+
+// 3. WorldStateSnapshot
+message WorldStateSnapshot {
+  google.protobuf.Struct echo_state = 1;
+  map<string, float> belief_vector = 2;
+  string arbitration_status = 3;
+  google.protobuf.Struct causal_graph = 4;
+  repeated string active_goals = 5;
+  repeated string pending_actions = 6;
+  string snapshot_version = 7;
+  google.protobuf.Timestamp snapshot_timestamp = 8;
+  int32 turn_index = 9;
+}
+
+// 4. GoalObject
+message GoalObject {
+  string goal_id = 1;
+  string name = 2;
+  string description = 3;
+  string priority = 4;    // critical, high, medium, low
+  string status = 5;      // proposed, active, suspended, completed, failed, rejected
+  float safety_score = 6;
+  float system_score = 7;
+  float user_score = 8;
+  map<string, float> legitimacy_weights = 9;
+  string parent_goal_id = 10;
+  repeated string sub_goal_ids = 11;
+  repeated string conflict_with = 12;
+  string source_module = 13;
+  google.protobuf.Timestamp created_at = 14;
+}
+
+// 5. MemoryEntry
+message MemoryEntry {
+  string memory_id = 1;
+  string content = 2;
+  string memory_type = 3;     // episodic, semantic, procedural, working
+  string boundary_zone = 4;   // immutable, gated, adaptive
+  repeated float embedding_vector = 5;
+  float decay_rate = 6;
+  float half_life_seconds = 7;
+  float current_strength = 8;
+  string source_module = 9;
+  google.protobuf.Timestamp created_at = 10;
+  google.protobuf.Timestamp last_access = 11;
+}
+
+// 6. ActionIntent
+message ActionIntent {
+  string intent_id = 1;
+  string action_type = 2;     // respond, modify_state, external_call, store_memory, escalate, shutdown
+  string description = 3;
+  string reversibility = 4;   // fully_reversible, partially_reversible, irreversible
+  bool sandbox_required = 5;
+  bool requires_approval = 6;
+  string target_module = 7;
+  google.protobuf.Struct target_parameters = 8;
+  float confidence = 9;
+  bool ethics_cleared = 10;
+  string source_module = 11;
+  string source_goal_id = 12;
+  google.protobuf.Timestamp proposed_at = 13;
+}
+
+// 7. EthicsDecision
+message EthicsDecision {
+  string decision_id = 1;
+  string verdict = 2;           // allow, allow_with_guard, deny, escalate, defer
+  string deliberation_layer = 3; // rule_based, policy_engine, deliberative, override
+  bool enforced = 4;
+  repeated string triggered_risks = 5;
+  float max_risk_score = 6;
+  string safety_message = 7;
+  float confidence = 8;
+  float entropy_adjustment = 9;
+  float amplitude_damping = 10;
+  google.protobuf.Timestamp timestamp = 11;
+}
+
+// 8. ConfidencePayload
+message ConfidencePayload {
+  float confidence_score = 1;
+  bool is_uncertain = 2;
+  string recommendation = 3;
+  string reasoning = 4;
+  float epistemic_uncertainty = 5;
+  float aleatoric_uncertainty = 6;
+  string dominant_uncertainty = 7;
+  float ece_score = 8;
+  float ood_score = 9;
+  float t_meta = 10;
+  float self_report_delta = 11;
+  repeated float ensemble_predictions = 12;
+  string source_estimator = 13;
+  google.protobuf.Timestamp timestamp = 14;
+}
+
+// 9. WorkspaceEvent
+message WorkspaceEvent {
+  string event_id = 1;
+  string event_type = 2;
+  string salience = 3;       // critical, high, medium, low
+  float salience_score = 4;
+  string source_module = 5;
+  google.protobuf.Struct payload = 6;
+  repeated string broadcast_targets = 7;
+  repeated string acknowledged_by = 8;
+  google.protobuf.Timestamp emitted_at = 9;
+}
+
+// 10. AuditRecord
+message AuditRecord {
+  string record_id = 1;
+  int64 sequence_number = 2;
+  string previous_hash = 3;
+  string record_hash = 4;
+  string signature = 5;
+  string signer_public_key = 6;
+  int32 turn_id = 7;
+  string event_type = 8;
+  string actor = 9;
+  string action = 10;
+  google.protobuf.Struct state_snapshot = 11;
+  string input_hash = 12;
+  string output_hash = 13;
+  google.protobuf.Timestamp timestamp = 14;
+  string schema_version = 15;
+}
+
+// 11. LearningUpdate
+message LearningUpdate {
+  string update_id = 1;
+  string target_parameter = 2;
+  google.protobuf.Value current_value = 3;
+  google.protobuf.Value proposed_value = 4;
+  float delta = 5;
+  string boundary_zone = 6;
+  string gate_decision = 7;   // approved, rejected, pending, deferred
+  string gate_reason = 8;
+  float impact_score = 9;
+  repeated string affected_modules = 10;
+  string source_module = 11;
+  google.protobuf.Timestamp proposed_at = 12;
+}
+
+// 12. DiscoveryCandidate
+message DiscoveryCandidate {
+  string candidate_id = 1;
+  string description = 2;
+  float novelty_score = 3;
+  float transfer_potential = 4;
+  float robustness_score = 5;
+  float composite_score = 6;
+  repeated string source_graph_nodes = 7;
+  string domain = 8;
+  map<string, float> domain_relevance = 9;
+  repeated float embedding_vector = 10;
+  google.protobuf.Timestamp discovered_at = 11;
+}
+
+// 13. ErrorPayload
+message ErrorPayload {
+  string error_id = 1;
+  string severity = 2;       // debug, info, warning, error, critical, fatal
+  string error_code = 3;
+  string message = 4;
+  string recovery_action = 5; // retry, fallback, skip, escalate, shutdown, none
+  bool retryable = 6;
+  int32 retry_after_ms = 7;
+  string source_module = 8;
+  string source_block_id = 9;
+  repeated string affected_modules = 10;
+  bool state_corrupted = 11;
+  string trace_id = 12;
+  google.protobuf.Timestamp occurred_at = 13;
+}

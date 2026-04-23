@@ -1,0 +1,146 @@
+{
+  "version": "1.0.0",
+  "description": "Gold baseline tasks — verified-correct. Any regression blocks promotion.",
+  "tasks": [
+    {
+      "id": "gold-001",
+      "category": "physics",
+      "description": "Phi computation with default parameters produces valid output",
+      "input": {"valence": 0.5, "arousal": 0.7, "amplitude": 5.0, "entropy": 0.3, "stability": 0.8},
+      "expected": {"phi_range": [2.0, 8.0], "phi_positive": true}
+    },
+    {
+      "id": "gold-002",
+      "category": "physics",
+      "description": "Phi computation with zero valence produces base resonance",
+      "input": {"valence": 0.0, "arousal": 0.5, "amplitude": 3.0, "entropy": 0.5, "stability": 0.5},
+      "expected": {"phi_range": [0.05, 5.0], "phi_positive": true}
+    },
+    {
+      "id": "gold-003",
+      "category": "physics",
+      "description": "Phi computation with negative valence still produces resonance (v2.2 fix)",
+      "input": {"valence": -0.8, "arousal": 0.6, "amplitude": 4.0, "entropy": 0.4, "stability": 0.6},
+      "expected": {"phi_range": [0.05, 7.0], "phi_positive": true}
+    },
+    {
+      "id": "gold-004",
+      "category": "physics",
+      "description": "High entropy reduces phi cognitive component",
+      "input": {"valence": 0.5, "arousal": 0.5, "amplitude": 5.0, "entropy": 0.9, "stability": 0.5},
+      "expected": {"phi_range": [0.05, 4.0], "high_entropy_penalty": true}
+    },
+    {
+      "id": "gold-005",
+      "category": "physics",
+      "description": "Entropy Shannon computation produces valid range",
+      "input": {"probabilities": [0.25, 0.25, 0.25, 0.25]},
+      "expected": {"entropy_range": [0.0, 1.0]}
+    },
+    {
+      "id": "gold-006",
+      "category": "physics",
+      "description": "Lyapunov stability check enforces energy decay",
+      "input": {"energy_t1": 5.0, "energy_t0": 6.0, "input_energy": 0.0},
+      "expected": {"stable": true}
+    },
+    {
+      "id": "gold-007",
+      "category": "governance",
+      "description": "Kill switch triggers on ethics threshold breach",
+      "input": {"ethics_max_risk": 0.96},
+      "expected": {"triggered": true}
+    },
+    {
+      "id": "gold-008",
+      "category": "governance",
+      "description": "Kill switch does not trigger below threshold",
+      "input": {"ethics_max_risk": 0.80},
+      "expected": {"triggered": false}
+    },
+    {
+      "id": "gold-009",
+      "category": "governance",
+      "description": "HITL queue accepts and retrieves decisions",
+      "input": {"decision_id": "test-001", "context": {"action": "test"}},
+      "expected": {"queued": true, "retrievable": true}
+    },
+    {
+      "id": "gold-010",
+      "category": "governance",
+      "description": "Deliberative ethics produces valid verdict",
+      "input": {"action": "share_data", "harm_risk": 0.3},
+      "expected": {"verdict_in": ["ALLOW", "ALLOW_WITH_GUARD", "DENY", "DEFER_TO_HUMAN"]}
+    },
+    {
+      "id": "gold-011",
+      "category": "memory",
+      "description": "Memory consolidation clusters related memories",
+      "input": {"memories": ["user likes coffee", "user prefers coffee over tea", "user drinks coffee daily"]},
+      "expected": {"clusters_formed": true, "min_clusters": 1}
+    },
+    {
+      "id": "gold-012",
+      "category": "memory",
+      "description": "Memory promotion based on access count",
+      "input": {"memory": "important fact", "access_count": 10},
+      "expected": {"promoted": true}
+    },
+    {
+      "id": "gold-013",
+      "category": "causality",
+      "description": "Causal graph rejects cycles",
+      "input": {"edges": [["A", "B"], ["B", "C"], ["C", "A"]]},
+      "expected": {"cycle_rejected": true}
+    },
+    {
+      "id": "gold-014",
+      "category": "causality",
+      "description": "Intervention do(X=x) propagates correctly",
+      "input": {"graph": {"A": ["B"], "B": ["C"]}, "intervention": {"variable": "A", "value": 1.0}},
+      "expected": {"propagated": true}
+    },
+    {
+      "id": "gold-015",
+      "category": "causality",
+      "description": "Counterfactual what_if produces result",
+      "input": {"variable": "entropy", "value": 0.9},
+      "expected": {"result_exists": true}
+    },
+    {
+      "id": "gold-016",
+      "category": "pipeline",
+      "description": "Pipeline block execution returns valid BlockResult",
+      "input": {"block_id": "phi_computation", "context": {}},
+      "expected": {"status_in": ["ok", "skipped"]}
+    },
+    {
+      "id": "gold-017",
+      "category": "pipeline",
+      "description": "Pipeline topological ordering respects dependencies",
+      "input": {"blocks": ["A", "B", "C"], "deps": {"C": ["A"], "B": ["A"]}},
+      "expected": {"A_before_B": true, "A_before_C": true}
+    },
+    {
+      "id": "gold-018",
+      "category": "determinism",
+      "description": "Same input produces same phi output",
+      "input": {"valence": 0.5, "arousal": 0.5, "amplitude": 5.0, "entropy": 0.5, "stability": 0.5, "runs": 3},
+      "expected": {"all_equal": true}
+    },
+    {
+      "id": "gold-019",
+      "category": "meta",
+      "description": "Self-model reports capabilities correctly",
+      "input": {"query": "can_i_do", "capability": "causal_reasoning"},
+      "expected": {"has_answer": true}
+    },
+    {
+      "id": "gold-020",
+      "category": "meta",
+      "description": "Knowledge boundary correctly identifies OOD input",
+      "input": {"query": "quantum chromodynamics flavor mixing matrix eigenvalues"},
+      "expected": {"assessment_in": ["hedge", "admit", "refuse"]}
+    }
+  ]
+}

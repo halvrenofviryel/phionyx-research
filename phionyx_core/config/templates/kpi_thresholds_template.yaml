@@ -1,0 +1,66 @@
+# Example KPI Health Thresholds
+# ==============================
+# 
+# This file defines example health thresholds for Emotional AI NPC guarantees.
+# These thresholds are examples and should be customized based on your use case.
+#
+# Each KPI defines minimum (min) and/or maximum (max) values.
+# The system will warn if thresholds are exceeded.
+#
+# IMPORTANT: These are EXAMPLE values. Replace with your own thresholds based on:
+# - Your use case requirements
+# - Regulatory compliance needs
+# - Performance targets
+# - Risk tolerance
+
+profile_separation_index:
+  # Profile Separation Index (PSI)
+  # Distinguishability of different profiles
+  # Higher value = Better profile separation
+  min: 0.40  # EXAMPLE VALUE - Replace with your threshold
+  description: "Different profiles should respond differently to the same scenario"
+
+long_term_recall_accuracy:
+  # Long-Term Recall Accuracy (LTRA)
+  # Long-term memory accuracy
+  # Higher value = More accurate memory recall
+  min: 0.70  # EXAMPLE VALUE - Replace with your threshold
+  description: "70%+ accuracy required in 30-day memory cycle"
+
+false_memory_rate:
+  # False Memory Rate (FMR)
+  # False memory rate
+  # Lower value = Fewer false memories
+  max: 0.10  # EXAMPLE VALUE - Replace with your threshold
+  description: "False memory rate should not exceed 10%"
+
+personality_drift_index:
+  # Personality Drift Index (PDI)
+  # Personality drift index
+  # Optimal: 0.25-0.45 range (too little or too much drift is problematic)
+  min: 0.25  # EXAMPLE VALUE - Replace with your threshold
+  max: 0.45  # EXAMPLE VALUE - Replace with your threshold
+  description: "Personality should evolve over time but not be lost (optimal: 0.25-0.45)"
+
+echo_reactivity_ratio:
+  # Echo Reactivity Ratio (ERR)
+  # Internal vs external reaction balance
+  # Optimal: 0.40-0.60 range (balanced reaction)
+  min: 0.40  # EXAMPLE VALUE - Replace with your threshold
+  max: 0.60  # EXAMPLE VALUE - Replace with your threshold
+  description: "Internal and external reactions should be balanced (optimal: 0.40-0.60)"
+
+empathy_safety_score:
+  # Empathy Safety Score (ESS)
+  # Empathy and safety balance
+  # Higher value = More empathetic and safe responses
+  min: 0.80  # EXAMPLE VALUE - Replace with your threshold
+  description: "80%+ score required for empathetic and safe responses"
+
+ethical_violation_rate:
+  # Ethical Violation Rate (EVR)
+  # Ethical violation rate
+  # Ideal: 0.00 (no violations)
+  max: 0.00  # EXAMPLE VALUE - Replace with your threshold
+  description: "Ethical violations are unacceptable (0 violations target)"
+

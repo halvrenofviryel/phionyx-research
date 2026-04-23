@@ -1,0 +1,125 @@
+{
+  "version": "2.4.0",
+  "description": "Telemetry Contract - Single Source of Truth for Block Order and Telemetry Schema",
+  "canonical_block_order": [
+    "api_process_decision",
+    "engine_ensure_initialized",
+    "time_update_sot",
+    "echo_ontology_event_trace",
+    "emotion_from_neurotransmitter",
+    "emotion_estimation",
+    "create_scenario_frame",
+    "initialize_unified_state",
+    "ukf_predict",
+    "cognitive_layer",
+    "echo_ontology_transformation",
+    "low_input_gate",
+    "entropy_amplitude_pre_gate",
+    "safety_layer_pre_cep",
+    "cep_evaluation",
+    "ethics_pre_response",
+    "narrative_layer",
+    "ethics_post_response",
+    "unified_state_update_esc",
+    "phi_publish",
+    "esc_state_helper_update",
+    "drive_coherence_update",
+    "coherence_qa",
+    "entropy_amplitude_post_gate",
+    "neurotransmitter_memory_growth",
+    "audit_layer",
+    "phi_finalize",
+    "state_update_physics",
+    "response_build",
+    "phi_computation",
+    "entropy_computation"
+  ],
+  "always_on_blocks": [
+    "time_update_sot",
+    "emotion_estimation",
+    "state_update_physics",
+    "response_build",
+    "phi_computation",
+    "entropy_computation"
+  ],
+  "required_fields": {
+    "top_level": [
+      "session_id",
+      "trace_id",
+      "turn_id",
+      "blocks"
+    ],
+    "block": [
+      "block_id",
+      "category",
+      "status"
+    ]
+  },
+  "block_categories": [
+    "api",
+    "initialization",
+    "time_update",
+    "emotion",
+    "cognitive",
+    "safety",
+    "ethics",
+    "narrative",
+    "state",
+    "coherence",
+    "audit",
+    "response"
+  ],
+  "status_values": [
+    "ok",
+    "error",
+    "skipped",
+    "blocked",
+    "executed",
+    "silent",
+    "not_executed"
+  ],
+  "block_semantics": {
+    "always_on_block": {
+      "description": "Always-On Block semantic definition",
+      "requirements": [
+        "MUST appear in canonical block order",
+        "MAY emit zero events",
+        "MUST expose execution status: executed | skipped | silent"
+      ],
+      "status_meaning": {
+        "executed": "Block executed successfully (may have zero events)",
+        "skipped": "Block was skipped due to early exit or bypass condition",
+        "silent": "Block executed but emitted no events (normal for some blocks)",
+        "not_executed": "Block was not executed in this turn (initial state for canonical blocks)"
+      },
+      "note": "Always-on blocks are guaranteed to be present in every turn response, but may have zero events. This is semantically valid and does not indicate an error."
+    }
+  },
+  "semantic_rules": {
+    "monotonic_ordering": {
+      "description": "Blocks must appear in canonical order",
+      "enforced": true
+    },
+    "always_on_blocks": {
+      "description": "Always-on blocks must be present in every turn",
+      "enforced": true,
+      "semantics": "Always-on blocks MUST appear in canonical block order, MAY emit zero events, and MUST expose execution status (executed | skipped | silent)"
+    },
+    "always_on_block_status": {
+      "description": "Always-on blocks must have valid status: executed, skipped, or silent",
+      "enforced": true,
+      "valid_statuses": ["executed", "skipped", "silent"],
+      "note": "Status 'ok' is also valid but 'executed' is preferred for always-on blocks to distinguish from regular blocks"
+    },
+    "zero_events_valid": {
+      "description": "Always-on blocks may have zero events - this is semantically valid",
+      "enforced": false,
+      "note": "A block with status 'executed' or 'silent' and zero events is valid for always-on blocks"
+    },
+    "required_fields": {
+      "description": "Required fields must be present",
+      "enforced": true
+    }
+  }
+}
+

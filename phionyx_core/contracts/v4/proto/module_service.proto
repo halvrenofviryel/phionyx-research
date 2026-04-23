@@ -1,0 +1,186 @@
+// Module Service — gRPC RPC definitions
+// ========================================
+// Defines inter-module communication protocol.
+// Phase 2: gRPC server alongside REST.
+
+syntax = "proto3";
+
+package phionyx.v4;
+
+option go_package = "phionyx/v4";
+
+import "phionyx_v4.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+
+// Pipeline Execution Service
+service PipelineService {
+  // Execute full pipeline (REST equivalent: POST /api/v4/pipeline/execute)
+  rpc ExecutePipeline(PipelineRequest) returns (PipelineResponse);
+
+  // Execute single block
+  rpc ExecuteBlock(BlockRequest) returns (BlockResponse);
+
+  // Get pipeline status
+  rpc GetPipelineStatus(google.protobuf.Empty) returns (PipelineStatusResponse);
+}
+
+// Goal Management Service
+service GoalService {
+  rpc RegisterGoal(GoalObject) returns (GoalObject);
+  rpc GetActiveGoals(google.protobuf.Empty) returns (GoalList);
+  rpc EvaluateGoals(EvaluateGoalsRequest) returns (GoalList);
+  rpc CompleteGoal(GoalIdRequest) returns (GoalObject);
+}
+
+// Ethics Service
+service EthicsService {
+  rpc EvaluateAction(ActionIntent) returns (EthicsDecision);
+  rpc GetEthicsPolicy(google.protobuf.Empty) returns (EthicsPolicyResponse);
+}
+
+// Audit Service
+service AuditService {
+  rpc RecordAudit(AuditRecord) returns (AuditRecord);
+  rpc VerifyChain(VerifyChainRequest) returns (VerifyChainResponse);
+  rpc GetAuditLog(AuditLogRequest) returns (AuditLogResponse);
+}
+
+// Kill Switch Service
+service KillSwitchService {
+  rpc Activate(KillSwitchRequest) returns (KillSwitchResponse);
+  rpc Deactivate(KillSwitchRequest) returns (KillSwitchResponse);
+  rpc GetStatus(google.protobuf.Empty) returns (KillSwitchStatusResponse);
+}
+
+// Learning Gate Service
+service LearningGateService {
+  rpc EvaluateUpdate(LearningUpdate) returns (LearningUpdate);
+  rpc GetPendingApprovals(google.protobuf.Empty) returns (LearningUpdateList);
+  rpc ApproveUpdate(ApproveUpdateRequest) returns (LearningUpdate);
+}
+
+// Health Check Service
+service HealthService {
+  rpc Check(HealthCheckRequest) returns (HealthCheckResponse);
+  rpc Watch(HealthCheckRequest) returns (stream HealthCheckResponse);
+}
+
+// ---- Request/Response Messages ----
+
+message PipelineRequest {
+  InputSignal signal = 1;
+  string pipeline_version = 2;  // "2.5.0" or "3.0.0"
+  string trace_id = 3;
+}
+
+message PipelineResponse {
+  string response_text = 1;
+  WorldStateSnapshot world_state = 2;
+  ConfidencePayload confidence = 3;
+  repeated AuditRecord audit_records = 4;
+  repeated ErrorPayload errors = 5;
+  string trace_id = 6;
+  int64 execution_time_ms = 7;
+}
+
+message BlockRequest {
+  string block_id = 1;
+  InputSignal signal = 2;
+  string trace_id = 3;
+}
+
+message BlockResponse {
+  string block_id = 1;
+  string status = 2;  // ok, error, skipped
+  google.protobuf.Struct data = 3;
+  ErrorPayload error = 4;
+}
+
+message PipelineStatusResponse {
+  string version = 1;
+  int32 block_count = 2;
+  repeated string block_order = 3;
+  bool kill_switch_active = 4;
+  string circuit_breaker_state = 5;
+}
+
+message GoalList {
+  repeated GoalObject goals = 1;
+}
+
+message GoalIdRequest {
+  string goal_id = 1;
+}
+
+message EvaluateGoalsRequest {
+  string context_id = 1;
+}
+
+message EthicsPolicyResponse {
+  float risk_threshold = 1;
+  float damping_factor = 2;
+  string message_style = 3;
+}
+
+message VerifyChainRequest {
+  int64 from_sequence = 1;
+  int64 to_sequence = 2;
+}
+
+message VerifyChainResponse {
+  bool valid = 1;
+  int64 records_checked = 2;
+  repeated string issues = 3;
+}
+
+message AuditLogRequest {
+  int64 from_sequence = 1;
+  int32 limit = 2;
+}
+
+message AuditLogResponse {
+  repeated AuditRecord records = 1;
+  int64 total_count = 2;
+}
+
+message KillSwitchRequest {
+  string reason = 1;
+  string activated_by = 2;
+  string signature = 3;
+}
+
+message KillSwitchResponse {
+  bool success = 1;
+  bool is_active = 2;
+  google.protobuf.Timestamp timestamp = 3;
+}
+
+message KillSwitchStatusResponse {
+  bool is_active = 1;
+  string last_reason = 2;
+  google.protobuf.Timestamp last_activation = 3;
+}
+
+message LearningUpdateList {
+  repeated LearningUpdate updates = 1;
+}
+
+message ApproveUpdateRequest {
+  string update_id = 1;
+  string approved_by = 2;
+  string signature = 3;
+}
+
+message HealthCheckRequest {
+  string service = 1;
+}
+
+message HealthCheckResponse {
+  enum ServingStatus {
+    UNKNOWN = 0;
+    SERVING = 1;
+    NOT_SERVING = 2;
+  }
+  ServingStatus status = 1;
+}

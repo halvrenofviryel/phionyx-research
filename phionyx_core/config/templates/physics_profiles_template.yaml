@@ -1,0 +1,138 @@
+# Example Physics Profile Presets
+# ================================
+# High-level profiles for configuring physics behavior without exposing raw math.
+# Used by teachers, parents, and developers through UI sliders.
+#
+# IMPORTANT: These are EXAMPLE profiles. Replace with your own values based on:
+# - Your use case requirements
+# - Behavioral targets
+# - Safety and compliance needs
+# - Performance requirements
+
+profiles:
+  # ========================================================================
+  # EXAMPLE SCHOOL PROFILES (High Resilience, Low Reactivity)
+  # ========================================================================
+  
+  - name: SCHOOL_DEFAULT
+    base_mode: SCHOOL
+    reactivity: 0.2  # EXAMPLE VALUE
+    resilience: 0.9  # EXAMPLE VALUE
+    safety: 0.8  # EXAMPLE VALUE
+    description: |
+      Example default school profile: High resilience, low reactivity.
+      Students can make mistakes without severe penalties.
+      System remains supportive and stable.
+      Mapped to: w_c=0.75, gamma=0.1, stability=0.9
+    # Physics v2.1 Parameters (Circumplex Model)
+    valence: 0.0  # EXAMPLE VALUE - Neutral valence for supportive tone
+    arousal: 0.5  # EXAMPLE VALUE - Moderate arousal for calm learning environment
+    amplitude: 5.0  # EXAMPLE VALUE
+    entropy: 0.3  # EXAMPLE VALUE
+    stability: 0.9  # EXAMPLE VALUE
+    gamma: 0.15  # EXAMPLE VALUE
+    w_c: 0.75  # EXAMPLE VALUE - Cognitive weight
+    w_p: 0.25  # EXAMPLE VALUE - Physical weight
+    entropy_penalty_k: 1.2  # EXAMPLE VALUE - Conservative penalty for regulatory compliance
+  
+  - name: SCHOOL_STRICT
+    base_mode: SCHOOL
+    reactivity: 0.3  # EXAMPLE VALUE
+    resilience: 0.85  # EXAMPLE VALUE
+    safety: 0.95  # EXAMPLE VALUE
+    description: |
+      Example strict school profile: High safety, moderate reactivity.
+      Enforces strict rules while maintaining stability.
+      Mapped to: w_c=0.725, gamma=0.125, stability=0.85
+    valence: 0.0  # EXAMPLE VALUE
+    arousal: 0.4  # EXAMPLE VALUE
+    amplitude: 4.5  # EXAMPLE VALUE
+    entropy: 0.25  # EXAMPLE VALUE
+    stability: 0.85  # EXAMPLE VALUE
+    gamma: 0.125  # EXAMPLE VALUE
+    w_c: 0.725  # EXAMPLE VALUE
+    w_p: 0.275  # EXAMPLE VALUE
+    entropy_penalty_k: 1.3  # EXAMPLE VALUE
+  
+  # ========================================================================
+  # EXAMPLE GAME PROFILES (High Reactivity, Variable Resilience)
+  # ========================================================================
+  
+  - name: GAME_BOSS
+    base_mode: GAME
+    reactivity: 0.8  # EXAMPLE VALUE
+    resilience: 0.7  # EXAMPLE VALUE
+    safety: 0.6  # EXAMPLE VALUE
+    description: |
+      Example boss character profile: High reactivity, moderate resilience.
+      Creates dynamic and challenging interactions.
+      Mapped to: w_c=0.6, gamma=0.25, stability=0.7
+    valence: 0.3  # EXAMPLE VALUE - Slightly positive for engaging challenge
+    arousal: 0.8  # EXAMPLE VALUE - High arousal for excitement
+    amplitude: 8.0  # EXAMPLE VALUE
+    entropy: 0.6  # EXAMPLE VALUE
+    stability: 0.7  # EXAMPLE VALUE
+    gamma: 0.25  # EXAMPLE VALUE
+    w_c: 0.6  # EXAMPLE VALUE
+    w_p: 0.4  # EXAMPLE VALUE
+    entropy_penalty_k: 1.0  # EXAMPLE VALUE
+  
+  - name: GAME_COMPANION
+    base_mode: GAME
+    reactivity: 0.5  # EXAMPLE VALUE
+    resilience: 0.85  # EXAMPLE VALUE
+    safety: 0.75  # EXAMPLE VALUE
+    description: |
+      Example companion character profile: Balanced reactivity and resilience.
+      Provides supportive and consistent interactions.
+      Mapped to: w_c=0.7, gamma=0.18, stability=0.85
+    valence: 0.2  # EXAMPLE VALUE
+    arousal: 0.6  # EXAMPLE VALUE
+    amplitude: 6.0  # EXAMPLE VALUE
+    entropy: 0.4  # EXAMPLE VALUE
+    stability: 0.85  # EXAMPLE VALUE
+    gamma: 0.18  # EXAMPLE VALUE
+    w_c: 0.7  # EXAMPLE VALUE
+    w_p: 0.3  # EXAMPLE VALUE
+    entropy_penalty_k: 1.1  # EXAMPLE VALUE
+  
+  # ========================================================================
+  # EXAMPLE CLINICAL PROFILES (High Stability, Low Reactivity)
+  # ========================================================================
+  
+  - name: CLINICAL_THERAPEUTIC
+    base_mode: CLINICAL
+    reactivity: 0.2  # EXAMPLE VALUE
+    resilience: 0.95  # EXAMPLE VALUE
+    safety: 0.95  # EXAMPLE VALUE
+    description: |
+      Example therapeutic profile: High stability, low reactivity.
+      Maintains therapeutic neutrality and reliability.
+      Mapped to: w_c=0.8, gamma=0.1, stability=0.95
+    valence: 0.0  # EXAMPLE VALUE - Neutral for therapeutic neutrality
+    arousal: 0.4  # EXAMPLE VALUE - Lower arousal for calm environment
+    amplitude: 4.0  # EXAMPLE VALUE
+    entropy: 0.25  # EXAMPLE VALUE
+    stability: 0.95  # EXAMPLE VALUE - High stability for reliability
+    gamma: 0.1  # EXAMPLE VALUE
+    w_c: 0.8  # EXAMPLE VALUE - Higher cognitive weight
+    w_p: 0.2  # EXAMPLE VALUE
+    entropy_penalty_k: 1.4  # EXAMPLE VALUE - Conservative for clinical safety
+
+# ========================================================================
+# USAGE INSTRUCTIONS
+# ========================================================================
+#
+# To use these templates:
+#
+# 1. Copy the example profile that matches your use case
+# 2. Customize the values based on your requirements
+# 3. Replace "EXAMPLE VALUE" comments with your own values
+# 4. Adjust physics parameters based on your behavioral targets
+# 5. Configure base_mode, reactivity, resilience, and safety based on your needs
+#
+# For detailed information on:
+# - Physics parameters: See arXiv paper Section 4
+# - Profile configuration: See Phionyx Evaluation Standard v0.1
+# - Behavioral assessment: See technical book "Phionyx System: Deterministic AI, Observability, and Assurance"
+

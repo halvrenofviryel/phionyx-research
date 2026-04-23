@@ -1,0 +1,914 @@
+# Phionyx Research Engine — Mutable Surface Declarations
+# This file is Tier D (immutable by research agent).
+# Only humans may add, remove, or modify surface definitions.
+#
+# v2.1.0 — Full parameter coverage + AGI domain mapping
+# AGI fields: agi_domain, mind_loop_stage (per Mind-Loop Contract)
+
+version: "2.2.0"
+
+surfaces:
+  # === TIER A: Autonomous Config Tuning ===
+
+  # ── Physics Constants (14 params) ──
+  - file: "phionyx_core/physics/constants.py"
+    tier: A
+    max_lines_changed: 15
+    review_required: false
+    agi_domain: physics
+    mind_loop_stage: act
+    parameters:
+      - name: "DEFAULT_GAMMA"
+        type: float
+        current: 0.15
+        range_min: 0.05
+        range_max: 0.3
+        step: 0.01
+        description: "Physical resonance decay rate"
+
+      - name: "DEFAULT_F_SELF"
+        type: float
+        current: 0.95
+        range_min: 0.1
+        range_max: 1.0
+        step: 0.05
+        description: "Default self-frequency (Hz)"
+
+      - name: "PHI_UNIVERSE"
+        type: float
+        current: 5.0
+        range_min: 2.0
+        range_max: 10.0
+        step: 0.5
+        description: "Universe resistance constant"
+
+      - name: "STABILITY_HIGH_THRESHOLD"
+        type: float
+        current: 0.7
+        range_min: 0.5
+        range_max: 0.9
+        step: 0.05
+        description: "High resilience stability threshold"
+
+      - name: "STABILITY_LOW_THRESHOLD"
+        type: float
+        current: 0.4
+        range_min: 0.2
+        range_max: 0.6
+        step: 0.05
+        description: "Low resilience stability threshold"
+
+      - name: "ENTROPY_THRESHOLD_DEFAULT"
+        type: float
+        current: 0.5
+        range_min: 0.3
+        range_max: 0.7
+        step: 0.05
+        description: "Default entropy penalty threshold"
+
+      - name: "COHERENCE_SIGMOID_STEEPNESS"
+        type: float
+        current: 10.0
+        range_min: 5.0
+        range_max: 20.0
+        step: 1.0
+        description: "Sigmoid steepness for coherence calculation"
+
+      - name: "COHERENCE_NORMALIZATION_FACTOR"
+        type: float
+        current: 2.0
+        range_min: 1.0
+        range_max: 4.0
+        step: 0.5
+        description: "Normalization factor for residual calculation"
+
+      - name: "COHERENCE_MIDPOINT"
+        type: float
+        current: 0.5
+        range_min: 0.3
+        range_max: 0.7
+        step: 0.05
+        description: "Midpoint for sigmoid transformation"
+
+      - name: "CONFIDENCE_FACTOR_MIN"
+        type: float
+        current: 0.5
+        range_min: 0.3
+        range_max: 0.7
+        step: 0.05
+        description: "Minimum confidence factor"
+
+      - name: "CONFIDENCE_FALLBACK_COHERENCE"
+        type: float
+        current: 0.7
+        range_min: 0.5
+        range_max: 0.9
+        step: 0.05
+        description: "Fallback coherence for low confidence"
+
+      - name: "ENTROPY_BOOST_FACTOR"
+        type: float
+        current: 0.1
+        range_min: 0.01
+        range_max: 0.3
+        step: 0.01
+        description: "Entropy boost from low coherence"
+
+      - name: "ENTROPY_MIN_INVARIANT"
+        type: float
+        current: 0.01
+        range_min: 0.001
+        range_max: 0.05
+        step: 0.001
+        description: "Minimum entropy invariant floor"
+
+      - name: "TEMPORAL_ECHO_PHI_THRESHOLD"
+        type: float
+        current: 0.1
+        range_min: 0.01
+        range_max: 0.3
+        step: 0.01
+        description: "Phi threshold for temporal echo calculation"
+
+    constraints:
+      - type: sum_equals
+        name: "default_context_weights"
+        params: ["wc", "wp"]
+        target: 1.0
+      - type: less_than
+        name: "stability_threshold_ordering"
+        params: ["STABILITY_LOW_THRESHOLD", "STABILITY_HIGH_THRESHOLD"]
+
+  # ── Physics Formulas (3 params) ──
+  - file: "phionyx_core/physics/formulas.py"
+    tier: A
+    max_lines_changed: 3
+    review_required: false
+    agi_domain: physics
+    mind_loop_stage: act
+    parameters:
+      - name: "entropy_penalty_k"
+        type: float
+        current: 0.0
+        range_min: 0.0
+        range_max: 2.0
+        step: 0.05
+        description: "v2.2 Entropy penalty coefficient"
+
+      - name: "base_resonance"
+        type: float
+        current: 0.12
+        range_min: 0.05
+        range_max: 0.2
+        step: 0.01
+        description: "Base Life Support minimum resonance floor"
+
+      - name: "recovery_gain"
+        type: float
+        current: 0.19
+        range_min: 0.0
+        range_max: 0.2
+        step: 0.01
+        description: "v2.3 Recovery term coefficient"
+
+  # ── Physics Dynamics (6 params) ──
+  - file: "phionyx_core/physics/dynamics.py"
+    tier: A
+    max_lines_changed: 8
+    review_required: false
+    agi_domain: physics
+    mind_loop_stage: act
+    parameters:
+      - name: "SCHOOL_ALPHA"
+        type: float
+        current: 0.1
+        range_min: 0.05
+        range_max: 0.3
+        step: 0.01
+        description: "SCHOOL mode learning rate"
+
+      - name: "SCHOOL_BETA"
+        type: float
+        current: 0.2
+        range_min: 0.05
+        range_max: 0.4
+        step: 0.01
+        description: "SCHOOL mode entropy penalty"
+
+      - name: "GAME_ALPHA"
+        type: float
+        current: 0.3
+        range_min: 0.1
+        range_max: 0.5
+        step: 0.01
+        description: "GAME mode learning rate"
+
+      - name: "GAME_BETA"
+        type: float
+        current: 0.1
+        range_min: 0.05
+        range_max: 0.3
+        step: 0.01
+        description: "GAME mode entropy penalty"
+
+      - name: "DEFAULT_ALPHA"
+        type: float
+        current: 0.2
+        range_min: 0.1
+        range_max: 0.4
+        step: 0.01
+        description: "Default mode learning rate"
+
+      - name: "DEFAULT_BETA"
+        type: float
+        current: 0.15
+        range_min: 0.05
+        range_max: 0.3
+        step: 0.01
+        description: "Default mode entropy penalty"
+
+  # ── Physics Inertia (4 params) ──
+  - file: "phionyx_core/physics/inertia.py"
+    tier: A
+    max_lines_changed: 6
+    review_required: false
+    agi_domain: physics
+    mind_loop_stage: act
+    parameters:
+      - name: "UKF_MIN_Q"
+        type: float
+        current: 0.01
+        range_min: 0.001
+        range_max: 0.05
+        step: 0.001
+        description: "Minimum UKF process noise"
+
+      - name: "UKF_MAX_Q"
+        type: float
+        current: 0.1
+        range_min: 0.05
+        range_max: 0.5
+        step: 0.01
+        description: "Maximum UKF process noise"
+
+      - name: "DERIVATIVE_MIN_GAIN"
+        type: float
+        current: 0.1
+        range_min: 0.01
+        range_max: 0.3
+        step: 0.01
+        description: "Minimum derivative update gain"
+
+      - name: "DERIVATIVE_MAX_GAIN"
+        type: float
+        current: 1.0
+        range_min: 0.5
+        range_max: 2.0
+        step: 0.1
+        description: "Maximum derivative update gain"
+
+  # ── Physics Entropy Modulation (3 params) ──
+  - file: "phionyx_core/physics/entropy_modulation.py"
+    tier: A
+    max_lines_changed: 5
+    review_required: false
+    agi_domain: physics
+    mind_loop_stage: act
+    parameters:
+      - name: "ENTROPY_MOD_KH"
+        type: float
+        current: 1.0
+        range_min: 0.1
+        range_max: 5.0
+        step: 0.1
+        description: "Entropy modulation coefficient kH"
+
+      - name: "MIN_AMPLITUDE"
+        type: float
+        current: 0.1
+        range_min: 0.01
+        range_max: 0.5
+        step: 0.01
+        description: "Minimum response amplitude"
+
+      - name: "MAX_AMPLITUDE"
+        type: float
+        current: 10.0
+        range_min: 5.0
+        range_max: 20.0
+        step: 1.0
+        description: "Maximum response amplitude"
+
+  # ── Memory Consolidation (4 params) ──
+  - file: "phionyx_core/memory/consolidation.py"
+    tier: A
+    max_lines_changed: 5
+    review_required: false
+    agi_domain: memory
+    mind_loop_stage: update_memory
+    parameters:
+      - name: "min_cluster_size"
+        type: int
+        current: 2
+        range_min: 2
+        range_max: 5
+        step: 1
+        description: "Minimum episodic memories for semantic cluster"
+
+      - name: "similarity_threshold"
+        type: float
+        current: 0.5
+        range_min: 0.4
+        range_max: 0.8
+        step: 0.05
+        description: "Text similarity threshold for clustering"
+
+      - name: "promotion_access_threshold"
+        type: int
+        current: 3
+        range_min: 3
+        range_max: 10
+        step: 1
+        description: "Access count to promote episodic to semantic"
+
+      - name: "decay_strength_threshold"
+        type: float
+        current: 0.1
+        range_min: 0.05
+        range_max: 0.2
+        step: 0.01
+        description: "Strength below which memories decay faster"
+
+  # ── Memory Forgetting (2 params) ──
+  - file: "phionyx_core/memory/forgetting.py"
+    tier: A
+    max_lines_changed: 3
+    review_required: false
+    agi_domain: memory
+    mind_loop_stage: update_memory
+    parameters:
+      - name: "suppression_factor"
+        type: float
+        current: 0.1
+        range_min: 0.01
+        range_max: 0.3
+        step: 0.01
+        description: "Event intensity reduction on suppression"
+
+      - name: "min_intensity"
+        type: float
+        current: 0.001
+        range_min: 0.0001
+        range_max: 0.01
+        step: 0.0001
+        description: "Minimum event intensity after suppression"
+
+  # ── Causality Causal Graph (5 params) ──
+  - file: "phionyx_core/causality/causal_graph.py"
+    tier: A
+    max_lines_changed: 6
+    review_required: false
+    agi_domain: causality
+    mind_loop_stage: update_world_model
+    parameters:
+      - name: "default_confidence"
+        type: float
+        current: 0.75
+        range_min: 0.3
+        range_max: 0.8
+        step: 0.05
+        description: "Default confidence for new causal edges"
+
+      - name: "default_strength"
+        type: float
+        current: 0.75
+        range_min: 0.3
+        range_max: 0.8
+        step: 0.05
+        description: "Default strength for new causal edges"
+
+      - name: "pc_alpha"
+        type: float
+        current: 0.05
+        range_min: 0.01
+        range_max: 0.20
+        step: 0.01
+        description: "PC algorithm significance level for independence tests"
+
+      - name: "pc_min_observations"
+        type: int
+        current: 20
+        range_min: 10
+        range_max: 50
+        step: 5
+        description: "Minimum observations per node before PC discovery triggers"
+
+      - name: "pc_max_conditioning_size"
+        type: int
+        current: 3
+        range_min: 1
+        range_max: 5
+        step: 1
+        description: "Maximum conditioning set size for PC algorithm"
+
+  # ── Causality Intervention (3 params) ──
+  - file: "phionyx_core/causality/intervention.py"
+    tier: A
+    max_lines_changed: 5
+    review_required: false
+    agi_domain: causality
+    mind_loop_stage: update_world_model
+    parameters:
+      - name: "attenuation_rate"
+        type: float
+        current: 0.8
+        range_min: 0.5
+        range_max: 0.95
+        step: 0.05
+        description: "Effect attenuation per hop"
+
+      - name: "min_effect_threshold"
+        type: float
+        current: 0.01
+        range_min: 0.001
+        range_max: 0.05
+        step: 0.001
+        description: "Minimum delta to continue propagation"
+
+      - name: "max_propagation_depth"
+        type: int
+        current: 10
+        range_min: 3
+        range_max: 20
+        step: 1
+        description: "Maximum hops from intervention node"
+
+  # ── Causality Counterfactual (2 params) ──
+  - file: "phionyx_core/causality/counterfactual.py"
+    tier: A
+    max_lines_changed: 3
+    review_required: false
+    agi_domain: causality
+    mind_loop_stage: reflect
+    parameters:
+      - name: "cf_attenuation_rate"
+        type: float
+        current: 0.8
+        range_min: 0.5
+        range_max: 0.95
+        step: 0.05
+        description: "Counterfactual effect attenuation per hop"
+
+      - name: "cf_min_effect"
+        type: float
+        current: 0.01
+        range_min: 0.001
+        range_max: 0.05
+        step: 0.001
+        description: "Counterfactual minimum effect threshold"
+
+  # ── Causality Root Cause (3 params) ──
+  - file: "phionyx_core/causality/root_cause.py"
+    tier: A
+    max_lines_changed: 5
+    review_required: false
+    agi_domain: causality
+    mind_loop_stage: reflect
+    parameters:
+      - name: "rca_attenuation_rate"
+        type: float
+        current: 0.85
+        range_min: 0.5
+        range_max: 0.95
+        step: 0.05
+        description: "Root cause backward walk decay"
+
+      - name: "rca_max_depth"
+        type: int
+        current: 8
+        range_min: 3
+        range_max: 15
+        step: 1
+        description: "Root cause max search depth"
+
+      - name: "rca_min_likelihood"
+        type: float
+        current: 0.05
+        range_min: 0.01
+        range_max: 0.2
+        step: 0.01
+        description: "Root cause minimum likelihood threshold"
+
+  # ── Social Trust (4 params) ──
+  - file: "phionyx_core/social/trust_propagation.py"
+    tier: A
+    max_lines_changed: 5
+    review_required: false
+    agi_domain: social
+    mind_loop_stage: perceive
+    parameters:
+      - name: "decay_factor"
+        type: float
+        current: 0.9
+        range_min: 0.5
+        range_max: 0.99
+        step: 0.01
+        description: "Trust decay per hop"
+
+      - name: "trust_threshold"
+        type: float
+        current: 0.5
+        range_min: 0.3
+        range_max: 0.8
+        step: 0.05
+        description: "Threshold above which entity is trusted"
+
+      - name: "max_path_length"
+        type: int
+        current: 5
+        range_min: 2
+        range_max: 10
+        step: 1
+        description: "Maximum transitive trust hops"
+
+      - name: "trust_ema_alpha"
+        type: float
+        current: 0.3
+        range_min: 0.1
+        range_max: 0.5
+        step: 0.05
+        description: "EMA update weight for trust"
+
+  # ── Meta Knowledge Boundary (5 params) ──
+  - file: "phionyx_core/meta/knowledge_boundary.py"
+    tier: A
+    max_lines_changed: 6
+    review_required: false
+    agi_domain: meta
+    mind_loop_stage: perceive
+    parameters:
+      - name: "boundary_threshold"
+        type: float
+        current: 0.4
+        range_min: 0.2
+        range_max: 0.6
+        step: 0.05
+        description: "Below this = outside knowledge boundary"
+
+      - name: "hedge_threshold"
+        type: float
+        current: 0.6
+        range_min: 0.4
+        range_max: 0.8
+        step: 0.05
+        description: "Between boundary and hedge = uncertain"
+
+      - name: "weight_ood"
+        type: float
+        current: 0.4
+        range_min: 0.2
+        range_max: 0.6
+        step: 0.05
+        description: "Weight for OOD component"
+
+      - name: "weight_relevance"
+        type: float
+        current: 0.35
+        range_min: 0.15
+        range_max: 0.55
+        step: 0.05
+        description: "Weight for graph relevance"
+
+      - name: "weight_novelty"
+        type: float
+        current: 0.25
+        range_min: 0.1
+        range_max: 0.45
+        step: 0.05
+        description: "Weight for novelty component"
+
+    constraints:
+      - type: sum_equals
+        name: "knowledge_boundary_weights"
+        params: ["weight_ood", "weight_relevance", "weight_novelty"]
+        target: 1.0
+
+  # ── Meta Self-Model Drift (7 params) ──
+  - file: "phionyx_core/meta/self_model_drift.py"
+    tier: A
+    max_lines_changed: 8
+    review_required: false
+    agi_domain: meta
+    mind_loop_stage: update_self_model
+    parameters:
+      - name: "drift_threshold_low"
+        type: float
+        current: 0.05
+        range_min: 0.02
+        range_max: 0.1
+        step: 0.01
+        description: "LOW severity drift threshold"
+
+      - name: "drift_threshold_moderate"
+        type: float
+        current: 0.10
+        range_min: 0.05
+        range_max: 0.2
+        step: 0.01
+        description: "MODERATE severity drift threshold"
+
+      - name: "drift_threshold_high"
+        type: float
+        current: 0.20
+        range_min: 0.1
+        range_max: 0.35
+        step: 0.01
+        description: "HIGH severity drift threshold"
+
+      - name: "drift_threshold_critical"
+        type: float
+        current: 0.35
+        range_min: 0.2
+        range_max: 0.5
+        step: 0.01
+        description: "CRITICAL severity drift threshold"
+
+      - name: "drift_ema_alpha"
+        type: float
+        current: 0.3
+        range_min: 0.1
+        range_max: 0.5
+        step: 0.05
+        description: "EMA smoothing factor for drift"
+
+      - name: "correction_dampening"
+        type: float
+        current: 0.5
+        range_min: 0.2
+        range_max: 0.8
+        step: 0.05
+        description: "Drift correction dampening strength"
+
+      - name: "window_size"
+        type: int
+        current: 20
+        range_min: 5
+        range_max: 50
+        step: 5
+        description: "Rolling window size for confidence tracking"
+
+  # ── Planning Goal Decomposer (2 params) ──
+  - file: "phionyx_core/planning/goal_decomposer.py"
+    tier: A
+    max_lines_changed: 3
+    review_required: false
+    agi_domain: planning
+    mind_loop_stage: plan
+    parameters:
+      - name: "max_sub_goals"
+        type: int
+        current: 20
+        range_min: 5
+        range_max: 50
+        step: 5
+        description: "Maximum number of sub-goals"
+
+      - name: "default_complexity"
+        type: float
+        current: 0.5
+        range_min: 0.2
+        range_max: 0.8
+        step: 0.05
+        description: "Default sub-goal complexity"
+
+  # ── World Temporal Tracker (2 params) ──
+  - file: "phionyx_core/world/temporal_tracker.py"
+    tier: A
+    max_lines_changed: 3
+    review_required: false
+    agi_domain: world_model
+    mind_loop_stage: update_world_model
+    parameters:
+      - name: "temporal_decay_rate"
+        type: float
+        current: 0.02
+        range_min: 0.005
+        range_max: 0.1
+        step: 0.005
+        description: "Confidence decay per turn"
+
+      - name: "max_history_per_entity"
+        type: int
+        current: 100
+        range_min: 20
+        range_max: 500
+        step: 10
+        description: "Maximum state history per entity attribute"
+
+  # === TIER B: Restricted Mutable (Review Required) ===
+
+  - file: "phionyx_core/physics/formulas.py"
+    tier: B
+    max_lines_changed: 20
+    review_required: true
+    parameters: []  # Formula logic edits, not parameter changes
+
+  - file: "phionyx_core/pipeline/blocks/phi_computation.py"
+    tier: B
+    max_lines_changed: 30
+    review_required: true
+    parameters: []
+
+  - file: "phionyx_core/memory/consolidation.py"
+    tier: B
+    max_lines_changed: 20
+    review_required: true
+    parameters: []
+
+  # === TIER C: Human Approval Required ===
+
+  - file: "phionyx_core/governance/kill_switch.py"
+    tier: C
+    max_lines_changed: 10
+    review_required: true
+    proposal_only: true
+    agi_domain: governance
+    mind_loop_stage: governance_gate
+    parameters:
+      - name: "ethics_max_risk_threshold"
+        type: float
+        current: 0.95
+        range_min: 0.8
+        range_max: 0.99
+        step: 0.01
+
+      - name: "t_meta_min_threshold"
+        type: float
+        current: 0.1
+        range_min: 0.05
+        range_max: 0.25
+        step: 0.01
+
+      - name: "consecutive_drift_max"
+        type: int
+        current: 5
+        range_min: 3
+        range_max: 10
+        step: 1
+
+  - file: "phionyx_core/governance/deliberative_ethics.py"
+    tier: C
+    max_lines_changed: 8
+    review_required: true
+    proposal_only: true
+    agi_domain: governance
+    mind_loop_stage: governance_gate
+    parameters:
+      - name: "deontological_weight"
+        type: float
+        current: 0.3
+        range_min: 0.1
+        range_max: 0.5
+        step: 0.05
+        description: "Deontological framework weight"
+
+      - name: "consequentialist_weight"
+        type: float
+        current: 0.3
+        range_min: 0.1
+        range_max: 0.5
+        step: 0.05
+        description: "Consequentialist framework weight"
+
+      - name: "virtue_weight"
+        type: float
+        current: 0.2
+        range_min: 0.1
+        range_max: 0.4
+        step: 0.05
+        description: "Virtue ethics framework weight"
+
+      - name: "care_weight"
+        type: float
+        current: 0.2
+        range_min: 0.1
+        range_max: 0.4
+        step: 0.05
+        description: "Care ethics framework weight"
+
+      - name: "deny_threshold"
+        type: float
+        current: 0.6
+        range_min: 0.4
+        range_max: 0.8
+        step: 0.05
+        description: "Weighted score above this triggers DENY"
+
+      - name: "guard_threshold"
+        type: float
+        current: 0.4
+        range_min: 0.2
+        range_max: 0.6
+        step: 0.05
+        description: "Between guard and deny triggers GUARD"
+
+    constraints:
+      - type: sum_equals
+        name: "framework_weights"
+        params: ["deontological_weight", "consequentialist_weight", "virtue_weight", "care_weight"]
+        target: 1.0
+
+# === CAMPAIGNS: AGI-Focused PRE Experiment Campaigns ===
+# These define structured sweep strategies for Level 3.5 gate problems.
+# Each campaign targets a subset of surfaces with AGI-relevant metrics.
+
+campaigns:
+  - id: edge_discovery_campaign
+    label: "Causal Edge Discovery"
+    priority: 1
+    agi_impact_weight: 0.40
+    agi_target: "Level 3.5 — Causal Discovery"
+    mind_loop_stages: ["update_world_model", "plan"]
+    agi_domains: ["causality"]
+    description: "Sweep causality parameters to improve CF Self-Coherence — enriched graph achieved 0.8097"
+    success_metric: "counterfactual_self_coherence"
+    success_threshold: 0.80
+    current_baseline: 0.8097
+    target_surfaces:
+      - file: "phionyx_core/causality/causal_graph.py"
+        parameters: ["default_confidence", "default_strength", "pc_alpha", "pc_min_observations", "pc_max_conditioning_size"]
+      - file: "phionyx_core/causality/intervention.py"
+        parameters: ["attenuation_rate", "min_effect_threshold", "max_propagation_depth"]
+      - file: "phionyx_core/causality/counterfactual.py"
+        parameters: ["cf_attenuation_rate", "cf_min_effect"]
+      - file: "phionyx_core/causality/root_cause.py"
+        parameters: ["rca_attenuation_rate", "rca_max_depth", "rca_min_likelihood"]
+    constraints:
+      - "All causality parameters must maintain existing test pass rates"
+      - "CF Self-Coherence must improve without reducing other proxy scores"
+    estimated_experiments: 65
+
+  - id: goal_persistence_sweep
+    label: "Goal Persistence Cross-Session"
+    priority: 2
+    agi_impact_weight: 0.35
+    agi_target: "Level 3.5 — Goal Persistence"
+    mind_loop_stages: ["plan", "reflect"]
+    agi_domains: ["planning", "memory"]
+    description: "Optimize planning and memory parameters for cross-session goal load rate >= 80%"
+    success_metric: "cross_session_goal_load_rate"
+    success_threshold: 0.80
+    current_baseline: 0.0
+    target_surfaces:
+      - file: "phionyx_core/planning/goal_decomposer.py"
+        parameters: ["max_sub_goals", "default_complexity"]
+      - file: "phionyx_core/memory/consolidation.py"
+        parameters: ["similarity_threshold", "promotion_access_threshold"]
+      - file: "phionyx_core/memory/forgetting.py"
+        parameters: ["suppression_factor", "min_intensity"]
+    constraints:
+      - "Goal decomposition must still pass all existing tests"
+      - "Memory consolidation must not lose existing semantic memories"
+    estimated_experiments: 40
+
+  - id: learning_feedback_loop
+    label: "Learning Feedback Loop"
+    priority: 3
+    agi_impact_weight: 0.25
+    agi_target: "Level 3.5 — Online Learning"
+    mind_loop_stages: ["update_self_model", "reflect", "revise"]
+    agi_domains: ["meta"]
+    description: "Explore self-model and drift parameters for outcome-based parameter updates"
+    success_metric: "self_directed_revision_rate"
+    success_threshold: 0.50
+    current_baseline: 0.0
+    target_surfaces:
+      - file: "phionyx_core/meta/self_model_drift.py"
+        parameters: ["drift_ema_alpha", "correction_dampening", "window_size"]
+      - file: "phionyx_core/meta/knowledge_boundary.py"
+        parameters: ["boundary_threshold", "hedge_threshold"]
+    constraints:
+      - "Drift detection quality must not degrade"
+      - "Knowledge boundary accuracy must be maintained"
+      - "Nondeterminism must be explicitly marked and bounded"
+    estimated_experiments: 30
+
+  # === TIER D: Immutable ===
+
+  - file: "phionyx_core/research_engine/evaluation/scoring.py"
+    tier: D
+
+  - file: "phionyx_core/research_engine/decision.py"
+    tier: D
+
+  - file: "phionyx_core/research_engine/loop.py"
+    tier: D
+
+  - file: "phionyx_core/research_engine/PROGRAM.md"
+    tier: D
+
+  - file: "pyproject.toml"
+    tier: D
+
+  - file: "benchmarks/ci_release_gate.py"
+    tier: D

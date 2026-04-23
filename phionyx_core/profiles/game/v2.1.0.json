@@ -1,0 +1,38 @@
+{
+  "profile": "game",
+  "version": "2.1.0",
+  "description": "Game profile for interactive fiction studios (Inkle, Failbetter)",
+  "modules": {
+    "physics": "v2.1",
+    "memory": "full",
+    "intuition": "graphrag",
+    "pedagogy": "light",
+    "policy": "standard",
+    "narrative": "rich",
+    "meta": "standard"
+  },
+  "features": {
+    "gdpr_compliance": false,
+    "audit_logging": false,
+    "replay_mode": true,
+    "trust_scoring": false,
+    "scenario_authority": true
+  },
+  "physics_v2_1": {
+    "valence": 0.3,
+    "arousal": 0.8,
+    "amplitude": 7.0,
+    "entropy": 0.4,
+    "stability": 0.7,
+    "gamma": 0.2,
+    "w_c": 0.65,
+    "w_p": 0.35,
+    "description": "Slightly positive valence (0.3) for engaging narrative, high arousal (0.8) for exciting gameplay"
+  },
+  "metadata": {
+    "target_market": "Interactive fiction studios, game developers",
+    "license": "Commercial",
+    "pricing_model": "per-NPC or per-scenario"
+  }
+}
+

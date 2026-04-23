@@ -1,0 +1,91 @@
+{
+  "version": "1.1.0",
+  "description": "State schema for Phionyx Echo Engine",
+  "schema": {
+    "schema_version": {
+      "type": "string",
+      "required": true,
+      "description": "Schema version (SemVer, e.g., '1.1.0')",
+      "example": "1.1.0"
+    },
+    "H": {
+      "type": "number",
+      "required": true,
+      "description": "Entropy (0.0-1.0)",
+      "minimum": 0.0,
+      "maximum": 1.0,
+      "example": 0.5
+    },
+    "A": {
+      "type": "number",
+      "required": false,
+      "description": "Arousal (0.0-1.0)",
+      "minimum": 0.0,
+      "maximum": 1.0,
+      "example": 0.5
+    },
+    "V": {
+      "type": "number",
+      "required": false,
+      "description": "Valence (-1.0 to 1.0)",
+      "minimum": -1.0,
+      "maximum": 1.0,
+      "example": 0.0
+    },
+    "dA": {
+      "type": "number",
+      "required": false,
+      "description": "Arousal derivative (dA/dt)",
+      "example": 0.0
+    },
+    "dV": {
+      "type": "number",
+      "required": false,
+      "description": "Valence derivative (dV/dt)",
+      "example": 0.0
+    },
+    "t_local": {
+      "type": "number",
+      "required": false,
+      "description": "Time since last emotional effect (seconds)",
+      "minimum": 0.0,
+      "example": 0.0
+    },
+    "t_global": {
+      "type": "number",
+      "required": false,
+      "description": "Time since relationship start (seconds)",
+      "minimum": 0.0,
+      "example": 0.0
+    },
+    "dt": {
+      "type": "number",
+      "required": false,
+      "description": "Time delta since last update (seconds)",
+      "minimum": 0.0,
+      "example": 0.1
+    },
+    "E_tags": {
+      "type": "array",
+      "required": false,
+      "description": "Memory tags (Echoism Core v1.0)",
+      "items": {
+        "type": "string"
+      },
+      "example": []
+    },
+    "note": {
+      "type": "string",
+      "required": false,
+      "description": "NOTE: phi is NOT persisted - it's a derived metric computed from state"
+    }
+  },
+  "migrations": [
+    {
+      "from_version": "1.0.0",
+      "to_version": "1.1.0",
+      "description": "Rename user_id to participant_id, remove phi from state"
+    }
+  ]
+}
+
