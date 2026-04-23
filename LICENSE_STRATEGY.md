@@ -1,125 +1,131 @@
-# Phionyx Core SDK - Licensing Strategy
+# Phionyx Core SDK – Licensing Strategy
 
 **Dual-License Model: AGPL-3.0 + Commercial License**
 
----
-
 ## Executive Summary
 
-Phionyx Core SDK follows a **dual-license** model:
+Phionyx Core SDK is released under a dual-license model:
 
-- **Open Source**: AGPL-3.0 (copyleft — derivative works and network use must also be AGPL-3.0)
-- **Commercial License**: Available for users who cannot comply with AGPL-3.0 copyleft obligations
-- **Patent Protection**: No patent grant under AGPL-3.0 — all patent rights retained by Phionyx Research
+- **Open Source License:** AGPL-3.0
+- **Commercial License:** Available for organizations that cannot or do not wish to comply with AGPL-3.0 obligations
+- **Patent Position:** The AGPL-3.0 license includes the patent-related permissions required by the license itself for the covered contributor version. Any separate commercial licensing, trademark use, certification, hosted deployment terms, or rights outside the AGPL scope are managed separately by Phionyx Research.
+
+This means:
+
+- researchers and open-source users may use, study, modify, and deploy the SDK under AGPL-3.0 terms;
+- organizations seeking different redistribution, embedding, deployment, warranty, support, or licensing terms may request a separate commercial license;
+- the public open-source release does not by itself grant use of Phionyx trademarks, certification marks, or any separate commercial service rights.
 
 ---
 
 ## 1. Why AGPL-3.0?
 
+Phionyx Core SDK uses AGPL-3.0 because the project is intended to remain open, inspectable, and improvement-friendly, while preventing closed network deployment of modified versions without source disclosure.
+
 ### Benefits
 
-- **Copyleft protection**: Anyone modifying or using the SDK in a network service must release their source code
-- **No patent grant**: Patent rights remain fully with Phionyx Research, enabling patent licensing revenue
-- **Dual-license revenue**: Organizations wanting proprietary use must purchase a commercial license
-- **Academic-friendly**: Academic and research use is unrestricted (copyleft is not a burden for published research)
-- **Proven model**: Used by MongoDB, Grafana, Minio, and other successful open-source companies
+- **Copyleft protection:** modified versions used over a network must also make source code available under AGPL-3.0 terms.
+- **Transparency:** downstream users can inspect and audit the implementation.
+- **Research friendliness:** academic and experimental use remains open and reproducible.
+- **Commercial flexibility:** organizations needing alternative terms can obtain a separate commercial license.
 
-### Compared to Apache 2.0
+---
 
-| | Apache 2.0 | AGPL-3.0 |
+## 2. Why offer a commercial license?
+
+Some users cannot adopt AGPL-3.0 in production because of internal policy, redistribution models, proprietary integration constraints, or compliance requirements.
+
+A separate commercial license may provide, depending on the agreement:
+
+- use without AGPL copyleft obligations;
+- proprietary embedding or redistribution rights;
+- negotiated support, warranty, or indemnity terms;
+- commercial deployment permissions under separate contractual conditions.
+
+This is the basis of the dual-license approach.
+
+---
+
+## 3. Patent position
+
+Phionyx Research retains ownership of its intellectual property, including copyrights, branding, and any patent rights not otherwise granted by the applicable open-source license.
+
+Important clarification:
+
+- the open-source release is made under **AGPL-3.0**;
+- any patent-related permissions that arise under AGPL-3.0 apply within that license framework;
+- **commercial rights outside AGPL-3.0**, including separately negotiated patent, deployment, support, branding, certification, or enterprise-use rights, are handled only through a separate written agreement.
+
+### In plain language
+
+Using the SDK under AGPL-3.0 does **not** make a user a commercial partner, certified implementer, or trademark licensee of Phionyx Research.
+
+---
+
+## 4. Compared to permissive licensing
+
+| Topic | Apache 2.0 style approach | AGPL-3.0 approach used by Phionyx |
 |---|---|---|
-| Patent grant | Automatic for SDK users | None — retained |
-| Copyleft | No | Yes — source disclosure required |
-| Commercial use without license | Unrestricted | Must comply with copyleft |
-| Revenue potential | Lower | Higher (dual-license + patent) |
-| Academic adoption | High | High (copyleft not a burden) |
+| Copyleft | No | Yes |
+| Network source disclosure | No | Yes |
+| Proprietary internal/service use without copyleft obligations | Easier | Requires AGPL compliance or separate commercial license |
+| Commercial dual-license leverage | Lower | Higher |
+| Downstream transparency | Lower | Higher |
+
+Phionyx intentionally uses AGPL-3.0 because the project is designed as an auditable runtime layer, where transparency and reciprocal openness are strategically important.
 
 ---
 
-## 2. Dual-License Boundary
+## 5. What is open-source, and what is separate?
 
-### AGPL-3.0 (Open Source)
+### Covered by the public AGPL release
+- the public source code in this repository;
+- modifications and redistributions made under AGPL-3.0 terms;
+- research and open-source use consistent with AGPL-3.0.
 
-Available to everyone:
-
-- Core pipeline orchestration
-- EchoState and structured state management
-- Risk scoring interface
-- Policy hooks (interface)
-- SDK API contracts
-- Evaluation hooks (standard compliance)
-
-### Commercial License (Paid)
-
-For organizations that cannot or prefer not to comply with AGPL-3.0:
-
-- Same Core SDK code, different license terms
-- No source-disclosure obligation
-- May include patent license
-- Custom support and SLA options
-
-### Proprietary Products (Separate)
-
-Not part of the Core SDK, always require commercial license:
-
-- Governance Node (decision authority, 4-gate structure)
-- Evidence Store (audit logs, replay database)
-- Certification Engine (compliance verification)
+### Not automatically granted by the public release
+- trademark use of **Phionyx**;
+- certification or endorsement by Phionyx Research;
+- commercial warranty/support commitments;
+- custom enterprise deployment terms;
+- separate commercial patent or licensing agreements beyond the AGPL framework.
 
 ---
 
-## 3. Patent + License Alignment
+## 6. Commercial licensing path
 
-### Structure
+Organizations that need different terms may request a commercial license from Phionyx Research.
 
-1. **Core SDK LICENSE** (AGPL-3.0)
-   - Open source with copyleft
-   - No patent grant
+Typical reasons include:
 
-2. **PATENT_NOTICE.md** (separate file)
-   - Lists related patents (4 families, 66 claims)
-   - Clarifies patent rights retention
-   - Defines commercial licensing path
+- proprietary embedding;
+- closed-source distribution;
+- internal legal policy against AGPL deployment;
+- enterprise procurement requirements;
+- support and contractual assurance needs.
 
-### Revenue Streams
-
-| Stream | Source |
-|---|---|
-| Patent licensing | Independent implementations of patented methods |
-| Commercial SDK license | Organizations avoiding AGPL-3.0 copyleft |
-| Proprietary products | Governance Node, Evidence Store, Certification |
-| Book sales | Amazon KDP (passive income) |
+Contact: **founder@phionyx.ai**
 
 ---
 
-## 4. Competitive Protection
+## 7. Practical interpretation
 
-### If Competitor Forks Core SDK
+### If you are a researcher or open-source developer
+You may use the SDK under AGPL-3.0.
 
-**Under AGPL-3.0:**
-1. They must release their modifications under AGPL-3.0
-2. If they use it in a network service, they must release all source code
-3. No patent rights transfer — they may need a patent license
-4. They cannot offer a proprietary version without a commercial license from us
+### If you modify the SDK and deploy it as a network service
+You must comply with AGPL-3.0 obligations.
 
-**Result**: Much stronger protection than Apache 2.0.
+### If you want to integrate the SDK into a proprietary offering without AGPL obligations
+You need a separate commercial license.
 
----
-
-## 5. Files
-
-- `LICENSE`: AGPL-3.0 license text
-- `PATENT_NOTICE.md`: Patent information and commercial licensing
-- `LICENSE_STRATEGY.md`: This document (strategic overview)
+### If you want to use the Phionyx name, claim certification, or obtain enterprise assurances
+You need separate permission or agreement.
 
 ---
 
-## 6. Contact
+## 8. No legal advice
 
-- **Open Source License**: See LICENSE file (AGPL-3.0)
-- **Patent Information**: See PATENT_NOTICE.md
-- **Commercial Licensing**: founder@phionyx.ai
-
----
-
-**Last Updated**: 2026-04-23
+This document is a practical licensing summary, not legal advice.  
+The legally controlling terms for the open-source release are those of the **GNU Affero General Public License v3.0**.  
+Commercial rights, if any, exist only if granted through a separate written agreement by Phionyx Research.
