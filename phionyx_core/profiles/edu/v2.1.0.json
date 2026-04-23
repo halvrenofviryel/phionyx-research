@@ -1,0 +1,38 @@
+{
+  "profile": "edu",
+  "version": "2.1.0",
+  "description": "Educational profile for schools and mental health platforms (Kooth, Smoothwall)",
+  "modules": {
+    "physics": "v2.1",
+    "memory": "standard",
+    "intuition": "null",
+    "pedagogy": "strict_school",
+    "policy": "standard",
+    "narrative": "simple",
+    "meta": "standard"
+  },
+  "features": {
+    "gdpr_compliance": true,
+    "audit_logging": true,
+    "replay_mode": true,
+    "trust_scoring": true,
+    "safety_boundary": true
+  },
+  "physics_v2_1": {
+    "valence": 0.0,
+    "arousal": 0.5,
+    "amplitude": 5.0,
+    "entropy": 0.3,
+    "stability": 0.9,
+    "gamma": 0.15,
+    "w_c": 0.75,
+    "w_p": 0.25,
+    "description": "Neutral valence (0.0) for supportive tone, moderate arousal (0.5) for calm learning environment"
+  },
+  "metadata": {
+    "target_market": "Schools, EdTech platforms",
+    "license": "Commercial",
+    "pricing_model": "per-student or per-school"
+  }
+}
+

@@ -1,0 +1,31 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite the arXiv paper below."
+title: "Phionyx Core SDK"
+version: 0.2.0
+date-released: "2026-04-23"
+authors:
+  - family-names: Abak
+    given-names: Ali Toygar
+    affiliation: Phionyx Research
+    email: founder@phionyx.ai
+license: AGPL-3.0-or-later
+url: "https://phionyx.ai"
+repository-code: "https://github.com/halvrenofviryel/phionyx-research"
+keywords:
+  - deterministic-ai
+  - runtime-architecture
+  - ai-governance
+  - pre-response-control
+  - structured-state
+  - llm-safety
+preferred-citation:
+  type: article
+  title: "Phionyx: A Deterministic AI Runtime Architecture with Structured State Management and Pre-Response Governance"
+  authors:
+    - family-names: Abak
+      given-names: Ali Toygar
+      affiliation: Phionyx Research
+  year: 2026
+  institution:
+    name: Phionyx Research
+  url: "https://phionyx.ai/papers/phionyx"

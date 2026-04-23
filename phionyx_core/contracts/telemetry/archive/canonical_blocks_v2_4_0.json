@@ -1,0 +1,52 @@
+{
+  "contract_version": "2.4.0",
+  "description": "Canonical block order for telemetry contract v2.4.0 - Single source of truth",
+  "canonical_block_order": [
+    "api_process_decision",
+    "engine_ensure_initialized",
+    "time_update_sot",
+    "echo_ontology_event_trace",
+    "emotion_from_neurotransmitter",
+    "emotion_estimation",
+    "create_scenario_frame",
+    "initialize_unified_state",
+    "ukf_predict",
+    "cognitive_layer",
+    "echo_ontology_transformation",
+    "low_input_gate",
+    "entropy_amplitude_pre_gate",
+    "safety_layer_pre_cep",
+    "cep_evaluation",
+    "ethics_pre_response",
+    "narrative_layer",
+    "ethics_post_response",
+    "unified_state_update_esc",
+    "phi_publish",
+    "esc_state_helper_update",
+    "drive_coherence_update",
+    "coherence_qa",
+    "entropy_amplitude_post_gate",
+    "neurotransmitter_memory_growth",
+    "audit_layer",
+    "phi_finalize",
+    "state_update_physics",
+    "response_build",
+    "phi_computation",
+    "entropy_computation"
+  ],
+  "required_event_types": [
+    "start_turn",
+    "tool_call",
+    "verifier_disagreement",
+    "state_snapshot",
+    "audit_integrity",
+    "end_turn"
+  ],
+  "notes": [
+    "This file is the single source of truth for canonical block order",
+    "Both backend and frontend should import/read from this file",
+    "Total blocks: 31",
+    "Always-on blocks: time_update_sot, emotion_estimation, state_update_physics, response_build, phi_computation, entropy_computation"
+  ]
+}
+

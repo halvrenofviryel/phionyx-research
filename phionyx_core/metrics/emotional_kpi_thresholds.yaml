@@ -1,0 +1,60 @@
+# Emotional KPI Health Thresholds
+# ================================
+# 
+# This file defines health thresholds for Emotional AI NPC guarantees.
+# These thresholds are determined according to academic standards and Phionyx 2.0 architecture.
+#
+# Each KPI defines minimum (min) and/or maximum (max) values.
+# The system will warn if thresholds are exceeded.
+
+profile_separation_index:
+  # Profile Separation Index (PSI)
+  # Farklı profillerin ayırt edilebilirliği
+  # Yüksek değer = Daha iyi profil ayrımı
+  min: 0.40
+  description: "Different profiles should respond differently to the same scenario"
+
+long_term_recall_accuracy:
+  # Long-Term Recall Accuracy (LTRA)
+  # Uzun vadeli hafıza doğruluğu
+  # Yüksek değer = Daha doğru hafıza geri çağırma
+  min: 0.70
+  description: "70%+ accuracy required in 30-day memory cycle"
+
+false_memory_rate:
+  # False Memory Rate (FMR)
+  # Yanlış hafıza oranı
+  # Düşük değer = Daha az yanlış hafıza
+  max: 0.10
+  description: "False memory rate should not exceed 10%"
+
+personality_drift_index:
+  # Personality Drift Index (PDI)
+  # Kişilik kayması indeksi
+  # Optimal: 0.25-0.45 arası (çok az veya çok fazla kayma sorunlu)
+  min: 0.25
+  max: 0.45
+  description: "Personality should evolve over time but not be lost (optimal: 0.25-0.45)"
+
+echo_reactivity_ratio:
+  # Echo Reactivity Ratio (ERR)
+  # İçsel vs dışsal reaksiyon dengesi
+  # Optimal: 0.40-0.60 arası (dengeli reaksiyon)
+  min: 0.40
+  max: 0.60
+  description: "Internal and external reactions should be balanced (optimal: 0.40-0.60)"
+
+empathy_safety_score:
+  # Empathy Safety Score (ESS)
+  # Empati ve güvenlik dengesi
+  # Yüksek değer = Daha güvenli ve empatik yanıtlar
+  min: 0.80
+  description: "80%+ score required for empathetic and safe responses"
+
+ethical_violation_rate:
+  # Ethical Violation Rate (EVR)
+  # Etik ihlal oranı
+  # İdeal: 0.00 (hiç ihlal yok)
+  max: 0.00
+  description: "Ethical violations are unacceptable (0 violations target)"
+

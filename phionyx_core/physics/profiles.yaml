@@ -1,0 +1,168 @@
+# Physics Profile Presets
+# =======================
+# High-level profiles for configuring physics behavior without exposing raw math.
+# Used by teachers, parents, and developers through UI sliders.
+
+profiles:
+  # ========================================================================
+  # SCHOOL PROFILES (High Resilience, Low Reactivity)
+  # ========================================================================
+  
+  - name: SCHOOL_DEFAULT
+    base_mode: SCHOOL
+    reactivity: 0.2
+    resilience: 0.9
+    safety: 0.8
+    description: |
+      Default school profile: High resilience, low reactivity.
+      Students can make mistakes without severe penalties.
+      System remains supportive and stable.
+      Mapped to: w_c=0.75, gamma=0.1, stability=0.9
+    # Physics v2.1 Parameters (Circumplex Model)
+    valence: 0.0  # Neutral valence for supportive tone
+    arousal: 0.5  # Moderate arousal for calm learning environment
+    amplitude: 5.0
+    entropy: 0.3
+    stability: 0.9
+    gamma: 0.15
+    w_c: 0.75
+    w_p: 0.25
+    entropy_penalty_k: 1.2  # Conservative penalty for regulatory compliance
+  
+  - name: SCHOOL_STRICT
+    base_mode: SCHOOL
+    reactivity: 0.3
+    resilience: 0.85
+    safety: 0.95
+    description: |
+      Strict school profile: High safety, moderate reactivity.
+      Enforces strict rules while maintaining stability.
+      Mapped to: w_c=0.725, gamma=0.125, stability=0.85
+  
+  # ========================================================================
+  # GAME PROFILES (High Reactivity, Variable Resilience)
+  # ========================================================================
+  
+  - name: GAME_BOSS
+    base_mode: GAME
+    reactivity: 0.8
+    resilience: 0.7
+    safety: 0.6
+    description: |
+      Boss NPC profile: High reactivity, high resilience.
+      Responds quickly to player actions (high w_p, high gamma).
+      Maintains character integrity (high stability).
+      Mapped to: w_c=0.65, w_p=0.35, gamma=0.25, stability=0.7
+    # Physics v2.1 Parameters (Circumplex Model)
+    valence: 0.3  # Slightly positive for engaging narrative
+    arousal: 0.8  # High arousal for exciting gameplay
+    amplitude: 7.0
+    entropy: 0.4
+    stability: 0.7
+    gamma: 0.2
+    w_c: 0.65
+    w_p: 0.35
+    entropy_penalty_k: 0.9  # More tolerant to entropy for gameplay
+  
+  - name: GAME_FRAGILE
+    base_mode: GAME
+    reactivity: 0.9
+    resilience: 0.3
+    safety: 0.5
+    description: |
+      Fragile NPC profile: Very high reactivity, low resilience.
+      Reacts strongly to player actions but easily destabilized.
+      Mapped to: w_c=0.45, w_p=0.55, gamma=0.275, stability=0.3
+  
+  - name: GAME_BALANCED
+    base_mode: GAME
+    reactivity: 0.5
+    resilience: 0.5
+    safety: 0.5
+    description: |
+      Balanced game profile: Equal reactivity and resilience.
+      Standard NPC behavior.
+      Mapped to: w_c=0.55, w_p=0.45, gamma=0.175, stability=0.5
+  
+  # ========================================================================
+  # THERAPY PROFILES (Maximum Resilience, Low Reactivity)
+  # ========================================================================
+  
+  - name: THERAPY_SUPPORT
+    base_mode: THERAPY
+    reactivity: 0.1
+    resilience: 0.95
+    safety: 0.9
+    description: |
+      Therapy support profile: Maximum resilience, minimal reactivity.
+      System remains stable and supportive regardless of user input.
+      Mapped to: w_c=0.775, w_p=0.225, gamma=0.075, stability=0.95
+    # Physics v2.1 Parameters (Circumplex Model)
+    valence: 0.0  # Neutral valence for therapeutic neutrality
+    arousal: 0.3  # Low arousal for calm, supportive environment
+    amplitude: 4.0
+    entropy: 0.2
+    stability: 0.95
+    gamma: 0.1
+    w_c: 0.8
+    w_p: 0.2
+    entropy_penalty_k: 1.3  # Strong regulation for clinical safety
+  
+  - name: THERAPY_GENTLE
+    base_mode: THERAPY
+    reactivity: 0.15
+    resilience: 0.9
+    safety: 0.85
+    description: |
+      Gentle therapy profile: High resilience, very low reactivity.
+      Provides gentle guidance without overwhelming the user.
+      Mapped to: w_c=0.75, w_p=0.25, gamma=0.0875, stability=0.9
+  
+  # ========================================================================
+  # ENTERPRISE BANKING PROFILES (Maximum Safety, Low Entropy)
+  # ========================================================================
+  
+  - name: BANK_STRICT
+    base_mode: SCHOOL
+    reactivity: 0.2
+    resilience: 0.9
+    safety: 1.0
+    description: |
+      Enterprise banking profile: Maximum safety, high resilience, low reactivity.
+      Designed for financial/banking use cases where hallucinated numbers are unacceptable.
+      Zero tolerance for chaos - responses must be boring, stable, and factually accurate.
+      Mapped to: w_c=0.75, gamma=0.1, stability=0.9, max_entropy=0.3
+    # Physics v2.1 Parameters (Circumplex Model)
+    valence: 0.0  # Neutral valence for professional tone
+    arousal: 0.2  # Very low arousal for calm, professional environment
+    amplitude: 3.0  # Low amplitude for conservative responses
+    entropy: 0.3  # Low entropy threshold
+    stability: 0.9  # High stability for consistent behavior
+    gamma: 0.1  # Low decay rate (slow, deliberate responses)
+    w_c: 0.75  # High cognitive weight (stability focus)
+    w_p: 0.25  # Low physical weight (response focus)
+    entropy_penalty_k: 1.5  # Strong entropy penalty for regulatory compliance
+    max_entropy: 0.3  # Maximum entropy threshold (hard limit)
+  
+  # ========================================================================
+  # DEVELOPER PROFILES (Customizable)
+  # ========================================================================
+  
+  - name: DEV_TEST
+    base_mode: DEFAULT
+    reactivity: 0.5
+    resilience: 0.5
+    safety: 0.5
+    description: |
+      Developer test profile: Balanced defaults for testing.
+      Mapped to: w_c=0.55, w_p=0.45, gamma=0.175, stability=0.5
+  
+  - name: DEV_PERFORMANCE
+    base_mode: GAME
+    reactivity: 0.95
+    resilience: 0.8
+    safety: 0.4
+    description: |
+      Performance test profile: Maximum reactivity for stress testing.
+      Mapped to: w_c=0.7, w_p=0.3, gamma=0.2875, stability=0.8
+

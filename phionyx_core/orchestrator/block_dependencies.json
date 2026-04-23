@@ -1,0 +1,445 @@
+{
+  "version": "1.0.0",
+  "description": "Block dependency graph for 46-block pipeline (v3.8.0)",
+  "dependencies": {
+    "api_process_decision": {
+      "dependencies": [],
+      "metadata_needs": []
+    },
+    "engine_ensure_initialized": {
+      "dependencies": [],
+      "metadata_needs": []
+    },
+    "time_update_sot": {
+      "dependencies": [],
+      "metadata_needs": []
+    },
+    "echo_ontology_event_trace": {
+      "dependencies": [],
+      "metadata_needs": [
+        "t_now"
+      ]
+    },
+    "emotion_from_neurotransmitter": {
+      "dependencies": [],
+      "metadata_needs": [
+        "mode"
+      ]
+    },
+    "emotion_estimation": {
+      "dependencies": [],
+      "metadata_needs": []
+    },
+    "create_scenario_frame": {
+      "dependencies": [],
+      "metadata_needs": [
+        "physics_params"
+      ]
+    },
+    "initialize_unified_state": {
+      "dependencies": [
+        "create_scenario_frame"
+      ],
+      "metadata_needs": [
+        "frame",
+        "physics_params",
+        "time_delta"
+      ]
+    },
+    "ukf_predict": {
+      "dependencies": [
+        "initialize_unified_state"
+      ],
+      "metadata_needs": [
+        "time_delta",
+        "unified_state"
+      ]
+    },
+    "cognitive_layer": {
+      "dependencies": [
+        "create_scenario_frame"
+      ],
+      "metadata_needs": [
+        "frame",
+        "physics_params"
+      ]
+    },
+    "echo_ontology_transformation": {
+      "dependencies": [
+        "create_scenario_frame"
+      ],
+      "metadata_needs": [
+        "trace_result",
+        "frame"
+      ]
+    },
+    "low_input_gate": {
+      "dependencies": [],
+      "metadata_needs": []
+    },
+    "entropy_amplitude_pre_gate": {
+      "dependencies": [
+        "echo_ontology_transformation",
+        "cognitive_layer",
+        "initialize_unified_state"
+      ],
+      "metadata_needs": [
+        "cognitive_state",
+        "unified_state",
+        "enhanced_context_string"
+      ]
+    },
+    "safety_layer_pre_cep": {
+      "dependencies": [
+        "cognitive_layer",
+        "create_scenario_frame"
+      ],
+      "metadata_needs": [
+        "cognitive_state",
+        "frame",
+        "context_string"
+      ]
+    },
+    "cep_evaluation": {
+      "dependencies": [
+        "cognitive_layer",
+        "narrative_layer",
+        "create_scenario_frame"
+      ],
+      "metadata_needs": [
+        "narrative_text",
+        "cognitive_state",
+        "frame"
+      ]
+    },
+    "ethics_pre_response": {
+      "dependencies": [
+        "cognitive_layer",
+        "create_scenario_frame"
+      ],
+      "metadata_needs": [
+        "cognitive_state",
+        "frame"
+      ]
+    },
+    "narrative_layer": {
+      "dependencies": [
+        "echo_ontology_transformation",
+        "state_update_physics",
+        "cognitive_layer",
+        "create_scenario_frame"
+      ],
+      "metadata_needs": [
+        "enhanced_context_string",
+        "system_prompt",
+        "physics_state",
+        "selected_intent",
+        "frame"
+      ]
+    },
+    "ethics_post_response": {
+      "dependencies": [
+        "cognitive_layer",
+        "narrative_layer",
+        "create_scenario_frame"
+      ],
+      "metadata_needs": [
+        "narrative_text",
+        "cognitive_state",
+        "frame"
+      ]
+    },
+    "unified_state_update_esc": {
+      "dependencies": [
+        "state_update_physics",
+        "initialize_unified_state"
+      ],
+      "metadata_needs": [
+        "physics_state",
+        "unified_state"
+      ]
+    },
+    "phi_publish": {
+      "dependencies": [
+        "phi_computation",
+        "phi_publish",
+        "initialize_unified_state"
+      ],
+      "metadata_needs": [
+        "phi_components",
+        "phi",
+        "unified_state"
+      ]
+    },
+    "esc_state_helper_update": {
+      "dependencies": [
+        "state_update_physics",
+        "initialize_unified_state"
+      ],
+      "metadata_needs": [
+        "physics_state",
+        "unified_state"
+      ]
+    },
+    "drive_coherence_update": {
+      "dependencies": [
+        "state_update_physics",
+        "narrative_layer",
+        "initialize_unified_state"
+      ],
+      "metadata_needs": [
+        "narrative_text",
+        "physics_state",
+        "unified_state"
+      ]
+    },
+    "coherence_qa": {
+      "dependencies": [
+        "narrative_layer",
+        "initialize_unified_state"
+      ],
+      "metadata_needs": [
+        "narrative_text",
+        "unified_state"
+      ]
+    },
+    "entropy_amplitude_post_gate": {
+      "dependencies": [
+        "state_update_physics"
+      ],
+      "metadata_needs": [
+        "physics_state"
+      ]
+    },
+    "neurotransmitter_memory_growth": {
+      "dependencies": [
+        "state_update_physics",
+        "narrative_layer"
+      ],
+      "metadata_needs": [
+        "narrative_text",
+        "physics_state"
+      ]
+    },
+    "audit_layer": {
+      "dependencies": [
+        "state_update_physics",
+        "narrative_layer",
+        "initialize_unified_state",
+        "create_scenario_frame"
+      ],
+      "metadata_needs": [
+        "narrative_text",
+        "physics_state",
+        "frame",
+        "unified_state"
+      ]
+    },
+    "phi_finalize": {
+      "dependencies": [
+        "phi_computation",
+        "phi_publish",
+        "initialize_unified_state"
+      ],
+      "metadata_needs": [
+        "phi_components",
+        "phi",
+        "unified_state"
+      ]
+    },
+    "state_update_physics": {
+      "dependencies": [
+        "low_input_gate",
+        "state_update_physics",
+        "initialize_unified_state"
+      ],
+      "metadata_needs": [
+        "physics_state",
+        "early_exit_triggered",
+        "unified_state"
+      ]
+    },
+    "response_build": {
+      "dependencies": [
+        "narrative_layer",
+        "cep_evaluation",
+        "low_input_gate",
+        "echo_ontology_transformation",
+        "initialize_unified_state",
+        "cognitive_layer",
+        "state_update_physics",
+        "create_scenario_frame"
+      ],
+      "metadata_needs": [
+        "strategy",
+        "confidence_result",
+        "cep_flags",
+        "narrative_text",
+        "early_exit_triggered",
+        "memory_result",
+        "cep_metrics",
+        "enhanced_context_string",
+        "esc_available",
+        "unified_state",
+        "physics_state",
+        "entropy_modulated_amplitude",
+        "growth_metrics",
+        "clarifying_question",
+        "emotional_state",
+        "behavior_modulation",
+        "frame",
+        "mode"
+      ]
+    },
+    "phi_computation": {
+      "dependencies": [
+        "state_update_physics"
+      ],
+      "metadata_needs": [
+        "physics_state"
+      ]
+    },
+    "entropy_computation": {
+      "dependencies": [
+        "narrative_layer"
+      ],
+      "metadata_needs": [
+        "narrative_text"
+      ]
+    }
+  },
+  "metadata_producers": {
+    "unified_state": [
+      "esc_state_helper_update",
+      "unified_state_update_esc",
+      "phi_finalize",
+      "audit_layer",
+      "state_update_physics",
+      "response_build",
+      "entropy_amplitude_pre_gate",
+      "coherence_qa",
+      "phi_publish",
+      "drive_coherence_update",
+      "ukf_predict"
+    ],
+    "physics_state": [
+      "esc_state_helper_update",
+      "unified_state_update_esc",
+      "narrative_layer",
+      "audit_layer",
+      "response_build",
+      "entropy_amplitude_post_gate",
+      "phi_computation",
+      "state_update_physics",
+      "neurotransmitter_memory_growth",
+      "drive_coherence_update"
+    ],
+    "frame": [
+      "narrative_layer",
+      "cep_evaluation",
+      "echo_ontology_transformation",
+      "audit_layer",
+      "initialize_unified_state",
+      "cognitive_layer",
+      "ethics_post_response",
+      "ethics_pre_response",
+      "response_build",
+      "safety_layer_pre_cep"
+    ],
+    "narrative_text": [
+      "entropy_computation",
+      "cep_evaluation",
+      "audit_layer",
+      "response_build",
+      "ethics_post_response",
+      "coherence_qa",
+      "neurotransmitter_memory_growth",
+      "drive_coherence_update"
+    ],
+    "cognitive_state": [
+      "cep_evaluation",
+      "ethics_pre_response",
+      "ethics_post_response",
+      "entropy_amplitude_pre_gate",
+      "safety_layer_pre_cep"
+    ],
+    "physics_params": [
+      "cognitive_layer",
+      "initialize_unified_state",
+      "create_scenario_frame"
+    ],
+    "t_now": [
+      "echo_ontology_event_trace"
+    ],
+    "trace_result": [
+      "echo_ontology_transformation"
+    ],
+    "mode": [
+      "response_build",
+      "emotion_from_neurotransmitter"
+    ],
+    "enhanced_context_string": [
+      "response_build",
+      "narrative_layer",
+      "entropy_amplitude_pre_gate"
+    ],
+    "time_delta": [
+      "ukf_predict",
+      "initialize_unified_state"
+    ],
+    "system_prompt": [
+      "narrative_layer"
+    ],
+    "selected_intent": [
+      "narrative_layer"
+    ],
+    "phi": [
+      "phi_publish",
+      "phi_finalize"
+    ],
+    "phi_components": [
+      "phi_publish",
+      "phi_finalize"
+    ],
+    "early_exit_triggered": [
+      "state_update_physics",
+      "response_build"
+    ],
+    "clarifying_question": [
+      "response_build"
+    ],
+    "emotional_state": [
+      "response_build"
+    ],
+    "memory_result": [
+      "response_build"
+    ],
+    "growth_metrics": [
+      "response_build"
+    ],
+    "confidence_result": [
+      "response_build"
+    ],
+    "cep_metrics": [
+      "response_build"
+    ],
+    "cep_flags": [
+      "response_build"
+    ],
+    "entropy_modulated_amplitude": [
+      "response_build"
+    ],
+    "behavior_modulation": [
+      "response_build"
+    ],
+    "esc_available": [
+      "response_build"
+    ],
+    "strategy": [
+      "response_build"
+    ],
+    "context_string": [
+      "safety_layer_pre_cep"
+    ]
+  }
+}

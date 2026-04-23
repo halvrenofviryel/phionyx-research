@@ -1,0 +1,142 @@
+{
+  "contract_version": "3.8.0",
+  "description": "Canonical block order v3.8.0 — state-driven response revision. 46 blocks: 45 from v3.7.0 + response_revision_gate. Final-turn state computations (phi_computation, entropy_computation, confidence_fusion, arbitration_resolve) moved ABOVE response_build so their signals can drive in-turn response revision via the new response_revision_gate (inserted immediately before response_build). Closes the structural tension surfaced in BLOCK_CLAIM_ALIGNMENT_ANALYSIS.md and satisfies Echoism Axiom 1 (symbolic-over-neural) without 1-turn lag.",
+  "canonical_block_order": [
+    "kill_switch_gate",
+    "time_update_sot",
+    "input_safety_gate",
+    "intent_classification",
+    "context_retrieval_rag",
+    "perceptual_frame_emit",
+    "create_scenario_frame",
+    "initialize_unified_state",
+    "goal_evaluation",
+    "goal_decomposition",
+    "ukf_predict",
+    "entropy_amplitude_pre_gate",
+    "cognitive_layer",
+    "self_model_assessment",
+    "knowledge_boundary_check",
+    "trust_evaluation",
+    "ethics_pre_response",
+    "deliberative_ethics_gate",
+    "cep_evaluation",
+    "narrative_layer",
+    "ethics_post_response",
+    "action_intent_gate",
+    "behavioral_drift_detection",
+    "workspace_broadcast",
+    "unified_state_update_esc",
+    "phi_publish",
+    "entropy_amplitude_post_gate",
+    "neurotransmitter_memory_growth",
+    "emotion_estimation",
+    "state_update_physics",
+    "causal_graph_update",
+    "causal_intervention",
+    "counterfactual_analysis",
+    "root_cause_analysis",
+    "causal_simulation",
+    "world_state_snapshot",
+    "phi_computation",
+    "entropy_computation",
+    "confidence_fusion",
+    "arbitration_resolve",
+    "response_revision_gate",
+    "response_build",
+    "memory_consolidation",
+    "audit_layer",
+    "outcome_feedback",
+    "learning_gate"
+  ],
+  "middleware_blocks": [
+    "request_processor",
+    "engine_initializer",
+    "response_serializer"
+  ],
+  "new_blocks_v3_8": [
+    "response_revision_gate"
+  ],
+  "reordered_blocks_v3_8": [
+    "phi_computation",
+    "entropy_computation",
+    "confidence_fusion",
+    "arbitration_resolve"
+  ],
+  "new_blocks_v3_7": [
+    "cep_evaluation"
+  ],
+  "new_blocks_v3_6": [
+    "outcome_feedback"
+  ],
+  "new_blocks_v3_5": [
+    "kill_switch_gate",
+    "self_model_assessment",
+    "knowledge_boundary_check",
+    "memory_consolidation",
+    "causal_graph_update",
+    "causal_intervention",
+    "counterfactual_analysis",
+    "root_cause_analysis",
+    "causal_simulation",
+    "trust_evaluation",
+    "goal_decomposition",
+    "deliberative_ethics_gate"
+  ],
+  "inherited_from_v3_0_0": [
+    "perceptual_frame_emit",
+    "goal_evaluation",
+    "action_intent_gate",
+    "workspace_broadcast",
+    "world_state_snapshot",
+    "confidence_fusion",
+    "arbitration_resolve",
+    "learning_gate"
+  ],
+  "block_mapping": {
+    "v3.7.0_to_v3.8.0": {},
+    "v3.6.0_to_v3.7.0": {},
+    "v3.5.0_to_v3.6.0": {},
+    "v3.0.0_to_v3.5.0": {},
+    "v2.5.0_to_v3.0.0": {},
+    "v2.4.0_to_v2.5.0": {
+      "api_process_decision": "middleware.request_processor",
+      "engine_ensure_initialized": "middleware.engine_initializer",
+      "low_input_gate": "input_safety_gate",
+      "safety_layer_pre_cep": "input_safety_gate"
+    }
+  },
+  "required_event_types": [
+    "start_turn",
+    "tool_call",
+    "verifier_disagreement",
+    "state_snapshot",
+    "audit_integrity",
+    "goal_evaluation",
+    "goal_decomposition",
+    "ethics_decision",
+    "deliberative_ethics",
+    "cep_evaluation",
+    "workspace_broadcast",
+    "arbitration_result",
+    "learning_gate_decision",
+    "self_model_assessment",
+    "knowledge_boundary",
+    "causal_graph_update",
+    "causal_intervention",
+    "trust_evaluation",
+    "memory_consolidation",
+    "outcome_feedback",
+    "response_revision",
+    "end_turn"
+  ],
+  "notes": [
+    "v3.8.0 closes the state → response feedback loop within a single turn.",
+    "phi_computation, entropy_computation, confidence_fusion, arbitration_resolve moved ABOVE response_build (positions 37-40).",
+    "response_revision_gate (new) sits at position 41, immediately before response_build.",
+    "response_build extended to consume metadata['revision_directive'] directly.",
+    "REGENERATE directive currently falls through to clarification fallback inside response_build; full narrative re-entry via orchestrator is a bounded follow-up refactor (not in this contract change).",
+    "Founder-approved contract change per BLOCK_CLAIM_IMPROVEMENT_PLAN_V2.md.",
+    "Backward compatible: v3.7.0 still loadable; orchestrator selects version via config."
+  ]
+}

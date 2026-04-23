@@ -1,0 +1,86 @@
+{
+  "version": "0.1",
+  "description": "Agent-to-Agent Message Envelope Schema",
+  "schema": {
+    "protocol": {
+      "type": "string",
+      "required": true,
+      "description": "Protocol identifier (e.g., 'generic-json', 'openai-responses')",
+      "example": "generic-json"
+    },
+    "sender_participant_ref": {
+      "type": "object",
+      "required": true,
+      "description": "Sender participant reference",
+      "properties": {
+        "id": {
+          "type": "string",
+          "required": true,
+          "example": "agent_a"
+        },
+        "type": {
+          "type": "string",
+          "required": true,
+          "enum": ["human", "ai_agent", "system"],
+          "example": "ai_agent"
+        }
+      }
+    },
+    "receiver_participant_ref": {
+      "type": "object",
+      "required": true,
+      "description": "Receiver participant reference",
+      "properties": {
+        "id": {
+          "type": "string",
+          "required": true,
+          "example": "agent_b"
+        },
+        "type": {
+          "type": "string",
+          "required": true,
+          "enum": ["human", "ai_agent", "system"],
+          "example": "ai_agent"
+        }
+      }
+    },
+    "trace_id": {
+      "type": "string",
+      "required": true,
+      "description": "Trace ID for request tracking",
+      "example": "trace_123"
+    },
+    "turn_id": {
+      "type": "integer",
+      "required": true,
+      "description": "Turn ID (monotonic)",
+      "minimum": 1,
+      "example": 1
+    },
+    "intent": {
+      "type": "object",
+      "required": false,
+      "description": "Intent metadata (optional)"
+    },
+    "payload": {
+      "type": "object",
+      "required": true,
+      "description": "Message payload (protocol-specific)",
+      "example": {
+        "user_input": "Hello"
+      }
+    },
+    "capabilities": {
+      "type": "object",
+      "required": false,
+      "description": "Sender capabilities (optional)"
+    },
+    "metadata": {
+      "type": "object",
+      "required": false,
+      "description": "Additional metadata",
+      "default": {}
+    }
+  }
+}
+

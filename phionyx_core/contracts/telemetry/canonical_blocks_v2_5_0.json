@@ -1,0 +1,93 @@
+{
+  "contract_version": "2.5.0",
+  "description": "Canonical block order for telemetry contract v2.5.0 - Single source of truth. Updated for ~26 block pipeline with middleware separation.",
+  "canonical_block_order": [
+    "time_update_sot",
+    "input_safety_gate",
+    "intent_classification",
+    "context_retrieval_rag",
+    "create_scenario_frame",
+    "initialize_unified_state",
+    "ukf_predict",
+    "entropy_amplitude_pre_gate",
+    "cognitive_layer",
+    "ethics_pre_response",
+    "narrative_layer",
+    "ethics_post_response",
+    "behavioral_drift_detection",
+    "unified_state_update_esc",
+    "phi_publish",
+    "entropy_amplitude_post_gate",
+    "neurotransmitter_memory_growth",
+    "emotion_estimation",
+    "state_update_physics",
+    "response_build",
+    "phi_computation",
+    "entropy_computation",
+    "audit_layer",
+    "telemetry_publish"
+  ],
+  "middleware_blocks": [
+    "request_processor",
+    "engine_initializer",
+    "response_serializer"
+  ],
+  "block_mapping": {
+    "v2.4.0_to_v2.5.0": {
+      "api_process_decision": "middleware.request_processor",
+      "engine_ensure_initialized": "middleware.engine_initializer",
+      "low_input_gate": "input_safety_gate",
+      "safety_layer_pre_cep": "input_safety_gate"
+    },
+    "new_blocks": [
+      "intent_classification",
+      "context_retrieval_rag"
+    ],
+    "removed_blocks": [
+      "echo_ontology_event_trace",
+      "emotion_from_neurotransmitter",
+      "echo_ontology_transformation",
+      "cep_evaluation",
+      "esc_state_helper_update",
+      "drive_coherence_update",
+      "coherence_qa",
+      "phi_finalize"
+    ]
+  },
+  "required_event_types": [
+    "start_turn",
+    "tool_call",
+    "verifier_disagreement",
+    "state_snapshot",
+    "audit_integrity",
+    "end_turn"
+  ],
+  "notes": [
+    "This file is the single source of truth for canonical block order",
+    "Both backend and frontend should import/read from this file",
+    "Total blocks: ~23 (core pipeline) + 3 (middleware) = ~26 blocks",
+    "Always-on blocks: time_update_sot, emotion_estimation, state_update_physics, response_build, phi_computation, entropy_computation",
+    "Optional blocks: ukf_predict, neurotransmitter_memory_growth, audit_layer, telemetry_publish",
+    "Middleware blocks are executed before/after pipeline, not part of canonical order",
+    "Migration from v2.4.0: Use block_mapping for backward compatibility"
+  ],
+  "migration_guide": {
+    "version": "2.4.0_to_2.5.0",
+    "breaking_changes": [
+      "api_process_decision moved to middleware",
+      "engine_ensure_initialized moved to middleware",
+      "low_input_gate and safety_layer_pre_cep merged into input_safety_gate"
+    ],
+    "new_features": [
+      "intent_classification block added",
+      "context_retrieval_rag block added",
+      "Middleware separation for HTTP/infrastructure concerns"
+    ],
+    "backward_compatibility": {
+      "enabled": true,
+      "mapping_file": "block_mapping.v2.4.0_to_v2.5.0",
+      "deprecation_warning": "v2.4.0 blocks will be supported until v3.0.0"
+    }
+  }
+}
+

@@ -1,0 +1,94 @@
+{
+  "contract_version": "1.0",
+  "server_name": "phionyx-echo-core",
+  "goal": "Cursor inside LLM usage with Phionyx as middleware without Phionyx calling any paid LLM API.",
+  "tools": [
+    {
+      "name": "phionyx_build_context",
+      "purpose": "Build deterministic context pack (system/developer instructions + memory/trace + safety constraints) for Cursor to feed into its own LLM call.",
+      "input_schema": {
+        "type": "object",
+        "required": ["session_id", "user_input", "profile"],
+        "properties": {
+          "session_id": { "type": "string" },
+          "user_input": { "type": "string" },
+          "profile": { "type": "string", "enum": ["sdk_dev", "creative_writing", "edu_school", "unity_npc"] },
+          "character_id": { "type": "string" },
+          "lore_pack_id": { "type": "string", "description": "Optional. For first-party products (books/school/unity) you can enable lore packs." },
+          "provider_metadata": {
+            "type": "object",
+            "description": "Metadata about model provider/quality if Cursor exposes it; otherwise omit."
+          }
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "required": ["context_pack", "debug"],
+        "properties": {
+          "context_pack": {
+            "type": "object",
+            "required": ["system", "developer", "memory", "constraints"],
+            "properties": {
+              "system": { "type": "string" },
+              "developer": { "type": "string" },
+              "memory": { "type": "string" },
+              "constraints": { "type": "string" }
+            }
+          },
+          "debug": {
+            "type": "object",
+            "properties": {
+              "state_vector": { "type": "object" },
+              "ethics_vector": { "type": "object" },
+              "retrieved_traces": { "type": "array", "items": { "type": "string" } }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "phionyx_validate_output",
+      "purpose": "Post-check Cursor model output: ethics vector + forced damping recommendation + coherence warning.",
+      "input_schema": {
+        "type": "object",
+        "required": ["session_id", "user_input", "model_output", "profile"],
+        "properties": {
+          "session_id": { "type": "string" },
+          "user_input": { "type": "string" },
+          "model_output": { "type": "string" },
+          "profile": { "type": "string", "enum": ["sdk_dev", "creative_writing", "edu_school", "unity_npc"] },
+          "provider_metadata": { "type": "object" }
+        }
+      },
+      "output_schema": {
+        "type": "object",
+        "required": ["verdict", "actions", "debug"],
+        "properties": {
+          "verdict": { "type": "string", "enum": ["allow", "rewrite_required", "block"] },
+          "actions": {
+            "type": "object",
+            "required": ["forced_damping", "rewrite_instructions"],
+            "properties": {
+              "forced_damping": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+              "rewrite_instructions": { "type": "string" }
+            }
+          },
+          "debug": {
+            "type": "object",
+            "properties": {
+              "ethics_vector": { "type": "object" },
+              "measurement_vector": { "type": "object" },
+              "coherence": { "type": "number" }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "invariants": [
+    "Phionyx MCP server MUST NOT call paid external LLM APIs.",
+    "All mapping/ethics decisions must be deterministic for same inputs.",
+    "School profile thresholds are stricter than general profiles."
+  ]
+}
+

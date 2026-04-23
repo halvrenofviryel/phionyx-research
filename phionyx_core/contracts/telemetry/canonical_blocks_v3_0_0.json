@@ -1,0 +1,116 @@
+{
+  "contract_version": "3.0.0",
+  "description": "Canonical block order for telemetry contract v3.0.0 — v4 AGI/ASI integration. 32 blocks.",
+  "canonical_block_order": [
+    "time_update_sot",
+    "input_safety_gate",
+    "intent_classification",
+    "context_retrieval_rag",
+    "perceptual_frame_emit",
+    "create_scenario_frame",
+    "initialize_unified_state",
+    "goal_evaluation",
+    "ukf_predict",
+    "entropy_amplitude_pre_gate",
+    "cognitive_layer",
+    "ethics_pre_response",
+    "narrative_layer",
+    "ethics_post_response",
+    "action_intent_gate",
+    "behavioral_drift_detection",
+    "workspace_broadcast",
+    "unified_state_update_esc",
+    "phi_publish",
+    "entropy_amplitude_post_gate",
+    "neurotransmitter_memory_growth",
+    "emotion_estimation",
+    "state_update_physics",
+    "world_state_snapshot",
+    "response_build",
+    "phi_computation",
+    "entropy_computation",
+    "confidence_fusion",
+    "arbitration_resolve",
+    "audit_layer",
+    "learning_gate",
+    "telemetry_publish"
+  ],
+  "middleware_blocks": [
+    "request_processor",
+    "engine_initializer",
+    "response_serializer"
+  ],
+  "new_blocks_v3": [
+    "perceptual_frame_emit",
+    "goal_evaluation",
+    "action_intent_gate",
+    "workspace_broadcast",
+    "world_state_snapshot",
+    "confidence_fusion",
+    "arbitration_resolve",
+    "learning_gate"
+  ],
+  "block_mapping": {
+    "v2.5.0_to_v3.0.0": {},
+    "v2.4.0_to_v2.5.0": {
+      "api_process_decision": "middleware.request_processor",
+      "engine_ensure_initialized": "middleware.engine_initializer",
+      "low_input_gate": "input_safety_gate",
+      "safety_layer_pre_cep": "input_safety_gate"
+    }
+  },
+  "required_event_types": [
+    "start_turn",
+    "tool_call",
+    "verifier_disagreement",
+    "state_snapshot",
+    "audit_integrity",
+    "goal_evaluation",
+    "ethics_decision",
+    "workspace_broadcast",
+    "arbitration_result",
+    "learning_gate_decision",
+    "end_turn"
+  ],
+  "v4_schemas_used": [
+    "InputSignal",
+    "PerceptualFrame",
+    "WorldStateSnapshot",
+    "GoalObject",
+    "MemoryEntry",
+    "ActionIntent",
+    "EthicsDecision",
+    "ConfidencePayload",
+    "WorkspaceEvent",
+    "AuditRecord",
+    "LearningUpdate",
+    "DiscoveryCandidate",
+    "ErrorPayload"
+  ],
+  "notes": [
+    "v3.0.0 adds 8 new blocks for v4 AGI/ASI integration",
+    "Pipeline version coexistence: orchestrator loads v2.5.0 or v3.0.0 based on config (AD-3)",
+    "All v4 BlockContext fields are Optional for backward compatibility (AD-6)",
+    "New blocks fail-open: errors don't break pipeline",
+    "v2.5.0 blocks are unchanged — insertion-only expansion"
+  ],
+  "migration_guide": {
+    "version": "2.5.0_to_3.0.0",
+    "breaking_changes": [],
+    "new_features": [
+      "perceptual_frame_emit: Emits PerceptualFrame after context retrieval",
+      "goal_evaluation: Evaluates active goals with legitimacy scoring",
+      "action_intent_gate: Gates actions through ethics and safety",
+      "workspace_broadcast: GWT-style event broadcast",
+      "world_state_snapshot: Full state snapshot after physics",
+      "confidence_fusion: Multi-module confidence fusion (W_final)",
+      "arbitration_resolve: Inter-module conflict resolution",
+      "learning_gate: Boundary zone learning gate"
+    ],
+    "backward_compatibility": {
+      "enabled": true,
+      "v2.5.0_pipeline_supported": true,
+      "v4_fields_optional": true
+    }
+  }
+}
