@@ -136,6 +136,21 @@ def test_calculate_phi():
 
 ---
 
+## Contribution Quality Bar
+
+Phionyx does not accept placeholder-only, automated, or bounty-generated pull requests that do not implement the issue scope.
+
+A valid contribution must include:
+- Meaningful code or documentation
+- A clear explanation of the change
+- Minimal and justified dependencies
+- Test or review instructions
+- Alignment with the Phionyx governance runtime model
+
+Maintainers may close pull requests that only add comments, empty files, generic placeholders, or unrelated changes.
+
+---
+
 ## Pull Request Process
 
 1. **Update documentation** if needed
