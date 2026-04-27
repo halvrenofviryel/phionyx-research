@@ -1,22 +1,65 @@
 # FastAPI Integration Example
 
-> Status: Planned — see [Issue #2](https://github.com/halvrenofviryel/phionyx-research/issues/2)
+**Status:** Implemented — resolves Issue #2
 
 A minimal FastAPI wrapper exposing the Phionyx governance pipeline as an HTTP endpoint.
 
-## Planned Endpoint
+## Architecture Note
 
+Phionyx Core is framework-agnostic. FastAPI lives in this example, not in the core SDK.  
+The core never imports delivery-layer frameworks—external dependencies enter through ports.
+
+## Getting Started
+
+Install the Core SDK in development mode:
+
+```bash
+pip install -e .
 ```
-POST /govern
-Content-Type: application/json
 
+Ensure you have installed `PyYAML` as it is a core dependency for physics profiles.
+
+Install example dependencies:
+
+```bash
+pip install -r examples/fastapi/requirements.txt
+```
+
+Run the server:
+
+```bash
+python examples/fastapi/main.py
+```
+
+## API Endpoint
+
+### `POST /govern`
+
+Wraps the 46-block Phionyx pipeline (v3.8.0) to process user input.
+
+### Request Body
+
+```json
 {
   "text": "User input text",
   "profile": "edu"
 }
 ```
 
-## Planned Response
+### Test with curl
+
+```bash
+curl -X POST http://127.0.0.1:8000/govern \
+  -H "Content-Type: application/json" \
+  -d '{"text": "How can I improve my study habits?", "profile": "edu"}'
+```
+### Swagger UI
+
+Open `http://localhost:8000/docs` for interactive API documentation.
+
+## Expected Response
+
+The endpoint returns a structured envelope containing the governed response, state metrics, and execution telemetry.
 
 ```json
 {
@@ -40,19 +83,9 @@ Content-Type: application/json
     "deterministic": true
   },
   "audit": {
-    "record_id": "...",
+    "record_id": "aud_1714175400",
     "hash_chain": "...",
-    "timestamp": "..."
+    "timestamp": "2026-04-26T23:50:00Z"
   }
 }
 ```
-
-## Architecture Note
-
-Phionyx Core is **framework-agnostic**. FastAPI lives in this example, not in the core SDK. The core never imports delivery-layer frameworks — external dependencies enter through ports.
-
-## Coming Soon
-
-- `main.py` — Minimal server
-- `requirements.txt` — FastAPI + Uvicorn only
-- Full walkthrough with curl examples
