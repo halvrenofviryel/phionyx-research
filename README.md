@@ -152,6 +152,13 @@ A commercial license is available for use cases where AGPL-3.0 copyleft is not s
 
 ---
 
+## Further Reading
+
+- [Why Every AI Runtime Needs a Kill Switch](https://phionyxresearch.substack.com/p/why-every-ai-runtime-needs-a-kill)
+- [Inside the 46-Block Deterministic AI Pipeline](https://phionyxresearch.substack.com/p/inside-the-46-block-deterministic)
+
+---
+
 ## Links
 
 - **Website:** [phionyx.ai](https://phionyx.ai)
