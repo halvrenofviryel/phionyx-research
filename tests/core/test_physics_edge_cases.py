@@ -14,21 +14,16 @@ Verifies:
 
 Issue: https://github.com/halvrenofviryel/phionyx-research/issues/13
 """
-import pytest
 import math
-import sys
-from pathlib import Path
 
-# Add core-physics to path
-PROJECT_ROOT = Path(__file__).parent.parent.parent
-sys.path.insert(0, str(PROJECT_ROOT / "core-physics" / "src"))
+import pytest
 
-from phionyx_core.physics.formulas import (  # noqa: E402
+from phionyx_core.physics.formulas import (
     calculate_phi_v2_1,
     calculate_phi_cognitive,
     calculate_phi_physical,
 )
-from phionyx_core.physics.constants import (  # noqa: E402
+from phionyx_core.physics.constants import (
     PHI_MIN,
     PHI_MAX,
 )
@@ -38,7 +33,12 @@ class TestCalculatePhiV21EdgeCases:
     """Edge-case tests for calculate_phi_v2_1 (Hybrid Resonance Model)."""
 
     def test_all_zero_inputs(self):
-        """All-zero inputs (A=0, V=0, H=0) should not crash and phi >= 0."""
+        """All-zero inputs (A=0, V=0, H=0) should not crash and phi >= 0.
+
+        Note: time_delta=0.0 is safe here because calculate_phi_physical
+        uses exponential decay (A * e^(-γt)), not division. At t=0 the
+        exponent evaluates to e^0 = 1, so no division-by-zero occurs.
+        """
         result = calculate_phi_v2_1(
             valence=0.0,
             arousal=0.0,
