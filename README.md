@@ -52,6 +52,27 @@ See [`examples/fastapi/`](examples/fastapi/) for an HTTP endpoint wrapper.
 
 ---
 
+## Try It In 30 Seconds
+
+Three short notebooks demonstrate the substrate without an LLM, server, or external account. Each runs end-to-end and embeds its outputs.
+
+| # | Notebook | Shows |
+|---|----------|-------|
+| 01 | [Determinism and Physics](examples/notebooks/01_determinism_and_physics.ipynb) | `EchoState2`, `calculate_phi_v2_1`, 1000-run determinism proof, side-by-side with a noisy alternative |
+| 02 | [Kill Switch in Action](examples/notebooks/02_kill_switch_in_action.ipynb) | `KillSwitch` with 4 triggers + NaN fail-closed guard, tamper-evident event log |
+| 03 | [Pipeline Blocks and Audit](examples/notebooks/03_pipeline_blocks_and_audit.ipynb) | Canonical 46-block pipeline (v3.8.0), custom block subclass, 100-run determinism |
+
+Notebook 01 sweeps the cognitive component of Φ across the full Circumplex (valence × arousal). The surface is smooth, bounded, and reproducible bit-for-bit — there is no LLM involved at this layer.
+
+![Phi cognitive across valence × arousal](docs/img/phi_heatmap.png)
+
+```bash
+pip install jupyter matplotlib
+jupyter notebook examples/notebooks/
+```
+
+---
+
 ## Architecture
 
 Phionyx implements three integrated layers:
