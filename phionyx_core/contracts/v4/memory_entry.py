@@ -8,7 +8,7 @@ with v4 boundary zone concept (immutable/gated/adaptive).
 
 from typing import Optional, Dict, Any, List
 from enum import Enum
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 from datetime import datetime, timezone
 import uuid
 
@@ -107,12 +107,4 @@ class MemoryEntry(BaseModel):
         """Check if modification requires learning gate approval."""
         return self.boundary_zone == BoundaryZone.GATED
 
-    class Config:
-        json_schema_extra = {
-            "example": {
-                "content": "User prefers concise responses",
-                "memory_type": "semantic",
-                "boundary_zone": "adaptive",
-                "decay_rate": 0.1,
-            }
-        }
+    model_config = ConfigDict(json_schema_extra={'example': {'content': 'User prefers concise responses', 'memory_type': 'semantic', 'boundary_zone': 'adaptive', 'decay_rate': 0.1}})

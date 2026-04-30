@@ -7,7 +7,7 @@ for open-ended discovery evaluation.
 """
 
 from typing import Optional, Dict, Any, List
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 from datetime import datetime, timezone
 import uuid
 
@@ -103,12 +103,4 @@ class DiscoveryCandidate(BaseModel):
         )
         return self.composite_score
 
-    class Config:
-        json_schema_extra = {
-            "example": {
-                "description": "Emotional resonance correlates with learning retention",
-                "novelty_score": 0.85,
-                "transfer_potential": 0.6,
-                "robustness_score": 0.7,
-            }
-        }
+    model_config = ConfigDict(json_schema_extra={'example': {'description': 'Emotional resonance correlates with learning retention', 'novelty_score': 0.85, 'transfer_potential': 0.6, 'robustness_score': 0.7}})

@@ -8,7 +8,7 @@ AD-1: Composition — TurnEnvelope is composed, not replaced.
 
 from typing import Optional, Dict, Any, List
 from enum import Enum
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 from datetime import datetime, timezone
 
 from ..envelopes.turn_envelope import TurnEnvelope
@@ -68,12 +68,4 @@ class InputSignal(BaseModel):
         description="Extensible metadata"
     )
 
-    class Config:
-        json_schema_extra = {
-            "example": {
-                "source_module": "user_interface",
-                "signal_type": "user_text",
-                "modalities": ["text"],
-                "priority": 0,
-            }
-        }
+    model_config = ConfigDict(json_schema_extra={'example': {'source_module': 'user_interface', 'signal_type': 'user_text', 'modalities': ['text'], 'priority': 0}})

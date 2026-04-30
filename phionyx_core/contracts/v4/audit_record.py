@@ -7,7 +7,7 @@ hash chain for immutability, and structured audit trail.
 """
 
 from typing import Optional, Dict, Any, List
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 from datetime import datetime, timezone
 import uuid
 import hashlib
@@ -152,12 +152,4 @@ class AuditRecord(BaseModel):
             return False
         return True
 
-    class Config:
-        json_schema_extra = {
-            "example": {
-                "sequence_number": 42,
-                "turn_id": 5,
-                "event_type": "turn_complete",
-                "actor": "system",
-            }
-        }
+    model_config = ConfigDict(json_schema_extra={'example': {'sequence_number': 42, 'turn_id': 5, 'event_type': 'turn_complete', 'actor': 'system'}})

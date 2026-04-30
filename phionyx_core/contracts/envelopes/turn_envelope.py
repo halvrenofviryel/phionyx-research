@@ -15,7 +15,7 @@ Schema version: 1.0
 """
 
 from typing import Optional
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 import hashlib
 
 
@@ -37,14 +37,16 @@ class TurnEnvelope(BaseModel):
     # Optional fields
     parent_turn_id: Optional[int] = Field(None, description="Parent turn ID (for conversation threading)")
 
-    @validator('turn_id')
+    @field_validator('turn_id')
+    @classmethod
     def validate_turn_id(cls, v):
         """Turn ID must be positive integer (starts at 1)."""
         if v < 1:
             raise ValueError(f"turn_id must be >= 1, got {v}")
         return v
 
-    @validator('user_text_sha256')
+    @field_validator('user_text_sha256')
+    @classmethod
     def validate_sha256_format(cls, v):
         """SHA256 hash must be 64 hex characters."""
         if len(v) != 64:
@@ -65,22 +67,7 @@ class TurnEnvelope(BaseModel):
         computed_hash = self.compute_sha256(self.user_text)
         return computed_hash.lower() == self.user_text_sha256.lower()
 
-    class Config:
-        """Pydantic config."""
-        json_schema_extra = {
-            "example": {
-                "conversation_id": "conv_abc123",
-                "turn_id": 1,
-                "message_id": "550e8400-e29b-41d4-a716-446655440000",
-                "user_text": "Hello, how are you?",
-                "user_text_sha256": "a1b2c3d4e5f6...",
-                "client_timestamp_ms": 1704067200000,
-                "schema_version": "1.0",
-                "parent_turn_id": None
-            }
-        }
-
-
+    model_config = ConfigDict(json_schema_extra={'example': {'conversation_id': 'conv_abc123', 'turn_id': 1, 'message_id': '550e8400-e29b-41d4-a716-446655440000', 'user_text': 'Hello, how are you?', 'user_text_sha256': 'a1b2c3d4e5f6...', 'client_timestamp_ms': 1704067200000, 'schema_version': '1.0', 'parent_turn_id': None}})
 class DeliveryAck(BaseModel):
     """
     Delivery acknowledgment - confirms message was received correctly.
@@ -97,17 +84,4 @@ class DeliveryAck(BaseModel):
     delivery_status: str = Field(default="delivered", description="Delivery status: delivered, mismatch, rejected")
     delivery_error: Optional[str] = Field(None, description="Error message if delivery failed")
 
-    class Config:
-        """Pydantic config."""
-        json_schema_extra = {
-            "example": {
-                "conversation_id": "conv_abc123",
-                "turn_id": 1,
-                "message_id": "550e8400-e29b-41d4-a716-446655440000",
-                "received_user_text_sha256": "a1b2c3d4e5f6...",
-                "prompt_context_sha256": "b2c3d4e5f6a1...",
-                "delivery_status": "delivered",
-                "delivery_error": None
-            }
-        }
-
+    model_config = ConfigDict(json_schema_extra={'example': {'conversation_id': 'conv_abc123', 'turn_id': 1, 'message_id': '550e8400-e29b-41d4-a716-446655440000', 'received_user_text_sha256': 'a1b2c3d4e5f6...', 'prompt_context_sha256': 'b2c3d4e5f6a1...', 'delivery_status': 'delivered', 'delivery_error': None}})

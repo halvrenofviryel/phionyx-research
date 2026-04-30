@@ -8,7 +8,7 @@ Represents events broadcast to all modules via salience-based attention.
 
 from typing import Optional, Dict, Any, List
 from enum import Enum
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 from datetime import datetime, timezone
 import uuid
 
@@ -83,12 +83,4 @@ class WorkspaceEvent(BaseModel):
     trace_id: Optional[str] = None
     metadata: Dict[str, Any] = Field(default_factory=dict)
 
-    class Config:
-        json_schema_extra = {
-            "example": {
-                "event_type": "ethics_trigger",
-                "salience": "high",
-                "salience_score": 0.9,
-                "source_module": "ethics_engine",
-            }
-        }
+    model_config = ConfigDict(json_schema_extra={'example': {'event_type': 'ethics_trigger', 'salience': 'high', 'salience_score': 0.9, 'source_module': 'ethics_engine'}})

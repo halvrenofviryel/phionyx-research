@@ -52,7 +52,7 @@ class MeasurementPacket(BaseModel):
             "confidence": self.confidence,
             "provider": self.provider,
             "timestamp": self.timestamp.isoformat(),
-            "evidence_spans": [span.dict() for span in self.evidence_spans]
+            "evidence_spans": [span.model_dump() for span in self.evidence_spans]
         }
 
     @classmethod

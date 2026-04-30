@@ -8,7 +8,7 @@ AD-1: Composition — existing models are referenced, not replaced.
 
 from typing import Optional, Dict, Any, List
 from enum import Enum
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 from datetime import datetime, timezone
 
 
@@ -70,14 +70,4 @@ class PerceptualFrame(BaseModel):
         description="Raw feature vector for downstream processing"
     )
 
-    class Config:
-        json_schema_extra = {
-            "example": {
-                "A_meas": 0.6,
-                "V_meas": 0.3,
-                "H_meas": 0.4,
-                "confidence": 0.85,
-                "modality": "text",
-                "salience": 0.7,
-            }
-        }
+    model_config = ConfigDict(json_schema_extra={'example': {'A_meas': 0.6, 'V_meas': 0.3, 'H_meas': 0.4, 'confidence': 0.85, 'modality': 'text', 'salience': 0.7}})

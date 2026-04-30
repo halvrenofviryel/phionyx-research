@@ -8,7 +8,7 @@ Represents system-level goals with legitimacy scoring and priority.
 
 from typing import Optional, Dict, Any, List
 from enum import Enum
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 from datetime import datetime, timezone
 import uuid
 
@@ -121,13 +121,4 @@ class GoalObject(BaseModel):
             + w.get("gamma", 0.2) * self.user_score
         )
 
-    class Config:
-        json_schema_extra = {
-            "example": {
-                "name": "maintain_safety_bounds",
-                "priority": "critical",
-                "safety_score": 1.0,
-                "system_score": 0.9,
-                "user_score": 0.5,
-            }
-        }
+    model_config = ConfigDict(json_schema_extra={'example': {'name': 'maintain_safety_bounds', 'priority': 'critical', 'safety_score': 1.0, 'system_score': 0.9, 'user_score': 0.5}})

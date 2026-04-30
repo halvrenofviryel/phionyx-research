@@ -8,7 +8,7 @@ ECE calibration, and OOD detection.
 
 from typing import Optional, Dict, Any, List
 from enum import Enum
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 from datetime import datetime, timezone
 
 
@@ -95,12 +95,4 @@ class ConfidencePayload(BaseModel):
     timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     metadata: Dict[str, Any] = Field(default_factory=dict)
 
-    class Config:
-        json_schema_extra = {
-            "example": {
-                "confidence_score": 0.82,
-                "epistemic_uncertainty": 0.12,
-                "aleatoric_uncertainty": 0.06,
-                "dominant_uncertainty": "epistemic",
-            }
-        }
+    model_config = ConfigDict(json_schema_extra={'example': {'confidence_score': 0.82, 'epistemic_uncertainty': 0.12, 'aleatoric_uncertainty': 0.06, 'dominant_uncertainty': 'epistemic'}})

@@ -8,7 +8,7 @@ and structured error reporting.
 
 from typing import Optional, Dict, Any, List
 from enum import Enum
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 from datetime import datetime, timezone
 import uuid
 
@@ -108,12 +108,4 @@ class ErrorPayload(BaseModel):
     correlation_id: Optional[str] = None
     metadata: Dict[str, Any] = Field(default_factory=dict)
 
-    class Config:
-        json_schema_extra = {
-            "example": {
-                "severity": "error",
-                "error_code": "ETHICS_GATE_FAIL",
-                "message": "Ethics gate denied action",
-                "recovery_action": "fallback",
-            }
-        }
+    model_config = ConfigDict(json_schema_extra={'example': {'severity': 'error', 'error_code': 'ETHICS_GATE_FAIL', 'message': 'Ethics gate denied action', 'recovery_action': 'fallback'}})

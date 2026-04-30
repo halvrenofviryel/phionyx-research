@@ -8,7 +8,7 @@ verdict enum, deliberation layer, and decision trace.
 
 from typing import Optional, Dict, Any, List
 from enum import Enum
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 from datetime import datetime, timezone
 import uuid
 
@@ -100,12 +100,4 @@ class EthicsDecision(BaseModel):
     timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     metadata: Dict[str, Any] = Field(default_factory=dict)
 
-    class Config:
-        json_schema_extra = {
-            "example": {
-                "verdict": "allow",
-                "deliberation_layer": "rule_based",
-                "enforced": False,
-                "max_risk_score": 0.2,
-            }
-        }
+    model_config = ConfigDict(json_schema_extra={'example': {'verdict': 'allow', 'deliberation_layer': 'rule_based', 'enforced': False, 'max_risk_score': 0.2}})
