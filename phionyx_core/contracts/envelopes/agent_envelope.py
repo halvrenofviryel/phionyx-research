@@ -7,7 +7,7 @@ Enhanced with envelope hardening (Paket E): message_id, turn_id, timestamp, TTL,
 """
 
 from typing import Optional, Dict, Any, List
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field, field_validator
 from datetime import datetime, timezone
 import uuid
 
@@ -63,7 +63,8 @@ class AgentMessageEnvelope(BaseModel):
     )
     metadata: Dict[str, Any] = Field(default_factory=dict, description="Additional metadata")
 
-    @validator('message_id')
+    @field_validator('message_id')
+    @classmethod
     def validate_message_id(cls, v):
         """Validate message_id is a valid UUID."""
         try:
@@ -72,7 +73,8 @@ class AgentMessageEnvelope(BaseModel):
         except ValueError:
             raise ValueError(f"message_id must be a valid UUID, got: {v}")
 
-    @validator('timestamp_utc')
+    @field_validator('timestamp_utc')
+    @classmethod
     def validate_timestamp(cls, v):
         """Validate timestamp is ISO8601 format."""
         try:
@@ -81,7 +83,8 @@ class AgentMessageEnvelope(BaseModel):
         except (ValueError, AttributeError):
             raise ValueError(f"timestamp_utc must be ISO8601 format, got: {v}")
 
-    @validator('nonce')
+    @field_validator('nonce')
+    @classmethod
     def validate_nonce(cls, v):
         """Validate nonce is non-empty."""
         if not v or not v.strip():
@@ -234,7 +237,7 @@ class AgentMessageEnvelope(BaseModel):
             "intent": self.intent,
             "payload": self.payload,
             "capabilities": self.capabilities,
-            "cognitive_metrics": self.cognitive_metrics.dict() if self.cognitive_metrics else None,
+            "cognitive_metrics": self.cognitive_metrics.model_dump() if self.cognitive_metrics else None,
             "metadata": self.metadata
         }
 

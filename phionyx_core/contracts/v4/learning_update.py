@@ -8,7 +8,7 @@ Learning updates must pass through a gate before modifying parameters.
 
 from typing import Optional, Dict, Any, List
 from enum import Enum
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 from datetime import datetime, timezone
 import uuid
 
@@ -118,13 +118,4 @@ class LearningUpdate(BaseModel):
     # Metadata
     metadata: Dict[str, Any] = Field(default_factory=dict)
 
-    class Config:
-        json_schema_extra = {
-            "example": {
-                "target_parameter": "physics.gamma",
-                "current_value": 0.15,
-                "proposed_value": 0.18,
-                "delta": 0.03,
-                "boundary_zone": "adaptive",
-            }
-        }
+    model_config = ConfigDict(json_schema_extra={'example': {'target_parameter': 'physics.gamma', 'current_value': 0.15, 'proposed_value': 0.18, 'delta': 0.03, 'boundary_zone': 'adaptive'}})

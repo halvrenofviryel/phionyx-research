@@ -12,7 +12,7 @@ Per Echoism Core v1.0:
 
 from __future__ import annotations
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 from typing import Dict, Any, Optional
 from datetime import datetime
 
@@ -184,7 +184,4 @@ class AuxState(BaseModel):
             metadata=data.get("metadata", {})
         )
 
-    class Config:
-        """Pydantic config."""
-        validate_assignment = True
-
+    model_config = ConfigDict(validate_assignment=True)

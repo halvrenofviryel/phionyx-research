@@ -20,7 +20,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import List, Dict, Any, Optional
 from datetime import datetime
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 import math
 import time as time_module  # For monotonic clock
 
@@ -585,12 +585,10 @@ class EchoState2(BaseModel):
             relationship_start=relationship_start
         )
 
-    class Config:
-        """Pydantic config."""
-        arbitrary_types_allowed = True
-        validate_assignment = True
-
-
+    model_config = ConfigDict(
+        arbitrary_types_allowed=True,
+        validate_assignment=True,
+    )
 class EchoState2Plus(EchoState2):
     """
     EchoState2Plus - Echoism Core v1.1 Extended State Model
@@ -1112,7 +1110,7 @@ class EchoState2Plus(EchoState2):
             D=data.get("D", None)
         )
 
-    class Config:
-        """Pydantic config."""
-        arbitrary_types_allowed = True
-        validate_assignment = True
+    model_config = ConfigDict(
+        arbitrary_types_allowed=True,
+        validate_assignment=True,
+    )

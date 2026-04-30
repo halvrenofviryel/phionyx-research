@@ -480,7 +480,7 @@ class MeasurementMapper:
                         "confidence": self.confidence,
                         "provider": self.provider,
                         "timestamp": self.timestamp.isoformat(),
-                        "evidence_spans": [span.dict() if hasattr(span, 'dict') else {"text": span.text, "start": span.start, "end": span.end, "tag": span.tag} for span in self.evidence_spans]
+                        "evidence_spans": [span.model_dump() if hasattr(span, 'dict') else {"text": span.text, "start": span.start, "end": span.end, "tag": span.tag} for span in self.evidence_spans]
                     }
 
         # Get base measurement

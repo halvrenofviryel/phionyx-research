@@ -8,7 +8,7 @@ This allows phionyx_core to work with participants without depending on bridge.
 
 from typing import Optional
 from enum import Enum
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class ParticipantType(str, Enum):
@@ -30,7 +30,4 @@ class ParticipantRef(BaseModel):
     name: Optional[str] = Field(None, description="Participant name")
     metadata: Optional[dict] = Field(None, description="Additional metadata")
 
-    class Config:
-        """Pydantic config."""
-        use_enum_values = True
-
+    model_config = ConfigDict(use_enum_values=True)

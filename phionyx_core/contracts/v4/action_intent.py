@@ -9,7 +9,7 @@ Includes sandbox/reversibility metadata for safe execution.
 
 from typing import Optional, Dict, Any
 from enum import Enum
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 from datetime import datetime, timezone
 import uuid
 
@@ -113,12 +113,4 @@ class ActionIntent(BaseModel):
     trace_id: Optional[str] = None
     metadata: Dict[str, Any] = Field(default_factory=dict)
 
-    class Config:
-        json_schema_extra = {
-            "example": {
-                "action_type": "respond",
-                "reversibility": "fully_reversible",
-                "sandbox_required": False,
-                "confidence": 0.85,
-            }
-        }
+    model_config = ConfigDict(json_schema_extra={'example': {'action_type': 'respond', 'reversibility': 'fully_reversible', 'sandbox_required': False, 'confidence': 0.85}})

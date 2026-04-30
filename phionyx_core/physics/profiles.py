@@ -8,7 +8,7 @@ Uses Pydantic for validation and YAML for preset storage.
 
 from enum import Enum
 from typing import Optional, Dict
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 import yaml
 from pathlib import Path
 
@@ -50,22 +50,11 @@ class PhysicsProfile(BaseModel):
         """Ensure values are in [0, 1] range."""
         return max(0.0, min(1.0, v))
 
-    class Config:
-        """Pydantic config."""
-        use_enum_values = True
-        extra = "allow"  # ENTERPRISE UPGRADE: Allow extra fields like max_entropy from YAML
-        json_schema_extra = {
-            "example": {
-                "name": "SCHOOL_DEFAULT",
-                "base_mode": "SCHOOL",
-                "reactivity": 0.2,
-                "resilience": 0.9,
-                "safety": 0.8,
-                "description": "High resilience, low reactivity for educational settings"
-            }
-        }
-
-
+    model_config = ConfigDict(
+        use_enum_values=True,
+        extra='allow',
+        json_schema_extra={'example': {'name': 'SCHOOL_DEFAULT', 'base_mode': 'SCHOOL', 'reactivity': 0.2, 'resilience': 0.9, 'safety': 0.8, 'description': 'High resilience, low reactivity for educational settings'}},
+    )
 class ProfileLoader:
     """
     Loads and manages physics profiles from YAML files.

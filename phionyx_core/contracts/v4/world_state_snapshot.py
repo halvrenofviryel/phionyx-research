@@ -8,7 +8,7 @@ AD-1: Composition — EchoState2 is composed as echo_state field.
 
 from typing import Optional, Dict, Any, List
 from enum import Enum
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 from datetime import datetime, timezone
 
 
@@ -74,11 +74,4 @@ class WorldStateSnapshot(BaseModel):
         description="Turn index at snapshot time"
     )
 
-    class Config:
-        json_schema_extra = {
-            "example": {
-                "echo_state": {"A": 0.5, "V": 0.3, "H": 0.4},
-                "belief_vector": {"hypothesis_a": 0.7, "hypothesis_b": 0.3},
-                "arbitration_status": "stable",
-            }
-        }
+    model_config = ConfigDict(json_schema_extra={'example': {'echo_state': {'A': 0.5, 'V': 0.3, 'H': 0.4}, 'belief_vector': {'hypothesis_a': 0.7, 'hypothesis_b': 0.3}, 'arbitration_status': 'stable'}})

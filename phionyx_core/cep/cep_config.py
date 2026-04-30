@@ -6,7 +6,7 @@ Configuration management for Conscious Echo Proof (CEP) engine.
 Supports profile-based configuration with YAML loading capability.
 """
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 from typing import Any, List, Literal, Optional
 from pathlib import Path
 import logging
@@ -35,11 +35,7 @@ class CEPConfig(BaseModel):
         description="CEP thresholds for evaluation"
     )
 
-    class Config:
-        """Pydantic config."""
-        use_enum_values = True
-
-
+    model_config = ConfigDict(use_enum_values=True)
 def _cep_config_search_paths(profile_name: str) -> List[Path]:
     """Return candidate paths for CEP profile YAML (first existing wins)."""
     base = Path(__file__).resolve().parent

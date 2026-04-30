@@ -7,7 +7,7 @@ Defines the nested structure for high-level personas and low-level technical par
 
 from enum import Enum
 from typing import Optional, Dict, List
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 
 class BaseMode(str, Enum):
@@ -102,11 +102,7 @@ class GovernanceConfig(BaseModel):
     audit_level: AuditLevel = Field(AuditLevel.STANDARD, description="Audit logging level")
     custom_regex_patterns: Optional[List[str]] = Field(None, description="Custom PII regex patterns")
 
-    class Config:
-        """Pydantic config."""
-        use_enum_values = True
-
-
+    model_config = ConfigDict(use_enum_values=True)
 class RoutingConfig(BaseModel):
     """
     LLM routing configuration.
@@ -118,11 +114,7 @@ class RoutingConfig(BaseModel):
     max_tokens_per_tier: Optional[Dict[str, int]] = Field(None, description="Max tokens per tier")
     enable_graph_rag: bool = Field(False, description="Enable GraphRAG for hidden context discovery (default: OFF, only for Academic/Enterprise/Deep-analysis modes)")
 
-    class Config:
-        """Pydantic config."""
-        use_enum_values = True
-
-
+    model_config = ConfigDict(use_enum_values=True)
 class ExecutionGuardConfig(BaseModel):
     """
     Per-profile ExecutionGuard limits.
@@ -157,11 +149,7 @@ class ExecutionGuardConfig(BaseModel):
         description="Circular-sequence detection window. Guard default: 3.",
     )
 
-    class Config:
-        """Pydantic config."""
-        use_enum_values = True
-
-
+    model_config = ConfigDict(use_enum_values=True)
 class Profile(BaseModel):
     """
     Root profile model containing all module configurations.
@@ -185,32 +173,7 @@ class Profile(BaseModel):
     version: Optional[str] = Field("1.0.0", description="Profile version")
     tags: Optional[List[str]] = Field(None, description="Tags for filtering/searching")
 
-    class Config:
-        """Pydantic config."""
-        use_enum_values = True
-        json_schema_extra = {
-            "example": {
-                "name": "SCHOOL_DEFAULT",
-                "description": "Default school profile: High resilience, low reactivity",
-                "physics": {
-                    "reactivity": 0.2,
-                    "resilience": 0.9,
-                    "safety_bias": 0.8,
-                    "base_mode": "SCHOOL"
-                },
-                "pedagogy": {
-                    "vygotsky_level": 0.7,
-                    "scaffolding_aggressiveness": 0.6,
-                    "intervention_threshold": 0.4
-                },
-                "governance": {
-                    "policy_id": "school_policy",
-                    "pii_mode": "FULL",
-                    "audit_level": "VERBOSE"
-                },
-                "routing": {
-                    "llm_tier_strategy": "QUALITY_OPTIMIZED"
-                }
-            }
-        }
-
+    model_config = ConfigDict(
+        use_enum_values=True,
+        json_schema_extra={'example': {'name': 'SCHOOL_DEFAULT', 'description': 'Default school profile: High resilience, low reactivity', 'physics': {'reactivity': 0.2, 'resilience': 0.9, 'safety_bias': 0.8, 'base_mode': 'SCHOOL'}, 'pedagogy': {'vygotsky_level': 0.7, 'scaffolding_aggressiveness': 0.6, 'intervention_threshold': 0.4}, 'governance': {'policy_id': 'school_policy', 'pii_mode': 'FULL', 'audit_level': 'VERBOSE'}, 'routing': {'llm_tier_strategy': 'QUALITY_OPTIMIZED'}}},
+    )
