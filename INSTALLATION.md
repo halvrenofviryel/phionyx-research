@@ -1,153 +1,120 @@
-# Installation Guide
+# Installation
 
-**Phionyx Core SDK Installation**
+## Requirements
 
----
+- Python 3.10 or higher
+- pip ≥ 22
 
-## Prerequisites
+## Install from source (current canonical path)
 
-- **Python**: 3.9 or higher
-- **pip**: Latest version recommended
-- **Operating System**: Linux, macOS, or Windows
+```bash
+git clone https://github.com/halvrenofviryel/phionyx-research.git
+cd phionyx-research
+pip install -e .
+```
 
----
+After install, a one-line smoke test:
 
-## Installation Methods
+```python
+from phionyx_core import EchoState2, calculate_phi_v2_1
+state = EchoState2(A=0.5, V=0.3, H=0.4)
+phi = calculate_phi_v2_1(
+    valence=state.V, arousal=state.A, amplitude=5.0, time_delta=0.1,
+    gamma=0.15, stability=state.stability, entropy=state.H,
+    w_c=0.6, w_p=0.4,
+)
+print(phi["phi"])  # deterministic, reproducible
+```
 
-### Method 1: pip (Recommended)
+## Install from PyPI
+
+Coming soon. The package metadata, build, and `twine check` are clean,
+but the upload is gated on a TestPyPI verification run. Track
+[`#packaging/pypi-readiness`](https://github.com/halvrenofviryel/phionyx-research/pulls?q=label%3Apackaging)
+for status. Once uploaded the install will be:
 
 ```bash
 pip install phionyx-core
 ```
 
-### Method 2: From Source
+## Required dependencies
+
+These are pulled automatically by `pip install`:
+
+- `pydantic >= 2.0`
+- `typing-extensions >= 4.0`
+- `PyYAML >= 6.0` — required because `phionyx_core.physics.profiles`
+  and `phionyx_core.cep.cep_config` parse YAML at import time
+- `numpy >= 1.24` — required because `phionyx_core.state.ukf_*` imports
+  numpy at module top level
+
+## Optional extras
 
 ```bash
-# Clone repository
-git clone https://github.com/phionyx/phionyx-core.git
-cd phionyx-core
-
-# Install in development mode
-pip install -e .
-
-# Or install normally
-pip install .
+pip install -e ".[graph]"        # networkx — CausalGraph, graph_engine
+pip install -e ".[telemetry]"    # OpenTelemetry SDK + API
+pip install -e ".[postgres]"     # asyncpg adapter
+pip install -e ".[supabase]"     # supabase adapter
+pip install -e ".[dev]"          # pytest, ruff, mypy — for contributing
+pip install -e ".[all]"          # graph + telemetry (production adapters)
 ```
 
-### Method 3: From GitHub (Latest)
+## Run the tests
 
 ```bash
-pip install git+https://github.com/phionyx/phionyx-core.git
+pip install -e ".[dev]"
+pytest tests/core -q
 ```
 
----
+A clean clone should produce **1013 passed, 5 skipped** in `tests/core`
+(roughly two seconds on a recent laptop). Other test directories
+(`tests/contract`, `tests/benchmarks`) are also runnable but require
+some extras.
 
-## Dependencies
-
-Phionyx Core SDK has the following dependencies:
-
-### Core Dependencies
-
-- **pydantic**: Data validation and settings management
-- **numpy**: Numerical computations
-- **typing-extensions**: Extended type hints
-
-### Optional Dependencies
-
-- **asyncpg**: PostgreSQL state store (if using PostgreSQL)
-- **opentelemetry**: Telemetry and observability (if using OpenTelemetry)
-
-### Development Dependencies
-
-- **pytest**: Testing framework
-- **pytest-cov**: Coverage reporting
-- **ruff**: Code linting
-- **black**: Code formatting
-
----
-
-## Verification
-
-After installation, verify the installation:
-
-```python
-import phionyx_core
-print(phionyx_core.__version__)
-
-# Test import
-from phionyx_core import EchoOrchestrator, EchoState2
-print("✅ Phionyx Core SDK installed successfully!")
-```
-
----
-
-## Configuration
-
-### Environment Variables
-
-Phionyx Core SDK uses environment variables for configuration:
+## Run the demo notebooks
 
 ```bash
-# Optional: Set log level
-export PHIONYX_LOG_LEVEL=INFO
-
-# Optional: Enable OpenTelemetry
-export PHIONYX_OPENTELEMETRY_ENABLED=true
+pip install jupyter matplotlib
+jupyter notebook examples/notebooks/
 ```
 
-### Profile Configuration
-
-Copy example profiles from `config/templates/` and customize:
-
-```bash
-# Copy template
-cp phionyx_core/config/templates/profile_templates.py my_profile.py
-
-# Edit my_profile.py with your values
-```
-
----
+See [`examples/notebooks/README.md`](examples/notebooks/README.md) for
+what each notebook demonstrates.
 
 ## Troubleshooting
 
-### Common Issues
+**`ModuleNotFoundError: No module named 'phionyx_core'`**
 
-**Issue**: `ModuleNotFoundError: No module named 'phionyx_core'`
+You're not in the venv where you ran `pip install`. Activate it:
 
-**Solution**: Ensure you're using the correct Python environment:
 ```bash
-python --version  # Should be 3.9+
-which python      # Check Python path
-pip install phionyx-core
+source venv/bin/activate
+which python  # should point inside the venv
 ```
 
-**Issue**: `ImportError: cannot import name 'EchoOrchestrator'`
+**`ImportError: cannot import name 'EchoOrchestrator'`**
 
-**Solution**: Ensure you're importing from the correct module:
+Import from the package root, not a submodule:
+
 ```python
-from phionyx_core import EchoOrchestrator  # Correct
-# Not: from phionyx_core.orchestrator import EchoOrchestrator
+from phionyx_core import EchoOrchestrator  # correct
+# from phionyx_core.orchestrator import EchoOrchestrator  # internal
 ```
 
-**Issue**: PostgreSQL connection errors
+**Postgres / Supabase connection errors**
 
-**Solution**: Install asyncpg if using PostgreSQL:
+Install the matching extra:
+
 ```bash
-pip install asyncpg
+pip install -e ".[postgres]"  # asyncpg
+pip install -e ".[supabase]"
 ```
 
----
+## Environment variables
 
-## Next Steps
+Optional, all unset by default:
 
-After installation:
-
-1. Read the [README.md](README.md) for quick start
-2. Check [API Reference](docs/API_REFERENCE.md) for detailed API documentation
-3. Review [Usage Examples](docs/EXAMPLES.md) for code examples
-4. See [Configuration Guide](docs/CONFIGURATION.md) for configuration options
-
----
-
-**Last Updated**: 2026-01-29
-
+```bash
+export PHIONYX_LOG_LEVEL=INFO
+export PHIONYX_OPENTELEMETRY_ENABLED=true
+```
