@@ -28,9 +28,17 @@ from pathlib import Path
 import pytest
 import yaml
 
-from phionyx_products.config_loader import ProductConfigLoader
-from phionyx_products.product_manager import DevelopmentStage
-from phionyx_products.product_registry import ProductRegistry
+# `phionyx_products` is monorepo-only — it ships in the founder's
+# internal repo but not in this public SDK release. Skip the whole
+# module on a clean clone so the rest of `tests/contract` can run.
+pytest.importorskip(
+    "phionyx_products",
+    reason="phionyx_products is monorepo-only; this contract test skips on the public SDK release",
+)
+
+from phionyx_products.config_loader import ProductConfigLoader  # noqa: E402
+from phionyx_products.product_manager import DevelopmentStage  # noqa: E402
+from phionyx_products.product_registry import ProductRegistry  # noqa: E402
 
 
 PRODUCTS_DIR = Path(__file__).resolve().parents[2] / "phionyx_products" / "products"
