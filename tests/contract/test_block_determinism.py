@@ -80,6 +80,12 @@ def test_matrix_doc_in_sync():
     """Running ``generate_determinism_matrix.py --check`` must succeed,
     proving the committed matrix doc matches the current code."""
     script = REPO_ROOT / "scripts" / "active" / "generate_determinism_matrix.py"
+    if not script.exists():
+        pytest.skip(
+            "generate_determinism_matrix.py is monorepo-only and not "
+            "shipped on the public SDK release. The doc is regenerated "
+            "in the monorepo and committed manually here."
+        )
     result = subprocess.run(
         [sys.executable, str(script), "--check"],
         capture_output=True,

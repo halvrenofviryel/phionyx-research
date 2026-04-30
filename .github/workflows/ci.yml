@@ -49,6 +49,9 @@ jobs:
       - name: Run pytest (tests/core)
         run: pytest tests/core -q --tb=short
 
+      - name: Run pytest (tests/contract)
+        run: pytest tests/contract -q --tb=short
+
       - name: Run pytest (tests/benchmarks)
         run: pytest tests/benchmarks -q --tb=short
 
