@@ -24,14 +24,39 @@ Most AI frameworks let the LLM decide. Phionyx doesn't. Every LLM response passe
 
 ---
 
-## Quick Start
+## Try It In 30 Seconds
+
+**Three demo notebooks. No API key. Runs locally.**
+
+The substrate (state vector, Φ, governance gates, pipeline) is demonstrable
+without an LLM, server, or external account. Each notebook runs end-to-end
+in seconds and embeds its outputs.
+
+| # | Notebook | Shows |
+|---|----------|-------|
+| 01 | [Determinism and Physics](examples/notebooks/01_determinism_and_physics.ipynb) | `EchoState2`, `calculate_phi_v2_1`, 1000-run determinism proof, side-by-side with a noisy alternative |
+| 02 | [Kill Switch in Action](examples/notebooks/02_kill_switch_in_action.ipynb) | `KillSwitch` with 4 triggers + NaN fail-closed guard, tamper-evident event log |
+| 03 | [Pipeline Blocks and Audit](examples/notebooks/03_pipeline_blocks_and_audit.ipynb) | Canonical 46-block pipeline (v3.8.0), custom block subclass, 100-run determinism |
+
+Notebook 01 sweeps the cognitive component of Φ across the full Circumplex
+(valence × arousal). The surface is smooth, bounded, and reproducible —
+no LLM is involved at this layer.
+
+![Phi cognitive across valence × arousal](docs/img/phi_heatmap.png)
 
 ```bash
-# Install from source
 git clone https://github.com/halvrenofviryel/phionyx-research.git
 cd phionyx-research
-pip install -e .
+pip install -e . jupyter matplotlib
+jupyter notebook examples/notebooks/
 ```
+
+---
+
+## Quick Start — Full Runtime
+
+For the LLM-backed orchestrator (governed response, state metrics, audit
+trail):
 
 ```python
 from phionyx_core import EchoOrchestrator, OrchestratorServices
@@ -49,27 +74,6 @@ result = await orchestrator.run(
 ```
 
 See [`examples/fastapi/`](examples/fastapi/) for an HTTP endpoint wrapper.
-
----
-
-## Try It In 30 Seconds
-
-Three short notebooks demonstrate the substrate without an LLM, server, or external account. Each runs end-to-end and embeds its outputs.
-
-| # | Notebook | Shows |
-|---|----------|-------|
-| 01 | [Determinism and Physics](examples/notebooks/01_determinism_and_physics.ipynb) | `EchoState2`, `calculate_phi_v2_1`, 1000-run determinism proof, side-by-side with a noisy alternative |
-| 02 | [Kill Switch in Action](examples/notebooks/02_kill_switch_in_action.ipynb) | `KillSwitch` with 4 triggers + NaN fail-closed guard, tamper-evident event log |
-| 03 | [Pipeline Blocks and Audit](examples/notebooks/03_pipeline_blocks_and_audit.ipynb) | Canonical 46-block pipeline (v3.8.0), custom block subclass, 100-run determinism |
-
-Notebook 01 sweeps the cognitive component of Φ across the full Circumplex (valence × arousal). The surface is smooth, bounded, and reproducible bit-for-bit — there is no LLM involved at this layer.
-
-![Phi cognitive across valence × arousal](docs/img/phi_heatmap.png)
-
-```bash
-pip install jupyter matplotlib
-jupyter notebook examples/notebooks/
-```
 
 ---
 
