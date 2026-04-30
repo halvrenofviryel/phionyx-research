@@ -42,20 +42,14 @@ classifiers = [
 dependencies = [
     "pydantic>=2.0.0,<3.0.0",
     "typing-extensions>=4.0.0",
+    "PyYAML>=6.0",
+    "numpy>=1.24.0",
 ]
 
 [project.optional-dependencies]
 # Graph / intuition layer (networkx for CausalGraph, graph_engine)
 graph = [
     "networkx>=3.0",
-]
-# Numeric extensions (UKF, CEP, metrics)
-numeric = [
-    "numpy>=1.24.0",
-]
-# Profile loader reads YAML configs
-yaml = [
-    "PyYAML>=6.0",
 ]
 # OpenTelemetry instrumentation
 telemetry = [
@@ -78,9 +72,9 @@ dev = [
     "ruff>=0.4.0",
     "mypy>=1.0.0",
 ]
-# All optional runtime dependencies
+# All optional runtime adapters
 all = [
-    "phionyx-core[graph,numeric,yaml,telemetry]",
+    "phionyx-core[graph,telemetry]",
 ]
 
 [project.urls]

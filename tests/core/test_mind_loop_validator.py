@@ -20,9 +20,18 @@ def _make_block_result(status="ok"):
 
 
 def _all_blocks_ok():
-    """All 43 canonical blocks executed."""
-    from tests.behavioral_eval.conftest import CANONICAL_V3_5_0
-    return {b: _make_block_result("ok") for b in CANONICAL_V3_5_0}
+    """All current canonical blocks executed (v3.8.0, 46 blocks).
+
+    The validator's expected stage-block sets (in
+    phionyx_core/meta/mind_loop_validator.py) track the current
+    contract, so the test helper must load the current canonical list,
+    not an older one. Loading directly from the package keeps the test
+    self-contained — the older `tests.behavioral_eval` fixture is
+    monorepo-only and not shipped here.
+    """
+    from phionyx_core.contracts.telemetry import get_canonical_blocks
+    blocks = get_canonical_blocks()  # defaults to current (v3.8.0)
+    return {b: _make_block_result("ok") for b in blocks}
 
 
 def _full_metadata():
