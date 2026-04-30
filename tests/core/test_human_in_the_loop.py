@@ -6,7 +6,7 @@ import pytest
 import os
 import tempfile
 import json
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 from phionyx_core.governance.human_in_the_loop import (
     HumanReviewQueue,
@@ -117,13 +117,13 @@ class TestExpiry:
     def test_expired_item_auto_denied(self, queue):
         item = queue.submit_for_review("test", "reason")
         # Manually expire the item
-        item.expires_at = (datetime.utcnow() - timedelta(hours=1)).isoformat()
+        item.expires_at = (datetime.now(timezone.utc) - timedelta(hours=1)).isoformat()
         queue._expire_stale()
         assert queue.pending_count == 0
 
     def test_is_pending_false_for_expired(self, queue):
         item = queue.submit_for_review("test", "reason")
-        item.expires_at = (datetime.utcnow() - timedelta(hours=1)).isoformat()
+        item.expires_at = (datetime.now(timezone.utc) - timedelta(hours=1)).isoformat()
         assert not queue.is_pending(item.review_id)
 
 
@@ -206,7 +206,7 @@ class TestReviewItem:
     def test_is_expired(self):
         item = ReviewItem(
             review_id="test",
-            submitted_at=datetime.utcnow().isoformat(),
-            expires_at=(datetime.utcnow() - timedelta(hours=1)).isoformat(),
+            submitted_at=datetime.now(timezone.utc).isoformat(),
+            expires_at=(datetime.now(timezone.utc) - timedelta(hours=1)).isoformat(),
         )
         assert item.is_expired()
