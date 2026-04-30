@@ -10,9 +10,8 @@ Captures full world state snapshot after physics update.
 """
 
 import logging
-from typing import Optional
 
-from ..base import PipelineBlock, BlockContext, BlockResult
+from ..base import BlockContext, BlockResult, PipelineBlock
 
 logger = logging.getLogger(__name__)
 
@@ -28,14 +27,14 @@ class WorldStateSnapshotBlock(PipelineBlock):
     def __init__(self):
         super().__init__("world_state_snapshot")
 
-    def should_skip(self, context: BlockContext) -> Optional[str]:
+    def should_skip(self, context: BlockContext) -> str | None:
         if context.pipeline_version < "3.0.0":
             return "v4_block_requires_pipeline_v3"
         return None
 
     async def execute(self, context: BlockContext) -> BlockResult:
         try:
-            from ...contracts.v4.world_state_snapshot import WorldStateSnapshot, ArbitrationStatus
+            from ...contracts.v4.world_state_snapshot import ArbitrationStatus, WorldStateSnapshot
 
             metadata = context.metadata or {}
             unified_state = metadata.get("unified_state")

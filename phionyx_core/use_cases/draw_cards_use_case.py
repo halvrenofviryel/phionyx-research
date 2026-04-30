@@ -7,8 +7,8 @@ Extracted from API route handler to core layer.
 """
 
 import logging
-from typing import Dict, Any, Optional
 from dataclasses import dataclass
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -17,21 +17,21 @@ logger = logging.getLogger(__name__)
 class DrawCardsInput:
     """Input for draw cards use case."""
     character_id: str
-    profile_name: Optional[str] = None
-    content_profile: Optional[str] = None
-    user_id: Optional[str] = None
+    profile_name: str | None = None
+    content_profile: str | None = None
+    user_id: str | None = None
 
 
 @dataclass
 class DrawCardsOutput:
     """Output from draw cards use case."""
-    cards: Dict[str, Any]
+    cards: dict[str, Any]
     character_name: str
     character_archetype: str
     profile_name: str
     character_class: str = "Shadow"
-    initial_integrity: Optional[float] = None
-    background: Optional[str] = None
+    initial_integrity: float | None = None
+    background: str | None = None
 
 
 class DrawCardsUseCase:

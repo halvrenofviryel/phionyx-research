@@ -6,28 +6,28 @@ Manages product profiles and port instantiation.
 Creates appropriate port implementations based on profile configuration.
 """
 
-import logging
-from typing import Dict, Any, Optional
-from pathlib import Path
 import json
+import logging
+from pathlib import Path
+from typing import Any
 
 from ..ports import (
-    PhysicsPort,
-    MemoryPort,
     IntuitionPort,
-    PedagogyPort,
-    PolicyPort,
+    MemoryPort,
+    MetaPort,
     NarrativePort,
-    MetaPort
+    PedagogyPort,
+    PhysicsPort,
+    PolicyPort,
 )
 from ..ports.null_implementations import (
-    NullPhysicsEngine,
-    NullMemoryEngine,
     NullIntuitionEngine,
-    NullPedagogyEngine,
-    NullPolicyEngine,
+    NullMemoryEngine,
+    NullMetaEngine,
     NullNarrativeEngine,
-    NullMetaEngine
+    NullPedagogyEngine,
+    NullPhysicsEngine,
+    NullPolicyEngine,
 )
 from .profile_configs import get_profile_config
 
@@ -47,7 +47,7 @@ class ProductProfile:
         narrative: NarrativePort,
         meta: MetaPort,
         profile_name: str,
-        config: Dict[str, Any]
+        config: dict[str, Any]
     ):
         self.physics = physics
         self.memory = memory
@@ -59,7 +59,7 @@ class ProductProfile:
         self.profile_name = profile_name
         self.config = config
 
-    def get_module_status(self) -> Dict[str, bool]:
+    def get_module_status(self) -> dict[str, bool]:
         """Get status of each module (enabled/disabled)."""
         return {
             "physics": not isinstance(self.physics, NullPhysicsEngine),
@@ -84,6 +84,7 @@ class ProfileManager:
         # Try to import real Physics implementation
         try:
             from phionyx_core.physics.formulas import calculate_phi_v2_1  # noqa: F401
+
             # Create real Physics port implementation
             # This would be a wrapper around the real SDK
             from ..implementations.physics_impl import RealPhysicsEngine
@@ -100,6 +101,7 @@ class ProfileManager:
 
         try:
             from phionyx_core.memory.vector_store import VectorStore  # noqa: F401
+
             from ..implementations.memory_impl import RealMemoryEngine
             return RealMemoryEngine()
         except ImportError:
@@ -114,6 +116,7 @@ class ProfileManager:
 
         try:
             from phionyx_intuition import GraphEngine  # noqa: F401
+
             from ..implementations.intuition_impl import RealIntuitionEngine
             return RealIntuitionEngine()
         except ImportError:
@@ -128,6 +131,7 @@ class ProfileManager:
 
         try:
             from phionyx_core.pedagogy.risk_assessment import RiskAssessor  # noqa: F401
+
             from ..implementations.pedagogy_impl import RealPedagogyEngine
             return RealPedagogyEngine(strictness=module_config)
         except ImportError:
@@ -177,7 +181,7 @@ class ProfileManager:
     def create_profile(
         cls,
         profile_name: str,
-        config: Optional[Dict[str, Any]] = None
+        config: dict[str, Any] | None = None
     ) -> ProductProfile:
         """
         Create product profile from configuration.
@@ -218,7 +222,7 @@ class ProfileManager:
         )
 
     @staticmethod
-    def _get_module_status(modules: Dict[str, str]) -> str:
+    def _get_module_status(modules: dict[str, str]) -> str:
         """Get human-readable module status."""
         status = []
         for module, config in modules.items():
@@ -240,7 +244,7 @@ class ProfileManager:
         if not path.exists():
             raise FileNotFoundError(f"Profile config not found: {config_path}")
 
-        with open(path, "r", encoding="utf-8") as f:
+        with open(path, encoding="utf-8") as f:
             config = json.load(f)
 
         profile_name = config.get("profile", "edu")

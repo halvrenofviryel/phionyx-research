@@ -3,16 +3,15 @@ Behavioral Drift Detection Block
 Pipeline-integrated drift detection for Silent Failure Firewall.
 """
 
-from typing import Optional
 import logging
 
-from ..base import PipelineBlock, BlockContext, BlockResult
 from ...monitoring.behavioral_drift import (
     BehavioralDriftDetector,
 )
 from ...monitoring.circuit_breaker import (
     CircuitBreaker,
 )
+from ..base import BlockContext, BlockResult, PipelineBlock
 
 logger = logging.getLogger(__name__)
 
@@ -36,8 +35,8 @@ class BehavioralDriftDetectionBlock(PipelineBlock):
 
     def __init__(
         self,
-        drift_detector: Optional[BehavioralDriftDetector] = None,
-        circuit_breaker: Optional[CircuitBreaker] = None,
+        drift_detector: BehavioralDriftDetector | None = None,
+        circuit_breaker: CircuitBreaker | None = None,
         enabled: bool = True
     ):
         """

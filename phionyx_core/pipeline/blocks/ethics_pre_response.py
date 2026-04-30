@@ -7,9 +7,9 @@ Ethics check before narrative generation.
 """
 
 import logging
-from typing import Dict, Any, Optional, Protocol
+from typing import Any, Protocol
 
-from ..base import PipelineBlock, BlockContext, BlockResult
+from ..base import BlockContext, BlockResult, PipelineBlock
 
 logger = logging.getLogger(__name__)
 
@@ -21,7 +21,7 @@ class EthicsProcessorProtocol(Protocol):
         frame: Any,
         user_input: str,
         cognitive_state: Any
-    ) -> Dict[str, Any]:  # Returns ethics_result
+    ) -> dict[str, Any]:  # Returns ethics_result
         """Check ethics before response."""
         ...
 
@@ -33,7 +33,7 @@ class EthicsPreResponseBlock(PipelineBlock):
     Performs ethics check before narrative generation.
     """
 
-    def __init__(self, processor: Optional[EthicsProcessorProtocol] = None):
+    def __init__(self, processor: EthicsProcessorProtocol | None = None):
         """
         Initialize block.
 

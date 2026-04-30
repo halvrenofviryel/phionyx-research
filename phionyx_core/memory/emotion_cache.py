@@ -13,10 +13,10 @@ Features:
 """
 
 import hashlib
-import time
-from typing import Dict, Any, Optional, Tuple
-from collections import OrderedDict
 import logging
+import time
+from collections import OrderedDict
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -86,7 +86,7 @@ class EmotionCache:
         # Generate deterministic hash
         return hashlib.sha256(normalized.encode('utf-8')).hexdigest()
 
-    def get(self, text: str) -> Optional[Tuple[float, float]]:
+    def get(self, text: str) -> tuple[float, float] | None:
         """
         Get cached emotion values for input text.
 
@@ -151,7 +151,7 @@ class EmotionCache:
 
         logger.debug(f"Emotion cache SET: text_hash={cache_key[:8]}..., valence={valence:.4f}, arousal={arousal:.4f}")
 
-    def get_metrics(self) -> Dict[str, Any]:
+    def get_metrics(self) -> dict[str, Any]:
         """
         Get cache metrics.
 

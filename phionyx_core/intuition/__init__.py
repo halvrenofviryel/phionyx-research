@@ -12,7 +12,7 @@ Key Features:
 - Physics-driven edge strength
 """
 
-from .graph_engine import GraphEngine, Concept, Association, HiddenContext
+from .graph_engine import Association, Concept, GraphEngine, HiddenContext
 from .visualizer import GraphVisualizer
 
 __all__ = ["GraphEngine", "Concept", "Association", "HiddenContext", "GraphVisualizer"]

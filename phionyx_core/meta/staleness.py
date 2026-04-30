@@ -6,9 +6,8 @@ Invalidates model/module outputs when they exceed staleness threshold.
 Default: τ > 3600s (1 hour) → stale.
 """
 
-import time
 import logging
-from typing import Dict, Optional
+import time
 from dataclasses import dataclass, field
 
 logger = logging.getLogger(__name__)
@@ -35,14 +34,14 @@ class StalenessRegistry:
     Modules register their last update timestamp.
     Query to check if any module is stale.
     """
-    entries: Dict[str, StalenessEntry] = field(default_factory=dict)
+    entries: dict[str, StalenessEntry] = field(default_factory=dict)
     default_threshold: float = DEFAULT_STALENESS_THRESHOLD
 
     def register_update(
         self,
         module_id: str,
-        timestamp: Optional[float] = None,
-        threshold: Optional[float] = None,
+        timestamp: float | None = None,
+        threshold: float | None = None,
     ) -> None:
         """Register a module update."""
         ts = timestamp if timestamp is not None else time.monotonic()
@@ -56,7 +55,7 @@ class StalenessRegistry:
     def check_staleness(
         self,
         module_id: str,
-        current_time: Optional[float] = None,
+        current_time: float | None = None,
     ) -> StalenessEntry:
         """Check if a module's output is stale."""
         now = current_time if current_time is not None else time.monotonic()
@@ -87,7 +86,7 @@ class StalenessRegistry:
 
     def get_stale_modules(
         self,
-        current_time: Optional[float] = None,
+        current_time: float | None = None,
     ) -> list:
         """Get all stale modules."""
         return [

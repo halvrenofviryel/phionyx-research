@@ -7,9 +7,9 @@ Transforms trace result into physics state using echo ontology.
 """
 
 import logging
-from typing import Dict, Any, Protocol
+from typing import Any, Protocol
 
-from ...base import PipelineBlock, BlockContext, BlockResult
+from ...base import BlockContext, BlockResult, PipelineBlock
 
 logger = logging.getLogger(__name__)
 
@@ -21,7 +21,7 @@ class EchoOntologyTransformerProtocol(Protocol):
         frame: Any,
         cognitive_state: Any,
         trace_result: Any
-    ) -> Dict[str, Any]:  # Returns physics_state
+    ) -> dict[str, Any]:  # Returns physics_state
         """Transform trace to physics state."""
         ...
 

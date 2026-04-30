@@ -10,11 +10,10 @@ Per Faz 2.4:
 
 from __future__ import annotations
 
-from typing import List, Optional
-from contextlib import closing
-from datetime import datetime
 import json
 import sqlite3
+from contextlib import closing
+from datetime import datetime
 from pathlib import Path
 
 # Import EchoEvent if available
@@ -38,8 +37,8 @@ class TraceStore:
 
     def __init__(
         self,
-        db_path: Optional[str] = None,
-        jsonl_path: Optional[str] = None,
+        db_path: str | None = None,
+        jsonl_path: str | None = None,
         enable_vector_index: bool = False
     ):
         """
@@ -164,7 +163,7 @@ class TraceStore:
 
         return True
 
-    def get_event(self, event_id: str) -> Optional[EchoEvent]:
+    def get_event(self, event_id: str) -> EchoEvent | None:
         """
         Retrieve event by ID.
 
@@ -213,11 +212,11 @@ class TraceStore:
 
     def get_events_by_tags(
         self,
-        tags: List[str],
-        start_time: Optional[datetime] = None,
-        end_time: Optional[datetime] = None,
+        tags: list[str],
+        start_time: datetime | None = None,
+        end_time: datetime | None = None,
         limit: int = 100
-    ) -> List[EchoEvent]:
+    ) -> list[EchoEvent]:
         """
         Retrieve events by tags.
 
@@ -309,8 +308,8 @@ class TraceStore:
     def erase_event(
         self,
         event_id: str,
-        reason: Optional[str] = None,
-        user_id: Optional[str] = None
+        reason: str | None = None,
+        user_id: str | None = None
     ) -> bool:
         """
         Permanently erase event (GDPR compliance).

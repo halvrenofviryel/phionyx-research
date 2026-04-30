@@ -10,9 +10,9 @@ Position in pipeline: After confidence_fusion, before narrative_layer.
 """
 
 import logging
-from typing import Dict, Any
+from typing import Any
 
-from ..base import PipelineBlock, BlockContext, BlockResult
+from ..base import BlockContext, BlockResult, PipelineBlock
 
 logger = logging.getLogger(__name__)
 
@@ -126,7 +126,7 @@ class KillSwitchGateBlock(PipelineBlock):
                 data={"error": str(e)}
             )
 
-    def _extract_ethics_risk(self, metadata: Dict[str, Any]) -> float:
+    def _extract_ethics_risk(self, metadata: dict[str, Any]) -> float:
         """Extract max ethics risk from pipeline context."""
         # From ethics_pre_response block result
         ethics_result = metadata.get("ethics_result")
@@ -146,7 +146,7 @@ class KillSwitchGateBlock(PipelineBlock):
 
         return 0.0
 
-    def _extract_t_meta(self, metadata: Dict[str, Any]) -> float:
+    def _extract_t_meta(self, metadata: dict[str, Any]) -> float:
         """Extract T_meta from confidence fusion."""
         # From confidence_fusion block result
         confidence = metadata.get("confidence_result")
@@ -166,7 +166,7 @@ class KillSwitchGateBlock(PipelineBlock):
 
         return 1.0  # Default: fully trusted
 
-    def _extract_drift(self, metadata: Dict[str, Any]) -> bool:
+    def _extract_drift(self, metadata: dict[str, Any]) -> bool:
         """Extract drift detection status."""
         drift_result = metadata.get("drift_result")
         if drift_result:

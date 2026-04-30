@@ -7,9 +7,9 @@ Faz 3.1: Kalan Özellikler
 AI varsayımlarını kabul etmek yerine challenge eder.
 """
 
-from typing import List, Dict, Any
 from dataclasses import dataclass
 from enum import Enum
+from typing import Any
 
 from phionyx_core.services.assumption_types import Assumption
 
@@ -29,7 +29,7 @@ class AssumptionChallenge:
     assumption: Assumption
     challenge_type: ChallengeType
     challenge_reason: str
-    required_evidence: List[str]
+    required_evidence: list[str]
     severity: str = "medium"  # "low", "medium", "high", "critical"
 
 
@@ -46,12 +46,12 @@ class AssumptionChallengeModule:
 
     def __init__(self):
         """Initialize assumption challenge module."""
-        self.challenge_history: List[AssumptionChallenge] = []
+        self.challenge_history: list[AssumptionChallenge] = []
 
     def challenge_assumptions(
         self,
-        assumptions: List[Assumption]
-    ) -> List[AssumptionChallenge]:
+        assumptions: list[Assumption]
+    ) -> list[AssumptionChallenge]:
         """
         Challenge assumptions that lack evidence or have low confidence.
 
@@ -101,7 +101,7 @@ class AssumptionChallengeModule:
         self.challenge_history.extend(challenges)
         return challenges
 
-    def _get_required_evidence(self, assumption: Assumption) -> List[str]:
+    def _get_required_evidence(self, assumption: Assumption) -> list[str]:
         """Get required evidence for assumption type."""
         evidence_map = {
             "input_type": ["Type annotation", "Usage examples", "Documentation"],
@@ -115,7 +115,7 @@ class AssumptionChallengeModule:
     def _check_contradictory(
         self,
         assumption: Assumption,
-        all_assumptions: List[Assumption]
+        all_assumptions: list[Assumption]
     ) -> bool:
         """Check if assumption contradicts others."""
         # Simple heuristic: check for opposite descriptions
@@ -142,8 +142,8 @@ class AssumptionChallengeModule:
     def process_challenge_response(
         self,
         challenge_id: str,
-        response: Dict[str, Any]
-    ) -> Dict[str, Any]:
+        response: dict[str, Any]
+    ) -> dict[str, Any]:
         """
         Process response to assumption challenge.
 

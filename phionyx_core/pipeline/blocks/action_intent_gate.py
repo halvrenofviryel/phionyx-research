@@ -10,9 +10,8 @@ Gates proposed actions through ethics and safety checks.
 """
 
 import logging
-from typing import Optional
 
-from ..base import PipelineBlock, BlockContext, BlockResult
+from ..base import BlockContext, BlockResult, PipelineBlock
 
 logger = logging.getLogger(__name__)
 
@@ -28,7 +27,7 @@ class ActionIntentGateBlock(PipelineBlock):
     def __init__(self):
         super().__init__("action_intent_gate")
 
-    def should_skip(self, context: BlockContext) -> Optional[str]:
+    def should_skip(self, context: BlockContext) -> str | None:
         if context.pipeline_version < "3.0.0":
             return "v4_block_requires_pipeline_v3"
         return None

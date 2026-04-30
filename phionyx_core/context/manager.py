@@ -6,10 +6,10 @@ Manages context switching by flushing active context and loading
 mode-specific memory blocks.
 """
 
-from typing import Dict, Optional, List, Any
 import logging
+from typing import Any
 
-from .definitions import ContextMode, ContextDefinitions
+from .definitions import ContextDefinitions, ContextMode
 from .detector import ModeDetector
 
 logger = logging.getLogger(__name__)
@@ -38,17 +38,17 @@ class ContextManager:
         self.vector_store = vector_store
 
         # Current state
-        self.current_mode: Optional[ContextMode] = None
-        self.active_context: Dict[str, Any] = {}
-        self.loaded_memories: List[Dict] = []
+        self.current_mode: ContextMode | None = None
+        self.active_context: dict[str, Any] = {}
+        self.loaded_memories: list[dict] = []
 
         logger.info("ContextManager initialized")
 
     async def process(
         self,
         user_input: str,
-        current_state: Optional[Dict] = None
-    ) -> Dict[str, Any]:
+        current_state: dict | None = None
+    ) -> dict[str, Any]:
         """
         Process user input and determine if context switch is needed.
 
@@ -136,7 +136,7 @@ class ContextManager:
             f"Loaded {len(self.loaded_memories)} memories."
         )
 
-    async def _load_memories_for_mode(self, memory_tags: List[str]) -> None:
+    async def _load_memories_for_mode(self, memory_tags: list[str]) -> None:
         """
         Load memories from Vector Store filtered by context_tags.
 
@@ -180,7 +180,7 @@ class ContextManager:
             logger.error(f"ContextManager: Failed to load memories: {e}")
             self.loaded_memories = []
 
-    def get_active_context(self) -> Dict[str, Any]:
+    def get_active_context(self) -> dict[str, Any]:
         """Get current active context state."""
         return {
             "current_mode": self.current_mode.value if self.current_mode else None,

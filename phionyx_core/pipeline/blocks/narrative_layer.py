@@ -7,11 +7,12 @@ Generates narrative response using LLM.
 """
 
 import logging
-from typing import Dict, Any, Optional, Protocol
+from typing import Any, Protocol
 
-from ..base import PipelineBlock, BlockContext, BlockResult
 from phionyx_core.templates import get_template_manager
 from phionyx_core.templates.response_templates import IntentType
+
+from ..base import BlockContext, BlockResult, PipelineBlock
 
 logger = logging.getLogger(__name__)
 
@@ -26,9 +27,9 @@ class NarrativeLayerProcessorProtocol(Protocol):
         card_result: str,
         scene_context: str,
         enhanced_context_string: str,
-        system_prompt: Optional[str] = None,
-        physics_state: Optional[Dict[str, Any]] = None,
-        selected_intent: Optional[Dict[str, Any]] = None
+        system_prompt: str | None = None,
+        physics_state: dict[str, Any] | None = None,
+        selected_intent: dict[str, Any] | None = None
     ) -> tuple[Any, str, Any]:  # Returns (frame, narrative_text, narrative_result)
         """Process narrative layer."""
         ...
@@ -45,7 +46,7 @@ class NarrativeLayerBlock(PipelineBlock):
 
     CLAIM_REFS = ("SF1:C4", "SF1:C14", "SF1:C15")
 
-    def __init__(self, processor: Optional[NarrativeLayerProcessorProtocol] = None, enable_templates: bool = True):
+    def __init__(self, processor: NarrativeLayerProcessorProtocol | None = None, enable_templates: bool = True):
         """
         Initialize block.
 
@@ -61,7 +62,7 @@ class NarrativeLayerBlock(PipelineBlock):
         else:
             self.template_manager = None
 
-    def should_skip(self, context: BlockContext) -> Optional[str]:
+    def should_skip(self, context: BlockContext) -> str | None:
         """Skip if processor not available."""
         if self.processor is None:
             return "processor_not_available"

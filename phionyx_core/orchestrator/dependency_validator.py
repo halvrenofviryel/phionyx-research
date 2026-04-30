@@ -8,7 +8,6 @@ Validates block execution order against dependency graph.
 import json
 import logging
 from pathlib import Path
-from typing import List, Dict, Set, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -18,7 +17,7 @@ class DependencyValidator:
     Validates block execution order against dependency graph.
     """
 
-    def __init__(self, dependencies_file: Optional[Path] = None):
+    def __init__(self, dependencies_file: Path | None = None):
         """
         Initialize validator.
 
@@ -31,15 +30,15 @@ class DependencyValidator:
             dependencies_file = current_dir / 'block_dependencies.json'
 
         self.dependencies_file = dependencies_file
-        self.dependencies: Dict[str, Dict] = {}
-        self.metadata_producers: Dict[str, List[str]] = {}
+        self.dependencies: dict[str, dict] = {}
+        self.metadata_producers: dict[str, list[str]] = {}
 
         self._load_dependencies()
 
     def _load_dependencies(self) -> None:
         """Load dependency graph from JSON file."""
         try:
-            with open(self.dependencies_file, 'r', encoding='utf-8') as f:
+            with open(self.dependencies_file, encoding='utf-8') as f:
                 data = json.load(f)
                 self.dependencies = data.get('dependencies', {})
                 self.metadata_producers = data.get('metadata_producers', {})
@@ -53,7 +52,7 @@ class DependencyValidator:
             self.dependencies = {}
             self.metadata_producers = {}
 
-    def validate_execution_order(self, block_order: List[str]) -> tuple[bool, List[str]]:
+    def validate_execution_order(self, block_order: list[str]) -> tuple[bool, list[str]]:
         """
         Validate block execution order against dependency graph.
 
@@ -68,7 +67,7 @@ class DependencyValidator:
             return True, []
 
         violations = []
-        executed_blocks: Set[str] = set()
+        executed_blocks: set[str] = set()
 
         for block_id in block_order:
             if block_id not in self.dependencies:
@@ -89,7 +88,7 @@ class DependencyValidator:
 
         return len(violations) == 0, violations
 
-    def get_block_dependencies(self, block_id: str) -> List[str]:
+    def get_block_dependencies(self, block_id: str) -> list[str]:
         """
         Get list of block IDs that must execute before this block.
 
@@ -104,7 +103,7 @@ class DependencyValidator:
 
         return self.dependencies[block_id].get('dependencies', [])
 
-    def get_metadata_producers(self, metadata_key: str) -> List[str]:
+    def get_metadata_producers(self, metadata_key: str) -> list[str]:
         """
         Get list of block IDs that produce a specific metadata key.
 
@@ -116,7 +115,7 @@ class DependencyValidator:
         """
         return self.metadata_producers.get(metadata_key, [])
 
-    def get_block_writes(self, block_id: str) -> Set[str]:
+    def get_block_writes(self, block_id: str) -> set[str]:
         """
         Get set of metadata keys that this block writes to.
 
@@ -132,7 +131,7 @@ class DependencyValidator:
         writes = self.dependencies[block_id].get('writes', [])
         return set(writes) if writes else set()
 
-    def get_block_reads(self, block_id: str) -> Set[str]:
+    def get_block_reads(self, block_id: str) -> set[str]:
         """
         Get set of metadata keys that this block reads from.
 

@@ -8,8 +8,8 @@ Port-adapter pattern (AD-2): implements GoalRegistryProtocol.
 """
 
 import logging
-from typing import List, Optional, Dict, Any
 from datetime import datetime, timezone
+from typing import Any
 
 from ..contracts.v4.goal_object import GoalObject, GoalPriority, GoalStatus
 from ..meta.arbitration_math import compute_goal_utility
@@ -25,7 +25,7 @@ class GoalRegistry:
     """
 
     def __init__(self):
-        self._goals: Dict[str, GoalObject] = {}
+        self._goals: dict[str, GoalObject] = {}
 
     async def register_goal(self, goal: GoalObject) -> GoalObject:
         """Register a new goal."""
@@ -41,7 +41,7 @@ class GoalRegistry:
         self._goals[goal.goal_id] = goal
         return goal
 
-    async def activate_goal(self, goal_id: str) -> Optional[GoalObject]:
+    async def activate_goal(self, goal_id: str) -> GoalObject | None:
         """Activate a proposed goal."""
         goal = self._goals.get(goal_id)
         if goal and goal.status == GoalStatus.PROPOSED:
@@ -49,7 +49,7 @@ class GoalRegistry:
             goal.activated_at = datetime.now(timezone.utc)
         return goal
 
-    async def get_active_goals(self) -> List[GoalObject]:
+    async def get_active_goals(self) -> list[GoalObject]:
         """Get all active goals sorted by priority."""
         priority_order = {
             GoalPriority.CRITICAL: 0,
@@ -60,7 +60,7 @@ class GoalRegistry:
         active = [g for g in self._goals.values() if g.status == GoalStatus.ACTIVE]
         return sorted(active, key=lambda g: priority_order.get(g.priority, 99))
 
-    async def evaluate_goals(self, context: Any) -> List[GoalObject]:
+    async def evaluate_goals(self, context: Any) -> list[GoalObject]:
         """Evaluate all active goals against current context."""
         active = await self.get_active_goals()
         for goal in active:
@@ -73,7 +73,7 @@ class GoalRegistry:
             )
         return active
 
-    async def complete_goal(self, goal_id: str) -> Optional[GoalObject]:
+    async def complete_goal(self, goal_id: str) -> GoalObject | None:
         """Mark a goal as completed."""
         goal = self._goals.get(goal_id)
         if goal:
@@ -81,6 +81,6 @@ class GoalRegistry:
             goal.completed_at = datetime.now(timezone.utc)
         return goal
 
-    def get_goal(self, goal_id: str) -> Optional[GoalObject]:
+    def get_goal(self, goal_id: str) -> GoalObject | None:
         """Get a goal by ID."""
         return self._goals.get(goal_id)

@@ -12,13 +12,13 @@ Port-Adapter Pattern:
 - Product profiles select which ports to use
 """
 
-from .physics_port import PhysicsPort
-from .memory_port import MemoryPort
 from .intuition_port import IntuitionPort
-from .pedagogy_port import PedagogyPort
-from .policy_port import PolicyPort
-from .narrative_port import NarrativePort
+from .memory_port import MemoryPort
 from .meta_port import MetaPort
+from .narrative_port import NarrativePort
+from .pedagogy_port import PedagogyPort
+from .physics_port import PhysicsPort
+from .policy_port import PolicyPort
 
 # NOTE: OfstedPort moved to apps/school_ingest/ports/ofsted_port.py
 # Per Echoism Core v1.0: Ofsted is product-specific, not part of core SDK

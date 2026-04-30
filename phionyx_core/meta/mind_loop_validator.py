@@ -21,14 +21,14 @@ Pipeline Stages (per PHIONYX_MIND_LOOP_CONTRACT.md):
 
 import logging
 from dataclasses import dataclass, field
-from typing import Dict, List, Set, Any, Optional
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
 
 # ─── Stage Metadata Requirements ──────────────────────────────────
 
-STAGE_EXPECTED_KEYS: Dict[str, Dict[str, Any]] = {
+STAGE_EXPECTED_KEYS: dict[str, dict[str, Any]] = {
     "perceive": {
         "blocks": [
             "kill_switch_gate", "input_safety_gate", "intent_classification",
@@ -98,7 +98,7 @@ STAGE_ORDER = [
 ]
 
 # Hard dependencies: stage -> set of stages that must complete first
-STAGE_DEPENDENCIES: Dict[str, Set[str]] = {
+STAGE_DEPENDENCIES: dict[str, set[str]] = {
     "perceive": set(),
     "update_memory": {"perceive"},
     "update_self_model": {"perceive"},
@@ -113,13 +113,13 @@ STAGE_DEPENDENCIES: Dict[str, Set[str]] = {
 class StageValidationResult:
     """Result of validating a single mind-loop stage."""
     stage: str
-    executed_blocks: List[str] = field(default_factory=list)
-    missing_blocks: List[str] = field(default_factory=list)
-    missing_metadata: Set[str] = field(default_factory=set)
+    executed_blocks: list[str] = field(default_factory=list)
+    missing_blocks: list[str] = field(default_factory=list)
+    missing_metadata: set[str] = field(default_factory=set)
     completion_signal_present: bool = False
     dependencies_met: bool = True
     valid: bool = True
-    errors: List[str] = field(default_factory=list)
+    errors: list[str] = field(default_factory=list)
     # Quality scalars [0,1]
     quality_score: float = 0.0
     metadata_completeness: float = 0.0
@@ -130,15 +130,15 @@ class StageValidationResult:
 @dataclass
 class MindLoopValidationReport:
     """Complete mind-loop validation report for one pipeline turn."""
-    stages: Dict[str, StageValidationResult] = field(default_factory=dict)
+    stages: dict[str, StageValidationResult] = field(default_factory=dict)
     all_valid: bool = True
     total_blocks_executed: int = 0
     total_stages_complete: int = 0
-    errors: List[str] = field(default_factory=list)
+    errors: list[str] = field(default_factory=list)
     # Quality aggregation
     overall_quality: float = 0.0
     min_stage_quality: float = 0.0
-    quality_distribution: Dict[str, float] = field(default_factory=dict)
+    quality_distribution: dict[str, float] = field(default_factory=dict)
 
     @property
     def completion_ratio(self) -> float:
@@ -169,8 +169,8 @@ class MindLoopValidator:
 
     def validate(
         self,
-        block_results: Dict[str, Any],
-        metadata: Dict[str, Any],
+        block_results: dict[str, Any],
+        metadata: dict[str, Any],
     ) -> MindLoopValidationReport:
         """Validate mind-loop integrity from pipeline execution results.
 
@@ -182,7 +182,7 @@ class MindLoopValidator:
             MindLoopValidationReport with per-stage and overall results.
         """
         report = MindLoopValidationReport()
-        completed_stages: Set[str] = set()
+        completed_stages: set[str] = set()
 
         # Extract executed block IDs
         executed_blocks = set()
@@ -318,7 +318,7 @@ class MindLoopValidator:
         return "unknown"
 
     @staticmethod
-    def get_stage_for_block(block_id: str) -> Optional[str]:
+    def get_stage_for_block(block_id: str) -> str | None:
         """Return which mind-loop stage a block belongs to."""
         for stage_name, stage_def in STAGE_EXPECTED_KEYS.items():
             if block_id in stage_def["blocks"]:
@@ -326,7 +326,7 @@ class MindLoopValidator:
         return None
 
     @staticmethod
-    def get_all_stage_blocks() -> Dict[str, List[str]]:
+    def get_all_stage_blocks() -> dict[str, list[str]]:
         """Return all blocks grouped by stage."""
         return {
             stage: def_["blocks"]

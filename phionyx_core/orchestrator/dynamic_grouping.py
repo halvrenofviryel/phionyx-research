@@ -11,7 +11,6 @@ Features:
 """
 
 import logging
-from typing import Dict, Optional, List, Set
 from dataclasses import dataclass
 
 from .parallel_executor import ParallelGroup
@@ -23,9 +22,9 @@ logger = logging.getLogger(__name__)
 class IntentBasedGroupConfig:
     """Configuration for intent-based parallel groups."""
     intent: str
-    parallel_groups: List[List[str]]  # List of block groups that can run in parallel
-    skip_blocks: Set[str] = None  # Blocks to skip for this intent
-    preserve_blocks: Set[str] = None  # Blocks that must always run
+    parallel_groups: list[list[str]]  # List of block groups that can run in parallel
+    skip_blocks: set[str] = None  # Blocks to skip for this intent
+    preserve_blocks: set[str] = None  # Blocks that must always run
 
     def __post_init__(self):
         """Initialize default sets."""
@@ -47,7 +46,7 @@ class DynamicGrouping:
 
     def __init__(self):
         """Initialize dynamic grouping."""
-        self.configs: Dict[str, IntentBasedGroupConfig] = {}
+        self.configs: dict[str, IntentBasedGroupConfig] = {}
         self._initialize_configs()
 
     def _initialize_configs(self) -> None:
@@ -141,10 +140,10 @@ class DynamicGrouping:
 
     def get_groups_for_intent(
         self,
-        intent: Optional[str],
-        block_order: List[str],
-        executed_blocks: Set[str]
-    ) -> List[ParallelGroup]:
+        intent: str | None,
+        block_order: list[str],
+        executed_blocks: set[str]
+    ) -> list[ParallelGroup]:
         """
         Get parallel groups for specific intent.
 
@@ -192,7 +191,7 @@ class DynamicGrouping:
 
         return groups
 
-    def get_blocks_to_skip_for_intent(self, intent: Optional[str]) -> Set[str]:
+    def get_blocks_to_skip_for_intent(self, intent: str | None) -> set[str]:
         """
         Get blocks to skip for specific intent.
 
@@ -214,7 +213,7 @@ class DynamicGrouping:
     def should_preserve_block(
         self,
         block_id: str,
-        intent: Optional[str]
+        intent: str | None
     ) -> bool:
         """
         Check if block should be preserved (always run) for intent.

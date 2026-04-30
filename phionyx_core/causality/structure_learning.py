@@ -20,9 +20,8 @@ Integrates with:
 - contracts/v4/world_state_snapshot.py (enriched causal model)
 """
 
-import math
 import logging
-from typing import Dict, FrozenSet, List, Optional, Set, Tuple
+import math
 from dataclasses import dataclass
 
 from phionyx_core.causality.causal_graph import CausalGraph, MechanismType
@@ -43,8 +42,8 @@ class DiscoveredEdge:
 @dataclass
 class StructureLearningResult:
     """Result of running the PC algorithm."""
-    discovered_edges: List[DiscoveredEdge]
-    removed_pairs: List[Tuple[str, str, List[str]]]  # (var_a, var_b, sep_set)
+    discovered_edges: list[DiscoveredEdge]
+    removed_pairs: list[tuple[str, str, list[str]]]  # (var_a, var_b, sep_set)
     nodes_used: int
     sample_size: int
     max_conditioning_size: int
@@ -155,7 +154,7 @@ class PCAlgorithm:
 
     def _extract_observations(
         self, graph: CausalGraph
-    ) -> Tuple[List[str], List[List[float]]]:
+    ) -> tuple[list[str], list[list[float]]]:
         """Extract aligned observation matrix from graph nodes.
 
         Returns:
@@ -185,8 +184,8 @@ class PCAlgorithm:
         return var_names, obs_matrix
 
     def _compute_correlation_matrix(
-        self, obs_matrix: List[List[float]], n_vars: int, n_samples: int
-    ) -> List[List[float]]:
+        self, obs_matrix: list[list[float]], n_vars: int, n_samples: int
+    ) -> list[list[float]]:
         """Compute Pearson correlation matrix."""
         # Compute means
         means = [sum(obs_matrix[i]) / n_samples for i in range(n_vars)]
@@ -218,13 +217,13 @@ class PCAlgorithm:
 
     def _discover_skeleton(
         self,
-        var_names: List[str],
-        corr_matrix: List[List[float]],
+        var_names: list[str],
+        corr_matrix: list[list[float]],
         n_samples: int,
-    ) -> Tuple[
-        List[List[bool]],
-        Dict[FrozenSet[int], List[int]],
-        List[Tuple[str, str, List[str]]],
+    ) -> tuple[
+        list[list[bool]],
+        dict[frozenset[int], list[int]],
+        list[tuple[str, str, list[str]]],
     ]:
         """PC skeleton discovery: remove edges via conditional independence.
 
@@ -233,8 +232,8 @@ class PCAlgorithm:
         """
         n = len(var_names)
         adjacency = [[i != j for j in range(n)] for i in range(n)]
-        sep_sets: Dict[FrozenSet[int], List[int]] = {}
-        removed: List[Tuple[str, str, List[str]]] = []
+        sep_sets: dict[frozenset[int], list[int]] = {}
+        removed: list[tuple[str, str, list[str]]] = []
 
         for cond_size in range(self.max_conditioning_size + 1):
             for i in range(n):
@@ -277,11 +276,11 @@ class PCAlgorithm:
 
     def _orient_edges(
         self,
-        var_names: List[str],
-        adjacency: List[List[bool]],
-        sep_sets: Dict[FrozenSet[int], List[int]],
+        var_names: list[str],
+        adjacency: list[list[bool]],
+        sep_sets: dict[frozenset[int], list[int]],
         original_graph: CausalGraph,
-    ) -> List[Tuple[int, int]]:
+    ) -> list[tuple[int, int]]:
         """Orient undirected skeleton edges into directed edges.
 
         Uses:
@@ -292,7 +291,7 @@ class PCAlgorithm:
         n = len(var_names)
 
         # directed[i][j] = True means i → j is confirmed
-        directed: List[List[Optional[bool]]] = [
+        directed: list[list[bool | None]] = [
             [None] * n for _ in range(n)
         ]
 
@@ -362,10 +361,10 @@ class PCAlgorithm:
 
     def _partial_correlation(
         self,
-        corr_matrix: List[List[float]],
+        corr_matrix: list[list[float]],
         i: int,
         j: int,
-        conditioning: List[int],
+        conditioning: list[int],
     ) -> float:
         """Compute partial correlation between i and j given conditioning set.
 
@@ -450,7 +449,7 @@ class PCAlgorithm:
         return math.sqrt(size_factor * strength_factor)
 
     @staticmethod
-    def _combinations(items: List[int], size: int):
+    def _combinations(items: list[int], size: int):
         """Generate all combinations of given size (deterministic order)."""
         if size == 0:
             yield ()
@@ -477,14 +476,14 @@ class PCAlgorithm:
 
     @staticmethod
     def _would_create_cycle_in_directed(
-        directed: List[List[Optional[bool]]],
+        directed: list[list[bool | None]],
         n: int,
         source: int,
         target: int,
     ) -> bool:
         """Check if adding source→target creates a cycle in directed edges."""
         # BFS from target following directed edges to see if we reach source
-        visited: Set[int] = set()
+        visited: set[int] = set()
         queue = [target]
         while queue:
             current = queue.pop(0)

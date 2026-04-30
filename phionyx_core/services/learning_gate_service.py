@@ -8,13 +8,12 @@ Port-adapter pattern (AD-2).
 """
 
 import logging
-from pathlib import Path
-from typing import Dict, List, Optional
 from datetime import datetime, timezone
+from pathlib import Path
 
 import yaml
 
-from ..contracts.v4.learning_update import LearningUpdate, LearningGateDecision
+from ..contracts.v4.learning_update import LearningGateDecision, LearningUpdate
 
 logger = logging.getLogger(__name__)
 
@@ -22,7 +21,7 @@ logger = logging.getLogger(__name__)
 MAX_DELTA_FRACTION = 0.2  # 20% change per update
 
 # Tier-to-zone mapping (Learning Gate Contract v1.0 §3)
-TIER_TO_ZONE: Dict[str, str] = {
+TIER_TO_ZONE: dict[str, str] = {
     "A": "adaptive",
     "B": "gated",
     "C": "gated",
@@ -33,19 +32,19 @@ TIER_TO_ZONE: Dict[str, str] = {
 _SURFACES_YAML = Path(__file__).parent.parent / "research_engine" / "mutation" / "surfaces.yaml"
 
 
-def _load_surface_registry(surfaces_path: Optional[Path] = None) -> Dict[str, str]:
+def _load_surface_registry(surfaces_path: Path | None = None) -> dict[str, str]:
     """Load parameter → boundary zone mapping from surfaces.yaml.
 
     Returns dict mapping 'param_name' -> 'immutable'|'gated'|'adaptive'.
     """
     path = surfaces_path or _SURFACES_YAML
-    registry: Dict[str, str] = {}
+    registry: dict[str, str] = {}
 
     if not path.exists():
         logger.warning("surfaces.yaml not found at %s — using empty registry", path)
         return registry
 
-    with open(path, "r") as f:
+    with open(path) as f:
         data = yaml.safe_load(f)
 
     for surface in data.get("surfaces", []):
@@ -78,12 +77,12 @@ class LearningGateService:
     def __init__(
         self,
         max_delta_fraction: float = MAX_DELTA_FRACTION,
-        surfaces_path: Optional[Path] = None,
+        surfaces_path: Path | None = None,
     ):
         self.max_delta_fraction = max_delta_fraction
-        self._approval_queue: List[LearningUpdate] = []
-        self._applied_updates: Dict[str, LearningUpdate] = {}  # update_id -> update
-        self._zone_registry: Dict[str, str] = _load_surface_registry(surfaces_path)
+        self._approval_queue: list[LearningUpdate] = []
+        self._applied_updates: dict[str, LearningUpdate] = {}  # update_id -> update
+        self._zone_registry: dict[str, str] = _load_surface_registry(surfaces_path)
 
     def get_boundary_zone(self, param_name: str) -> str:
         """Resolve boundary zone for a parameter from surfaces.yaml tier mapping.
@@ -93,7 +92,7 @@ class LearningGateService:
         """
         return self._zone_registry.get(param_name, "gated")
 
-    async def evaluate_updates(self, updates: List[LearningUpdate]) -> List[LearningUpdate]:
+    async def evaluate_updates(self, updates: list[LearningUpdate]) -> list[LearningUpdate]:
         """Evaluate a batch of learning updates."""
         for update in updates:
             # Auto-resolve zone from registry if not explicitly set or still default
@@ -201,7 +200,7 @@ class LearningGateService:
 
         return True
 
-    async def apply_approved(self, updates: List[LearningUpdate]) -> int:
+    async def apply_approved(self, updates: list[LearningUpdate]) -> int:
         """Apply approved updates and track for potential rollback."""
         applied = 0
         for update in updates:
@@ -243,17 +242,17 @@ class LearningGateService:
         )
         return True
 
-    def get_pending_approvals(self) -> List[LearningUpdate]:
+    def get_pending_approvals(self) -> list[LearningUpdate]:
         """Get updates awaiting human approval."""
         return [u for u in self._approval_queue if u.gate_decision == LearningGateDecision.PENDING]
 
-    def get_applied_updates(self) -> Dict[str, LearningUpdate]:
+    def get_applied_updates(self) -> dict[str, LearningUpdate]:
         """Get all currently applied updates (available for rollback)."""
         return dict(self._applied_updates)
 
-    def get_zone_distribution(self) -> Dict[str, int]:
+    def get_zone_distribution(self) -> dict[str, int]:
         """Get count of parameters per boundary zone from registry."""
-        dist: Dict[str, int] = {"immutable": 0, "gated": 0, "adaptive": 0}
+        dist: dict[str, int] = {"immutable": 0, "gated": 0, "adaptive": 0}
         for zone in self._zone_registry.values():
             dist[zone] = dist.get(zone, 0) + 1
         return dist

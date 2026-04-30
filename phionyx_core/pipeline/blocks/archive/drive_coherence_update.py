@@ -9,9 +9,9 @@ Drive = arousal * (1 - entropy) * min(phi, 1.0).
 """
 
 import logging
-from typing import Dict, Any, Optional, Protocol
+from typing import Any, Protocol
 
-from ...base import PipelineBlock, BlockContext, BlockResult
+from ...base import BlockContext, BlockResult, PipelineBlock
 
 logger = logging.getLogger(__name__)
 
@@ -22,7 +22,7 @@ class DriveCoherenceUpdaterProtocol(Protocol):
         self,
         unified_state: Any,
         narrative_response: str,
-        physics_state: Dict[str, Any]
+        physics_state: dict[str, Any]
     ) -> Any:
         """Update narrative drive and coherence."""
         ...
@@ -38,7 +38,7 @@ class DriveCoherenceUpdateBlock(PipelineBlock):
     coherence inline (fail-open design).
     """
 
-    def __init__(self, updater: Optional[DriveCoherenceUpdaterProtocol] = None):
+    def __init__(self, updater: DriveCoherenceUpdaterProtocol | None = None):
         super().__init__("drive_coherence_update")
         self.updater = updater
 
@@ -94,7 +94,7 @@ class DriveCoherenceUpdateBlock(PipelineBlock):
                     if hasattr(unified_state, "coherence"):
                         unified_state.coherence = coherence
 
-            drive_result: Dict[str, Any] = {
+            drive_result: dict[str, Any] = {
                 "drive": drive,
                 "coherence": coherence,
                 "source": source,

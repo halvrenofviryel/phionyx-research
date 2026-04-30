@@ -5,10 +5,10 @@ Block Rollback Manager
 Manages state snapshots and rollback for pipeline blocks.
 """
 
-import logging
 import copy
-from typing import Dict, Any, Optional, List
+import logging
 from dataclasses import dataclass
+from typing import Any, Optional
 
 from ..pipeline.base import BlockContext
 
@@ -22,8 +22,8 @@ _MONOTONIC_TIME_KEYS = ("t_now", "turn_index", "monotonic_last_update")
 class StateSnapshot:
     """Snapshot of block context state."""
     block_id: str
-    context_snapshot: Dict[str, Any]
-    metadata_snapshot: Dict[str, Any]
+    context_snapshot: dict[str, Any]
+    metadata_snapshot: dict[str, Any]
 
 
 class RollbackManager:
@@ -47,9 +47,9 @@ class RollbackManager:
             enabled: Whether rollback is enabled (default: True)
         """
         self.enabled = enabled
-        self.snapshots: List[StateSnapshot] = []
+        self.snapshots: list[StateSnapshot] = []
         self.checkpoint_interval: int = 1  # Create snapshot every N blocks
-        self._time_floor: Dict[str, float] = {}  # Monotonic time floor values
+        self._time_floor: dict[str, float] = {}  # Monotonic time floor values
 
     def create_checkpoint(self, block_id: str, context: BlockContext) -> None:
         """
@@ -174,7 +174,7 @@ class RollbackManager:
         self.snapshots.clear()
         logger.debug("All checkpoints cleared")
 
-    def _update_time_floor(self, metadata: Dict[str, Any]) -> None:
+    def _update_time_floor(self, metadata: dict[str, Any]) -> None:
         """
         Update monotonic time floor from metadata values.
 
@@ -189,7 +189,7 @@ class RollbackManager:
                     if val > current_floor:
                         self._time_floor[key] = val
 
-    def _enforce_time_floor(self, metadata: Dict[str, Any]) -> None:
+    def _enforce_time_floor(self, metadata: dict[str, Any]) -> None:
         """
         Enforce monotonic time floor on metadata after rollback.
 

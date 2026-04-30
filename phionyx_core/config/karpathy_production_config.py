@@ -7,15 +7,15 @@ Faz 3.5: Production Deployment
 Production-ready configuration for Karpathy features.
 """
 
-from typing import Dict, Any, Optional
-from dataclasses import dataclass
 import os
+from dataclasses import dataclass
+from typing import Any
 
 
 @dataclass
 class KarpathyProductionConfig:
     """Production configuration for Karpathy features."""
-    
+
     # Feature flags
     assumption_enabled: bool = True
     inconsistency_enabled: bool = True
@@ -28,29 +28,29 @@ class KarpathyProductionConfig:
     dead_code_enabled: bool = True
     orthogonal_guard_enabled: bool = True
     challenge_enabled: bool = True
-    
+
     # Complexity budget
     max_cyclomatic: int = 10
     max_cognitive: int = 15
     max_nesting: int = 4
     max_function_length: int = 50
     max_class_complexity: int = 20
-    
+
     # Governance
     strict_mode: bool = True
     block_on_critical: bool = True
     block_on_high: bool = True
-    
+
     # Performance
     cache_enabled: bool = True
     parallel_execution: bool = True
     max_analysis_depth: int = 100
-    
+
     # Monitoring
     metrics_enabled: bool = True
     audit_trail_enabled: bool = True
     evidence_chain_enabled: bool = True
-    
+
     @classmethod
     def from_env(cls) -> 'KarpathyProductionConfig':
         """Load configuration from environment variables."""
@@ -66,8 +66,8 @@ class KarpathyProductionConfig:
             strict_mode=os.getenv('GOVERNANCE_STRICT_MODE', 'true').lower() == 'true',
             block_on_critical=os.getenv('GOVERNANCE_BLOCK_ON_CRITICAL', 'true').lower() == 'true',
         )
-    
-    def to_dict(self) -> Dict[str, Any]:
+
+    def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary."""
         return {
             "assumption_enabled": self.assumption_enabled,

@@ -12,8 +12,8 @@ Per Echoism Core v1.1:
 
 from __future__ import annotations
 
-from typing import Dict, Any, Optional
 import math
+from typing import Any
 
 
 def calculate_empathy_v1_1(
@@ -100,8 +100,8 @@ def calculate_closeness_language_policy(
 
 
 def get_tau_from_profile(
-    profile_name: Optional[str] = None,
-    profile: Optional[Dict[str, Any]] = None
+    profile_name: str | None = None,
+    profile: dict[str, Any] | None = None
 ) -> float:
     """
     Get τ (tau) parameter from profile.
@@ -147,9 +147,9 @@ def calculate_empathy_with_profile(
     entropy: float,
     resonance_score: float,
     coherence: float,
-    profile_name: Optional[str] = None,
-    profile: Optional[Dict[str, Any]] = None
-) -> Dict[str, Any]:
+    profile_name: str | None = None,
+    profile: dict[str, Any] | None = None
+) -> dict[str, Any]:
     """
     Calculate empathy with profile-specific parameters.
 

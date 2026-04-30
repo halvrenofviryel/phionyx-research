@@ -17,12 +17,13 @@ Key Principles:
 
 from __future__ import annotations
 
-from dataclasses import dataclass
-from typing import List, Dict, Any, Optional
-from datetime import datetime
-from pydantic import BaseModel, ConfigDict, Field
 import math
 import time as time_module  # For monotonic clock
+from dataclasses import dataclass
+from datetime import datetime
+from typing import Any
+
+from pydantic import BaseModel, ConfigDict, Field
 
 # ============================================================
 # Configurable Constants (Patent-Referenced Parameters)
@@ -125,7 +126,7 @@ class EchoState2(BaseModel):
         description="Time since relationship start (seconds)"
     )
 
-    E_tags: List[EventReference] = Field(
+    E_tags: list[EventReference] = Field(
         default_factory=list,
         description="Event references (last N events: id + tag + intensity)"
     )
@@ -253,7 +254,7 @@ class EchoState2(BaseModel):
 
     def update_time(
         self,
-        current_time: Optional[datetime] = None,
+        current_time: datetime | None = None,
         increment_turn: bool = True
     ) -> float:
         """
@@ -342,7 +343,7 @@ class EchoState2(BaseModel):
 
         return self.dt
 
-    def from_physics_state(self, physics_state: Dict[str, Any]) -> None:
+    def from_physics_state(self, physics_state: dict[str, Any]) -> None:
         """
         Update EchoState2 from physics state dictionary.
 
@@ -395,8 +396,8 @@ class EchoState2(BaseModel):
         event_type: str,
         intensity: float,
         semantic_context: str,
-        metadata: Optional[Dict[str, Any]] = None,
-        timestamp: Optional[datetime] = None
+        metadata: dict[str, Any] | None = None,
+        timestamp: datetime | None = None
     ) -> None:
         """
         Add event tag (immutable append-only).
@@ -434,10 +435,10 @@ class EchoState2(BaseModel):
 
     def update_state(
         self,
-        A_new: Optional[float] = None,
-        V_new: Optional[float] = None,
-        H_new: Optional[float] = None,
-        current_time: Optional[datetime] = None,
+        A_new: float | None = None,
+        V_new: float | None = None,
+        H_new: float | None = None,
+        current_time: datetime | None = None,
         increment_turn: bool = True
     ) -> float:
         """
@@ -484,7 +485,7 @@ class EchoState2(BaseModel):
 
         return dt
 
-    def get_recent_events(self, time_window: float = 300.0) -> List[EventReference]:
+    def get_recent_events(self, time_window: float = 300.0) -> list[EventReference]:
         """
         Get recent events within time window.
 
@@ -501,7 +502,7 @@ class EchoState2(BaseModel):
         # (In practice, E_tags should be limited to recent N events)
         return self.E_tags[-10:] if len(self.E_tags) > 10 else self.E_tags
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """
         Convert to dictionary (for serialization).
 
@@ -536,7 +537,7 @@ class EchoState2(BaseModel):
         }
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> EchoState2:
+    def from_dict(cls, data: dict[str, Any]) -> EchoState2:
         """
         Create from dictionary (for deserialization).
 
@@ -631,7 +632,7 @@ class EchoState2Plus(EchoState2):
         description="Coherence (0.0-1.0): Measurement-state consistency (diagnostic). Low C → entropy boost signal"
     )
 
-    D: Optional[float] = Field(
+    D: float | None = Field(
         default=None,
         ge=0.0,
         le=1.0,
@@ -643,25 +644,25 @@ class EchoState2Plus(EchoState2):
     # ============================================================
 
     # Assumptions tracking (Karpathy Problem 1)
-    assumptions: List[Dict[str, Any]] = Field(
+    assumptions: list[dict[str, Any]] = Field(
         default_factory=list,
         description="List of assumptions extracted during code generation. Each assumption has: type, description, code_reference, confidence, evidence"
     )
 
     # Inconsistencies tracking (Karpathy Problem 2)
-    inconsistencies: List[Dict[str, Any]] = Field(
+    inconsistencies: list[dict[str, Any]] = Field(
         default_factory=list,
         description="List of inconsistencies detected between code, plan, tests, and requirements. Each inconsistency has: type, description, severity, code_reference, resolution_suggestion, evidence"
     )
 
     # Complexity metrics tracking (Karpathy Problem 7)
-    complexity_metrics: Optional[Dict[str, Any]] = Field(
+    complexity_metrics: dict[str, Any] | None = Field(
         default=None,
         description="Complexity metrics: cyclomatic, cognitive, nesting_depth, function_length, class_complexity"
     )
 
     # Complexity budget configuration
-    complexity_budget: Optional[Dict[str, Any]] = Field(
+    complexity_budget: dict[str, Any] | None = Field(
         default=None,
         description="Complexity budget limits: max_cyclomatic, max_cognitive, max_nesting, max_function_length, max_class_complexity"
     )
@@ -778,9 +779,9 @@ class EchoState2Plus(EchoState2):
 
     def update_coherence(
         self,
-        measurement: Dict[str, float],
-        state: Optional[Dict[str, float]] = None,
-        confidence: Optional[float] = None
+        measurement: dict[str, float],
+        state: dict[str, float] | None = None,
+        confidence: float | None = None
     ) -> None:
         """
         Update Coherence (C) from measurement-state consistency.
@@ -801,7 +802,7 @@ class EchoState2Plus(EchoState2):
         try:
             from phionyx_core.physics.coherence import (
                 calculate_coherence,
-                calculate_coherence_with_confidence
+                calculate_coherence_with_confidence,
             )
 
             if confidence is not None:
@@ -867,7 +868,9 @@ class EchoState2Plus(EchoState2):
             Adjusted process noise Q
         """
         try:
-            from phionyx_core.physics.inertia import apply_inertia_to_ukf_process_noise as apply_inertia
+            from phionyx_core.physics.inertia import (
+                apply_inertia_to_ukf_process_noise as apply_inertia,
+            )
             return apply_inertia(base_Q, self.I)
         except ImportError:
             # Fallback
@@ -889,14 +892,16 @@ class EchoState2Plus(EchoState2):
             Adjusted gain
         """
         try:
-            from phionyx_core.physics.inertia import apply_inertia_to_derivative_gain as apply_inertia
+            from phionyx_core.physics.inertia import (
+                apply_inertia_to_derivative_gain as apply_inertia,
+            )
             return apply_inertia(base_gain, self.I)
         except ImportError:
             # Fallback
             adjusted = base_gain * (1.0 - self.I)
             return max(0.1, min(1.0, adjusted))
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """
         Convert to dictionary (includes v1.1 fields and Karpathy extensions).
 
@@ -920,9 +925,9 @@ class EchoState2Plus(EchoState2):
         self,
         assumption_type: str,
         description: str,
-        code_reference: Optional[str] = None,
+        code_reference: str | None = None,
         confidence: float = 1.0,
-        evidence: Optional[List[str]] = None
+        evidence: list[str] | None = None
     ) -> None:
         """
         Add an assumption to state.
@@ -947,9 +952,9 @@ class EchoState2Plus(EchoState2):
         inconsistency_type: str,
         description: str,
         severity: str,
-        code_reference: Optional[str] = None,
-        resolution_suggestion: Optional[str] = None,
-        evidence: Optional[List[str]] = None
+        code_reference: str | None = None,
+        resolution_suggestion: str | None = None,
+        evidence: list[str] | None = None
     ) -> None:
         """
         Add an inconsistency to state.
@@ -1030,7 +1035,7 @@ class EchoState2Plus(EchoState2):
         I_default: float = 0.6,
         R_default: float = 0.05,
         C_default: float = 0.5,
-        D_default: Optional[float] = None
+        D_default: float | None = None
     ) -> EchoState2Plus:
         """
         Create EchoState2Plus from EchoState2 (backward compatibility).
@@ -1076,7 +1081,7 @@ class EchoState2Plus(EchoState2):
         )
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> EchoState2Plus:
+    def from_dict(cls, data: dict[str, Any]) -> EchoState2Plus:
         """
         Create from dictionary (includes v1.1 fields).
 

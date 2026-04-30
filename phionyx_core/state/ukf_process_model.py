@@ -16,14 +16,15 @@ State transition rules:
 
 from __future__ import annotations
 
-from typing import Dict, Any, Optional
+from typing import Any
+
 import numpy as np
 
 
 def echoism_process_model(
     x: np.ndarray,
     dt: float,
-    u: Optional[Dict[str, Any]] = None
+    u: dict[str, Any] | None = None
 ) -> np.ndarray:
     """
     Non-linear process model f(x, dt, u) for Echoism Core v1.0.
@@ -166,9 +167,9 @@ def echoism_process_model(
 
 def create_echoism_process_model(
     dt: float,
-    event_features: Optional[Dict[str, Any]] = None,
+    event_features: dict[str, Any] | None = None,
     trace_strength: float = 0.0,
-    task_outcome: Optional[str] = None,
+    task_outcome: str | None = None,
     confidence: float = 0.5
 ) -> callable:
     """
@@ -191,7 +192,7 @@ def create_echoism_process_model(
         "confidence": confidence
     }
 
-    def process_model(x: np.ndarray, control: Optional[Dict[str, Any]] = None) -> np.ndarray:
+    def process_model(x: np.ndarray, control: dict[str, Any] | None = None) -> np.ndarray:
         """
         Process model with pre-configured control inputs.
 

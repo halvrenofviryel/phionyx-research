@@ -12,7 +12,6 @@ Uses IntentClassifier logic expanded with toxicity_filter.
 
 import logging
 import re
-from typing import Dict, List, Optional
 from enum import Enum
 
 logger = logging.getLogger(__name__)
@@ -44,10 +43,10 @@ class RiskAssessment:
         self,
         risk_level: RiskLevel,
         risk_type: RiskType,
-        detected_patterns: List[str],
+        detected_patterns: list[str],
         confidence: float,
         intervention_required: bool,
-        intervention_message: Optional[str] = None,
+        intervention_message: str | None = None,
         needs_reframing: bool = False
     ):
         self.risk_level = risk_level
@@ -58,7 +57,7 @@ class RiskAssessment:
         self.intervention_message = intervention_message
         self.needs_reframing = needs_reframing  # Level 2: Tag for shaper.py
 
-    def to_dict(self) -> Dict:
+    def to_dict(self) -> dict:
         """Convert to dictionary."""
         return {
             "risk_level": self.risk_level.value,
@@ -342,7 +341,7 @@ class Guardrails:
         assessment = self.assess_risk(text)
         return assessment.needs_reframing
 
-    def get_intervention_protocol(self, text: str) -> Optional[str]:
+    def get_intervention_protocol(self, text: str) -> str | None:
         """
         Get intervention protocol message if Level 1 risk is detected.
 

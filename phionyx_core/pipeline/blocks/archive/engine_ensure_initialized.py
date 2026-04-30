@@ -8,7 +8,7 @@ Ensures all engine processors and services are initialized.
 
 import logging
 
-from ...base import PipelineBlock, BlockContext, BlockResult
+from ...base import BlockContext, BlockResult, PipelineBlock
 
 logger = logging.getLogger(__name__)
 

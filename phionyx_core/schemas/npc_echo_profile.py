@@ -8,7 +8,6 @@ Integrates Plutchik → Circumplex → Φ Physics pipeline.
 
 from __future__ import annotations
 
-from typing import Dict
 from pydantic import BaseModel, ConfigDict, Field
 
 
@@ -63,7 +62,7 @@ class NPCEchoProfile(BaseModel):
     )
 
     # 7 echo domains (weights 0.0 to 1.0)
-    domain_weights: Dict[str, float] = Field(
+    domain_weights: dict[str, float] = Field(
         default_factory=lambda: {
             "physical": 0.3,
             "biological": 0.2,

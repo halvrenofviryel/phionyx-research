@@ -6,8 +6,8 @@ Core abstraction for participant references to maintain layer isolation.
 This allows phionyx_core to work with participants without depending on bridge.
 """
 
-from typing import Optional
 from enum import Enum
+
 from pydantic import BaseModel, ConfigDict, Field
 
 
@@ -27,7 +27,7 @@ class ParticipantRef(BaseModel):
     """
     id: str = Field(..., description="Participant identifier")
     type: ParticipantType = Field(..., description="Participant type")
-    name: Optional[str] = Field(None, description="Participant name")
-    metadata: Optional[dict] = Field(None, description="Additional metadata")
+    name: str | None = Field(None, description="Participant name")
+    metadata: dict | None = Field(None, description="Additional metadata")
 
     model_config = ConfigDict(use_enum_values=True)

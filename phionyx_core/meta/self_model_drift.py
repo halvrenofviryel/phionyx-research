@@ -8,12 +8,10 @@ Detects sudden changes and applies auto-correction.
 Roadmap Faz 4.5: World Model Hardening — Self-Model Drift
 """
 
+import math
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from enum import Enum
-from typing import List, Optional
-import math
-
 
 # Module-level tunable defaults (Tier A — PRE surfaces)
 drift_threshold_low = 0.05
@@ -53,7 +51,7 @@ class DriftReport:
     mean_confidence: float
     std_confidence: float
     severity: DriftSeverity
-    alerts: List[DriftAlert]
+    alerts: list[DriftAlert]
     auto_corrections_applied: int
     reasoning: str
 
@@ -92,13 +90,13 @@ class SelfModelDrift:
         self.auto_correct = auto_correct
         self.correction_dampening = max(0.0, min(1.0, correction_dampening))
 
-        self._history: List[float] = []
-        self._ema: Optional[float] = None
+        self._history: list[float] = []
+        self._ema: float | None = None
         self._turn: int = 0
-        self._alerts: List[DriftAlert] = []
+        self._alerts: list[DriftAlert] = []
         self._corrections: int = 0
 
-    def observe(self, confidence: float, turn_index: Optional[int] = None) -> Optional[DriftAlert]:
+    def observe(self, confidence: float, turn_index: int | None = None) -> DriftAlert | None:
         """
         Record a confidence observation and check for drift.
 
@@ -168,7 +166,7 @@ class SelfModelDrift:
         """Current drift severity."""
         return self._classify_severity(self._compute_drift())
 
-    def get_alerts(self, severity: Optional[DriftSeverity] = None) -> List[DriftAlert]:
+    def get_alerts(self, severity: DriftSeverity | None = None) -> list[DriftAlert]:
         """Get drift alerts, optionally filtered by severity."""
         if severity:
             return [a for a in self._alerts if a.severity == severity]
@@ -236,7 +234,7 @@ class SelfModelDrift:
         return max(0.0, min(1.0, corrected))
 
     @staticmethod
-    def _compute_std(values: List[float]) -> float:
+    def _compute_std(values: list[float]) -> float:
         """Standard deviation of a float list."""
         if len(values) < 2:
             return 0.0

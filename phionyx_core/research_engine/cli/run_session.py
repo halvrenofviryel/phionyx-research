@@ -14,8 +14,9 @@ Options:
 import argparse
 import re
 import sys
-import yaml
 from pathlib import Path
+
+import yaml
 
 
 def load_surfaces(surfaces_file: str | None = None) -> list[dict]:

@@ -15,9 +15,9 @@ import logging
 import math
 import re
 import time
-from typing import Any, Dict, List, Optional
-from enum import Enum
 from dataclasses import dataclass
+from enum import Enum
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -53,8 +53,8 @@ class IntentClassifier:
 
     def __init__(
         self,
-        llm_provider: Optional[Any] = None,
-        embedding_cache: Optional[Any] = None
+        llm_provider: Any | None = None,
+        embedding_cache: Any | None = None
     ):
         """
         Initialize intent classifier.
@@ -182,7 +182,7 @@ class IntentClassifier:
             processing_time_ms=elapsed_ms
         )
 
-    def _classify_rule_based(self, normalized_input: str) -> Optional[IntentResult]:
+    def _classify_rule_based(self, normalized_input: str) -> IntentResult | None:
         """
         Rule-based intent classification (fastest).
 
@@ -234,7 +234,7 @@ class IntentClassifier:
 
         return None
 
-    _INTENT_KEYWORDS: Dict[IntentType, List[str]] = {
+    _INTENT_KEYWORDS: dict[IntentType, list[str]] = {
         IntentType.GREETING: [
             "merhaba", "selam", "hey", "hi", "hello", "günaydın",
             "iyi günler", "iyi akşamlar", "how are you", "nasılsın",
@@ -262,7 +262,7 @@ class IntentClassifier:
         ],
     }
 
-    def _classify_embedding_based(self, normalized_input: str) -> Optional[IntentResult]:
+    def _classify_embedding_based(self, normalized_input: str) -> IntentResult | None:
         """
         Embedding-based intent classification (fast path).
 
@@ -289,7 +289,7 @@ class IntentClassifier:
         if not input_tokens:
             return None
 
-        scores: List[float] = []
+        scores: list[float] = []
         for intent_type in self._INTENT_KEYWORDS:
             keywords = self._INTENT_KEYWORDS[intent_type]
             keyword_set = set(keywords)
@@ -322,7 +322,7 @@ class IntentClassifier:
         self,
         normalized_input: str,
         timeout_ms: float
-    ) -> Optional[IntentResult]:
+    ) -> IntentResult | None:
         """
         LLM-based intent classification (fallback, small model only).
 

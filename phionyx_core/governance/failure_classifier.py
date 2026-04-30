@@ -16,7 +16,7 @@ Each failure type carries a severity, a recovery strategy, and audit metadata.
 import logging
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Dict, Any, List, Optional
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -53,11 +53,11 @@ class FailureClassification:
     severity: FailureSeverity
     recovery_strategy: RecoveryStrategy
     confidence: float  # 0-1
-    details: Dict[str, Any] = field(default_factory=dict)
-    triggering_block: Optional[str] = None
+    details: dict[str, Any] = field(default_factory=dict)
+    triggering_block: str | None = None
     recommended_action: str = ""
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         return {
             "category": self.category.value,
             "severity": self.severity.value,
@@ -91,10 +91,10 @@ class FailureClassifier:
 
     def classify(
         self,
-        pipeline_state: Dict[str, Any],
-        previous_state: Optional[Dict[str, Any]] = None,
-        block_results: Optional[Dict[str, Any]] = None,
-    ) -> List[FailureClassification]:
+        pipeline_state: dict[str, Any],
+        previous_state: dict[str, Any] | None = None,
+        block_results: dict[str, Any] | None = None,
+    ) -> list[FailureClassification]:
         """
         Classify failures from pipeline state.
 
@@ -106,7 +106,7 @@ class FailureClassifier:
         Returns:
             List of classified failures (may be empty if no failures)
         """
-        failures: List[FailureClassification] = []
+        failures: list[FailureClassification] = []
         previous_state = previous_state or {}
         block_results = block_results or {}
 
@@ -188,10 +188,10 @@ class FailureClassifier:
 
     def classify_single(
         self,
-        pipeline_state: Dict[str, Any],
-        previous_state: Optional[Dict[str, Any]] = None,
-        block_results: Optional[Dict[str, Any]] = None,
-    ) -> Optional[FailureClassification]:
+        pipeline_state: dict[str, Any],
+        previous_state: dict[str, Any] | None = None,
+        block_results: dict[str, Any] | None = None,
+    ) -> FailureClassification | None:
         """
         Classify and return the highest-severity failure, or None.
 

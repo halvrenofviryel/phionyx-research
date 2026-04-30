@@ -12,8 +12,7 @@ Per Echoism Core v1.1:
 
 from __future__ import annotations
 
-from typing import Dict, Any, Optional
-
+from typing import Any
 
 # Module-level tunable defaults (Tier A — PRE surfaces)
 UKF_MIN_Q = 0.01
@@ -110,9 +109,9 @@ def apply_inertia_to_derivative_gain(
 
 
 def get_inertia_from_profile(
-    profile: Optional[Dict[str, Any]] = None,
-    age_group: Optional[str] = None,
-    persona: Optional[str] = None
+    profile: dict[str, Any] | None = None,
+    age_group: str | None = None,
+    persona: str | None = None
 ) -> float:
     """
     Get initial Inertia (I) from profile, age group, or persona.

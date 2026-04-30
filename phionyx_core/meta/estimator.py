@@ -8,7 +8,7 @@ When confidence is low, triggers hedging strategies or clarification requests.
 
 import logging
 from dataclasses import dataclass
-from typing import Dict, Any, Optional, List
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -39,12 +39,12 @@ class ConfidenceResult:
     complexity_contribution: float
 
     # v4 optional extensions (AD-6: backward compat via Optional)
-    epistemic_uncertainty: Optional[float] = None
-    aleatoric_uncertainty: Optional[float] = None
-    t_meta: Optional[float] = None
-    ood_score: Optional[float] = None
+    epistemic_uncertainty: float | None = None
+    aleatoric_uncertainty: float | None = None
+    t_meta: float | None = None
+    ood_score: float | None = None
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary."""
         result = {
             "confidence_score": self.confidence_score,
@@ -86,12 +86,12 @@ class ConfidenceEstimator:
 
     def estimate_confidence(
         self,
-        physics_state: Dict[str, Any],
-        context: Optional[Dict[str, Any]] = None,
-        user_input: Optional[str] = None,
-        memory_matches: Optional[List[Dict[str, Any]]] = None,
-        memory_similarity: Optional[float] = None,
-        input_length: Optional[int] = None
+        physics_state: dict[str, Any],
+        context: dict[str, Any] | None = None,
+        user_input: str | None = None,
+        memory_matches: list[dict[str, Any]] | None = None,
+        memory_similarity: float | None = None,
+        input_length: int | None = None
     ) -> ConfidenceResult:
         """
         Estimate confidence score based on entropy, memory similarity, and input clarity.
@@ -238,9 +238,9 @@ class ConfidenceEstimator:
 
     def _calculate_complexity_factor(
         self,
-        context: Optional[Dict[str, Any]],
-        user_input: Optional[str],
-        physics_state: Dict[str, Any]
+        context: dict[str, Any] | None,
+        user_input: str | None,
+        physics_state: dict[str, Any]
     ) -> float:
         """
         Calculate complexity factor (0.0-1.0) based on context and input.
@@ -355,7 +355,7 @@ class ConfidenceEstimator:
 
     def get_clarification_request(
         self,
-        user_input: Optional[str] = None,
+        user_input: str | None = None,
         language: str = "tr"
     ) -> str:
         """

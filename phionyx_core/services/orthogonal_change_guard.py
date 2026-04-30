@@ -7,9 +7,9 @@ Faz 3.1: Kalan Özellikler
 Kod dışı etki / değişiklik kontrolü.
 """
 
-from typing import List, Dict, Any, Optional, Set
-from dataclasses import dataclass
 import re
+from dataclasses import dataclass
+from typing import Any
 
 
 @dataclass
@@ -17,7 +17,7 @@ class OrthogonalChange:
     """Orthogonal change detection."""
     type: str  # "file_modification", "dependency_change", "config_change", "side_effect"
     description: str
-    affected_files: List[str]
+    affected_files: list[str]
     severity: str  # "low", "medium", "high", "critical"
     suggestion: str
 
@@ -35,14 +35,14 @@ class OrthogonalChangeGuard:
 
     def __init__(self):
         """Initialize orthogonal change guard."""
-        self.detected_changes: List[OrthogonalChange] = []
-        self.file_registry: Set[str] = set()
+        self.detected_changes: list[OrthogonalChange] = []
+        self.file_registry: set[str] = set()
 
     def check_orthogonal_changes(
         self,
         code: str,
-        context: Optional[Dict[str, Any]] = None
-    ) -> List[OrthogonalChange]:
+        context: dict[str, Any] | None = None
+    ) -> list[OrthogonalChange]:
         """
         Check for orthogonal changes (side effects).
 
@@ -74,7 +74,7 @@ class OrthogonalChangeGuard:
         self.detected_changes.extend(changes)
         return changes
 
-    def _detect_file_modifications(self, code: str) -> List[OrthogonalChange]:
+    def _detect_file_modifications(self, code: str) -> list[OrthogonalChange]:
         """Detect file modification operations."""
         changes = []
 
@@ -101,7 +101,7 @@ class OrthogonalChangeGuard:
 
         return changes
 
-    def _detect_dependency_changes(self, code: str) -> List[OrthogonalChange]:
+    def _detect_dependency_changes(self, code: str) -> list[OrthogonalChange]:
         """Detect dependency changes."""
         changes = []
 
@@ -120,7 +120,7 @@ class OrthogonalChangeGuard:
 
         return changes
 
-    def _detect_config_changes(self, code: str) -> List[OrthogonalChange]:
+    def _detect_config_changes(self, code: str) -> list[OrthogonalChange]:
         """Detect configuration changes."""
         changes = []
 
@@ -143,7 +143,7 @@ class OrthogonalChangeGuard:
 
         return changes
 
-    def _detect_side_effects(self, code: str) -> List[OrthogonalChange]:
+    def _detect_side_effects(self, code: str) -> list[OrthogonalChange]:
         """Detect side effects."""
         changes = []
 

@@ -5,8 +5,8 @@ CEP Types - Pydantic Models for Type Safety
 Type definitions for Conscious Echo Proof (CEP) evaluation.
 """
 
+
 from pydantic import BaseModel, Field
-from typing import Optional, List
 
 
 class CEPMetrics(BaseModel):
@@ -45,6 +45,6 @@ class CEPResult(BaseModel):
     metrics: CEPMetrics = Field(description="Computed metrics")
     thresholds: CEPThresholds = Field(description="Thresholds used for evaluation")
     flags: CEPFlags = Field(description="Evaluation flags")
-    sanitized_text: Optional[str] = Field(default=None, description="Sanitized text if sanitization was applied")
-    notes: List[str] = Field(default_factory=list, description="Additional notes about the evaluation")
+    sanitized_text: str | None = Field(default=None, description="Sanitized text if sanitization was applied")
+    notes: list[str] = Field(default_factory=list, description="Additional notes about the evaluation")
 

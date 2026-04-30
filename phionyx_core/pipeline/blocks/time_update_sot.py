@@ -7,9 +7,9 @@ Updates time semantics using TimeManager (single source of truth per Echoism Cor
 """
 
 import logging
-from typing import Optional, Protocol
+from typing import Protocol
 
-from ..base import PipelineBlock, BlockContext, BlockResult
+from ..base import BlockContext, BlockResult, PipelineBlock
 
 logger = logging.getLogger(__name__)
 
@@ -53,7 +53,7 @@ class TimeUpdateSotBlock(PipelineBlock):
         self.time_manager = time_manager
         self.participant_id = participant_id
 
-    def should_skip(self, context: BlockContext) -> Optional[str]:
+    def should_skip(self, context: BlockContext) -> str | None:
         """Skip if time_manager not available."""
         if self.time_manager is None:
             return "time_manager_not_available"

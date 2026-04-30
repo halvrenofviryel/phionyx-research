@@ -10,7 +10,7 @@ Helper functions to integrate NPC echo profile criteria into various systems:
 - Policy Engine (feedback_sensitivity)
 """
 
-from typing import Dict
+
 from .npc_echo_profile import NPCEchoProfile
 
 
@@ -135,7 +135,7 @@ def apply_feedback_sensitivity(
 def get_npc_physics_params(
     npc_profile: NPCEchoProfile,
     time_delta: float = 0.0
-) -> Dict[str, float]:
+) -> dict[str, float]:
     """
     Get physics parameters for NPC from echo profile.
 

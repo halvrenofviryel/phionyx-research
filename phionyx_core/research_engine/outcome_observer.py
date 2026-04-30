@@ -25,7 +25,6 @@ Cognitive vs. automation: Infrastructure (threshold-based proposal generation)
 """
 
 import logging
-from typing import Dict, List, Optional
 from dataclasses import dataclass, field
 
 from phionyx_core.contracts.v4.learning_update import (
@@ -49,7 +48,7 @@ class ParameterEvidence:
     parameter_name: str
     surface_file: str
     tier: str
-    experiments: List[Dict] = field(default_factory=list)
+    experiments: list[dict] = field(default_factory=list)
 
     @property
     def keep_count(self) -> int:
@@ -72,7 +71,7 @@ class ParameterEvidence:
         return sum(e["cqs_delta"] for e in kept) / len(kept)
 
     @property
-    def best_value(self) -> Optional[float]:
+    def best_value(self) -> float | None:
         """Best proposed value from kept experiments (highest CQS delta)."""
         kept = [e for e in self.experiments if e["decision"] == "keep"]
         if not kept:
@@ -81,7 +80,7 @@ class ParameterEvidence:
         return best["proposed_value"]
 
     @property
-    def current_value(self) -> Optional[float]:
+    def current_value(self) -> float | None:
         """Current value from the most recent experiment."""
         if not self.experiments:
             return None
@@ -94,7 +93,7 @@ class OutcomeObserverResult:
     total_observed: int
     parameters_tracked: int
     updates_proposed: int
-    proposed_updates: List[LearningUpdate]
+    proposed_updates: list[LearningUpdate]
 
 
 class OutcomeObserver:
@@ -119,7 +118,7 @@ class OutcomeObserver:
         min_experiments: int = MIN_CONSISTENT_EXPERIMENTS,
         cqs_delta_threshold: float = CQS_DELTA_THRESHOLD,
         max_delta_fraction: float = MAX_DELTA_FRACTION,
-        tier_zone_map: Optional[Dict[str, str]] = None,
+        tier_zone_map: dict[str, str] | None = None,
     ):
         """
         Args:
@@ -137,7 +136,7 @@ class OutcomeObserver:
             "C": "gated",
             "D": "immutable",
         }
-        self._evidence: Dict[str, ParameterEvidence] = {}
+        self._evidence: dict[str, ParameterEvidence] = {}
         self._proposed_params: set = set()
 
     def observe(self, record: ExperimentRecord) -> None:
@@ -167,7 +166,7 @@ class OutcomeObserver:
             "timestamp": record.timestamp,
         })
 
-    def observe_batch(self, records: List[ExperimentRecord]) -> None:
+    def observe_batch(self, records: list[ExperimentRecord]) -> None:
         """Observe multiple experiment records."""
         for record in records:
             self.observe(record)
@@ -186,7 +185,7 @@ class OutcomeObserver:
         Returns:
             OutcomeObserverResult with proposed LearningUpdates.
         """
-        proposals: List[LearningUpdate] = []
+        proposals: list[LearningUpdate] = []
 
         for param_name, evidence in sorted(self._evidence.items()):
             if param_name in self._proposed_params:
@@ -209,11 +208,11 @@ class OutcomeObserver:
             proposed_updates=proposals,
         )
 
-    def get_evidence(self, parameter_name: str) -> Optional[ParameterEvidence]:
+    def get_evidence(self, parameter_name: str) -> ParameterEvidence | None:
         """Get accumulated evidence for a parameter."""
         return self._evidence.get(parameter_name)
 
-    def get_all_evidence(self) -> Dict[str, ParameterEvidence]:
+    def get_all_evidence(self) -> dict[str, ParameterEvidence]:
         """Get all accumulated evidence."""
         return dict(self._evidence)
 
@@ -250,7 +249,7 @@ class OutcomeObserver:
 
         return True
 
-    def _create_update(self, evidence: ParameterEvidence) -> Optional[LearningUpdate]:
+    def _create_update(self, evidence: ParameterEvidence) -> LearningUpdate | None:
         """Create a LearningUpdate from accumulated evidence."""
         current = evidence.current_value
         proposed = evidence.best_value

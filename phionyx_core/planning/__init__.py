@@ -8,7 +8,7 @@ Components:
 - GoalDecomposer: Breaks high-level goals into sub-goals
 """
 
-from .goal_decomposer import GoalDecomposer, SubGoal, DecompositionPlan
+from .goal_decomposer import DecompositionPlan, GoalDecomposer, SubGoal
 
 __all__ = [
     "GoalDecomposer",

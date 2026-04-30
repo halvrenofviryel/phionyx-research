@@ -7,9 +7,9 @@ Gets emotion (valence, arousal) from neurotransmitter system.
 """
 
 import logging
-from typing import Optional, Protocol
+from typing import Protocol
 
-from ...base import PipelineBlock, BlockContext, BlockResult
+from ...base import BlockContext, BlockResult, PipelineBlock
 
 logger = logging.getLogger(__name__)
 
@@ -19,7 +19,7 @@ class NeurotransmitterEmotionProtocol(Protocol):
     def get_emotion(
         self,
         user_input: str,
-        mode: Optional[str] = None
+        mode: str | None = None
     ) -> tuple[float, float]:  # Returns (valence, arousal)
         """Get emotion from neurotransmitter."""
         ...
@@ -33,7 +33,7 @@ class EmotionFromNeurotransmitterBlock(PipelineBlock):
     This is a fallback when emotion estimation is unavailable.
     """
 
-    def __init__(self, neurotransmitter: Optional[NeurotransmitterEmotionProtocol] = None):
+    def __init__(self, neurotransmitter: NeurotransmitterEmotionProtocol | None = None):
         """
         Initialize block.
 
@@ -43,7 +43,7 @@ class EmotionFromNeurotransmitterBlock(PipelineBlock):
         super().__init__("emotion_from_neurotransmitter")
         self.neurotransmitter = neurotransmitter
 
-    def should_skip(self, context: BlockContext) -> Optional[str]:
+    def should_skip(self, context: BlockContext) -> str | None:
         """Skip if no neurotransmitter available."""
         if self.neurotransmitter is None:
             return "neurotransmitter_not_available"

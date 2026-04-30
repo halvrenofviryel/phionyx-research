@@ -5,12 +5,10 @@ Ethics Enforcement Wrapper
 Wrapper class for backward compatibility with tests.
 """
 
-from typing import Dict, Any, Optional
-from .ethics_enforcement import (
-    apply_ethics_enforcement,
-    EthicsEnforcementConfig
-)
+from typing import Any
+
 from .ethics import EthicsVector
+from .ethics_enforcement import EthicsEnforcementConfig, apply_ethics_enforcement
 
 
 class EthicsEnforcement:
@@ -20,7 +18,7 @@ class EthicsEnforcement:
     Wraps apply_ethics_enforcement function for class-based API.
     """
 
-    def __init__(self, config: Optional[EthicsEnforcementConfig] = None):
+    def __init__(self, config: EthicsEnforcementConfig | None = None):
         """Initialize ethics enforcement."""
         self.config = config or EthicsEnforcementConfig()
 
@@ -29,7 +27,7 @@ class EthicsEnforcement:
         ethics_vector: EthicsVector,
         current_entropy: float,
         base_amplitude: float
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         Check risk and apply enforcement if needed.
 

@@ -6,10 +6,11 @@ Models for AI↔AI communication protocol bridge (Paket A).
 Enhanced with envelope hardening (Paket E): message_id, turn_id, timestamp, TTL, nonce.
 """
 
-from typing import Optional, Dict, Any, List
-from pydantic import BaseModel, Field, field_validator
-from datetime import datetime, timezone
 import uuid
+from datetime import datetime, timezone
+from typing import Any
+
+from pydantic import BaseModel, Field, field_validator
 
 # Use core ParticipantRef to maintain layer isolation
 from phionyx_core.contracts.participants import ParticipantRef, ParticipantType
@@ -25,8 +26,8 @@ class CognitiveMetrics(BaseModel):
     phi: float = Field(0.0, ge=0.0, le=1.0, description="Integrated information (0-1)")
     entropy: float = Field(0.0, ge=0.0, le=1.0, description="System entropy / chaos level (0-1)")
     coherence: float = Field(0.0, ge=0.0, le=1.0, description="Coherence score (0-1)")
-    trust: Optional[float] = Field(None, ge=0.0, le=1.0, description="Trust score (0-1, optional)")
-    w_final: Optional[float] = Field(None, ge=0.0, le=1.0, description="Confidence fusion weight (0-1, optional)")
+    trust: float | None = Field(None, ge=0.0, le=1.0, description="Trust score (0-1, optional)")
+    w_final: float | None = Field(None, ge=0.0, le=1.0, description="Confidence fusion weight (0-1, optional)")
 
 
 class AgentMessageEnvelope(BaseModel):
@@ -55,13 +56,13 @@ class AgentMessageEnvelope(BaseModel):
     ttl_seconds: int = Field(..., ge=0, description="Time-to-live in seconds (0 = no expiration)")
     nonce: str = Field(..., description="Random nonce for replay protection")
 
-    intent: Optional[Dict[str, Any]] = Field(None, description="Intent metadata (optional)")
-    payload: Dict[str, Any] = Field(..., description="Message payload (protocol-specific)")
-    capabilities: Optional[Dict[str, Any]] = Field(None, description="Sender capabilities (optional)")
-    cognitive_metrics: Optional[CognitiveMetrics] = Field(
+    intent: dict[str, Any] | None = Field(None, description="Intent metadata (optional)")
+    payload: dict[str, Any] = Field(..., description="Message payload (protocol-specific)")
+    capabilities: dict[str, Any] | None = Field(None, description="Sender capabilities (optional)")
+    cognitive_metrics: CognitiveMetrics | None = Field(
         None, description="Cognitive state metrics at message creation time (SF2-14)"
     )
-    metadata: Dict[str, Any] = Field(default_factory=dict, description="Additional metadata")
+    metadata: dict[str, Any] = Field(default_factory=dict, description="Additional metadata")
 
     @field_validator('message_id')
     @classmethod
@@ -70,8 +71,8 @@ class AgentMessageEnvelope(BaseModel):
         try:
             uuid.UUID(v)
             return v
-        except ValueError:
-            raise ValueError(f"message_id must be a valid UUID, got: {v}")
+        except ValueError as err:
+            raise ValueError(f"message_id must be a valid UUID, got: {v}") from err
 
     @field_validator('timestamp_utc')
     @classmethod
@@ -80,8 +81,8 @@ class AgentMessageEnvelope(BaseModel):
         try:
             datetime.fromisoformat(v.replace('Z', '+00:00'))
             return v
-        except (ValueError, AttributeError):
-            raise ValueError(f"timestamp_utc must be ISO8601 format, got: {v}")
+        except (ValueError, AttributeError) as err:
+            raise ValueError(f"timestamp_utc must be ISO8601 format, got: {v}") from err
 
     @field_validator('nonce')
     @classmethod
@@ -99,15 +100,15 @@ class AgentMessageEnvelope(BaseModel):
         receiver_participant_ref: ParticipantRef,
         trace_id: str,
         turn_id: int,
-        payload: Dict[str, Any],
+        payload: dict[str, Any],
         ttl_seconds: int = 3600,  # Default 1 hour
-        message_id: Optional[str] = None,
-        timestamp_utc: Optional[str] = None,
-        nonce: Optional[str] = None,
-        intent: Optional[Dict[str, Any]] = None,
-        capabilities: Optional[Dict[str, Any]] = None,
-        cognitive_metrics: Optional[CognitiveMetrics] = None,
-        metadata: Optional[Dict[str, Any]] = None
+        message_id: str | None = None,
+        timestamp_utc: str | None = None,
+        nonce: str | None = None,
+        intent: dict[str, Any] | None = None,
+        capabilities: dict[str, Any] | None = None,
+        cognitive_metrics: CognitiveMetrics | None = None,
+        metadata: dict[str, Any] | None = None
     ) -> 'AgentMessageEnvelope':
         """
         Create envelope with auto-generated fields.
@@ -202,7 +203,7 @@ class AgentMessageEnvelope(BaseModel):
         except Exception:
             return True  # If we can't parse, consider expired
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Serialize to dictionary."""
         # Handle ParticipantType: if it's already a string (use_enum_values=True), use directly
         # Otherwise, get .value if it's an enum
@@ -242,7 +243,7 @@ class AgentMessageEnvelope(BaseModel):
         }
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> 'AgentMessageEnvelope':
+    def from_dict(cls, data: dict[str, Any]) -> 'AgentMessageEnvelope':
         """Deserialize from dictionary."""
         # Use core ParticipantRef (no bridge dependency)
 
@@ -279,22 +280,22 @@ class HandshakeResponse(BaseModel):
 
     Returned by handshake() to exchange agent capabilities.
     """
-    model_capabilities: Dict[str, Any] = Field(..., description="Model capabilities (name, provider, context_window, etc.)")
-    tool_capabilities: Optional[List[Dict[str, Any]]] = Field(None, description="Available tools")
-    context_window_hints: Dict[str, Any] = Field(default_factory=dict, description="Context window hints (max_tokens, etc.)")
+    model_capabilities: dict[str, Any] = Field(..., description="Model capabilities (name, provider, context_window, etc.)")
+    tool_capabilities: list[dict[str, Any]] | None = Field(None, description="Available tools")
+    context_window_hints: dict[str, Any] = Field(default_factory=dict, description="Context window hints (max_tokens, etc.)")
     safety_level: str = Field(..., description="Safety level (e.g., 'strict', 'moderate', 'permissive')")
     protocol_version: str = Field(default="0.1", description="Protocol version")
-    metadata: Dict[str, Any] = Field(default_factory=dict, description="Additional metadata")
+    metadata: dict[str, Any] = Field(default_factory=dict, description="Additional metadata")
 
 
-def detect_capabilities_from_participant(participant: ParticipantRef) -> Dict[str, Any]:
+def detect_capabilities_from_participant(participant: ParticipantRef) -> dict[str, Any]:
     """
     Capability detection: extract model and tool capabilities from participant metadata.
 
     Reads participant.metadata for: provider, model_name, context_window, max_tokens,
     tool_capabilities, safety_level. Used by handshake() to build HandshakeResponse.
     """
-    out: Dict[str, Any] = {
+    out: dict[str, Any] = {
         "provider": "unknown",
         "model_name": "default",
         "context_window": 4096,
@@ -328,7 +329,7 @@ def detect_capabilities_from_participant(participant: ParticipantRef) -> Dict[st
 
 def handshake(
     participant: ParticipantRef,
-    requested_capabilities: Optional[Dict[str, Any]] = None
+    requested_capabilities: dict[str, Any] | None = None
 ) -> HandshakeResponse:
     """
     Perform handshake to exchange capabilities.

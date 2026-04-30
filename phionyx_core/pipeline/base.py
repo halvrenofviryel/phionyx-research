@@ -6,8 +6,8 @@ Base class for all pipeline blocks in the 46-block canonical pipeline.
 """
 
 from abc import ABC, abstractmethod
-from typing import Any, ClassVar, Dict, Literal, Optional
 from dataclasses import dataclass
+from typing import Any, ClassVar, Literal
 
 DeterminismClass = Literal["strict", "seeded", "noisy_sensor"]
 """Determinism classification for a pipeline block.
@@ -40,45 +40,45 @@ class BlockContext:
     card_result: str
 
     # Session/Scenario
-    scenario_id: Optional[str] = None
-    scenario_step_id: Optional[str] = None
-    session_id: Optional[str] = None
+    scenario_id: str | None = None
+    scenario_step_id: str | None = None
+    session_id: str | None = None
 
     # Physics State
     current_amplitude: float = 5.0
     current_entropy: float = 0.5
     current_integrity: float = 100.0
-    previous_phi: Optional[float] = None
+    previous_phi: float | None = None
 
     # Participant & Runtime
-    participant: Optional[Any] = None  # Participant abstraction
-    mode: Optional[str] = None  # Runtime mode (e.g., "toygar_core", "story", "game_scenario")
-    strategy: Optional[str] = None  # Runtime strategy (e.g., "normal", "stabilize", "comfort")
+    participant: Any | None = None  # Participant abstraction
+    mode: str | None = None  # Runtime mode (e.g., "toygar_core", "story", "game_scenario")
+    strategy: str | None = None  # Runtime strategy (e.g., "normal", "stabilize", "comfort")
 
     # Envelope tracking
-    envelope_message_id: Optional[str] = None  # TurnEnvelope message_id for transcript tracking
-    envelope_turn_id: Optional[int] = None  # TurnEnvelope turn_id for transcript tracking
-    envelope_user_text_sha256: Optional[str] = None  # TurnEnvelope user_text_sha256 for integrity
+    envelope_message_id: str | None = None  # TurnEnvelope message_id for transcript tracking
+    envelope_turn_id: int | None = None  # TurnEnvelope turn_id for transcript tracking
+    envelope_user_text_sha256: str | None = None  # TurnEnvelope user_text_sha256 for integrity
 
     # Capabilities
-    capabilities: Optional[Any] = None  # RunCapabilities
-    capability_deriver: Optional[Any] = None  # CapabilityDeriverProtocol
+    capabilities: Any | None = None  # RunCapabilities
+    capability_deriver: Any | None = None  # CapabilityDeriverProtocol
 
     # v4 optional extensions (AD-6: backward compat via Optional)
-    v4_perceptual_frame: Optional[Any] = None   # PerceptualFrame
-    v4_world_state: Optional[Any] = None        # WorldStateSnapshot
-    v4_active_goals: Optional[Any] = None       # List[GoalObject]
-    v4_action_intent: Optional[Any] = None      # ActionIntent
-    v4_ethics_decision: Optional[Any] = None    # EthicsDecision
-    v4_confidence: Optional[Any] = None         # ConfidencePayload
-    v4_workspace_events: Optional[Any] = None   # List[WorkspaceEvent]
-    v4_audit_record: Optional[Any] = None       # AuditRecord
-    v4_learning_updates: Optional[Any] = None   # List[LearningUpdate]
-    v4_error_payload: Optional[Any] = None      # ErrorPayload
+    v4_perceptual_frame: Any | None = None   # PerceptualFrame
+    v4_world_state: Any | None = None        # WorldStateSnapshot
+    v4_active_goals: Any | None = None       # List[GoalObject]
+    v4_action_intent: Any | None = None      # ActionIntent
+    v4_ethics_decision: Any | None = None    # EthicsDecision
+    v4_confidence: Any | None = None         # ConfidencePayload
+    v4_workspace_events: Any | None = None   # List[WorkspaceEvent]
+    v4_audit_record: Any | None = None       # AuditRecord
+    v4_learning_updates: Any | None = None   # List[LearningUpdate]
+    v4_error_payload: Any | None = None      # ErrorPayload
     pipeline_version: str = "3.0.0"             # "2.5.0" or "3.0.0"
 
     # Additional context (extensible)
-    metadata: Dict[str, Any] = None
+    metadata: dict[str, Any] = None
 
     def __post_init__(self):
         if self.metadata is None:
@@ -92,11 +92,11 @@ class BlockResult:
     """
     block_id: str
     status: str  # "ok", "error", "skipped"
-    data: Optional[Dict[str, Any]] = None
-    error: Optional[Exception] = None
-    skip_reason: Optional[str] = None
+    data: dict[str, Any] | None = None
+    error: Exception | None = None
+    skip_reason: str | None = None
     # v4 optional extension (AD-6)
-    v4_error_payload: Optional[Any] = None  # ErrorPayload
+    v4_error_payload: Any | None = None  # ErrorPayload
 
     def is_success(self) -> bool:
         """Check if block executed successfully."""
@@ -154,7 +154,7 @@ class PipelineBlock(ABC):
         """
         pass
 
-    def should_skip(self, context: BlockContext) -> Optional[str]:
+    def should_skip(self, context: BlockContext) -> str | None:
         """
         Check if this block should be skipped.
 

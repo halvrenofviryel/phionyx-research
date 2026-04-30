@@ -7,10 +7,10 @@ Faz 3.1: Kalan Özellikler
 Dead code detection and removal suggestions.
 """
 
-from typing import List, Dict, Any, Optional, Set
-from dataclasses import dataclass
-import re
 import ast
+import re
+from dataclasses import dataclass
+from typing import Any
 
 
 @dataclass
@@ -37,13 +37,13 @@ class DeadCodePruner:
 
     def __init__(self):
         """Initialize dead code pruner."""
-        self.detected_items: List[DeadCodeItem] = []
+        self.detected_items: list[DeadCodeItem] = []
 
     def detect_dead_code(
         self,
         code: str,
-        entry_points: Optional[List[str]] = None
-    ) -> List[DeadCodeItem]:
+        entry_points: list[str] | None = None
+    ) -> list[DeadCodeItem]:
         """
         Detect dead code in codebase.
 
@@ -114,7 +114,7 @@ class DeadCodePruner:
         self.detected_items.extend(dead_items)
         return dead_items
 
-    def _extract_functions(self, tree: ast.AST) -> List[Dict[str, Any]]:
+    def _extract_functions(self, tree: ast.AST) -> list[dict[str, Any]]:
         """Extract function definitions."""
         functions = []
         for node in ast.walk(tree):
@@ -125,7 +125,7 @@ class DeadCodePruner:
                 })
         return functions
 
-    def _extract_classes(self, tree: ast.AST) -> List[Dict[str, Any]]:
+    def _extract_classes(self, tree: ast.AST) -> list[dict[str, Any]]:
         """Extract class definitions."""
         classes = []
         for node in ast.walk(tree):
@@ -136,7 +136,7 @@ class DeadCodePruner:
                 })
         return classes
 
-    def _extract_variables(self, tree: ast.AST) -> List[Dict[str, Any]]:
+    def _extract_variables(self, tree: ast.AST) -> list[dict[str, Any]]:
         """Extract variable definitions."""
         variables = []
         for node in ast.walk(tree):
@@ -149,7 +149,7 @@ class DeadCodePruner:
                         })
         return variables
 
-    def _extract_imports(self, tree: ast.AST) -> List[Dict[str, Any]]:
+    def _extract_imports(self, tree: ast.AST) -> list[dict[str, Any]]:
         """Extract import statements."""
         imports = []
         for node in ast.walk(tree):
@@ -167,7 +167,7 @@ class DeadCodePruner:
                     })
         return imports
 
-    def _extract_function_calls(self, tree: ast.AST) -> Set[str]:
+    def _extract_function_calls(self, tree: ast.AST) -> set[str]:
         """Extract function calls."""
         calls = set()
         for node in ast.walk(tree):
@@ -178,7 +178,7 @@ class DeadCodePruner:
                     calls.add(node.func.attr)
         return calls
 
-    def _extract_class_instantiations(self, tree: ast.AST) -> Set[str]:
+    def _extract_class_instantiations(self, tree: ast.AST) -> set[str]:
         """Extract class instantiations."""
         instantiations = set()
         for node in ast.walk(tree):
@@ -187,7 +187,7 @@ class DeadCodePruner:
                     instantiations.add(node.func.id)
         return instantiations
 
-    def _extract_variable_usages(self, tree: ast.AST) -> Set[str]:
+    def _extract_variable_usages(self, tree: ast.AST) -> set[str]:
         """Extract variable usages."""
         usages = set()
         for node in ast.walk(tree):
@@ -195,7 +195,7 @@ class DeadCodePruner:
                 usages.add(node.id)
         return usages
 
-    def _detect_dead_code_pattern(self, code: str) -> List[DeadCodeItem]:
+    def _detect_dead_code_pattern(self, code: str) -> list[DeadCodeItem]:
         """Pattern-based dead code detection (fallback)."""
         dead_items = []
 

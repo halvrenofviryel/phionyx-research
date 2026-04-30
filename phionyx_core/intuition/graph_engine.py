@@ -14,10 +14,10 @@ through the graph: Darkness -> Cave -> Fear (weight: 0.9)
 
 import logging
 import os
-from typing import List, Dict, Optional, Tuple, Any, TYPE_CHECKING
+import uuid
 from dataclasses import dataclass
 from enum import Enum
-import uuid
+from typing import TYPE_CHECKING, Any, Optional
 
 try:
     import networkx as nx
@@ -25,15 +25,15 @@ except ImportError:
     nx = None
 
 try:
-    from supabase import create_client, Client
+    from supabase import Client, create_client
 except ImportError:
     create_client = None
     Client = None
 # litellm imports removed - using centralized LLM service instead
 
 if TYPE_CHECKING:
-    from phionyx_core.contracts.llm_provider import LLMProviderProtocol
     from phionyx_core.contracts.database import GraphRepositoryProtocol
+    from phionyx_core.contracts.llm_provider import LLMProviderProtocol
 
 logger = logging.getLogger(__name__)
 
@@ -56,13 +56,13 @@ class EdgeType(str, Enum):
 @dataclass
 class Concept:
     """A concept extracted from text."""
-    id: Optional[str] = None
+    id: str | None = None
     name: str = ""
     normalized_name: str = ""
     category: str = ""  # emotion, person, location, abstract, object, action, trait
     confidence: float = 0.0
     observation_source: str = ""  # v4: where this concept was observed (user_input, llm, system)
-    first_observed: Optional[str] = None  # v4: ISO timestamp of first observation
+    first_observed: str | None = None  # v4: ISO timestamp of first observation
 
 
 @dataclass
@@ -73,7 +73,7 @@ class Association:
     weight: float
     formation_phi: float
     edge_type: str = EdgeType.RELATED.value  # v4: typed relationship
-    context: Optional[str] = None
+    context: str | None = None
 
 
 @dataclass
@@ -125,7 +125,7 @@ class GraphEngine:
         # Store repository (if provided)
         self._graph_repository = graph_repository
 
-        self.client: Optional[Client] = None
+        self.client: Client | None = None
         self._init_supabase()
 
         # In-memory graph for fast traversal (loaded from DB)
@@ -203,7 +203,7 @@ class GraphEngine:
         self,
         text: str,
         model: str = None
-    ) -> List[Concept]:
+    ) -> list[Concept]:
         """
         Extract key concepts from user input using centralized LLM service.
 
@@ -267,7 +267,7 @@ class GraphEngine:
         )
         return None
 
-    async def _generate_embedding(self, text: str) -> Optional[List[float]]:
+    async def _generate_embedding(self, text: str) -> list[float] | None:
         """
         Generate embedding for entity resolution (Microsoft GraphRAG style).
 
@@ -307,7 +307,7 @@ class GraphEngine:
         self,
         concept: Concept,
         phi: float = 0.0
-    ) -> Optional[str]:
+    ) -> str | None:
         """
         Get existing concept ID or create new one in database.
 
@@ -376,11 +376,11 @@ class GraphEngine:
 
     async def form_associations(
         self,
-        concepts: List[Concept],
+        concepts: list[Concept],
         phi: float,
-        context: Optional[str] = None,
+        context: str | None = None,
         edge_type: str = EdgeType.RELATED.value,
-    ) -> List[Association]:
+    ) -> list[Association]:
         """
         Form associations between all pairs of concepts, weighted by Phi.
 
@@ -409,8 +409,8 @@ class GraphEngine:
             return []
 
         # Form associations between all pairs
-        for i, (source_id, source_concept) in enumerate(concept_ids):
-            for target_id, target_concept in concept_ids[i+1:]:
+        for i, (source_id, _source_concept) in enumerate(concept_ids):
+            for target_id, _target_concept in concept_ids[i+1:]:
                 # Prevent self-loops
                 if source_id == target_id:
                     continue
@@ -517,7 +517,7 @@ class GraphEngine:
                 [source_concept, target_concept], weight, edge_type=edge_type
             ))
 
-    def infer_context(self, text: str) -> Dict[str, Any]:
+    def infer_context(self, text: str) -> dict[str, Any]:
         """
         Infer context from text (synchronous wrapper for testing).
 
@@ -552,10 +552,10 @@ class GraphEngine:
 
     async def infer_hidden_context(
         self,
-        concept_names: List[str],
+        concept_names: list[str],
         max_hops: int = 2,
         min_weight: float = 0.3
-    ) -> List[HiddenContext]:
+    ) -> list[HiddenContext]:
         """
         Infer hidden context using Microsoft GraphRAG-style PageRank algorithm.
 
@@ -611,7 +611,7 @@ class GraphEngine:
 
         # Expand ego-graph: include neighbors up to max_hops
         current_level = set(concept_ids)
-        for hop in range(max_hops):
+        for _hop in range(max_hops):
             next_level = set()
             for node_id in current_level:
                 # Add node to subgraph
@@ -706,7 +706,7 @@ class GraphEngine:
         concept_name: str,
         limit: int = 10,
         depth: int = 1
-    ) -> List[Dict]:
+    ) -> list[dict]:
         """
         Get directly related concepts (1-hop neighbors).
 
@@ -749,7 +749,7 @@ class GraphEngine:
             logger.error(f"GraphEngine: Failed to get related concepts: {e}")
             return []
 
-    def get_edges_by_type(self, edge_type: str) -> List[Tuple[str, str, Dict]]:
+    def get_edges_by_type(self, edge_type: str) -> list[tuple[str, str, dict]]:
         """
         Get all edges of a specific type from the in-memory graph.
 
@@ -779,7 +779,7 @@ class GraphEngine:
         subgraph.add_edges_from(causal_edges)
         return subgraph
 
-    def get_contradictions(self) -> List[Tuple[str, str, Dict]]:
+    def get_contradictions(self) -> list[tuple[str, str, dict]]:
         """Get all contradiction edges."""
         return self.get_edges_by_type(EdgeType.CONTRADICTS.value)
 
@@ -795,9 +795,9 @@ class GraphEngine:
         self,
         character_id: str,
         event_type: str,
-        event_payload: Dict,
-        concept_id: Optional[str] = None
-    ) -> Optional[str]:
+        event_payload: dict,
+        concept_id: str | None = None
+    ) -> str | None:
         """
         Add or update an event node in Chronicle Graph.
 
@@ -843,7 +843,7 @@ class GraphEngine:
         character_id: str,
         window: int = 10,
         include_relationships: bool = True
-    ) -> Dict:
+    ) -> dict:
         """
         Get relevant subgraph for narrative generation.
 
@@ -922,7 +922,7 @@ class GraphEngine:
 
     def _generate_chronicle_summary(
         self,
-        events: List[Dict],
+        events: list[dict],
         character_id: str
     ) -> str:
         """

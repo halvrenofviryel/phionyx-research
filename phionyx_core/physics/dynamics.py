@@ -11,12 +11,12 @@ Scientific Grounding Upgrade (v3):
 - Replaces heuristic magic numbers with mathematically grounded approaches
 """
 
-from typing import Optional, Dict
+
 from .constants import (
-    ENTROPY_MIN,
     ENTROPY_MAX,
-    MIN_STABILITY,
+    ENTROPY_MIN,
     MAX_STABILITY,
+    MIN_STABILITY,
 )
 from .tuner import PhysicsParams
 
@@ -42,7 +42,7 @@ def calculate_dynamic_entropy(
     phi_variance: float,
     negative_emotion_count: int,
     complexity: float,
-    base_entropy: Optional[float] = None
+    base_entropy: float | None = None
 ) -> float:
     """
     Calculate dynamic entropy based on runtime conditions.
@@ -100,8 +100,8 @@ def update_stability(
     current_phi: float,
     entropy: float,
     params: PhysicsParams,
-    alpha: Optional[float] = None,
-    beta: Optional[float] = None
+    alpha: float | None = None,
+    beta: float | None = None
 ) -> float:
     """
     Update stability based on target vs current phi and entropy.
@@ -215,8 +215,8 @@ def calculate_dynamic_entropy_v3(
     input_text: str,
     phi_variance: float = 0.0,
     negative_emotion_ratio: float = 0.0,
-    base_entropy: Optional[float] = None,
-    weights: Optional[Dict[str, float]] = None
+    base_entropy: float | None = None,
+    weights: dict[str, float] | None = None
 ) -> float:
     """
     Calculate dynamic entropy using Kolmogorov Complexity (Information Theory).
@@ -296,9 +296,9 @@ def update_system_stability(
     target_phi: float,
     entropy: float,
     input_energy: float = 0.0,
-    params: Optional[PhysicsParams] = None,
-    alpha: Optional[float] = None,
-    beta: Optional[float] = None
+    params: PhysicsParams | None = None,
+    alpha: float | None = None,
+    beta: float | None = None
 ) -> float:
     """
     Update stability ensuring Lyapunov convergence (Control Theory).

@@ -7,9 +7,8 @@ Each port method call is checked against RBAC before execution.
 """
 
 import logging
-from typing import Dict, Set, Optional
-from enum import Enum
 from dataclasses import dataclass, field
+from enum import Enum
 
 logger = logging.getLogger(__name__)
 
@@ -42,7 +41,7 @@ class Role(str, Enum):
 
 # Default permission matrix (v4 §6.1)
 # Format: {module: {target_module: {permissions}}}
-DEFAULT_PERMISSION_MATRIX: Dict[str, Dict[str, Set[str]]] = {
+DEFAULT_PERMISSION_MATRIX: dict[str, dict[str, set[str]]] = {
     "perception_engine": {
         "world_model": {"read", "write"},
         "memory_store": {"read"},
@@ -119,7 +118,7 @@ class RBACManager:
 
     Checks caller module permissions before port method invocation.
     """
-    permission_matrix: Dict[str, Dict[str, Set[str]]] = field(
+    permission_matrix: dict[str, dict[str, set[str]]] = field(
         default_factory=lambda: dict(DEFAULT_PERMISSION_MATRIX)
     )
     audit_log: list = field(default_factory=list)
@@ -170,7 +169,7 @@ class RBACManager:
         self,
         caller_module: str,
         target_module: str,
-        permissions: Set[str],
+        permissions: set[str],
     ) -> None:
         """Grant permissions to a module."""
         if caller_module not in self.permission_matrix:
@@ -183,7 +182,7 @@ class RBACManager:
         self,
         caller_module: str,
         target_module: str,
-        permissions: Optional[Set[str]] = None,
+        permissions: set[str] | None = None,
     ) -> None:
         """Revoke permissions from a module."""
         if caller_module in self.permission_matrix:

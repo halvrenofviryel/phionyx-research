@@ -8,10 +8,11 @@ context modes (e.g., "Life planning" + "Engineering" in one query).
 Uses lightweight LLM to segment complex queries into discrete tasks.
 """
 
-from typing import List, Optional, Callable, Any
-from dataclasses import dataclass
-import logging
 import json
+import logging
+from collections.abc import Callable
+from dataclasses import dataclass
+from typing import Any
 
 from .definitions import ContextMode
 
@@ -45,7 +46,7 @@ class MultiIntentDetector:
         self,
         llm_provider: str = "openai",
         llm_model: str = "gpt-4o-mini",
-        llm_completion_fn: Optional[Callable[..., Any]] = None,
+        llm_completion_fn: Callable[..., Any] | None = None,
     ):
         """
         Initialize multi-intent detector.
@@ -62,7 +63,7 @@ class MultiIntentDetector:
         self.llm_model = llm_model
         self._init_llm(llm_completion_fn)
 
-    def _init_llm(self, llm_completion_fn: Optional[Callable[..., Any]] = None):
+    def _init_llm(self, llm_completion_fn: Callable[..., Any] | None = None):
         """Initialize LLM client via injected callable (Core boundary: no direct litellm import)."""
         if llm_completion_fn is not None:
             self.llm_available = True
@@ -74,7 +75,7 @@ class MultiIntentDetector:
             )
             self.llm_available = False
 
-    async def analyze(self, text: str) -> List[IntentSegment]:
+    async def analyze(self, text: str) -> list[IntentSegment]:
         """
         Analyze text and segment into multiple intents.
 
@@ -102,7 +103,7 @@ class MultiIntentDetector:
         else:
             return await self._analyze_keyword_based(text)
 
-    async def _analyze_llm_based(self, text: str) -> List[IntentSegment]:
+    async def _analyze_llm_based(self, text: str) -> list[IntentSegment]:
         """
         Use lightweight LLM to analyze and segment intents.
 
@@ -161,7 +162,7 @@ Return ONLY valid JSON, no other text."""
                 if json_match:
                     segments_data = json.loads(json_match.group())
                 else:
-                    raise ValueError("No valid JSON found in response")
+                    raise ValueError("No valid JSON found in response") from None
 
             # Convert to IntentSegment objects
             segments = []
@@ -191,7 +192,7 @@ Return ONLY valid JSON, no other text."""
             logger.error(f"MultiIntentDetector: LLM analysis failed: {e}")
             raise
 
-    async def _analyze_keyword_based(self, text: str) -> List[IntentSegment]:
+    async def _analyze_keyword_based(self, text: str) -> list[IntentSegment]:
         """
         Fallback: Keyword-based intent detection.
 
@@ -213,7 +214,7 @@ Return ONLY valid JSON, no other text."""
             confidence=detection.confidence
         )]
 
-    def is_overload(self, segments: List[IntentSegment]) -> bool:
+    def is_overload(self, segments: list[IntentSegment]) -> bool:
         """
         Check if query has too many intents (overload).
 

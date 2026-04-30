@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Dict
 
 
 @dataclass
@@ -32,7 +31,7 @@ class AcceptanceThresholds:
     min_cqs_delta: float = 0.005
     max_latency_increase_pct: float = 20.0
     max_cost_increase_pct: float = 15.0
-    complexity_tax: Dict[str, float] = field(
+    complexity_tax: dict[str, float] = field(
         default_factory=lambda: {
             "1-10": 0.000,   # trivial one-liner — no extra bar
             "11-30": 0.002,  # small refactor

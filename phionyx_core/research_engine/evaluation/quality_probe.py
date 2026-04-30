@@ -11,8 +11,8 @@ Tier B (review required for modifications).
 v2.1.0 — 11 probe domains, 31 metrics, 18 source files.
 """
 
-import re
 import logging
+import re
 from pathlib import Path
 from typing import Any
 
@@ -302,9 +302,9 @@ class QualityProbe:
             "phionyx_core/physics/formulas.py", "recovery_gain", 0.05
         )
 
-        _kw = dict(entropy=0.6, stability=0.8, valence=0.0)
-        _rec_kw = dict(entropy=0.4, stability=0.8, valence=0.3,
-                       previous_entropy=0.8, previous_valence=-0.5)
+        _kw = {"entropy": 0.6, "stability": 0.8, "valence": 0.0}
+        _rec_kw = {"entropy": 0.4, "stability": 0.8, "valence": 0.3,
+                       "previous_entropy": 0.8, "previous_valence": -0.5}
 
         phi_curr = calculate_phi_cognitive(**_kw, entropy_penalty_k=epk, base_resonance=br, recovery_gain=rg)
         phi_best = calculate_phi_cognitive(**_kw, entropy_penalty_k=0.0, base_resonance=br, recovery_gain=rg)
@@ -312,7 +312,7 @@ class QualityProbe:
         span1 = phi_best - phi_worst
         norm_epk = (phi_curr - phi_worst) / span1 if span1 > 0 else 0.5
 
-        _kw2 = dict(entropy=0.1, stability=0.9, valence=0.0)
+        _kw2 = {"entropy": 0.1, "stability": 0.9, "valence": 0.0}
         phi_curr2 = calculate_phi_cognitive(**_kw2, entropy_penalty_k=epk, base_resonance=br, recovery_gain=rg)
         phi_best2 = calculate_phi_cognitive(**_kw2, entropy_penalty_k=epk, base_resonance=0.2, recovery_gain=rg)
         phi_worst2 = calculate_phi_cognitive(**_kw2, entropy_penalty_k=epk, base_resonance=0.05, recovery_gain=rg)
@@ -487,8 +487,8 @@ class QualityProbe:
 
     def _probe_world(self) -> dict[str, float]:
         """Probe temporal tracker and goal decomposer."""
-        from phionyx_core.world.temporal_tracker import TemporalTracker
         from phionyx_core.planning.goal_decomposer import GoalDecomposer
+        from phionyx_core.world.temporal_tracker import TemporalTracker
 
         dr = self._read_param(
             "phionyx_core/world/temporal_tracker.py", "temporal_decay_rate", 0.02
@@ -629,8 +629,8 @@ class QualityProbe:
         Tests that entropy/phi computations actually vary with input,
         and that feedback blocks skip gracefully with None DI.
         """
-        from phionyx_core.physics.text_physics import calculate_text_entropy_zlib
         from phionyx_core.physics.formulas import calculate_phi_cognitive
+        from phionyx_core.physics.text_physics import calculate_text_entropy_zlib
 
         # Metric 1: pipeline_entropy_sensitivity — 3 texts → entropy spread
         texts = [
@@ -673,7 +673,9 @@ class QualityProbe:
             pass
 
         try:
-            from phionyx_core.pipeline.blocks.memory_consolidation_block import MemoryConsolidationBlock
+            from phionyx_core.pipeline.blocks.memory_consolidation_block import (
+                MemoryConsolidationBlock,
+            )
             _blk = MemoryConsolidationBlock()
             skip_count += 1
         except Exception:

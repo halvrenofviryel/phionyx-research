@@ -8,67 +8,66 @@ Contract v3.8.0.
 """
 
 import logging
-from typing import Dict, Any, Optional
+from typing import Any
 
 from ..pipeline.blocks import (
-    # Core blocks (31)
-    TimeUpdateSotBlock,
-    EchoOntologyEventTraceBlock,
-    EmotionFromNeurotransmitterBlock,
-    EmotionEstimationBlock,
-    CreateScenarioFrameBlock,
-    InitializeUnifiedStateBlock,
-    UkfPredictBlock,
-    CognitiveLayerBlock,
-    EchoOntologyTransformationBlock,
-    InputSafetyGateBlock,  # Combined: low_input_gate + safety_layer_pre_cep
-    IntentClassificationBlock,  # Intent classification block
-    ContextRetrievalRagBlock,  # Context retrieval RAG block
-    EntropyAmplitudePreGateBlock,
-    CepEvaluationBlock,
-    EthicsPreResponseBlock,
-    NarrativeLayerBlock,
-    EthicsPostResponseBlock,
-    BehavioralDriftDetectionBlock,  # Silent Failure Firewall
-    UnifiedStateUpdateEscBlock,
-    PhiPublishBlock,
-    EscStateHelperUpdateBlock,
-    DriveCoherenceUpdateBlock,
-    CoherenceQaBlock,
-    EntropyAmplitudePostGateBlock,
-    NeurotransmitterMemoryGrowthBlock,
-    AuditLayerBlock,
-    PhiFinalizeBlock,
-    StateUpdatePhysicsBlock,
-    ResponseBuildBlock,
-    PhiComputationBlock,
-    EntropyComputationBlock,
-    # v3.0.0 AGI World Model blocks (8)
-    KillSwitchGateBlock,
-    PerceptualFrameEmitBlock,
-    GoalEvaluationBlock,
-    WorldStateSnapshotBlock,
-    ConfidenceFusionBlock,
-    ArbitrationResolveBlock,
     ActionIntentGateBlock,
-    LearningGateBlock,
-    WorkspaceBroadcastBlock,
-    # AGI Sprint Pipeline Binding blocks S2-S5 (11)
-    SelfModelAssessmentBlock,
-    KnowledgeBoundaryCheckBlock,
-    MemoryConsolidationBlock,
+    ArbitrationResolveBlock,
+    AuditLayerBlock,
+    BehavioralDriftDetectionBlock,  # Silent Failure Firewall
     CausalGraphUpdateBlock,
     CausalInterventionBlock,
-    CounterfactualAnalysisBlock,
-    RootCauseAnalysisBlock,
     CausalSimulationBlock,
-    TrustEvaluationBlock,
-    GoalDecompositionBlock,
+    CepEvaluationBlock,
+    CognitiveLayerBlock,
+    CoherenceQaBlock,
+    ConfidenceFusionBlock,
+    ContextRetrievalRagBlock,  # Context retrieval RAG block
+    CounterfactualAnalysisBlock,
+    CreateScenarioFrameBlock,
     DeliberativeEthicsGateBlock,
+    DriveCoherenceUpdateBlock,
+    EchoOntologyEventTraceBlock,
+    EchoOntologyTransformationBlock,
+    EmotionEstimationBlock,
+    EmotionFromNeurotransmitterBlock,
+    EntropyAmplitudePostGateBlock,
+    EntropyAmplitudePreGateBlock,
+    EntropyComputationBlock,
+    EscStateHelperUpdateBlock,
+    EthicsPostResponseBlock,
+    EthicsPreResponseBlock,
+    GoalDecompositionBlock,
+    GoalEvaluationBlock,
+    InitializeUnifiedStateBlock,
+    InputSafetyGateBlock,  # Combined: low_input_gate + safety_layer_pre_cep
+    IntentClassificationBlock,  # Intent classification block
+    # v3.0.0 AGI World Model blocks (8)
+    KillSwitchGateBlock,
+    KnowledgeBoundaryCheckBlock,
+    LearningGateBlock,
+    MemoryConsolidationBlock,
+    NarrativeLayerBlock,
+    NeurotransmitterMemoryGrowthBlock,
     # Feedback Loop Block (v3.6.0)
     OutcomeFeedbackBlock,
+    PerceptualFrameEmitBlock,
+    PhiComputationBlock,
+    PhiFinalizeBlock,
+    PhiPublishBlock,
+    ResponseBuildBlock,
+    RootCauseAnalysisBlock,
+    # AGI Sprint Pipeline Binding blocks S2-S5 (11)
+    SelfModelAssessmentBlock,
+    StateUpdatePhysicsBlock,
+    # Core blocks (31)
+    TimeUpdateSotBlock,
+    TrustEvaluationBlock,
+    UkfPredictBlock,
+    UnifiedStateUpdateEscBlock,
+    WorkspaceBroadcastBlock,
+    WorldStateSnapshotBlock,
 )
-
 from .echo_orchestrator import OrchestratorServices
 
 logger = logging.getLogger(__name__)
@@ -85,10 +84,10 @@ except ImportError:
 
 def create_all_blocks(
     services: OrchestratorServices,
-    engine_instance: Optional[Any] = None,
-    participant_id: Optional[str] = None,
-    emotion_cache: Optional[Any] = None
-) -> Dict[str, Any]:
+    engine_instance: Any | None = None,
+    participant_id: str | None = None,
+    emotion_cache: Any | None = None
+) -> dict[str, Any]:
     """
     Create all 43 pipeline blocks with their dependencies.
 
@@ -181,7 +180,7 @@ def create_all_blocks(
                 """Initialize adapter with processor."""
                 self.processor = processor
 
-            def get_emotion(self, user_input: str, mode: Optional[str] = None) -> Any:
+            def get_emotion(self, user_input: str, mode: str | None = None) -> Any:
                 """Get emotion from neurotransmitter."""
                 return self.processor.get_emotion_from_neurotransmitter(
                     user_input=user_input,
@@ -283,7 +282,7 @@ def create_all_blocks(
             def predict(self, unified_state: Any, time_delta: float = 1.0) -> Any:
                 """Run UKF prediction step using real process model."""
                 # Build current_state dict from unified_state for process model
-                current_state: Dict[str, Any] = {}
+                current_state: dict[str, Any] = {}
                 if unified_state is not None:
                     for attr in ("phi", "entropy", "valence", "arousal", "trust", "regulation"):
                         val = getattr(unified_state, attr, None)
@@ -566,12 +565,12 @@ def create_all_blocks(
     # 18.5. behavioral_drift_detection - Silent Failure Firewall (NEW)
     # Optional: Only create if monitoring services are available
     try:
+        from phionyx_core.memory.vector_store import VectorStore  # noqa: F401
         from phionyx_core.monitoring import (
             BaselineStore,
             BehavioralDriftDetector,
             CircuitBreaker,
         )
-        from phionyx_core.memory.vector_store import VectorStore  # noqa: F401
 
         # Get vector store if available
         vector_store = None
@@ -654,7 +653,7 @@ def create_all_blocks(
             self,
             unified_state: Any,
             phi_value: float,
-            phi_components: Optional[Any] = None
+            phi_components: Any | None = None
         ) -> Any:
             """
             Publish phi value to unified state.
@@ -739,7 +738,7 @@ def create_all_blocks(
             def __init__(self, processor: Any) -> None:
                 self.processor = processor
 
-            def apply_gate(self, physics_state: Dict) -> Dict:
+            def apply_gate(self, physics_state: dict) -> dict:
                 """Apply entropy/amplitude gate after narrative generation."""
                 if hasattr(self.processor, 'apply_entropy_amplitude_post_gate'):
                     return self.processor.apply_entropy_amplitude_post_gate(

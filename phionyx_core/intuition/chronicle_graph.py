@@ -8,9 +8,8 @@ for narrative generation.
 """
 
 import logging
-from typing import Dict, List, Optional
-from datetime import datetime
 import uuid
+from datetime import datetime
 
 logger = logging.getLogger(__name__)
 
@@ -40,9 +39,9 @@ class ChronicleGraphAPI:
         self,
         character_id: str,
         event_type: str,
-        event_payload: Dict,
-        concept_id: Optional[str] = None
-    ) -> Optional[str]:
+        event_payload: dict,
+        concept_id: str | None = None
+    ) -> str | None:
         """
         Add or update an event node in Chronicle Graph.
 
@@ -87,7 +86,7 @@ class ChronicleGraphAPI:
         character_id: str,
         window: int = 10,
         include_relationships: bool = True
-    ) -> Dict:
+    ) -> dict:
         """
         Get relevant subgraph for narrative generation.
 
@@ -149,7 +148,7 @@ class ChronicleGraphAPI:
             if concept_ids and include_relationships:
                 # Fetch concepts and their associations
                 # This integrates Chronicle Graph with GraphEngine concepts
-                for concept_id in concept_ids:
+                for _concept_id in concept_ids:
                     _related = await self.graph_engine.get_related_concepts(
                         concept_name="",  # We'll need concept_id lookup
                         limit=5
@@ -178,7 +177,7 @@ class ChronicleGraphAPI:
 
     def _generate_narrative_summary(
         self,
-        events: List[Dict],
+        events: list[dict],
         character_id: str
     ) -> str:
         """
@@ -216,9 +215,9 @@ class ChronicleGraphAPI:
     async def get_recent_events(
         self,
         character_id: str,
-        event_type: Optional[str] = None,
+        event_type: str | None = None,
         limit: int = 5
-    ) -> List[Dict]:
+    ) -> list[dict]:
         """
         Get recent events for a character, optionally filtered by type.
 

@@ -6,11 +6,12 @@ Extends BlockResult with severity enum, recovery actions,
 and structured error reporting.
 """
 
-from typing import Optional, Dict, Any, List
-from enum import Enum
-from pydantic import BaseModel, ConfigDict, Field
-from datetime import datetime, timezone
 import uuid
+from datetime import datetime, timezone
+from enum import Enum
+from typing import Any
+
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class ErrorSeverity(str, Enum):
@@ -62,7 +63,7 @@ class ErrorPayload(BaseModel):
         default=RecoveryAction.NONE,
         description="Recommended recovery action"
     )
-    recovery_details: Optional[str] = Field(
+    recovery_details: str | None = Field(
         None,
         description="Detailed recovery instructions"
     )
@@ -70,7 +71,7 @@ class ErrorPayload(BaseModel):
         default=False,
         description="Whether the operation can be retried"
     )
-    retry_after_ms: Optional[int] = Field(
+    retry_after_ms: int | None = Field(
         None, ge=0,
         description="Suggested retry delay in milliseconds"
     )
@@ -80,17 +81,17 @@ class ErrorPayload(BaseModel):
         default="unknown",
         description="Module where error originated"
     )
-    source_block_id: Optional[str] = Field(
+    source_block_id: str | None = Field(
         None,
         description="Pipeline block ID if error is from pipeline"
     )
-    stack_trace: Optional[str] = Field(
+    stack_trace: str | None = Field(
         None,
         description="Stack trace (debug/staging only, never in production)"
     )
 
     # Impact
-    affected_modules: List[str] = Field(
+    affected_modules: list[str] = Field(
         default_factory=list,
         description="Modules affected by this error"
     )
@@ -101,11 +102,11 @@ class ErrorPayload(BaseModel):
 
     # Timestamps
     occurred_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
-    resolved_at: Optional[datetime] = None
+    resolved_at: datetime | None = None
 
     # Metadata
-    trace_id: Optional[str] = None
-    correlation_id: Optional[str] = None
-    metadata: Dict[str, Any] = Field(default_factory=dict)
+    trace_id: str | None = None
+    correlation_id: str | None = None
+    metadata: dict[str, Any] = Field(default_factory=dict)
 
     model_config = ConfigDict(json_schema_extra={'example': {'severity': 'error', 'error_code': 'ETHICS_GATE_FAIL', 'message': 'Ethics gate denied action', 'recovery_action': 'fallback'}})

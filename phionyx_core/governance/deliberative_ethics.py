@@ -19,9 +19,9 @@ Integrates with:
 """
 
 import logging
-from typing import Dict, List, Optional, Any
 from dataclasses import dataclass, field
 from enum import Enum
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -62,14 +62,14 @@ class FrameworkAssessment:
 class DeliberativeResult:
     """Full result of deliberative ethics analysis."""
     action_description: str
-    framework_assessments: List[FrameworkAssessment]
+    framework_assessments: list[FrameworkAssessment]
     final_verdict: str  # DeliberationOutcome value
     final_confidence: float
     consensus: bool  # Did all frameworks agree?
     reasoning: str
-    risk_dimensions: Dict[str, float] = field(default_factory=dict)
+    risk_dimensions: dict[str, float] = field(default_factory=dict)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         return {
             "action": self.action_description,
             "frameworks": [
@@ -88,7 +88,7 @@ class DeliberativeResult:
         }
 
 
-def normalize_risk_vector(components: List[float]) -> List[float]:
+def normalize_risk_vector(components: list[float]) -> list[float]:
     """
     Normalize risk vector components to [0, 1] range.
 
@@ -134,7 +134,7 @@ class DeliberativeEthics:
 
     def __init__(
         self,
-        framework_weights: Optional[Dict[str, float]] = None,
+        framework_weights: dict[str, float] | None = None,
         deny_threshold: float = deny_threshold,
         guard_threshold: float = guard_threshold,
     ):
@@ -163,8 +163,8 @@ class DeliberativeEthics:
     def deliberate(
         self,
         action: str,
-        ethics_vector: Dict[str, float],
-        context: Optional[Dict[str, Any]] = None,
+        ethics_vector: dict[str, float],
+        context: dict[str, Any] | None = None,
     ) -> DeliberativeResult:
         """
         Perform multi-framework ethical deliberation.
@@ -202,7 +202,7 @@ class DeliberativeEthics:
         )
 
     def _assess_deontological(
-        self, action: str, risks: Dict[str, float], context: Dict,
+        self, action: str, risks: dict[str, float], context: dict,
     ) -> FrameworkAssessment:
         """Rule-based: Does this violate absolute rules?"""
         # Hard rules
@@ -234,7 +234,7 @@ class DeliberativeEthics:
         )
 
     def _assess_consequentialist(
-        self, action: str, risks: Dict[str, float], context: Dict,
+        self, action: str, risks: dict[str, float], context: dict,
     ) -> FrameworkAssessment:
         """Outcome-based: Do outcomes maximize good?"""
         harm = risks.get("harm_risk", 0.0)
@@ -264,7 +264,7 @@ class DeliberativeEthics:
         )
 
     def _assess_virtue(
-        self, action: str, risks: Dict[str, float], context: Dict,
+        self, action: str, risks: dict[str, float], context: dict,
     ) -> FrameworkAssessment:
         """Virtue-based: Is this consistent with system values?"""
         manipulation = risks.get("manipulation_risk", 0.0)
@@ -295,7 +295,7 @@ class DeliberativeEthics:
         )
 
     def _assess_care(
-        self, action: str, risks: Dict[str, float], context: Dict,
+        self, action: str, risks: dict[str, float], context: dict,
     ) -> FrameworkAssessment:
         """Care-based: Does it protect vulnerable entities?"""
         child_risk = risks.get("child_on_child_risk", 0.0)
@@ -330,10 +330,10 @@ class DeliberativeEthics:
         )
 
     def _aggregate(
-        self, assessments: List[FrameworkAssessment],
+        self, assessments: list[FrameworkAssessment],
     ) -> tuple:
         """Aggregate framework assessments into final verdict."""
-        verdict_scores: Dict[str, float] = {}
+        verdict_scores: dict[str, float] = {}
 
         for fa in assessments:
             score = fa.confidence * fa.weight
@@ -366,7 +366,7 @@ class DeliberativeEthics:
 
     def _build_reasoning(
         self,
-        assessments: List[FrameworkAssessment],
+        assessments: list[FrameworkAssessment],
         verdict: str,
         consensus: bool,
     ) -> str:

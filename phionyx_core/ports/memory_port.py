@@ -7,7 +7,7 @@ Enables swapping Memory with Null implementation.
 """
 
 from abc import ABC, abstractmethod
-from typing import Dict, Any, List, Optional
+from typing import Any
 
 
 class MemoryPort(ABC):
@@ -19,8 +19,8 @@ class MemoryPort(ABC):
         content: str,
         actor_ref: str,  # SPRINT 5: Replaced user_id with actor_ref (core-neutral)
         importance: float,
-        metadata: Optional[Dict[str, Any]] = None
-    ) -> Optional[str]:
+        metadata: dict[str, Any] | None = None
+    ) -> str | None:
         """
         Add memory to vector store.
 
@@ -41,7 +41,7 @@ class MemoryPort(ABC):
         query: str,
         actor_ref: str,  # SPRINT 5: Replaced user_id with actor_ref (core-neutral)
         limit: int = 5
-    ) -> List[Dict[str, Any]]:
+    ) -> list[dict[str, Any]]:
         """
         Search memories by semantic similarity.
 
@@ -60,7 +60,7 @@ class MemoryPort(ABC):
         self,
         memory_id: str,
         actor_ref: str  # SPRINT 5: Replaced user_id with actor_ref (core-neutral)
-    ) -> Optional[Dict[str, Any]]:
+    ) -> dict[str, Any] | None:
         """
         Get memory by ID.
 

@@ -14,10 +14,11 @@ This block:
 """
 
 import logging
-from typing import Any, Optional
+from typing import Any
 
-from ..base import PipelineBlock, BlockContext, BlockResult
 from phionyx_core.services.rag_service import RAGService
+
+from ..base import BlockContext, BlockResult, PipelineBlock
 
 logger = logging.getLogger(__name__)
 
@@ -31,8 +32,8 @@ class ContextRetrievalRagBlock(PipelineBlock):
 
     def __init__(
         self,
-        rag_service: Optional[RAGService] = None,
-        vector_store: Optional[Any] = None,
+        rag_service: RAGService | None = None,
+        vector_store: Any | None = None,
         max_context_tokens: int = 2000,
         relevance_threshold: float = 0.7
     ):

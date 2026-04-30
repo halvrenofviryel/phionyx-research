@@ -14,9 +14,9 @@ Critical invariants:
 Schema version: 1.0
 """
 
-from typing import Optional
-from pydantic import BaseModel, ConfigDict, Field, field_validator
 import hashlib
+
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 
 class TurnEnvelope(BaseModel):
@@ -35,7 +35,7 @@ class TurnEnvelope(BaseModel):
     schema_version: str = Field(default="1.0", description="Schema version for contract evolution")
 
     # Optional fields
-    parent_turn_id: Optional[int] = Field(None, description="Parent turn ID (for conversation threading)")
+    parent_turn_id: int | None = Field(None, description="Parent turn ID (for conversation threading)")
 
     @field_validator('turn_id')
     @classmethod
@@ -53,8 +53,8 @@ class TurnEnvelope(BaseModel):
             raise ValueError(f"user_text_sha256 must be 64 hex characters, got {len(v)}")
         try:
             int(v, 16)  # Validate hex
-        except ValueError:
-            raise ValueError(f"user_text_sha256 must be valid hex string, got {v}")
+        except ValueError as err:
+            raise ValueError(f"user_text_sha256 must be valid hex string, got {v}") from err
         return v.lower()  # Normalize to lowercase
 
     @classmethod
@@ -80,8 +80,8 @@ class DeliveryAck(BaseModel):
     turn_id: int = Field(..., description="Turn ID from envelope")
     message_id: str = Field(..., description="Message ID from envelope")
     received_user_text_sha256: str = Field(..., description="SHA256 of user_text as received by core")
-    prompt_context_sha256: Optional[str] = Field(None, description="SHA256 of prompt context (if available)")
+    prompt_context_sha256: str | None = Field(None, description="SHA256 of prompt context (if available)")
     delivery_status: str = Field(default="delivered", description="Delivery status: delivered, mismatch, rejected")
-    delivery_error: Optional[str] = Field(None, description="Error message if delivery failed")
+    delivery_error: str | None = Field(None, description="Error message if delivery failed")
 
     model_config = ConfigDict(json_schema_extra={'example': {'conversation_id': 'conv_abc123', 'turn_id': 1, 'message_id': '550e8400-e29b-41d4-a716-446655440000', 'received_user_text_sha256': 'a1b2c3d4e5f6...', 'prompt_context_sha256': 'b2c3d4e5f6a1...', 'delivery_status': 'delivered', 'delivery_error': None}})

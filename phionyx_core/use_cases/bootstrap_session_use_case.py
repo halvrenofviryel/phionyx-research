@@ -7,8 +7,8 @@ Extracted from API route handler to core layer.
 """
 
 import logging
-from typing import Optional, Any
 from dataclasses import dataclass
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -18,14 +18,14 @@ class BootstrapSessionInput:
     """Input for bootstrap session use case."""
     actor_ref: str
     character_id: str
-    content_profile: Optional[str] = None
+    content_profile: str | None = None
 
 
 @dataclass
 class BootstrapSessionOutput:
     """Output from bootstrap session use case."""
     scenario: Any  # EchoScenario
-    persona: Optional[Any] = None  # Persona object
+    persona: Any | None = None  # Persona object
 
 
 class BootstrapSessionUseCase:

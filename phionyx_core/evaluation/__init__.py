@@ -8,9 +8,9 @@ human expert responses, and knowledge worker responses.
 Roadmap Faz 2: Human Comparative Evaluation
 """
 
-from .task_set import EvalTask, TaskCategory, TaskSet
-from .scoring import EloRating, PreferenceScorer, CalibrationMetrics
 from .report_generator import EvalReport, EvalReportGenerator
+from .scoring import CalibrationMetrics, EloRating, PreferenceScorer
+from .task_set import EvalTask, TaskCategory, TaskSet
 
 __all__ = [
     "EvalTask",

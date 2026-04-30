@@ -5,14 +5,14 @@ State Store Configuration
 Helper functions for creating and configuring state stores based on environment variables.
 """
 
-import os
 import logging
-from typing import Optional, Any
+import os
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
 
-async def create_state_store_from_env() -> Optional[Any]:
+async def create_state_store_from_env() -> Any | None:
     """
     Create state store based on environment variables.
 
@@ -71,7 +71,7 @@ async def create_state_store_from_env() -> Optional[Any]:
         return None
 
 
-def get_state_store_type() -> Optional[str]:
+def get_state_store_type() -> str | None:
     """
     Get configured state store type from environment.
 

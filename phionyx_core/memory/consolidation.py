@@ -15,16 +15,16 @@ Integrates with:
 - memory/forgetting.py (decay semantics)
 """
 
-import math
 import logging
-from typing import Callable, List, Dict, Optional
+import math
+from collections.abc import Callable
 from dataclasses import dataclass
 from datetime import datetime, timezone
 
 logger = logging.getLogger(__name__)
 
 # Type alias: sync callable that maps text → embedding vector (or None on failure)
-EmbeddingFn = Callable[[str], Optional[List[float]]]
+EmbeddingFn = Callable[[str], list[float] | None]
 
 # ── Tunable Parameters (Tier A: Research Engine may modify) ──
 min_cluster_size = 2
@@ -37,7 +37,7 @@ decay_strength_threshold = 0.1
 class ConsolidationCandidate:
     """A cluster of related memories that could be consolidated."""
     cluster_id: str
-    memories: List[Dict]  # Serialized MemoryEntry dicts
+    memories: list[dict]  # Serialized MemoryEntry dicts
     centroid_content: str
     mean_strength: float
     access_count: int
@@ -50,7 +50,7 @@ class ConsolidationResult:
     consolidated_count: int  # Number of semantic memories created
     promoted_count: int  # Number of memories promoted (episodic→semantic)
     decayed_count: int  # Number of weak memories marked for decay
-    candidates: List[ConsolidationCandidate]
+    candidates: list[ConsolidationCandidate]
     timestamp: str
 
 
@@ -77,7 +77,7 @@ class MemoryConsolidator:
         _similarity_threshold: float | None = None,
         _promotion_access_threshold: int | None = None,
         _decay_strength_threshold: float | None = None,
-        embedding_fn: Optional[EmbeddingFn] = None,
+        embedding_fn: EmbeddingFn | None = None,
         **kwargs,
     ):
         """
@@ -107,11 +107,11 @@ class MemoryConsolidator:
         self.promotion_access_threshold = _promotion_access_threshold if _promotion_access_threshold is not None else promotion_access_threshold
         self.decay_strength_threshold = _decay_strength_threshold if _decay_strength_threshold is not None else decay_strength_threshold
         self.embedding_fn = embedding_fn
-        self._embedding_cache: Dict[str, List[float]] = {}
+        self._embedding_cache: dict[str, list[float]] = {}
 
     def consolidate(
         self,
-        memories: List[Dict],
+        memories: list[dict],
     ) -> ConsolidationResult:
         """
         Run consolidation on a set of episodic memories.
@@ -171,7 +171,7 @@ class MemoryConsolidator:
             timestamp=datetime.now(timezone.utc).isoformat(),
         )
 
-    def promote_memory(self, memory: Dict) -> Dict:
+    def promote_memory(self, memory: dict) -> dict:
         """
         Promote an episodic memory to semantic.
 
@@ -189,7 +189,7 @@ class MemoryConsolidator:
         promoted["metadata"]["promotion_reason"] = "access_count_threshold"
         return promoted
 
-    def abstract_cluster(self, candidate: ConsolidationCandidate) -> Dict:
+    def abstract_cluster(self, candidate: ConsolidationCandidate) -> dict:
         """
         Create an abstract semantic memory from a cluster.
 
@@ -214,8 +214,8 @@ class MemoryConsolidator:
         }
 
     def _cluster_by_similarity(
-        self, memories: List[Dict]
-    ) -> Dict[str, List[Dict]]:
+        self, memories: list[dict]
+    ) -> dict[str, list[dict]]:
         """
         Cluster memories by semantic similarity.
 
@@ -223,7 +223,7 @@ class MemoryConsolidator:
         (via embedding_vector field or embedding_fn). Falls back to Jaccard
         word overlap when embeddings are unavailable.
         """
-        clusters: Dict[str, List[Dict]] = {}
+        clusters: dict[str, list[dict]] = {}
         assigned: set = set()
 
         for i, mem_a in enumerate(memories):
@@ -249,7 +249,7 @@ class MemoryConsolidator:
         return clusters
 
     def _create_candidate(
-        self, cluster_id: str, members: List[Dict]
+        self, cluster_id: str, members: list[dict]
     ) -> ConsolidationCandidate:
         """Create a ConsolidationCandidate from a cluster."""
         # Pick the most representative content (highest strength)
@@ -280,7 +280,7 @@ class MemoryConsolidator:
             similarity_score=avg_sim,
         )
 
-    def _compute_similarity(self, mem_a: Dict, mem_b: Dict) -> float:
+    def _compute_similarity(self, mem_a: dict, mem_b: dict) -> float:
         """Compute similarity between two memories.
 
         Priority:
@@ -300,7 +300,7 @@ class MemoryConsolidator:
             mem_a.get("content", ""), mem_b.get("content", "")
         )
 
-    def _get_embedding(self, text: str) -> Optional[List[float]]:
+    def _get_embedding(self, text: str) -> list[float] | None:
         """Get embedding for text via embedding_fn with local caching."""
         if not text or not self.embedding_fn:
             return None
@@ -316,7 +316,7 @@ class MemoryConsolidator:
         return vec
 
     @staticmethod
-    def _cosine_similarity(a: List[float], b: List[float]) -> float:
+    def _cosine_similarity(a: list[float], b: list[float]) -> float:
         """Cosine similarity between two vectors."""
         if len(a) != len(b) or not a:
             return 0.0
@@ -339,11 +339,11 @@ class MemoryConsolidator:
             return 0.0
         return len(intersection) / len(union)
 
-    def _extract_common_tags(self, memories: List[Dict]) -> List[str]:
+    def _extract_common_tags(self, memories: list[dict]) -> list[str]:
         """Extract tags common to majority of cluster members."""
         if not memories:
             return []
-        tag_counts: Dict[str, int] = {}
+        tag_counts: dict[str, int] = {}
         for m in memories:
             for tag in m.get("tags", []):
                 tag_counts[tag] = tag_counts.get(tag, 0) + 1
@@ -354,7 +354,7 @@ class MemoryConsolidator:
 
     def set_priority_boost(
         self,
-        memory_ids: List[str],
+        memory_ids: list[str],
         boost: float = 1.5,
     ) -> int:
         """
@@ -372,7 +372,7 @@ class MemoryConsolidator:
             Number of boosts applied
         """
         if not hasattr(self, '_priority_boosts'):
-            self._priority_boosts: Dict[str, float] = {}
+            self._priority_boosts: dict[str, float] = {}
 
         boost = max(1.0, min(2.0, boost))
         count = 0
@@ -381,7 +381,7 @@ class MemoryConsolidator:
             count += 1
         return count
 
-    def get_priority_boosts(self) -> Dict[str, float]:
+    def get_priority_boosts(self) -> dict[str, float]:
         """Get current priority boost map."""
         if not hasattr(self, '_priority_boosts'):
             return {}
@@ -392,7 +392,7 @@ class MemoryConsolidator:
         if hasattr(self, '_priority_boosts'):
             self._priority_boosts.clear()
 
-    def get_effective_strength(self, memory: Dict) -> float:
+    def get_effective_strength(self, memory: dict) -> float:
         """Get memory strength with priority boost applied."""
         base_strength = memory.get("current_strength", 0.5)
         if not hasattr(self, '_priority_boosts'):

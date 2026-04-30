@@ -12,10 +12,9 @@ Features:
 """
 
 import hashlib
-import time
-from typing import List, Optional, Dict
-from collections import OrderedDict
 import logging
+import time
+from collections import OrderedDict
 
 logger = logging.getLogger(__name__)
 
@@ -25,7 +24,7 @@ class RAGCacheEntry:
 
     def __init__(
         self,
-        memories: List[Dict],
+        memories: list[dict],
         timestamp: float,
         ttl: float = 3600.0,
         significance: float = 0.5,
@@ -45,19 +44,19 @@ class RAGCacheEntry:
         self.significance = max(0.0, min(1.0, significance))
         self.access_count: int = 0
 
-    def is_expired(self, current_time: Optional[float] = None) -> bool:
+    def is_expired(self, current_time: float | None = None) -> bool:
         """Check if entry is expired."""
         if current_time is None:
             current_time = time.time()
         return (current_time - self.timestamp) > self.ttl
 
-    def age(self, current_time: Optional[float] = None) -> float:
+    def age(self, current_time: float | None = None) -> float:
         """Get entry age in seconds."""
         if current_time is None:
             current_time = time.time()
         return current_time - self.timestamp
 
-    def cognitive_impact(self, current_time: Optional[float] = None) -> float:
+    def cognitive_impact(self, current_time: float | None = None) -> float:
         """
         Compute cognitive impact score for eviction decisions.
 
@@ -131,8 +130,8 @@ class RAGCache:
     def _generate_cache_key(
         self,
         query: str,
-        intent: Optional[str] = None,
-        actor_ref: Optional[str] = None
+        intent: str | None = None,
+        actor_ref: str | None = None
     ) -> str:
         """
         Generate cache key from query, intent, and optional actor_ref.
@@ -163,10 +162,10 @@ class RAGCache:
     def get(
         self,
         query: str,
-        intent: Optional[str] = None,
-        actor_ref: Optional[str] = None,
-        current_time: Optional[float] = None
-    ) -> Optional[List[Dict]]:
+        intent: str | None = None,
+        actor_ref: str | None = None,
+        current_time: float | None = None
+    ) -> list[dict] | None:
         """
         Get RAG results from cache.
 
@@ -213,10 +212,10 @@ class RAGCache:
     def put(
         self,
         query: str,
-        memories: List[Dict],
-        intent: Optional[str] = None,
-        actor_ref: Optional[str] = None,
-        current_time: Optional[float] = None,
+        memories: list[dict],
+        intent: str | None = None,
+        actor_ref: str | None = None,
+        current_time: float | None = None,
         significance: float = 0.5,
     ) -> None:
         """
@@ -296,7 +295,7 @@ class RAGCache:
             self._evictions = 0
             self._expirations = 0
 
-    def cleanup_below_threshold(self, current_time: Optional[float] = None) -> int:
+    def cleanup_below_threshold(self, current_time: float | None = None) -> int:
         """
         Proactively remove entries with cognitive impact below threshold.
 
@@ -322,7 +321,7 @@ class RAGCache:
 
         return len(below)
 
-    def cleanup_expired(self, current_time: Optional[float] = None) -> int:
+    def cleanup_expired(self, current_time: float | None = None) -> int:
         """
         Remove expired entries.
 
@@ -347,7 +346,7 @@ class RAGCache:
 
         return len(expired_keys)
 
-    def get_metrics(self) -> Dict[str, int]:
+    def get_metrics(self) -> dict[str, int]:
         """
         Get cache metrics.
 
@@ -370,7 +369,7 @@ class RAGCache:
 
 
 # Global cache instance (singleton pattern)
-_global_cache: Optional[RAGCache] = None
+_global_cache: RAGCache | None = None
 
 
 def get_rag_cache(

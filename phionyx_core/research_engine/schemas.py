@@ -7,10 +7,9 @@ hashed, and passed across async boundaries without defensive copying.
 from __future__ import annotations
 
 import math
-from typing import Any, Dict, List, Literal
+from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict
-
 
 # ---------------------------------------------------------------------------
 # MetricVector
@@ -142,7 +141,7 @@ class ExperimentRecord(BaseModel):
     diff_lines_changed: int
     benchmark_suite: str
     benchmark_duration_seconds: float
-    guardrail_violations: List[str]
+    guardrail_violations: list[str]
     status: Literal["rejected", "archived", "candidate", "promoted", "gold"]
 
 
@@ -162,7 +161,7 @@ class BaselineSnapshot(BaseModel):
     timestamp: str          # ISO 8601
     git_commit: str
     metrics: MetricVector
-    surface_values: Dict[str, Any]
+    surface_values: dict[str, Any]
 
 
 # ---------------------------------------------------------------------------
@@ -188,7 +187,7 @@ class SessionReport(BaseModel):
     crashed: int
     best_cqs_delta: float
     stop_reason: str
-    experiments: List[str]  # experiment IDs
+    experiments: list[str]  # experiment IDs
 
 
 # ---------------------------------------------------------------------------
@@ -228,6 +227,6 @@ class Surface(BaseModel):
 
     file: str
     tier: Literal["A", "B", "C", "D"]
-    parameters: List[SurfaceParameter]
+    parameters: list[SurfaceParameter]
     max_lines_changed: int
     review_required: bool = False

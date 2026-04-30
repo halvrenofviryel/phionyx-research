@@ -5,12 +5,11 @@ Mode Detector - Intent Classification for Context Switching
 Detects when user is switching topics/modes using keyword and semantic analysis.
 """
 
-from typing import Dict, Optional, List
-from dataclasses import dataclass
 import logging
 import re
+from dataclasses import dataclass
 
-from .definitions import ContextMode, ContextDefinitions
+from .definitions import ContextDefinitions, ContextMode
 
 logger = logging.getLogger(__name__)
 
@@ -22,7 +21,7 @@ class DetectionResult:
     detected_mode: ContextMode
     confidence: float  # 0.0 to 1.0
     switch_required: bool  # True if context should switch
-    detected_keywords: List[str] = None  # Keywords that triggered detection
+    detected_keywords: list[str] = None  # Keywords that triggered detection
 
     def __post_init__(self):
         """Initialize default values."""
@@ -99,7 +98,7 @@ class ModeDetector:
     def detect_mode(
         self,
         user_input: str,
-        current_state: Optional[Dict] = None
+        current_state: dict | None = None
     ) -> DetectionResult:
         """
         Detect context mode from user input.
@@ -121,8 +120,8 @@ class ModeDetector:
         user_input_lower = user_input.lower()
 
         # Score each mode based on keyword matches
-        mode_scores: Dict[ContextMode, float] = {}
-        mode_keywords: Dict[ContextMode, List[str]] = {}
+        mode_scores: dict[ContextMode, float] = {}
+        mode_keywords: dict[ContextMode, list[str]] = {}
 
         for mode, patterns in self.patterns.items():
             score = 0.0

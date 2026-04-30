@@ -16,23 +16,23 @@ Formula:
 
 from __future__ import annotations
 
-from typing import Dict
 import math
+
 from .constants import (
-    COHERENCE_SIGMOID_STEEPNESS,
-    COHERENCE_NORMALIZATION_FACTOR,
     COHERENCE_MIDPOINT,
-    CONFIDENCE_FACTOR_MIN,
+    COHERENCE_NORMALIZATION_FACTOR,
+    COHERENCE_SIGMOID_STEEPNESS,
     CONFIDENCE_FACTOR_MAX,
+    CONFIDENCE_FACTOR_MIN,
     CONFIDENCE_FALLBACK_COHERENCE,
     ENTROPY_BOOST_FACTOR,
-    ENTROPY_MIN_INVARIANT
+    ENTROPY_MIN_INVARIANT,
 )
 
 
 def calculate_coherence(
-    measurement: Dict[str, float],
-    state: Dict[str, float],
+    measurement: dict[str, float],
+    state: dict[str, float],
     sigmoid_steepness: float = COHERENCE_SIGMOID_STEEPNESS
 ) -> float:
     """
@@ -86,8 +86,8 @@ def calculate_coherence(
 
 
 def calculate_coherence_with_confidence(
-    measurement: Dict[str, float],
-    state: Dict[str, float],
+    measurement: dict[str, float],
+    state: dict[str, float],
     confidence: float,
     sigmoid_steepness: float = COHERENCE_SIGMOID_STEEPNESS
 ) -> float:

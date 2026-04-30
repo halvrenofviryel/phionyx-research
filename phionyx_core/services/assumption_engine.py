@@ -7,11 +7,11 @@ Faz 2.1: Assumption Surfacing Engine - Tam Fonksiyonel
 Gelişmiş assumption extraction ve validation servisi.
 """
 
-from typing import List, Dict, Any, Optional, Tuple
-from dataclasses import dataclass
-import re
 import ast
 import hashlib
+import re
+from dataclasses import dataclass
+from typing import Any
 
 from phionyx_core.services.assumption_types import Assumption
 
@@ -29,8 +29,8 @@ class AssumptionEvidence:
 class ValidationResult:
     """Result of assumption validation."""
     is_valid: bool
-    violations: List[Assumption]
-    warnings: List[Assumption]
+    violations: list[Assumption]
+    warnings: list[Assumption]
     validated_count: int
     total_count: int
 
@@ -46,7 +46,7 @@ class AssumptionSurfacingEngine:
     - Assumption challenge mechanism
     """
 
-    def __init__(self, profile: Optional[Any] = None):
+    def __init__(self, profile: Any | None = None):
         """
         Initialize assumption engine.
 
@@ -54,15 +54,15 @@ class AssumptionSurfacingEngine:
             profile: Profile instance for validation (optional)
         """
         self.profile = profile
-        self.assumption_cache: Dict[str, List[Assumption]] = {}
-        self.evidence_map: Dict[str, List[AssumptionEvidence]] = {}
+        self.assumption_cache: dict[str, list[Assumption]] = {}
+        self.evidence_map: dict[str, list[AssumptionEvidence]] = {}
 
     def extract_assumptions(
         self,
         code: str,
         context: Any,
-        state: Optional[Any] = None
-    ) -> List[Assumption]:
+        state: Any | None = None
+    ) -> list[Assumption]:
         """
         Extract assumptions from code and context.
 
@@ -107,7 +107,7 @@ class AssumptionSurfacingEngine:
         self,
         code: str,
         context: Any
-    ) -> List[Assumption]:
+    ) -> list[Assumption]:
         """Enhanced type assumption extraction."""
         assumptions = []
 
@@ -175,7 +175,7 @@ class AssumptionSurfacingEngine:
 
         return assumptions
 
-    def _infer_type_from_usage(self, func_node: ast.FunctionDef, param_name: str) -> Optional[str]:
+    def _infer_type_from_usage(self, func_node: ast.FunctionDef, param_name: str) -> str | None:
         """Infer parameter type from function body usage."""
         # Look for operations on parameter
         for node in ast.walk(func_node):
@@ -201,7 +201,7 @@ class AssumptionSurfacingEngine:
 
         return None
 
-    def _infer_return_type(self, func_node: ast.FunctionDef) -> Optional[str]:
+    def _infer_return_type(self, func_node: ast.FunctionDef) -> str | None:
         """Infer return type from function body."""
         # Look for return statements
         for node in ast.walk(func_node):
@@ -210,7 +210,7 @@ class AssumptionSurfacingEngine:
                     return self._infer_type_from_value(node.value)
         return None
 
-    def _infer_type_from_value(self, value_node: ast.AST) -> Optional[str]:
+    def _infer_type_from_value(self, value_node: ast.AST) -> str | None:
         """Infer type from AST value node."""
         if isinstance(value_node, ast.Str):
             return "str"
@@ -230,7 +230,7 @@ class AssumptionSurfacingEngine:
                     return func_name
         return None
 
-    def _extract_type_assumptions_pattern(self, code: str) -> List[Assumption]:
+    def _extract_type_assumptions_pattern(self, code: str) -> list[Assumption]:
         """Pattern-based type assumption extraction (fallback)."""
         assumptions = []
 
@@ -258,7 +258,7 @@ class AssumptionSurfacingEngine:
         self,
         state: Any,
         context: Any
-    ) -> List[Assumption]:
+    ) -> list[Assumption]:
         """Enhanced state assumption extraction."""
         assumptions = []
 
@@ -302,7 +302,7 @@ class AssumptionSurfacingEngine:
 
         return assumptions
 
-    def _extract_state_assumptions_from_context(self, context: Any) -> List[Assumption]:
+    def _extract_state_assumptions_from_context(self, context: Any) -> list[Assumption]:
         """Extract state assumptions from context (when state not available)."""
         assumptions = []
 
@@ -330,7 +330,7 @@ class AssumptionSurfacingEngine:
         self,
         code: str,
         context: Any
-    ) -> List[Assumption]:
+    ) -> list[Assumption]:
         """Enhanced dependency assumption extraction."""
         assumptions = []
 
@@ -377,7 +377,7 @@ class AssumptionSurfacingEngine:
         self,
         code: str,
         context: Any
-    ) -> List[Assumption]:
+    ) -> list[Assumption]:
         """Extract performance assumptions."""
         assumptions = []
 
@@ -416,7 +416,7 @@ class AssumptionSurfacingEngine:
         assumption: Assumption,
         code: str,
         context: Any,
-        state: Optional[Any] = None
+        state: Any | None = None
     ) -> None:
         """Link evidence to assumption."""
         if not assumption.evidence:
@@ -442,9 +442,9 @@ class AssumptionSurfacingEngine:
 
     def validate_assumptions(
         self,
-        assumptions: List[Assumption],
-        profile: Optional[Any] = None,
-        state: Optional[Any] = None
+        assumptions: list[Assumption],
+        profile: Any | None = None,
+        state: Any | None = None
     ) -> ValidationResult:
         """
         Validate assumptions against profile and state.
@@ -503,7 +503,7 @@ class AssumptionSurfacingEngine:
         self,
         assumption: Assumption,
         challenge_reason: str
-    ) -> Tuple[bool, Optional[str]]:
+    ) -> tuple[bool, str | None]:
         """
         Challenge an assumption.
 

@@ -13,9 +13,9 @@ Cognitive vs. automation: Cognitive — first closed feedback loop in pipeline
 """
 
 import logging
-from typing import Dict, Any, List
+from typing import Any
 
-from ..base import PipelineBlock, BlockContext, BlockResult
+from ..base import BlockContext, BlockResult, PipelineBlock
 
 logger = logging.getLogger(__name__)
 
@@ -51,7 +51,7 @@ class OutcomeFeedbackBlock(PipelineBlock):
 
         try:
             metadata = context.metadata or {}
-            result_data: Dict[str, Any] = {
+            result_data: dict[str, Any] = {
                 "outcomes_recorded": [],
                 "confidence_updates": {},
                 "revisions_proposed": [],
@@ -129,7 +129,7 @@ class OutcomeFeedbackBlock(PipelineBlock):
             )
 
     def _determine_turn_success(
-        self, audit_result: Dict[str, Any], metadata: Dict[str, Any]
+        self, audit_result: dict[str, Any], metadata: dict[str, Any]
     ) -> bool:
         """Determine turn success from audit result and pipeline metadata."""
         # Explicit audit status
@@ -152,7 +152,7 @@ class OutcomeFeedbackBlock(PipelineBlock):
         # Default: success
         return True
 
-    def _infer_capabilities(self, metadata: Dict[str, Any]) -> List[str]:
+    def _infer_capabilities(self, metadata: dict[str, Any]) -> list[str]:
         """Infer which capabilities were exercised this turn."""
         capabilities = ["respond"]  # Always present — pipeline produced a response
 

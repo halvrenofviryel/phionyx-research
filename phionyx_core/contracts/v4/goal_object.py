@@ -6,11 +6,12 @@ Entirely new schema — no existing Phionyx counterpart.
 Represents system-level goals with legitimacy scoring and priority.
 """
 
-from typing import Optional, Dict, Any, List
-from enum import Enum
-from pydantic import BaseModel, ConfigDict, Field
-from datetime import datetime, timezone
 import uuid
+from datetime import datetime, timezone
+from enum import Enum
+from typing import Any
+
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class GoalPriority(str, Enum):
@@ -69,44 +70,44 @@ class GoalObject(BaseModel):
         default=0.5, ge=0.0, le=1.0,
         description="User alignment score"
     )
-    legitimacy_weights: Dict[str, float] = Field(
+    legitimacy_weights: dict[str, float] = Field(
         default_factory=lambda: {"alpha": 0.5, "beta": 0.3, "gamma": 0.2},
         description="Weights for L(g) = alpha*safety + beta*system + gamma*user"
     )
 
     # Goal tracking
-    parent_goal_id: Optional[str] = Field(
+    parent_goal_id: str | None = Field(
         None,
         description="Parent goal for hierarchical decomposition"
     )
-    sub_goal_ids: List[str] = Field(
+    sub_goal_ids: list[str] = Field(
         default_factory=list,
         description="Child goal IDs"
     )
-    conflict_with: List[str] = Field(
+    conflict_with: list[str] = Field(
         default_factory=list,
         description="Goal IDs this goal conflicts with"
     )
-    preconditions: List[str] = Field(
+    preconditions: list[str] = Field(
         default_factory=list,
         description="Conditions that must be true for activation"
     )
-    success_criteria: List[str] = Field(
+    success_criteria: list[str] = Field(
         default_factory=list,
         description="Conditions for goal completion"
     )
 
     # Timestamps
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
-    activated_at: Optional[datetime] = None
-    completed_at: Optional[datetime] = None
+    activated_at: datetime | None = None
+    completed_at: datetime | None = None
 
     # Metadata
     source_module: str = Field(
         default="goal_manager",
         description="Module that created this goal"
     )
-    metadata: Dict[str, Any] = Field(default_factory=dict)
+    metadata: dict[str, Any] = Field(default_factory=dict)
 
     def compute_legitimacy(self) -> float:
         """

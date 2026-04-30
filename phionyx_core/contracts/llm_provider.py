@@ -9,7 +9,7 @@ This protocol allows phionyx_core to use LLM services without importing
 from echo_server, maintaining proper layer isolation.
 """
 
-from typing import Protocol, List, Optional, Dict, Any
+from typing import Any, Protocol
 
 
 class LLMProviderProtocol(Protocol):
@@ -35,10 +35,10 @@ class LLMProviderProtocol(Protocol):
 
     async def completion(
         self,
-        messages: List[Dict[str, str]],
-        model: Optional[str] = None,
+        messages: list[dict[str, str]],
+        model: str | None = None,
         temperature: float = 0.7,
-        max_tokens: Optional[int] = None,
+        max_tokens: int | None = None,
         **kwargs: Any
     ) -> str:
         """
@@ -62,9 +62,9 @@ class LLMProviderProtocol(Protocol):
     async def embedding(
         self,
         text: str,
-        model: Optional[str] = None,
+        model: str | None = None,
         use_cache: bool = True
-    ) -> Optional[List[float]]:
+    ) -> list[float] | None:
         """
         Generate embedding vector for text.
 
@@ -81,8 +81,8 @@ class LLMProviderProtocol(Protocol):
     async def extract_concepts(
         self,
         text: str,
-        model: Optional[str] = None
-    ) -> List[Any]:
+        model: str | None = None
+    ) -> list[Any]:
         """
         Extract concepts from text.
 

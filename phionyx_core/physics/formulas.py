@@ -16,28 +16,28 @@ Formulas (v2.0 - Hybrid State Model):
 """
 
 import math
-from typing import List, Dict, Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from .types import NPCPhysicsParams, PhiComponents
 
 # Import constants from single source of truth
 from .constants import (
-    DEFAULT_F_SELF,
-    MIN_TIME_DELTA,
-    PHI_MIN,
-    PHI_MAX,
-    CONSCIOUSNESS_MIN,
-    CONSCIOUSNESS_MAX,
-    AMPLITUDE_MIN,
     AMPLITUDE_MAX,
-    GAMMA_MIN,
-    GAMMA_MAX,
-    ENTROPY_MIN,
-    ENTROPY_MAX,
-    MIN_STABILITY,
-    MAX_STABILITY,
+    AMPLITUDE_MIN,
+    CONSCIOUSNESS_MAX,
+    CONSCIOUSNESS_MIN,
     CONTEXT_WEIGHTS,
+    DEFAULT_F_SELF,
+    ENTROPY_MAX,
+    ENTROPY_MIN,
+    GAMMA_MAX,
+    GAMMA_MIN,
+    MAX_STABILITY,
+    MIN_STABILITY,
+    MIN_TIME_DELTA,
+    PHI_MAX,
+    PHI_MIN,
 )
 
 # ── Tunable Parameters (Tier A: Research Engine may modify) ──
@@ -145,7 +145,7 @@ def calculate_echo_energy(
     return phi * links * delta_entropy
 
 
-def calculate_entropy_shannon(probabilities: List[float]) -> float:
+def calculate_entropy_shannon(probabilities: list[float]) -> float:
     """
     Calculate S (Shannon Entropy).
 
@@ -236,8 +236,8 @@ def calculate_temporal_echo(
 
 
 def calculate_c_echo_series(
-    phi_values: List[float],
-    time_deltas: List[float],
+    phi_values: list[float],
+    time_deltas: list[float],
     f_self: float = DEFAULT_F_SELF
 ) -> float:
     """
@@ -380,7 +380,7 @@ def calculate_intrinsic_drive(phi: float, entropy: float, risk_level: str) -> fl
 # PHYSICS v2.0 - Hybrid Resonance Model
 # ============================================================================
 
-def get_context_weights(context_mode: str) -> Dict[str, float]:
+def get_context_weights(context_mode: str) -> dict[str, float]:
     """
     Get cognitive (wc) and physical (wp) weights based on context.
 
@@ -398,8 +398,8 @@ def calculate_phi_cognitive(
     stability: float,
     valence: float = 0.0,
     entropy_penalty_k: float = entropy_penalty_k,
-    previous_entropy: Optional[float] = None,
-    previous_valence: Optional[float] = None,
+    previous_entropy: float | None = None,
+    previous_valence: float | None = None,
     recovery_gain: float = recovery_gain,
     base_resonance: float = base_resonance,
 ) -> float:
@@ -588,7 +588,7 @@ def calculate_phi_v2_1(
     w_c: float,
     w_p: float,
     entropy_penalty_k: float = 1.15  # Default to micro-calibrated value (15% increase)
-) -> Dict[str, float]:
+) -> dict[str, float]:
     """
     Calculate Total Echo Quality (Φ) using Hybrid Resonance Model (Circumplex-integrated with Base Life Support).
 
@@ -675,7 +675,7 @@ def calculate_phi_v2(
     valence: float = 0.0,
     arousal: float = 1.0,
     entropy_penalty_k: float = entropy_penalty_k,
-) -> Dict[str, float]:
+) -> dict[str, float]:
     """
     Calculate Total Echo Quality (Φ) using Hybrid Resonance Model v2.0 (backward compatible).
 

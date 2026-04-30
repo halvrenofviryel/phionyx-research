@@ -10,7 +10,8 @@ This is crucial for "Visual Proof" in documentation and pitch decks.
 """
 
 import logging
-from typing import List, Dict, Optional, Any
+from typing import Any
+
 try:
     from supabase import Client
 except ImportError:
@@ -43,8 +44,8 @@ class GraphVisualizer:
     async def export_for_cosmograph(
         self,
         min_weight: float = 0.3,
-        limit_nodes: Optional[int] = None
-    ) -> Dict[str, Any]:
+        limit_nodes: int | None = None
+    ) -> dict[str, Any]:
         """
         Export graph in Cosmograph-compatible JSON format.
 
@@ -133,8 +134,8 @@ class GraphVisualizer:
     async def export_for_cytoscape(
         self,
         min_weight: float = 0.3,
-        limit_nodes: Optional[int] = None
-    ) -> List[Dict[str, Any]]:
+        limit_nodes: int | None = None
+    ) -> list[dict[str, Any]]:
         """
         Export graph in Cytoscape.js-compatible JSON format.
 
@@ -215,7 +216,7 @@ class GraphVisualizer:
             logger.error(f"GraphVisualizer: Failed to export for Cytoscape.js: {e}")
             return []
 
-    async def export_statistics(self) -> Dict[str, Any]:
+    async def export_statistics(self) -> dict[str, Any]:
         """
         Export graph statistics for documentation.
 

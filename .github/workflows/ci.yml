@@ -40,6 +40,9 @@ jobs:
           pip --version
           pip list | grep -E "^(phionyx-core|pydantic|numpy|PyYAML)" || true
 
+      - name: Lint (ruff)
+        run: ruff check phionyx_core
+
       - name: Smoke import
         run: |
           python -c "import phionyx_core; print('phionyx_core', phionyx_core.__version__)"

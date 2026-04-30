@@ -21,10 +21,10 @@ Integrates with:
 import json
 import logging
 import math
-from pathlib import Path
-from typing import List, Dict, Optional, Set, Tuple, Any
 from dataclasses import dataclass, field
 from enum import Enum
+from pathlib import Path
+from typing import Any, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -59,12 +59,12 @@ class CausalNode:
     node_id: str
     name: str
     node_type: str = NodeType.STATE.value
-    observed_values: List[float] = field(default_factory=list)
-    current_value: Optional[float] = None
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    observed_values: list[float] = field(default_factory=list)
+    current_value: float | None = None
+    metadata: dict[str, Any] = field(default_factory=dict)
 
     @property
-    def mean_value(self) -> Optional[float]:
+    def mean_value(self) -> float | None:
         if not self.observed_values:
             return self.current_value
         return sum(self.observed_values) / len(self.observed_values)
@@ -79,7 +79,7 @@ class CausalEdge:
     confidence: float = default_confidence   # 0.0-1.0: how confident we are this is causal
     mechanism: str = MechanismType.OBSERVED.value
     observations: int = 1     # How many times this was observed
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    metadata: dict[str, Any] = field(default_factory=dict)
 
     @property
     def effective_strength(self) -> float:
@@ -90,8 +90,8 @@ class CausalEdge:
 @dataclass
 class CausalGraph:
     """A complete causal model as a directed graph."""
-    nodes: Dict[str, CausalNode] = field(default_factory=dict)
-    edges: Dict[str, CausalEdge] = field(default_factory=dict)  # key: "source->target"
+    nodes: dict[str, CausalNode] = field(default_factory=dict)
+    edges: dict[str, CausalEdge] = field(default_factory=dict)  # key: "source->target"
 
     @property
     def node_count(self) -> int:
@@ -101,29 +101,29 @@ class CausalGraph:
     def edge_count(self) -> int:
         return len(self.edges)
 
-    def get_parents(self, node_id: str) -> List[str]:
+    def get_parents(self, node_id: str) -> list[str]:
         """Get direct causes of a node."""
         return [
             e.source_id for e in self.edges.values()
             if e.target_id == node_id
         ]
 
-    def get_children(self, node_id: str) -> List[str]:
+    def get_children(self, node_id: str) -> list[str]:
         """Get direct effects of a node."""
         return [
             e.target_id for e in self.edges.values()
             if e.source_id == node_id
         ]
 
-    def get_edge(self, source_id: str, target_id: str) -> Optional[CausalEdge]:
+    def get_edge(self, source_id: str, target_id: str) -> CausalEdge | None:
         """Get edge between two nodes."""
         key = f"{source_id}->{target_id}"
         return self.edges.get(key)
 
     def has_cycle(self) -> bool:
         """Check if graph has cycles (should be DAG)."""
-        visited: Set[str] = set()
-        rec_stack: Set[str] = set()
+        visited: set[str] = set()
+        rec_stack: set[str] = set()
 
         def _dfs(node_id: str) -> bool:
             visited.add(node_id)
@@ -143,12 +143,12 @@ class CausalGraph:
                     return True
         return False
 
-    def topological_order(self) -> List[str]:
+    def topological_order(self) -> list[str]:
         """Return nodes in topological order (causes before effects)."""
         if self.has_cycle():
             return list(self.nodes.keys())  # Fallback: arbitrary order
 
-        in_degree: Dict[str, int] = dict.fromkeys(self.nodes, 0)
+        in_degree: dict[str, int] = dict.fromkeys(self.nodes, 0)
         for e in self.edges.values():
             if e.target_id in in_degree:
                 in_degree[e.target_id] += 1
@@ -165,9 +165,9 @@ class CausalGraph:
                         queue.append(child)
         return order
 
-    def get_ancestors(self, node_id: str) -> Set[str]:
+    def get_ancestors(self, node_id: str) -> set[str]:
         """Get all transitive causes of a node."""
-        ancestors: Set[str] = set()
+        ancestors: set[str] = set()
         stack = list(self.get_parents(node_id))
         while stack:
             current = stack.pop()
@@ -176,9 +176,9 @@ class CausalGraph:
                 stack.extend(self.get_parents(current))
         return ancestors
 
-    def get_descendants(self, node_id: str) -> Set[str]:
+    def get_descendants(self, node_id: str) -> set[str]:
         """Get all transitive effects of a node."""
-        descendants: Set[str] = set()
+        descendants: set[str] = set()
         stack = list(self.get_children(node_id))
         while stack:
             current = stack.pop()
@@ -187,7 +187,7 @@ class CausalGraph:
                 stack.extend(self.get_children(current))
         return descendants
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Serialize causal graph (complete, for cross-session persistence)."""
         return {
             "nodes": {
@@ -217,7 +217,7 @@ class CausalGraph:
         }
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "CausalGraph":
+    def from_dict(cls, data: dict[str, Any]) -> "CausalGraph":
         """Restore causal graph from serialized data."""
         graph = cls()
         for nid, ndata in data.get("nodes", {}).items():
@@ -305,7 +305,7 @@ class CausalGraphBuilder:
         if self._auto_save_enabled:
             self.auto_save(self._auto_save_path)
 
-    def auto_save(self, base_path: str = "data/causal_graph") -> Optional[str]:
+    def auto_save(self, base_path: str = "data/causal_graph") -> str | None:
         """Auto-save causal graph to JSON for cross-session persistence."""
         if not self._session_id:
             logger.warning("Cannot auto-save CausalGraph: no session_id set")
@@ -341,7 +341,7 @@ class CausalGraphBuilder:
             return None
 
         try:
-            with open(file_path, "r") as f:
+            with open(file_path) as f:
                 data = json.load(f)
             builder = cls(
                 promotion_threshold=data.get("promotion_threshold", 0.6),
@@ -360,10 +360,10 @@ class CausalGraphBuilder:
     def add_node(
         self,
         node_id: str,
-        name: Optional[str] = None,
+        name: str | None = None,
         node_type: str = NodeType.STATE.value,
-        current_value: Optional[float] = None,
-        metadata: Optional[Dict[str, Any]] = None,
+        current_value: float | None = None,
+        metadata: dict[str, Any] | None = None,
     ) -> CausalNode:
         """Add or update a node in the causal graph."""
         if node_id in self._graph.nodes:
@@ -396,8 +396,8 @@ class CausalGraphBuilder:
         strength: float = default_strength,
         confidence: float = 0.8,
         mechanism: str = MechanismType.DIRECT.value,
-        metadata: Optional[Dict[str, Any]] = None,
-    ) -> Optional[CausalEdge]:
+        metadata: dict[str, Any] | None = None,
+    ) -> CausalEdge | None:
         """
         Add a causal link A → B.
 
@@ -459,10 +459,10 @@ class CausalGraphBuilder:
         self,
         variable_a: str,
         variable_b: str,
-        value_a: Optional[float] = None,
-        value_b: Optional[float] = None,
-        direction_hint: Optional[str] = None,
-    ) -> Optional[CausalEdge]:
+        value_a: float | None = None,
+        value_b: float | None = None,
+        direction_hint: str | None = None,
+    ) -> CausalEdge | None:
         """
         Record that two variables co-occurred.
 
@@ -506,7 +506,7 @@ class CausalGraphBuilder:
         )
 
     def import_from_graph_engine_edges(
-        self, causal_edges: List[Tuple[str, str, Dict]]
+        self, causal_edges: list[tuple[str, str, dict]]
     ) -> int:
         """
         Import causal edges from GraphEngine.get_causal_subgraph().
@@ -539,7 +539,7 @@ class CausalGraphBuilder:
 
     def add_physics_variables(
         self,
-        echo_state: Dict[str, Any],
+        echo_state: dict[str, Any],
     ) -> None:
         """
         Add Phionyx physics state variables as causal nodes.
@@ -578,10 +578,10 @@ class CausalGraphBuilder:
 
     def discover_structure(
         self,
-        min_observations: Optional[int] = None,
-        alpha: Optional[float] = None,
-        max_conditioning_size: Optional[int] = None,
-    ) -> Dict[str, Any]:
+        min_observations: int | None = None,
+        alpha: float | None = None,
+        max_conditioning_size: int | None = None,
+    ) -> dict[str, Any]:
         """
         Run PC algorithm for causal structure discovery on accumulated observations.
 
@@ -662,7 +662,7 @@ class CausalGraphBuilder:
         """Return the constructed causal graph."""
         return self._graph
 
-    def to_world_state_dict(self) -> Dict[str, Any]:
+    def to_world_state_dict(self) -> dict[str, Any]:
         """Serialize for WorldStateSnapshot.causal_graph field."""
         return self._graph.to_dict()
 

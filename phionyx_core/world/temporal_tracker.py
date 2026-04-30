@@ -11,8 +11,7 @@ Roadmap Faz 4.2: World Model Hardening — Temporal Tracking
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from enum import Enum
-from typing import Any, Dict, List, Optional
-
+from typing import Any
 
 # Module-level tunable defaults (Tier A — PRE surfaces)
 temporal_decay_rate = 0.02
@@ -43,10 +42,10 @@ class EntityTimeline:
     """Full timeline of an entity's attribute changes."""
     entity_id: str
     attribute: str
-    states: List[EntityState] = field(default_factory=list)
+    states: list[EntityState] = field(default_factory=list)
 
     @property
-    def current(self) -> Optional[EntityState]:
+    def current(self) -> EntityState | None:
         return self.states[-1] if self.states else None
 
     @property
@@ -99,9 +98,9 @@ class TemporalTracker:
         self.decay_rate = max(0.0, min(1.0, decay_rate))
         self.max_history = max_history_per_entity
         self.conflict_strategy = conflict_strategy
-        self._timelines: Dict[str, Dict[str, EntityTimeline]] = {}
+        self._timelines: dict[str, dict[str, EntityTimeline]] = {}
         self._current_turn: int = 0
-        self._conflicts: List[ConflictResolution] = []
+        self._conflicts: list[ConflictResolution] = []
 
     def advance_turn(self) -> int:
         """Advance the turn counter. Returns new turn index."""
@@ -119,8 +118,8 @@ class TemporalTracker:
         value: Any,
         confidence: float = 1.0,
         source: str = "observation",
-        timestamp: Optional[str] = None,
-    ) -> Optional[ConflictResolution]:
+        timestamp: str | None = None,
+    ) -> ConflictResolution | None:
         """
         Record a state change for an entity attribute.
 
@@ -169,7 +168,7 @@ class TemporalTracker:
         self,
         entity_id: str,
         attribute: str,
-        at_turn: Optional[int] = None,
+        at_turn: int | None = None,
     ) -> TemporalQuery:
         """
         Query entity state, optionally at a specific turn.
@@ -230,19 +229,19 @@ class TemporalTracker:
             reasoning=f"Value from turn {state.turn_index}, {turns_elapsed} turns ago, decay={decay:.3f}",
         )
 
-    def get_timeline(self, entity_id: str, attribute: str) -> Optional[EntityTimeline]:
+    def get_timeline(self, entity_id: str, attribute: str) -> EntityTimeline | None:
         """Get full timeline for an entity attribute."""
         return self._get_timeline(entity_id, attribute)
 
-    def get_entity_attributes(self, entity_id: str) -> List[str]:
+    def get_entity_attributes(self, entity_id: str) -> list[str]:
         """List all tracked attributes for an entity."""
         return list(self._timelines.get(entity_id, {}).keys())
 
-    def get_all_entities(self) -> List[str]:
+    def get_all_entities(self) -> list[str]:
         """List all tracked entity IDs."""
         return list(self._timelines.keys())
 
-    def get_conflicts(self) -> List[ConflictResolution]:
+    def get_conflicts(self) -> list[ConflictResolution]:
         """Return all recorded conflicts."""
         return list(self._conflicts)
 
@@ -258,7 +257,7 @@ class TemporalTracker:
             for tl in entity_timelines.values()
         )
 
-    def _get_timeline(self, entity_id: str, attribute: str) -> Optional[EntityTimeline]:
+    def _get_timeline(self, entity_id: str, attribute: str) -> EntityTimeline | None:
         return self._timelines.get(entity_id, {}).get(attribute)
 
     def _resolve_conflict(

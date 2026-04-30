@@ -8,10 +8,9 @@ Port-adapter pattern (AD-2).
 """
 
 import logging
-from typing import List, Dict, Set, Optional
 from collections import defaultdict
 
-from ..contracts.v4.workspace_event import WorkspaceEvent, SalienceLevel
+from ..contracts.v4.workspace_event import SalienceLevel, WorkspaceEvent
 
 logger = logging.getLogger(__name__)
 
@@ -24,17 +23,17 @@ class GlobalWorkspace:
     """
 
     def __init__(self, salience_threshold: float = 0.3):
-        self._subscribers: Dict[str, Set[str]] = defaultdict(set)
-        self._event_log: List[WorkspaceEvent] = []
+        self._subscribers: dict[str, set[str]] = defaultdict(set)
+        self._event_log: list[WorkspaceEvent] = []
         self._salience_threshold = salience_threshold
         self._max_log_size = 1000
 
-    def subscribe(self, module_id: str, event_types: List[str]) -> None:
+    def subscribe(self, module_id: str, event_types: list[str]) -> None:
         """Subscribe a module to specific event types."""
         for event_type in event_types:
             self._subscribers[event_type].add(module_id)
 
-    def unsubscribe(self, module_id: str, event_types: Optional[List[str]] = None) -> None:
+    def unsubscribe(self, module_id: str, event_types: list[str] | None = None) -> None:
         """Unsubscribe a module from event types."""
         if event_types is None:
             for subs in self._subscribers.values():
@@ -69,7 +68,7 @@ class GlobalWorkspace:
             f"(salience={event.salience.value}, targets={len(targets)})"
         )
 
-    async def get_pending_events(self) -> List[WorkspaceEvent]:
+    async def get_pending_events(self) -> list[WorkspaceEvent]:
         """Get recent events from the workspace."""
         return list(self._event_log[-50:])
 

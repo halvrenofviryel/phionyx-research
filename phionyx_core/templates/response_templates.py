@@ -13,9 +13,9 @@ Features:
 """
 
 import logging
-from typing import Dict, Optional, List, Any
-from enum import Enum
 from dataclasses import dataclass
+from enum import Enum
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -37,7 +37,7 @@ class ResponseTemplate:
     template: str
     min_entropy: float = 0.0
     max_entropy: float = 0.5
-    variables: Optional[List[str]] = None
+    variables: list[str] | None = None
 
     def render(self, **kwargs: Any) -> str:
         """
@@ -69,7 +69,7 @@ class TemplateManager:
 
     def __init__(self):
         """Initialize template manager with default templates."""
-        self._templates: Dict[IntentType, List[ResponseTemplate]] = {}
+        self._templates: dict[IntentType, list[ResponseTemplate]] = {}
         self._metrics = {
             "hits": 0,
             "misses": 0,
@@ -153,7 +153,7 @@ class TemplateManager:
         intent: IntentType,
         entropy: float,
         **kwargs: Any
-    ) -> Optional[str]:
+    ) -> str | None:
         """
         Get template response for intent and entropy level.
 
@@ -218,7 +218,7 @@ class TemplateManager:
 
         return len(eligible_templates) > 0
 
-    def get_metrics(self) -> Dict[str, Any]:
+    def get_metrics(self) -> dict[str, Any]:
         """
         Get template metrics.
 
@@ -245,7 +245,7 @@ class TemplateManager:
 
 
 # Global template manager instance (singleton pattern)
-_global_template_manager: Optional[TemplateManager] = None
+_global_template_manager: TemplateManager | None = None
 
 
 def get_template_manager() -> TemplateManager:

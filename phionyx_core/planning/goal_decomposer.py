@@ -18,9 +18,9 @@ Integrates with:
 """
 
 import logging
-from typing import List, Dict, Optional, Any, Set
 from dataclasses import dataclass, field
 from enum import Enum
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -47,10 +47,10 @@ class SubGoal:
     parent_goal_id: str = ""
     status: str = SubGoalStatus.PENDING.value
     priority: int = 0                  # Lower = higher priority (execution order)
-    prerequisites: List[str] = field(default_factory=list)  # Sub-goal IDs this depends on
+    prerequisites: list[str] = field(default_factory=list)  # Sub-goal IDs this depends on
     action_type: str = "respond"       # ActionType from action_intent
     estimated_complexity: float = 0.5  # 0.0-1.0
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    metadata: dict[str, Any] = field(default_factory=dict)
 
     @property
     def is_ready(self) -> bool:
@@ -66,12 +66,12 @@ class DecompositionPlan:
     """Full decomposition of a goal into sub-goals."""
     goal_id: str
     goal_name: str
-    sub_goals: List[SubGoal]
-    execution_order: List[str]  # Sub-goal IDs in execution order
+    sub_goals: list[SubGoal]
+    execution_order: list[str]  # Sub-goal IDs in execution order
     total_complexity: float
     estimated_steps: int
 
-    def get_ready_goals(self, completed: Optional[Set[str]] = None) -> List[SubGoal]:
+    def get_ready_goals(self, completed: set[str] | None = None) -> list[SubGoal]:
         """Get sub-goals whose prerequisites are all completed."""
         completed = completed or set()
         ready = []
@@ -97,7 +97,7 @@ class DecompositionPlan:
         completed = sum(1 for sg in self.sub_goals if sg.is_complete)
         return completed / len(self.sub_goals)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         return {
             "goal_id": self.goal_id,
             "goal_name": self.goal_name,
@@ -147,10 +147,10 @@ class GoalDecomposer:
         self,
         goal_id: str,
         goal_name: str,
-        requirements: List[str],
-        dependencies: Optional[Dict[str, List[str]]] = None,
-        action_types: Optional[Dict[str, str]] = None,
-        complexities: Optional[Dict[str, float]] = None,
+        requirements: list[str],
+        dependencies: dict[str, list[str]] | None = None,
+        action_types: dict[str, str] | None = None,
+        complexities: dict[str, float] | None = None,
     ) -> DecompositionPlan:
         """
         Decompose a goal into sub-goals.
@@ -174,8 +174,8 @@ class GoalDecomposer:
         reqs = requirements[:self.max_sub_goals]
 
         # Create sub-goals
-        name_to_id: Dict[str, str] = {}
-        sub_goals: List[SubGoal] = []
+        name_to_id: dict[str, str] = {}
+        sub_goals: list[SubGoal] = []
 
         for i, req in enumerate(reqs):
             sg_id = f"sg_{goal_id}_{i}"
@@ -218,8 +218,8 @@ class GoalDecomposer:
         self,
         goal_id: str,
         goal_name: str,
-        requirements: List[str],
-        causal_dependencies: List[tuple],
+        requirements: list[str],
+        causal_dependencies: list[tuple],
     ) -> DecompositionPlan:
         """
         Decompose using causal graph hints for dependency ordering.
@@ -227,7 +227,7 @@ class GoalDecomposer:
         Args:
             causal_dependencies: List of (cause_req, effect_req) tuples
         """
-        deps: Dict[str, List[str]] = {}
+        deps: dict[str, list[str]] = {}
         for cause, effect in causal_dependencies:
             if effect not in deps:
                 deps[effect] = []
@@ -240,10 +240,10 @@ class GoalDecomposer:
             dependencies=deps,
         )
 
-    def _topological_sort(self, sub_goals: List[SubGoal]) -> List[str]:
+    def _topological_sort(self, sub_goals: list[SubGoal]) -> list[str]:
         """Sort sub-goals by dependency order."""
         id_to_sg = {sg.sub_goal_id: sg for sg in sub_goals}
-        in_degree: Dict[str, int] = {sg.sub_goal_id: 0 for sg in sub_goals}
+        in_degree: dict[str, int] = {sg.sub_goal_id: 0 for sg in sub_goals}
 
         for sg in sub_goals:
             for prereq in sg.prerequisites:

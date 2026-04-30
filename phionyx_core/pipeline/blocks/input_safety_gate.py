@@ -13,9 +13,9 @@ Both blocks serve the same purpose: early rejection of problematic inputs.
 """
 
 import logging
-from typing import Any, Optional, Protocol
+from typing import Any, Protocol
 
-from ..base import PipelineBlock, BlockContext, BlockResult
+from ..base import BlockContext, BlockResult, PipelineBlock
 
 logger = logging.getLogger(__name__)
 
@@ -29,8 +29,8 @@ class SafetyLayerProcessorProtocol(Protocol):
         narrative_response: str,
         cognitive_state: Any,
         context_string: str,
-        cep_flags: Optional[Any] = None,
-        cep_config: Optional[Any] = None
+        cep_flags: Any | None = None,
+        cep_config: Any | None = None
     ) -> tuple[Any, Any]:  # Returns (frame, safety_result)
         """Process safety layer."""
         ...
@@ -49,7 +49,7 @@ class InputSafetyGateBlock(PipelineBlock):
 
     def __init__(
         self,
-        processor: Optional[SafetyLayerProcessorProtocol] = None,
+        processor: SafetyLayerProcessorProtocol | None = None,
         min_input_length: int = 3
     ):
         """

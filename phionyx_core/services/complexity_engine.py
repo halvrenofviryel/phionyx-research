@@ -7,13 +7,12 @@ Faz 2.3: Complexity Budget Enforcement - Tam Fonksiyonel
 Gelişmiş complexity measurement ve enforcement servisi.
 """
 
-from typing import List, Optional, Tuple
-from dataclasses import dataclass
-import re
 import ast
 import math
+import re
+from dataclasses import dataclass
 
-from phionyx_core.pipeline.blocks.complexity_budget import ComplexityMetrics, ComplexityBudget
+from phionyx_core.pipeline.blocks.complexity_budget import ComplexityBudget, ComplexityMetrics
 
 
 @dataclass
@@ -40,7 +39,7 @@ class ComplexityBudgetEngine:
     - Entropy integration
     """
 
-    def __init__(self, budget: Optional[ComplexityBudget] = None):
+    def __init__(self, budget: ComplexityBudget | None = None):
         """
         Initialize complexity engine.
 
@@ -48,7 +47,7 @@ class ComplexityBudgetEngine:
             budget: ComplexityBudget configuration (optional)
         """
         self.budget = budget or ComplexityBudget()
-        self.metrics_history: List[ComplexityMetrics] = []
+        self.metrics_history: list[ComplexityMetrics] = []
 
     def measure_complexity_enhanced(self, code: str) -> ComplexityMetrics:
         """
@@ -264,8 +263,8 @@ class ComplexityBudgetEngine:
     def check_budget_enhanced(
         self,
         metrics: ComplexityMetrics,
-        budget: Optional[ComplexityBudget] = None
-    ) -> Tuple[bool, List[str], List[SimplificationSuggestion]]:
+        budget: ComplexityBudget | None = None
+    ) -> tuple[bool, list[str], list[SimplificationSuggestion]]:
         """
         Enhanced budget checking with suggestions.
 
@@ -374,8 +373,8 @@ class ComplexityBudgetEngine:
         self,
         code: str,
         metrics: ComplexityMetrics,
-        budget: Optional[ComplexityBudget] = None
-    ) -> List[SimplificationSuggestion]:
+        budget: ComplexityBudget | None = None
+    ) -> list[SimplificationSuggestion]:
         """
         Generate simplification suggestions based on complexity metrics.
 

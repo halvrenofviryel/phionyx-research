@@ -10,17 +10,17 @@ Gates learning updates through boundary zone checks.
 """
 
 import logging
-from typing import Optional, Protocol, List, Any
+from typing import Any, Protocol
 
-from ..base import PipelineBlock, BlockContext, BlockResult
+from ..base import BlockContext, BlockResult, PipelineBlock
 
 logger = logging.getLogger(__name__)
 
 
 class LearningGateServiceProtocol(Protocol):
     """Protocol for learning gate service."""
-    async def evaluate_updates(self, updates: List[Any]) -> List[Any]: ...
-    async def apply_approved(self, updates: List[Any]) -> int: ...
+    async def evaluate_updates(self, updates: list[Any]) -> list[Any]: ...
+    async def apply_approved(self, updates: list[Any]) -> int: ...
 
 
 class LearningGateBlock(PipelineBlock):
@@ -32,11 +32,11 @@ class LearningGateBlock(PipelineBlock):
     Adaptive zone: auto-approved within bounds.
     """
 
-    def __init__(self, gate_service: Optional[LearningGateServiceProtocol] = None):
+    def __init__(self, gate_service: LearningGateServiceProtocol | None = None):
         super().__init__("learning_gate")
         self.gate_service = gate_service
 
-    def should_skip(self, context: BlockContext) -> Optional[str]:
+    def should_skip(self, context: BlockContext) -> str | None:
         if context.pipeline_version < "3.0.0":
             return "v4_block_requires_pipeline_v3"
         return None
@@ -63,7 +63,7 @@ class LearningGateBlock(PipelineBlock):
                 rejected_count = len(evaluated) - len(approved)
             else:
                 # Default: approve adaptive, reject immutable, defer gated
-                from ...contracts.v4.learning_update import LearningUpdate, LearningGateDecision
+                from ...contracts.v4.learning_update import LearningGateDecision, LearningUpdate
 
                 for update in pending_updates:
                     if isinstance(update, LearningUpdate):
