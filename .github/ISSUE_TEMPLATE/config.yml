@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security vulnerability
+    url: https://github.com/halvrenofviryel/phionyx-research/security/advisories/new
+    about: Use the private vulnerability report flow — see SECURITY.md.
+  - name: Discussion
+    url: https://github.com/halvrenofviryel/phionyx-research/discussions
+    about: Open-ended question, design feedback, or "how would you approach…".

@@ -1,0 +1,26 @@
+name: Question
+description: How does X work? Where do I find Y?
+title: "[q] "
+labels: ["question"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        For longer-form discussion, the
+        [Discussions](https://github.com/halvrenofviryel/phionyx-research/discussions)
+        tab is usually a better fit than an issue. Use this template
+        when you suspect the question is short and the answer might
+        be reusable.
+
+  - type: textarea
+    id: question
+    attributes:
+      label: Question
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: What you've already checked
+      description: README, INSTALLATION.md, CHANGELOG, examples/notebooks, docs/, the relevant source file, ChatGPT / search. Tells us where to point you.
