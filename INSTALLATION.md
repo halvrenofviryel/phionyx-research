@@ -5,13 +5,13 @@
 - Python 3.10 or higher
 - pip ≥ 22
 
-## Install from source (current canonical path)
+## Install from PyPI (recommended)
 
 ```bash
-git clone https://github.com/halvrenofviryel/phionyx-research.git
-cd phionyx-research
-pip install -e .
+pip install phionyx-core
 ```
+
+[![PyPI](https://img.shields.io/pypi/v/phionyx-core.svg)](https://pypi.org/project/phionyx-core/) — first PyPI release: 0.2.1.
 
 After install, a one-line smoke test:
 
@@ -26,15 +26,16 @@ phi = calculate_phi_v2_1(
 print(phi["phi"])  # deterministic, reproducible
 ```
 
-## Install from PyPI
+## Install from source
 
-Coming soon. The package metadata, build, and `twine check` are clean,
-but the upload is gated on a TestPyPI verification run. Track
-[`#packaging/pypi-readiness`](https://github.com/halvrenofviryel/phionyx-research/pulls?q=label%3Apackaging)
-for status. Once uploaded the install will be:
+For contributors or anyone who wants to run the test suite / hack on
+the kernel:
 
 ```bash
-pip install phionyx-core
+git clone https://github.com/halvrenofviryel/phionyx-research.git
+cd phionyx-research
+pip install -e ".[dev]"
+pytest tests/core -q
 ```
 
 ## Required dependencies

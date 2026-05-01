@@ -3,10 +3,14 @@
 **Deterministic AI runtime that treats LLM outputs as sensor measurements, not decisions.**
 
 [![CI](https://github.com/halvrenofviryel/phionyx-research/actions/workflows/ci.yml/badge.svg)](https://github.com/halvrenofviryel/phionyx-research/actions/workflows/ci.yml)
-[![Version](https://img.shields.io/badge/version-0.2.0-blue.svg)](https://github.com/halvrenofviryel/phionyx-research)
+[![PyPI](https://img.shields.io/pypi/v/phionyx-core.svg)](https://pypi.org/project/phionyx-core/)
 [![License](https://img.shields.io/badge/license-AGPL--3.0-blue.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
-[![Tests](https://img.shields.io/badge/tests-1%2C013%20pass-brightgreen.svg)](tests/)
+[![Tests](https://img.shields.io/badge/tests-1%2C230%20pass-brightgreen.svg)](tests/)
+
+```bash
+pip install phionyx-core
+```
 
 Most AI frameworks let the LLM decide. Phionyx doesn't. Every LLM response passes through a 46-block deterministic pipeline with safety gates, ethics checks, and physics-based state tracking — before it reaches the user.
 
@@ -46,11 +50,14 @@ no LLM is involved at this layer.
 ![Phi cognitive across valence × arousal](docs/img/phi_heatmap.png)
 
 ```bash
+pip install phionyx-core jupyter matplotlib
 git clone https://github.com/halvrenofviryel/phionyx-research.git
-cd phionyx-research
-pip install -e . jupyter matplotlib
-jupyter notebook examples/notebooks/
+jupyter notebook phionyx-research/examples/notebooks/
 ```
+
+(Cloning is only needed because the notebooks live in the repo, not the
+package. Source-only install is also supported — see
+[`INSTALLATION.md`](INSTALLATION.md).)
 
 ---
 
