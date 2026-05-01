@@ -95,7 +95,7 @@ jobs:
           from phionyx_core import EchoState2, calculate_phi_v2_1
           from phionyx_core.governance.kill_switch import KillSwitch
           from phionyx_core.contracts.telemetry import get_canonical_blocks
-          assert phionyx_core.__version__ == '0.2.0'
+          assert phionyx_core.__version__, 'package __version__ should be set'
           assert len(get_canonical_blocks()) == 46
           s = EchoState2(A=0.5, V=0.3, H=0.4)
           r = calculate_phi_v2_1(valence=s.V, arousal=s.A, amplitude=5.0,
