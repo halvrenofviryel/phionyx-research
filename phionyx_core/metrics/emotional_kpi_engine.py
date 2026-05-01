@@ -32,7 +32,7 @@ import logging
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 import numpy as np
 import yaml
@@ -90,7 +90,7 @@ def load_thresholds() -> dict[str, dict[str, float]]:
 
     try:
         with open(threshold_file, encoding="utf-8") as f:
-            thresholds = yaml.safe_load(f)
+            thresholds = cast(dict[str, dict[str, float]], yaml.safe_load(f))
         return thresholds
     except Exception as e:
         logger.error(f"Failed to load thresholds: {e}, using defaults")
@@ -157,7 +157,7 @@ def calculate_profile_separation(
             return 0.5
 
         # Ortalama benzerlik ne kadar düşükse, ayrım o kadar yüksek
-        avg_similarity = np.mean(similarities)
+        avg_similarity = float(np.mean(similarities))
         psi = 1.0 - avg_similarity  # Mesafe = 1 - Benzerlik
 
         return max(0.0, min(1.0, psi))
@@ -199,7 +199,7 @@ def _cosine_similarity(vec_a: list[float], vec_b: list[float]) -> float:
         if norm_a == 0 or norm_b == 0:
             return 0.0
 
-        return dot_product / (norm_a * norm_b)
+        return float(dot_product / (norm_a * norm_b))
     except Exception:
         return 0.0
 

@@ -79,7 +79,7 @@ class HarmonicComposer:
 
         if len(segments) == 1:
             # Single segment - return as-is
-            return segments[0].get("response", "")
+            return str(segments[0].get("response", ""))
 
         # Sort by priority (entropy-based)
         sorted_segments = sorted(

@@ -197,7 +197,7 @@ class PreferenceScorer:
 
         result = {}
         for task_id, counts in task_votes.items():
-            result[task_id] = max(counts, key=counts.get)
+            result[task_id] = max(counts, key=lambda k: counts[k])
         return result
 
     def summary(self) -> dict[str, Any]:

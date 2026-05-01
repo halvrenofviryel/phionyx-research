@@ -249,11 +249,15 @@ class AgentMessageEnvelope(BaseModel):
 
         sender_ref = ParticipantRef(
             id=data["sender_participant_ref"]["id"],
-            type=ParticipantType(data["sender_participant_ref"]["type"])
+            type=ParticipantType(data["sender_participant_ref"]["type"]),
+            name=data["sender_participant_ref"].get("name"),
+            metadata=data["sender_participant_ref"].get("metadata"),
         )
         receiver_ref = ParticipantRef(
             id=data["receiver_participant_ref"]["id"],
-            type=ParticipantType(data["receiver_participant_ref"]["type"])
+            type=ParticipantType(data["receiver_participant_ref"]["type"]),
+            name=data["receiver_participant_ref"].get("name"),
+            metadata=data["receiver_participant_ref"].get("metadata"),
         )
 
         return cls(

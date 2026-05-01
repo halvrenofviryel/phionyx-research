@@ -190,15 +190,15 @@ class CausalSimulator:
                 step_index=i,
                 interventions=interventions,
                 state_before=state_before,
-                state_after=dict(current_state),
+                state_after={k: v for k, v in current_state.items() if v is not None},
                 effects=all_effects,
                 delta_summary=delta_summary,
             ))
 
             # Update graph node values for next step
-            for nid, val in current_state.items():
-                if nid in self.graph.nodes and val is not None:
-                    self.graph.nodes[nid].current_value = val
+            for nid, node_val in current_state.items():
+                if nid in self.graph.nodes and node_val is not None:
+                    self.graph.nodes[nid].current_value = node_val
 
         # Assess risk on final state
         risk = self._assess_risk(current_state)
@@ -237,7 +237,7 @@ class CausalSimulator:
         result_a = self.simulate_step(action_a)
         result_b = self.simulate_step(action_b)
 
-        comparison = {
+        comparison: dict[str, Any] = {
             "action_a": {
                 "interventions": action_a,
                 "affected": result_a.total_variables_affected,
