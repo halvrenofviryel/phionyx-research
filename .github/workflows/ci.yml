@@ -48,7 +48,14 @@ jobs:
         # cleanest type surface so they cannot regress. Other modules
         # are tracked in `project_mypy_deferred.md` and will land
         # behind their own CI gate as each becomes clean.
-        run: mypy phionyx_core/governance phionyx_core/physics phionyx_core/contracts/v4 phionyx_core/contracts/telemetry
+        #
+        # `--follow-imports=silent` is the gating mechanism: mypy still
+        # *reads* transitive imports (so it can resolve types) but
+        # suppresses errors that originate outside the listed paths.
+        # Without it, errors from modules like
+        # phionyx_core/orchestrator/block_factory.py — tracked for a
+        # later wave — would fail this check.
+        run: mypy --follow-imports=silent phionyx_core/governance phionyx_core/physics phionyx_core/contracts/v4 phionyx_core/contracts/telemetry
 
       - name: Smoke import
         run: |
