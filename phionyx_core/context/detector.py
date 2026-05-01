@@ -7,7 +7,7 @@ Detects when user is switching topics/modes using keyword and semantic analysis.
 
 import logging
 import re
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from .definitions import ContextDefinitions, ContextMode
 
@@ -21,12 +21,7 @@ class DetectionResult:
     detected_mode: ContextMode
     confidence: float  # 0.0 to 1.0
     switch_required: bool  # True if context should switch
-    detected_keywords: list[str] = None  # Keywords that triggered detection
-
-    def __post_init__(self):
-        """Initialize default values."""
-        if self.detected_keywords is None:
-            self.detected_keywords = []
+    detected_keywords: list[str] = field(default_factory=list)
 
 
 class ModeDetector:

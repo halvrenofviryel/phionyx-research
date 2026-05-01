@@ -230,7 +230,7 @@ class GoalPersistence:
         - Explicitly marked conflicts (conflicts_with)
         - Multiple CRITICAL goals (resource contention)
         """
-        conflicts = []
+        conflicts: list[ConflictReport] = []
         active = self.get_active_goals()
 
         # Explicit conflicts
@@ -278,7 +278,7 @@ class GoalPersistence:
 
     def get_report(self) -> GoalPersistenceReport:
         """Generate summary report."""
-        by_status = {}
+        by_status: dict[GoalStatus, int] = {}
         for g in self._goals.values():
             by_status[g.status] = by_status.get(g.status, 0) + 1
 
@@ -412,7 +412,7 @@ class GoalPersistence:
 
     def to_dict(self) -> dict[str, Any]:
         """Serialize for persistence."""
-        result = {
+        result: dict[str, Any] = {
             "session_id": self._session_id,
             "goals": {
                 gid: {

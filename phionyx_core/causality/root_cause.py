@@ -269,7 +269,7 @@ class RootCauseAnalyzer:
             std = (sum((v - avg) ** 2 for v in values) / len(values)) ** 0.5
             if std > 0:
                 z_score = abs(node.current_value - avg) / std
-                return min(1.0, z_score / 3.0)  # Normalize: 3σ = 1.0
+                return float(min(1.0, z_score / 3.0))  # Normalize: 3σ = 1.0
 
         # Fallback: check against expected range
         return self._anomaly_magnitude(node.current_value, expected_range)
