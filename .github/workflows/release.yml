@@ -1,0 +1,95 @@
+name: Release
+
+# Publishes a sdist + wheel to PyPI when a tag matching v* is pushed.
+# Uses PyPI's OIDC "trusted publisher" flow — no API token in repo or
+# secrets. The mapping (this repo + this workflow file + this job +
+# optional environment) must be configured once at
+# https://pypi.org/manage/account/publishing/. After that, every tag
+# v0.2.0, v0.3.0, ... triggers this run and uploads automatically.
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  build:
+    name: build sdist + wheel
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Verify tag matches package version
+        run: |
+          tag="${GITHUB_REF##*/}"          # v0.2.0
+          tag_version="${tag#v}"           # 0.2.0
+          pkg_version=$(python -c "import tomllib; print(tomllib.load(open('pyproject.toml','rb'))['project']['version'])")
+          if [ "$tag_version" != "$pkg_version" ]; then
+            echo "::error::Tag ${tag} does not match pyproject.toml version ${pkg_version}"
+            exit 1
+          fi
+          echo "tag=${tag}, version=${pkg_version}"
+
+      - name: Install build tooling
+        run: |
+          python -m pip install --upgrade pip
+          pip install build twine
+
+      - name: Build sdist + wheel
+        run: python -m build
+
+      - name: Twine check
+        run: python -m twine check dist/*
+
+      - name: Smoke install + import from built wheel
+        run: |
+          python -m venv /tmp/wheel-smoke
+          /tmp/wheel-smoke/bin/pip install --quiet dist/phionyx_core-*.whl
+          /tmp/wheel-smoke/bin/python -c "
+          import phionyx_core
+          from phionyx_core import EchoState2, calculate_phi_v2_1
+          from phionyx_core.governance.kill_switch import KillSwitch
+          from phionyx_core.contracts.telemetry import get_canonical_blocks
+          assert len(get_canonical_blocks()) == 46
+          s = EchoState2(A=0.5, V=0.3, H=0.4)
+          r = calculate_phi_v2_1(valence=s.V, arousal=s.A, amplitude=5.0,
+              time_delta=0.1, gamma=0.15, stability=s.stability,
+              entropy=s.H, w_c=0.6, w_p=0.4)
+          assert r['phi'] > 0
+          assert KillSwitch().state.value == 'armed'
+          print('release smoke: ok')
+          "
+
+      - name: Upload dist as workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+          retention-days: 30
+
+  publish:
+    name: publish to PyPI
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/phionyx-core
+    permissions:
+      id-token: write   # required for OIDC trusted-publisher exchange
+    steps:
+      - name: Download dist
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        # No `with: password:` — trusted publisher flow uses OIDC.

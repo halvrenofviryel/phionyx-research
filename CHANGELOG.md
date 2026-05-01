@@ -7,7 +7,90 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-## [Unreleased] — Pipeline contract v3.8.0
+## [Unreleased]
+
+_(no changes yet)_
+
+---
+
+## [0.2.0] — 2026-05-01
+
+PyPI-readiness release. Public surface is unchanged from v0.2.0-dev;
+the work in this version is packaging hygiene, dependency correctness,
+and CI / release infrastructure so that `pip install phionyx-core`
+behaves as advertised on a clean machine.
+
+### Added
+
+- **CI matrix** — GitHub Actions running `ruff check phionyx_core`, smoke
+  imports, and `pytest tests/core tests/contract tests/benchmarks` on
+  Python 3.10 / 3.11 / 3.12 / 3.13 plus a build job that produces sdist
+  + wheel and verifies them with `twine check` and a fresh-venv install.
+- **Release workflow** — `.github/workflows/release.yml` triggers on
+  tags matching `v*`, builds the wheel, and publishes to PyPI via
+  OIDC trusted publisher (no API token in repo or secrets). The
+  workflow also cross-checks that the tag matches `pyproject.toml`
+  `project.version` before uploading.
+- **Demo notebooks** — `examples/notebooks/01_determinism_and_physics.ipynb`,
+  `02_kill_switch_in_action.ipynb`, `03_pipeline_blocks_and_audit.ipynb`
+  with a Try-It-In-30-Seconds entry in the README.
+
+### Changed
+
+- **Required dependencies** — `PyYAML >= 6.0` and `numpy >= 1.24` moved
+  from optional extras into base `dependencies`. They were imported at
+  module top level by `phionyx_core.physics.profiles`,
+  `phionyx_core.cep.cep_config`, and `phionyx_core.state.ukf_*`, so a
+  vanilla install previously raised `ModuleNotFoundError` on
+  `import phionyx_core`. `networkx` remains optional under `[graph]`.
+- **Single packaging metadata source** — removed legacy `setup.py` (it
+  duplicated and disagreed with `pyproject.toml`).
+- **Pydantic V2 idioms across the codebase** — 26 nested `class Config:`
+  blocks migrated to `model_config = ConfigDict(...)`, 5 `@validator`
+  to `@field_validator` + `@classmethod`, 3 `.dict()` to
+  `.model_dump()`. Clears all `PydanticDeprecatedSince20` warnings.
+- **PEP 585 typing across the codebase** — `typing.List/Dict/Optional`
+  rewritten to `list/dict/X | None`, import order normalized,
+  comprehension shape simplified. 293 files mechanically updated;
+  every change is type-annotation or formatting only — no behavioural
+  diff.
+- **`datetime.utcnow()` removed from tests** — 4 occurrences in
+  `tests/core/test_human_in_the_loop.py` replaced with
+  `datetime.now(timezone.utc)` to match the source layer and clear
+  the deprecation warning.
+- **README** — new "Try It In 30 Seconds" section above Quick Start
+  with a Φ heatmap from notebook 01; CI badge added; static test count
+  corrected from 2,571 (monorepo number) to 1,230 (this repo:
+  1,013 core + 107 contract + 10 benchmarks).
+
+### Fixed
+
+- **`tests/contract/test_product_registry.py`** — was failing on a clean
+  clone because it imported from `phionyx_products`, a monorepo-only
+  package. Now uses `pytest.importorskip` so the file skips cleanly
+  on the public release.
+- **`tests/contract/test_block_determinism.py::test_matrix_doc_in_sync`**
+  — invoked `scripts/active/generate_determinism_matrix.py`, which is
+  monorepo-only. Now skips with a clear reason if the script is
+  absent.
+- **`tests/core/test_mind_loop_validator.py`** — imported
+  `tests.behavioral_eval.conftest.CANONICAL_V3_5_0` which is
+  monorepo-only. Now loads the current canonical block list directly
+  from `phionyx_core.contracts.telemetry.get_canonical_blocks()`,
+  fixing 12 collection failures.
+- **`B904` (raise from)** — 4 `raise ValueError(...)` calls inside
+  `except` blocks now chain via `from err` or `from None` so the
+  triggering exception is preserved in tracebacks.
+
+### Tests
+
+- Clean-clone test count rose from 998 (pre-hardening, with one
+  failing test in `tests/core` and a collection error in
+  `tests/contract`) to **1,230 passed, 7 skipped, 0 failed**.
+
+---
+
+## [0.2.0-dev] — Pipeline contract v3.8.0
 
 ### Added
 
