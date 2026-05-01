@@ -136,6 +136,9 @@ addopts = [
     "--strict-markers",
     "--tb=short",
 ]
+markers = [
+    "integration: opt-in tests that hit the network / PyPI / external services. Run with `-m integration`. Excluded from the default CI matrix.",
+]
 
 [tool.coverage.run]
 source = ["phionyx_core"]
