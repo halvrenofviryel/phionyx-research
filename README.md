@@ -13,6 +13,12 @@ pip install phionyx-core
 python -c "import phionyx_core; print('Phionyx Core ready —', phionyx_core.__version__)"
 ```
 
+Or one command end-to-end (fresh venv → install → smoke flow):
+
+```bash
+bash <(curl -sSL https://raw.githubusercontent.com/halvrenofviryel/phionyx-research/main/scripts/demo.sh)
+```
+
 Most AI frameworks let the LLM decide. Phionyx doesn't. Every LLM response passes through a 46-block deterministic pipeline with safety gates, ethics checks, and physics-based state tracking — before it reaches the user.
 
 The substrate is demonstrable in seconds **without an LLM, server, or API key** — see the [demo table](#try-it-in-30-seconds) below.
