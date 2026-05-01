@@ -1,0 +1,50 @@
+# Customer support profile — balanced physics, full audit, deterministic
+# routing.
+#
+# Use for B2B/B2C support assistants where every turn may be reviewed.
+# Audit is verbose, PII scrubbing is FULL (queries often include
+# customer identifiers), and routing is COST_OPTIMIZED — quality matters
+# but volume is usually higher than in a single classroom.
+
+name: customer_support
+description: |
+  Profile for customer-support assistants. Verbose audit, FULL PII
+  scrubbing, cost-optimized routing. Physics is balanced so the agent
+  can match a friendly tone without drifting into excitement.
+
+physics:
+  reactivity: 0.45
+  resilience: 0.7
+  safety_bias: 0.7
+  base_mode: DEFAULT
+
+  valence: 0.2             # mildly positive — warm but not effusive
+  arousal: 0.45
+  amplitude: 5.0
+  entropy: 0.35
+
+  stability: 0.8
+  gamma: 0.15
+  w_c: 0.7
+  w_p: 0.3
+  entropy_penalty_k: 1.0
+
+pedagogy:
+  vygotsky_level: 0.4              # explain enough but don't lecture
+  scaffolding_aggressiveness: 0.4
+  intervention_threshold: 0.45
+
+governance:
+  policy_id: support_default
+  pii_mode: FULL                   # ticket bodies often contain PII
+  audit_level: VERBOSE             # every turn is review-able
+
+routing:
+  llm_tier_strategy: COST_OPTIMIZED
+  enable_graph_rag: false
+
+version: "1.0.0"
+tags:
+  - customer-support
+  - b2b
+  - audit-heavy

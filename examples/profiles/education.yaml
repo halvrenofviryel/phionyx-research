@@ -1,0 +1,51 @@
+# Education profile — strict safety + privacy, calm physics, audit-heavy.
+#
+# Use when the target audience includes minors, schools, or supervised
+# learning environments. The dial choices below are conservative on
+# purpose: low arousal floor, high stability, FULL PII scrubbing,
+# VERBOSE audit, QUALITY_OPTIMIZED routing (fewer hallucinations matter
+# more than cost).
+
+name: education_default
+description: |
+  Educational profile for K-12, EdTech platforms, and tutoring tools.
+  Conservative defaults: low cognitive arousal, FULL PII scrubbing,
+  VERBOSE audit logs, quality-optimized model routing.
+
+physics:
+  reactivity: 0.2          # low — don't react sharply to provocations
+  resilience: 0.9          # high — maintain steady tone under pressure
+  safety_bias: 0.85        # strict
+  base_mode: SCHOOL
+
+  # Circumplex defaults that suit a calm classroom register.
+  valence: 0.1             # slightly positive
+  arousal: 0.4             # moderate — not flat, not excited
+  amplitude: 4.0
+  entropy: 0.25            # low — predictable phrasing
+
+  stability: 0.9
+  gamma: 0.15
+  w_c: 0.75                # cognitive weight dominates
+  w_p: 0.25
+  entropy_penalty_k: 1.2   # penalise chaotic phrasing harder than default
+
+pedagogy:
+  vygotsky_level: 0.7              # closer to ZPD, plenty of scaffolding
+  scaffolding_aggressiveness: 0.6
+  intervention_threshold: 0.35     # intervene early on self-talk drift
+
+governance:
+  policy_id: school_policy
+  pii_mode: FULL                   # mask names, emails, locations
+  audit_level: VERBOSE             # KCSIE-style retention
+
+routing:
+  llm_tier_strategy: QUALITY_OPTIMIZED
+  enable_graph_rag: false          # default off in school context
+
+version: "1.0.0"
+tags:
+  - education
+  - safety-first
+  - audit-heavy
