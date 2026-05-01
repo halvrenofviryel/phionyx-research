@@ -1,0 +1,62 @@
+name: Feature request
+description: Propose a new capability, block, port, or extension.
+title: "[feat] "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Phionyx is a deterministic-by-design runtime, so feature
+        proposals get evaluated against three lenses before being
+        scoped: (1) does it preserve determinism; (2) does it map to
+        the mind-loop or to an adapter; (3) what does it cost in
+        complexity.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: The concrete situation where today's API is missing or awkward. Skip motivation by example.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed shape
+      description: Sketch the API or block. Pseudocode is fine.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: layer
+    attributes:
+      label: Which layer does this touch?
+      options:
+        - "phionyx_core (kernel — physics, state, contracts, governance)"
+        - "phionyx_core.ports (adapter interface)"
+        - "Adapter implementation (graph / postgres / supabase / telemetry / ...)"
+        - "Examples / docs"
+        - "CI / release / packaging"
+        - "Not sure"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: determinism
+    attributes:
+      label: Determinism class of the new code
+      description: See `phionyx_core.pipeline.base.DeterminismClass`.
+      options:
+        - "strict (no randomness, no clock, no I/O)"
+        - "seeded (random derived from BlockContext)"
+        - "noisy_sensor (delegates to LLM / network / clock)"
+        - "n/a (docs / examples / build only)"
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Why doesn't an existing block / port / config combo cover this?
