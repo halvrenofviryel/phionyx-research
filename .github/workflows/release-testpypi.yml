@@ -119,7 +119,7 @@ jobs:
           /tmp/testpypi-smoke/bin/python -c "
           import phionyx_core
           from phionyx_core import EchoState2, calculate_phi_v2_1
-          assert phionyx_core.__version__.startswith('0.2.0')
+          assert phionyx_core.__version__.startswith('0.2.'), phionyx_core.__version__
           s = EchoState2(A=0.5, V=0.3, H=0.4)
           calculate_phi_v2_1(valence=s.V, arousal=s.A, amplitude=5.0,
               time_delta=0.1, gamma=0.15, stability=s.stability,

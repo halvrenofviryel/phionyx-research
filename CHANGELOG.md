@@ -13,12 +13,17 @@ _(no changes yet)_
 
 ---
 
-## [0.2.0] — 2026-05-01
+## [0.2.1] — 2026-05-01
 
-PyPI-readiness release. Public surface is unchanged from v0.2.0-dev;
-the work in this version is packaging hygiene, dependency correctness,
-and CI / release infrastructure so that `pip install phionyx-core`
-behaves as advertised on a clean machine.
+First PyPI release. Public surface is unchanged from the v0.2.0
+GitHub release (2026-04-26); the work in this version is packaging
+hygiene, dependency correctness, and CI / release infrastructure so
+`pip install phionyx-core` behaves as advertised on a clean machine.
+
+The version bump from 0.2.0 to 0.2.1 is bookkeeping: the v0.2.0 tag
+was already attached to the GitHub-only release that introduced the
+public source drop, never reached PyPI, and stays untouched. v0.2.1
+is the first artifact that lives on pypi.org.
 
 ### Added
 

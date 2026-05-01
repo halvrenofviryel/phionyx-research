@@ -32,7 +32,7 @@ Public API is organized into the following namespaces:
 - ``phionyx_core.cep``         -- Conscious Echo Proof engine, guards, config
 """
 
-__version__ = "0.2.0"
+__version__ = "0.2.1"
 
 # ---------------------------------------------------------------------------
 # Pipeline (always available -- no external deps)
