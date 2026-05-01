@@ -7,39 +7,39 @@ Faz 3.2: End-to-End Integration
 Tüm Karpathy özelliklerinin birlikte çalışması için orchestration.
 """
 
-from typing import List, Dict, Any, Optional
 from dataclasses import dataclass
+from typing import Any
 
 from phionyx_core.pipeline.base import BlockContext
+from phionyx_core.services.assumption_challenge_module import AssumptionChallengeModule
 from phionyx_core.services.assumption_engine import AssumptionSurfacingEngine
-from phionyx_core.services.inconsistency_engine import InconsistencyDetectionEngine
+from phionyx_core.services.clarification_engine import ClarificationRequestEngine
 from phionyx_core.services.complexity_engine import ComplexityBudgetEngine
+from phionyx_core.services.dead_code_pruner import DeadCodePruner
+from phionyx_core.services.inconsistency_engine import InconsistencyDetectionEngine
+from phionyx_core.services.inline_plan_engine import InlinePlanEngine
+from phionyx_core.services.orthogonal_change_guard import OrthogonalChangeGuard
 from phionyx_core.services.pushback_engine import PushBackEngine
 from phionyx_core.services.success_criteria_engine import SuccessCriteriaEngine
 from phionyx_core.services.tradeoff_engine import TradeOffElicitationEngine
-from phionyx_core.services.inline_plan_engine import InlinePlanEngine
-from phionyx_core.services.clarification_engine import ClarificationRequestEngine
-from phionyx_core.services.dead_code_pruner import DeadCodePruner
-from phionyx_core.services.orthogonal_change_guard import OrthogonalChangeGuard
-from phionyx_core.services.assumption_challenge_module import AssumptionChallengeModule
 
 
 @dataclass
 class KarpathyPipelineResult:
     """Result of Karpathy pipeline execution."""
-    assumptions: List[Any]
-    inconsistencies: List[Any]
-    complexity_metrics: Optional[Dict[str, Any]]
-    push_back_result: Optional[Any]
-    success_criteria_result: Optional[Any]
-    trade_offs: Optional[Any]
-    plan: Optional[Any]
-    clarifications: List[Any]
-    dead_code: List[Any]
-    orthogonal_changes: List[Any]
-    assumption_challenges: List[Any]
-    evidence_chain: List[Dict[str, Any]]
-    audit_trail: List[Dict[str, Any]]
+    assumptions: list[Any]
+    inconsistencies: list[Any]
+    complexity_metrics: dict[str, Any] | None
+    push_back_result: Any | None
+    success_criteria_result: Any | None
+    trade_offs: Any | None
+    plan: Any | None
+    clarifications: list[Any]
+    dead_code: list[Any]
+    orthogonal_changes: list[Any]
+    assumption_challenges: list[Any]
+    evidence_chain: list[dict[str, Any]]
+    audit_trail: list[dict[str, Any]]
 
 
 class KarpathyPipelineOrchestrator:
@@ -56,17 +56,17 @@ class KarpathyPipelineOrchestrator:
 
     def __init__(
         self,
-        assumption_engine: Optional[AssumptionSurfacingEngine] = None,
-        inconsistency_engine: Optional[InconsistencyDetectionEngine] = None,
-        complexity_engine: Optional[ComplexityBudgetEngine] = None,
-        pushback_engine: Optional[PushBackEngine] = None,
-        success_criteria_engine: Optional[SuccessCriteriaEngine] = None,
-        tradeoff_engine: Optional[TradeOffElicitationEngine] = None,
-        plan_engine: Optional[InlinePlanEngine] = None,
-        clarification_engine: Optional[ClarificationRequestEngine] = None,
-        dead_code_pruner: Optional[DeadCodePruner] = None,
-        orthogonal_guard: Optional[OrthogonalChangeGuard] = None,
-        challenge_module: Optional[AssumptionChallengeModule] = None
+        assumption_engine: AssumptionSurfacingEngine | None = None,
+        inconsistency_engine: InconsistencyDetectionEngine | None = None,
+        complexity_engine: ComplexityBudgetEngine | None = None,
+        pushback_engine: PushBackEngine | None = None,
+        success_criteria_engine: SuccessCriteriaEngine | None = None,
+        tradeoff_engine: TradeOffElicitationEngine | None = None,
+        plan_engine: InlinePlanEngine | None = None,
+        clarification_engine: ClarificationRequestEngine | None = None,
+        dead_code_pruner: DeadCodePruner | None = None,
+        orthogonal_guard: OrthogonalChangeGuard | None = None,
+        challenge_module: AssumptionChallengeModule | None = None
     ):
         """Initialize orchestrator with all engines."""
         self.assumption_engine = assumption_engine or AssumptionSurfacingEngine()
@@ -81,14 +81,14 @@ class KarpathyPipelineOrchestrator:
         self.orthogonal_guard = orthogonal_guard or OrthogonalChangeGuard()
         self.challenge_module = challenge_module or AssumptionChallengeModule()
 
-        self.evidence_chain: List[Dict[str, Any]] = []
-        self.audit_trail: List[Dict[str, Any]] = []
+        self.evidence_chain: list[dict[str, Any]] = []
+        self.audit_trail: list[dict[str, Any]] = []
 
     async def execute_karpathy_pipeline(
         self,
         context: BlockContext,
-        code: Optional[str] = None,
-        requirements: Optional[List[Dict[str, Any]]] = None
+        code: str | None = None,
+        requirements: list[dict[str, Any]] | None = None
     ) -> KarpathyPipelineResult:
         """
         Execute complete Karpathy pipeline.
@@ -248,7 +248,7 @@ class KarpathyPipelineOrchestrator:
             "timestamp": None  # Would use actual timestamp in production
         })
 
-    def _add_to_audit_trail(self, action: str, details: Dict[str, Any]) -> None:
+    def _add_to_audit_trail(self, action: str, details: dict[str, Any]) -> None:
         """Add to audit trail."""
         self.audit_trail.append({
             "action": action,
@@ -256,11 +256,11 @@ class KarpathyPipelineOrchestrator:
             "timestamp": None  # Would use actual timestamp in production
         })
 
-    def get_evidence_chain(self) -> List[Dict[str, Any]]:
+    def get_evidence_chain(self) -> list[dict[str, Any]]:
         """Get complete evidence chain."""
         return self.evidence_chain
 
-    def get_audit_trail(self) -> List[Dict[str, Any]]:
+    def get_audit_trail(self) -> list[dict[str, Any]]:
         """Get complete audit trail."""
         return self.audit_trail
 

@@ -1,19 +1,18 @@
 """Scope validator — enforces Tier A/B/C/D edit permissions."""
 from dataclasses import dataclass
-from typing import List
 
 
 @dataclass(frozen=True)
 class ValidationResult:
     valid: bool
-    violations: List[str]
+    violations: list[str]
 
 
 def validate_scope(
     file_path: str,
     diff_lines: int,
     tier: str,
-    surfaces: List[dict],  # Parsed from surfaces.yaml
+    surfaces: list[dict],  # Parsed from surfaces.yaml
 ) -> ValidationResult:
     """Validate that the proposed edit is within scope.
 

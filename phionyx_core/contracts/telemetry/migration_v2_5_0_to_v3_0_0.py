@@ -7,7 +7,7 @@ Non-destructive: v2.5.0 pipeline continues to work alongside v3.0.0 (AD-3).
 """
 
 import logging
-from typing import List, Dict, Any
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -36,7 +36,7 @@ V3_INSERTION_POINTS = {
 }
 
 
-def migrate_block_order(v2_blocks: List[str]) -> List[str]:
+def migrate_block_order(v2_blocks: list[str]) -> list[str]:
     """
     Migrate v2.5.0 block order to v3.0.0 by inserting new blocks.
 
@@ -65,7 +65,7 @@ def migrate_block_order(v2_blocks: List[str]) -> List[str]:
     return result
 
 
-def validate_migration(v3_blocks: List[str]) -> Dict[str, Any]:
+def validate_migration(v3_blocks: list[str]) -> dict[str, Any]:
     """
     Validate that migrated block order is correct.
 
@@ -104,7 +104,7 @@ def validate_migration(v3_blocks: List[str]) -> Dict[str, Any]:
     }
 
 
-def get_migration_diff(v2_blocks: List[str], v3_blocks: List[str]) -> Dict[str, Any]:
+def get_migration_diff(v2_blocks: list[str], v3_blocks: list[str]) -> dict[str, Any]:
     """Get diff between v2.5.0 and v3.0.0 block orders."""
     added = [b for b in v3_blocks if b not in v2_blocks]
     removed = [b for b in v2_blocks if b not in v3_blocks]

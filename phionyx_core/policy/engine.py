@@ -6,7 +6,7 @@ Selects appropriate behavioral policy based on context, risk level, and user rol
 """
 
 import logging
-from typing import Optional, Dict, Any
+from typing import Any
 
 from .policies import Policy, PolicyPresets
 
@@ -23,7 +23,7 @@ class PolicyEngine:
     - User role (teacher, student, etc.)
     """
 
-    def __init__(self, mode: Optional[str] = None, **kwargs):
+    def __init__(self, mode: str | None = None, **kwargs):
         """
         Initialize policy engine.
 
@@ -37,10 +37,10 @@ class PolicyEngine:
 
     def select_policy(
         self,
-        context_mode: Optional[str] = None,
+        context_mode: str | None = None,
         risk_level: int = 0,
-        user_role: Optional[str] = None,
-        additional_context: Optional[Dict[str, Any]] = None
+        user_role: str | None = None,
+        additional_context: dict[str, Any] | None = None
     ) -> Policy:
         """
         Select appropriate policy based on context.
@@ -140,7 +140,7 @@ class PolicyEngine:
         )
         return self.presets.DEFAULT_POLICY
 
-    def get_policy_config(self, policy: Policy) -> Dict[str, Any]:
+    def get_policy_config(self, policy: Policy) -> dict[str, Any]:
         """
         Convert policy to configuration dictionary for LLM calls.
 

@@ -7,9 +7,9 @@ Finalizes phi computation and updates unified state.
 """
 
 import logging
-from typing import Dict, Any, Optional, Protocol
+from typing import Any, Protocol
 
-from ...base import PipelineBlock, BlockContext, BlockResult
+from ...base import BlockContext, BlockResult, PipelineBlock
 
 logger = logging.getLogger(__name__)
 
@@ -20,7 +20,7 @@ class PhiFinalizerProtocol(Protocol):
         self,
         unified_state: Any,
         phi_value: float,
-        phi_components: Optional[Dict[str, Any]] = None
+        phi_components: dict[str, Any] | None = None
     ) -> Any:  # Returns finalized unified_state
         """Finalize phi computation."""
         ...
@@ -33,7 +33,7 @@ class PhiFinalizeBlock(PipelineBlock):
     Finalizes phi computation and updates unified state.
     """
 
-    def __init__(self, finalizer: Optional[PhiFinalizerProtocol] = None):
+    def __init__(self, finalizer: PhiFinalizerProtocol | None = None):
         """
         Initialize block.
 
@@ -43,7 +43,7 @@ class PhiFinalizeBlock(PipelineBlock):
         super().__init__("phi_finalize")
         self.finalizer = finalizer
 
-    def should_skip(self, context: BlockContext) -> Optional[str]:
+    def should_skip(self, context: BlockContext) -> str | None:
         """Skip if no finalizer or unified_state available."""
         metadata = context.metadata or {}
         if not self.finalizer or not metadata.get("unified_state"):

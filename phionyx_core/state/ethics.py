@@ -11,7 +11,6 @@ Per Echoism Core v1.1:
 
 from __future__ import annotations
 
-from typing import Dict, Optional
 from dataclasses import dataclass
 
 
@@ -32,7 +31,7 @@ class EthicsVector:
     boundary_violation_risk: float = 0.0
     child_on_child_risk: float = 0.0  # KCSIE Part 5: Child-on-Child Sexual Violence and Sexual Harassment
 
-    def to_dict(self) -> Dict[str, float]:
+    def to_dict(self) -> dict[str, float]:
         """Convert to dictionary."""
         return {
             "harm_risk": self.harm_risk,
@@ -391,8 +390,8 @@ class EthicsRiskAssessor:
         self,
         text: str,
         resonance_score: float = 0.0,
-        measurement_vector: Optional[Dict[str, float]] = None,
-        state: Optional[Dict[str, float]] = None,
+        measurement_vector: dict[str, float] | None = None,
+        state: dict[str, float] | None = None,
         is_group_scenario: bool = False  # KCSIE Part 5: Child-on-Child detection
     ) -> EthicsVector:
         """

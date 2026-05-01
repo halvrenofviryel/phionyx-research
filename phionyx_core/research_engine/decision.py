@@ -20,7 +20,6 @@ from __future__ import annotations
 
 import math
 from dataclasses import dataclass
-from typing import List
 
 from .evaluation.scoring import compute_complexity_tax, compute_decision_score
 
@@ -73,7 +72,7 @@ class Decision:
     action: str
     status: str
     rationale: str
-    guardrail_violations: List[str]
+    guardrail_violations: list[str]
     cqs_delta: float
     decision_score: float
 
@@ -98,7 +97,7 @@ class Decision:
 def decide(
     baseline_cqs: float,
     experiment_cqs: float,
-    guardrail_violations: List[str],
+    guardrail_violations: list[str],
     diff_lines: int,
     tier: str,
     latency_regression_pct: float = 0.0,

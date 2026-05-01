@@ -6,12 +6,12 @@ Maps high-level profile knobs to low-level technical parameters across all SDK m
 This is the "brain" that distributes settings to all modules.
 """
 
-from typing import Dict, Any, Optional
-from dataclasses import dataclass
 import logging
+from dataclasses import dataclass
+from typing import Any
 
-from .schema import Profile, RoutingConfig
 from .loader import ProfileLoader
+from .schema import Profile, RoutingConfig
 
 logger = logging.getLogger(__name__)
 
@@ -63,7 +63,7 @@ class ProfileManager:
     3. Returns structured params for each module
     """
 
-    def __init__(self, config_dir: Optional[str] = None):
+    def __init__(self, config_dir: str | None = None):
         """
         Initialize profile manager.
 
@@ -71,7 +71,7 @@ class ProfileManager:
             config_dir: Optional path to config directory
         """
         self.loader = ProfileLoader(config_dir)
-        self._active_profile: Optional[Profile] = None
+        self._active_profile: Profile | None = None
 
     def load_profile(self, profile_name: str) -> Profile:
         """
@@ -88,7 +88,7 @@ class ProfileManager:
         logger.info(f"Loaded profile: {profile_name}")
         return profile
 
-    def get_active_profile(self) -> Optional[Profile]:
+    def get_active_profile(self) -> Profile | None:
         """Get the currently active profile."""
         return self._active_profile
 
@@ -96,7 +96,7 @@ class ProfileManager:
     # Fan-Out Logic: High-Level → Low-Level Mapping
     # ========================================================================
 
-    def get_physics_params(self, profile: Optional[Profile] = None) -> PhysicsParams:
+    def get_physics_params(self, profile: Profile | None = None) -> PhysicsParams:
         """
         Map PhysicsConfig to low-level physics parameters.
 
@@ -147,7 +147,7 @@ class ProfileManager:
             safety_strictness=safety_strictness
         )
 
-    def get_pedagogy_params(self, profile: Optional[Profile] = None) -> PedagogyParams:
+    def get_pedagogy_params(self, profile: Profile | None = None) -> PedagogyParams:
         """
         Map PedagogyConfig to low-level pedagogy parameters.
 
@@ -171,7 +171,7 @@ class ProfileManager:
             vygotsky_zone=pedagogy.vygotsky_level
         )
 
-    def get_governance_params(self, profile: Optional[Profile] = None) -> GovernanceParams:
+    def get_governance_params(self, profile: Profile | None = None) -> GovernanceParams:
         """
         Map GovernanceConfig to low-level governance parameters.
 
@@ -196,7 +196,7 @@ class ProfileManager:
             regex_patterns=governance.custom_regex_patterns or []
         )
 
-    def get_routing_config(self, profile: Optional[Profile] = None) -> RoutingConfig:
+    def get_routing_config(self, profile: Profile | None = None) -> RoutingConfig:
         """
         Get routing configuration.
 
@@ -214,7 +214,7 @@ class ProfileManager:
 
         return profile.routing
 
-    def explain_mapping(self, profile: Optional[Profile] = None) -> Dict[str, Any]:
+    def explain_mapping(self, profile: Profile | None = None) -> dict[str, Any]:
         """
         Explain how a profile maps to low-level parameters (for debugging/UI).
 
@@ -288,7 +288,7 @@ class ProfileManager:
 # Singleton Helper Function
 # ============================================================================
 
-_global_manager: Optional[ProfileManager] = None
+_global_manager: ProfileManager | None = None
 
 
 def get_global_manager() -> ProfileManager:
@@ -306,7 +306,7 @@ def get_global_manager() -> ProfileManager:
     return _global_manager
 
 
-def get_active_profile() -> Optional[Profile]:
+def get_active_profile() -> Profile | None:
     """
     Get the globally active profile.
 

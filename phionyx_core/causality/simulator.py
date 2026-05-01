@@ -14,8 +14,8 @@ Integrates with:
 """
 
 import logging
-from typing import Dict, List, Optional, Any, Tuple
 from dataclasses import dataclass
+from typing import Any
 
 from .causal_graph import CausalGraph
 from .intervention import InterventionModel
@@ -27,23 +27,23 @@ logger = logging.getLogger(__name__)
 class SimulationStep:
     """One step in forward simulation."""
     step_index: int
-    interventions: Dict[str, float]  # variable → forced value
-    state_before: Dict[str, Optional[float]]
-    state_after: Dict[str, float]
-    effects: List[Dict[str, Any]]  # Simplified InterventionEffect dicts
-    delta_summary: Dict[str, float]  # variable → total delta
+    interventions: dict[str, float]  # variable → forced value
+    state_before: dict[str, float | None]
+    state_after: dict[str, float]
+    effects: list[dict[str, Any]]  # Simplified InterventionEffect dicts
+    delta_summary: dict[str, float]  # variable → total delta
 
 
 @dataclass
 class SimulationResult:
     """Full simulation result over one or more steps."""
-    steps: List[SimulationStep]
-    initial_state: Dict[str, Optional[float]]
-    final_state: Dict[str, float]
+    steps: list[SimulationStep]
+    initial_state: dict[str, float | None]
+    final_state: dict[str, float]
     total_variables_affected: int
-    risk_assessment: Dict[str, Any]
+    risk_assessment: dict[str, Any]
 
-    def get_final_value(self, variable: str) -> Optional[float]:
+    def get_final_value(self, variable: str) -> float | None:
         return self.final_state.get(variable)
 
     def get_total_delta(self, variable: str) -> float:
@@ -54,7 +54,7 @@ class SimulationResult:
             return 0.0
         return final - initial
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         return {
             "steps": [
                 {
@@ -101,7 +101,7 @@ class CausalSimulator:
         self,
         graph: CausalGraph,
         attenuation_rate: float = 0.8,
-        risk_thresholds: Optional[Dict[str, Tuple[float, float]]] = None,
+        risk_thresholds: dict[str, tuple[float, float]] | None = None,
     ):
         """
         Args:
@@ -123,7 +123,7 @@ class CausalSimulator:
 
     def simulate_step(
         self,
-        interventions: Dict[str, float],
+        interventions: dict[str, float],
     ) -> SimulationResult:
         """
         Simulate one step: apply interventions and predict effects.
@@ -138,7 +138,7 @@ class CausalSimulator:
 
     def simulate_sequence(
         self,
-        steps: List[Dict[str, float]],
+        steps: list[dict[str, float]],
     ) -> SimulationResult:
         """
         Simulate a sequence of intervention steps.
@@ -152,21 +152,21 @@ class CausalSimulator:
             SimulationResult with all steps and final state
         """
         # Capture initial state
-        initial_state: Dict[str, Optional[float]] = {
+        initial_state: dict[str, float | None] = {
             nid: node.current_value
             for nid, node in self.graph.nodes.items()
         }
         current_state = dict(initial_state)
 
-        sim_steps: List[SimulationStep] = []
+        sim_steps: list[SimulationStep] = []
         all_affected: set = set()
 
         for i, interventions in enumerate(steps):
             state_before = dict(current_state)
 
             # Apply all interventions in this step
-            delta_summary: Dict[str, float] = {}
-            all_effects: List[Dict[str, Any]] = []
+            delta_summary: dict[str, float] = {}
+            all_effects: list[dict[str, Any]] = []
 
             for var, val in interventions.items():
                 result = self._intervention_model.do(var, val)
@@ -213,8 +213,8 @@ class CausalSimulator:
 
     def preview_risk(
         self,
-        interventions: Dict[str, float],
-    ) -> Dict[str, Any]:
+        interventions: dict[str, float],
+    ) -> dict[str, Any]:
         """
         Preview risk without applying changes.
 
@@ -225,9 +225,9 @@ class CausalSimulator:
 
     def compare_actions(
         self,
-        action_a: Dict[str, float],
-        action_b: Dict[str, float],
-    ) -> Dict[str, Any]:
+        action_a: dict[str, float],
+        action_b: dict[str, float],
+    ) -> dict[str, Any]:
         """
         Compare two possible actions.
 
@@ -272,10 +272,10 @@ class CausalSimulator:
 
     def _assess_risk(
         self,
-        state: Dict[str, Optional[float]],
-    ) -> Dict[str, Any]:
+        state: dict[str, float | None],
+    ) -> dict[str, Any]:
         """Assess risk of a state against thresholds."""
-        violations: List[Dict[str, Any]] = []
+        violations: list[dict[str, Any]] = []
         for var, (low, high) in self.risk_thresholds.items():
             val = state.get(var)
             if val is None:

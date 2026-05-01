@@ -8,12 +8,12 @@ Serialization and deserialization utilities for EchoState2 and AuxState.
 from __future__ import annotations
 
 import json
-from typing import Dict, Any, Optional
 from datetime import datetime
 from pathlib import Path
+from typing import Any
 
-from phionyx_core.state.echo_state_2 import EchoState2
 from phionyx_core.state.aux_state import AuxState
+from phionyx_core.state.echo_state_2 import EchoState2
 
 
 class StateSnapshot:
@@ -31,9 +31,9 @@ class StateSnapshot:
     @staticmethod
     def serialize(
         echo_state2: EchoState2,
-        aux_state: Optional[AuxState] = None,
+        aux_state: AuxState | None = None,
         include_derived: bool = True
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         Serialize EchoState2 (+ AuxState) to dictionary.
 
@@ -66,7 +66,7 @@ class StateSnapshot:
         return snapshot
 
     @staticmethod
-    def deserialize(data: Dict[str, Any]) -> tuple[EchoState2, Optional[AuxState]]:
+    def deserialize(data: dict[str, Any]) -> tuple[EchoState2, AuxState | None]:
         """
         Deserialize dictionary to EchoState2 (+ AuxState).
 
@@ -94,9 +94,9 @@ class StateSnapshot:
     @staticmethod
     def to_json(
         echo_state2: EchoState2,
-        aux_state: Optional[AuxState] = None,
+        aux_state: AuxState | None = None,
         include_derived: bool = True,
-        indent: Optional[int] = 2
+        indent: int | None = 2
     ) -> str:
         """
         Serialize to JSON string.
@@ -114,7 +114,7 @@ class StateSnapshot:
         return json.dumps(snapshot, indent=indent, ensure_ascii=False)
 
     @staticmethod
-    def from_json(json_str: str) -> tuple[EchoState2, Optional[AuxState]]:
+    def from_json(json_str: str) -> tuple[EchoState2, AuxState | None]:
         """
         Deserialize from JSON string.
 
@@ -131,7 +131,7 @@ class StateSnapshot:
     def save_to_file(
         file_path: str | Path,
         echo_state2: EchoState2,
-        aux_state: Optional[AuxState] = None,
+        aux_state: AuxState | None = None,
         include_derived: bool = True
     ) -> None:
         """
@@ -148,7 +148,7 @@ class StateSnapshot:
         file_path.write_text(json_str, encoding='utf-8')
 
     @staticmethod
-    def load_from_file(file_path: str | Path) -> tuple[EchoState2, Optional[AuxState]]:
+    def load_from_file(file_path: str | Path) -> tuple[EchoState2, AuxState | None]:
         """
         Load state from file.
 
@@ -165,9 +165,9 @@ class StateSnapshot:
     @staticmethod
     def create_snapshot(
         echo_state2: EchoState2,
-        aux_state: Optional[AuxState] = None,
-        metadata: Optional[Dict[str, Any]] = None
-    ) -> Dict[str, Any]:
+        aux_state: AuxState | None = None,
+        metadata: dict[str, Any] | None = None
+    ) -> dict[str, Any]:
         """
         Create a complete snapshot with metadata.
 

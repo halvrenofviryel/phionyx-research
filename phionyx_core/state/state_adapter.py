@@ -10,10 +10,10 @@ UnifiedEchoState format when needed.
 
 from __future__ import annotations
 
-from typing import Dict, Any, Optional
+from typing import Any
 
-from phionyx_core.state.echo_state_2 import EchoState2
 from phionyx_core.state.aux_state import AuxState
+from phionyx_core.state.echo_state_2 import EchoState2
 
 
 class EchoState2Adapter:
@@ -29,7 +29,7 @@ class EchoState2Adapter:
     def __init__(
         self,
         echo_state2: EchoState2,
-        aux_state: Optional[AuxState] = None
+        aux_state: AuxState | None = None
     ):
         """
         Initialize adapter.
@@ -94,7 +94,7 @@ class EchoState2Adapter:
     # Dictionary Format (Backward Compatibility)
     # ============================================================
 
-    def to_physics_state(self) -> Dict[str, Any]:
+    def to_physics_state(self) -> dict[str, Any]:
         """
         Convert to physics_state dict format (backward compatibility).
 
@@ -118,7 +118,7 @@ class EchoState2Adapter:
             "t_global": self.echo_state2.t_global
         }
 
-    def to_unified_echo_state_dict(self) -> Dict[str, Any]:
+    def to_unified_echo_state_dict(self) -> dict[str, Any]:
         """
         Convert to UnifiedEchoState dict format (backward compatibility).
 
@@ -171,7 +171,7 @@ class EchoState2Adapter:
     # Update Methods
     # ============================================================
 
-    def update_from_physics_state(self, physics_state: Dict[str, Any]) -> None:
+    def update_from_physics_state(self, physics_state: dict[str, Any]) -> None:
         """
         Update EchoState2 from physics_state dict (backward compatibility).
 

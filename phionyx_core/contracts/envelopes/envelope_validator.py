@@ -10,8 +10,8 @@ Runs 4 checks in sequence:
   4. Cognitive integrity (phi/entropy/coherence thresholds)
 """
 
-from typing import Dict, Any, List, Optional, Set, Tuple
 from collections import deque
+from typing import Any
 
 from pydantic import BaseModel, Field
 
@@ -22,9 +22,9 @@ from phionyx_core.contracts.envelopes.causal_chain_tracker import CausalChainTra
 class EnvelopeValidationResult(BaseModel):
     """Composite result from all validation checks."""
     valid: bool = Field(..., description="True if all checks passed")
-    checks_passed: List[str] = Field(default_factory=list, description="Names of passed checks")
-    checks_failed: List[str] = Field(default_factory=list, description="Names of failed checks")
-    details: Dict[str, Any] = Field(default_factory=dict, description="Per-check detail messages")
+    checks_passed: list[str] = Field(default_factory=list, description="Names of passed checks")
+    checks_failed: list[str] = Field(default_factory=list, description="Names of failed checks")
+    details: dict[str, Any] = Field(default_factory=dict, description="Per-check detail messages")
 
 
 class EnvelopeValidator:
@@ -39,7 +39,7 @@ class EnvelopeValidator:
 
     def __init__(
         self,
-        causal_tracker: Optional[CausalChainTracker] = None,
+        causal_tracker: CausalChainTracker | None = None,
         nonce_store_max: int = 10000,
         min_phi: float = 0.0,
         max_entropy: float = 1.0,
@@ -47,7 +47,7 @@ class EnvelopeValidator:
     ):
         self._causal_tracker = causal_tracker or CausalChainTracker()
         self._nonce_order: deque[str] = deque(maxlen=nonce_store_max)
-        self._seen_nonces: Set[str] = set()
+        self._seen_nonces: set[str] = set()
         self._nonce_store_max = nonce_store_max
         self._min_phi = min_phi
         self._max_entropy = max_entropy
@@ -62,9 +62,9 @@ class EnvelopeValidator:
             ("cognitive_integrity", self._check_cognitive),
         ]
 
-        passed: List[str] = []
-        failed: List[str] = []
-        details: Dict[str, Any] = {}
+        passed: list[str] = []
+        failed: list[str] = []
+        details: dict[str, Any] = {}
 
         for name, check_fn in checks:
             ok, detail = check_fn(envelope)
@@ -81,13 +81,13 @@ class EnvelopeValidator:
             details=details,
         )
 
-    def _check_ttl(self, envelope: AgentMessageEnvelope) -> Tuple[bool, str]:
+    def _check_ttl(self, envelope: AgentMessageEnvelope) -> tuple[bool, str]:
         """Check envelope is not expired."""
         if envelope.is_expired():
             return False, "Envelope TTL expired"
         return True, "TTL valid"
 
-    def _check_nonce(self, envelope: AgentMessageEnvelope) -> Tuple[bool, str]:
+    def _check_nonce(self, envelope: AgentMessageEnvelope) -> tuple[bool, str]:
         """Check nonce has not been seen before (replay protection)."""
         nonce = envelope.nonce
         if nonce in self._seen_nonces:
@@ -102,7 +102,7 @@ class EnvelopeValidator:
         self._nonce_order.append(nonce)
         return True, "Nonce unique"
 
-    def _check_causal(self, envelope: AgentMessageEnvelope) -> Tuple[bool, str]:
+    def _check_causal(self, envelope: AgentMessageEnvelope) -> tuple[bool, str]:
         """Check per-participant turn_id monotonicity."""
         participant_id = envelope.sender_participant_ref.id
         violation = self._causal_tracker.validate_and_record(
@@ -116,7 +116,7 @@ class EnvelopeValidator:
             )
         return True, "Causal chain valid"
 
-    def _check_cognitive(self, envelope: AgentMessageEnvelope) -> Tuple[bool, str]:
+    def _check_cognitive(self, envelope: AgentMessageEnvelope) -> tuple[bool, str]:
         """Check cognitive integrity thresholds."""
         if not envelope.validate_cognitive_integrity(
             min_phi=self._min_phi,

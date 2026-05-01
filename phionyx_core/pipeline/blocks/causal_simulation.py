@@ -10,7 +10,7 @@ Position in pipeline: After root_cause_analysis, before response_build.
 
 import logging
 
-from ..base import PipelineBlock, BlockContext, BlockResult
+from ..base import BlockContext, BlockResult, PipelineBlock
 
 logger = logging.getLogger(__name__)
 

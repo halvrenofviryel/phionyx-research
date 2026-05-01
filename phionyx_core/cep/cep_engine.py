@@ -6,13 +6,13 @@ Main engine for evaluating responses against Conscious Echo Proof (CEP) criteria
 Detects self-narrative patterns, trauma language, and echo repetition.
 """
 
-import re
 import logging
-from typing import Optional, Dict, List, Literal
+import re
 from difflib import SequenceMatcher
+from typing import Literal
 
-from .cep_types import CEPMetrics, CEPFlags, CEPResult
 from .cep_config import CEPConfig
+from .cep_types import CEPFlags, CEPMetrics, CEPResult
 
 logger = logging.getLogger(__name__)
 
@@ -30,7 +30,7 @@ class ConsciousEchoProofEngine:
     Provides sanitization capabilities for unsafe content.
     """
 
-    def __init__(self, config: Optional[CEPConfig] = None, profile_name: Optional[str] = None):
+    def __init__(self, config: CEPConfig | None = None, profile_name: str | None = None):
         """
         Initialize CEP engine.
 
@@ -129,10 +129,10 @@ class ConsciousEchoProofEngine:
         raw_text: str,
         phi: float,
         entropy: float,
-        unified_state: Optional[Dict[str, float]] = None,
-        conversation_history: Optional[List[str]] = None,
-        npc_role: Optional[str] = None,
-        profile_name: Optional[str] = None
+        unified_state: dict[str, float] | None = None,
+        conversation_history: list[str] | None = None,
+        npc_role: str | None = None,
+        profile_name: str | None = None
     ) -> CEPResult:
         """
         Evaluate response against CEP criteria.
@@ -236,7 +236,7 @@ class ConsciousEchoProofEngine:
         raw_text: str,
         phi: float,
         entropy: float,
-        unified_state: Optional[Dict[str, float]] = None
+        unified_state: dict[str, float] | None = None
     ) -> CEPMetrics:
         """
         Compute base metrics from physics parameters.
@@ -393,7 +393,7 @@ class ConsciousEchoProofEngine:
 
         return max(0.0, min(1.0, total_score))
 
-    def _run_echo_variation_test(self, raw_text: str, conversation_history: List[str]) -> float:
+    def _run_echo_variation_test(self, raw_text: str, conversation_history: list[str]) -> float:
         """
         Test for echo variation/novelty using embedding-based similarity.
 
@@ -465,7 +465,7 @@ class ConsciousEchoProofEngine:
 
         return max(0.0, min(1.0, novelty_score))
 
-    def _get_embeddings(self, texts: List[str]) -> Optional[List[List[float]]]:
+    def _get_embeddings(self, texts: list[str]) -> list[list[float]] | None:
         """
         Get embeddings for texts.
 
@@ -481,8 +481,8 @@ class ConsciousEchoProofEngine:
         # Try to use vector store if available (future: integrate with phionyx_memory)
         # For now, use simple TF-IDF-like approach
         try:
-            from sklearn.feature_extraction.text import TfidfVectorizer
             import numpy as np
+            from sklearn.feature_extraction.text import TfidfVectorizer
 
             vectorizer = TfidfVectorizer(max_features=100, stop_words='english')
             embeddings = vectorizer.fit_transform(texts).toarray()
@@ -501,7 +501,7 @@ class ConsciousEchoProofEngine:
                 if not all_words:
                     return None
 
-                word_list = sorted(list(all_words))
+                word_list = sorted(all_words)
                 embeddings = []
                 for text in texts:
                     words = text.lower().split()
@@ -518,7 +518,7 @@ class ConsciousEchoProofEngine:
                 logger.debug(f"Simple embedding generation failed: {e}")
                 return None
 
-    def _cosine_similarity(self, vec1: List[float], vec2: List[float]) -> float:
+    def _cosine_similarity(self, vec1: list[float], vec2: list[float]) -> float:
         """
         Calculate cosine similarity between two vectors.
 
@@ -740,8 +740,8 @@ class ConsciousEchoProofEngine:
         raw_text: str,
         flags: CEPFlags,
         mode: Literal["universal", "fiction"],
-        npc_role: Optional[str] = None
-    ) -> Optional[str]:
+        npc_role: str | None = None
+    ) -> str | None:
         """
         Sanitize text if flags indicate need.
 

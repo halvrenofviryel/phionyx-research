@@ -6,10 +6,11 @@ Extends IntuitionGraph with novelty/transfer/robustness scoring
 for open-ended discovery evaluation.
 """
 
-from typing import Optional, Dict, Any, List
-from pydantic import BaseModel, ConfigDict, Field
-from datetime import datetime, timezone
 import uuid
+from datetime import datetime, timezone
+from typing import Any
+
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class DiscoveryCandidate(BaseModel):
@@ -47,11 +48,11 @@ class DiscoveryCandidate(BaseModel):
     )
 
     # Discovery provenance
-    source_graph_nodes: List[str] = Field(
+    source_graph_nodes: list[str] = Field(
         default_factory=list,
         description="IntuitionGraph node IDs that contributed"
     )
-    source_patterns: List[str] = Field(
+    source_patterns: list[str] = Field(
         default_factory=list,
         description="Patterns identified"
     )
@@ -61,13 +62,13 @@ class DiscoveryCandidate(BaseModel):
     )
 
     # Cross-domain relevance
-    domain_relevance: Dict[str, float] = Field(
+    domain_relevance: dict[str, float] = Field(
         default_factory=dict,
         description="Relevance score per domain"
     )
 
     # Embedding for similarity computation
-    embedding_vector: Optional[List[float]] = Field(
+    embedding_vector: list[float] | None = Field(
         None,
         description="Embedding vector for novelty computation"
     )
@@ -77,17 +78,17 @@ class DiscoveryCandidate(BaseModel):
         default=False,
         description="Whether a human has validated this discovery"
     )
-    validation_score: Optional[float] = Field(
+    validation_score: float | None = Field(
         None, ge=0.0, le=1.0,
         description="Human validation score"
     )
 
     # Timestamps
     discovered_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
-    validated_at: Optional[datetime] = None
+    validated_at: datetime | None = None
 
     # Metadata
-    metadata: Dict[str, Any] = Field(default_factory=dict)
+    metadata: dict[str, Any] = Field(default_factory=dict)
 
     def compute_composite(
         self,

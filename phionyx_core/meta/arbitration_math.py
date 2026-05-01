@@ -13,9 +13,8 @@ Implements 6 core arbitration formulas:
 All functions are pure mathematical — no side effects.
 """
 
-import math
 import logging
-from typing import List, Dict, Optional
+import math
 from dataclasses import dataclass
 
 logger = logging.getLogger(__name__)
@@ -26,14 +25,14 @@ class ArbitrationResult:
     """Result of confidence fusion / arbitration."""
     w_final: float
     conflict_score: float
-    module_weights: Dict[str, float]
+    module_weights: dict[str, float]
     dominant_module: str
     is_conflicted: bool  # conflict_score > threshold
 
 
 def compute_w_final(
-    module_confidences: Dict[str, float],
-    recency_weights: Optional[Dict[str, float]] = None,
+    module_confidences: dict[str, float],
+    recency_weights: dict[str, float] | None = None,
     alpha: float = 1.0,
 ) -> ArbitrationResult:
     """
@@ -90,7 +89,7 @@ def compute_w_final(
     )
 
 
-def compute_conflict_score(confidences: List[float]) -> float:
+def compute_conflict_score(confidences: list[float]) -> float:
     """
     Arbitration Conflict Score using Herfindahl index.
 
@@ -209,10 +208,10 @@ def compute_recency_decay(
 
 
 def compute_recency_weights(
-    timestamps: Dict[str, float],
+    timestamps: dict[str, float],
     current_time: float,
     decay_rate: float = 0.1,
-) -> Dict[str, float]:
+) -> dict[str, float]:
     """
     Compute recency weights for multiple modules.
 

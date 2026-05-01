@@ -10,10 +10,10 @@ This module provides narrative generation that automatically enforces:
 The App layer should NOT manually add these constraints - the SDK enforces them automatically.
 """
 
-import os
 import logging
-from typing import Dict, Optional, Any, TYPE_CHECKING
+import os
 from dataclasses import dataclass
+from typing import TYPE_CHECKING, Any, Optional
 
 if TYPE_CHECKING:
     from phionyx_core.contracts.llm_provider import LLMProviderProtocol
@@ -72,7 +72,7 @@ class NarrativeEngine:
 
     def __init__(
         self,
-        config: Optional[NarrativeConfig] = None,
+        config: NarrativeConfig | None = None,
         llm_provider: Optional['LLMProviderProtocol'] = None
     ):
         """
@@ -103,7 +103,7 @@ class NarrativeEngine:
     def _inject_physics_constraints(
         self,
         system_prompt: str,
-        physics_state: Dict[str, float]
+        physics_state: dict[str, float]
     ) -> str:
         """
         Automatically inject Physics constraints into system prompt.
@@ -174,7 +174,7 @@ class NarrativeEngine:
     def _apply_safety_filters(
         self,
         prompt: str,
-        physics_state: Dict[str, float]
+        physics_state: dict[str, float]
     ) -> str:
         """
         Automatically apply Safety filters (Ethics Engine).
@@ -208,12 +208,12 @@ class NarrativeEngine:
     async def generate(
         self,
         context: str,
-        physics_state: Dict[str, float],
-        system_prompt: Optional[str] = None,
-        memory_context: Optional[str] = None,
-        intuitive_context: Optional[str] = None,
-        seasonal_context: Optional[str] = None,
-        user_prompt: Optional[str] = None,
+        physics_state: dict[str, float],
+        system_prompt: str | None = None,
+        memory_context: str | None = None,
+        intuitive_context: str | None = None,
+        seasonal_context: str | None = None,
+        user_prompt: str | None = None,
         **kwargs
     ) -> str:
         """
@@ -327,7 +327,7 @@ class NarrativeEngine:
         )
         return None
 
-    async def check_model_availability(self) -> Dict[str, Any]:
+    async def check_model_availability(self) -> dict[str, Any]:
         """Check if configured model is available via LLM service."""
         llm_service = self._get_llm_provider()
         if not llm_service or not llm_service.available:

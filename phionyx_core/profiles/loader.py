@@ -5,12 +5,13 @@ Profile Loader - YAML Loading and Merging Logic
 Loads profiles from YAML files and merges high-level personas with low-level defaults.
 """
 
-from typing import Dict, Any, Optional
-from pathlib import Path
-import yaml
 import logging
+from pathlib import Path
+from typing import Any
 
-from .schema import Profile, PhysicsConfig, PedagogyConfig, GovernanceConfig, RoutingConfig
+import yaml
+
+from .schema import GovernanceConfig, PedagogyConfig, PhysicsConfig, Profile, RoutingConfig
 
 logger = logging.getLogger(__name__)
 
@@ -25,7 +26,7 @@ class ProfileLoader:
     3. Merge persona overrides into defaults
     """
 
-    def __init__(self, config_dir: Optional[Path] = None):
+    def __init__(self, config_dir: Path | None = None):
         """
         Initialize profile loader.
 
@@ -41,10 +42,10 @@ class ProfileLoader:
         self.defaults_dir = self.config_dir / "defaults"
 
         # Cache loaded defaults
-        self._defaults_cache: Dict[str, Dict[str, Any]] = {}
-        self._profiles_cache: Dict[str, Profile] = {}
+        self._defaults_cache: dict[str, dict[str, Any]] = {}
+        self._profiles_cache: dict[str, Profile] = {}
 
-    def _load_defaults(self) -> Dict[str, Dict[str, Any]]:
+    def _load_defaults(self) -> dict[str, dict[str, Any]]:
         """
         Load all default YAML files from defaults/ directory.
 
@@ -59,7 +60,7 @@ class ProfileLoader:
         # Load physics defaults
         physics_file = self.defaults_dir / "physics.yaml"
         if physics_file.exists():
-            with open(physics_file, 'r', encoding='utf-8') as f:
+            with open(physics_file, encoding='utf-8') as f:
                 defaults['physics'] = yaml.safe_load(f) or {}
         else:
             logger.warning(f"Physics defaults not found: {physics_file}")
@@ -68,7 +69,7 @@ class ProfileLoader:
         # Load pedagogy defaults
         pedagogy_file = self.defaults_dir / "pedagogy.yaml"
         if pedagogy_file.exists():
-            with open(pedagogy_file, 'r', encoding='utf-8') as f:
+            with open(pedagogy_file, encoding='utf-8') as f:
                 defaults['pedagogy'] = yaml.safe_load(f) or {}
         else:
             logger.warning(f"Pedagogy defaults not found: {pedagogy_file}")
@@ -77,7 +78,7 @@ class ProfileLoader:
         # Load governance defaults
         governance_file = self.defaults_dir / "governance.yaml"
         if governance_file.exists():
-            with open(governance_file, 'r', encoding='utf-8') as f:
+            with open(governance_file, encoding='utf-8') as f:
                 defaults['governance'] = yaml.safe_load(f) or {}
         else:
             logger.warning(f"Governance defaults not found: {governance_file}")
@@ -86,7 +87,7 @@ class ProfileLoader:
         self._defaults_cache = defaults
         return defaults
 
-    def _merge_config(self, base: Dict[str, Any], override: Dict[str, Any]) -> Dict[str, Any]:
+    def _merge_config(self, base: dict[str, Any], override: dict[str, Any]) -> dict[str, Any]:
         """
         Deep merge override into base.
 
@@ -107,7 +108,7 @@ class ProfileLoader:
 
         return result
 
-    def _load_profiles(self) -> Dict[str, Dict[str, Any]]:
+    def _load_profiles(self) -> dict[str, dict[str, Any]]:
         """
         Load profiles.yaml file.
 
@@ -120,7 +121,7 @@ class ProfileLoader:
                 f"Please create profiles.yaml with profile definitions."
             )
 
-        with open(self.profiles_file, 'r', encoding='utf-8') as f:
+        with open(self.profiles_file, encoding='utf-8') as f:
             data = yaml.safe_load(f)
 
         if not isinstance(data, dict) or 'profiles' not in data:

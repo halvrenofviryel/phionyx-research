@@ -5,10 +5,11 @@ Thread Safety Utilities
 Utilities for thread-safe operations in multi-tenant environments.
 """
 
-import threading
-from typing import TypeVar, Callable, Any
-from functools import wraps
 import logging
+import threading
+from collections.abc import Callable
+from functools import wraps
+from typing import Any, TypeVar
 
 logger = logging.getLogger(__name__)
 

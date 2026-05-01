@@ -7,8 +7,7 @@ Single source of truth for all canonical contracts:
 - State contracts
 - Invariants
 """
-from . import telemetry
-from . import envelopes
+from . import envelopes, telemetry
 
 __all__ = [
     'telemetry',

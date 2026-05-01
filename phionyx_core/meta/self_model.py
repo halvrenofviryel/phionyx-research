@@ -13,10 +13,10 @@ Integrates with:
 
 import json
 import logging
-from pathlib import Path
-from typing import Dict, Any, Optional, List, Set
 from dataclasses import dataclass, field
 from enum import Enum
+from pathlib import Path
+from typing import Any, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -35,7 +35,7 @@ class CapabilityAssessment:
     can_do: bool
     confidence: float  # 0.0-1.0
     status: CapabilityStatus = CapabilityStatus.UNKNOWN
-    limitations: List[str] = field(default_factory=list)
+    limitations: list[str] = field(default_factory=list)
     reasoning: str = ""
 
 
@@ -47,7 +47,7 @@ class SelfAwarenessReport:
     capabilities_unavailable: int
     knowledge_coverage: float  # 0.0-1.0
     confidence_mean: float  # 0.0-1.0
-    active_limitations: List[str] = field(default_factory=list)
+    active_limitations: list[str] = field(default_factory=list)
 
 
 class SelfModel:
@@ -67,10 +67,10 @@ class SelfModel:
     """
 
     def __init__(self):
-        self._capabilities: Dict[str, CapabilityStatus] = {}
-        self._capability_reasons: Dict[str, str] = {}
-        self._known_limitations: List[str] = []
-        self._confidence_history: List[float] = []
+        self._capabilities: dict[str, CapabilityStatus] = {}
+        self._capability_reasons: dict[str, str] = {}
+        self._known_limitations: list[str] = []
+        self._confidence_history: list[float] = []
         self._max_history: int = 100
         self._session_id: str = ""
         self._auto_save_enabled: bool = False
@@ -207,7 +207,7 @@ class SelfModel:
             reasoning=self._build_reasoning(action, can_do, combined_score, limitations),
         )
 
-    def get_limitations(self) -> List[str]:
+    def get_limitations(self) -> list[str]:
         """Get all known limitations."""
         all_limitations = list(self._known_limitations)
         for name, status in self._capabilities.items():
@@ -219,7 +219,7 @@ class SelfModel:
                 all_limitations.append(f"{name}: degraded — {reason}")
         return all_limitations
 
-    def get_available_capabilities(self) -> Set[str]:
+    def get_available_capabilities(self) -> set[str]:
         """Get names of all available capabilities."""
         return {
             name for name, status in self._capabilities.items()
@@ -265,7 +265,7 @@ class SelfModel:
         action: str,
         can_do: bool,
         score: float,
-        limitations: List[str],
+        limitations: list[str],
     ) -> str:
         """Build human-readable reasoning."""
         if can_do and not limitations:
@@ -295,7 +295,7 @@ class SelfModel:
             success: Whether the use was successful
         """
         if not hasattr(self, '_outcome_history'):
-            self._outcome_history: Dict[str, List[bool]] = {}
+            self._outcome_history: dict[str, list[bool]] = {}
         if capability not in self._outcome_history:
             self._outcome_history[capability] = []
         self._outcome_history[capability].append(success)
@@ -304,7 +304,7 @@ class SelfModel:
             self._outcome_history[capability] = self._outcome_history[capability][-self._max_history:]
         self._trigger_auto_save()
 
-    def update_confidence_from_outcomes(self, window: int = 10, alpha: float = 0.1) -> Dict[str, float]:
+    def update_confidence_from_outcomes(self, window: int = 10, alpha: float = 0.1) -> dict[str, float]:
         """
         Update capability confidence based on recent outcome history.
 
@@ -321,12 +321,12 @@ class SelfModel:
             Dict mapping capability name → new confidence value
         """
         if not hasattr(self, '_outcome_history'):
-            self._outcome_history: Dict[str, List[bool]] = {}
+            self._outcome_history: dict[str, list[bool]] = {}
 
         if not hasattr(self, '_outcome_confidences'):
-            self._outcome_confidences: Dict[str, float] = {}
+            self._outcome_confidences: dict[str, float] = {}
 
-        updates: Dict[str, float] = {}
+        updates: dict[str, float] = {}
         for capability, outcomes in self._outcome_history.items():
             if not outcomes:
                 continue
@@ -344,19 +344,19 @@ class SelfModel:
             self._trigger_auto_save()
         return updates
 
-    def get_outcome_confidence(self, capability: str) -> Optional[float]:
+    def get_outcome_confidence(self, capability: str) -> float | None:
         """Get outcome-based confidence for a capability (None if no data)."""
         if not hasattr(self, '_outcome_confidences'):
             return None
         return self._outcome_confidences.get(capability)
 
-    def get_outcome_history(self, capability: str) -> List[bool]:
+    def get_outcome_history(self, capability: str) -> list[bool]:
         """Get outcome history for a capability."""
         if not hasattr(self, '_outcome_history'):
             return []
         return list(self._outcome_history.get(capability, []))
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Serialize self-model state (complete, for cross-session persistence)."""
         result = {
             "session_id": self._session_id,
@@ -376,7 +376,7 @@ class SelfModel:
         return result
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "SelfModel":
+    def from_dict(cls, data: dict[str, Any]) -> "SelfModel":
         """Restore from serialized data."""
         instance = cls()
         instance._session_id = data.get("session_id", "")
@@ -392,7 +392,7 @@ class SelfModel:
         instance._outcome_confidences = dict(data.get("outcome_confidences", {}))
         return instance
 
-    def auto_save(self, base_path: str = "data/self_model") -> Optional[str]:
+    def auto_save(self, base_path: str = "data/self_model") -> str | None:
         """Auto-save self-model to JSON file for cross-session persistence."""
         if not self._session_id:
             logger.warning("Cannot auto-save SelfModel: no session_id set")
@@ -422,7 +422,7 @@ class SelfModel:
             return None
 
         try:
-            with open(file_path, "r") as f:
+            with open(file_path) as f:
                 data = json.load(f)
             instance = cls.from_dict(data)
             logger.info("SelfModel auto-loaded from %s", file_path)

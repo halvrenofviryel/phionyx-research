@@ -7,10 +7,10 @@ Faz 2.2: Inconsistency Detection Engine - Tam Fonksiyonel
 Gelişmiş inconsistency detection ve resolution servisi.
 """
 
-from typing import List, Dict, Any, Optional, Tuple
-from dataclasses import dataclass
-import re
 import ast
+import re
+from dataclasses import dataclass
+from typing import Any
 
 from phionyx_core.pipeline.blocks.inconsistency_detection import Inconsistency
 
@@ -49,17 +49,17 @@ class InconsistencyDetectionEngine:
 
     def __init__(self):
         """Initialize inconsistency detection engine."""
-        self.inconsistency_cache: Dict[str, List[Inconsistency]] = {}
-        self.resolution_cache: Dict[str, List[ResolutionSuggestion]] = {}
+        self.inconsistency_cache: dict[str, list[Inconsistency]] = {}
+        self.resolution_cache: dict[str, list[ResolutionSuggestion]] = {}
 
     def detect_inconsistencies(
         self,
         code: str,
-        plan: Optional[str] = None,
-        tests: Optional[List[str]] = None,
-        requirements: Optional[List[str]] = None,
-        state: Optional[Any] = None
-    ) -> Tuple[List[Inconsistency], CoherenceMetrics]:
+        plan: str | None = None,
+        tests: list[str] | None = None,
+        requirements: list[str] | None = None,
+        state: Any | None = None
+    ) -> tuple[list[Inconsistency], CoherenceMetrics]:
         """
         Detect inconsistencies between code, plan, tests, and requirements.
 
@@ -113,7 +113,7 @@ class InconsistencyDetectionEngine:
         self,
         code: str,
         plan: str
-    ) -> List[Inconsistency]:
+    ) -> list[Inconsistency]:
         """Enhanced code-plan mismatch detection."""
         inconsistencies = []
 
@@ -174,8 +174,8 @@ class InconsistencyDetectionEngine:
     def _detect_code_test_mismatch_enhanced(
         self,
         code: str,
-        tests: List[str]
-    ) -> List[Inconsistency]:
+        tests: list[str]
+    ) -> list[Inconsistency]:
         """Enhanced code-test mismatch detection."""
         inconsistencies = []
 
@@ -225,8 +225,8 @@ class InconsistencyDetectionEngine:
     def _detect_plan_requirement_mismatch_enhanced(
         self,
         plan: str,
-        requirements: List[str]
-    ) -> List[Inconsistency]:
+        requirements: list[str]
+    ) -> list[Inconsistency]:
         """Enhanced plan-requirement mismatch detection."""
         inconsistencies = []
 
@@ -258,7 +258,7 @@ class InconsistencyDetectionEngine:
 
         return inconsistencies
 
-    def _detect_state_inconsistency_enhanced(self, state: Any) -> List[Inconsistency]:
+    def _detect_state_inconsistency_enhanced(self, state: Any) -> list[Inconsistency]:
         """Enhanced state inconsistency detection."""
         inconsistencies = []
 
@@ -315,10 +315,10 @@ class InconsistencyDetectionEngine:
     def _calculate_coherence_metrics(
         self,
         code: str,
-        plan: Optional[str],
-        tests: Optional[List[str]],
-        requirements: Optional[List[str]],
-        inconsistencies: List[Inconsistency]
+        plan: str | None,
+        tests: list[str] | None,
+        requirements: list[str] | None,
+        inconsistencies: list[Inconsistency]
     ) -> CoherenceMetrics:
         """Calculate coherence metrics."""
         code_plan_coherence = 1.0
@@ -382,9 +382,9 @@ class InconsistencyDetectionEngine:
         self,
         inconsistency: Inconsistency,
         code: str,
-        plan: Optional[str],
-        tests: Optional[List[str]],
-        requirements: Optional[List[str]]
+        plan: str | None,
+        tests: list[str] | None,
+        requirements: list[str] | None
     ) -> str:
         """Generate resolution suggestion for inconsistency."""
         if inconsistency.type == "code_plan":
@@ -398,7 +398,7 @@ class InconsistencyDetectionEngine:
         else:
             return "Review and resolve inconsistency based on context."
 
-    def _extract_plan_steps_enhanced(self, plan: str) -> List[str]:
+    def _extract_plan_steps_enhanced(self, plan: str) -> list[str]:
         """Enhanced plan step extraction."""
         steps = []
 
@@ -418,7 +418,7 @@ class InconsistencyDetectionEngine:
 
         return steps
 
-    def _extract_code_elements_enhanced(self, code: str) -> List[Dict[str, Any]]:
+    def _extract_code_elements_enhanced(self, code: str) -> list[dict[str, Any]]:
         """Enhanced code element extraction."""
         elements = []
 
@@ -453,7 +453,7 @@ class InconsistencyDetectionEngine:
 
         return elements
 
-    def _extract_functions_enhanced(self, code: str) -> List[Dict[str, Any]]:
+    def _extract_functions_enhanced(self, code: str) -> list[dict[str, Any]]:
         """Enhanced function extraction."""
         functions = []
 
@@ -477,7 +477,7 @@ class InconsistencyDetectionEngine:
 
         return functions
 
-    def _extract_test_cases_enhanced(self, tests: List[str]) -> List[Dict[str, Any]]:
+    def _extract_test_cases_enhanced(self, tests: list[str]) -> list[dict[str, Any]]:
         """Enhanced test case extraction."""
         test_cases = []
 
@@ -493,7 +493,7 @@ class InconsistencyDetectionEngine:
 
         return test_cases
 
-    def _extract_tested_function_enhanced(self, test_case: Dict[str, Any]) -> Optional[str]:
+    def _extract_tested_function_enhanced(self, test_case: dict[str, Any]) -> str | None:
         """Enhanced tested function extraction."""
         test_code = test_case.get("code", "")
 
@@ -509,7 +509,7 @@ class InconsistencyDetectionEngine:
 
         return None
 
-    def _extract_keywords(self, text: str) -> List[str]:
+    def _extract_keywords(self, text: str) -> list[str]:
         """Extract keywords from text."""
         # Remove common words
         stop_words = {'the', 'a', 'an', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for', 'of', 'with', 'by'}
@@ -517,7 +517,7 @@ class InconsistencyDetectionEngine:
         keywords = [w for w in words if w not in stop_words and len(w) > 2]
         return keywords
 
-    def _calculate_similarity(self, keywords1: List[str], keywords2: List[str]) -> float:
+    def _calculate_similarity(self, keywords1: list[str], keywords2: list[str]) -> float:
         """Calculate similarity between two keyword lists."""
         if not keywords1 or not keywords2:
             return 0.0
@@ -537,7 +537,7 @@ class InconsistencyDetectionEngine:
 
         return len(intersection) / len(union)
 
-    def _validate_state_assumption(self, assumption: Dict[str, Any], state: Any) -> bool:
+    def _validate_state_assumption(self, assumption: dict[str, Any], state: Any) -> bool:
         """Validate state assumption against actual state."""
         # Basic validation - would be enhanced in production
         return True

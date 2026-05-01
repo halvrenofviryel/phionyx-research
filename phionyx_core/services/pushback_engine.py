@@ -7,9 +7,9 @@ Faz 2.4: Push-back Interface - Tam Fonksiyonel
 Push-back mechanism for requirement, constraint, and profile violations.
 """
 
-from typing import List, Dict, Any, Optional
 from dataclasses import dataclass
 from enum import Enum
+from typing import Any
 
 from phionyx_core.pipeline.base import BlockContext
 
@@ -27,19 +27,19 @@ class PushBackMessage:
     """Push-back message structure."""
     violation_type: ViolationType
     violation_description: str
-    constraint_name: Optional[str] = None
-    requirement_name: Optional[str] = None
-    profile_name: Optional[str] = None
+    constraint_name: str | None = None
+    requirement_name: str | None = None
+    profile_name: str | None = None
     severity: str = "medium"  # "low", "medium", "high", "critical"
-    suggested_action: Optional[str] = None
-    user_feedback_request: Optional[str] = None
+    suggested_action: str | None = None
+    user_feedback_request: str | None = None
 
 
 @dataclass
 class PushBackResult:
     """Result of push-back evaluation."""
     should_push_back: bool
-    messages: List[PushBackMessage]
+    messages: list[PushBackMessage]
     violations_count: int
     can_proceed: bool  # Whether execution can proceed despite violations
 
@@ -57,7 +57,7 @@ class PushBackEngine:
     - User feedback loop
     """
 
-    def __init__(self, governance_node: Optional[Any] = None):
+    def __init__(self, governance_node: Any | None = None):
         """
         Initialize push-back engine.
 
@@ -65,15 +65,15 @@ class PushBackEngine:
             governance_node: GovernanceNode instance (optional)
         """
         self.governance_node = governance_node
-        self.violation_history: List[PushBackMessage] = []
-        self.user_feedback_cache: Dict[str, Any] = {}
+        self.violation_history: list[PushBackMessage] = []
+        self.user_feedback_cache: dict[str, Any] = {}
 
     def evaluate_push_back(
         self,
         context: BlockContext,
-        requirements: Optional[List[Dict[str, Any]]] = None,
-        constraints: Optional[List[Dict[str, Any]]] = None,
-        profile: Optional[Any] = None
+        requirements: list[dict[str, Any]] | None = None,
+        constraints: list[dict[str, Any]] | None = None,
+        profile: Any | None = None
     ) -> PushBackResult:
         """
         Evaluate if push-back is needed.
@@ -129,8 +129,8 @@ class PushBackEngine:
     def _check_requirement_violations(
         self,
         context: BlockContext,
-        requirements: List[Dict[str, Any]]
-    ) -> List[PushBackMessage]:
+        requirements: list[dict[str, Any]]
+    ) -> list[PushBackMessage]:
         """Check requirement violations."""
         violations = []
 
@@ -156,8 +156,8 @@ class PushBackEngine:
     def _check_constraint_violations(
         self,
         context: BlockContext,
-        constraints: List[Dict[str, Any]]
-    ) -> List[PushBackMessage]:
+        constraints: list[dict[str, Any]]
+    ) -> list[PushBackMessage]:
         """Check constraint violations."""
         violations = []
 
@@ -184,7 +184,7 @@ class PushBackEngine:
         self,
         context: BlockContext,
         profile: Any
-    ) -> List[PushBackMessage]:
+    ) -> list[PushBackMessage]:
         """Check profile violations."""
         violations = []
 
@@ -221,7 +221,7 @@ class PushBackEngine:
     def _check_governance_violations(
         self,
         context: BlockContext
-    ) -> List[PushBackMessage]:
+    ) -> list[PushBackMessage]:
         """Check governance violations using Governance Node."""
         violations = []
 
@@ -289,7 +289,7 @@ class PushBackEngine:
     def _check_threshold(
         self,
         value: float,
-        threshold: Dict[str, Any]
+        threshold: dict[str, Any]
     ) -> bool:
         """Check if value is within threshold."""
         min_val = threshold.get("min")
@@ -352,8 +352,8 @@ class PushBackEngine:
     def process_user_feedback(
         self,
         violation_id: str,
-        feedback: Dict[str, Any]
-    ) -> Dict[str, Any]:
+        feedback: dict[str, Any]
+    ) -> dict[str, Any]:
         """
         Process user feedback for a violation.
 

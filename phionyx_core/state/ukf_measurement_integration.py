@@ -12,7 +12,8 @@ Ensures:
 
 from __future__ import annotations
 
-from typing import Optional, Dict, Any
+from typing import Any
+
 import numpy as np
 
 from phionyx_core.state.measurement_mapper import MeasurementMapper, MeasurementVector
@@ -37,7 +38,7 @@ class UKFMeasurementIntegration:
     - Update UKF with measurement
     """
 
-    def __init__(self, measurement_mapper: Optional[MeasurementMapper] = None):
+    def __init__(self, measurement_mapper: MeasurementMapper | None = None):
         """
         Initialize UKF measurement integration.
 
@@ -49,7 +50,7 @@ class UKFMeasurementIntegration:
     def create_measurement_from_llm(
         self,
         llm_text: str,
-        llm_output: Optional[Dict[str, Any]] = None
+        llm_output: dict[str, Any] | None = None
     ) -> MeasurementVector:
         """
         Create measurement vector from LLM output.
@@ -66,7 +67,7 @@ class UKFMeasurementIntegration:
     def convert_measurement_to_ukf_state(
         self,
         measurement: MeasurementVector,
-        current_state: Optional[EchoStateVector] = None
+        current_state: EchoStateVector | None = None
     ) -> EchoStateVector:
         """
         Convert measurement vector to UKF state vector.
@@ -121,7 +122,7 @@ class UKFMeasurementIntegration:
         self,
         ukf_estimator: EchoStateEstimator,
         measurement: MeasurementVector,
-        current_state: Optional[EchoStateVector] = None
+        current_state: EchoStateVector | None = None
     ) -> EchoStateVector:
         """
         Update UKF with measurement from mapper.
@@ -185,8 +186,8 @@ class UKFMeasurementIntegration:
         self,
         ukf_estimator: EchoStateEstimator,
         llm_text: str,
-        llm_output: Optional[Dict[str, Any]] = None,
-        current_state: Optional[EchoStateVector] = None
+        llm_output: dict[str, Any] | None = None,
+        current_state: EchoStateVector | None = None
     ) -> tuple[MeasurementVector, EchoStateVector]:
         """
         Process LLM output and update UKF in one step.

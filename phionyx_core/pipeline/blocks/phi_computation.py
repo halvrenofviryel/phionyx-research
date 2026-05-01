@@ -7,9 +7,9 @@ Computes phi (integrated information) value from physics state.
 """
 
 import logging
-from typing import Dict, Any, Optional, Protocol
+from typing import Any, Protocol
 
-from ..base import PipelineBlock, BlockContext, BlockResult
+from ..base import BlockContext, BlockResult, PipelineBlock
 
 logger = logging.getLogger(__name__)
 
@@ -18,9 +18,9 @@ class PhiComputationProtocol(Protocol):
     """Protocol for phi computation."""
     def compute_phi(
         self,
-        physics_state: Dict[str, Any],
-        previous_phi: Optional[float] = None
-    ) -> Dict[str, Any]:
+        physics_state: dict[str, Any],
+        previous_phi: float | None = None
+    ) -> dict[str, Any]:
         """Compute phi value from physics state."""
         ...
 
@@ -33,7 +33,7 @@ class PhiComputationBlock(PipelineBlock):
     This is an always-on block.
     """
 
-    def __init__(self, phi_computer: Optional[PhiComputationProtocol] = None):
+    def __init__(self, phi_computer: PhiComputationProtocol | None = None):
         """
         Initialize block.
 

@@ -9,16 +9,17 @@ Usage:
 """
 import json
 from pathlib import Path
-from typing import Dict, Any
+from typing import Any
+
 from phionyx_core.contracts.telemetry import (
-    get_canonical_blocks,
     get_block_mapping,
+    get_canonical_blocks,
     get_middleware_blocks,
-    migrate_block_id
+    migrate_block_id,
 )
 
 
-def validate_migration() -> Dict[str, Any]:
+def validate_migration() -> dict[str, Any]:
     """
     Validate that migration mapping is correct.
 
@@ -32,10 +33,10 @@ def validate_migration() -> Dict[str, Any]:
     contract_v2_4_0_path = Path(__file__).parent / "archive" / "canonical_blocks_v2_4_0.json"
     contract_v2_5_0_path = Path(__file__).parent / "canonical_blocks_v2_5_0.json"
 
-    with open(contract_v2_4_0_path, 'r') as f:
+    with open(contract_v2_4_0_path) as f:
         contract_v2_4_0 = json.load(f)
 
-    with open(contract_v2_5_0_path, 'r') as f:
+    with open(contract_v2_5_0_path) as f:
         contract_v2_5_0 = json.load(f)
 
     # Check that all mapped blocks exist in v2.4.0
@@ -66,7 +67,7 @@ def validate_migration() -> Dict[str, Any]:
     }
 
 
-def migrate_telemetry_data(telemetry_data: Dict[str, Any]) -> Dict[str, Any]:
+def migrate_telemetry_data(telemetry_data: dict[str, Any]) -> dict[str, Any]:
     """
     Migrate telemetry data from v2.4.0 to v2.5.0 format.
 

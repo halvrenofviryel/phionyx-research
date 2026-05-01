@@ -10,7 +10,7 @@ Position in pipeline: After counterfactual_analysis, when anomalies detected.
 
 import logging
 
-from ..base import PipelineBlock, BlockContext, BlockResult
+from ..base import BlockContext, BlockResult, PipelineBlock
 
 logger = logging.getLogger(__name__)
 

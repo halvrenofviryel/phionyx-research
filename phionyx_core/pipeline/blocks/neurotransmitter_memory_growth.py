@@ -7,9 +7,9 @@ Updates neurotransmitter and memory growth metrics.
 """
 
 import logging
-from typing import Dict, Any, Optional, Protocol
+from typing import Any, Protocol
 
-from ..base import PipelineBlock, BlockContext, BlockResult
+from ..base import BlockContext, BlockResult, PipelineBlock
 
 logger = logging.getLogger(__name__)
 
@@ -20,8 +20,8 @@ class NeurotransmitterMemoryGrowthProtocol(Protocol):
         self,
         user_input: str,
         narrative_response: str,
-        physics_state: Dict[str, Any]
-    ) -> Dict[str, Any]:  # Returns growth metrics
+        physics_state: dict[str, Any]
+    ) -> dict[str, Any]:  # Returns growth metrics
         """Update neurotransmitter and memory growth."""
         ...
 
@@ -33,7 +33,7 @@ class NeurotransmitterMemoryGrowthBlock(PipelineBlock):
     Updates neurotransmitter and memory growth metrics.
     """
 
-    def __init__(self, growth_updater: Optional[NeurotransmitterMemoryGrowthProtocol] = None):
+    def __init__(self, growth_updater: NeurotransmitterMemoryGrowthProtocol | None = None):
         """
         Initialize block.
 
@@ -43,7 +43,7 @@ class NeurotransmitterMemoryGrowthBlock(PipelineBlock):
         super().__init__("neurotransmitter_memory_growth")
         self.growth_updater = growth_updater
 
-    def should_skip(self, context: BlockContext) -> Optional[str]:
+    def should_skip(self, context: BlockContext) -> str | None:
         """Skip if no updater available."""
         if self.growth_updater is None:
             return "growth_updater_not_available"

@@ -21,8 +21,8 @@ Integrates with:
 """
 
 import logging
-from typing import Dict, List, Optional, Set, Tuple, Any
 from dataclasses import dataclass
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -48,9 +48,9 @@ class TrustAssessment:
     """Result of trust query."""
     source: str
     target: str
-    direct_trust: Optional[float]   # Direct edge (None if no direct)
+    direct_trust: float | None   # Direct edge (None if no direct)
     transitive_trust: float          # Best trust via any path
-    trust_path: List[str]            # Path that produced best trust
+    trust_path: list[str]            # Path that produced best trust
     is_trusted: bool                 # Above threshold?
     reasoning: str
 
@@ -82,8 +82,8 @@ class TrustNetwork:
         self.decay_factor = max(0.0, min(1.0, decay_factor))
         self.trust_threshold = trust_threshold
         self.max_path_length = max_path_length
-        self._edges: Dict[str, Dict[str, TrustEdge]] = {}  # source → {target → edge}
-        self._entities: Set[str] = set()
+        self._edges: dict[str, dict[str, TrustEdge]] = {}  # source → {target → edge}
+        self._entities: set[str] = set()
 
     def add_trust(
         self,
@@ -117,7 +117,7 @@ class TrustNetwork:
         self._edges[source][target] = edge
         return edge
 
-    def get_direct_trust(self, source: str, target: str) -> Optional[float]:
+    def get_direct_trust(self, source: str, target: str) -> float | None:
         """Get direct trust from source to target (None if no direct edge)."""
         if source == target:
             return 1.0
@@ -167,7 +167,7 @@ class TrustNetwork:
             reasoning=reasoning,
         )
 
-    def get_trusted_entities(self, source: str) -> List[Tuple[str, float]]:
+    def get_trusted_entities(self, source: str) -> list[tuple[str, float]]:
         """Get all entities trusted by source (above threshold)."""
         results = []
         for entity in self._entities:
@@ -179,7 +179,7 @@ class TrustNetwork:
         results.sort(key=lambda x: x[1], reverse=True)
         return results
 
-    def get_trust_graph(self) -> Dict[str, Any]:
+    def get_trust_graph(self) -> dict[str, Any]:
         """Serialize trust network."""
         return {
             "entities": sorted(self._entities),
@@ -199,12 +199,12 @@ class TrustNetwork:
 
     def _find_best_trust_path(
         self, source: str, target: str,
-    ) -> Tuple[float, List[str]]:
+    ) -> tuple[float, list[str]]:
         """Find path with highest trust from source to target."""
         best_trust = 0.0
-        best_path: List[str] = []
+        best_path: list[str] = []
 
-        def _dfs(current: str, path: List[str], trust_so_far: float, depth: int):
+        def _dfs(current: str, path: list[str], trust_so_far: float, depth: int):
             nonlocal best_trust, best_path
             if depth > self.max_path_length:
                 return
@@ -229,9 +229,9 @@ class TrustNetwork:
         self,
         source: str,
         target: str,
-        direct: Optional[float],
+        direct: float | None,
         transitive: float,
-        path: List[str],
+        path: list[str],
         is_trusted: bool,
     ) -> str:
         if direct is not None and direct >= transitive:

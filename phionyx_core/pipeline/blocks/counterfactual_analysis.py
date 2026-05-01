@@ -10,7 +10,7 @@ Position in pipeline: After causal_intervention, optional enrichment.
 
 import logging
 
-from ..base import PipelineBlock, BlockContext, BlockResult
+from ..base import BlockContext, BlockResult, PipelineBlock
 
 logger = logging.getLogger(__name__)
 

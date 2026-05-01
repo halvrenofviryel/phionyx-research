@@ -7,9 +7,9 @@ Builds final response payload (always-on block).
 """
 
 import logging
-from typing import Dict, Any, Optional, Protocol
+from typing import Any, Protocol
 
-from ..base import PipelineBlock, BlockContext, BlockResult
+from ..base import BlockContext, BlockResult, PipelineBlock
 
 logger = logging.getLogger(__name__)
 
@@ -20,21 +20,21 @@ class ResponseBuilderProtocol(Protocol):
         self,
         frame: Any,
         narrative_response: str,
-        physics_state: Dict[str, Any],
-        emotional_state: Optional[Dict[str, Any]] = None,
-        memory_result: Optional[Any] = None,
-        growth_metrics: Optional[Dict[str, Any]] = None,
-        confidence_result: Optional[Any] = None,
-        cep_metrics: Optional[Dict[str, Any]] = None,
-        cep_flags: Optional[Dict[str, Any]] = None,
-        entropy_modulated_amplitude: Optional[float] = None,
-        behavior_modulation: Optional[Dict[str, Any]] = None,
-        current_unified_state: Optional[Any] = None,
+        physics_state: dict[str, Any],
+        emotional_state: dict[str, Any] | None = None,
+        memory_result: Any | None = None,
+        growth_metrics: dict[str, Any] | None = None,
+        confidence_result: Any | None = None,
+        cep_metrics: dict[str, Any] | None = None,
+        cep_flags: dict[str, Any] | None = None,
+        entropy_modulated_amplitude: float | None = None,
+        behavior_modulation: dict[str, Any] | None = None,
+        current_unified_state: Any | None = None,
         esc_available: bool = False,
-        mode: Optional[str] = None,
-        strategy: Optional[str] = None,
-        prompt_context: Optional[str] = None
-    ) -> Dict[str, Any]:  # Returns response payload
+        mode: str | None = None,
+        strategy: str | None = None,
+        prompt_context: str | None = None
+    ) -> dict[str, Any]:  # Returns response payload
         """Build response payload."""
         ...
 

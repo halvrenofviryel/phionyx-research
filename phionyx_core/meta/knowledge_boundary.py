@@ -14,9 +14,8 @@ Integrates with:
 - intuition/graph_engine.py (graph relevance)
 """
 
-import math
 import logging
-from typing import List, Optional
+import math
 from dataclasses import dataclass
 
 logger = logging.getLogger(__name__)
@@ -153,8 +152,8 @@ class KnowledgeBoundaryDetector:
 
     def assess_from_text(
         self,
-        query_embedding: Optional[List[float]] = None,
-        reference_embeddings: Optional[List[List[float]]] = None,
+        query_embedding: list[float] | None = None,
+        reference_embeddings: list[list[float]] | None = None,
         graph_node_count: int = 0,
         graph_relevant_nodes: int = 0,
     ) -> BoundaryAssessment:
@@ -216,7 +215,7 @@ class KnowledgeBoundaryDetector:
             return f"Far outside knowledge boundary (score={score:.2f}): {reasons}"
 
 
-def _cosine_similarity(a: List[float], b: List[float]) -> float:
+def _cosine_similarity(a: list[float], b: list[float]) -> float:
     """Cosine similarity between two vectors."""
     if len(a) != len(b) or not a:
         return 0.0

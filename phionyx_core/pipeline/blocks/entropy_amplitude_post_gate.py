@@ -7,9 +7,9 @@ Gate that checks entropy/amplitude after narrative generation.
 """
 
 import logging
-from typing import Dict, Any, Optional, Protocol
+from typing import Any, Protocol
 
-from ..base import PipelineBlock, BlockContext, BlockResult
+from ..base import BlockContext, BlockResult, PipelineBlock
 
 logger = logging.getLogger(__name__)
 
@@ -18,8 +18,8 @@ class EntropyAmplitudeGateProtocol(Protocol):
     """Protocol for entropy/amplitude gating."""
     def apply_gate(
         self,
-        physics_state: Dict[str, Any]
-    ) -> Dict[str, Any]:  # Returns gated physics_state
+        physics_state: dict[str, Any]
+    ) -> dict[str, Any]:  # Returns gated physics_state
         """Apply entropy/amplitude gate."""
         ...
 
@@ -31,7 +31,7 @@ class EntropyAmplitudePostGateBlock(PipelineBlock):
     Applies entropy/amplitude gate after narrative generation.
     """
 
-    def __init__(self, gate: Optional[EntropyAmplitudeGateProtocol] = None):
+    def __init__(self, gate: EntropyAmplitudeGateProtocol | None = None):
         """
         Initialize block.
 
@@ -41,7 +41,7 @@ class EntropyAmplitudePostGateBlock(PipelineBlock):
         super().__init__("entropy_amplitude_post_gate")
         self.gate = gate
 
-    def should_skip(self, context: BlockContext) -> Optional[str]:
+    def should_skip(self, context: BlockContext) -> str | None:
         """Never skip — inline fallback handles missing gate service."""
         return None
 

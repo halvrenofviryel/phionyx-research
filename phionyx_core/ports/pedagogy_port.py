@@ -7,7 +7,7 @@ Enables swapping Pedagogy with different strictness levels.
 """
 
 from abc import ABC, abstractmethod
-from typing import Dict, Any, Optional
+from typing import Any
 
 
 class PedagogyPort(ABC):
@@ -17,10 +17,10 @@ class PedagogyPort(ABC):
     async def assess_risk(
         self,
         user_input: str,
-        physics_state: Dict[str, float],
-        actor_ref: Optional[str] = None,
-        tenant_ref: Optional[str] = None
-    ) -> Dict[str, Any]:
+        physics_state: dict[str, float],
+        actor_ref: str | None = None,
+        tenant_ref: str | None = None
+    ) -> dict[str, Any]:
         """
         Assess risk level for user input.
 
@@ -58,8 +58,8 @@ class PedagogyPort(ABC):
         self,
         risk_type: str,
         language: str = "tr",
-        physics_state: Optional[Dict[str, float]] = None
-    ) -> Optional[str]:
+        physics_state: dict[str, float] | None = None
+    ) -> str | None:
         """
         Get safe template for risk type.
 

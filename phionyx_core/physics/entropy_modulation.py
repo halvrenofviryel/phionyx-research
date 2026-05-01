@@ -12,9 +12,7 @@ This module provides core functions (independent of HarmonicComposer).
 
 from __future__ import annotations
 
-from typing import Dict, Optional
 from dataclasses import dataclass
-
 
 # Module-level tunable defaults (Tier A — PRE surfaces)
 ENTROPY_MOD_KH = 1.0
@@ -41,7 +39,7 @@ class EntropyModulationConfig:
 def calculate_entropy_modulated_amplitude(
     base_amplitude: float,
     entropy: float,
-    config: Optional[EntropyModulationConfig] = None
+    config: EntropyModulationConfig | None = None
 ) -> float:
     """
     Calculate entropy-modulated response amplitude.
@@ -80,7 +78,7 @@ def calculate_entropy_modulated_amplitude(
 def modulate_empathic_intervention_strength(
     base_strength: float,
     entropy: float,
-    config: Optional[EntropyModulationConfig] = None
+    config: EntropyModulationConfig | None = None
 ) -> float:
     """
     Modulate empathic intervention strength based on entropy.
@@ -113,7 +111,7 @@ def modulate_empathic_intervention_strength(
 def modulate_directiveness_level(
     base_directiveness: float,
     entropy: float,
-    config: Optional[EntropyModulationConfig] = None
+    config: EntropyModulationConfig | None = None
 ) -> float:
     """
     Modulate directiveness level based on entropy.
@@ -146,7 +144,7 @@ def modulate_directiveness_level(
 def modulate_sentence_length_intensity(
     base_length: float,
     entropy: float,
-    config: Optional[EntropyModulationConfig] = None
+    config: EntropyModulationConfig | None = None
 ) -> float:
     """
     Modulate sentence length/intensity based on entropy.
@@ -179,8 +177,8 @@ def modulate_sentence_length_intensity(
 def calculate_behavior_modulation(
     base_amplitude: float,
     entropy: float,
-    config: Optional[EntropyModulationConfig] = None
-) -> Dict[str, float]:
+    config: EntropyModulationConfig | None = None
+) -> dict[str, float]:
     """
     Calculate all behavior parameters modulated by entropy.
 

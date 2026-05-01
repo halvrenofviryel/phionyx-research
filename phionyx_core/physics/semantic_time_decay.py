@@ -18,9 +18,9 @@ Mathematical Model:
 - Weight after decay: weight(t) = weight(0) * exp(-λ * t)
 """
 
-import math
 import logging
-from typing import Optional, Dict, Any
+import math
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -45,8 +45,8 @@ def calculate_decay_rate(half_life_seconds: float) -> float:
 
 def calculate_decay_factor(
     time_elapsed: float,
-    decay_rate: Optional[float] = None,
-    half_life_seconds: Optional[float] = None
+    decay_rate: float | None = None,
+    half_life_seconds: float | None = None
 ) -> float:
     """
     Calculate decay factor using exponential decay.
@@ -84,8 +84,8 @@ def apply_semantic_time_decay(
     initial_value: float,
     t_local: float,
     t_global: float,
-    decay_rate: Optional[float] = None,
-    half_life_seconds: Optional[float] = None,
+    decay_rate: float | None = None,
+    half_life_seconds: float | None = None,
     use_local_time: bool = True
 ) -> float:
     """
@@ -124,10 +124,10 @@ def apply_semantic_time_decay(
 def calculate_semantic_time_decay_metadata(
     t_local: float,
     t_global: float,
-    decay_rate: Optional[float] = None,
-    half_life_seconds: Optional[float] = None,
+    decay_rate: float | None = None,
+    half_life_seconds: float | None = None,
     use_local_time: bool = True
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """
     Calculate semantic time decay metadata for reporting and debugging.
 
@@ -205,9 +205,9 @@ class SemanticTimeDecayManager:
         initial_value: float,
         t_local: float,
         t_global: float,
-        decay_rate: Optional[float] = None,
-        half_life_seconds: Optional[float] = None,
-        use_local_time: Optional[bool] = None
+        decay_rate: float | None = None,
+        half_life_seconds: float | None = None,
+        use_local_time: bool | None = None
     ) -> float:
         """
         Apply semantic time decay to a value.
@@ -242,10 +242,10 @@ class SemanticTimeDecayManager:
         self,
         t_local: float,
         t_global: float,
-        decay_rate: Optional[float] = None,
-        half_life_seconds: Optional[float] = None,
-        use_local_time: Optional[bool] = None
-    ) -> Dict[str, Any]:
+        decay_rate: float | None = None,
+        half_life_seconds: float | None = None,
+        use_local_time: bool | None = None
+    ) -> dict[str, Any]:
         """
         Get decay metadata.
 

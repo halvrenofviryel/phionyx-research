@@ -21,9 +21,9 @@ Integrates with:
 
 import logging
 import time
-from typing import Optional, List, Dict, Any
 from dataclasses import dataclass, field
 from enum import Enum
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -62,8 +62,8 @@ class CognitiveSnapshot:
     coherence: float = 0.8
     drift_magnitude: float = 0.0
     drift_severity: str = "none"  # none, low, medium, high, critical
-    active_goals: List[str] = field(default_factory=list)
-    goal_conflicts: List[str] = field(default_factory=list)
+    active_goals: list[str] = field(default_factory=list)
+    goal_conflicts: list[str] = field(default_factory=list)
     turn_count: int = 0
     last_user_message_time: float = 0.0  # epoch seconds
     session_id: str = ""
@@ -85,7 +85,7 @@ class ThoughtProposal:
     suppressed: bool = False
     timestamp: float = field(default_factory=time.time)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Serialize for transport."""
         return {
             "trigger": self.trigger.value,
@@ -180,11 +180,11 @@ class AutonomousThoughtGenerator:
         self._session_id: str = ""
         self._thought_count: int = 0
         self._last_thought_time: float = 0.0
-        self._thought_history: List[ThoughtProposal] = []
+        self._thought_history: list[ThoughtProposal] = []
 
     # ── Public API ────────────────────────────────────────────────────
 
-    def generate(self, snapshot: CognitiveSnapshot) -> Optional[ThoughtProposal]:
+    def generate(self, snapshot: CognitiveSnapshot) -> ThoughtProposal | None:
         """
         Evaluate cognitive state and produce a thought proposal if warranted.
 
@@ -257,7 +257,7 @@ class AutonomousThoughtGenerator:
         """Return number of thoughts generated this session."""
         return self._thought_count
 
-    def get_thought_history(self) -> List[ThoughtProposal]:
+    def get_thought_history(self) -> list[ThoughtProposal]:
         """Return all thought proposals generated this session."""
         return list(self._thought_history)
 
@@ -270,7 +270,7 @@ class AutonomousThoughtGenerator:
 
     # ── Priority Checks (private) ─────────────────────────────────────
 
-    def _check_critical_drift(self, snap: CognitiveSnapshot) -> Optional[ThoughtProposal]:
+    def _check_critical_drift(self, snap: CognitiveSnapshot) -> ThoughtProposal | None:
         """Priority 1: Critical drift detected — self-model instability."""
         if snap.drift_severity in ("high", "critical") and snap.drift_magnitude >= self._drift_threshold:
             return ThoughtProposal(
@@ -289,7 +289,7 @@ class AutonomousThoughtGenerator:
             )
         return None
 
-    def _check_goal_conflicts(self, snap: CognitiveSnapshot) -> Optional[ThoughtProposal]:
+    def _check_goal_conflicts(self, snap: CognitiveSnapshot) -> ThoughtProposal | None:
         """Priority 2: Active goal conflicts require attention."""
         if snap.goal_conflicts:
             conflict_summary = "; ".join(snap.goal_conflicts[:3])
@@ -307,7 +307,7 @@ class AutonomousThoughtGenerator:
             )
         return None
 
-    def _check_feedback_discovery(self, snap: CognitiveSnapshot) -> Optional[ThoughtProposal]:
+    def _check_feedback_discovery(self, snap: CognitiveSnapshot) -> ThoughtProposal | None:
         """Priority 3: Feedback channels produced a significant discovery."""
         if not snap.feedback_channel_active:
             return None
@@ -341,7 +341,7 @@ class AutonomousThoughtGenerator:
             ),
         )
 
-    def _check_physics_anomaly(self, snap: CognitiveSnapshot) -> Optional[ThoughtProposal]:
+    def _check_physics_anomaly(self, snap: CognitiveSnapshot) -> ThoughtProposal | None:
         """Priority 4: Physics state anomaly — entropy spike, phi collapse, coherence drop."""
         anomalies = []
         if snap.entropy > self._entropy_threshold:
@@ -367,7 +367,7 @@ class AutonomousThoughtGenerator:
             )
         return None
 
-    def _check_goal_updates(self, snap: CognitiveSnapshot) -> Optional[ThoughtProposal]:
+    def _check_goal_updates(self, snap: CognitiveSnapshot) -> ThoughtProposal | None:
         """Priority 5: Active goals that may need status update."""
         if snap.active_goals and snap.turn_count > 0 and snap.turn_count % 5 == 0:
             goals_text = ", ".join(snap.active_goals[:3])
@@ -386,7 +386,7 @@ class AutonomousThoughtGenerator:
             )
         return None
 
-    def _check_session_greeting(self, snap: CognitiveSnapshot) -> Optional[ThoughtProposal]:
+    def _check_session_greeting(self, snap: CognitiveSnapshot) -> ThoughtProposal | None:
         """Priority 6: Session just started — proactive greeting."""
         if snap.turn_count == 0 and self._thought_count == 0:
             return ThoughtProposal(
@@ -401,7 +401,7 @@ class AutonomousThoughtGenerator:
             )
         return None
 
-    def _check_self_reflection(self, snap: CognitiveSnapshot) -> Optional[ThoughtProposal]:
+    def _check_self_reflection(self, snap: CognitiveSnapshot) -> ThoughtProposal | None:
         """Priority 7: After enough turns, reflect on conversation quality."""
         if snap.turn_count >= self._reflection_min_turns and snap.turn_count % self._reflection_min_turns == 0:
             # Avoid duplicate reflections at same turn count
@@ -426,7 +426,7 @@ class AutonomousThoughtGenerator:
             )
         return None
 
-    def _check_idle_insight(self, snap: CognitiveSnapshot, now: float) -> Optional[ThoughtProposal]:
+    def _check_idle_insight(self, snap: CognitiveSnapshot, now: float) -> ThoughtProposal | None:
         """Priority 8: Extended idle — share an insight or observation."""
         if snap.last_user_message_time <= 0:
             return None

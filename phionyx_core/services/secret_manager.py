@@ -6,9 +6,8 @@ Vault-first secret management with env var fallback.
 Abstracts secret access for all modules.
 """
 
-import os
 import logging
-from typing import Optional, Dict
+import os
 
 logger = logging.getLogger(__name__)
 
@@ -25,8 +24,8 @@ class SecretManager:
 
     def __init__(
         self,
-        vault_url: Optional[str] = None,
-        vault_token: Optional[str] = None,
+        vault_url: str | None = None,
+        vault_token: str | None = None,
         vault_mount: str = "secret",
     ):
         """
@@ -41,7 +40,7 @@ class SecretManager:
         self._vault_token = vault_token or os.environ.get("VAULT_TOKEN")
         self._vault_mount = vault_mount
         self._vault_client = None
-        self._cache: Dict[str, str] = {}
+        self._cache: dict[str, str] = {}
 
         if self._vault_url and self._vault_token:
             self._init_vault()
@@ -67,9 +66,9 @@ class SecretManager:
     def get_secret(
         self,
         key: str,
-        default: Optional[str] = None,
-        vault_path: Optional[str] = None,
-    ) -> Optional[str]:
+        default: str | None = None,
+        vault_path: str | None = None,
+    ) -> str | None:
         """
         Get a secret value.
 

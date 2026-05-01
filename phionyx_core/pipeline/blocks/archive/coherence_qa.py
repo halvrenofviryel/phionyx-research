@@ -8,11 +8,11 @@ computes coherence scores, and applies redaction when internal state
 information would be inappropriately exposed in responses.
 """
 
-import re
 import logging
-from typing import Dict, Any, Optional, List, Protocol
+import re
+from typing import Any, Protocol
 
-from ...base import PipelineBlock, BlockContext, BlockResult
+from ...base import BlockContext, BlockResult, PipelineBlock
 
 logger = logging.getLogger(__name__)
 
@@ -46,7 +46,7 @@ class CoherenceQAProtocol(Protocol):
         self,
         unified_state: Any,
         narrative_response: str
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """Check coherence quality."""
         ...
 
@@ -63,7 +63,7 @@ class CoherenceQaBlock(PipelineBlock):
     leak detection and scoring logic (fail-open design).
     """
 
-    def __init__(self, qa_checker: Optional[CoherenceQAProtocol] = None):
+    def __init__(self, qa_checker: CoherenceQAProtocol | None = None):
         super().__init__("coherence_qa")
         self.qa_checker = qa_checker
 
@@ -87,7 +87,7 @@ class CoherenceQaBlock(PipelineBlock):
                 )
 
             # --- Inline coherence QA logic ---
-            violations: List[str] = []
+            violations: list[str] = []
             leak_detected = False
 
             for pattern in _COMPILED_PATTERNS:
@@ -101,14 +101,14 @@ class CoherenceQaBlock(PipelineBlock):
             score = max(0.0, min(1.0, score))
 
             # Redaction: remove leak patterns from text
-            redacted_text: Optional[str] = None
+            redacted_text: str | None = None
             if leak_detected:
                 cleaned = narrative_text
                 for pattern in _COMPILED_PATTERNS:
                     cleaned = pattern.sub("", cleaned)
                 redacted_text = re.sub(r"\s+", " ", cleaned).strip()
 
-            qa_result: Dict[str, Any] = {
+            qa_result: dict[str, Any] = {
                 "coherence_score": score,
                 "leak_detected": leak_detected,
                 "violations": violations,

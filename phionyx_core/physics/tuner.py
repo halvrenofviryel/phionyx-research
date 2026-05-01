@@ -6,17 +6,18 @@ Translates user-friendly profiles (reactivity, resilience, safety) into
 raw physics parameters (w_c, w_p, gamma, stability_baseline, entropy_sensitivity).
 """
 
-from typing import Dict, Any
 from dataclasses import dataclass
-from .profiles import PhysicsProfile
+from typing import Any
+
 from .constants import (
-    GAMMA_MIN,
-    GAMMA_MAX,
-    MIN_STABILITY,
-    MAX_STABILITY,
-    ENTROPY_MIN,
     ENTROPY_MAX,
+    ENTROPY_MIN,
+    GAMMA_MAX,
+    GAMMA_MIN,
+    MAX_STABILITY,
+    MIN_STABILITY,
 )
+from .profiles import PhysicsProfile
 
 
 @dataclass
@@ -173,7 +174,7 @@ class ProfileTuner:
         )
 
     @staticmethod
-    def get_context_weights(profile: PhysicsProfile) -> Dict[str, float]:
+    def get_context_weights(profile: PhysicsProfile) -> dict[str, float]:
         """
         Get context weights (w_c, w_p) for use in calculate_phi_v2.
 
@@ -194,7 +195,7 @@ class ProfileTuner:
         }
 
     @staticmethod
-    def explain_mapping(profile: PhysicsProfile) -> Dict[str, Any]:
+    def explain_mapping(profile: PhysicsProfile) -> dict[str, Any]:
         """
         Explain how a profile maps to parameters (for debugging/UI).
 

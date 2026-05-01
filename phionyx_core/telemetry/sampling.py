@@ -12,7 +12,6 @@ Features:
 """
 
 import logging
-from typing import Optional
 
 logger = logging.getLogger(__name__)
 
@@ -67,7 +66,7 @@ class ErrorAwareSampler:
         return f"ErrorAwareSampler(base_rate={self.base_sampling_rate})"
 
 
-def create_production_sampler(sampling_rate: float = 0.1) -> Optional[object]:
+def create_production_sampler(sampling_rate: float = 0.1) -> object | None:
     """
     Create a production-ready sampler.
 

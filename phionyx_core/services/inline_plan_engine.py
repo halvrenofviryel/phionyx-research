@@ -7,8 +7,8 @@ Faz 3.1: Kalan Özellikler
 Kod üretiminden önce plan üretir ve adım ayrıştırması yapar.
 """
 
-from typing import List, Dict, Any, Optional
 from dataclasses import dataclass
+from typing import Any
 
 
 @dataclass
@@ -17,8 +17,8 @@ class PlanStep:
     id: str
     order: int
     description: str
-    dependencies: List[str] = None  # IDs of steps that must complete before this
-    estimated_time: Optional[float] = None  # In minutes
+    dependencies: list[str] = None  # IDs of steps that must complete before this
+    estimated_time: float | None = None  # In minutes
     status: str = "pending"  # "pending", "in_progress", "completed", "failed"
 
     def __post_init__(self):
@@ -32,8 +32,8 @@ class Plan:
     id: str
     title: str
     description: str
-    steps: List[PlanStep]
-    total_estimated_time: Optional[float] = None
+    steps: list[PlanStep]
+    total_estimated_time: float | None = None
     status: str = "draft"  # "draft", "approved", "executing", "completed"
 
 
@@ -50,12 +50,12 @@ class InlinePlanEngine:
 
     def __init__(self):
         """Initialize inline plan engine."""
-        self.plan_cache: Dict[str, Plan] = {}
+        self.plan_cache: dict[str, Plan] = {}
 
     def generate_plan(
         self,
         requirement: str,
-        context: Optional[Dict[str, Any]] = None
+        context: dict[str, Any] | None = None
     ) -> Plan:
         """
         Generate plan from requirement.
@@ -89,8 +89,8 @@ class InlinePlanEngine:
     def _decompose_requirement(
         self,
         requirement: str,
-        context: Optional[Dict[str, Any]] = None
-    ) -> List[PlanStep]:
+        context: dict[str, Any] | None = None
+    ) -> list[PlanStep]:
         """Decompose requirement into steps."""
         steps = []
 
@@ -108,7 +108,7 @@ class InlinePlanEngine:
         requirement_length = len(requirement)
         num_steps = min(6, max(3, requirement_length // 50))
 
-        for i, (step_type, step_desc, estimated_time) in enumerate(step_patterns[:num_steps]):
+        for i, (_step_type, step_desc, estimated_time) in enumerate(step_patterns[:num_steps]):
             step = PlanStep(
                 id=f"step_{i+1}",
                 order=i+1,
@@ -149,7 +149,7 @@ class InlinePlanEngine:
 
         return False
 
-    def get_execution_order(self, plan: Plan) -> List[PlanStep]:
+    def get_execution_order(self, plan: Plan) -> list[PlanStep]:
         """
         Get execution order considering dependencies.
 

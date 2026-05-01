@@ -6,28 +6,26 @@ Central configuration system that maps high-level personas (Teacher, Gamer)
 to low-level technical parameters across all SDK modules.
 """
 
-from .schema import (
-    Profile,
-    PhysicsConfig,
-    PedagogyConfig,
-    GovernanceConfig,
-    RoutingConfig,
-    BaseMode,
-    PIIMode,
-    AuditLevel,
-    LLMTierStrategy,
-)
-
 from .loader import ProfileLoader
-
 from .manager import (
-    ProfileManager,
-    PhysicsParams,
-    PedagogyParams,
     GovernanceParams,
-    get_global_manager,
+    PedagogyParams,
+    PhysicsParams,
+    ProfileManager,
     get_active_profile,
+    get_global_manager,
     set_active_profile,
+)
+from .schema import (
+    AuditLevel,
+    BaseMode,
+    GovernanceConfig,
+    LLMTierStrategy,
+    PedagogyConfig,
+    PhysicsConfig,
+    PIIMode,
+    Profile,
+    RoutingConfig,
 )
 
 __all__ = [

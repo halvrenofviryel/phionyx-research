@@ -8,12 +8,12 @@ into a structured evaluation report.
 Roadmap Faz 2.3-2.4
 """
 
+import json
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
-from typing import Any, Dict, List, Optional
-import json
+from typing import Any
 
-from .scoring import EloRating, PreferenceScorer, CalibrationMetrics
+from .scoring import CalibrationMetrics, EloRating, PreferenceScorer
 from .task_set import TaskSet
 
 
@@ -44,9 +44,9 @@ class EvalReport:
     task_set_name: str
     task_count: int
     evaluator_count: int
-    results: List[EvalResult] = field(default_factory=list)
-    elo_rankings: List[Dict[str, Any]] = field(default_factory=list)
-    category_breakdown: Dict[str, Dict[str, float]] = field(default_factory=dict)
+    results: list[EvalResult] = field(default_factory=list)
+    elo_rankings: list[dict[str, Any]] = field(default_factory=list)
+    category_breakdown: dict[str, dict[str, float]] = field(default_factory=dict)
     overall_pass: bool = False
     summary: str = ""
 
@@ -88,7 +88,7 @@ class EvalReportGenerator:
         elo: EloRating,
         preference: PreferenceScorer,
         calibration: CalibrationMetrics,
-        criteria: Optional[PassFailCriteria] = None,
+        criteria: PassFailCriteria | None = None,
     ):
         self.task_set = task_set
         self.elo = elo
@@ -184,12 +184,12 @@ class EvalReportGenerator:
             summary=summary,
         )
 
-    def _compute_category_breakdown(self) -> Dict[str, Dict[str, float]]:
+    def _compute_category_breakdown(self) -> dict[str, dict[str, float]]:
         """Compute preference scores per task category."""
-        from .task_set import TaskCategory
         from .scoring import PreferenceWinner
+        from .task_set import TaskCategory
 
-        breakdown: Dict[str, Dict[str, float]] = {}
+        breakdown: dict[str, dict[str, float]] = {}
 
         for category in TaskCategory:
             tasks = self.task_set.get_by_category(category)

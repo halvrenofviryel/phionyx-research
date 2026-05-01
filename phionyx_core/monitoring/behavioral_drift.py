@@ -3,12 +3,12 @@ Behavioral Drift Detector Module
 Multi-dimensional drift detection engine for Silent Failure Firewall.
 """
 
-from typing import Dict, List, Optional, Literal, Any
+import logging
 from dataclasses import dataclass
 from enum import Enum
-import logging
+from typing import Any, Literal
 
-from .baseline_store import BaselineStore, BaselineSnapshot
+from .baseline_store import BaselineSnapshot, BaselineStore
 
 logger = logging.getLogger(__name__)
 
@@ -26,12 +26,12 @@ class DriftReport:
     """Drift detection report."""
     drift_detected: bool
     drift_score: float  # 0.0-1.0
-    drift_type: List[DriftType]
-    degraded_metrics: List[str]
+    drift_type: list[DriftType]
+    degraded_metrics: list[str]
     recommendation: Literal["allow", "throttle", "block"]
     semantic_similarity: float
-    physics_drift: Dict[str, float]
-    ethics_escalation: Optional[Dict[str, float]]
+    physics_drift: dict[str, float]
+    ethics_escalation: dict[str, float] | None
     confidence: float
 
 
@@ -49,7 +49,7 @@ class BehavioralDriftDetector:
     def __init__(
         self,
         baseline_store: BaselineStore,
-        vector_store: Optional[Any] = None,  # VectorStore type
+        vector_store: Any | None = None,  # VectorStore type
         drift_threshold: float = 0.3,  # 30% degradation threshold
         semantic_threshold: float = 0.7,  # Semantic similarity threshold
         physics_threshold: float = 0.25,  # Physics metric drift threshold
@@ -76,10 +76,10 @@ class BehavioralDriftDetector:
     async def detect_drift(
         self,
         current_output: str,
-        current_metrics: Dict[str, float],
-        ethics_vector: Optional[Dict[str, float]] = None,
+        current_metrics: dict[str, float],
+        ethics_vector: dict[str, float] | None = None,
         session_id: str = None,
-        agent_id: Optional[str] = None
+        agent_id: str | None = None
     ) -> DriftReport:
         """
         Detect behavioral drift across all dimensions.
@@ -185,9 +185,9 @@ class BehavioralDriftDetector:
 
     def _compute_ethics_escalation(
         self,
-        current_ethics: Dict[str, float],
-        baseline_ethics: Dict[str, float]
-    ) -> Dict[str, float]:
+        current_ethics: dict[str, float],
+        baseline_ethics: dict[str, float]
+    ) -> dict[str, float]:
         """
         Compute ethics risk escalation.
 
@@ -230,9 +230,9 @@ class BehavioralDriftDetector:
     def _identify_degraded_metrics(
         self,
         semantic_drift: float,
-        physics_drift: Dict[str, float],
-        ethics_escalation: Optional[Dict[str, float]]
-    ) -> List[str]:
+        physics_drift: dict[str, float],
+        ethics_escalation: dict[str, float] | None
+    ) -> list[str]:
         """Identify which metrics are degraded."""
         degraded = []
 
@@ -256,7 +256,7 @@ class BehavioralDriftDetector:
     def _compute_confidence(
         self,
         baseline: BaselineSnapshot,
-        comparison: Dict[str, Any]
+        comparison: dict[str, Any]
     ) -> float:
         """
         Compute confidence in drift detection (0.0-1.0).

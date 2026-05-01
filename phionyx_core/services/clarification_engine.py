@@ -7,9 +7,9 @@ Faz 3.1: Kalan Özellikler
 Confusion yönetimi için clarification request prompting.
 """
 
-from typing import List, Dict, Any, Optional
 from dataclasses import dataclass
 from enum import Enum
+from typing import Any
 
 
 class ConfusionType(Enum):
@@ -29,7 +29,7 @@ class ClarificationRequest:
     question: str
     context: str
     priority: str = "medium"  # "low", "medium", "high", "critical"
-    suggested_options: List[str] = None
+    suggested_options: list[str] = None
 
     def __post_init__(self):
         if self.suggested_options is None:
@@ -48,13 +48,13 @@ class ClarificationRequestEngine:
 
     def __init__(self):
         """Initialize clarification engine."""
-        self.request_history: List[ClarificationRequest] = []
+        self.request_history: list[ClarificationRequest] = []
 
     def detect_confusion(
         self,
         user_input: str,
-        context: Optional[Dict[str, Any]] = None
-    ) -> List[ClarificationRequest]:
+        context: dict[str, Any] | None = None
+    ) -> list[ClarificationRequest]:
         """
         Detect confusion points and generate clarification requests.
 
@@ -119,8 +119,8 @@ class ClarificationRequestEngine:
     def _detect_missing_information(
         self,
         user_input: str,
-        context: Optional[Dict[str, Any]] = None
-    ) -> Optional[str]:
+        context: dict[str, Any] | None = None
+    ) -> str | None:
         """Detect missing information."""
         # Check for common missing information patterns
         missing_patterns = [
@@ -147,7 +147,7 @@ class ClarificationRequestEngine:
         text_lower = text.lower()
         return any(indicator in text_lower for indicator in conflict_indicators)
 
-    def _generate_clarification_options(self, text: str) -> List[str]:
+    def _generate_clarification_options(self, text: str) -> list[str]:
         """Generate clarification options."""
         options = [
             "Could you provide more details?",
@@ -160,7 +160,7 @@ class ClarificationRequestEngine:
         self,
         request_id: str,
         response: str
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         Process user clarification response.
 

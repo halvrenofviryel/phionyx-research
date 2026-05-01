@@ -7,7 +7,7 @@ NOT suitable for production multi-instance deployments.
 """
 
 import logging
-from typing import Optional, Dict
+
 from phionyx_core.state.echo_state_2 import EchoState2
 
 logger = logging.getLogger(__name__)
@@ -23,7 +23,7 @@ class InMemoryStateStore:
 
     def __init__(self):
         """Initialize in-memory state store."""
-        self._storage: Dict[str, EchoState2] = {}
+        self._storage: dict[str, EchoState2] = {}
         logger.info("InMemoryStateStore initialized")
 
     async def save_state(self, session_id: str, state: EchoState2) -> None:
@@ -37,7 +37,7 @@ class InMemoryStateStore:
         self._storage[session_id] = state
         logger.debug(f"State saved for session: {session_id}")
 
-    async def load_state(self, session_id: str) -> Optional[EchoState2]:
+    async def load_state(self, session_id: str) -> EchoState2 | None:
         """
         Load state from memory.
 

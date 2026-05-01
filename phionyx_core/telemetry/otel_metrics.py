@@ -12,7 +12,6 @@ Metrics:
 """
 
 import logging
-from typing import Optional
 
 logger = logging.getLogger(__name__)
 
@@ -26,9 +25,9 @@ _llm_cost_counter = None
 
 try:
     from opentelemetry import metrics
+    from opentelemetry.exporter.otlp.proto.grpc.metric_exporter import OTLPMetricExporter
     from opentelemetry.sdk.metrics import MeterProvider
     from opentelemetry.sdk.metrics.export import PeriodicExportingMetricReader
-    from opentelemetry.exporter.otlp.proto.grpc.metric_exporter import OTLPMetricExporter
     _metrics_available = True
 except ImportError:
     logger.debug("OpenTelemetry metrics not available")
@@ -106,7 +105,7 @@ def initialize_otel_metrics(
         return False
 
 
-def record_entropy(entropy: float, block_id: Optional[str] = None):
+def record_entropy(entropy: float, block_id: str | None = None):
     """
     Record entropy value.
 
@@ -124,7 +123,7 @@ def record_entropy(entropy: float, block_id: Optional[str] = None):
             logger.debug(f"Failed to record entropy metric: {e}")
 
 
-def record_ethics_blocking(block_id: str, reason: Optional[str] = None):
+def record_ethics_blocking(block_id: str, reason: str | None = None):
     """
     Record ethics blocking event.
 
@@ -143,7 +142,7 @@ def record_ethics_blocking(block_id: str, reason: Optional[str] = None):
             logger.debug(f"Failed to record ethics blocking metric: {e}")
 
 
-def record_latency(latency_seconds: float, block_id: Optional[str] = None):
+def record_latency(latency_seconds: float, block_id: str | None = None):
     """
     Record pipeline or block latency.
 

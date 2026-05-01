@@ -9,13 +9,13 @@ These templates demonstrate the structure and schema of profile configurations.
 They are NOT production values and should be customized for your specific needs.
 """
 
-from typing import Dict, Any
+from typing import Any
 
 # ============================================================================
 # EXAMPLE EDU PROFILE (Educational/School Use Cases)
 # ============================================================================
 
-EXAMPLE_EDU_PROFILE: Dict[str, Any] = {
+EXAMPLE_EDU_PROFILE: dict[str, Any] = {
     "profile": "edu",
     "description": "Example educational profile for schools and mental health platforms",
     "modules": {
@@ -49,7 +49,7 @@ EXAMPLE_EDU_PROFILE: Dict[str, Any] = {
 # EXAMPLE GAME PROFILE (Interactive Fiction / Game Studios)
 # ============================================================================
 
-EXAMPLE_GAME_PROFILE: Dict[str, Any] = {
+EXAMPLE_GAME_PROFILE: dict[str, Any] = {
     "profile": "game",
     "description": "Example game profile for interactive fiction studios",
     "modules": {
@@ -83,7 +83,7 @@ EXAMPLE_GAME_PROFILE: Dict[str, Any] = {
 # EXAMPLE CLINICAL PROFILE (Clinical/Mental Health Use Cases)
 # ============================================================================
 
-EXAMPLE_CLINICAL_PROFILE: Dict[str, Any] = {
+EXAMPLE_CLINICAL_PROFILE: dict[str, Any] = {
     "profile": "clinical",
     "description": "Example clinical profile for mental health applications",
     "modules": {

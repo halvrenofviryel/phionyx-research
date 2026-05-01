@@ -20,10 +20,11 @@ Design:
 
 import logging
 import math
-from typing import Dict, Any, Optional, List, Callable
+from collections.abc import Callable
 from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
 from enum import Enum
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -49,12 +50,12 @@ class KillSwitchState(str, Enum):
 class KillSwitchEvent:
     """Record of a kill switch evaluation or trigger."""
     timestamp: datetime
-    trigger: Optional[KillSwitchTrigger]
+    trigger: KillSwitchTrigger | None
     state_before: KillSwitchState
     state_after: KillSwitchState
     reason: str
-    metrics: Dict[str, float]
-    turn_id: Optional[int] = None
+    metrics: dict[str, float]
+    turn_id: int | None = None
 
 
 @dataclass
@@ -83,17 +84,17 @@ class KillSwitch:
 
     def __init__(
         self,
-        config: Optional[KillSwitchConfig] = None,
-        on_trigger: Optional[Callable[['KillSwitchResult'], None]] = None,
+        config: KillSwitchConfig | None = None,
+        on_trigger: Callable[['KillSwitchResult'], None] | None = None,
     ):
         self.config = config or KillSwitchConfig()
         self.state = KillSwitchState.ARMED
         self._on_trigger = on_trigger
         self._consecutive_drift_count: int = 0
-        self._event_log: List[KillSwitchEvent] = []
+        self._event_log: list[KillSwitchEvent] = []
         self._max_event_log: int = 1000
-        self._triggered_at: Optional[datetime] = None
-        self._cooldown_until: Optional[datetime] = None
+        self._triggered_at: datetime | None = None
+        self._cooldown_until: datetime | None = None
 
     @property
     def is_triggered(self) -> bool:
@@ -104,7 +105,7 @@ class KillSwitch:
         return self.state in (KillSwitchState.ARMED, KillSwitchState.COOLDOWN)
 
     @property
-    def event_log(self) -> List[KillSwitchEvent]:
+    def event_log(self) -> list[KillSwitchEvent]:
         return list(self._event_log)
 
     def evaluate(
@@ -112,7 +113,7 @@ class KillSwitch:
         ethics_max_risk: float = 0.0,
         t_meta: float = 1.0,
         drift_detected: bool = False,
-        turn_id: Optional[int] = None,
+        turn_id: int | None = None,
     ) -> 'KillSwitchResult':
         """
         Evaluate kill switch conditions.
@@ -215,7 +216,7 @@ class KillSwitch:
                 )
             return KillSwitchResult(triggered=False, reason=f"Evaluation error (fail-open): {e}")
 
-    def manual_trigger(self, reason: str = "Manual shutdown", turn_id: Optional[int] = None) -> 'KillSwitchResult':
+    def manual_trigger(self, reason: str = "Manual shutdown", turn_id: int | None = None) -> 'KillSwitchResult':
         """Manually trigger the kill switch."""
         metrics = {"manual": 1.0}
         return self._trigger(KillSwitchTrigger.MANUAL, reason, metrics, turn_id)
@@ -272,8 +273,8 @@ class KillSwitch:
         self,
         trigger: KillSwitchTrigger,
         reason: str,
-        metrics: Dict[str, float],
-        turn_id: Optional[int] = None,
+        metrics: dict[str, float],
+        turn_id: int | None = None,
     ) -> 'KillSwitchResult':
         """Execute kill switch trigger."""
         old_state = self.state
@@ -302,12 +303,12 @@ class KillSwitch:
 
     def _log_event(
         self,
-        trigger: Optional[KillSwitchTrigger],
+        trigger: KillSwitchTrigger | None,
         state_before: KillSwitchState,
         state_after: KillSwitchState,
         reason: str,
-        metrics: Dict[str, float],
-        turn_id: Optional[int] = None,
+        metrics: dict[str, float],
+        turn_id: int | None = None,
     ) -> None:
         """Log kill switch event."""
         event = KillSwitchEvent(
@@ -323,7 +324,7 @@ class KillSwitch:
         if len(self._event_log) > self._max_event_log:
             self._event_log = self._event_log[-self._max_event_log:]
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Serialize kill switch state for audit/snapshot."""
         return {
             "state": self.state.value,
@@ -344,8 +345,8 @@ class KillSwitch:
 class KillSwitchResult:
     """Result of kill switch evaluation."""
     triggered: bool
-    trigger: Optional[KillSwitchTrigger] = None
+    trigger: KillSwitchTrigger | None = None
     reason: str = ""
-    metrics: Optional[Dict[str, float]] = None
-    turn_id: Optional[int] = None
-    timestamp: Optional[datetime] = None
+    metrics: dict[str, float] | None = None
+    turn_id: int | None = None
+    timestamp: datetime | None = None

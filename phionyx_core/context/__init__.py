@@ -5,11 +5,11 @@ Phionyx Context SDK
 Context Regulator Layer for managing state across LLM sessions.
 """
 
-from .definitions import ContextMode, ContextRule, ContextDefinition
-from .detector import ModeDetector, DetectionResult
-from .manager import ContextManager
-from .multi_intent import MultiIntentDetector, IntentSegment
 from .composer import HarmonicComposer
+from .definitions import ContextDefinition, ContextMode, ContextRule
+from .detector import DetectionResult, ModeDetector
+from .manager import ContextManager
+from .multi_intent import IntentSegment, MultiIntentDetector
 
 __all__ = [
     "ContextMode",

@@ -7,9 +7,9 @@ Performs audit operations (snapshots, event logging, explainability).
 """
 
 import logging
-from typing import Dict, Any, Optional, Protocol
+from typing import Any, Protocol
 
-from ..base import PipelineBlock, BlockContext, BlockResult
+from ..base import BlockContext, BlockResult, PipelineBlock
 
 logger = logging.getLogger(__name__)
 
@@ -19,10 +19,10 @@ class AuditLayerProcessorProtocol(Protocol):
     async def process_audit(
         self,
         frame: Any,
-        unified_state: Optional[Any],
+        unified_state: Any | None,
         narrative_response: str,
-        physics_state: Dict[str, Any]
-    ) -> Dict[str, Any]:  # Returns audit result
+        physics_state: dict[str, Any]
+    ) -> dict[str, Any]:  # Returns audit result
         """Process audit layer."""
         ...
 
@@ -34,7 +34,7 @@ class AuditLayerBlock(PipelineBlock):
     Performs audit operations (snapshots, event logging, explainability).
     """
 
-    def __init__(self, processor: Optional[AuditLayerProcessorProtocol] = None):
+    def __init__(self, processor: AuditLayerProcessorProtocol | None = None):
         """
         Initialize block.
 
@@ -44,7 +44,7 @@ class AuditLayerBlock(PipelineBlock):
         super().__init__("audit_layer")
         self.processor = processor
 
-    def should_skip(self, context: BlockContext) -> Optional[str]:
+    def should_skip(self, context: BlockContext) -> str | None:
         """Never skip — inline fallback computes basic integrity."""
         return None
 

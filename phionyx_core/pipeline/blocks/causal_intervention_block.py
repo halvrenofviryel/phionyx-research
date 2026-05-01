@@ -11,7 +11,7 @@ Position in pipeline: After causal_graph_update.
 
 import logging
 
-from ..base import PipelineBlock, BlockContext, BlockResult
+from ..base import BlockContext, BlockResult, PipelineBlock
 
 logger = logging.getLogger(__name__)
 

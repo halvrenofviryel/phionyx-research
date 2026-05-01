@@ -6,11 +6,12 @@ Composes existing ForgettingManager + SemanticTimeDecayManager logic
 with v4 boundary zone concept (immutable/gated/adaptive).
 """
 
-from typing import Optional, Dict, Any, List
-from enum import Enum
-from pydantic import BaseModel, ConfigDict, Field
-from datetime import datetime, timezone
 import uuid
+from datetime import datetime, timezone
+from enum import Enum
+from typing import Any
+
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class BoundaryZone(str, Enum):
@@ -50,11 +51,11 @@ class MemoryEntry(BaseModel):
     )
 
     # Embedding / retrieval
-    embedding_vector: Optional[List[float]] = Field(
+    embedding_vector: list[float] | None = Field(
         None,
         description="Embedding vector for similarity search"
     )
-    similarity_score: Optional[float] = Field(
+    similarity_score: float | None = Field(
         None, ge=0.0, le=1.0,
         description="Last retrieval similarity score"
     )
@@ -85,19 +86,19 @@ class MemoryEntry(BaseModel):
         default="memory_store",
         description="Module that created this memory"
     )
-    source_turn_id: Optional[int] = Field(
+    source_turn_id: int | None = Field(
         None,
         description="Turn ID when memory was created"
     )
-    conversation_id: Optional[str] = None
+    conversation_id: str | None = None
 
     # Timestamps
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
-    updated_at: Optional[datetime] = None
+    updated_at: datetime | None = None
 
     # Metadata
-    tags: List[str] = Field(default_factory=list)
-    metadata: Dict[str, Any] = Field(default_factory=dict)
+    tags: list[str] = Field(default_factory=list)
+    metadata: dict[str, Any] = Field(default_factory=dict)
 
     def is_modifiable(self) -> bool:
         """Check if this memory can be modified."""

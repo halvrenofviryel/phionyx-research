@@ -14,7 +14,7 @@ import uuid
 from dataclasses import asdict, dataclass, field
 from datetime import datetime, timezone
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 
 class ParticipantRole(str, Enum):
@@ -54,16 +54,16 @@ class NotificationEntry:
     status: str  # NotificationStatus value
     title: str
     content: str
-    context: Dict[str, Any] = field(default_factory=dict)
-    read_at: Optional[str] = None
-    acknowledged_at: Optional[str] = None
+    context: dict[str, Any] = field(default_factory=dict)
+    read_at: str | None = None
+    acknowledged_at: str | None = None
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Serialize to dictionary."""
         return asdict(self)
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "NotificationEntry":
+    def from_dict(cls, data: dict[str, Any]) -> "NotificationEntry":
         """Deserialize from dictionary, filtering to known fields."""
         known = {k: v for k, v in data.items() if k in cls.__dataclass_fields__}
         return cls(**known)
@@ -81,7 +81,7 @@ class NotificationLog:
 
     def __init__(
         self,
-        storage_path: Optional[str] = None,
+        storage_path: str | None = None,
         max_active: int = 500,
         archive_limit: int = 200,
     ):
@@ -99,8 +99,8 @@ class NotificationLog:
                 "notification_log.json",
             )
 
-        self._notifications: List[NotificationEntry] = []
-        self._archive: List[NotificationEntry] = []
+        self._notifications: list[NotificationEntry] = []
+        self._archive: list[NotificationEntry] = []
         self._load()
 
     def add(
@@ -111,7 +111,7 @@ class NotificationLog:
         title: str,
         content: str,
         urgency: NotificationUrgency = NotificationUrgency.INFO,
-        context: Optional[Dict[str, Any]] = None,
+        context: dict[str, Any] | None = None,
     ) -> NotificationEntry:
         """
         Add a new notification.
@@ -163,8 +163,8 @@ class NotificationLog:
         return entry
 
     def get_unread(
-        self, target: Optional[ParticipantRole] = None
-    ) -> List[NotificationEntry]:
+        self, target: ParticipantRole | None = None
+    ) -> list[NotificationEntry]:
         """Get unread notifications, optionally filtered by target."""
         results = [
             n for n in self._notifications if n.status == NotificationStatus.UNREAD.value
@@ -174,11 +174,11 @@ class NotificationLog:
             results = [n for n in results if n.target == target_val]
         return results
 
-    def get_by_session(self, session_id: str) -> List[NotificationEntry]:
+    def get_by_session(self, session_id: str) -> list[NotificationEntry]:
         """Get all active notifications for a session."""
         return [n for n in self._notifications if n.session_id == session_id]
 
-    def get_by_id(self, entry_id: str) -> Optional[NotificationEntry]:
+    def get_by_id(self, entry_id: str) -> NotificationEntry | None:
         """Find a notification by ID (searches active and archive)."""
         for n in self._notifications:
             if n.id == entry_id:
@@ -211,16 +211,16 @@ class NotificationLog:
                 return True
         return False
 
-    def get_unread_count(self, target: Optional[ParticipantRole] = None) -> int:
+    def get_unread_count(self, target: ParticipantRole | None = None) -> int:
         """Get count of unread notifications."""
         return len(self.get_unread(target))
 
-    def get_collaboration_sessions(self) -> List[str]:
+    def get_collaboration_sessions(self) -> list[str]:
         """
         Find sessions where multiple AI participants are active.
         Returns session IDs where both Phionyx and Claude Code have notifications.
         """
-        session_sources: Dict[str, set] = {}
+        session_sources: dict[str, set] = {}
         ai_roles = {ParticipantRole.PHIONYX_AUTONOMOUS.value, ParticipantRole.CLAUDE_CODE.value}
 
         for n in self._notifications:

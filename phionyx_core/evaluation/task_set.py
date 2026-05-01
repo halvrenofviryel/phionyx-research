@@ -8,10 +8,10 @@ Each task has a category, prompt, expected traits, and scoring rubric.
 Roadmap Faz 2.1-2.2
 """
 
+import json
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Dict, List, Optional
-import json
+from typing import Any
 
 
 class TaskCategory(str, Enum):
@@ -39,7 +39,7 @@ class ScoringRubric:
     epistemic_weight: float = 0.15
     governance_weight: float = 0.15
 
-    def weights(self) -> Dict[str, float]:
+    def weights(self) -> dict[str, float]:
         return {
             "accuracy": self.accuracy_weight,
             "consistency": self.consistency_weight,
@@ -59,11 +59,11 @@ class EvalTask:
     task_id: str
     category: TaskCategory
     prompt: str
-    expected_traits: List[str]
+    expected_traits: list[str]
     difficulty: DifficultyLevel = DifficultyLevel.MEDIUM
     rubric: ScoringRubric = field(default_factory=ScoringRubric)
-    reference_answer: Optional[str] = None
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    reference_answer: str | None = None
+    metadata: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> dict:
         return {
@@ -99,18 +99,18 @@ class TaskSet:
 
     def __init__(self, name: str = "default"):
         self.name = name
-        self._tasks: Dict[str, EvalTask] = {}
+        self._tasks: dict[str, EvalTask] = {}
 
     def add_task(self, task: EvalTask) -> None:
         self._tasks[task.task_id] = task
 
-    def get_task(self, task_id: str) -> Optional[EvalTask]:
+    def get_task(self, task_id: str) -> EvalTask | None:
         return self._tasks.get(task_id)
 
-    def get_by_category(self, category: TaskCategory) -> List[EvalTask]:
+    def get_by_category(self, category: TaskCategory) -> list[EvalTask]:
         return [t for t in self._tasks.values() if t.category == category]
 
-    def get_by_difficulty(self, difficulty: DifficultyLevel) -> List[EvalTask]:
+    def get_by_difficulty(self, difficulty: DifficultyLevel) -> list[EvalTask]:
         return [t for t in self._tasks.values() if t.difficulty == difficulty]
 
     @property
@@ -118,12 +118,12 @@ class TaskSet:
         return len(self._tasks)
 
     @property
-    def all_tasks(self) -> List[EvalTask]:
+    def all_tasks(self) -> list[EvalTask]:
         return list(self._tasks.values())
 
     @property
-    def category_distribution(self) -> Dict[str, int]:
-        dist: Dict[str, int] = {}
+    def category_distribution(self) -> dict[str, int]:
+        dist: dict[str, int] = {}
         for task in self._tasks.values():
             cat = task.category.value
             dist[cat] = dist.get(cat, 0) + 1

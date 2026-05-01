@@ -17,8 +17,8 @@ Integrates with:
 """
 
 import logging
-from typing import Dict, List, Optional, Set, Any, Tuple
 from dataclasses import dataclass
+from typing import Any
 
 from .causal_graph import CausalGraph
 
@@ -34,10 +34,10 @@ max_propagation_depth = 10
 class InterventionEffect:
     """Effect of an intervention on a single node."""
     node_id: str
-    original_value: Optional[float]
+    original_value: float | None
     new_value: float
     delta: float
-    causal_path: List[str]  # path from intervention to this node
+    causal_path: list[str]  # path from intervention to this node
     attenuation: float  # how much the effect was attenuated along the path
 
 
@@ -46,13 +46,13 @@ class InterventionResult:
     """Full result of a do(X=x) intervention."""
     intervention_variable: str
     intervention_value: float
-    original_value: Optional[float]
-    effects: List[InterventionEffect]
+    original_value: float | None
+    effects: list[InterventionEffect]
     total_nodes_affected: int
     max_propagation_depth: int
-    graph_snapshot: Dict[str, Any]  # post-intervention state
+    graph_snapshot: dict[str, Any]  # post-intervention state
 
-    def get_effect(self, node_id: str) -> Optional[InterventionEffect]:
+    def get_effect(self, node_id: str) -> InterventionEffect | None:
         """Get effect on a specific node."""
         for e in self.effects:
             if e.node_id == node_id:
@@ -60,10 +60,10 @@ class InterventionResult:
         return None
 
     @property
-    def affected_node_ids(self) -> Set[str]:
+    def affected_node_ids(self) -> set[str]:
         return {e.node_id for e in self.effects}
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         return {
             "intervention": {
                 "variable": self.intervention_variable,
@@ -156,7 +156,7 @@ class InterventionModel:
         delta = value - (original_value or 0.0)
 
         # Propagate effects through descendants
-        effects: List[InterventionEffect] = []
+        effects: list[InterventionEffect] = []
         max_depth = 0
 
         if abs(delta) >= self.min_effect_threshold:
@@ -183,8 +183,8 @@ class InterventionModel:
 
     def simulate_multiple(
         self,
-        interventions: Dict[str, float],
-    ) -> Dict[str, InterventionResult]:
+        interventions: dict[str, float],
+    ) -> dict[str, InterventionResult]:
         """
         Simulate multiple simultaneous interventions.
 
@@ -247,7 +247,7 @@ class InterventionModel:
         self,
         cause: str,
         effect: str,
-    ) -> List[str]:
+    ) -> list[str]:
         """
         Identify potential confounding variables between cause and effect.
 
@@ -264,10 +264,10 @@ class InterventionModel:
         self,
         source_id: str,
         source_delta: float,
-        path: List[str],
+        path: list[str],
         depth: int,
-        visited: Set[str],
-    ) -> Tuple[List[InterventionEffect], int]:
+        visited: set[str],
+    ) -> tuple[list[InterventionEffect], int]:
         """Recursively propagate intervention effects."""
         if depth >= self.max_propagation_depth:
             return [], depth
@@ -322,11 +322,11 @@ class InterventionModel:
         source: str,
         target: str,
         max_length: int = 5,
-    ) -> List[List[str]]:
+    ) -> list[list[str]]:
         """Find all directed paths from source to target (bounded)."""
-        paths: List[List[str]] = []
+        paths: list[list[str]] = []
 
-        def _dfs(current: str, path: List[str]):
+        def _dfs(current: str, path: list[str]):
             if len(path) > max_length + 1:
                 return
             if current == target:
@@ -345,10 +345,10 @@ class InterventionModel:
         self,
         intervention_var: str,
         intervention_val: float,
-        effects: List[InterventionEffect],
-    ) -> Dict[str, Any]:
+        effects: list[InterventionEffect],
+    ) -> dict[str, Any]:
         """Build post-intervention state snapshot."""
-        snapshot: Dict[str, Any] = {}
+        snapshot: dict[str, Any] = {}
         for nid, node in self.graph.nodes.items():
             snapshot[nid] = node.current_value
         # Apply intervention

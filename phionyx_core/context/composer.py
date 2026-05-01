@@ -6,8 +6,8 @@ Weaves multiple parallel responses into one coherent reply.
 Uses Physics-based prioritization (Entropy) to determine order.
 """
 
-from typing import List, Dict, Any, Optional
 import logging
+from typing import Any
 
 from .multi_intent import IntentSegment
 
@@ -59,7 +59,7 @@ class HarmonicComposer:
 
     def compose(
         self,
-        segments: List[Dict[str, Any]]
+        segments: list[dict[str, Any]]
     ) -> str:
         """
         Compose multiple responses into one coherent reply.
@@ -136,7 +136,7 @@ class HarmonicComposer:
 
         return composed
 
-    def calculate_priority(self, segment: IntentSegment, physics_state: Optional[Dict] = None) -> int:
+    def calculate_priority(self, segment: IntentSegment, physics_state: dict | None = None) -> int:
         """
         Calculate priority based on entropy and mode.
 

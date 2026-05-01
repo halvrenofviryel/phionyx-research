@@ -3,11 +3,11 @@ Circuit Breaker Module
 Deterministic circuit breaker with state machine for automatic execution halting.
 """
 
-from typing import Dict, Optional, Any
+import logging
+import time
 from dataclasses import dataclass
 from enum import Enum
-import time
-import logging
+from typing import Any
 
 from .behavioral_drift import DriftReport
 
@@ -25,10 +25,10 @@ class CircuitState(Enum):
 class CircuitBreakerResult:
     """Circuit breaker check result."""
     allowed: bool
-    reason: Optional[str]
+    reason: str | None
     human_approval_required: bool
     safe_mode_required: bool
-    drift_report: Optional[DriftReport] = None
+    drift_report: DriftReport | None = None
 
 
 class CircuitBreaker:
@@ -53,7 +53,7 @@ class CircuitBreaker:
         failure_threshold: int = 3,  # Consecutive failures to open
         recovery_timeout: float = 300.0,  # 5 minutes
         half_open_test_limit: int = 5,  # Max executions in HALF_OPEN
-        ethics_config: Optional[Dict[str, Any]] = None
+        ethics_config: dict[str, Any] | None = None
     ):
         """
         Initialize circuit breaker.
@@ -74,13 +74,13 @@ class CircuitBreaker:
         # State machine
         self.state = CircuitState.CLOSED
         self.failure_count = 0
-        self.last_failure_time: Optional[float] = None
+        self.last_failure_time: float | None = None
         self.half_open_executions = 0
-        self.last_success_time: Optional[float] = None
+        self.last_success_time: float | None = None
 
     async def check_before_execution(
         self,
-        context: Dict[str, Any]  # BlockContext-like dict
+        context: dict[str, Any]  # BlockContext-like dict
     ) -> CircuitBreakerResult:
         """
         Check circuit state before execution (pre-gate).
@@ -225,7 +225,7 @@ class CircuitBreaker:
         """Get current circuit state."""
         return self.state
 
-    def get_stats(self) -> Dict[str, Any]:
+    def get_stats(self) -> dict[str, Any]:
         """Get circuit breaker statistics."""
         return {
             "state": self.state.value,

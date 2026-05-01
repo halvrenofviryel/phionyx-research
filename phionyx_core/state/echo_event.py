@@ -15,11 +15,12 @@ This module defines:
 
 from __future__ import annotations
 
-from dataclasses import dataclass
-from typing import Dict, Any, List
-from datetime import datetime
-from pydantic import BaseModel, Field
 import uuid
+from dataclasses import dataclass
+from datetime import datetime
+from typing import Any
+
+from pydantic import BaseModel, Field
 
 
 class EchoEvent(BaseModel):
@@ -60,17 +61,17 @@ class EchoEvent(BaseModel):
         description="Event intensity (0.0-1.0)"
     )
 
-    tags: List[str] = Field(
+    tags: list[str] = Field(
         default_factory=list,
         description="Semantic tags for categorization"
     )
 
-    payload: Dict[str, Any] = Field(
+    payload: dict[str, Any] = Field(
         default_factory=dict,
         description="Additional event data"
     )
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary."""
         return {
             "id": self.id,
@@ -82,7 +83,7 @@ class EchoEvent(BaseModel):
         }
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> EchoEvent:
+    def from_dict(cls, data: dict[str, Any]) -> EchoEvent:
         """Create from dictionary."""
         timestamp = datetime.fromisoformat(data.get("timestamp", datetime.now().isoformat()))
         return cls(
@@ -109,7 +110,7 @@ class EventReference:
     tag: str
     intensity: float
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary."""
         return {
             "id": self.id,
@@ -118,7 +119,7 @@ class EventReference:
         }
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> EventReference:
+    def from_dict(cls, data: dict[str, Any]) -> EventReference:
         """Create from dictionary."""
         return cls(
             id=data["id"],

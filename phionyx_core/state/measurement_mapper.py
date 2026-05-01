@@ -13,11 +13,12 @@ This module maps LLM text output to measurement vector.
 from __future__ import annotations
 
 import logging
-from typing import Dict, Any, Optional, List, TYPE_CHECKING
-from datetime import datetime
-from pydantic import BaseModel, Field
-import re
 import math
+import re
+from datetime import datetime
+from typing import TYPE_CHECKING, Any
+
+from pydantic import BaseModel, Field
 
 if TYPE_CHECKING:
     from phionyx_core.state.measurement_packet import MeasurementPacket
@@ -64,7 +65,7 @@ class MeasurementVector(BaseModel):
         description="Measurement confidence (0.0-1.0)"
     )
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary."""
         return {
             "A_meas": self.A_meas,
@@ -74,7 +75,7 @@ class MeasurementVector(BaseModel):
         }
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> MeasurementVector:
+    def from_dict(cls, data: dict[str, Any]) -> MeasurementVector:
         """Create from dictionary."""
         return cls(
             A_meas=data.get("A_meas", 0.5),
@@ -123,8 +124,8 @@ class MeasurementMapper:
     def map_text_to_measurement(
         self,
         raw_llm_output: str,
-        provider_metadata: Optional[Dict[str, Any]] = None,
-        llm_output: Optional[Dict[str, Any]] = None  # Deprecated: use raw_llm_output
+        provider_metadata: dict[str, Any] | None = None,
+        llm_output: dict[str, Any] | None = None  # Deprecated: use raw_llm_output
     ) -> MeasurementVector:
         """
         Map LLM text output to measurement vector.
@@ -179,7 +180,7 @@ class MeasurementMapper:
     def _adjust_confidence_by_provider(
         self,
         base_confidence: float,
-        provider_metadata: Dict[str, Any]
+        provider_metadata: dict[str, Any]
     ) -> float:
         """
         Adjust confidence based on provider metadata.
@@ -232,8 +233,8 @@ class MeasurementMapper:
 
     def _parse_structured_output(
         self,
-        llm_output: Dict[str, Any]
-    ) -> Optional[MeasurementVector]:
+        llm_output: dict[str, Any]
+    ) -> MeasurementVector | None:
         """
         Parse structured output from LLM (if available).
 
@@ -270,8 +271,8 @@ class MeasurementMapper:
 
     def _extract_float(
         self,
-        data: Dict[str, Any],
-        keys: List[str],
+        data: dict[str, Any],
+        keys: list[str],
         default: float
     ) -> float:
         """Extract float value from dict using multiple possible keys."""
@@ -404,7 +405,7 @@ class MeasurementMapper:
         confidence: float,
         base_noise: float = 0.05,
         state_dim: int = 6
-    ) -> List[List[float]]:
+    ) -> list[list[float]]:
         """
         Create measurement noise covariance matrix R.
 
@@ -428,7 +429,7 @@ class MeasurementMapper:
     def map_text_to_measurement_packet(
         self,
         raw_llm_output: str,
-        provider_metadata: Optional[Dict[str, Any]] = None,
+        provider_metadata: dict[str, Any] | None = None,
         enable_dominance: bool = False
     ) -> MeasurementPacket:
         """
@@ -448,11 +449,12 @@ class MeasurementMapper:
         """
         # Import MeasurementPacket (avoid circular import)
         try:
-            from phionyx_core.state.measurement_packet import MeasurementPacket, EvidenceSpan
+            from phionyx_core.state.measurement_packet import EvidenceSpan, MeasurementPacket
         except ImportError:
             # Fallback: create minimal MeasurementPacket-like object
-            from pydantic import BaseModel
             from datetime import datetime
+
+            from pydantic import BaseModel
 
             class EvidenceSpan(BaseModel):
                 text: str
@@ -463,14 +465,14 @@ class MeasurementMapper:
             class MeasurementPacket(BaseModel):
                 A: float
                 V: float
-                D: Optional[float] = None
+                D: float | None = None
                 H: float
                 confidence: float
-                provider: Dict[str, Any]
+                provider: dict[str, Any]
                 timestamp: datetime
-                evidence_spans: List[EvidenceSpan] = []
+                evidence_spans: list[EvidenceSpan] = []
 
-                def to_dict(self) -> Dict[str, Any]:
+                def to_dict(self) -> dict[str, Any]:
                     """Convert to dictionary."""
                     return {
                         "A": self.A,

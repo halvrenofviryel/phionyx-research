@@ -7,9 +7,8 @@ Epistemic = reducible with more data (model disagreement).
 Aleatoric = irreducible noise (data variance).
 """
 
-import math
 import logging
-from typing import List, Optional
+import math
 from dataclasses import dataclass
 
 logger = logging.getLogger(__name__)
@@ -26,8 +25,8 @@ class UncertaintyDecomposition:
 
 
 def decompose_uncertainty(
-    ensemble_predictions: List[float],
-    ensemble_variances: Optional[List[float]] = None,
+    ensemble_predictions: list[float],
+    ensemble_variances: list[float] | None = None,
 ) -> UncertaintyDecomposition:
     """
     Decompose total uncertainty into epistemic and aleatoric components.
@@ -92,8 +91,8 @@ def decompose_uncertainty(
 
 
 def compute_ece(
-    predicted_confidences: List[float],
-    actual_outcomes: List[bool],
+    predicted_confidences: list[float],
+    actual_outcomes: list[bool],
     n_bins: int = 10,
 ) -> float:
     """
@@ -143,8 +142,8 @@ def compute_ece(
 
 
 def compute_ood_score(
-    embedding: List[float],
-    reference_embeddings: List[List[float]],
+    embedding: list[float],
+    reference_embeddings: list[list[float]],
     threshold: float = 0.5,
 ) -> float:
     """
@@ -171,7 +170,7 @@ def compute_ood_score(
     return max(0.0, min(1.0, 1.0 - max_sim))
 
 
-def _cosine_similarity(a: List[float], b: List[float]) -> float:
+def _cosine_similarity(a: list[float], b: list[float]) -> float:
     """Cosine similarity between two vectors."""
     if len(a) != len(b) or not a:
         return 0.0

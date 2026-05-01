@@ -10,9 +10,8 @@ Scientific Grounding:
 """
 
 import re
-from typing import Dict
-from .core_math import calculate_kolmogorov_complexity
 
+from .core_math import calculate_kolmogorov_complexity
 
 # Psycholinguistic Lexicon (Valence-Arousal-Dominance)
 # Format: {term: (valence, arousal)}
@@ -104,7 +103,7 @@ DIMINISHERS = {
 }
 
 
-def analyze_text_psycholinguistics(text: str) -> Dict[str, float]:
+def analyze_text_psycholinguistics(text: str) -> dict[str, float]:
     """
     Analyze text using psycholinguistic lexicon to extract Valence and Arousal.
 

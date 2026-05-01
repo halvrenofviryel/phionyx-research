@@ -8,11 +8,11 @@ All user IDs are hashed immediately for privacy.
 Never exposes raw student chat logs - only aggregate patterns.
 """
 
-import logging
 import hashlib
+import logging
 from datetime import datetime, timezone
-from typing import Dict, Optional, Any
 from enum import Enum
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -32,7 +32,7 @@ class PedagogyLogger:
     Only aggregate patterns are stored - never raw chat logs.
     """
 
-    def __init__(self, supabase_url: Optional[str] = None, supabase_key: Optional[str] = None):
+    def __init__(self, supabase_url: str | None = None, supabase_key: str | None = None):
         """
         Initialize PedagogyLogger.
 
@@ -51,7 +51,8 @@ class PedagogyLogger:
             # Backward compatible: Use direct Supabase client
             try:
                 import os
-                from supabase import create_client, Client  # noqa: F401
+
+                from supabase import Client, create_client  # noqa: F401
 
                 url = self.supabase_url or os.getenv("SUPABASE_URL")
                 key = self.supabase_key or os.getenv("SUPABASE_SERVICE_ROLE_KEY") or os.getenv("SUPABASE_KEY")
@@ -125,13 +126,13 @@ class PedagogyLogger:
         trigger_text: str,
         risk_level: RiskLevel,
         action_taken: str,
-        physics_snapshot: Dict[str, Any],
-        school_id: Optional[str] = None,
-        class_id: Optional[str] = None,
-        session_id: Optional[str] = None,
-        model_used: Optional[str] = None,
+        physics_snapshot: dict[str, Any],
+        school_id: str | None = None,
+        class_id: str | None = None,
+        session_id: str | None = None,
+        model_used: str | None = None,
         bypassed_llm: bool = False,
-        override_reason: Optional[str] = None
+        override_reason: str | None = None
     ) -> bool:
         """
         Log a safety intervention event.
@@ -226,10 +227,10 @@ class PedagogyLogger:
 
     def get_aggregate_stats(
         self,
-        school_id: Optional[str] = None,
-        class_id: Optional[str] = None,
+        school_id: str | None = None,
+        class_id: str | None = None,
         days: int = 7
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         Get aggregate statistics for teacher dashboard.
 
@@ -292,7 +293,7 @@ class PedagogyLogger:
 
             # Extract common triggers (keywords from Level 2 interventions)
             level_2_logs = [log for log in logs if log.get("risk_level") == "level_2"]
-            keyword_counts: Dict[str, int] = {}
+            keyword_counts: dict[str, int] = {}
             for log in level_2_logs:
                 keywords = log.get("keywords", [])
                 for keyword in keywords:

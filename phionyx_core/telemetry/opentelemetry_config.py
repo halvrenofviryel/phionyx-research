@@ -14,7 +14,6 @@ Features:
 
 import logging
 import os
-from typing import Optional
 
 logger = logging.getLogger(__name__)
 
@@ -26,8 +25,8 @@ _tracer = None
 def initialize_opentelemetry(
     service_name: str = "phionyx-echo-server",
     service_version: str = "2.5.0",
-    otlp_endpoint: Optional[str] = None,
-    enabled: Optional[bool] = None,
+    otlp_endpoint: str | None = None,
+    enabled: bool | None = None,
     sampling_rate: float = 1.0,
     enable_metrics: bool = False
 ) -> bool:
@@ -62,10 +61,10 @@ def initialize_opentelemetry(
     # Try to import OpenTelemetry packages
     try:
         from opentelemetry import trace
+        from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
+        from opentelemetry.sdk.resources import SERVICE_NAME, SERVICE_VERSION, Resource
         from opentelemetry.sdk.trace import TracerProvider
         from opentelemetry.sdk.trace.export import BatchSpanProcessor
-        from opentelemetry.sdk.resources import Resource, SERVICE_NAME, SERVICE_VERSION
-        from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
     except ImportError as e:
         logger.warning(f"OpenTelemetry packages not installed: {e}")
         logger.warning("Install with: pip install opentelemetry-api opentelemetry-sdk opentelemetry-exporter-otlp")

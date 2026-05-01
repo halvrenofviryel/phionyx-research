@@ -6,10 +6,11 @@ Composes EchoState2/EchoState2Plus with v4 world model fields.
 AD-1: Composition — EchoState2 is composed as echo_state field.
 """
 
-from typing import Optional, Dict, Any, List
-from enum import Enum
-from pydantic import BaseModel, ConfigDict, Field
 from datetime import datetime, timezone
+from enum import Enum
+from typing import Any
+
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class ArbitrationStatus(str, Enum):
@@ -34,13 +35,13 @@ class WorldStateSnapshot(BaseModel):
         )
     """
     # Composed existing model (serialized EchoState2Plus dict)
-    echo_state: Dict[str, Any] = Field(
+    echo_state: dict[str, Any] = Field(
         ...,
         description="Serialized EchoState2/EchoState2Plus — primary state vector"
     )
 
     # v4 new fields
-    belief_vector: Dict[str, float] = Field(
+    belief_vector: dict[str, float] = Field(
         default_factory=dict,
         description="Probabilistic belief distribution over world hypotheses"
     )
@@ -48,15 +49,15 @@ class WorldStateSnapshot(BaseModel):
         default=ArbitrationStatus.STABLE,
         description="Current arbitration system status"
     )
-    causal_graph: Optional[Dict[str, Any]] = Field(
+    causal_graph: dict[str, Any] | None = Field(
         None,
         description="Causal dependency graph (node→edge structure)"
     )
-    active_goals: List[str] = Field(
+    active_goals: list[str] = Field(
         default_factory=list,
         description="Currently active goal IDs"
     )
-    pending_actions: List[str] = Field(
+    pending_actions: list[str] = Field(
         default_factory=list,
         description="Action intents awaiting execution"
     )

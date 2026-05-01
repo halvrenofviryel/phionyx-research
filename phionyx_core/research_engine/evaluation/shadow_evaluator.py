@@ -22,7 +22,6 @@ from phionyx_core.research_engine.evaluation.runner import (
 )
 from phionyx_core.research_engine.evaluation.scoring import compute_cqs
 
-
 # Holdout suites — tests NOT in the main composite benchmark
 HOLDOUT_SUITES: dict[str, str] = {
     "adversarial": "tests/behavioral_eval/test_adversarial_scenarios.py",

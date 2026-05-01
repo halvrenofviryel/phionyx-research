@@ -7,9 +7,9 @@ Publishes phi value to unified state.
 """
 
 import logging
-from typing import Dict, Any, Optional, Protocol
+from typing import Any, Protocol
 
-from ..base import PipelineBlock, BlockContext, BlockResult
+from ..base import BlockContext, BlockResult, PipelineBlock
 
 logger = logging.getLogger(__name__)
 
@@ -20,7 +20,7 @@ class PhiPublisherProtocol(Protocol):
         self,
         unified_state: Any,
         phi_value: float,
-        phi_components: Optional[Dict[str, Any]] = None
+        phi_components: dict[str, Any] | None = None
     ) -> Any:  # Returns updated unified_state
         """Publish phi to unified state."""
         ...
@@ -33,7 +33,7 @@ class PhiPublishBlock(PipelineBlock):
     Publishes phi value to unified state.
     """
 
-    def __init__(self, publisher: Optional[PhiPublisherProtocol] = None):
+    def __init__(self, publisher: PhiPublisherProtocol | None = None):
         """
         Initialize block.
 
@@ -43,7 +43,7 @@ class PhiPublishBlock(PipelineBlock):
         super().__init__("phi_publish")
         self.publisher = publisher
 
-    def should_skip(self, context: BlockContext) -> Optional[str]:
+    def should_skip(self, context: BlockContext) -> str | None:
         """Skip if no unified_state — output is not consumed downstream."""
         metadata = context.metadata or {}
         if not metadata.get("unified_state"):

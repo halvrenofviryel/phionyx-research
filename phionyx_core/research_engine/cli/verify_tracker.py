@@ -18,10 +18,11 @@ Options:
 import json
 import re
 import sys
-import yaml
+from collections import Counter
 from datetime import datetime, timezone
 from pathlib import Path
-from collections import Counter
+
+import yaml
 
 # ── Paths ──
 

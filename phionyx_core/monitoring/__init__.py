@@ -3,7 +3,7 @@ Monitoring and Safety Modules
 Silent Failure Firewall components
 """
 
-from .baseline_store import BaselineStore, BaselineSnapshot
+from .baseline_store import BaselineSnapshot, BaselineStore
 from .behavioral_drift import (
     BehavioralDriftDetector,
     DriftReport,
@@ -15,9 +15,9 @@ from .circuit_breaker import (
     CircuitState,
 )
 from .human_approval import (
-    HumanApprovalService,
     ApprovalRequest,
     ApprovalStatus,
+    HumanApprovalService,
 )
 from .safe_mode_fallback import (
     SafeModeFallback,

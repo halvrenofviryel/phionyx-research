@@ -7,8 +7,8 @@ Extracted from API route handler to core layer.
 """
 
 import logging
-from typing import Dict, Any, Optional
 from dataclasses import dataclass
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -20,24 +20,24 @@ class ProcessDecisionInput:
     character_id: str
     character_archetype: str
     profile_name: str
-    conversation_id: Optional[str] = None
-    actor_ref: Optional[str] = None
-    participant_type: Optional[str] = None
-    mode: Optional[str] = None
-    strategy: Optional[str] = None
-    turn_envelope: Optional[Dict[str, Any]] = None
-    request_id: Optional[str] = None
+    conversation_id: str | None = None
+    actor_ref: str | None = None
+    participant_type: str | None = None
+    mode: str | None = None
+    strategy: str | None = None
+    turn_envelope: dict[str, Any] | None = None
+    request_id: str | None = None
     debug: bool = False
 
 
 @dataclass
 class ProcessDecisionOutput:
     """Output from process decision use case."""
-    result: Dict[str, Any]
+    result: dict[str, Any]
     conversation_id: str
-    participant: Optional[Any] = None
-    envelope: Optional[Any] = None
-    delivery_ack: Optional[Any] = None
+    participant: Any | None = None
+    envelope: Any | None = None
+    delivery_ack: Any | None = None
 
 
 class ProcessDecisionUseCase:
@@ -57,7 +57,7 @@ class ProcessDecisionUseCase:
         engine: Any,  # UnifiedEchoEngineRefactored
         envelope_store: Any,  # TurnEnvelopeStore
         turn_lock_guard: Any,  # TurnLockGuard
-        capability_deriver: Optional[Any] = None
+        capability_deriver: Any | None = None
     ):
         """
         Initialize use case.
@@ -84,15 +84,15 @@ class ProcessDecisionUseCase:
             ProcessDecisionOutput with result and metadata
         """
         # Import here to avoid circular dependencies
-        from ..contracts.envelopes.turn_envelope import TurnEnvelope, DeliveryAck
+        from ..contracts.envelopes.turn_envelope import DeliveryAck, TurnEnvelope
         from ..contracts.participants import ParticipantRef, ParticipantType
 
         # Step 1: Validate and process TurnEnvelope
-        envelope: Optional[TurnEnvelope] = None
-        delivery_ack: Optional[DeliveryAck] = None
-        _conversation_id_from_envelope: Optional[str] = None
-        _turn_id_from_envelope: Optional[int] = None
-        _message_id_from_envelope: Optional[str] = None
+        envelope: TurnEnvelope | None = None
+        delivery_ack: DeliveryAck | None = None
+        _conversation_id_from_envelope: str | None = None
+        _turn_id_from_envelope: int | None = None
+        _message_id_from_envelope: str | None = None
         turn_lock_result = None
 
         if input_data.turn_envelope:

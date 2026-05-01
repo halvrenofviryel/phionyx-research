@@ -7,9 +7,9 @@ Helper update for ESC (Echo State Controller) state.
 """
 
 import logging
-from typing import Dict, Any, Optional, Protocol
+from typing import Any, Protocol
 
-from ...base import PipelineBlock, BlockContext, BlockResult
+from ...base import BlockContext, BlockResult, PipelineBlock
 
 logger = logging.getLogger(__name__)
 
@@ -19,7 +19,7 @@ class ESCStateHelperProtocol(Protocol):
     def update_helper_state(
         self,
         unified_state: Any,
-        physics_state: Dict[str, Any]
+        physics_state: dict[str, Any]
     ) -> Any:  # Returns updated unified_state
         """Update ESC helper state."""
         ...
@@ -32,7 +32,7 @@ class EscStateHelperUpdateBlock(PipelineBlock):
     Performs helper updates for ESC state.
     """
 
-    def __init__(self, helper: Optional[ESCStateHelperProtocol] = None):
+    def __init__(self, helper: ESCStateHelperProtocol | None = None):
         """
         Initialize block.
 
@@ -42,7 +42,7 @@ class EscStateHelperUpdateBlock(PipelineBlock):
         super().__init__("esc_state_helper_update")
         self.helper = helper
 
-    def should_skip(self, context: BlockContext) -> Optional[str]:
+    def should_skip(self, context: BlockContext) -> str | None:
         """Skip if no helper or unified_state available."""
         metadata = context.metadata or {}
         if not self.helper or not metadata.get("unified_state"):

@@ -12,8 +12,8 @@ Features:
 """
 
 import logging
-from typing import Dict, Any, Optional, Set
 from dataclasses import dataclass
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -23,8 +23,8 @@ class EarlyExitCondition:
     """Early exit condition definition."""
     condition_type: str  # "intent", "safety", "template"
     block_id: str
-    skip_blocks: Set[str]  # Blocks to skip when condition is met
-    preserve_blocks: Set[str]  # Blocks that must always run (always-on)
+    skip_blocks: set[str]  # Blocks to skip when condition is met
+    preserve_blocks: set[str]  # Blocks that must always run (always-on)
 
 
 class EarlyExitOptimizer:
@@ -39,7 +39,7 @@ class EarlyExitOptimizer:
 
     def __init__(self):
         """Initialize early exit optimizer."""
-        self.conditions: Dict[str, EarlyExitCondition] = {}
+        self.conditions: dict[str, EarlyExitCondition] = {}
         self.metrics = {
             "early_exits": 0,
             "intent_based_exits": 0,
@@ -115,8 +115,8 @@ class EarlyExitOptimizer:
         self,
         block_id: str,
         context: Any,
-        result: Optional[Any] = None
-    ) -> Optional[EarlyExitCondition]:
+        result: Any | None = None
+    ) -> EarlyExitCondition | None:
         """
         Check if pipeline should short-circuit based on current block result.
 
@@ -170,7 +170,7 @@ class EarlyExitOptimizer:
         self,
         condition: EarlyExitCondition,
         current_block_id: str
-    ) -> Set[str]:
+    ) -> set[str]:
         """
         Get list of blocks to skip based on early exit condition.
 
@@ -192,7 +192,7 @@ class EarlyExitOptimizer:
 
         return blocks_to_skip
 
-    def get_metrics(self) -> Dict[str, int]:
+    def get_metrics(self) -> dict[str, int]:
         """
         Get early exit metrics.
 

@@ -7,7 +7,6 @@ Enables swapping between SIMPLE, RICH, and THERAPEUTIC modes.
 """
 
 from abc import ABC, abstractmethod
-from typing import Dict, Optional, List
 
 
 class NarrativePort(ABC):
@@ -18,10 +17,10 @@ class NarrativePort(ABC):
         self,
         user_input: str,
         context: str,
-        physics_state: Dict[str, float],
+        physics_state: dict[str, float],
         model_id: str,
         system_prompt: str,
-        temperature: Optional[float] = None
+        temperature: float | None = None
     ) -> str:
         """
         Generate narrative response.
@@ -45,7 +44,7 @@ class NarrativePort(ABC):
     async def apply_filters(
         self,
         narrative: str,
-        filters: List[str]
+        filters: list[str]
     ) -> str:
         """Apply safety/content filters to narrative."""
         pass

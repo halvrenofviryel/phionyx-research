@@ -1,7 +1,6 @@
 """Experiment store — append-only JSONL storage for experiment records."""
 import json
 from pathlib import Path
-from typing import List
 
 
 class ExperimentStore:
@@ -22,7 +21,7 @@ class ExperimentStore:
         with open(self._file, "a") as f:
             f.write(json.dumps(record, default=str) + "\n")
 
-    def get_all(self) -> List[dict]:
+    def get_all(self) -> list[dict]:
         """Get all experiment records."""
         if not self._file.exists():
             return []
@@ -34,15 +33,15 @@ class ExperimentStore:
                     records.append(json.loads(line))
         return records
 
-    def get_by_session(self, session_id: str) -> List[dict]:
+    def get_by_session(self, session_id: str) -> list[dict]:
         """Get experiments for a specific session."""
         return [r for r in self.get_all() if r.get("session_id") == session_id]
 
-    def get_by_surface(self, surface_file: str) -> List[dict]:
+    def get_by_surface(self, surface_file: str) -> list[dict]:
         """Get experiments for a specific surface."""
         return [r for r in self.get_all() if r.get("surface_file") == surface_file]
 
-    def get_by_status(self, status: str) -> List[dict]:
+    def get_by_status(self, status: str) -> list[dict]:
         """Get experiments with a specific status."""
         return [r for r in self.get_all() if r.get("status") == status]
 

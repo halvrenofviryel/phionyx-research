@@ -14,12 +14,12 @@ Migration utilities for converting between:
 
 from __future__ import annotations
 
-from typing import Optional, Tuple
 from datetime import datetime
+
+from phionyx_core.state.aux_state import AuxState
 
 # Import new state models
 from phionyx_core.state.echo_state_2 import EchoState2
-from phionyx_core.state.aux_state import AuxState
 
 # Import old state model (optional, for backward compatibility)
 OLD_STATE_AVAILABLE = False
@@ -34,8 +34,8 @@ except (ImportError, ModuleNotFoundError):
 
 def unified_to_echo_state2(
     old_state: UnifiedEchoState,
-    relationship_start: Optional[datetime] = None
-) -> Tuple[EchoState2, AuxState]:
+    relationship_start: datetime | None = None
+) -> tuple[EchoState2, AuxState]:
     """
     Convert UnifiedEchoState (LEGACY) to EchoState2 + AuxState (CANONICAL).
 
@@ -115,7 +115,7 @@ def unified_to_echo_state2(
 
 def echo_state2_to_unified(
     echo_state2: EchoState2,
-    aux_state: Optional[AuxState] = None
+    aux_state: AuxState | None = None
 ) -> UnifiedEchoState:
     """
     Convert EchoState2 + AuxState (CANONICAL) to UnifiedEchoState (LEGACY).

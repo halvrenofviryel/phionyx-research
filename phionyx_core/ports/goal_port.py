@@ -6,7 +6,7 @@ Port interface for goal management (AD-2: port-adapter pattern).
 """
 
 from abc import ABC, abstractmethod
-from typing import List, Optional, Any
+from typing import Any
 
 
 class GoalPort(ABC):
@@ -18,17 +18,17 @@ class GoalPort(ABC):
         ...
 
     @abstractmethod
-    async def get_active_goals(self) -> List[Any]:
+    async def get_active_goals(self) -> list[Any]:
         """Get active goals."""
         ...
 
     @abstractmethod
-    async def evaluate_goals(self, context: Any) -> List[Any]:
+    async def evaluate_goals(self, context: Any) -> list[Any]:
         """Evaluate goals against context."""
         ...
 
     @abstractmethod
-    async def complete_goal(self, goal_id: str) -> Optional[Any]:
+    async def complete_goal(self, goal_id: str) -> Any | None:
         """Mark goal as completed."""
         ...
 
@@ -39,11 +39,11 @@ class NullGoalPort(GoalPort):
     async def register_goal(self, goal: Any) -> Any:
         return goal
 
-    async def get_active_goals(self) -> List[Any]:
+    async def get_active_goals(self) -> list[Any]:
         return []
 
-    async def evaluate_goals(self, context: Any) -> List[Any]:
+    async def evaluate_goals(self, context: Any) -> list[Any]:
         return []
 
-    async def complete_goal(self, goal_id: str) -> Optional[Any]:
+    async def complete_goal(self, goal_id: str) -> Any | None:
         return None

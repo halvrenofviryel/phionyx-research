@@ -7,9 +7,9 @@ Final physics state update (always-on block).
 """
 
 import logging
-from typing import Dict, Any, Optional, Protocol
+from typing import Any, Protocol
 
-from ..base import PipelineBlock, BlockContext, BlockResult
+from ..base import BlockContext, BlockResult, PipelineBlock
 
 logger = logging.getLogger(__name__)
 
@@ -18,9 +18,9 @@ class PhysicsStateUpdaterProtocol(Protocol):
     """Protocol for physics state update."""
     def update_physics_state(
         self,
-        physics_state: Dict[str, Any],
-        unified_state: Optional[Any]
-    ) -> Dict[str, Any]:  # Returns updated physics_state
+        physics_state: dict[str, Any],
+        unified_state: Any | None
+    ) -> dict[str, Any]:  # Returns updated physics_state
         """Update physics state from unified state."""
         ...
 
@@ -33,7 +33,7 @@ class StateUpdatePhysicsBlock(PipelineBlock):
     This block MUST ALWAYS run, even on early exit.
     """
 
-    def __init__(self, updater: Optional[PhysicsStateUpdaterProtocol] = None):
+    def __init__(self, updater: PhysicsStateUpdaterProtocol | None = None):
         """
         Initialize block.
 
@@ -43,7 +43,7 @@ class StateUpdatePhysicsBlock(PipelineBlock):
         super().__init__("state_update_physics")
         self.updater = updater
 
-    def should_skip(self, context: BlockContext) -> Optional[str]:
+    def should_skip(self, context: BlockContext) -> str | None:
         """Skip only if there is no physics_state at all — nothing to update."""
         metadata = context.metadata or {}
         # Run if physics_state exists (even without unified_state):

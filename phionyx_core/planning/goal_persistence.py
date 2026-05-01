@@ -14,7 +14,7 @@ from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from enum import Enum
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -43,15 +43,15 @@ class PersistentGoal:
     status: GoalStatus = GoalStatus.PENDING
     priority: GoalPriority = GoalPriority.MEDIUM
     created_at: str = ""
-    activated_at: Optional[str] = None
-    completed_at: Optional[str] = None
+    activated_at: str | None = None
+    completed_at: str | None = None
     session_created: str = ""
     session_last_active: str = ""
     progress: float = 0.0  # 0.0-1.0
-    sub_goal_ids: List[str] = field(default_factory=list)
-    parent_goal_id: Optional[str] = None
-    conflicts_with: List[str] = field(default_factory=list)
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    sub_goal_ids: list[str] = field(default_factory=list)
+    parent_goal_id: str | None = None
+    conflicts_with: list[str] = field(default_factory=list)
+    metadata: dict[str, Any] = field(default_factory=dict)
 
     def __post_init__(self):
         if not self.created_at:
@@ -77,7 +77,7 @@ class GoalPersistenceReport:
     pending_goals: int
     blocked_goals: int
     abandoned_goals: int
-    conflicts: List[ConflictReport]
+    conflicts: list[ConflictReport]
     cross_session_goals: int  # Goals spanning multiple sessions
 
 
@@ -94,9 +94,9 @@ class GoalPersistence:
     """
 
     def __init__(self):
-        self._goals: Dict[str, PersistentGoal] = {}
+        self._goals: dict[str, PersistentGoal] = {}
         self._session_id: str = ""
-        self._conflicts: List[ConflictReport] = []
+        self._conflicts: list[ConflictReport] = []
         self._auto_save_enabled: bool = False
         self._auto_save_path: str = "data/goals"
 
@@ -124,7 +124,7 @@ class GoalPersistence:
         name: str,
         description: str = "",
         priority: GoalPriority = GoalPriority.MEDIUM,
-        parent_goal_id: Optional[str] = None,
+        parent_goal_id: str | None = None,
     ) -> PersistentGoal:
         """Add a new goal."""
         if goal_id in self._goals:
@@ -203,11 +203,11 @@ class GoalPersistence:
         self._trigger_auto_save()
         return True
 
-    def get_goal(self, goal_id: str) -> Optional[PersistentGoal]:
+    def get_goal(self, goal_id: str) -> PersistentGoal | None:
         """Get a goal by ID."""
         return self._goals.get(goal_id)
 
-    def get_active_goals(self) -> List[PersistentGoal]:
+    def get_active_goals(self) -> list[PersistentGoal]:
         """Get all active goals, sorted by priority."""
         priority_order = {
             GoalPriority.CRITICAL: 0,
@@ -218,11 +218,11 @@ class GoalPersistence:
         active = [g for g in self._goals.values() if g.status == GoalStatus.ACTIVE]
         return sorted(active, key=lambda g: priority_order.get(g.priority, 99))
 
-    def get_goals_by_status(self, status: GoalStatus) -> List[PersistentGoal]:
+    def get_goals_by_status(self, status: GoalStatus) -> list[PersistentGoal]:
         """Get goals filtered by status."""
         return [g for g in self._goals.values() if g.status == status]
 
-    def detect_conflicts(self) -> List[ConflictReport]:
+    def detect_conflicts(self) -> list[ConflictReport]:
         """
         Detect conflicts between active goals.
 
@@ -268,7 +268,7 @@ class GoalPersistence:
         self._conflicts = conflicts
         return conflicts
 
-    def get_cross_session_goals(self) -> List[PersistentGoal]:
+    def get_cross_session_goals(self) -> list[PersistentGoal]:
         """Get goals that span multiple sessions."""
         return [
             g for g in self._goals.values()
@@ -300,7 +300,7 @@ class GoalPersistence:
         goal_id: str,
         reason: str,
         evidence: str = "",
-    ) -> Optional[Dict[str, Any]]:
+    ) -> dict[str, Any] | None:
         """
         Propose a revision to an existing goal (Reflect → Plan feedback).
 
@@ -316,7 +316,7 @@ class GoalPersistence:
             Revision proposal dict, or None if goal not found or already proposed
         """
         if not hasattr(self, '_pending_revisions'):
-            self._pending_revisions: List[Dict[str, Any]] = []
+            self._pending_revisions: list[dict[str, Any]] = []
 
         if goal_id not in self._goals:
             return None
@@ -341,7 +341,7 @@ class GoalPersistence:
         self._trigger_auto_save()
         return revision
 
-    def get_pending_revisions(self) -> List[Dict[str, Any]]:
+    def get_pending_revisions(self) -> list[dict[str, Any]]:
         """Get all pending (unapplied) revision proposals."""
         if not hasattr(self, '_pending_revisions'):
             return []
@@ -364,7 +364,7 @@ class GoalPersistence:
                 return True
         return False
 
-    def auto_save(self, base_path: str = "data/goals") -> Optional[str]:
+    def auto_save(self, base_path: str = "data/goals") -> str | None:
         """Auto-save goals to JSON file for cross-session persistence.
 
         Saves to {base_path}/{session_id}.json on every state change.
@@ -401,7 +401,7 @@ class GoalPersistence:
             return None
 
         try:
-            with open(file_path, "r") as f:
+            with open(file_path) as f:
                 data = json.load(f)
             instance = cls.from_dict(data)
             logger.info("Goals auto-loaded from %s (%d goals)", file_path, len(instance._goals))
@@ -410,7 +410,7 @@ class GoalPersistence:
             logger.error("Auto-load failed for %s: %s", file_path, e)
             return None
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Serialize for persistence."""
         result = {
             "session_id": self._session_id,
@@ -440,7 +440,7 @@ class GoalPersistence:
         return result
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "GoalPersistence":
+    def from_dict(cls, data: dict[str, Any]) -> "GoalPersistence":
         """Restore from serialized data."""
         instance = cls()
         instance._session_id = data.get("session_id", "")

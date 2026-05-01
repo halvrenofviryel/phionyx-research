@@ -14,7 +14,8 @@ Based on:
 
 import logging
 import re
-from typing import Dict, Optional, Callable, Any
+from collections.abc import Callable
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -32,7 +33,7 @@ class LanguageShaper:
     def __init__(
         self,
         use_llm_reframing: bool = True,
-        llm_completion_fn: Optional[Callable[..., Any]] = None,
+        llm_completion_fn: Callable[..., Any] | None = None,
     ):
         """
         Initialize with transformation rules.
@@ -46,7 +47,7 @@ class LanguageShaper:
         """
         self.use_llm_reframing = use_llm_reframing
         self.llm_available = False
-        self._llm_completion_fn: Optional[Callable[..., Any]] = None
+        self._llm_completion_fn: Callable[..., Any] | None = None
         self._init_llm(llm_completion_fn)
 
         # Fixed mindset → Growth mindset transformations (regex-based fallback)
@@ -110,7 +111,7 @@ class LanguageShaper:
             "Every step forward is progress.",
         ]
 
-    def _init_llm(self, llm_completion_fn: Optional[Callable[..., Any]] = None):
+    def _init_llm(self, llm_completion_fn: Callable[..., Any] | None = None):
         """Initialize LLM for advanced reframing via injected callable (Core boundary: no direct litellm import)."""
         if not self.use_llm_reframing:
             return
@@ -126,7 +127,7 @@ class LanguageShaper:
             )
             self.llm_available = False
 
-    def reshape(self, text: str, physics_state: Optional[Dict] = None, context: Optional[str] = None) -> str:
+    def reshape(self, text: str, physics_state: dict | None = None, context: str | None = None) -> str:
         """
         Reshape text according to Vygotsky Protocol (Growth Mindset + Scaffolding).
 
@@ -180,8 +181,8 @@ class LanguageShaper:
     def reframe_response(
         self,
         draft_text: str,
-        physics_state: Optional[Dict] = None,
-        context: Optional[str] = None
+        physics_state: dict | None = None,
+        context: str | None = None
     ) -> str:
         """
         Advanced reframing using LLM (Vygotsky Protocol).
@@ -243,7 +244,7 @@ Return ONLY the reframed response, no explanations."""
             # Fallback to regex-based reshaping
             return self.reshape(draft_text, physics_state, context)
 
-    def _build_vygotsky_prompt(self, physics_state: Optional[Dict]) -> str:
+    def _build_vygotsky_prompt(self, physics_state: dict | None) -> str:
         """Build system prompt for Vygotsky Protocol reframing."""
         prompt = """You are a pedagogical AI assistant following the Vygotsky Protocol.
 
@@ -276,7 +277,7 @@ CORE PRINCIPLES:
         prompt += "\nReframe the response to follow these principles while maintaining the original meaning and tone."
         return prompt
 
-    def _apply_scaffolding(self, text: str, context: Optional[str] = None) -> str:
+    def _apply_scaffolding(self, text: str, context: str | None = None) -> str:
         """
         Rule 1: No Spoon-feeding - Apply scaffolding approach.
 
@@ -338,7 +339,7 @@ CORE PRINCIPLES:
 
         return text
 
-    def _reframe_failure(self, text: str, physics_state: Optional[Dict] = None) -> str:
+    def _reframe_failure(self, text: str, physics_state: dict | None = None) -> str:
         """
         Rule 3: Reframe Failure - "Not Yet" instead of "No".
 
@@ -372,7 +373,7 @@ CORE PRINCIPLES:
 
         return text
 
-    def _get_encouragement(self, phi: float, entropy: float) -> Optional[str]:
+    def _get_encouragement(self, phi: float, entropy: float) -> str | None:
         """Get appropriate encouragement based on physics state."""
         if phi < 0.3:
             return "Zor bir an yaşıyorsun, ama bu geçecek. Her zorluk seni daha güçlü yapar."

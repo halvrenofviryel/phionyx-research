@@ -10,9 +10,8 @@ does not re-implement physics formulas.
 """
 
 import logging
-from typing import Optional, Dict
 
-from .cep_types import CEPResult, CEPFlags
+from .cep_types import CEPFlags, CEPResult
 
 logger = logging.getLogger(__name__)
 
@@ -54,7 +53,7 @@ class EchoSelfThresholdGuard:
     def check_and_guard(
         self,
         cep_result: CEPResult,
-        unified_state: Optional[Dict[str, float]] = None
+        unified_state: dict[str, float] | None = None
     ) -> CEPResult:
         """
         Check CEP result against thresholds and apply guard if needed.

@@ -12,9 +12,10 @@ Per Echoism Core v1.0:
 
 from __future__ import annotations
 
-from pydantic import BaseModel, ConfigDict, Field
-from typing import Dict, Any, Optional
 from datetime import datetime
+from typing import Any
+
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class AuxState(BaseModel):
@@ -92,7 +93,7 @@ class AuxState(BaseModel):
         description="Last update timestamp"
     )
 
-    metadata: Dict[str, Any] = Field(
+    metadata: dict[str, Any] = Field(
         default_factory=dict,
         description="Additional metadata"
     )
@@ -101,7 +102,7 @@ class AuxState(BaseModel):
     # Helper Methods
     # ============================================================
 
-    def update_trust(self, new_trust: float, previous_trust: Optional[float] = None) -> None:
+    def update_trust(self, new_trust: float, previous_trust: float | None = None) -> None:
         """
         Update trust score and compute trend.
 
@@ -116,7 +117,7 @@ class AuxState(BaseModel):
         self.trust_trend = self.trust_score - previous_trust
         self.last_update = datetime.now()
 
-    def update_regulation(self, new_regulation: float, previous_regulation: Optional[float] = None) -> None:
+    def update_regulation(self, new_regulation: float, previous_regulation: float | None = None) -> None:
         """
         Update regulation score and compute trend.
 
@@ -142,7 +143,7 @@ class AuxState(BaseModel):
         self.high_risk_flag = self.risk_score > 0.7
         self.last_update = datetime.now()
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """
         Convert to dictionary (for serialization).
 
@@ -161,7 +162,7 @@ class AuxState(BaseModel):
         }
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> AuxState:
+    def from_dict(cls, data: dict[str, Any]) -> AuxState:
         """
         Create from dictionary (for deserialization).
 

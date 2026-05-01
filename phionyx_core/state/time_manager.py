@@ -13,8 +13,8 @@ Ensures:
 
 from __future__ import annotations
 
-from typing import Optional
 from datetime import datetime
+
 from phionyx_core.state.echo_state_2 import EchoState2
 
 
@@ -40,7 +40,7 @@ class TimeManager:
 
     def advance_turn(
         self,
-        current_time: Optional[datetime] = None
+        current_time: datetime | None = None
     ) -> float:
         """
         Advance turn and update all time fields.
@@ -118,7 +118,7 @@ class TimeManager:
         """
         return self.state.t_now
 
-    def validate_dt(self, external_dt: Optional[float] = None) -> float:
+    def validate_dt(self, external_dt: float | None = None) -> float:
         """
         Validate and return dt.
 

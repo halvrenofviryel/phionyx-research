@@ -9,10 +9,10 @@ Per Echoism Core v1.1 / Faz 2.1:
 
 from __future__ import annotations
 
-from typing import Dict, Any, Optional, List
 from datetime import datetime, timezone
-from pydantic import BaseModel, Field
+from typing import Any
 
+from pydantic import BaseModel, Field
 
 
 class EvidenceSpan(BaseModel):
@@ -35,14 +35,14 @@ class MeasurementPacket(BaseModel):
     """
     A: float = Field(ge=-1.0, le=1.0, description="Arousal measurement")
     V: float = Field(ge=-1.0, le=1.0, description="Valence measurement")
-    D: Optional[float] = Field(default=None, ge=-1.0, le=1.0, description="Dominance measurement (optional)")
+    D: float | None = Field(default=None, ge=-1.0, le=1.0, description="Dominance measurement (optional)")
     H: float = Field(ge=0.0, le=1.0, description="Entropy measurement")
     confidence: float = Field(ge=0.0, le=1.0, description="Measurement confidence")
-    provider: Dict[str, Any] = Field(default_factory=dict, description="Provider metadata")
+    provider: dict[str, Any] = Field(default_factory=dict, description="Provider metadata")
     timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc), description="Measurement timestamp")
-    evidence_spans: List[EvidenceSpan] = Field(default_factory=list, description="Evidence spans")
+    evidence_spans: list[EvidenceSpan] = Field(default_factory=list, description="Evidence spans")
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary."""
         return {
             "A": self.A,
@@ -56,7 +56,7 @@ class MeasurementPacket(BaseModel):
         }
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> MeasurementPacket:
+    def from_dict(cls, data: dict[str, Any]) -> MeasurementPacket:
         """Create from dictionary."""
         evidence_spans = [
             EvidenceSpan(**span) if isinstance(span, dict) else span

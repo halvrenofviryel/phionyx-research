@@ -14,7 +14,7 @@ Mind-loop stage: UpdateSelfModel, Reflect+Revise
 
 import logging
 from dataclasses import dataclass, field
-from typing import Dict, Optional, List, Any
+from typing import Any
 
 from ..causality.causal_graph import CausalGraph
 from ..causality.counterfactual import CounterfactualEngine, CounterfactualResult
@@ -66,7 +66,7 @@ class CounterfactualSelfAssessment:
         self,
         variable: str,
         cf_value: float,
-        targets: Optional[List[str]] = None,
+        targets: list[str] | None = None,
     ) -> CounterfactualSelfResult:
         """Assess counterfactual impact of changing a self-model variable.
 
@@ -107,7 +107,7 @@ class CounterfactualSelfAssessment:
     def assess_confidence_sensitivity(
         self,
         perturbation: float = 0.2,
-    ) -> Dict[str, CounterfactualSelfResult]:
+    ) -> dict[str, CounterfactualSelfResult]:
         """Assess how sensitive the system is to confidence changes.
 
         Tests both increase and decrease by perturbation amount.
@@ -190,14 +190,14 @@ class StabilizationProposal:
     target_stability: float
     strategy: str  # "dampening" | "diversification"
     reasoning: str
-    edge_changes: List[Dict[str, Any]] = field(default_factory=list)
+    edge_changes: list[dict[str, Any]] = field(default_factory=list)
 
 
 @dataclass
 class SelfScanReport:
     """Report of full self-model sensitivity scan."""
-    variables: Dict[str, float]  # variable → stability score
-    weakest_variable: Optional[str]
+    variables: dict[str, float]  # variable → stability score
+    weakest_variable: str | None
     weakest_stability: float
     mean_stability: float
     all_stable: bool  # True if all variables have stability >= threshold
@@ -226,7 +226,7 @@ class SelfDirectedCounterfactual:
         Returns:
             SelfScanReport with per-variable stability scores.
         """
-        scores: Dict[str, float] = {}
+        scores: dict[str, float] = {}
         for var_name in SELF_MODEL_VARIABLES:
             node = self._graph.nodes.get(var_name)
             if node is None or node.current_value is None:
@@ -254,7 +254,7 @@ class SelfDirectedCounterfactual:
             all_stable=all(s >= self._stability_threshold for s in scores.values()),
         )
 
-    def identify_weakest(self, perturbation: float = 0.2) -> Optional[str]:
+    def identify_weakest(self, perturbation: float = 0.2) -> str | None:
         """Find the self-model variable with lowest stability score."""
         report = self.scan_all(perturbation)
         return report.weakest_variable
@@ -263,7 +263,7 @@ class SelfDirectedCounterfactual:
         self,
         variable: str,
         target_stability: float = 0.80,
-    ) -> Optional[StabilizationProposal]:
+    ) -> StabilizationProposal | None:
         """Propose a stabilization strategy for a specific variable.
 
         Analyzes the variable's downstream edges and suggests either:

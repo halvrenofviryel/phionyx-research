@@ -11,8 +11,8 @@ Multiple layers of protection against infinite loops and runaway execution:
 """
 import logging
 import time
-from typing import Dict, List, Optional, TYPE_CHECKING
 from collections import defaultdict
+from typing import TYPE_CHECKING, Optional
 
 if TYPE_CHECKING:
     from phionyx_core.profiles.schema import ExecutionGuardConfig
@@ -34,7 +34,7 @@ class ExecutionGuard:
 
     def __init__(
         self,
-        max_iterations: Optional[int] = None,
+        max_iterations: int | None = None,
         max_block_executions: int = 2,  # Same block can execute max 2 times
         max_execution_time: float = 300.0,  # 5 minutes max
         max_repeated_sequence: int = 3  # Same sequence of 3 blocks repeated
@@ -57,14 +57,14 @@ class ExecutionGuard:
 
         # Execution tracking
         self.iteration_count = 0
-        self.block_execution_count: Dict[str, int] = defaultdict(int)
-        self.execution_sequence: List[str] = []  # Track execution order
-        self.start_time: Optional[float] = None
-        self.last_block_id: Optional[str] = None
+        self.block_execution_count: dict[str, int] = defaultdict(int)
+        self.execution_sequence: list[str] = []  # Track execution order
+        self.start_time: float | None = None
+        self.last_block_id: str | None = None
         self.consecutive_repeats: int = 0
 
         # Violations
-        self.violations: List[str] = []
+        self.violations: list[str] = []
         self.is_safe = True
 
     @classmethod
@@ -97,7 +97,7 @@ class ExecutionGuard:
         guard._max_iterations_multiplier = config.max_iterations_multiplier
         return guard
 
-    def reset(self, block_order_length: Optional[int] = None):
+    def reset(self, block_order_length: int | None = None):
         """Reset guard for new pipeline execution."""
         if self.max_iterations is None and block_order_length:
             self.max_iterations = block_order_length * self._max_iterations_multiplier
@@ -110,7 +110,7 @@ class ExecutionGuard:
         self.violations.clear()
         self.is_safe = True
 
-    def check_iteration_limit(self) -> tuple[bool, Optional[str]]:
+    def check_iteration_limit(self) -> tuple[bool, str | None]:
         """
         Check if iteration limit exceeded.
 
@@ -124,7 +124,7 @@ class ExecutionGuard:
             return False, violation
         return True, None
 
-    def check_block_execution_limit(self, block_id: str) -> tuple[bool, Optional[str]]:
+    def check_block_execution_limit(self, block_id: str) -> tuple[bool, str | None]:
         """
         Check if block execution limit exceeded.
 
@@ -157,7 +157,7 @@ class ExecutionGuard:
 
         return True, None
 
-    def check_timeout(self) -> tuple[bool, Optional[str]]:
+    def check_timeout(self) -> tuple[bool, str | None]:
         """
         Check if execution timeout exceeded.
 
@@ -177,7 +177,7 @@ class ExecutionGuard:
 
         return True, None
 
-    def check_circular_sequence(self, block_id: str) -> tuple[bool, Optional[str]]:
+    def check_circular_sequence(self, block_id: str) -> tuple[bool, str | None]:
         """
         Check for circular/repeated block sequences.
 
@@ -208,7 +208,7 @@ class ExecutionGuard:
 
         return True, None
 
-    def check_block_index_stall(self, block_index: int, block_order_length: int, iterations_without_progress: int) -> tuple[bool, Optional[str]]:
+    def check_block_index_stall(self, block_index: int, block_order_length: int, iterations_without_progress: int) -> tuple[bool, str | None]:
         """
         Check if block_index is stalled (not incrementing).
 
@@ -233,7 +233,7 @@ class ExecutionGuard:
         """Record an iteration."""
         self.iteration_count += 1
 
-    def should_abort(self, block_id: str, block_index: int, block_order_length: int, iterations_without_progress: int = 0) -> tuple[bool, Optional[str]]:
+    def should_abort(self, block_id: str, block_index: int, block_order_length: int, iterations_without_progress: int = 0) -> tuple[bool, str | None]:
         """
         Comprehensive check: Should execution abort?
 
@@ -262,7 +262,7 @@ class ExecutionGuard:
 
         return False, None
 
-    def get_statistics(self) -> Dict[str, any]:
+    def get_statistics(self) -> dict[str, any]:
         """Get execution statistics."""
         return {
             "iteration_count": self.iteration_count,

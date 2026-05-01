@@ -12,10 +12,9 @@ Features:
 """
 
 import hashlib
-import time
-from typing import List, Optional, Dict
-from collections import OrderedDict
 import logging
+import time
+from collections import OrderedDict
 
 logger = logging.getLogger(__name__)
 
@@ -23,7 +22,7 @@ logger = logging.getLogger(__name__)
 class EmbeddingCacheEntry:
     """Single cache entry with TTL support."""
 
-    def __init__(self, embedding: List[float], timestamp: float, ttl: float = 86400.0):
+    def __init__(self, embedding: list[float], timestamp: float, ttl: float = 86400.0):
         """
         Initialize cache entry.
 
@@ -36,13 +35,13 @@ class EmbeddingCacheEntry:
         self.timestamp = timestamp
         self.ttl = ttl
 
-    def is_expired(self, current_time: Optional[float] = None) -> bool:
+    def is_expired(self, current_time: float | None = None) -> bool:
         """Check if entry is expired."""
         if current_time is None:
             current_time = time.time()
         return (current_time - self.timestamp) > self.ttl
 
-    def age(self, current_time: Optional[float] = None) -> float:
+    def age(self, current_time: float | None = None) -> float:
         """Get entry age in seconds."""
         if current_time is None:
             current_time = time.time()
@@ -88,7 +87,7 @@ class EmbeddingCache:
         self._evictions = 0
         self._expirations = 0
 
-    def _generate_cache_key(self, text: str, profile_id: Optional[str] = None) -> str:
+    def _generate_cache_key(self, text: str, profile_id: str | None = None) -> str:
         """
         Generate cache key from text and optional profile_id.
 
@@ -114,9 +113,9 @@ class EmbeddingCache:
     def get(
         self,
         text: str,
-        profile_id: Optional[str] = None,
-        current_time: Optional[float] = None
-    ) -> Optional[List[float]]:
+        profile_id: str | None = None,
+        current_time: float | None = None
+    ) -> list[float] | None:
         """
         Get embedding from cache.
 
@@ -161,9 +160,9 @@ class EmbeddingCache:
     def put(
         self,
         text: str,
-        embedding: List[float],
-        profile_id: Optional[str] = None,
-        current_time: Optional[float] = None
+        embedding: list[float],
+        profile_id: str | None = None,
+        current_time: float | None = None
     ) -> None:
         """
         Store embedding in cache.
@@ -207,7 +206,7 @@ class EmbeddingCache:
             self._evictions = 0
             self._expirations = 0
 
-    def cleanup_expired(self, current_time: Optional[float] = None) -> int:
+    def cleanup_expired(self, current_time: float | None = None) -> int:
         """
         Remove expired entries.
 
@@ -232,7 +231,7 @@ class EmbeddingCache:
 
         return len(expired_keys)
 
-    def get_metrics(self) -> Dict[str, int]:
+    def get_metrics(self) -> dict[str, int]:
         """
         Get cache metrics.
 
@@ -253,7 +252,7 @@ class EmbeddingCache:
             "max_size": self.max_size
         }
 
-    def get_stats(self) -> Dict[str, any]:
+    def get_stats(self) -> dict[str, any]:
         """
         Get detailed cache statistics.
 
@@ -275,7 +274,7 @@ class EmbeddingCache:
 
 
 # Global cache instance (singleton pattern)
-_global_cache: Optional[EmbeddingCache] = None
+_global_cache: EmbeddingCache | None = None
 
 
 def get_embedding_cache(

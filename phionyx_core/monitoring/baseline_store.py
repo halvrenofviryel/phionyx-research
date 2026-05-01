@@ -3,12 +3,12 @@ Baseline Store Module
 Persistent baseline storage and retrieval for drift detection.
 """
 
-from typing import Dict, List, Optional, Any, Protocol
-from dataclasses import dataclass, asdict
-from datetime import datetime
 import hashlib
 import json
 import logging
+from dataclasses import asdict, dataclass
+from datetime import datetime
+from typing import Any, Protocol
 
 logger = logging.getLogger(__name__)
 
@@ -16,16 +16,16 @@ logger = logging.getLogger(__name__)
 class DatabaseProtocol(Protocol):
     """Protocol for database operations."""
 
-    async def insert(self, table: str, data: Dict[str, Any]) -> Optional[str]:
+    async def insert(self, table: str, data: dict[str, Any]) -> str | None:
         """Insert a record. Returns record ID if successful."""
         ...
 
     async def query(
         self,
         table: str,
-        filters: Optional[Dict[str, Any]] = None,
-        limit: Optional[int] = None
-    ) -> List[Dict[str, Any]]:
+        filters: dict[str, Any] | None = None,
+        limit: int | None = None
+    ) -> list[dict[str, Any]]:
         """Query records. Returns list of records."""
         ...
 
@@ -33,7 +33,7 @@ class DatabaseProtocol(Protocol):
         self,
         table: str,
         record_id: str,
-        updates: Dict[str, Any]
+        updates: dict[str, Any]
     ) -> bool:
         """Update a record. Returns True if successful."""
         ...
@@ -44,16 +44,16 @@ class BaselineSnapshot:
     """Baseline snapshot for drift comparison."""
     baseline_id: str
     version: str
-    session_id: Optional[str]
-    agent_id: Optional[str]
+    session_id: str | None
+    agent_id: str | None
     created_at: datetime
-    reference_outputs: List[str]  # Sample outputs
-    reference_metrics: Dict[str, float]  # phi, entropy, valence, arousal
-    physics_state: Dict[str, float]  # Full state snapshot
+    reference_outputs: list[str]  # Sample outputs
+    reference_metrics: dict[str, float]  # phi, entropy, valence, arousal
+    physics_state: dict[str, float]  # Full state snapshot
     integrity_hash: str  # SHA256 hash
-    metadata: Dict[str, Any]
+    metadata: dict[str, Any]
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary for storage."""
         data = asdict(self)
         # Convert datetime to ISO string
@@ -61,7 +61,7 @@ class BaselineSnapshot:
         return data
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> 'BaselineSnapshot':
+    def from_dict(cls, data: dict[str, Any]) -> 'BaselineSnapshot':
         """Create from dictionary."""
         # Convert ISO string to datetime
         if isinstance(data.get('created_at'), str):
@@ -83,7 +83,7 @@ class BaselineStore:
     For now, uses in-memory storage. Database integration via DatabaseProtocol.
     """
 
-    def __init__(self, database: Optional[DatabaseProtocol] = None):
+    def __init__(self, database: DatabaseProtocol | None = None):
         """
         Initialize baseline store.
 
@@ -93,14 +93,14 @@ class BaselineStore:
         """
         self.db = database
         # In-memory fallback storage
-        self._memory_store: Dict[str, BaselineSnapshot] = {}
+        self._memory_store: dict[str, BaselineSnapshot] = {}
 
     def _generate_integrity_hash(
         self,
         version: str,
-        reference_outputs: List[str],
-        reference_metrics: Dict[str, float],
-        physics_state: Dict[str, float]
+        reference_outputs: list[str],
+        reference_metrics: dict[str, float],
+        physics_state: dict[str, float]
     ) -> str:
         """Generate SHA256 integrity hash for baseline data."""
         baseline_data = {
@@ -115,12 +115,12 @@ class BaselineStore:
     async def create_baseline(
         self,
         version: str,
-        session_id: Optional[str] = None,
-        agent_id: Optional[str] = None,
-        reference_outputs: List[str] = None,
-        reference_metrics: Dict[str, float] = None,
-        physics_state: Dict[str, float] = None,
-        metadata: Dict[str, Any] = None
+        session_id: str | None = None,
+        agent_id: str | None = None,
+        reference_outputs: list[str] = None,
+        reference_metrics: dict[str, float] = None,
+        physics_state: dict[str, float] = None,
+        metadata: dict[str, Any] = None
     ) -> BaselineSnapshot:
         """
         Create and store baseline snapshot.
@@ -185,10 +185,10 @@ class BaselineStore:
 
     async def get_baseline(
         self,
-        session_id: Optional[str] = None,
-        agent_id: Optional[str] = None,
-        version: Optional[str] = None
-    ) -> Optional[BaselineSnapshot]:
+        session_id: str | None = None,
+        agent_id: str | None = None,
+        version: str | None = None
+    ) -> BaselineSnapshot | None:
         """
         Retrieve baseline snapshot by session/agent/version.
 
@@ -250,10 +250,10 @@ class BaselineStore:
     async def compare_with_baseline(
         self,
         current_output: str,
-        current_metrics: Dict[str, float],
+        current_metrics: dict[str, float],
         baseline: BaselineSnapshot,
-        vector_store: Optional[Any] = None  # VectorStore type
-    ) -> Dict[str, Any]:
+        vector_store: Any | None = None  # VectorStore type
+    ) -> dict[str, Any]:
         """
         Compare current state with baseline.
 
@@ -302,9 +302,9 @@ class BaselineStore:
 
     def _compute_physics_drift(
         self,
-        current_metrics: Dict[str, float],
-        reference_metrics: Dict[str, float]
-    ) -> Dict[str, float]:
+        current_metrics: dict[str, float],
+        reference_metrics: dict[str, float]
+    ) -> dict[str, float]:
         """Compute physics metric drift."""
         drift = {}
         for key in reference_metrics:
@@ -323,7 +323,7 @@ class BaselineStore:
     def _compute_drift_score(
         self,
         semantic_similarity: float,
-        physics_drift: Dict[str, float]
+        physics_drift: dict[str, float]
     ) -> float:
         """
         Compute overall drift score (0.0 = no drift, 1.0 = maximum drift).

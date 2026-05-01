@@ -10,28 +10,30 @@ It has NO dependencies on FastAPI, HTTP, or database models.
 
 import logging
 import time
-from typing import Dict, Any, Optional, Protocol, TYPE_CHECKING
 from dataclasses import dataclass
+from typing import TYPE_CHECKING, Any, Optional, Protocol
 
-from ..pipeline.base import PipelineBlock, BlockContext, BlockResult
+from ..pipeline.base import BlockContext, BlockResult, PipelineBlock
 
 if TYPE_CHECKING:
     from ..profiles.schema import ExecutionGuardConfig
 # Import canonical block order
 from phionyx_core.contracts.telemetry import get_canonical_blocks as get_canonical_block_order
+
 from .dependency_validator import DependencyValidator
-from .rollback_manager import RollbackManager
-from .parallel_executor import ParallelExecutor
-from .early_exit_optimizer import EarlyExitOptimizer
 from .dynamic_grouping import DynamicGrouping
+from .early_exit_optimizer import EarlyExitOptimizer
 from .execution_guard import ExecutionGuard
+from .parallel_executor import ParallelExecutor
+from .rollback_manager import RollbackManager
 
 logger = logging.getLogger(__name__)
 
 # OpenTelemetry integration (optional)
 try:
-    from phionyx_core.telemetry import get_tracer, is_opentelemetry_enabled
     from opentelemetry.trace import Status, StatusCode
+
+    from phionyx_core.telemetry import get_tracer, is_opentelemetry_enabled
     OPENTELEMETRY_AVAILABLE = True
 except ImportError:
     OPENTELEMETRY_AVAILABLE = False
@@ -44,11 +46,11 @@ except ImportError:
 
 class TelemetryCollectorProtocol(Protocol):
     """Protocol for telemetry collection (to avoid direct dependency)."""
-    def start_block(self, block_id: str, timing_label: str, metadata: Optional[Dict[str, Any]] = None) -> None:
+    def start_block(self, block_id: str, timing_label: str, metadata: dict[str, Any] | None = None) -> None:
         """Start tracking a block."""
         ...
 
-    def end_block(self, block_id: str, status: str = "ok", events: Optional[list] = None) -> None:
+    def end_block(self, block_id: str, status: str = "ok", events: list | None = None) -> None:
         """End tracking a block."""
         ...
 
@@ -62,26 +64,26 @@ class OrchestratorServices:
     This allows the orchestrator to remain in core without bridge dependencies.
     """
     # Processor services
-    processor: Optional[Any] = None  # EngineProcessor
-    response_generator: Optional[Any] = None  # EngineResponseGenerator
+    processor: Any | None = None  # EngineProcessor
+    response_generator: Any | None = None  # EngineResponseGenerator
 
     # Physics/Math services
-    phi_engine: Optional[Any] = None  # PhiEngine
-    entropy_engine: Optional[Any] = None  # EntropyEngine
+    phi_engine: Any | None = None  # PhiEngine
+    entropy_engine: Any | None = None  # EntropyEngine
 
     # Emotion services
-    emotion_estimator: Optional[Any] = None  # EmotionEstimator
-    neurotransmitter: Optional[Any] = None  # NeurotransmitterEngine
+    emotion_estimator: Any | None = None  # EmotionEstimator
+    neurotransmitter: Any | None = None  # NeurotransmitterEngine
 
     # State services
-    state_store: Optional[Any] = None  # StateStore
-    echo_state_store: Optional[Any] = None  # EchoStateStore (legacy)
+    state_store: Any | None = None  # StateStore
+    echo_state_store: Any | None = None  # EchoStateStore (legacy)
 
     # Time management
-    time_managers: Optional[Dict[str, Any]] = None  # Dict of TimeManager instances
+    time_managers: dict[str, Any] | None = None  # Dict of TimeManager instances
 
     # Additional services (can be extended)
-    additional_services: Optional[Dict[str, Any]] = None
+    additional_services: dict[str, Any] | None = None
 
     def __post_init__(self):
         """Initialize default values."""
@@ -107,7 +109,7 @@ class EchoOrchestrator:
     def __init__(
         self,
         services: OrchestratorServices,
-        telemetry_collector: Optional[TelemetryCollectorProtocol] = None,
+        telemetry_collector: TelemetryCollectorProtocol | None = None,
         enable_rollback: bool = True,
         enable_parallel: bool = True,
         enable_execution_guard: bool = True,
@@ -135,7 +137,7 @@ class EchoOrchestrator:
         self.block_order = get_canonical_block_order()
 
         # Block registry (will be populated with block implementations)
-        self.blocks: Dict[str, PipelineBlock] = {}
+        self.blocks: dict[str, PipelineBlock] = {}
 
         # CRITICAL: Execution guard (infinite loop prevention)
         # Multiple protection layers: iteration limit, block execution tracking, timeout, circular sequence detection
@@ -234,7 +236,7 @@ class EchoOrchestrator:
         blob = _json.dumps(payload, sort_keys=True, default=str).encode("utf-8")
         return hashlib.sha256(blob).hexdigest()
 
-    def _build_regeneration_constraints(self, context: "BlockContext") -> Dict[str, Any]:
+    def _build_regeneration_constraints(self, context: "BlockContext") -> dict[str, Any]:
         """Assemble constraint payload written to ``metadata['regeneration_constraints']``."""
         import hashlib
 
@@ -319,7 +321,7 @@ class EchoOrchestrator:
     async def execute_pipeline(
         self,
         context: BlockContext
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         Execute the full 46-block pipeline (v3.8.0).
 
@@ -1014,23 +1016,23 @@ class EchoOrchestrator:
         card_title: str = "",
         scene_context: str = "",
         card_result: str = "neutral",
-        scenario_id: Optional[str] = None,
-        scenario_step_id: Optional[str] = None,
-        session_id: Optional[str] = None,
-        participant: Optional[Any] = None,  # Participant abstraction
-        mode: Optional[str] = None,  # Runtime mode (e.g., "toygar_core", "story", "game_scenario")
-        strategy: Optional[str] = None,  # Runtime strategy (e.g., "normal", "stabilize", "comfort")
-        envelope_message_id: Optional[str] = None,  # TurnEnvelope message_id for transcript tracking
-        envelope_turn_id: Optional[int] = None,  # TurnEnvelope turn_id for transcript tracking
-        envelope_user_text_sha256: Optional[str] = None,  # TurnEnvelope user_text_sha256 for integrity
-        capabilities: Optional[Any] = None,  # RunCapabilities
-        capability_deriver: Optional[Any] = None,  # CapabilityDeriverProtocol
+        scenario_id: str | None = None,
+        scenario_step_id: str | None = None,
+        session_id: str | None = None,
+        participant: Any | None = None,  # Participant abstraction
+        mode: str | None = None,  # Runtime mode (e.g., "toygar_core", "story", "game_scenario")
+        strategy: str | None = None,  # Runtime strategy (e.g., "normal", "stabilize", "comfort")
+        envelope_message_id: str | None = None,  # TurnEnvelope message_id for transcript tracking
+        envelope_turn_id: int | None = None,  # TurnEnvelope turn_id for transcript tracking
+        envelope_user_text_sha256: str | None = None,  # TurnEnvelope user_text_sha256 for integrity
+        capabilities: Any | None = None,  # RunCapabilities
+        capability_deriver: Any | None = None,  # CapabilityDeriverProtocol
         current_amplitude: float = 5.0,
         current_entropy: float = 0.5,
         current_integrity: float = 100.0,
-        previous_phi: Optional[float] = None,
+        previous_phi: float | None = None,
         **kwargs
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """
         Main entry point for pipeline execution.
 

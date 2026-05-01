@@ -7,9 +7,9 @@ Creates the ScenarioFrame immutable state object for the pipeline.
 """
 
 import logging
-from typing import Dict, Any, Optional, Protocol
+from typing import Any, Protocol
 
-from ..base import PipelineBlock, BlockContext, BlockResult
+from ..base import BlockContext, BlockResult, PipelineBlock
 
 logger = logging.getLogger(__name__)
 
@@ -23,7 +23,7 @@ class ScenarioFrameCreatorProtocol(Protocol):
         card_title: str,
         scene_context: str,
         card_result: str,
-        physics_params: Dict[str, Any]
+        physics_params: dict[str, Any]
     ) -> Any:  # Returns ScenarioFrame
         """Create scenario frame."""
         ...
@@ -36,7 +36,7 @@ class CreateScenarioFrameBlock(PipelineBlock):
     Creates the ScenarioFrame immutable state object that flows through the pipeline.
     """
 
-    def __init__(self, frame_creator: Optional[ScenarioFrameCreatorProtocol] = None):
+    def __init__(self, frame_creator: ScenarioFrameCreatorProtocol | None = None):
         """
         Initialize block.
 
@@ -46,7 +46,7 @@ class CreateScenarioFrameBlock(PipelineBlock):
         super().__init__("create_scenario_frame")
         self.frame_creator = frame_creator
 
-    def should_skip(self, context: BlockContext) -> Optional[str]:
+    def should_skip(self, context: BlockContext) -> str | None:
         """Skip if frame_creator not available."""
         if self.frame_creator is None:
             return "frame_creator_not_available"

@@ -3,10 +3,10 @@ Safe-Mode Fallback Mechanism
 Graceful degradation when circuit breaker is OPEN.
 """
 
-from typing import Dict, Any, Optional
+import logging
 from dataclasses import dataclass
 from datetime import datetime
-import logging
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -18,7 +18,7 @@ class SafeModeResponse:
     degraded: bool
     fallback_reason: str
     cached: bool
-    metadata: Dict[str, Any]
+    metadata: dict[str, Any]
 
 
 class SafeModeFallback:
@@ -50,14 +50,14 @@ class SafeModeFallback:
         self.safe_response_template = safe_response_template
 
         # In-memory cache (can be replaced with Redis/database)
-        self._response_cache: Dict[str, Dict[str, Any]] = {}
+        self._response_cache: dict[str, dict[str, Any]] = {}
 
     def get_cached_response(
         self,
         session_id: str,
         user_input: str,
         similarity_threshold: float = 0.7
-    ) -> Optional[SafeModeResponse]:
+    ) -> SafeModeResponse | None:
         """
         Retrieve cached response if available and similar.
 
@@ -107,7 +107,7 @@ class SafeModeFallback:
         self,
         user_input: str,
         circuit_state: str,
-        drift_info: Optional[Dict[str, Any]] = None
+        drift_info: dict[str, Any] | None = None
     ) -> SafeModeResponse:
         """
         Generate minimal safe response.
@@ -147,7 +147,7 @@ class SafeModeFallback:
         session_id: str,
         user_input: str,
         response_text: str,
-        metadata: Optional[Dict[str, Any]] = None
+        metadata: dict[str, Any] | None = None
     ) -> None:
         """
         Cache response for future use.
@@ -196,7 +196,7 @@ class SafeModeFallback:
         union = len(words1 | words2)
         return intersection / union if union > 0 else 0.0
 
-    def clear_cache(self, session_id: Optional[str] = None) -> None:
+    def clear_cache(self, session_id: str | None = None) -> None:
         """
         Clear cache for session or all sessions.
 
