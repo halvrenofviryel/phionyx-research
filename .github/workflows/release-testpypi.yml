@@ -1,0 +1,128 @@
+name: Release (TestPyPI)
+
+# Manual dry-run release to TestPyPI. Lets us verify build → publish →
+# install end-to-end before pushing a tag that triggers the real PyPI
+# release in `release.yml`. Same OIDC trusted-publisher flow, different
+# environment ("testpypi") so PyPI and TestPyPI mappings are separate.
+#
+# How to use:
+#   1. Configure trusted publisher on https://test.pypi.org/manage/account/publishing/
+#      Owner=halvrenofviryel, Project=phionyx-research,
+#      Workflow=release-testpypi.yml, Environment=testpypi
+#   2. Actions → "Release (TestPyPI)" → "Run workflow" (default branch).
+#   3. Optional: provide a version suffix (e.g. "rc1") so the upload
+#      bumps to 0.2.0rc1 on TestPyPI without touching pyproject.
+#
+# `skip-existing: true` makes re-runs idempotent — re-uploading the
+# same version is a no-op rather than a failure, so you can iterate
+# without bumping for every retry.
+
+on:
+  workflow_dispatch:
+    inputs:
+      version_suffix:
+        description: "Optional PEP 440 pre-release suffix appended to project.version (e.g. rc1, dev0). Empty = use pyproject version as-is."
+        required: false
+        default: ""
+        type: string
+
+jobs:
+  publish-testpypi:
+    name: build + publish to TestPyPI
+    runs-on: ubuntu-latest
+    environment:
+      name: testpypi
+      url: https://test.pypi.org/p/phionyx-core
+    permissions:
+      id-token: write   # required for OIDC trusted-publisher exchange
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Apply optional version suffix
+        if: ${{ inputs.version_suffix != '' }}
+        run: |
+          suffix='${{ inputs.version_suffix }}'
+          pkg_version=$(python -c "import tomllib; print(tomllib.load(open('pyproject.toml','rb'))['project']['version'])")
+          new_version="${pkg_version}${suffix}"
+          echo "Bumping version: ${pkg_version} → ${new_version} (TestPyPI dry-run only, not committed)"
+          # In-place rewrite for the build only; we don't commit this.
+          python - <<PY
+          import re, pathlib
+          p = pathlib.Path("pyproject.toml")
+          text = p.read_text()
+          text = re.sub(r'^version\s*=\s*"[^"]+"', f'version = "${pkg_version}${suffix}"', text, count=1, flags=re.MULTILINE)
+          p.write_text(text)
+          PY
+          python -c "import tomllib; print('built version:', tomllib.load(open('pyproject.toml','rb'))['project']['version'])"
+
+      - name: Install build tooling
+        run: |
+          python -m pip install --upgrade pip
+          pip install build twine
+
+      - name: Build sdist + wheel
+        run: python -m build
+
+      - name: Twine check
+        run: python -m twine check dist/*
+
+      - name: Smoke install from built wheel (local)
+        run: |
+          python -m venv /tmp/wheel-smoke
+          /tmp/wheel-smoke/bin/pip install --quiet dist/phionyx_core-*.whl
+          /tmp/wheel-smoke/bin/python -c "
+          import phionyx_core
+          from phionyx_core import EchoState2, calculate_phi_v2_1
+          from phionyx_core.governance.kill_switch import KillSwitch
+          from phionyx_core.contracts.telemetry import get_canonical_blocks
+          assert len(get_canonical_blocks()) == 46
+          s = EchoState2(A=0.5, V=0.3, H=0.4)
+          r = calculate_phi_v2_1(valence=s.V, arousal=s.A, amplitude=5.0,
+              time_delta=0.1, gamma=0.15, stability=s.stability,
+              entropy=s.H, w_c=0.6, w_p=0.4)
+          assert r['phi'] > 0
+          assert KillSwitch().state.value == 'armed'
+          print('local wheel smoke: ok')
+          "
+
+      - name: Publish to TestPyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
+          skip-existing: true   # re-runs of the same version are idempotent
+
+      - name: Smoke install from TestPyPI (round-trip verification)
+        run: |
+          # TestPyPI doesn't host most deps, so resolve them from real PyPI
+          # via --extra-index-url. Tries a few times because TestPyPI's CDN
+          # can take a minute to surface a fresh upload.
+          python -m venv /tmp/testpypi-smoke
+          version=$(python -c "import tomllib; print(tomllib.load(open('pyproject.toml','rb'))['project']['version'])")
+          for attempt in 1 2 3 4 5; do
+            if /tmp/testpypi-smoke/bin/pip install \
+                --index-url https://test.pypi.org/simple/ \
+                --extra-index-url https://pypi.org/simple/ \
+                "phionyx-core==${version}" ; then
+              break
+            fi
+            echo "TestPyPI not yet showing ${version}, waiting (attempt ${attempt}/5)..."
+            sleep 30
+          done
+          /tmp/testpypi-smoke/bin/python -c "
+          import phionyx_core
+          from phionyx_core import EchoState2, calculate_phi_v2_1
+          assert phionyx_core.__version__.startswith('0.2.0')
+          s = EchoState2(A=0.5, V=0.3, H=0.4)
+          calculate_phi_v2_1(valence=s.V, arousal=s.A, amplitude=5.0,
+              time_delta=0.1, gamma=0.15, stability=s.stability,
+              entropy=s.H, w_c=0.6, w_p=0.4)
+          print('testpypi round-trip: ok')
+          "
