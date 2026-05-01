@@ -79,10 +79,12 @@ all = [
 
 [project.urls]
 Homepage = "https://phionyx.ai"
-Documentation = "https://phionyx.ai/docs"
+Documentation = "https://github.com/halvrenofviryel/phionyx-research#readme"
+Installation = "https://github.com/halvrenofviryel/phionyx-research/blob/main/INSTALLATION.md"
 Repository = "https://github.com/halvrenofviryel/phionyx-research"
 Issues = "https://github.com/halvrenofviryel/phionyx-research/issues"
 Changelog = "https://github.com/halvrenofviryel/phionyx-research/blob/main/CHANGELOG.md"
+Discussions = "https://github.com/halvrenofviryel/phionyx-research/discussions"
 
 [tool.setuptools]
 packages = {find = {where = ["."], include = ["phionyx_core*"]}}

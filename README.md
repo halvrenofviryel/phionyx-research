@@ -10,9 +10,12 @@
 
 ```bash
 pip install phionyx-core
+python -c "import phionyx_core; print('Phionyx Core ready —', phionyx_core.__version__)"
 ```
 
 Most AI frameworks let the LLM decide. Phionyx doesn't. Every LLM response passes through a 46-block deterministic pipeline with safety gates, ethics checks, and physics-based state tracking — before it reaches the user.
+
+The substrate is demonstrable in seconds **without an LLM, server, or API key** — see the [demo table](#try-it-in-30-seconds) below.
 
 ---
 
@@ -31,17 +34,18 @@ Most AI frameworks let the LLM decide. Phionyx doesn't. Every LLM response passe
 
 ## Try It In 30 Seconds
 
-**Three demo notebooks. No API key. Runs locally.**
+**Three demo notebooks + a FastAPI wrapper. No API key. Runs locally.**
 
 The substrate (state vector, Φ, governance gates, pipeline) is demonstrable
-without an LLM, server, or external account. Each notebook runs end-to-end
-in seconds and embeds its outputs.
+without an LLM, server, or external account. Each demo runs end-to-end and
+embeds its outputs.
 
-| # | Notebook | Shows |
-|---|----------|-------|
-| 01 | [Determinism and Physics](examples/notebooks/01_determinism_and_physics.ipynb) | `EchoState2`, `calculate_phi_v2_1`, 1000-run determinism proof, side-by-side with a noisy alternative |
-| 02 | [Kill Switch in Action](examples/notebooks/02_kill_switch_in_action.ipynb) | `KillSwitch` with 4 triggers + NaN fail-closed guard, tamper-evident event log |
-| 03 | [Pipeline Blocks and Audit](examples/notebooks/03_pipeline_blocks_and_audit.ipynb) | Canonical 46-block pipeline (v3.8.0), custom block subclass, 100-run determinism |
+| # | Demo | Shows | Run time | API key |
+|---|------|-------|----------|---------|
+| 01 | [Determinism and Physics](examples/notebooks/01_determinism_and_physics.ipynb) | `EchoState2`, `calculate_phi_v2_1`, 1000-run determinism proof, valence × arousal Φ heatmap, side-by-side with a noisy alternative | ~30 s | No |
+| 02 | [Kill Switch in Action](examples/notebooks/02_kill_switch_in_action.ipynb) | `KillSwitch` with 4 triggers + NaN fail-closed guard, tamper-evident event log | ~5 s | No |
+| 03 | [Pipeline Blocks and Audit](examples/notebooks/03_pipeline_blocks_and_audit.ipynb) | Canonical 46-block pipeline (v3.8.0), custom `PipelineBlock` subclass, 100-run determinism | ~5 s | No |
+| 04 | [FastAPI wrapper](examples/fastapi/) | HTTP `/govern` endpoint over the governance pipeline | <1 min | No |
 
 Notebook 01 sweeps the cognitive component of Φ across the full Circumplex
 (valence × arousal). The surface is smooth, bounded, and reproducible —
