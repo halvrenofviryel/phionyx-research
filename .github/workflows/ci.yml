@@ -43,6 +43,13 @@ jobs:
       - name: Lint (ruff)
         run: ruff check phionyx_core
 
+      - name: Type check (mypy — strategic modules)
+        # Wave 1 of the gradual mypy rollout: lock the modules with the
+        # cleanest type surface so they cannot regress. Other modules
+        # are tracked in `project_mypy_deferred.md` and will land
+        # behind their own CI gate as each becomes clean.
+        run: mypy phionyx_core/governance phionyx_core/physics phionyx_core/contracts/v4 phionyx_core/contracts/telemetry
+
       - name: Smoke import
         run: |
           python -c "import phionyx_core; print('phionyx_core', phionyx_core.__version__)"

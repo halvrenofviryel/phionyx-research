@@ -132,10 +132,13 @@ class KillSwitch:
             try:
                 if math.isnan(val):
                     logger.critical(f"KILL SWITCH: NaN detected in {name} — fail-closed")
+                    # `metrics` is dict[str, float]; the offending field name
+                    # is captured in `reason` instead so this dict stays
+                    # numeric.
                     return self._trigger(
                         KillSwitchTrigger.EVALUATION_ERROR,
                         f"NaN detected in {name} (fail-closed)",
-                        {"nan_field": name, "ethics_max_risk": 0.0, "t_meta": 0.0,
+                        {"ethics_max_risk": 0.0, "t_meta": 0.0,
                          "drift_detected": float(drift_detected),
                          "consecutive_drift_count": float(self._consecutive_drift_count)},
                         turn_id,
