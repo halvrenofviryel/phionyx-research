@@ -55,6 +55,7 @@ jobs:
         # Wave 1 (locked): governance, physics, contracts/v4, contracts/telemetry
         # Wave 2 (locked): config, ports, contracts (rest), evaluation, context,
         #                  metrics, planning, causality
+        # Wave 3 (locked): cep
         run: |
           mypy --follow-imports=silent \
             phionyx_core/governance \
@@ -66,7 +67,8 @@ jobs:
             phionyx_core/context \
             phionyx_core/metrics \
             phionyx_core/planning \
-            phionyx_core/causality
+            phionyx_core/causality \
+            phionyx_core/cep
 
       - name: Smoke import
         run: |

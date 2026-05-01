@@ -9,7 +9,7 @@ Detects self-narrative patterns, trauma language, and echo repetition.
 import logging
 import re
 from difflib import SequenceMatcher
-from typing import Literal
+from typing import Any, Literal, cast
 
 from .cep_config import CEPConfig
 from .cep_types import CEPFlags, CEPMetrics, CEPResult
@@ -486,7 +486,7 @@ class ConsciousEchoProofEngine:
 
             vectorizer = TfidfVectorizer(max_features=100, stop_words='english')
             embeddings = vectorizer.fit_transform(texts).toarray()
-            return embeddings.tolist()
+            return cast("list[list[float]]", embeddings.tolist())
         except ImportError:
             # Fallback: Simple word-based embedding (bag of words normalized)
             try:
@@ -506,9 +506,9 @@ class ConsciousEchoProofEngine:
                 for text in texts:
                     words = text.lower().split()
                     word_freq = {word: words.count(word) for word in word_list}
-                    embedding = [word_freq.get(word, 0) for word in word_list]
+                    embedding: list[float] = [float(word_freq.get(word, 0)) for word in word_list]
                     # Normalize
-                    norm = np.linalg.norm(embedding)
+                    norm = float(np.linalg.norm(embedding))
                     if norm > 0:
                         embedding = [x / norm for x in embedding]
                     embeddings.append(embedding)
@@ -559,7 +559,7 @@ class ConsciousEchoProofEngine:
             norm2 = sum(b * b for b in vec2) ** 0.5
             if norm1 == 0 or norm2 == 0:
                 return 0.0
-            return max(0.0, min(1.0, dot / (norm1 * norm2)))
+            return float(max(0.0, min(1.0, dot / (norm1 * norm2))))
 
     def _run_mirror_self_test(self, raw_text: str) -> float:
         """
@@ -594,7 +594,7 @@ class ConsciousEchoProofEngine:
             return 0.0
 
         # Find all pattern matches with their positions
-        matches = []
+        matches: list[dict[str, Any]] = []
         for pattern in self.mirror_self_patterns:
             pattern_matches = re.finditer(pattern, text_lower, re.IGNORECASE)
             for match in pattern_matches:
@@ -622,8 +622,8 @@ class ConsciousEchoProofEngine:
             r'aslında\s+şöyleyim|kendimi\s+analiz|kendimi\s+yorumluyorum'
         ]
 
-        for match in matches:
-            match_text = match['text']
+        for m in matches:
+            match_text = m['text']
             # Check if it's a strong pattern
             is_strong = any(re.search(sp, match_text, re.IGNORECASE) for sp in strong_patterns)
             if is_strong:
@@ -640,12 +640,14 @@ class ConsciousEchoProofEngine:
 
         for sentence in sentences:
             sentence_lower = sentence.lower()
-            for match in matches:
-                if match['start'] < len(sentence_lower):
+            for m in matches:
+                m_start = int(m['start'])
+                m_end = int(m['end'])
+                if m_start < len(sentence_lower):
                     # Check if this match is in this sentence
-                    sentence_start = raw_text[:match['start']].rfind('.')
-                    sentence_end = raw_text.find('.', match['end'])
-                    if sentence_start < match['start'] < sentence_end:
+                    sentence_start = raw_text[:m_start].rfind('.')
+                    sentence_end = raw_text.find('.', m_end)
+                    if sentence_start < m_start < sentence_end:
                         sentences_with_patterns += 1
                         break
 
