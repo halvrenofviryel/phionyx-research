@@ -1,0 +1,47 @@
+{
+  "schema_version": "phionyx-governed-response/0.1",
+  "phionyx_core_version": "0.2.1",
+  "turn_id": 1,
+  "timestamp_utc": "2026-05-01T00:00:00+00:00",
+  "input": {
+    "user_text": "Walk me through the three layers Phionyx runs around an LLM.",
+    "safety": {
+      "allowed": true,
+      "reason": null
+    }
+  },
+  "state": {
+    "arousal": 0.4,
+    "valence": 0.2,
+    "entropy": 0.22,
+    "resonance": 0.32,
+    "stability": 0.78
+  },
+  "phi": {
+    "phi": 0.751476,
+    "phi_cognitive": 0.201674,
+    "phi_physical": 1.576179,
+    "weight_cognitive": 0.6,
+    "weight_physical": 0.4
+  },
+  "governance": {
+    "kill_switch_state": "armed",
+    "kill_switch_triggered": false,
+    "kill_switch_reason": "All safety checks passed",
+    "ethics_max_risk": 0.1,
+    "t_meta": 0.85,
+    "drift_detected": false
+  },
+  "response": {
+    "text": "(synthetic) You asked about Phionyx layers. \u03a6 = 0.751; the runtime resolved this turn through the deterministic substrate, the governance gates, and the audit layer.",
+    "narrative_layer": "synthetic_echo"
+  },
+  "pipeline": {
+    "contract_version": "3.8.0",
+    "block_count": 46
+  },
+  "audit": {
+    "hash_alg": "sha256",
+    "envelope_hash": "b3ea0af3e3efba99a4cb8da957afd3007ad6e65b7919b7981ba0d7e2f59ce41d"
+  }
+}
