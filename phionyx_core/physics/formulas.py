@@ -675,7 +675,7 @@ def calculate_phi_v2(
     valence: float = 0.0,
     arousal: float = 1.0,
     entropy_penalty_k: float = entropy_penalty_k,
-) -> dict[str, float]:
+) -> dict[str, float | str]:
     """
     Calculate Total Echo Quality (Φ) using Hybrid Resonance Model v2.0 (backward compatible).
 

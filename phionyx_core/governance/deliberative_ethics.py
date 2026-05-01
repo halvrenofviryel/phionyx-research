@@ -343,7 +343,7 @@ class DeliberativeEthics:
         if not verdict_scores:
             return DeliberationOutcome.DEFER_TO_HUMAN.value, 0.0, False
 
-        best_verdict = max(verdict_scores, key=verdict_scores.get)
+        best_verdict = max(verdict_scores, key=lambda k: verdict_scores[k])
         best_score = verdict_scores[best_verdict]
         total_score = sum(verdict_scores.values())
         confidence = best_score / total_score if total_score > 0 else 0.0

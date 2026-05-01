@@ -6,7 +6,18 @@ Supports backward compatibility with v3.7.0, v3.6.0, v3.5.0, v3.0.0, v2.5.0, and
 """
 import json
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
+
+
+def _read_contract_json(path: Path) -> dict[str, Any]:
+    """Load a JSON contract file with the type narrowed for mypy.
+
+    json.load returns Any; the contract files are object-typed by
+    construction and validated by tests/contract — this cast keeps the
+    public functions typed without weakening their return annotation.
+    """
+    with open(path) as f:
+        return cast(dict[str, Any], json.load(f))
 
 # Contract version management
 _CONTRACT_V2_4_0_PATH = Path(__file__).parent / "archive" / "canonical_blocks_v2_4_0.json"
@@ -25,47 +36,40 @@ def _load_contract(version: str | None = None) -> dict[str, Any]:
     # v3.8.0 support (state-driven response revision — 46 blocks)
     if version == "3.8.0" or version is None:
         if _CONTRACT_V3_8_0_PATH.exists():
-            with open(_CONTRACT_V3_8_0_PATH) as f:
-                return json.load(f)
+            return _read_contract_json(_CONTRACT_V3_8_0_PATH)
         if version == "3.8.0":
             raise FileNotFoundError("v3.8.0 contract file not found")
     # v3.7.0 support (CEP reactivation pipeline — 45 blocks)
     if version == "3.7.0" or version is None:
         if _CONTRACT_V3_7_0_PATH.exists():
-            with open(_CONTRACT_V3_7_0_PATH) as f:
-                return json.load(f)
+            return _read_contract_json(_CONTRACT_V3_7_0_PATH)
         if version == "3.7.0":
             raise FileNotFoundError("v3.7.0 contract file not found")
     # v3.6.0 support (feedback loop pipeline — 44 blocks)
     if version == "3.6.0" or version is None:
         if _CONTRACT_V3_6_0_PATH.exists():
-            with open(_CONTRACT_V3_6_0_PATH) as f:
-                return json.load(f)
+            return _read_contract_json(_CONTRACT_V3_6_0_PATH)
         if version == "3.6.0":
             raise FileNotFoundError("v3.6.0 contract file not found")
     # v3.5.0 support (full AGI pipeline — 43 blocks)
     if version == "3.5.0" or version is None:
         if _CONTRACT_V3_5_0_PATH.exists():
-            with open(_CONTRACT_V3_5_0_PATH) as f:
-                return json.load(f)
+            return _read_contract_json(_CONTRACT_V3_5_0_PATH)
         # Fall through to v3.0.0 if v3.5.0 not found and no explicit version requested
         if version == "3.5.0":
             raise FileNotFoundError("v3.5.0 contract file not found")
     # v3.0.0 support (AD-3: pipeline version coexistence)
     if version == "3.0.0" or version is None:
         if _CONTRACT_V3_0_0_PATH.exists():
-            with open(_CONTRACT_V3_0_0_PATH) as f:
-                return json.load(f)
+            return _read_contract_json(_CONTRACT_V3_0_0_PATH)
         if version == "3.0.0":
             raise FileNotFoundError("v3.0.0 contract file not found")
     if version == "2.5.0" or version is None:
         if _CONTRACT_V2_5_0_PATH.exists():
-            with open(_CONTRACT_V2_5_0_PATH) as f:
-                return json.load(f)
+            return _read_contract_json(_CONTRACT_V2_5_0_PATH)
     # Fallback to v2.4.0
     if _CONTRACT_V2_4_0_PATH.exists():
-        with open(_CONTRACT_V2_4_0_PATH) as f:
-            return json.load(f)
+        return _read_contract_json(_CONTRACT_V2_4_0_PATH)
     raise FileNotFoundError("Telemetry contract file not found")
 
 
@@ -83,7 +87,7 @@ def get_canonical_blocks(version: str | None = None) -> list[str]:
         List of block IDs in canonical order.
     """
     contract = _load_contract(version)
-    return contract['canonical_block_order']
+    return cast(list[str], contract['canonical_block_order'])
 
 
 def get_canonical_block_order(version: str | None = None) -> list[str]:
@@ -110,7 +114,7 @@ def get_middleware_blocks(version: str | None = None) -> list[str]:
         List of middleware block IDs.
     """
     contract = _load_contract(version)
-    return contract.get('middleware_blocks', [])
+    return cast(list[str], contract.get('middleware_blocks', []))
 
 
 def get_block_mapping(version: str | None = None) -> dict[str, Any]:
@@ -124,20 +128,20 @@ def get_block_mapping(version: str | None = None) -> dict[str, Any]:
         Block mapping dictionary.
     """
     contract = _load_contract(version)
-    return contract.get('block_mapping', {})
+    return cast(dict[str, Any], contract.get('block_mapping', {}))
 
 
 def get_required_event_types(version: str | None = None) -> list[str]:
     """Returns required event types."""
     contract = _load_contract(version)
-    return contract['required_event_types']
+    return cast(list[str], contract['required_event_types'])
 
 
 def get_contract_version() -> str:
     """Returns current contract version."""
     try:
         contract = _load_contract()
-        return contract.get('contract_version', _CURRENT_VERSION)
+        return cast(str, contract.get('contract_version', _CURRENT_VERSION))
     except FileNotFoundError:
         return _FALLBACK_VERSION
 
@@ -157,7 +161,7 @@ def migrate_block_id(old_block_id: str, from_version: str = "2.4.0", to_version:
     if from_version == "2.4.0" and to_version == "2.5.0":
         contract = _load_contract("2.5.0")
         mapping = contract.get('block_mapping', {}).get('v2.4.0_to_v2.5.0', {})
-        return mapping.get(old_block_id, old_block_id)
+        return cast(str, mapping.get(old_block_id, old_block_id))
     if from_version == "2.5.0" and to_version == "3.0.0":
         # v3.0.0 is additive — no block renames, only insertions
         return old_block_id
