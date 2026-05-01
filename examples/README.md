@@ -20,6 +20,7 @@ Every notebook runs end-to-end on a fresh `pip install phionyx-core`. No LLM, no
 |---------|-------------|--------|
 | [FastAPI](fastapi/) | HTTP `/govern` endpoint over the governance pipeline | Planned |
 | [`envelopes/governed_response.json`](envelopes/governed_response.json) | Canonical governed-response envelope sample (output of notebook 04) | Reference |
+| [`profiles/`](profiles/) | Three runnable profile YAMLs — `education`, `creative_writing`, `customer_support`. All validate against `phionyx_core.Profile` | Reference |
 
 ## Running Notebooks
 

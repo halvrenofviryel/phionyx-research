@@ -1,0 +1,51 @@
+# Creative writing profile — relaxed entropy, stylistic range allowed,
+# audit standard but PII scrubbing only partial.
+#
+# Use for fiction tools, brainstorming assistants, editorial drafting.
+# The user wants surprise and texture, so reactivity is higher and the
+# entropy penalty is lighter. Safety is not disarmed — kill switch and
+# ethics gates still run — but the tone-shaping dials make room for
+# voice.
+
+name: creative_writing
+description: |
+  Profile for fiction, brainstorming, and editorial assistants.
+  Permits higher entropy and stylistic range. Safety gates remain
+  enabled; this profile only relaxes tone and physics-side dampening.
+
+physics:
+  reactivity: 0.65         # responsive to provocations / mood shifts
+  resilience: 0.5          # average — let the prose breathe
+  safety_bias: 0.5         # neutral — gates do the safety work
+  base_mode: DEFAULT
+
+  valence: 0.0             # let the writer set it
+  arousal: 0.6             # mid-high — warmth without spike
+  amplitude: 6.0
+  entropy: 0.55            # higher — variety is the point
+
+  stability: 0.6
+  gamma: 0.20
+  w_c: 0.55                # less cognitive weight
+  w_p: 0.45                # more physical (stylistic) weight
+  entropy_penalty_k: 0.8   # softer than default — chaos is sometimes the answer
+
+pedagogy:
+  vygotsky_level: 0.5
+  scaffolding_aggressiveness: 0.3  # writers don't want hand-holding
+  intervention_threshold: 0.5      # only step in for actual harm
+
+governance:
+  policy_id: editorial
+  pii_mode: PARTIAL                # email/phone scrub; leave names alone
+  audit_level: STANDARD
+
+routing:
+  llm_tier_strategy: BALANCED
+  enable_graph_rag: false
+
+version: "1.0.0"
+tags:
+  - creative
+  - editorial
+  - relaxed-entropy
