@@ -22,7 +22,7 @@ try:
     ECHO_EVENT_AVAILABLE = True
 except ImportError:
     ECHO_EVENT_AVAILABLE = False
-    EchoEvent = None
+    EchoEvent = None  # type: ignore[assignment,misc]
 
 
 class TraceStore:
@@ -237,7 +237,7 @@ class TraceStore:
 
             # Build query
             query = "SELECT id, type, timestamp, intensity, tags, payload FROM events WHERE erased = 0"
-            params = []
+            params: list[str | int] = []
 
             # Tag filter (simple LIKE search, can be enhanced with JSON functions)
             if tags:

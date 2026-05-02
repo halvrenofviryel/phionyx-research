@@ -13,6 +13,7 @@ Features:
 
 import hashlib
 import logging
+from typing import Any
 import time
 from collections import OrderedDict
 
@@ -231,7 +232,7 @@ class EmbeddingCache:
 
         return len(expired_keys)
 
-    def get_metrics(self) -> dict[str, int]:
+    def get_metrics(self) -> dict[str, int | float]:
         """
         Get cache metrics.
 
@@ -252,7 +253,7 @@ class EmbeddingCache:
             "max_size": self.max_size
         }
 
-    def get_stats(self) -> dict[str, any]:
+    def get_stats(self) -> dict[str, Any]:
         """
         Get detailed cache statistics.
 

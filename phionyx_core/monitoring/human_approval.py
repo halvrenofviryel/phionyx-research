@@ -4,7 +4,7 @@ Human-in-the-loop mechanism for circuit breaker OPEN state.
 """
 
 import logging
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, field
 from datetime import datetime
 from enum import Enum
 from typing import Any
@@ -35,11 +35,7 @@ class ApprovalRequest:
     approved_by: str | None = None
     approved_at: datetime | None = None
     rejection_reason: str | None = None
-    metadata: dict[str, Any] = None
-
-    def __post_init__(self):
-        if self.metadata is None:
-            self.metadata = {}
+    metadata: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary."""

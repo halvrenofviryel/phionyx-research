@@ -23,8 +23,8 @@ try:
     ECHO_STATE_AVAILABLE = True
 except ImportError:
     ECHO_STATE_AVAILABLE = False
-    EchoEvent = None
-    EchoState2 = None
+    EchoEvent = None  # type: ignore[assignment,misc]
+    EchoState2 = None  # type: ignore[assignment,misc]
 
 
 def trace_weight(
@@ -62,7 +62,7 @@ def trace_weight(
     Returns:
         Trace weight (0.0-1.0)
     """
-    if not ECHO_STATE_AVAILABLE or not EchoEvent:
+    if not ECHO_STATE_AVAILABLE:
         raise ImportError("EchoEvent and EchoState2 required for trace_weight")
 
     # Get current time from state or use event timestamp
@@ -142,7 +142,7 @@ def calculate_trace_strength_from_tags(
     Returns:
         Trace strength (0.0-1.0)
     """
-    if not ECHO_STATE_AVAILABLE or not EchoState2:
+    if not ECHO_STATE_AVAILABLE:
         raise ImportError("EchoState2 required for calculate_trace_strength_from_tags")
 
     if not state or not hasattr(state, 'E_tags') or not state.E_tags:
@@ -213,7 +213,7 @@ def get_trace_tags_for_retrieval(
     Returns:
         List of active tag strings
     """
-    if not ECHO_STATE_AVAILABLE or not EchoState2:
+    if not ECHO_STATE_AVAILABLE:
         raise ImportError("EchoState2 required for get_trace_tags_for_retrieval")
 
     if not state or not hasattr(state, 'E_tags') or not state.E_tags:
