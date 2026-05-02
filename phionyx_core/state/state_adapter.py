@@ -136,7 +136,7 @@ class EchoState2Adapter:
             "trust_trend": self.aux_state.trust_trend,
             "risk_score": self.risk_score,
             "high_risk_flag": self.aux_state.high_risk_flag,
-            "memory_tags": [tag.semantic_context for tag in self.echo_state2.E_tags],
+            "memory_tags": [tag.tag for tag in self.echo_state2.E_tags],
             "memory_strength": 0.5,  # Default
             "metadata": {
                 **self.aux_state.metadata,

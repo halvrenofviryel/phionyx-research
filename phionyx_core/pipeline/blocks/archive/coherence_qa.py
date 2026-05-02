@@ -108,7 +108,7 @@ class CoherenceQaBlock(PipelineBlock):
                     cleaned = pattern.sub("", cleaned)
                 redacted_text = re.sub(r"\s+", " ", cleaned).strip()
 
-            qa_result: dict[str, Any] = {
+            qa_result = {
                 "coherence_score": score,
                 "leak_detected": leak_detected,
                 "violations": violations,

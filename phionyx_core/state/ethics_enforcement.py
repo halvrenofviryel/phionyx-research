@@ -20,11 +20,11 @@ try:
     from .ethics_enforcement_wrapper import EthicsEnforcement
 except ImportError:
     # Create a minimal stub if wrapper import fails
-    class EthicsEnforcement:
+    class EthicsEnforcement:  # type: ignore[no-redef]
         """Stub EthicsEnforcement class."""
-        def __init__(self, *args, **kwargs):
+        def __init__(self, *args: Any, **kwargs: Any) -> None:
             pass
-        def check_risk(self, *args, **kwargs):
+        def check_risk(self, *args: Any, **kwargs: Any) -> Any:
             raise NotImplementedError("EthicsEnforcement.check_risk not implemented")
 
 __all__ = [
@@ -49,7 +49,7 @@ except (ImportError, ValueError):
         parent_dir = os.path.dirname(os.path.abspath(__file__))
         if parent_dir not in sys.path:
             sys.path.insert(0, parent_dir)
-        from ethics import EthicsVector
+        from ethics import EthicsVector  # type: ignore[no-redef]
 
 
 @dataclass

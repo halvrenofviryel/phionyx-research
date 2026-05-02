@@ -76,6 +76,13 @@ class InitializeUnifiedStateBlock(PipelineBlock):
             # Get physics_params
             physics_params = metadata.get("physics_params", {})
 
+            if self.initializer is None:
+                return BlockResult(
+                    block_id=self.block_id,
+                    status="error",
+                    error=RuntimeError("UnifiedStateInitializer not configured")
+                )
+
             # Initialize unified state
             unified_state = self.initializer.initialize_unified_state(
                 frame=frame,

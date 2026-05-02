@@ -64,10 +64,10 @@ class UkfPredictBlock(PipelineBlock):
             unified_state = metadata.get("unified_state")
             time_delta = metadata.get("time_delta", 1.0)
 
-            if not unified_state:
+            if not unified_state or self.predictor is None:
                 return BlockResult(
                     block_id=self.block_id,
-                    status="ok",  # Skip if no unified state
+                    status="ok",  # Skip if no unified state or predictor not configured
                     data={"predicted_state": None}
                 )
 

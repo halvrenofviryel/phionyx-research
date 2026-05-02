@@ -137,7 +137,7 @@ def _compute_damp_factor(entropy: float, thresholds: RevisionThresholds) -> floa
     base = 0.5
     ratio = entropy / max(thresholds.entropy_damp, 1e-6)
     factor = base ** ratio
-    return max(0.1, min(1.0, factor))
+    return float(max(0.1, min(1.0, factor)))
 
 
 class ResponseRevisionGateBlock(PipelineBlock):

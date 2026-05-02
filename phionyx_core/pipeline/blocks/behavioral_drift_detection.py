@@ -99,11 +99,11 @@ class BehavioralDriftDetectionBlock(PipelineBlock):
                 )
 
             # Extract physics metrics from metadata or context
-            current_metrics = {
-                "phi": metadata.get("phi") or getattr(context, 'previous_phi', 0.0),
-                "entropy": context.current_entropy or 0.0,
-                "valence": metadata.get("valence") or 0.0,
-                "arousal": metadata.get("arousal") or 0.5,
+            current_metrics: dict[str, float] = {
+                "phi": float(metadata.get("phi") or getattr(context, 'previous_phi', 0.0) or 0.0),
+                "entropy": float(context.current_entropy or 0.0),
+                "valence": float(metadata.get("valence") or 0.0),
+                "arousal": float(metadata.get("arousal") or 0.5),
             }
 
             # Extract ethics vector from metadata
