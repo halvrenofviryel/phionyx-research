@@ -184,7 +184,7 @@ class RollbackManager:
         for key in _MONOTONIC_TIME_KEYS:
             if key in metadata:
                 val = metadata[key]
-                if isinstance(val, (int, float)):
+                if isinstance(val, int | float):
                     current_floor = self._time_floor.get(key, float("-inf"))
                     if val > current_floor:
                         self._time_floor[key] = val
@@ -199,7 +199,7 @@ class RollbackManager:
         for key, floor_val in self._time_floor.items():
             if key in metadata:
                 val = metadata[key]
-                if isinstance(val, (int, float)) and val < floor_val:
+                if isinstance(val, int | float) and val < floor_val:
                     logger.info(
                         f"[MONOTONIC_GUARD] Clamped {key} from {val} to {floor_val} "
                         f"(preventing time reversal during rollback)"

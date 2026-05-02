@@ -204,7 +204,7 @@ def create_echoism_process_model(
 
         # Extract dt from control or use default
         dt_raw = control_input.get("dt", dt)
-        dt_value: float = float(dt_raw) if isinstance(dt_raw, (int, float)) else dt
+        dt_value: float = float(dt_raw) if isinstance(dt_raw, int | float) else dt
 
         return echoism_process_model(x, dt_value, control_input)
 

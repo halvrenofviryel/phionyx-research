@@ -346,7 +346,7 @@ class RAGCache:
 
         return len(expired_keys)
 
-    def get_metrics(self) -> dict[str, int]:
+    def get_metrics(self) -> dict[str, int | float]:
         """
         Get cache metrics.
 

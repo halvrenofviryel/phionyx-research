@@ -75,7 +75,7 @@ class TimeUpdateSotBlock(PipelineBlock):
             # Advance turn and get dt from state (SINGLE SOURCE OF TRUTH)
             time_delta_raw = self.time_manager.advance_turn()
             # Defensive: ensure numeric return (guards against misconfigured DI)
-            if not isinstance(time_delta_raw, (int, float)):
+            if not isinstance(time_delta_raw, int | float):
                 time_delta_raw = 1.0
             original_dt = time_delta_raw
 
@@ -139,7 +139,7 @@ class TimeUpdateSotBlock(PipelineBlock):
             if not isinstance(turn_index, int):
                 turn_index = 0
             t_now = self.time_manager.get_t_now()
-            if not isinstance(t_now, (int, float)):
+            if not isinstance(t_now, int | float):
                 t_now = 0.0
 
             # Propagate time values to context metadata for downstream blocks

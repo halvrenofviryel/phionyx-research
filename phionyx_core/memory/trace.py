@@ -23,7 +23,7 @@ try:
     ECHO_EVENT_AVAILABLE = True
 except ImportError:
     ECHO_EVENT_AVAILABLE = False
-    EchoEvent = None
+    EchoEvent = None  # type: ignore[assignment,misc]
 
 
 def trace_weight(

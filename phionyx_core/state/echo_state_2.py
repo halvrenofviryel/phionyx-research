@@ -365,21 +365,21 @@ class EchoState2(BaseModel):
         # Update entropy (H)
         if "entropy" in physics_state:
             entropy = physics_state["entropy"]
-            if isinstance(entropy, (int, float)):
+            if isinstance(entropy, int | float):
                 # Clamp to valid range [0.01, 1.0]
                 self.H = max(ENTROPY_FLOOR, min(1.0, float(entropy)))
 
         # Update valence (V)
         if "valence" in physics_state:
             valence = physics_state["valence"]
-            if isinstance(valence, (int, float)):
+            if isinstance(valence, int | float):
                 # Clamp to valid range [-1.0, 1.0]
                 self.V = max(-1.0, min(1.0, float(valence)))
 
         # Update arousal (A)
         if "arousal" in physics_state:
             arousal = physics_state["arousal"]
-            if isinstance(arousal, (int, float)):
+            if isinstance(arousal, int | float):
                 # Clamp to valid range [0.0, 1.0]
                 self.A = max(0.0, min(1.0, float(arousal)))
 

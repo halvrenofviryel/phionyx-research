@@ -94,7 +94,7 @@ class NarrativeLayerBlock(PipelineBlock):
 
             # --- Memory context injection: append retrieved memories ---
             retrieved_memories = metadata.get("retrieved_memories")
-            if retrieved_memories and isinstance(retrieved_memories, (list, tuple)):
+            if retrieved_memories and isinstance(retrieved_memories, list | tuple):
                 memory_lines = []
                 for m in retrieved_memories[:5]:  # Max 5 memories to control token budget
                     if isinstance(m, dict):
@@ -116,7 +116,7 @@ class NarrativeLayerBlock(PipelineBlock):
             sm = metadata.get("_agi_self_model", {})
             if sm.get("can_do") is not None:
                 conf = sm.get("confidence", 0)
-                conf_str = f"{conf:.2f}" if isinstance(conf, (int, float)) else str(conf)
+                conf_str = f"{conf:.2f}" if isinstance(conf, int | float) else str(conf)
                 agi_sections.append(
                     f"Self-Model: can_do={sm['can_do']}, confidence={conf_str}, "
                     f"available={sm.get('capabilities_available', 0)}, "
@@ -130,7 +130,7 @@ class NarrativeLayerBlock(PipelineBlock):
             kb = metadata.get("_agi_knowledge_boundary", {})
             if kb.get("recommendation") is not None:
                 bscore = kb.get("boundary_score", 0)
-                bscore_str = f"{bscore:.3f}" if isinstance(bscore, (int, float)) else str(bscore)
+                bscore_str = f"{bscore:.3f}" if isinstance(bscore, int | float) else str(bscore)
                 agi_sections.append(
                     f"Knowledge Boundary: within={kb.get('within_boundary')}, "
                     f"score={bscore_str}, "
@@ -164,9 +164,9 @@ class NarrativeLayerBlock(PipelineBlock):
                     "guardrails. Regenerate under the following constraints:",
                     f"- Trigger reasons: {', '.join(str(r) for r in reasons) or 'unspecified'}",
                 ]
-                if isinstance(target_phi, (int, float)):
+                if isinstance(target_phi, int | float):
                     parts.append(f"- Target phi floor: phi must be ≥ {target_phi}")
-                if isinstance(target_conf, (int, float)):
+                if isinstance(target_conf, int | float):
                     parts.append(f"- Target confidence: ≥ {target_conf}")
                 if prior_hash:
                     parts.append(f"- Prior rejected narrative hash: {prior_hash}")
