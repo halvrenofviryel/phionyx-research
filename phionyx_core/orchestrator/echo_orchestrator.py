@@ -312,7 +312,7 @@ class EchoOrchestrator:
             if retry_result is not None and getattr(retry_result, "data", None):
                 if isinstance(retry_result.data, dict):
                     for k, v in retry_result.data.items():
-                        if isinstance(v, (dict, list, tuple, str, int, float, bool, type(None))):
+                        if isinstance(v, dict | list | tuple | str | int | float | bool | type(None)):
                             metadata[k] = v
                     context.metadata = metadata
 
@@ -748,12 +748,12 @@ class EchoOrchestrator:
                                         filtered_data[k] = {}
                                 continue
                             # Skip non-serializable placeholder objects
-                            if not isinstance(v, (dict, list, tuple, str, int, float, bool, type(None))):
+                            if not isinstance(v, dict | list | tuple | str | int | float | bool | type(None)):
                                 logger.debug(f"Skipping non-serializable object in result.data['{k}'] (type: {type(v).__name__})")
                                 continue
                             if k == "physics_state" and isinstance(v, dict):
                                 filtered_physics_state = {pk: pv for pk, pv in v.items()
-                                                         if isinstance(pv, (str, int, float, bool, type(None)))}
+                                                         if isinstance(pv, str | int | float | bool | type(None))}
                                 filtered_data[k] = filtered_physics_state
                             else:
                                 filtered_data[k] = v

@@ -13,9 +13,9 @@ Features:
 
 import hashlib
 import logging
-from typing import Any
 import time
 from collections import OrderedDict
+from typing import Any
 
 logger = logging.getLogger(__name__)
 

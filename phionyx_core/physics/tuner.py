@@ -144,7 +144,7 @@ class ProfileTuner:
         if hasattr(profile, 'max_entropy'):
             try:
                 max_entropy_val = profile.max_entropy
-                if isinstance(max_entropy_val, (int, float)):
+                if isinstance(max_entropy_val, int | float):
                     max_entropy = float(max_entropy_val)
             except (AttributeError, TypeError):
                 pass
@@ -153,7 +153,7 @@ class ProfileTuner:
         if hasattr(profile, 'entropy_threshold'):
             try:
                 threshold_val = profile.entropy_threshold
-                if isinstance(threshold_val, (int, float)):
+                if isinstance(threshold_val, int | float):
                     entropy_threshold = float(threshold_val)
             except (AttributeError, TypeError):
                 pass
