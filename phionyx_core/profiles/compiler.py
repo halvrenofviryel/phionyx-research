@@ -9,7 +9,7 @@ Reduces runtime latency by pre-calculating parameter mappings.
 import json
 import logging
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 from .schema import Profile
 from .tuner import ProfileTuner
@@ -48,7 +48,7 @@ class ProfileCompiler:
         Returns:
             Compiled profile dictionary with pre-calculated parameters
         """
-        compiled = {
+        compiled: dict[str, Any] = {
             "name": profile.name,
             "version": profile.version or "1.0.0",
             "compiled_at": None,  # Will be set by caller
@@ -146,7 +146,7 @@ class ProfileCompiler:
 
         try:
             with open(cache_file, encoding="utf-8") as f:
-                compiled = json.load(f)
+                compiled = cast(dict[str, Any], json.load(f))
 
             logger.debug(f"Loaded compiled profile: {cache_file}")
             return compiled
@@ -182,7 +182,8 @@ def compile_profiles(profile_dir: Path | None = None):
     from .loader import ProfileLoader
 
     loader = ProfileLoader(profile_dir)
-    profiles = loader.load_all_profiles()
+    raw_profiles = loader._load_profiles()
+    profiles = [loader.load_profile(name) for name in raw_profiles]
 
     compiler = ProfileCompiler()
     compiler.compile_all_profiles(profiles)
@@ -194,10 +195,6 @@ if __name__ == "__main__":
     # CLI entry point
     import sys
 
-    if len(sys.argv) > 1:
-        profile_dir = Path(sys.argv[1])
-    else:
-        profile_dir = None
-
-    compile_profiles(profile_dir)
+    cli_profile_dir: Path | None = Path(sys.argv[1]) if len(sys.argv) > 1 else None
+    compile_profiles(cli_profile_dir)
 

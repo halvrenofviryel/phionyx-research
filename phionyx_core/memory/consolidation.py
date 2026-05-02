@@ -394,9 +394,9 @@ class MemoryConsolidator:
 
     def get_effective_strength(self, memory: dict) -> float:
         """Get memory strength with priority boost applied."""
-        base_strength = memory.get("current_strength", 0.5)
+        base_strength = float(memory.get("current_strength", 0.5))
         if not hasattr(self, '_priority_boosts'):
             return base_strength
         memory_id = memory.get("id", memory.get("memory_id", ""))
         boost = self._priority_boosts.get(memory_id, 1.0)
-        return min(1.0, base_strength * boost)
+        return float(min(1.0, base_strength * boost))

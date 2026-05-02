@@ -152,7 +152,7 @@ class ResponseBuildBlock(PipelineBlock):
                         revision_action_taken = "rewrite_prefix"
                 elif directive == "damp":
                     damp_factor = revision_directive.get("damp_factor")
-                    if isinstance(damp_factor, (int, float)) and 0.0 < damp_factor < 1.0:
+                    if isinstance(damp_factor, int | float) and 0.0 < damp_factor < 1.0:
                         current_amp = physics_state.get(
                             "amplitude", context.current_amplitude
                         )

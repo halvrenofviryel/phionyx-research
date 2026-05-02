@@ -968,7 +968,7 @@ def create_all_blocks(
                         },
                         telemetry_summaries={}
                     )
-                    return {"phi": phi_value if isinstance(phi_value, (int, float)) else 0.5, "components": {}}
+                    return {"phi": phi_value if isinstance(phi_value, int | float) else 0.5, "components": {}}
 
                 # Final fallback
                 return {"phi": previous_phi or 0.5, "components": {}}
@@ -1059,7 +1059,7 @@ def create_all_blocks(
                         previous_entropy=previous_entropy or 0.5,
                         echo_types=[]
                     )
-                    return {"entropy": entropy_value if isinstance(entropy_value, (int, float)) else 0.5, "components": {}}
+                    return {"entropy": entropy_value if isinstance(entropy_value, int | float) else 0.5, "components": {}}
 
                 # Final fallback
                 return {"entropy": previous_entropy or 0.5, "components": {}}

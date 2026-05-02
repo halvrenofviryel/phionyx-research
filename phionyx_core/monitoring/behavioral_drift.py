@@ -78,7 +78,7 @@ class BehavioralDriftDetector:
         current_output: str,
         current_metrics: dict[str, float],
         ethics_vector: dict[str, float] | None = None,
-        session_id: str = None,
+        session_id: str | None = None,
         agent_id: str | None = None
     ) -> DriftReport:
         """

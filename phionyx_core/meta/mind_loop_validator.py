@@ -312,9 +312,9 @@ class MindLoopValidator:
     def _get_status(result: Any) -> str:
         """Extract status from BlockResult or dict."""
         if hasattr(result, "status"):
-            return result.status
+            return str(result.status)
         if isinstance(result, dict):
-            return result.get("status", "unknown")
+            return str(result.get("status", "unknown"))
         return "unknown"
 
     @staticmethod

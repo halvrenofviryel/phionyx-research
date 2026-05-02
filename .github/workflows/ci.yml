@@ -57,6 +57,7 @@ jobs:
         #                  metrics, planning, causality
         # Wave 3 (locked): cep
         # Wave 4 (locked): state, pipeline
+        # Wave 5 (locked): memory, meta, monitoring, profiles
         run: |
           mypy --follow-imports=silent \
             phionyx_core/governance \
@@ -71,7 +72,11 @@ jobs:
             phionyx_core/causality \
             phionyx_core/cep \
             phionyx_core/state \
-            phionyx_core/pipeline
+            phionyx_core/pipeline \
+            phionyx_core/memory \
+            phionyx_core/meta \
+            phionyx_core/monitoring \
+            phionyx_core/profiles
 
       - name: Smoke import
         run: |

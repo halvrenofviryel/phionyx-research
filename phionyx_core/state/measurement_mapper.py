@@ -201,7 +201,7 @@ class MeasurementMapper:
 
         # Get quality tier
         quality_tier = provider_metadata.get("quality_tier", "medium")
-        if isinstance(quality_tier, (int, float)):
+        if isinstance(quality_tier, int | float):
             quality_score = float(quality_tier)
         elif isinstance(quality_tier, str):
             quality_map = {"high": 1.0, "medium": 0.7, "low": 0.4}
@@ -279,7 +279,7 @@ class MeasurementMapper:
         for key in keys:
             if key in data:
                 value = data[key]
-                if isinstance(value, (int, float)):
+                if isinstance(value, int | float):
                     return float(value)
                 elif isinstance(value, str):
                     try:

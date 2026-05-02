@@ -9,7 +9,7 @@ Creates appropriate port implementations based on profile configuration.
 import json
 import logging
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 from ..ports import (
     IntuitionPort,
@@ -86,9 +86,11 @@ class ProfileManager:
             from phionyx_core.physics.formulas import calculate_phi_v2_1  # noqa: F401
 
             # Create real Physics port implementation
-            # This would be a wrapper around the real SDK
+            # `phionyx_core.implementations.*` is a planned private package not
+            # shipped with the public SDK. mypy sees it as Any (per
+            # ignore_missing_imports); the cast acknowledges that.
             from ..implementations.physics_impl import RealPhysicsEngine
-            return RealPhysicsEngine()
+            return cast(PhysicsPort, RealPhysicsEngine())
         except ImportError:
             logger.warning("Physics SDK not available, using Null implementation")
             return NullPhysicsEngine()
@@ -103,7 +105,7 @@ class ProfileManager:
             from phionyx_core.memory.vector_store import VectorStore  # noqa: F401
 
             from ..implementations.memory_impl import RealMemoryEngine
-            return RealMemoryEngine()
+            return cast(MemoryPort, RealMemoryEngine())
         except ImportError:
             logger.warning("Memory SDK not available, using Null implementation")
             return NullMemoryEngine()
@@ -118,7 +120,7 @@ class ProfileManager:
             from phionyx_intuition import GraphEngine  # noqa: F401
 
             from ..implementations.intuition_impl import RealIntuitionEngine
-            return RealIntuitionEngine()
+            return cast(IntuitionPort, RealIntuitionEngine())
         except ImportError:
             logger.warning("Intuition SDK not available, using Null implementation")
             return NullIntuitionEngine()
@@ -133,7 +135,7 @@ class ProfileManager:
             from phionyx_core.pedagogy.risk_assessment import RiskAssessor  # noqa: F401
 
             from ..implementations.pedagogy_impl import RealPedagogyEngine
-            return RealPedagogyEngine(strictness=module_config)
+            return cast(PedagogyPort, RealPedagogyEngine(strictness=module_config))
         except ImportError:
             logger.warning("Pedagogy SDK not available, using Null implementation")
             return NullPedagogyEngine()
@@ -146,7 +148,7 @@ class ProfileManager:
 
         try:
             from ..implementations.policy_impl import RealPolicyEngine
-            return RealPolicyEngine(mode=module_config)
+            return cast(PolicyPort, RealPolicyEngine(mode=module_config))
         except ImportError:
             logger.warning("Policy SDK not available, using Null implementation")
             return NullPolicyEngine()
@@ -159,7 +161,7 @@ class ProfileManager:
 
         try:
             from ..implementations.narrative_impl import RealNarrativeEngine
-            return RealNarrativeEngine(mode=module_config)
+            return cast(NarrativePort, RealNarrativeEngine(mode=module_config))
         except ImportError:
             logger.warning("Narrative SDK not available, using Null implementation")
             return NullNarrativeEngine()
@@ -172,7 +174,7 @@ class ProfileManager:
 
         try:
             from ..implementations.meta_impl import RealMetaEngine
-            return RealMetaEngine()
+            return cast(MetaPort, RealMetaEngine())
         except ImportError:
             logger.warning("Meta SDK not available, using Null implementation")
             return NullMetaEngine()

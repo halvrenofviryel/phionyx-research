@@ -8,6 +8,7 @@ This is the "brain" that distributes settings to all modules.
 
 import logging
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Any
 
 from .loader import ProfileLoader
@@ -63,14 +64,14 @@ class ProfileManager:
     3. Returns structured params for each module
     """
 
-    def __init__(self, config_dir: str | None = None):
+    def __init__(self, config_dir: Path | str | None = None):
         """
         Initialize profile manager.
 
         Args:
             config_dir: Optional path to config directory
         """
-        self.loader = ProfileLoader(config_dir)
+        self.loader = ProfileLoader(Path(config_dir) if isinstance(config_dir, str) else config_dir)
         self._active_profile: Profile | None = None
 
     def load_profile(self, profile_name: str) -> Profile:

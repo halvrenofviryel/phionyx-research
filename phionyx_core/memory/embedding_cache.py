@@ -15,6 +15,7 @@ import hashlib
 import logging
 import time
 from collections import OrderedDict
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -231,7 +232,7 @@ class EmbeddingCache:
 
         return len(expired_keys)
 
-    def get_metrics(self) -> dict[str, int]:
+    def get_metrics(self) -> dict[str, int | float]:
         """
         Get cache metrics.
 
@@ -252,7 +253,7 @@ class EmbeddingCache:
             "max_size": self.max_size
         }
 
-    def get_stats(self) -> dict[str, any]:
+    def get_stats(self) -> dict[str, Any]:
         """
         Get detailed cache statistics.
 

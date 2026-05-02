@@ -1,8 +1,17 @@
+# mypy: ignore-errors
 """
 Vector Store - RAG Operations
 ==============================
 
 Semantic memory storage and retrieval using Supabase pgvector.
+
+Why ignore-errors: same pattern as `user_profile.py` — supabase is an
+optional adapter (`pip install phionyx-core[supabase]`). When it's not
+installed, `Client` and `create_client` fall through to `None`. Every
+call site is gated on a runtime `if not SUPABASE_AVAILABLE` check, but
+mypy can't narrow across that pattern. The type errors are real
+ambiguities of an optional integration that is dead code in the public
+SDK without the extra installed.
 """
 
 import logging

@@ -128,7 +128,7 @@ class ComplexityBudgetEngine:
             nonlocal complexity, nesting_level
             current_complexity = 0
 
-            if isinstance(node, (ast.If, ast.While, ast.For, ast.Try, ast.With)):
+            if isinstance(node, ast.If | ast.While | ast.For | ast.Try | ast.With):
                 nesting_level = level
                 current_complexity = nesting_level + 1
                 complexity += current_complexity
@@ -149,7 +149,7 @@ class ComplexityBudgetEngine:
 
         def visit_node(node, depth):
             nonlocal max_depth
-            if isinstance(node, (ast.If, ast.While, ast.For, ast.Try, ast.With)):
+            if isinstance(node, ast.If | ast.While | ast.For | ast.Try | ast.With):
                 current_depth = depth + 1
                 max_depth = max(max_depth, current_depth)
                 for child in ast.iter_child_nodes(node):
