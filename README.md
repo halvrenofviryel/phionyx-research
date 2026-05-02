@@ -213,6 +213,23 @@ A commercial license is available for use cases where AGPL-3.0 copyleft is not s
 
 ## Citation
 
+If you use Phionyx Core in academic work, please cite both the software and the architecture paper.
+
+**Software (this repository):**
+
+```bibtex
+@software{abak2026phionyxcore,
+  author    = {Abak, Ali Toygar},
+  title     = {Phionyx Core SDK},
+  year      = {2026},
+  publisher = {Phionyx Research},
+  version   = {0.2.1},
+  url       = {https://github.com/halvrenofviryel/phionyx-research}
+}
+```
+
+**Architecture paper (companion):**
+
 ```bibtex
 @techreport{abak2026phionyx,
   author      = {Abak, Ali Toygar},
@@ -222,3 +239,5 @@ A commercial license is available for use cases where AGPL-3.0 copyleft is not s
   url         = {https://github.com/halvrenofviryel/phionyx-research}
 }
 ```
+
+A machine-readable [`CITATION.cff`](CITATION.cff) is provided for GitHub's “Cite this repository” widget. A persistent Zenodo DOI for archived releases is planned — once issued it will be added here as a badge and to `CITATION.cff` under `identifiers:`.

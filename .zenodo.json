@@ -1,0 +1,37 @@
+{
+  "title": "Phionyx Core SDK",
+  "description": "Deterministic, auditable AI cognition runtime — not an LLM wrapper. Treats LLM outputs as sensor measurements inside a 46-block pipeline with safety gates, ethics checks, and physics-based state tracking.",
+  "creators": [
+    {
+      "name": "Abak, Ali Toygar",
+      "affiliation": "Phionyx Research",
+      "orcid": ""
+    }
+  ],
+  "upload_type": "software",
+  "license": "AGPL-3.0-or-later",
+  "access_right": "open",
+  "keywords": [
+    "deterministic-ai",
+    "runtime-architecture",
+    "ai-governance",
+    "pre-response-control",
+    "structured-state",
+    "llm-safety",
+    "cognitive-architecture",
+    "auditable-ai"
+  ],
+  "communities": [],
+  "related_identifiers": [
+    {
+      "identifier": "https://pypi.org/project/phionyx-core/",
+      "relation": "isPublishedIn",
+      "scheme": "url"
+    },
+    {
+      "identifier": "https://phionyx.ai",
+      "relation": "isDocumentedBy",
+      "scheme": "url"
+    }
+  ]
+}
