@@ -44,7 +44,7 @@ except ImportError:
     EVENT_REFERENCE_AVAILABLE = False
     # Fallback EventReference definition
     @dataclass
-    class EventReference:
+    class EventReference:  # type: ignore[no-redef]
         id: str
         tag: str
         intensity: float
@@ -215,7 +215,7 @@ class EchoState2(BaseModel):
                 gamma=0.15  # Default recovery rate
             )
 
-            return phi_result.get("phi", 0.5)
+            return float(phi_result.get("phi", 0.5))
         except ImportError:
             # Fallback: Simple heuristic
             # Higher A and positive V with low H = higher phi
@@ -415,23 +415,15 @@ class EchoState2(BaseModel):
         if timestamp is None:
             timestamp = self.t_now
 
-        # Create EventReference (simplified for E_tags)
-        if EVENT_REFERENCE_AVAILABLE:
-            ref = EventReference(
-                event_id=f"event_{len(self.E_tags)}",
-                event_type=event_type,
-                intensity=max(0.0, min(1.0, intensity)),
-                tags=[semantic_context] if semantic_context else []
-            )
-            self.E_tags.append(ref)
-        else:
-            # Fallback
-            ref = EventReference(
-                id=f"event_{len(self.E_tags)}",
-                tag=semantic_context or event_type,
-                intensity=max(0.0, min(1.0, intensity))
-            )
-            self.E_tags.append(ref)
+        # Create EventReference (simplified for E_tags). Both branches use
+        # the same schema (id, tag, intensity); the import-availability flag
+        # only switches between the canonical class and its inline fallback.
+        ref = EventReference(
+            id=f"event_{len(self.E_tags)}",
+            tag=semantic_context or event_type,
+            intensity=max(0.0, min(1.0, intensity)),
+        )
+        self.E_tags.append(ref)
 
     def update_state(
         self,

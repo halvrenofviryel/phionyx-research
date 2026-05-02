@@ -9,7 +9,7 @@ Generates narrative response using LLM.
 import logging
 from typing import Any, Protocol
 
-from phionyx_core.templates import get_template_manager
+from phionyx_core.templates import TemplateManager, get_template_manager
 from phionyx_core.templates.response_templates import IntentType
 
 from ..base import BlockContext, BlockResult, PipelineBlock
@@ -29,7 +29,8 @@ class NarrativeLayerProcessorProtocol(Protocol):
         enhanced_context_string: str,
         system_prompt: str | None = None,
         physics_state: dict[str, Any] | None = None,
-        selected_intent: dict[str, Any] | None = None
+        selected_intent: dict[str, Any] | None = None,
+        conversation_history: list[dict[str, Any]] | None = None,
     ) -> tuple[Any, str, Any]:  # Returns (frame, narrative_text, narrative_result)
         """Process narrative layer."""
         ...
@@ -57,10 +58,9 @@ class NarrativeLayerBlock(PipelineBlock):
         super().__init__("narrative_layer", claim_refs=self.CLAIM_REFS)
         self.processor = processor
         self.enable_templates = enable_templates
-        if enable_templates:
-            self.template_manager = get_template_manager()
-        else:
-            self.template_manager = None
+        self.template_manager: TemplateManager | None = (
+            get_template_manager() if enable_templates else None
+        )
 
     def should_skip(self, context: BlockContext) -> str | None:
         """Skip if processor not available."""
@@ -235,6 +235,7 @@ class NarrativeLayerBlock(PipelineBlock):
                             logger.debug(f"Template check skipped: {e}")
 
             # Normal LLM processing (no template match)
+            assert self.processor is not None  # narrowed by should_skip()
             updated_frame, narrative_text, narrative_result = await self.processor.process_narrative_layer(
                 frame=frame,
                 user_input=context.user_input,

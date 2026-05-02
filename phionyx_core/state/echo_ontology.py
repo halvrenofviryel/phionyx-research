@@ -27,8 +27,8 @@ try:
     TRACE_AVAILABLE = True
 except ImportError:
     TRACE_AVAILABLE = False
-    trace_weight = None
-    aggregate_trace = None
+    trace_weight = None  # type: ignore[assignment]
+    aggregate_trace = None  # type: ignore[assignment]
 
 
 class EchoOntology:
@@ -142,10 +142,11 @@ class EchoOntology:
             return weight
         except ImportError:
             # Fallback to simple trace_weight if standard API not available
+            from phionyx_core.memory.trace import trace_weight as _trace_weight_simple
             if now is None:
                 now = self.state.t_now
 
-            return trace_weight(event, now, self.half_life_seconds)
+            return _trace_weight_simple(event, now, self.half_life_seconds)
 
     def trace_to_echo(
         self,

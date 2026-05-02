@@ -66,6 +66,13 @@ class CreateScenarioFrameBlock(PipelineBlock):
             # Get physics params from context metadata (if available)
             physics_params = context.metadata.get("physics_params", {}) if context.metadata else {}
 
+            if self.frame_creator is None:
+                return BlockResult(
+                    block_id=self.block_id,
+                    status="error",
+                    error=RuntimeError("ScenarioFrameCreator not configured")
+                )
+
             # Create scenario frame
             frame = self.frame_creator.create_scenario_frame(
                 user_input=context.user_input,

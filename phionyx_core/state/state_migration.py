@@ -1,3 +1,4 @@
+# mypy: ignore-errors
 """
 State Migration - UnifiedEchoState ↔ EchoState2 Adapter
 ========================================================
@@ -10,6 +11,14 @@ Per Echoism Core v1.0:
 Migration utilities for converting between:
 - UnifiedEchoState (old/legacy) -> EchoState2 + AuxState (new/canonical)
 - EchoState2 + AuxState -> UnifiedEchoState (backward compatibility)
+
+Why ignore-errors: UnifiedEchoState lives in `app.core.echo.unified_state` —
+a private legacy package not shipped with phionyx-core. The import is
+optional (try/except), and every public-facing call is gated on
+OLD_STATE_AVAILABLE. mypy cannot resolve the legacy type, so its
+attribute lookups, kwargs, and return types all surface as errors. None
+of it is reachable in the public SDK; the file exists purely so
+internal callers that still hold a UnifiedEchoState can migrate.
 """
 
 from __future__ import annotations

@@ -81,6 +81,13 @@ class CognitiveLayerBlock(PipelineBlock):
             # Get physics params
             physics_params = context.metadata.get("physics_params", {}) if context.metadata else {}
 
+            if self.processor is None:
+                return BlockResult(
+                    block_id=self.block_id,
+                    status="error",
+                    error=RuntimeError("CognitiveLayerProcessor not configured")
+                )
+
             # Process cognitive layer
             updated_frame = await self.processor.process_cognitive_layer(
                 frame=frame,

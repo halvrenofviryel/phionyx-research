@@ -56,7 +56,7 @@ class DriveCoherenceUpdateBlock(PipelineBlock):
                     narrative_response=narrative_response,
                     physics_state=physics_state,
                 )
-                drive_result = {"drive": None, "coherence": None, "source": "injected"}
+                drive_result: dict[str, Any] = {"drive": None, "coherence": None, "source": "injected"}
                 context.metadata["drive_update_result"] = drive_result
                 return BlockResult(
                     block_id=self.block_id,
@@ -94,7 +94,7 @@ class DriveCoherenceUpdateBlock(PipelineBlock):
                     if hasattr(unified_state, "coherence"):
                         unified_state.coherence = coherence
 
-            drive_result: dict[str, Any] = {
+            drive_result = {
                 "drive": drive,
                 "coherence": coherence,
                 "source": source,

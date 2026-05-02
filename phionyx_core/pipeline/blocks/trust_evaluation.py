@@ -72,11 +72,11 @@ class TrustEvaluationBlock(PipelineBlock):
                 entropy = context.current_entropy if context.current_entropy is not None else 0.5
                 # Ethics risk lowers trust
                 ethics_result = metadata.get("ethics_result", {})
-                max_risk = 0.0
+                max_risk: float = 0.0
                 if isinstance(ethics_result, dict):
-                    max_risk = ethics_result.get("risk_level", ethics_result.get("harm_risk", 0.0))
+                    max_risk = float(ethics_result.get("risk_level", ethics_result.get("harm_risk", 0.0)) or 0.0)
                 elif hasattr(ethics_result, "risk_level"):
-                    max_risk = getattr(ethics_result, "risk_level", 0.0)
+                    max_risk = float(getattr(ethics_result, "risk_level", 0.0) or 0.0)
 
                 # Trust = confidence_weight * t_meta - risk - entropy_penalty
                 direct_trust = t_meta * 0.6 + (1.0 - max_risk) * 0.3 + (1.0 - entropy) * 0.1
