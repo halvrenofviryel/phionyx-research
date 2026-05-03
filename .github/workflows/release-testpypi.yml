@@ -26,6 +26,11 @@ on:
         default: ""
         type: string
 
+# Default to read-only at the workflow level. The single job below
+# elevates id-token: write for the OIDC trusted-publisher exchange.
+permissions:
+  contents: read
+
 jobs:
   publish-testpypi:
     name: build + publish to TestPyPI

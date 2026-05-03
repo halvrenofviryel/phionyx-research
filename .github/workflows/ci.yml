@@ -6,6 +6,14 @@ on:
   pull_request:
     branches: [main]
 
+# Default to read-only token for everything in this workflow.
+# CI does not push, comment, or release — only reads the repo and writes
+# build artifacts to the workflow scratch space (which does not need
+# write permissions on the repo). Defence-in-depth: even a compromised
+# step cannot mutate the repository or its issues.
+permissions:
+  contents: read
+
 # Cancel in-progress runs when a new commit is pushed to the same PR / branch.
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
