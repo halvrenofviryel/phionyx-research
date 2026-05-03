@@ -1,0 +1,195 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://phionyx.ai/schemas/governed_response/0.1",
+  "title": "Phionyx Governed Response Envelope",
+  "description": "Canonical structure for the envelope produced by a single Phionyx Core pipeline turn. Every field documented here corresponds to a row a reviewer can verify against `examples/envelopes/governed_response.json`.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "phionyx_core_version",
+    "turn_id",
+    "timestamp_utc",
+    "input",
+    "state",
+    "phi",
+    "governance",
+    "response",
+    "pipeline",
+    "audit"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "phionyx-governed-response/0.1",
+      "description": "Schema version identifier; bumped on breaking changes."
+    },
+    "phionyx_core_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+([+-][A-Za-z0-9.+-]+)?$",
+      "description": "Version of phionyx-core that produced the envelope (PEP 440 / SemVer-compatible)."
+    },
+    "turn_id": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Monotonic turn counter for the participant session."
+    },
+    "timestamp_utc": {
+      "type": "string",
+      "format": "date-time",
+      "description": "RFC 3339 / ISO 8601 UTC timestamp at the moment the envelope was sealed."
+    },
+
+    "input": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["user_text", "safety"],
+      "properties": {
+        "user_text": {
+          "type": "string",
+          "description": "Raw user input that entered the pipeline."
+        },
+        "safety": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["allowed"],
+          "properties": {
+            "allowed": {
+              "type": "boolean",
+              "description": "True when the input safety gate did not block the turn."
+            },
+            "reason": {
+              "type": ["string", "null"],
+              "description": "Human-readable rejection reason when allowed is false; null otherwise."
+            }
+          }
+        }
+      }
+    },
+
+    "state": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["arousal", "valence", "entropy", "resonance", "stability"],
+      "description": "EchoState2 derived metrics at the end of the turn.",
+      "properties": {
+        "arousal":   { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+        "valence":   { "type": "number", "minimum": -1.0, "maximum": 1.0 },
+        "entropy":   { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+        "resonance": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+        "stability": { "type": "number", "minimum": 0.0, "maximum": 1.0 }
+      }
+    },
+
+    "phi": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["phi", "phi_cognitive", "phi_physical", "weight_cognitive", "weight_physical"],
+      "description": "Hybrid-resonance Φ decomposition. Φ itself is dimensionless and bounded; the cognitive/physical sub-components and their weights are recorded so the result is reproducible from inputs alone.",
+      "properties": {
+        "phi":              { "type": "number" },
+        "phi_cognitive":    { "type": "number" },
+        "phi_physical":     { "type": "number" },
+        "weight_cognitive": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+        "weight_physical":  { "type": "number", "minimum": 0.0, "maximum": 1.0 }
+      }
+    },
+
+    "governance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kill_switch_state",
+        "kill_switch_triggered",
+        "kill_switch_reason",
+        "ethics_max_risk",
+        "t_meta",
+        "drift_detected"
+      ],
+      "description": "Decisions taken by the safety / governance layer for this turn.",
+      "properties": {
+        "kill_switch_state": {
+          "type": "string",
+          "enum": ["armed", "triggered", "cooldown", "disarmed"],
+          "description": "Lifecycle state of the kill switch after the turn."
+        },
+        "kill_switch_triggered": {
+          "type": "boolean",
+          "description": "True if any kill-switch trigger fired this turn."
+        },
+        "kill_switch_reason": {
+          "type": ["string", "null"],
+          "description": "Human-readable trigger reason when triggered; null otherwise."
+        },
+        "ethics_max_risk": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "description": "Maximum ethics risk score across all categories for the turn."
+        },
+        "t_meta": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "description": "Meta-cognitive trust score: (1-ECE)·(1-OOD)·(1-|self_report_delta|)."
+        },
+        "drift_detected": {
+          "type": "boolean",
+          "description": "True when the behavioural drift detector fired."
+        }
+      }
+    },
+
+    "response": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["text", "narrative_layer"],
+      "properties": {
+        "text": {
+          "type": "string",
+          "description": "Final user-facing response text."
+        },
+        "narrative_layer": {
+          "type": "string",
+          "description": "Identifier for the narrative-layer adapter that generated text (e.g. 'synthetic_echo', 'claude_cli', 'ollama')."
+        }
+      }
+    },
+
+    "pipeline": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["contract_version", "block_count"],
+      "properties": {
+        "contract_version": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+          "description": "Pipeline contract version (currently 3.8.0)."
+        },
+        "block_count": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Number of canonical blocks active in this contract version (46 for 3.8.0)."
+        }
+      }
+    },
+
+    "audit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["hash_alg", "envelope_hash"],
+      "properties": {
+        "hash_alg": {
+          "type": "string",
+          "enum": ["sha256"],
+          "description": "Hash algorithm used to seal the envelope."
+        },
+        "envelope_hash": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "description": "SHA-256 of the envelope payload (without the audit field itself), encoded as 64 lowercase hex characters."
+        }
+      }
+    }
+  }
+}

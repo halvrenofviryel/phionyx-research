@@ -13,6 +13,102 @@ _(no changes yet)_
 
 ---
 
+## [0.3.0] — 2026-05-03
+
+**Theme: from "self-asserted claims" to "reviewer-verifiable artifact."**
+
+The headline change is the **reproducibility pack** that now ships
+alongside every tagged release. It bundles JUnit XML, coverage XML,
+determinism hashes, a benchmark JSON, the canonical governed-response
+envelope, an audit-chain example, and a sample OpenTelemetry trace —
+small enough (< 1 MB) to attach to a GitHub release and ship to Zenodo
+for DOI minting. The point is that an external reviewer can verify
+every load-bearing claim on `phionyx.ai/evidence` without trusting any
+prose in this repo.
+
+### Added
+
+- **Reproducibility pack** (`scripts/make_reproducibility_pack.py`) —
+  one-shot generator that produces `pytest_report.xml`, `coverage.xml`,
+  `determinism_hashes.json`, `benchmark_results.json`,
+  `governed_response_example.json`, `audit_chain_example.json`,
+  `otel_trace_example.json`, and `reproducibility_report.md`. Runs
+  locally; `--zip` attaches a versioned archive. CI release workflow
+  builds the pack on every tag and uploads it as a GitHub release
+  asset via `softprops/action-gh-release`.
+- **JSON Schema for the governed-response envelope**
+  (`examples/envelopes/governed_response.schema.json`) — Draft 2020-12,
+  fully constrained, plus a small `validate.py` that reports
+  JSON-Pointer-precise failures. Ensures downstream consumers can
+  validate Phionyx envelopes deterministically.
+- **OpenTelemetry sample trace** — hand-crafted span tree (one span per
+  executed pipeline block) shipped in the reproducibility pack. The real
+  exporter is wired by the `[telemetry]` extra; this file documents the
+  expected attribute names so external OTel tooling can validate before
+  the optional dependency is installed.
+- **mypy strict gate (full SDK)** — every module under `phionyx_core/`
+  is now type-checked. 327 source files, zero errors. Six waves of
+  cleanup (#43, #45, #46, #48, #49, #50) folded the entire tree under
+  `mypy phionyx_core` in CI.
+
+### Changed
+
+- **Honest-positioning sweep across the public surface (Phase 1).**
+  Test count corrected: README now reports the public CI subset (was
+  conflated with the internal monorepo corpus). FastAPI example status:
+  "Planned" → "Runnable" (it always was; the doc was wrong). New
+  "Scope: what Phionyx is, and is not" + "Known limitations" sections
+  in README and on phionyx.ai. New tagline:
+  *"Phionyx makes the governance path deterministic — not the model."*
+  L3 evaluation level renamed from "Certification-Grade" to
+  "Certification-Oriented Evidence Profile" to avoid self-certification
+  framing. New Evidence Matrix at `phionyx.ai/evidence` with 19
+  itemised claims, each with evidence path + reproducibility command +
+  status (public / beta / planned / pending) and a 10-minute Reviewer
+  Quick Path.
+- **Pytest markers registered** in `pyproject.toml` (`unit`, `contract`,
+  `critical`, `smoke`, `safety`, `adversarial`) so `--strict-markers`
+  no longer breaks collection when marker-using suites run together.
+  With markers registered the combined collection is now 1,137 tests
+  (was effectively 4-error-on-collect when run together).
+- **Pydantic V2 plugin** wired into mypy (`pydantic.mypy`) — `Field(None, ...)`
+  defaults now type-check correctly.
+
+### Fixed
+
+- `state_adapter.py` was reading `tag.semantic_context` on
+  `EventReference`, which no longer has that attribute. Switched to
+  `tag.tag`. Surfaced by mypy wave 4.
+- `compiler.py:compile_profiles()` was calling a non-existent
+  `loader.load_all_profiles()`. Replaced with
+  `[loader.load_profile(name) for name in loader._load_profiles()]`.
+  Surfaced by mypy wave 5.
+- `complexity_engine.py` was calling `ast.walk(node.orelse)` on a
+  `list[stmt]`. `ast.walk` requires an `AST`; rewrote to walk each
+  statement.
+- `examples/fastapi/main.py` migrated `datetime.utcnow()` →
+  `datetime.now(timezone.utc)`.
+
+### Documentation
+
+- `docs/strategic/MASTER_PLAN_2026_05.md` (v2.0) — twelve-week roadmap
+  from "self-asserted claims" to "independently validated artifact",
+  revised after three rounds of external review. Reproducibility Pack
+  is the centre, not a side dish.
+- README "Known limitations" grounded in implementation reality
+  (controlled benchmarks, no third-party audit, no production
+  deployment claims, LLM quality not guaranteed, compliance mappings
+  are evidence not legal certification, Φ/entropy metrics
+  experimental).
+
+### Repo metadata
+
+- GitHub repo description tightened to: *"Deterministic AI runtime
+  governance for LLM systems — treating model output as measurement,
+  not authority. 46-block pipeline, audit trail, kill switch."*
+
+---
+
 ## [0.2.1] — 2026-05-01
 
 First PyPI release. Public surface is unchanged from the v0.2.0

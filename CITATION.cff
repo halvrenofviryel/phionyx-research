@@ -1,8 +1,8 @@
 cff-version: 1.2.0
 message: "If you use this software in your research, please cite it as below."
 title: "Phionyx Core SDK"
-version: 0.2.1
-date-released: "2026-05-01"
+version: 0.3.0
+date-released: "2026-05-03"
 authors:
   - family-names: Abak
     given-names: Ali Toygar
@@ -24,7 +24,7 @@ keywords:
 # identifiers:
 #   - type: doi
 #     value: 10.5281/zenodo.XXXXXXX
-#     description: Archived Zenodo release for v0.2.1 (uncomment after first archive)
+#     description: Archived Zenodo release for v0.3.0 (uncomment after first archive)
 preferred-citation:
   type: article
   title: "Phionyx: A Deterministic AI Runtime Architecture with Structured State Management and Pre-Response Governance"
