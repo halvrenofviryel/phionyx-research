@@ -262,5 +262,5 @@ class PedagogyEngine:
         Returns:
             True if intervention is required
         """
-        return self.guardrails.requires_intervention(text)
+        return bool(self.guardrails.requires_intervention(text))
 

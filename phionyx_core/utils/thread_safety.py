@@ -9,7 +9,7 @@ import logging
 import threading
 from collections.abc import Callable
 from functools import wraps
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 
 logger = logging.getLogger(__name__)
 
@@ -76,7 +76,7 @@ class ThreadSafeDict:
     def copy(self) -> dict:
         """Thread-safe copy."""
         with self._lock:
-            return self._dict.copy()
+            return cast(dict, self._dict.copy())
 
     def clear(self) -> None:
         """Thread-safe clear."""
@@ -144,7 +144,7 @@ class ThreadSafeList:
     def copy(self) -> list:
         """Thread-safe copy."""
         with self._lock:
-            return self._list.copy()
+            return cast(list, self._list.copy())
 
 
 def synchronized(func: Callable[..., T]) -> Callable[..., T]:
@@ -157,11 +157,11 @@ def synchronized(func: Callable[..., T]) -> Callable[..., T]:
             # Thread-safe code
             pass
     """
-    func.__lock__ = threading.RLock()
+    func.__lock__ = threading.RLock()  # type: ignore[attr-defined]
 
     @wraps(func)
     def wrapper(*args, **kwargs):
-        with func.__lock__:
+        with func.__lock__:  # type: ignore[attr-defined]
             return func(*args, **kwargs)
 
     return wrapper
@@ -221,5 +221,5 @@ class SessionLocalStorage:
         storage = getattr(self._local, 'storage', None)
         if storage is None:
             return {}
-        return storage.copy()
+        return cast(dict, storage.copy())
 

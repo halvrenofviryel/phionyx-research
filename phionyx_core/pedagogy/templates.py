@@ -10,7 +10,7 @@ Provides a library of hardcoded, clinically approved responses for:
 These templates BYPASS the LLM when physics state hits extremes.
 """
 
-from typing import Literal
+from typing import Any, Literal
 
 
 class TemplateLibrary:
@@ -51,7 +51,7 @@ class TemplateLibrary:
             }
         }
 
-    def _load_extreme_state_templates(self) -> dict[str, dict[str, dict[str, str]]]:
+    def _load_extreme_state_templates(self) -> dict[str, dict[str, dict[str, Any]]]:
         """
         Load hardcoded templates for extreme physics states.
 

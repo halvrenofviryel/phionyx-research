@@ -7,7 +7,7 @@ Faz 3.1: Kalan Özellikler
 Alternatif mimari/fonksiyon seçeneklerini listeler ve maliyet/risk analizi yapar.
 """
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any
 
@@ -39,14 +39,8 @@ class Alternative:
     risk_score: float = 0.0  # 0.0-1.0, lower is better
     complexity_score: float = 0.0  # 0.0-1.0, lower is better
     maintainability_score: float = 0.0  # 0.0-1.0, higher is better
-    pros: list[str] = None
-    cons: list[str] = None
-
-    def __post_init__(self):
-        if self.pros is None:
-            self.pros = []
-        if self.cons is None:
-            self.cons = []
+    pros: list[str] = field(default_factory=list)
+    cons: list[str] = field(default_factory=list)
 
 
 @dataclass

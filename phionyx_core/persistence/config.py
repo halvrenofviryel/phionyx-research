@@ -35,10 +35,10 @@ async def create_state_store_from_env() -> Any | None:
         logger.info("Creating InMemoryStateStore")
         try:
             from phionyx_core.persistence.in_memory_state_store import InMemoryStateStore
-            store = InMemoryStateStore()
-            await store.initialize()
+            mem_store = InMemoryStateStore()
+            await mem_store.initialize()
             logger.info("✅ InMemoryStateStore initialized")
-            return store
+            return mem_store
         except ImportError as e:
             logger.error(f"Failed to import InMemoryStateStore: {e}")
             return None
@@ -54,10 +54,10 @@ async def create_state_store_from_env() -> Any | None:
             from phionyx_core.persistence.postgres_state_store import PostgreSQLStateStore
 
             pool_size = int(os.getenv("STATE_STORE_POOL_SIZE", "10"))
-            store = PostgreSQLStateStore(connection_string, pool_size=pool_size)
-            await store.initialize()
+            pg_store = PostgreSQLStateStore(connection_string, pool_size=pool_size)
+            await pg_store.initialize()
             logger.info(f"✅ PostgreSQLStateStore initialized (pool_size={pool_size})")
-            return store
+            return pg_store
         except ImportError as e:
             logger.error(f"Failed to import PostgreSQLStateStore: {e}. Install asyncpg for PostgreSQL support.")
             return None

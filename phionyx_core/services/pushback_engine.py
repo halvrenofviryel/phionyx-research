@@ -223,7 +223,7 @@ class PushBackEngine:
         context: BlockContext
     ) -> list[PushBackMessage]:
         """Check governance violations using Governance Node."""
-        violations = []
+        violations: list[PushBackMessage] = []
 
         if not self.governance_node:
             return violations

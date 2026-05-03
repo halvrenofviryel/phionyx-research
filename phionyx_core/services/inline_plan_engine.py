@@ -7,7 +7,7 @@ Faz 3.1: Kalan Özellikler
 Kod üretiminden önce plan üretir ve adım ayrıştırması yapar.
 """
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Any
 
 
@@ -17,13 +17,9 @@ class PlanStep:
     id: str
     order: int
     description: str
-    dependencies: list[str] = None  # IDs of steps that must complete before this
+    dependencies: list[str] = field(default_factory=list)  # IDs of steps that must complete before this
     estimated_time: float | None = None  # In minutes
     status: str = "pending"  # "pending", "in_progress", "completed", "failed"
-
-    def __post_init__(self):
-        if self.dependencies is None:
-            self.dependencies = []
 
 
 @dataclass
@@ -160,8 +156,8 @@ class InlinePlanEngine:
             List of steps in execution order
         """
         # Topological sort based on dependencies
-        executed = set()
-        result = []
+        executed: set[str] = set()
+        result: list[PlanStep] = []
 
         while len(result) < len(plan.steps):
             progress = False

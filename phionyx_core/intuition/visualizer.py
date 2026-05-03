@@ -1,6 +1,10 @@
+# mypy: ignore-errors
 """
 Graph Visualizer - Export graph data for visualization
 ======================================================
+
+Why ignore-errors: same Supabase-optional pattern as
+memory/user_profile.py — gated on SUPABASE_AVAILABLE.
 
 Exports the knowledge graph in formats compatible with:
 - Cosmograph (https://cosmograph.app/)

@@ -77,7 +77,7 @@ def compute_urgency(campaign: dict) -> float:
 
     # Gap ratio: 0 = at threshold, 1 = at zero
     gap = (threshold - baseline) / threshold
-    return min(1.0, max(0.0, gap))
+    return float(min(1.0, max(0.0, gap)))
 
 
 def compute_stage_coverage(campaign: dict) -> float:
