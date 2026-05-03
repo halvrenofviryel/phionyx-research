@@ -1,12 +1,15 @@
 # Phionyx Core SDK
 
-**Deterministic AI runtime that treats LLM outputs as sensor measurements, not decisions.**
+**Phionyx makes the governance path deterministic — not the model.**
+
+Deterministic AI runtime that treats LLM outputs as sensor measurements, not decisions. The control plane around the model — gates, state, audit — is reproducible; the model itself stays probabilistic.
 
 [![CI](https://github.com/halvrenofviryel/phionyx-research/actions/workflows/ci.yml/badge.svg)](https://github.com/halvrenofviryel/phionyx-research/actions/workflows/ci.yml)
 [![PyPI](https://img.shields.io/pypi/v/phionyx-core.svg)](https://pypi.org/project/phionyx-core/)
 [![License](https://img.shields.io/badge/license-AGPL--3.0-blue.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
-[![Tests](https://img.shields.io/badge/tests-1%2C230%20pass-brightgreen.svg)](tests/)
+[![Tests](https://img.shields.io/badge/tests-1%2C018%20pass-brightgreen.svg)](tests/)
+[![Mypy](https://img.shields.io/badge/mypy-strict%20%7C%200%20errors-brightgreen.svg)](.github/workflows/ci.yml)
 
 ```bash
 pip install phionyx-core
@@ -95,6 +98,23 @@ See [`examples/fastapi/`](examples/fastapi/) for an HTTP endpoint wrapper.
 
 ---
 
+## Scope: what Phionyx is, and is not
+
+Phionyx is an **early, working reference implementation** for deterministic
+runtime governance. To keep claims aligned with evidence, here is what we
+**do not** assert:
+
+- **Phionyx does not make LLMs deterministic.** Model output stays probabilistic. Phionyx makes the *governance path* — gates, state, audit — deterministic.
+- **Phionyx is not a certification authority.** The Evaluation Standard v0.1 is an *open evaluation profile*, not an accredited certification scheme.
+- **Phionyx does not replace NIST AI RMF, ISO/IEC 42001, or the EU AI Act.** It is a runtime layer designed to *produce evidence* that maps onto those frameworks; it does not implement them on your behalf.
+- **Current benchmarks are controlled reference benchmarks**, not third-party audits. Reproducible from this repo, but not yet independently validated.
+- **Production-readiness is scoped to the demos in `examples/`**. The runtime is research-grade until pilot deployments and an external review land.
+- **Clinical, medical, or psychological framings are out of scope** unless separately validated under the appropriate regulatory regime.
+
+If a claim above feels too cautious for your context, write to founder@phionyx.ai — we will tell you what we have, what we do not, and what is on the roadmap.
+
+---
+
 ## Architecture
 
 Phionyx implements three integrated layers:
@@ -160,12 +180,19 @@ profile = manager.load_profile("edu")  # or "game", "clinical"
 
 ## Testing
 
+The public SDK ships with a verifiable subset that runs against a
+clean `pip install phionyx-core` clone. CI enforces this on every push
+across Python 3.10–3.13.
+
 ```bash
-pytest tests/                          # All tests (2,571)
-pytest tests/unit/core/ -q             # Core unit tests
-pytest tests/contract/ -q              # Contract tests
-pytest tests/behavioral_eval/ -q       # Behavioral evaluation
+pytest tests/core tests/contract tests/benchmarks
+# Public CI subset on v0.2.1: 1,018 passed, 7 skipped, 0 failed
 ```
+
+> The historical / internal corpus across the private monorepo (which
+> includes integration tests, behavioural eval suites, and apps) is
+> larger (~2,500+ checks). Only the figures runnable from this public
+> repository on a clean clone are reported here as load-bearing claims.
 
 ---
 
