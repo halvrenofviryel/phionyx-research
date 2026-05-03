@@ -48,6 +48,7 @@ class EchoState2Plus:
     t_now: datetime = field(default_factory=datetime.now)
     turn_index: int = 0
     dt: float = 0.0
+    _last_update: datetime | None = None
 
     @property
     def phi(self) -> float:

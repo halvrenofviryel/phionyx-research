@@ -22,6 +22,7 @@ _entropy_gauge = None
 _ethics_blocking_counter = None
 _latency_histogram = None
 _llm_cost_counter = None
+_entropy_values: dict[str, float] = {}
 
 try:
     from opentelemetry import metrics

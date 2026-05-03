@@ -83,7 +83,7 @@ class Ed25519Signer:
 
         if self._ed25519 and self._private_key:
             signature = self._private_key.sign(data_bytes)
-            return signature.hex()
+            return str(signature.hex())
         else:
             # HMAC-SHA256 fallback
             mac = hmac.new(self._hmac_key, data_bytes, hashlib.sha256)

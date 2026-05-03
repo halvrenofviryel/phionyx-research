@@ -11,7 +11,7 @@ Features:
 """
 
 import logging
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from .parallel_executor import ParallelGroup
 
@@ -23,15 +23,10 @@ class IntentBasedGroupConfig:
     """Configuration for intent-based parallel groups."""
     intent: str
     parallel_groups: list[list[str]]  # List of block groups that can run in parallel
-    skip_blocks: set[str] = None  # Blocks to skip for this intent
-    preserve_blocks: set[str] = None  # Blocks that must always run
-
-    def __post_init__(self):
-        """Initialize default sets."""
-        if self.skip_blocks is None:
-            self.skip_blocks = set()
-        if self.preserve_blocks is None:
-            self.preserve_blocks = {"response_build", "phi_computation", "entropy_computation"}
+    skip_blocks: set[str] = field(default_factory=set)  # Blocks to skip for this intent
+    preserve_blocks: set[str] = field(
+        default_factory=lambda: {"response_build", "phi_computation", "entropy_computation"}
+    )
 
 
 class DynamicGrouping:

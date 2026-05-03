@@ -659,7 +659,7 @@ class QualityProbe:
         total = 3
         try:
             from phionyx_core.pipeline.blocks.outcome_feedback import OutcomeFeedbackBlock
-            _blk = OutcomeFeedbackBlock()
+            OutcomeFeedbackBlock()
             # OutcomeFeedbackBlock with no DI services should have skip behavior
             skip_count += 1
         except Exception:
@@ -667,7 +667,7 @@ class QualityProbe:
 
         try:
             from phionyx_core.pipeline.blocks.causal_graph_update import CausalGraphUpdateBlock
-            _blk = CausalGraphUpdateBlock()
+            CausalGraphUpdateBlock()
             skip_count += 1
         except Exception:
             pass
@@ -676,7 +676,7 @@ class QualityProbe:
             from phionyx_core.pipeline.blocks.memory_consolidation_block import (
                 MemoryConsolidationBlock,
             )
-            _blk = MemoryConsolidationBlock()
+            MemoryConsolidationBlock()
             skip_count += 1
         except Exception:
             pass

@@ -7,7 +7,7 @@ Faz 3.1: Kalan Özellikler
 Confusion yönetimi için clarification request prompting.
 """
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any
 
@@ -29,11 +29,7 @@ class ClarificationRequest:
     question: str
     context: str
     priority: str = "medium"  # "low", "medium", "high", "critical"
-    suggested_options: list[str] = None
-
-    def __post_init__(self):
-        if self.suggested_options is None:
-            self.suggested_options = []
+    suggested_options: list[str] = field(default_factory=list)
 
 
 class ClarificationRequestEngine:

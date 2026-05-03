@@ -27,10 +27,10 @@ logger = logging.getLogger(__name__)
 class NarrativeConfig:
     """Configuration for NarrativeEngine."""
     # LLM Provider Configuration
-    llm_provider: str = None  # "openai", "ollama", "anthropic", etc.
-    llm_model: str = None  # Model name (e.g., "gpt-4o", "llama3.1:latest")
-    llm_api_key: str = None
-    llm_base_url: str = None  # For local models (Ollama)
+    llm_provider: str | None = None  # "openai", "ollama", "anthropic", etc.
+    llm_model: str | None = None  # Model name (e.g., "gpt-4o", "llama3.1:latest")
+    llm_api_key: str | None = None
+    llm_base_url: str | None = None  # For local models (Ollama)
 
     # Generation Parameters
     temperature: float = 0.7
@@ -89,16 +89,17 @@ class NarrativeEngine:
 
     def _build_model_string(self) -> str:
         """Build model string for LiteLLM."""
+        model = self.config.llm_model or ""
         if self.config.llm_provider == "ollama":
             # Ollama format: "ollama/llama3.1:latest" or just model if base_url is set
             if self.config.llm_base_url and self.config.llm_base_url != "http://localhost:11434":
-                return self.config.llm_model
-            return f"ollama/{self.config.llm_model}"
+                return model
+            return f"ollama/{model}"
         elif self.config.llm_provider == "openai":
-            return self.config.llm_model
+            return model
         else:
             # Other providers: "provider/model"
-            return f"{self.config.llm_provider}/{self.config.llm_model}"
+            return f"{self.config.llm_provider}/{model}"
 
     def _inject_physics_constraints(
         self,

@@ -12,6 +12,7 @@ Features:
 """
 
 import logging
+from typing import cast
 
 logger = logging.getLogger(__name__)
 
@@ -38,7 +39,7 @@ class ErrorAwareSampler:
             logger.warning("OpenTelemetry SDK not available for sampling")
             self.base_sampler = None
 
-    def should_sample(self, trace_id: int, span_name: str = None) -> bool:
+    def should_sample(self, trace_id: int, span_name: str | None = None) -> bool:
         """
         Determine if a trace should be sampled.
 
@@ -59,7 +60,7 @@ class ErrorAwareSampler:
                 return True
 
         # Use base sampler for other cases
-        return self.base_sampler.should_sample(trace_id)
+        return bool(self.base_sampler.should_sample(trace_id))
 
     def get_description(self) -> str:
         """Get sampler description."""
@@ -78,7 +79,7 @@ def create_production_sampler(sampling_rate: float = 0.1) -> object | None:
     """
     try:
         from opentelemetry.sdk.trace.sampling import TraceIdRatioBased
-        return TraceIdRatioBased(sampling_rate)
+        return cast("object | None", TraceIdRatioBased(sampling_rate))
     except ImportError:
         logger.warning("OpenTelemetry SDK not available for sampling")
         return None

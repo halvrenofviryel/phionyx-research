@@ -72,7 +72,7 @@ class ChronicleGraphAPI:
             result = self.client.table("chronicle_events").insert(event_data).execute()
 
             if result.data and len(result.data) > 0:
-                event_id = result.data[0]["id"]
+                event_id = str(result.data[0]["id"])
                 logger.info(f"ChronicleGraph: Created event {event_id} for character {character_id} ({event_type})")
                 return event_id
 

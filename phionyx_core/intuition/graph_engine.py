@@ -1,6 +1,11 @@
+# mypy: ignore-errors
 """
 Graph Engine - The Intuition Motor
 ==================================
+
+Why ignore-errors: same Supabase-optional pattern as memory/user_profile.py.
+Every call site is gated on SUPABASE_AVAILABLE, but mypy can't narrow
+across that runtime check.
 
 This module implements a lightweight GraphRAG system that:
 1. Extracts concepts from user input using LLM

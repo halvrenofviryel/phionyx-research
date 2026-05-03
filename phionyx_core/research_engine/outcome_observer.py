@@ -68,7 +68,7 @@ class ParameterEvidence:
         kept = [e for e in self.experiments if e["decision"] == "keep"]
         if not kept:
             return 0.0
-        return sum(e["cqs_delta"] for e in kept) / len(kept)
+        return float(sum(e["cqs_delta"] for e in kept) / len(kept))
 
     @property
     def best_value(self) -> float | None:
@@ -77,14 +77,16 @@ class ParameterEvidence:
         if not kept:
             return None
         best = max(kept, key=lambda e: e["cqs_delta"])
-        return best["proposed_value"]
+        val = best["proposed_value"]
+        return float(val) if val is not None else None
 
     @property
     def current_value(self) -> float | None:
         """Current value from the most recent experiment."""
         if not self.experiments:
             return None
-        return self.experiments[-1]["current_value"]
+        val = self.experiments[-1]["current_value"]
+        return float(val) if val is not None else None
 
 
 @dataclass

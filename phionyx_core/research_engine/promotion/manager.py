@@ -12,7 +12,7 @@ import json
 import time
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 
 @dataclass(frozen=True)
@@ -45,7 +45,7 @@ class PromotionManager:
             return {}
         try:
             with open(self._registry_path) as f:
-                return json.load(f)
+                return cast(dict[str, dict[str, Any]], json.load(f))
         except (OSError, json.JSONDecodeError):
             return {}
 

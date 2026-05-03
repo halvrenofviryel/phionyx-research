@@ -40,7 +40,7 @@ class EarlyExitOptimizer:
     def __init__(self):
         """Initialize early exit optimizer."""
         self.conditions: dict[str, EarlyExitCondition] = {}
-        self.metrics = {
+        self.metrics: dict[str, int] = {
             "early_exits": 0,
             "intent_based_exits": 0,
             "safety_exits": 0,

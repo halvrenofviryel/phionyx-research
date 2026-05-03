@@ -101,7 +101,7 @@ class DependencyValidator:
         if block_id not in self.dependencies:
             return []
 
-        return self.dependencies[block_id].get('dependencies', [])
+        return list(self.dependencies[block_id].get('dependencies', []))
 
     def get_metadata_producers(self, metadata_key: str) -> list[str]:
         """

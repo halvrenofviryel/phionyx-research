@@ -258,7 +258,7 @@ class Guardrails:
                 critical_type = rt
                 break
 
-        if critical_score > 0:
+        if critical_score > 0 and critical_type is not None:
             # LEVEL 1 (CRITICAL) - Immediate Block
             intervention_message = self._get_intervention_message(critical_type)
             return RiskAssessment(

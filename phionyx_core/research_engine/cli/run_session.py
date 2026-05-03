@@ -35,7 +35,7 @@ def load_surfaces(surfaces_file: str | None = None) -> list[dict]:
     with open(path) as f:
         data = yaml.safe_load(f)
 
-    return data.get("surfaces", [])
+    return list(data.get("surfaces", []))
 
 
 def _read_actual_value(

@@ -12,7 +12,7 @@ Multiple layers of protection against infinite loops and runaway execution:
 import logging
 import time
 from collections import defaultdict
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING, Any, Optional
 
 if TYPE_CHECKING:
     from phionyx_core.profiles.schema import ExecutionGuardConfig
@@ -262,7 +262,7 @@ class ExecutionGuard:
 
         return False, None
 
-    def get_statistics(self) -> dict[str, any]:
+    def get_statistics(self) -> dict[str, Any]:
         """Get execution statistics."""
         return {
             "iteration_count": self.iteration_count,

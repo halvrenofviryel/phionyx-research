@@ -91,7 +91,7 @@ class ComplexityBudgetEngine:
 
     def _calculate_cyclomatic_complexity_enhanced(self, tree: ast.AST) -> int:
         """Enhanced cyclomatic complexity calculation."""
-        complexity = 1  # Base complexity
+        complexity: float = 1  # Base complexity
 
         for node in ast.walk(tree):
             # Decision points increase complexity
@@ -99,9 +99,10 @@ class ComplexityBudgetEngine:
                 complexity += 1
                 # Check for elif chains
                 if hasattr(node, 'orelse') and node.orelse:
-                    for child in ast.walk(node.orelse):
-                        if isinstance(child, ast.If):
-                            complexity += 1
+                    for stmt in node.orelse:
+                        for child in ast.walk(stmt):
+                            if isinstance(child, ast.If):
+                                complexity += 1
             elif isinstance(node, ast.While):
                 complexity += 1
             elif isinstance(node, ast.For):
@@ -367,7 +368,7 @@ class ComplexityBudgetEngine:
         entropy_boost = complexity_score * 0.2  # Max 0.2 boost
         adjusted_entropy = min(1.0, base_entropy + entropy_boost)
 
-        return adjusted_entropy
+        return float(adjusted_entropy)
 
     def generate_simplification_suggestions(
         self,
