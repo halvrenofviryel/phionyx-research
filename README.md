@@ -113,6 +113,17 @@ runtime governance. To keep claims aligned with evidence, here is what we
 
 If a claim above feels too cautious for your context, write to founder@phionyx.ai — we will tell you what we have, what we do not, and what is on the roadmap.
 
+### Known limitations
+
+The following are real, not rhetorical. Treat them as load-bearing context when evaluating the project:
+
+- **Benchmarks are controlled reference benchmarks**, not third-party audits. Determinism, cache eviction and CPU overhead figures are reproducible from this repository on a clean clone; they have not yet been independently re-run.
+- **No third-party security review yet.** A paid independent review is on the roadmap; until it lands, treat the audit-trail and kill-switch implementations as research-grade.
+- **No production deployment claims.** Phionyx has not been operated in a regulated environment. Use it as a reference and pilot artifact, not as a certified runtime.
+- **LLM output quality is not guaranteed.** Phionyx governs *what reaches the user* (state, gates, audit) — it does not improve the model's own reasoning, hallucination rate, or domain accuracy.
+- **Compliance mappings (planned) are evidence mappings, not legal certification.** Tracing artifacts onto NIST AI RMF / EU AI Act / ISO 42001 produces inputs that an auditor or compliance officer can use; it does not constitute legal compliance on its own.
+- **The Φ (cognitive coherence) and entropy metrics are experimental.** They are useful as internal control signals and reproducible across runs, but they are not yet externally validated against established psychometric or behavioural benchmarks.
+
 ---
 
 ## Architecture
