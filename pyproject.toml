@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "phionyx-core"
-version = "0.2.1"
+version = "0.3.0"
 description = "Deterministic, auditable AI cognition runtime — not an LLM wrapper"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -145,6 +145,12 @@ addopts = [
 ]
 markers = [
     "integration: opt-in tests that hit the network / PyPI / external services. Run with `-m integration`. Excluded from the default CI matrix.",
+    "unit: isolated unit tests with no I/O.",
+    "contract: contract / interface boundary tests.",
+    "critical: tests that must never fail in CI.",
+    "smoke: quick sanity checks.",
+    "safety: governance and safety-critical assertions.",
+    "adversarial: tests modelling attack or stress scenarios.",
 ]
 
 [tool.coverage.run]

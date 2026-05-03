@@ -8,7 +8,7 @@ Deterministic AI runtime that treats LLM outputs as sensor measurements, not dec
 [![PyPI](https://img.shields.io/pypi/v/phionyx-core.svg)](https://pypi.org/project/phionyx-core/)
 [![License](https://img.shields.io/badge/license-AGPL--3.0-blue.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
-[![Tests](https://img.shields.io/badge/tests-1%2C018%20pass-brightgreen.svg)](tests/)
+[![Tests](https://img.shields.io/badge/tests-1%2C137%20pass-brightgreen.svg)](tests/)
 [![Mypy](https://img.shields.io/badge/mypy-strict%20%7C%200%20errors-brightgreen.svg)](.github/workflows/ci.yml)
 
 ```bash
@@ -197,13 +197,32 @@ across Python 3.10–3.13.
 
 ```bash
 pytest tests/core tests/contract tests/benchmarks
-# Public CI subset on v0.2.1: 1,018 passed, 7 skipped, 0 failed
+# Public CI subset on v0.3.0: 1,137 collected, 0 failed
 ```
 
 > The historical / internal corpus across the internal development history (which
 > includes integration tests, behavioural eval suites, and apps) is
 > larger (~2,500+ checks). Only the figures runnable from this public
 > repository on a clean clone are reported here as load-bearing claims.
+
+---
+
+## Reproducibility Pack (v0.3.0+)
+
+Every tagged release attaches a small (< 1 MB) `reproducibility_pack_v*.zip`
+containing JUnit XML, coverage XML, determinism hashes, benchmark JSON, the
+canonical governed-response envelope, an audit-chain example, and an
+OpenTelemetry sample trace. Build the same artifacts locally:
+
+```bash
+pip install -e ".[dev]"
+python scripts/make_reproducibility_pack.py --zip
+ls dist/reproducibility_pack_v*.zip
+```
+
+The pack is the artifact that backs every load-bearing claim on
+[phionyx.ai/evidence](https://phionyx.ai/evidence). Reviewers do not have
+to trust prose: the pack itself is the evidence.
 
 ---
 
