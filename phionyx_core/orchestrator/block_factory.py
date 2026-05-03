@@ -8,7 +8,7 @@ Contract v3.8.0.
 """
 
 import logging
-from typing import Any
+from typing import Any, cast
 
 from ..pipeline.blocks import (
     ActionIntentGateBlock,
@@ -77,7 +77,7 @@ try:
     from phionyx_core.memory.emotion_cache import EmotionCache as _EmotionCacheClass
     _EMOTION_CACHE_AVAILABLE = True
 except ImportError:
-    _EmotionCacheClass = None
+    _EmotionCacheClass = None  # type: ignore[assignment,misc]
     _EMOTION_CACHE_AVAILABLE = False
     logger.warning("EmotionCache not available, emotion_estimation will create its own cache")
 
@@ -102,7 +102,7 @@ def create_all_blocks(
     Returns:
         Dictionary mapping block_id to block instance
     """
-    blocks = {}
+    blocks: dict[str, Any] = {}
 
     # Get time manager for participant
     time_manager = None
@@ -419,16 +419,17 @@ def create_all_blocks(
             def __init__(self, processor: Any) -> None:
                 self.processor = processor
 
-            def apply_gate(self, cognitive_state: Any, unified_state: Any, enhanced_context_string: str) -> tuple:
+            def apply_gate(self, cognitive_state: Any, unified_state: Any, enhanced_context_string: str) -> tuple[Any, ...]:
                 """Apply entropy/amplitude gate before CEP evaluation."""
                 if hasattr(self.processor, 'apply_entropy_amplitude_pre_gate'):
-                    return self.processor.apply_entropy_amplitude_pre_gate(
+                    result = self.processor.apply_entropy_amplitude_pre_gate(
                         cognitive_state=cognitive_state,
                         unified_state=unified_state,
                         enhanced_context_string=enhanced_context_string
                     )
+                    return tuple(result) if not isinstance(result, tuple) else result
                 # Passthrough when processor lacks pre-gate method
-                return enhanced_context_string, None
+                return (enhanced_context_string, None)
 
         blocks["entropy_amplitude_pre_gate"] = EntropyAmplitudePreGateBlock(
             gate=EntropyAmplitudePreGateAdapter(services.processor)
@@ -507,7 +508,7 @@ def create_all_blocks(
             def __init__(self, processor):
                 self.processor = processor
 
-            async def process_narrative_layer(self, frame, user_input, card_type, card_result, scene_context, enhanced_context_string, system_prompt=None, physics_state=None, selected_intent=None, **kwargs):
+            async def process_narrative_layer(self, frame, user_input, card_type, card_result, scene_context, enhanced_context_string, system_prompt=None, physics_state=None, selected_intent=None, conversation_history=None, **kwargs):
                 return await self.processor.process_narrative_layer(
                     frame=frame,
                     user_input=user_input,
@@ -518,11 +519,13 @@ def create_all_blocks(
                     system_prompt=system_prompt,
                     physics_state=physics_state or {},
                     selected_intent=selected_intent,
+                    conversation_history=conversation_history,
                     **kwargs
                 )
 
+        from phionyx_core.pipeline.blocks.narrative_layer import NarrativeLayerProcessorProtocol
         blocks["narrative_layer"] = NarrativeLayerBlock(
-            processor=NarrativeLayerProcessorAdapter(services.processor)
+            processor=cast(NarrativeLayerProcessorProtocol, NarrativeLayerProcessorAdapter(services.processor))
         )
     else:
         # Fallback: block skips via should_skip() when processor=None
@@ -741,9 +744,10 @@ def create_all_blocks(
             def apply_gate(self, physics_state: dict) -> dict:
                 """Apply entropy/amplitude gate after narrative generation."""
                 if hasattr(self.processor, 'apply_entropy_amplitude_post_gate'):
-                    return self.processor.apply_entropy_amplitude_post_gate(
+                    result = self.processor.apply_entropy_amplitude_post_gate(
                         physics_state=physics_state
                     )
+                    return cast(dict, result)
                 # Passthrough when processor lacks post-gate method
                 return physics_state
 
@@ -771,7 +775,7 @@ def create_all_blocks(
         blocks["neurotransmitter_memory_growth"] = NeurotransmitterMemoryGrowthBlock(
             growth_updater=NeurotransmitterMemoryGrowthAdapter(
                 services.neurotransmitter,
-                services.additional_services.get("growth_tracker")
+                services.additional_services.get("growth_tracker") if services.additional_services else None
             )
         )
 
@@ -866,8 +870,11 @@ def create_all_blocks(
                     **kwargs
                 )
 
+        # Adapter forwards (**kwargs) to the underlying response_generator;
+        # cast satisfies the structural Protocol check.
+        from phionyx_core.pipeline.blocks.response_build import ResponseBuilderProtocol
         blocks["response_build"] = ResponseBuildBlock(
-            builder=ResponseBuilderAdapter(services.response_generator)
+            builder=cast(ResponseBuilderProtocol, ResponseBuilderAdapter(services.response_generator))
         )
         logger.debug("[BLOCK_FACTORY] response_build block created with ResponseGenerator")
     else:

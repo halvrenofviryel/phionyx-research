@@ -210,6 +210,18 @@ class TemporalTracker:
                 )
         else:
             state = timeline.current
+            if state is None:
+                return TemporalQuery(
+                    entity_id=entity_id,
+                    attribute=attribute,
+                    value=None,
+                    timestamp="",
+                    turn_index=-1,
+                    confidence=0.0,
+                    is_current=False,
+                    decay_applied=0.0,
+                    reasoning=f"No current state for {entity_id}.{attribute}",
+                )
 
         # Apply decay
         turns_elapsed = self._current_turn - state.turn_index

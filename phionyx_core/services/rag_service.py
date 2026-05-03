@@ -59,6 +59,7 @@ class RAGService:
         self.use_semantic_time_decay = use_semantic_time_decay
 
         # Initialize Semantic Time Decay Manager (Patent Aile 4)
+        self.semantic_decay_manager: SemanticTimeDecayManager | None = None
         if use_semantic_time_decay:
             # Convert hours to seconds for semantic time decay
             half_life_seconds = semantic_decay_half_life_hours * 3600.0
@@ -66,8 +67,6 @@ class RAGService:
                 default_half_life_seconds=half_life_seconds,
                 use_local_time=True
             )
-        else:
-            self.semantic_decay_manager = None
 
         # Initialize RAG cache
         if rag_cache is None:

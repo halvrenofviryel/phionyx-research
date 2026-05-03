@@ -37,11 +37,11 @@ try:
     OPENTELEMETRY_AVAILABLE = True
 except ImportError:
     OPENTELEMETRY_AVAILABLE = False
-    get_tracer = None
+    get_tracer = None  # type: ignore[assignment]
     def is_opentelemetry_enabled() -> bool:
         return False
-    Status = None
-    StatusCode = None
+    Status = None  # type: ignore[assignment,misc]
+    StatusCode = None  # type: ignore[assignment,misc]
 
 
 class TelemetryCollectorProtocol(Protocol):
@@ -366,7 +366,7 @@ class EchoOrchestrator:
             except Exception as e:
                 logger.warning(f"Failed to load state for session {context.session_id}: {e}")
 
-        results = {}
+        results: dict[str, Any] = {}
         current_context = context
         skipped_blocks: set[str] = set()  # Track skipped blocks for propagation
         early_exit_triggered = False  # Track early exit status
@@ -496,7 +496,7 @@ class EchoOrchestrator:
                                 current_context.metadata["physics_state"] = current_physics_state
 
                             # Update entropy value
-                            current_physics_state["entropy"] = float(entropy_value)
+                            current_physics_state["entropy"] = float(entropy_value) if entropy_value is not None else 0.0
 
                         # Handle phi_computation
                         if block_id == "phi_computation" and "phi" in result.data:
@@ -736,7 +736,7 @@ class EchoOrchestrator:
 
                     if isinstance(result.data, dict):
                         # Filter result.data: only merge real values
-                        filtered_data = {}
+                        filtered_data: dict[str, Any] = {}
                         for k, v in result.data.items():
                             if k == "frame":
                                 if isinstance(v, dict):
@@ -832,12 +832,16 @@ class EchoOrchestrator:
 
                     # Update amplitude and integrity if available
                     if "amplitude" in result.data:
-                        current_context.current_amplitude = result.data.get("amplitude")
-                        current_context.metadata["current_amplitude"] = result.data.get("amplitude")
+                        amp = result.data.get("amplitude")
+                        if amp is not None:
+                            current_context.current_amplitude = float(amp)
+                            current_context.metadata["current_amplitude"] = float(amp)
 
                     if "integrity" in result.data:
-                        current_context.current_integrity = result.data.get("integrity")
-                        current_context.metadata["current_integrity"] = result.data.get("integrity")
+                        integ = result.data.get("integrity")
+                        if integ is not None:
+                            current_context.current_integrity = float(integ)
+                            current_context.metadata["current_integrity"] = float(integ)
 
                     # Check for early exit trigger
                     if result.data.get("early_exit", False) or result.data.get("early_exit_triggered", False):

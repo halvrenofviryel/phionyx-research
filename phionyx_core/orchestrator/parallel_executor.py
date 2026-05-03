@@ -31,11 +31,11 @@ try:
     OPENTELEMETRY_AVAILABLE = True
 except ImportError:
     OPENTELEMETRY_AVAILABLE = False
-    get_tracer = None
+    get_tracer = None  # type: ignore[assignment]
     def is_opentelemetry_enabled() -> bool:
         return False
-    Status = None
-    StatusCode = None
+    Status = None  # type: ignore[assignment,misc]
+    StatusCode = None  # type: ignore[assignment,misc]
 
 
 @dataclass
@@ -363,7 +363,7 @@ class ParallelExecutor:
             success_count = 0
             error_count = 0
             for result_item in results_list:
-                if isinstance(result_item, Exception):
+                if isinstance(result_item, BaseException):
                     logger.error(f"Parallel execution task failed: {result_item}")
                     error_count += 1
                     continue

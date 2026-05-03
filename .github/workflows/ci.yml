@@ -43,40 +43,19 @@ jobs:
       - name: Lint (ruff)
         run: ruff check phionyx_core
 
-      - name: Type check (mypy — strategic modules)
-        # Gradual mypy rollout. Each wave locks a set of modules at zero
-        # errors so they cannot regress. Other modules are tracked for a
-        # later wave behind their own CI gate as each becomes clean.
-        #
-        # `--follow-imports=silent` is the gating mechanism: mypy still
-        # *reads* transitive imports (so it can resolve types) but
-        # suppresses errors that originate outside the listed paths.
-        #
-        # Wave 1 (locked): governance, physics, contracts/v4, contracts/telemetry
-        # Wave 2 (locked): config, ports, contracts (rest), evaluation, context,
-        #                  metrics, planning, causality
-        # Wave 3 (locked): cep
-        # Wave 4 (locked): state, pipeline
-        # Wave 5 (locked): memory, meta, monitoring, profiles
-        run: |
-          mypy --follow-imports=silent \
-            phionyx_core/governance \
-            phionyx_core/physics \
-            phionyx_core/contracts \
-            phionyx_core/config \
-            phionyx_core/ports \
-            phionyx_core/evaluation \
-            phionyx_core/context \
-            phionyx_core/metrics \
-            phionyx_core/planning \
-            phionyx_core/causality \
-            phionyx_core/cep \
-            phionyx_core/state \
-            phionyx_core/pipeline \
-            phionyx_core/memory \
-            phionyx_core/meta \
-            phionyx_core/monitoring \
-            phionyx_core/profiles
+      - name: Type check (mypy — full phionyx_core)
+        # Wave 6 (final, 2026-05-02) — entire phionyx_core/ tree is locked
+        # at zero mypy errors. Six waves landed gradually:
+        #   wave 1: governance, physics, contracts/v4, contracts/telemetry
+        #   wave 2: + contracts (rest), config, ports, evaluation, context,
+        #           metrics, planning, causality
+        #   wave 3: + cep
+        #   wave 4: + state, pipeline (enabled pydantic.mypy plugin)
+        #   wave 5: + memory, meta, monitoring, profiles
+        #   wave 6: + orchestrator + everything else (research_engine,
+        #           services, intuition, pedagogy, etc.)
+        # 327 source files. Any new type error fails CI.
+        run: mypy phionyx_core
 
       - name: Smoke import
         run: |

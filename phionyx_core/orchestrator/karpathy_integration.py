@@ -119,14 +119,15 @@ class KarpathyPipelineOrchestrator:
             self._add_to_evidence_chain("assumption_challenges", assumption_challenges)
 
         # 3. Inconsistency Detection
-        inconsistencies = []
+        inconsistencies: list[Any] = []
         coherence_metrics = None
         if code:
+            req_strs = [str(r) for r in requirements] if requirements else None
             inconsistencies, coherence_metrics = self.inconsistency_engine.detect_inconsistencies(
                 code=code,
                 plan=context.metadata.get("plan") if context.metadata else None,
                 tests=context.metadata.get("tests") if context.metadata else None,
-                requirements=requirements
+                requirements=req_strs
             )
             self._add_to_evidence_chain("inconsistencies", inconsistencies)
             self._add_to_audit_trail("inconsistency_detection", {"count": len(inconsistencies)})
@@ -229,7 +230,7 @@ class KarpathyPipelineOrchestrator:
     def _extract_code_from_context(self, context: BlockContext) -> str:
         """Extract code from context."""
         if context.metadata and "generated_code" in context.metadata:
-            return context.metadata["generated_code"]
+            return str(context.metadata["generated_code"])
 
         # Try to extract from user input
         code_blocks = []

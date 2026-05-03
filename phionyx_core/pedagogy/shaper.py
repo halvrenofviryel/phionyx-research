@@ -235,7 +235,7 @@ Return ONLY the reframed response, no explanations."""
                 max_tokens=400,   # Keep it concise
             )
 
-            reframed = response.choices[0].message.content.strip()
+            reframed = str(response.choices[0].message.content).strip()
             logger.info(f"LanguageShaper: LLM reframed response ({len(draft_text)} -> {len(reframed)} chars)")
             return reframed
 

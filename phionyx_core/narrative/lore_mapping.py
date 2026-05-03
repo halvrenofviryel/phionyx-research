@@ -12,6 +12,7 @@ Status: Production Ready
 
 from dataclasses import dataclass
 from enum import Enum
+from typing import Any
 
 
 class RiskLevel(str, Enum):
@@ -292,7 +293,7 @@ INTERVENTION_MAPPING: list[InterventionMapping] = [
 # 5. RISK LEVEL → SCENARIO DIFFICULTY MAPPING
 # ============================================================================
 
-RISK_TO_DIFFICULTY: dict[RiskLevel, dict[str, any]] = {
+RISK_TO_DIFFICULTY: dict[RiskLevel, dict[str, Any]] = {
     RiskLevel.LOW: {
         "teacher_view": "Monitor",
         "student_experience": "Hafif, keşif odaklı",
@@ -347,7 +348,7 @@ def get_intervention_mapping(intervention_type: InterventionType) -> Interventio
     return None
 
 
-def get_risk_difficulty(risk_level: RiskLevel) -> dict[str, any]:
+def get_risk_difficulty(risk_level: RiskLevel) -> dict[str, Any]:
     """Get scenario difficulty parameters for a given risk level."""
     return RISK_TO_DIFFICULTY.get(risk_level, RISK_TO_DIFFICULTY[RiskLevel.MEDIUM])
 

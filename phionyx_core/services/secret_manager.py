@@ -8,6 +8,7 @@ Abstracts secret access for all modules.
 
 import logging
 import os
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -39,7 +40,7 @@ class SecretManager:
         self._vault_url = vault_url or os.environ.get("VAULT_ADDR")
         self._vault_token = vault_token or os.environ.get("VAULT_TOKEN")
         self._vault_mount = vault_mount
-        self._vault_client = None
+        self._vault_client: Any = None
         self._cache: dict[str, str] = {}
 
         if self._vault_url and self._vault_token:
@@ -94,8 +95,9 @@ class SecretManager:
                 )
                 value = response["data"]["data"].get(key)
                 if value:
-                    self._cache[key] = value
-                    return value
+                    value_str = str(value)
+                    self._cache[key] = value_str
+                    return value_str
             except Exception as e:
                 logger.debug(f"Vault read failed for {key}: {e}")
 
