@@ -16,7 +16,7 @@ Payload Example:
 """
 import time
 import hashlib
-from datetime import datetime
+from datetime import datetime, timezone
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 
@@ -81,7 +81,7 @@ async def govern_endpoint(request: GovernRequest):
             "audit": {
                 "record_id": f"aud_{int(time.time())}",
                 "hash_chain": hashlib.sha256(governed_text.encode()).hexdigest(),
-                "timestamp": datetime.utcnow().isoformat() + "Z"
+                "timestamp": datetime.now(timezone.utc).isoformat()
             }
         }
         
