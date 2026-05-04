@@ -21,10 +21,13 @@ keywords:
   - llm-safety
   - cognitive-architecture
   - auditable-ai
-# identifiers:
-#   - type: doi
-#     value: 10.5281/zenodo.XXXXXXX
-#     description: Archived Zenodo release for v0.3.0 (uncomment after first archive)
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.20027534
+    description: Concept DOI (always points to the latest archived version)
+  - type: doi
+    value: 10.5281/zenodo.20027535
+    description: Version DOI for v0.3.0
 preferred-citation:
   type: article
   title: "Phionyx: A Deterministic AI Runtime Architecture with Structured State Management and Pre-Response Governance"

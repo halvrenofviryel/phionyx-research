@@ -10,6 +10,7 @@ Deterministic AI runtime that treats LLM outputs as sensor measurements, not dec
 [![Python](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![Tests](https://img.shields.io/badge/tests-1%2C137%20pass-brightgreen.svg)](tests/)
 [![Mypy](https://img.shields.io/badge/mypy-strict%20%7C%200%20errors-brightgreen.svg)](.github/workflows/ci.yml)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20027534.svg)](https://doi.org/10.5281/zenodo.20027534)
 
 ```bash
 pip install phionyx-core
@@ -280,10 +281,13 @@ If you use Phionyx Core in academic work, please cite both the software and the 
   title     = {Phionyx Core SDK},
   year      = {2026},
   publisher = {Phionyx Research},
-  version   = {0.2.1},
-  url       = {https://github.com/halvrenofviryel/phionyx-research}
+  version   = {0.3.0},
+  doi       = {10.5281/zenodo.20027534},
+  url       = {https://doi.org/10.5281/zenodo.20027534}
 }
 ```
+
+The DOI above is the **concept DOI** — it always resolves to the latest archived version. To pin a specific release, use the version DOI in [`CITATION.cff`](CITATION.cff): v0.3.0 is `10.5281/zenodo.20027535`.
 
 **Architecture paper (companion):**
 
@@ -297,4 +301,4 @@ If you use Phionyx Core in academic work, please cite both the software and the 
 }
 ```
 
-A machine-readable [`CITATION.cff`](CITATION.cff) is provided for GitHub's “Cite this repository” widget. A persistent Zenodo DOI for archived releases is planned — once issued it will be added here as a badge and to `CITATION.cff` under `identifiers:`.
+A machine-readable [`CITATION.cff`](CITATION.cff) is provided for GitHub's “Cite this repository” widget; both the concept and version DOIs are registered there.
