@@ -12,6 +12,13 @@ on:
     tags:
       - "v*"
 
+# Default to read-only at the workflow level. The two jobs that need
+# elevated permissions request them explicitly:
+#   - github-release: contents: write   (upload release asset)
+#   - publish:         id-token: write  (OIDC trusted-publisher exchange)
+permissions:
+  contents: read
+
 jobs:
   build:
     name: build sdist + wheel
@@ -125,7 +132,10 @@ jobs:
         # release notes still come from CHANGELOG.md / manual edits;
         # this step only ensures the reproducibility pack is downloadable
         # straight from the tag page.
-        uses: softprops/action-gh-release@v2
+        # SHA-pinned (v2 → 3bb12739…) for supply-chain hardening — this is
+        # the only third-party action in our release path; everything
+        # else is actions/* or pypa/*.
+        uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # v2
         with:
           files: ./pack/reproducibility_pack_v*.zip
           fail_on_unmatched_files: true
