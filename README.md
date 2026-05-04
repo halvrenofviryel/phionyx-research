@@ -237,6 +237,18 @@ Phionyx systems are evaluated against the [Phionyx Evaluation Standard v0.1](htt
 
 ---
 
+## Compliance mappings
+
+Phionyx publishes **evidence mappings** — not certifications — connecting runtime artifacts to industry threat models and risk frameworks:
+
+- [`docs/mappings/owasp-agentic-ai-2025.md`](docs/mappings/owasp-agentic-ai-2025.md) — OWASP Agentic AI Threats v1.0 (15 categories, 1 Full / 10 Partial / 4 Gap)
+
+Each row is structured: framework description → Phionyx mechanism → Coverage → Evidence (file paths + reproducibility command) → "what's still missing" residual-risk line. Gaps are stated explicitly. NIST AI RMF and EU AI Act mappings are on the Phase 3 roadmap.
+
+See also [`docs/mappings/README.md`](docs/mappings/README.md) for reading conventions and cadence.
+
+---
+
 ## Contributing
 
 Contributions welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
