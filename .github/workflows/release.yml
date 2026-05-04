@@ -135,7 +135,7 @@ jobs:
         # SHA-pinned (v2 → 3bb12739…) for supply-chain hardening — this is
         # the only third-party action in our release path; everything
         # else is actions/* or pypa/*.
-        uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # v2
+        uses: softprops/action-gh-release@b4309332981a82ec1c5618f44dd2e27cc8bfbfda # v3.0.0
         with:
           files: ./pack/reproducibility_pack_v*.zip
           fail_on_unmatched_files: true
