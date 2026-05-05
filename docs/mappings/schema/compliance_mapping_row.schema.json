@@ -1,0 +1,128 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://phionyx.ai/schemas/compliance_mapping_row.schema.json",
+  "title": "Phionyx compliance-mapping row (v0.1)",
+  "description": "Schema for one row of an evidence mapping between an external framework requirement (OWASP Agentic AI, EU AI Act, NIST AI RMF, ISO/IEC 42001, …) and a Phionyx Core artifact. Used by docs/mappings/*.md and consumable by Paper 2's evaluation protocol.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "framework",
+    "framework_version",
+    "framework_identifier",
+    "framework_text",
+    "phionyx_mechanism",
+    "coverage",
+    "evidence",
+    "deployer_responsibility"
+  ],
+  "properties": {
+    "framework": {
+      "type": "string",
+      "description": "Name of the external framework being mapped from.",
+      "enum": [
+        "OWASP Agentic AI Threats",
+        "EU AI Act",
+        "NIST AI RMF",
+        "ISO/IEC 42001",
+        "Other"
+      ]
+    },
+    "framework_version": {
+      "type": "string",
+      "description": "Version of the framework being mapped (e.g., 'v1.0', '2024/1689', '1.0', '2023').",
+      "minLength": 1
+    },
+    "framework_identifier": {
+      "type": "string",
+      "description": "Stable identifier *within* the framework: an OWASP threat ID (T1...T15), an EU AI Act article (Article 9...15), a NIST AI RMF function/category (GOVERN, MEASURE.1.1...), an ISO/IEC 42001 control ID, etc.",
+      "minLength": 1
+    },
+    "framework_text": {
+      "type": "string",
+      "description": "Paraphrased excerpt of the obligation, threat, or requirement. NOT a verbatim copy (avoids licence questions); MUST preserve the obligation flag (shall / should / must / etc.) where applicable.",
+      "minLength": 20
+    },
+    "phionyx_mechanism": {
+      "type": "array",
+      "description": "Concrete Phionyx Core artifacts that produce evidence for this row. Each entry is a stable file path or a canonical pipeline-block identifier.",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["kind", "ref"],
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": ["file", "block", "contract", "test", "doc", "release_artifact"]
+          },
+          "ref": {
+            "type": "string",
+            "description": "For 'file': repo-relative path. For 'block': canonical pipeline block name (e.g., 'kill_switch_gate', 'audit_layer'). For 'contract': contract path under phionyx_core/contracts/. For 'test': pytest node id. For 'doc': repo-relative markdown path. For 'release_artifact': zip / wheel / sdist / DOI URL.",
+            "minLength": 1
+          },
+          "note": {
+            "type": "string",
+            "description": "Optional: short clarifier (e.g., 'fail-closed; four named triggers').",
+            "maxLength": 240
+          }
+        }
+      }
+    },
+    "coverage": {
+      "type": "string",
+      "description": "How much of the framework requirement is addressed by Phionyx mechanisms. Coverage MUST be scoped to the runtime perimeter; organisational outcomes belong in deployer_responsibility.",
+      "enum": ["Full", "Partial", "Gap"]
+    },
+    "coverage_scope": {
+      "type": "string",
+      "description": "Optional explicit scope qualifier — e.g., 'within the runtime perimeter', 'per-turn only', 'audit-record level only'.",
+      "maxLength": 200
+    },
+    "evidence": {
+      "type": "array",
+      "description": "Reproducible evidence a reviewer can use to confirm the claim from a clean clone. Each entry MUST be either a file/path that exists in the repo, a test node id that is in CI, or a public release artifact.",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["type", "ref"],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["repo_file", "test_id", "release_artifact", "audit_example", "external_doc"]
+          },
+          "ref": {
+            "type": "string",
+            "minLength": 1
+          },
+          "reproduction_command": {
+            "type": "string",
+            "description": "Exact shell command a reviewer can run to verify (e.g., 'pytest tests/contract/test_governance_layering.py -q', 'python examples/adversarial/prompt_injection_tool_call.py').",
+            "maxLength": 400
+          }
+        }
+      }
+    },
+    "deployer_responsibility": {
+      "type": "string",
+      "description": "What the deploying organisation MUST add for the row to actually satisfy the framework obligation. This field is REQUIRED on every row — including 'Full' rows — to make explicit that even the strongest runtime evidence does not by itself satisfy a regulatory or organisational obligation.",
+      "minLength": 30
+    },
+    "status": {
+      "type": "string",
+      "description": "Public-claim status of the row, mirroring the Phionyx Evidence Matrix vocabulary.",
+      "enum": ["public", "beta", "planned", "pending"],
+      "default": "public"
+    },
+    "last_verified": {
+      "type": "string",
+      "format": "date",
+      "description": "ISO-8601 date the row was last verified against the linked evidence."
+    },
+    "notes": {
+      "type": "string",
+      "description": "Optional free-form note (e.g., known caveat, Profile-document reference, Article subsection scoping).",
+      "maxLength": 800
+    }
+  }
+}
