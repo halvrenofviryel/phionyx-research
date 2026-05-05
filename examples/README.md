@@ -23,6 +23,8 @@ Every notebook runs end-to-end on a fresh `pip install phionyx-core`. No LLM, no
 | [`envelopes/governed_response.schema.json`](envelopes/governed_response.schema.json) + [`validate.py`](envelopes/validate.py) | JSON Schema (Draft 2020-12) for the governed-response envelope plus a small validator. Run `pip install jsonschema && python examples/envelopes/validate.py` to confirm conformance | Runnable |
 | [`profiles/`](profiles/) | Three runnable profile YAMLs — `education`, `creative_writing`, `customer_support`. All validate against `phionyx_core.Profile` | Reference |
 | [`comparison/`](comparison/) | Phionyx as a governance layer on top of LangChain / LlamaIndex / any orchestrator (`with_orchestrator.py` + role-distinction note) | Reference |
+| [`adversarial/`](adversarial/) | Four single-file demos: prompt injection, unsafe-action, RBAC-vs-ethics conflict, audit replay/tamper-detection. Each maps back to OWASP / EU AI Act / NIST rows. | Runnable |
+| [`before_after/with_phionyx_vs_without.py`](before_after/with_phionyx_vs_without.py) | Side-by-side harness: same input, with vs. without Phionyx — produces a 3-line table showing what each gate blocks. Case-study artifact for Paper 2. | Runnable |
 
 ## Running Notebooks
 
