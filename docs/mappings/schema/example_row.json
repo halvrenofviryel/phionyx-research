@@ -1,0 +1,45 @@
+{
+  "framework": "EU AI Act",
+  "framework_version": "Regulation (EU) 2024/1689",
+  "framework_identifier": "Article 12",
+  "framework_text": "Providers of high-risk AI systems shall ensure that their systems technically allow for the automatic recording of events ('logs') over the lifetime of the system, with sufficient traceability of the system's functioning to identify situations that may result in risk to health, safety, fundamental rights, or substantial modifications.",
+  "phionyx_mechanism": [
+    {
+      "kind": "contract",
+      "ref": "phionyx_core/contracts/v4/audit_record.py",
+      "note": "AuditRecord v4 — Ed25519-signed, hash-chained per turn"
+    },
+    {
+      "kind": "block",
+      "ref": "audit_layer",
+      "note": "Canonical block 44 — every governance decision writes one record"
+    },
+    {
+      "kind": "file",
+      "ref": "phionyx_core/governance/kill_switch.py",
+      "note": "Each KillSwitchEvent is recorded in the audit chain"
+    }
+  ],
+  "coverage": "Full",
+  "coverage_scope": "within the runtime perimeter — record creation only; long-term retention and SIEM ingest remain deployer-side",
+  "evidence": [
+    {
+      "type": "repo_file",
+      "ref": "phionyx_core/contracts/v4/audit_record.py"
+    },
+    {
+      "type": "test_id",
+      "ref": "tests/contract/test_audit_record.py",
+      "reproduction_command": "pytest tests/contract/test_audit_record.py -q"
+    },
+    {
+      "type": "audit_example",
+      "ref": "audit_chain_example.json (in reproducibility pack)",
+      "reproduction_command": "python scripts/make_reproducibility_pack.py && unzip -p phionyx_reproducibility_pack_v0.3.0.zip audit_chain_example.json"
+    }
+  ],
+  "deployer_responsibility": "Deploy long-term storage with retention policy aligned to local retention obligations (Article 19); ingest the audit chain into the deployer's SIEM/audit pipeline; integrate the public-key verification flow into incident-response runbooks; document who has access to the audit store.",
+  "status": "public",
+  "last_verified": "2026-05-04",
+  "notes": "Article 12 is the single Full row in the EU AI Act mapping. Phionyx and the article align almost line-by-line on the *technical* obligation; the deployer responsibility line covers the surrounding operational obligations."
+}

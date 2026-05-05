@@ -43,3 +43,14 @@ Mappings are re-verified:
 - After every Phionyx minor release (the `Mapping last verified` date is bumped).
 - When the target framework publishes a new version.
 - When an independent reviewer re-classifies a row (their note will be appended).
+
+## Machine-readable schema
+
+The structural complement to the human-readable Markdown mappings lives at
+[`schema/`](schema/) — JSON Schema (Draft 2020-12) for one mapping row plus a
+canonical example and validator. The schema enforces that every row MUST cite
+a Phionyx mechanism, MUST have at least one piece of reviewer-reproducible
+evidence, and MUST state the deployer's residual responsibility — even when
+coverage is `Full`. This is the stable row format other projects can adopt to
+produce their own evidence pages from the same data; Paper 2 (the evidence-
+protocol methodology paper) builds on this surface.
