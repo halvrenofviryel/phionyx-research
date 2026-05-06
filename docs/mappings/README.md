@@ -14,7 +14,7 @@ how to verify the claim from the public repository.
 | [`owasp-agentic-ai-2025.md`](owasp-agentic-ai-2025.md) | OWASP Agentic AI — Threats and Mitigations v1.0 (Feb 2025) — 15 threats | v0.3.0 | **Public** |
 | [`eu-ai-act.md`](eu-ai-act.md) | EU AI Act, Articles 9–15 (high-risk obligations) — with explicit deployer-responsibility per article | v0.3.0 | **Public** |
 | [`nist-ai-rmf.md`](nist-ai-rmf.md) | NIST AI Risk Management Framework 1.0 — Govern / Map / Measure / Manage (4 functions) — with explicit deployer-responsibility per function | v0.3.0 | **Public** |
-| `iso-42001.md` | ISO/IEC 42001 AI management system controls | v0.3.0 | Planned (Phase 3, P2-deferred) |
+| [`iso-42001.md`](iso-42001.md) | ISO/IEC 42001:2023 AI Management System — 15 control-type rows (1 Full / 8 Partial / 6 Gap) — **draft**, Annex A identifier accuracy requires paid-text verification | v0.3.0 | **Public (draft)** |
 
 Each `Public` row is linked from the [Evidence Matrix at /evidence](https://phionyx.ai/evidence) and is part of the load-bearing public claim set.
 
