@@ -1,0 +1,132 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://phionyx.ai/schemas/phionyx_state_vector.schema.json",
+  "title": "Phionyx State Vector (v0.1)",
+  "description": "Structured input to the Phionyx physics formulas (calculate_phi_v2_1, calculate_functional_coherence_score, etc.). Each field corresponds to one component of the state vector; fields not relevant to a particular formula may be omitted by the caller. The formulas are deterministic; given identical state vector inputs, identical outputs are produced.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "valence",
+    "arousal",
+    "stability",
+    "entropy"
+  ],
+  "properties": {
+    "valence": {
+      "type": "number",
+      "minimum": -1.0,
+      "maximum": 1.0,
+      "description": "Emotional / sentiment polarity from the Circumplex model of affect. -1 = strongly aversive, 0 = neutral, +1 = strongly approach-oriented. In NPC contexts: derived from in-character emotional state. In session-coherence contexts: derived from sentiment classifier on the conversation."
+    },
+    "arousal": {
+      "type": "number",
+      "minimum": 0.0,
+      "maximum": 1.0,
+      "description": "Activation level from the Circumplex model. 0 = quiescent, 1 = maximally activated. In NPC contexts: derived from scene tags (combat=high, dialogue=mid, exposition=low). In session contexts: derived from prompt urgency markers and response density."
+    },
+    "amplitude": {
+      "type": "number",
+      "minimum": 0.0,
+      "maximum": 10.0,
+      "default": 1.0,
+      "description": "Emotional intensity multiplier (A0). Configured per deployment (e.g. 'stoic warrior' NPC has A0=3, 'dramatic mage' has A0=8). Multiplied by arousal to yield effective amplitude. Out-of-range values are clamped on entry to the formulas."
+    },
+    "stability": {
+      "type": "number",
+      "minimum": 0.0,
+      "maximum": 1.0,
+      "description": "Internal resilience metric. 0 = brittle, 1 = self-recovering. Operationally: how strongly the system resists external perturbation, often computed from response variance over a recent history window."
+    },
+    "entropy": {
+      "type": "number",
+      "minimum": 0.0,
+      "maximum": 1.0,
+      "description": "Chaos / disorder level. Operationally: normalized Shannon entropy over a relevant probability distribution (token-level, decision-level, or domain-specific). High entropy = high unpredictability."
+    },
+    "time_delta": {
+      "type": "number",
+      "minimum": 0.0,
+      "default": 0.1,
+      "description": "Time since previous state in seconds. Used by Phi_physical (decay) and FCS (rate). Floor of 0.001 enforced inside the formulas to avoid division by zero."
+    },
+    "gamma": {
+      "type": "number",
+      "minimum": 0.05,
+      "maximum": 0.5,
+      "default": 0.15,
+      "description": "Physical-component decay rate. Lower = longer-lasting trace; higher = faster fading. Tunable via adjust_gamma() based on user intent multiplier."
+    },
+    "w_c": {
+      "type": "number",
+      "minimum": 0.0,
+      "maximum": 1.0,
+      "description": "Weight of the cognitive component in total Phi. Constraint: w_c + w_p = 1.0. Use named CONTEXT_WEIGHTS profiles when possible."
+    },
+    "w_p": {
+      "type": "number",
+      "minimum": 0.0,
+      "maximum": 1.0,
+      "description": "Weight of the physical component in total Phi. Constraint: w_c + w_p = 1.0."
+    },
+    "context_profile": {
+      "type": "string",
+      "enum": ["SCHOOL", "GAME", "NPC_ENGINE", "THERAPY", "DEFAULT"],
+      "description": "Named context profile that determines the (w_c, w_p) pair. SCHOOL: 0.75/0.25 (stability dominates). GAME: 0.40/0.60 (responsiveness dominates). NPC_ENGINE: 0.50/0.50 (balanced). THERAPY: 0.90/0.10 (max stability). DEFAULT: 0.50/0.50. If both context_profile and (w_c, w_p) are supplied, explicit weights take precedence."
+    },
+    "previous_entropy": {
+      "type": "number",
+      "minimum": 0.0,
+      "maximum": 1.0,
+      "description": "Previous-turn entropy value, optionally supplied to enable the recovery-term boost in Phi_cognitive when entropy decreases between turns."
+    },
+    "previous_valence": {
+      "type": "number",
+      "minimum": -1.0,
+      "maximum": 1.0,
+      "description": "Previous-turn valence value, optionally supplied to enable the recovery-term boost in Phi_cognitive when valence improves between turns."
+    },
+    "f_self": {
+      "type": "number",
+      "minimum": 0.001,
+      "default": 0.95,
+      "description": "Self-frequency used in Functional Coherence Score (FCS) computation: FCS = (dPhi/dt) / f_self. Default 0.95 Hz."
+    }
+  },
+  "examples": [
+    {
+      "_comment": "NPC coherence — stable in-character interaction",
+      "valence": 0.3,
+      "arousal": 0.4,
+      "amplitude": 5.0,
+      "stability": 0.85,
+      "entropy": 0.2,
+      "time_delta": 1.0,
+      "gamma": 0.15,
+      "context_profile": "NPC_ENGINE"
+    },
+    {
+      "_comment": "Session coherence — engaged classroom moment (SCHOOL profile)",
+      "valence": 0.6,
+      "arousal": 0.7,
+      "amplitude": 4.0,
+      "stability": 0.78,
+      "entropy": 0.25,
+      "time_delta": 30.0,
+      "gamma": 0.15,
+      "context_profile": "SCHOOL"
+    },
+    {
+      "_comment": "Drift detected — agent state diverging from baseline",
+      "valence": -0.4,
+      "arousal": 0.85,
+      "amplitude": 6.0,
+      "stability": 0.35,
+      "entropy": 0.78,
+      "time_delta": 2.0,
+      "gamma": 0.15,
+      "previous_entropy": 0.4,
+      "previous_valence": 0.2,
+      "context_profile": "GAME"
+    }
+  ]
+}
