@@ -1,8 +1,11 @@
 # Phionyx Core SDK
 
+**Phionyx is a deterministic runtime evidence layer for probabilistic AI systems.**
+*Core governs the path · Physics measures coherence · Trace demonstrates it in living worlds.*
+
 **Phionyx makes the governance path deterministic — not the model.**
 
-Deterministic AI runtime that treats LLM outputs as sensor measurements, not decisions. The control plane around the model — gates, state, audit — is reproducible; the model itself stays probabilistic.
+Deterministic AI runtime that treats LLM outputs as sensor measurements, not decisions. The control plane around the model — gates, state, audit — is reproducible; the model itself stays probabilistic. Beyond governance, Phionyx Core ships a **physics module** that produces deterministic coherence telemetry over a structured state vector — useful for NPC/agent drift detection, session-level coherence tracking, and reproducible runtime evaluation.
 
 [![CI](https://github.com/halvrenofviryel/phionyx-research/actions/workflows/ci.yml/badge.svg)](https://github.com/halvrenofviryel/phionyx-research/actions/workflows/ci.yml)
 [![PyPI](https://img.shields.io/pypi/v/phionyx-core.svg)](https://pypi.org/project/phionyx-core/)
