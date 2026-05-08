@@ -29,10 +29,33 @@ governed result. The producer is interchangeable — same wrap, different
 upstream.
 
 See [`with_orchestrator.py`](with_orchestrator.py) for a runnable
-illustration. The script uses a `pretend_chain()` stand-in so you
-don't need a LangChain or LlamaIndex install to run it; the comment
-block at the top of the file shows the one-line swap to use the real
-ones.
+illustration. The script auto-detects which producer to use:
+
+```bash
+# Default: deterministic stand-in producer, no extra deps, no API key.
+pip install phionyx-core
+python examples/comparison/with_orchestrator.py
+
+# With LangChain (auto-detected if installed and OPENAI_API_KEY is set):
+pip install phionyx-core langchain-openai
+export OPENAI_API_KEY=sk-...
+python examples/comparison/with_orchestrator.py
+
+# With LlamaIndex (auto-detected if installed and OPENAI_API_KEY is set):
+pip install phionyx-core llama-index llama-index-llms-openai
+export OPENAI_API_KEY=sk-...
+python examples/comparison/with_orchestrator.py
+
+# Force a specific producer (useful for CI / reproducibility):
+python examples/comparison/with_orchestrator.py --producer pretend
+python examples/comparison/with_orchestrator.py --producer langchain
+python examples/comparison/with_orchestrator.py --producer llamaindex
+```
+
+The auto-detection prefers LangChain over LlamaIndex over the
+deterministic stand-in. The Phionyx side of the call is unchanged
+regardless of producer; only the producer argument differs. That is
+the whole point of the comparison: governance is producer-agnostic.
 
 ## When to reach for which
 
