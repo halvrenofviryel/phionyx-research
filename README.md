@@ -1,19 +1,19 @@
 # Phionyx Core SDK
 
-**Phionyx is a deterministic runtime evidence layer for probabilistic AI systems.**
-*Core governs the path · Physics measures coherence · Trace demonstrates it in living worlds.*
+**Phionyx treats LLM output as a noisy sensor measurement, not as truth.**
 
-**Phionyx makes the governance path deterministic — not the model.**
+A deterministic AI runtime that maps every model output through 46 evaluation blocks before allowing it to affect system behavior. Signed audit trails, replayable decisions, and reviewer-runnable governance evidence — not better prompts, a control system around an unreliable sensor.
 
-Deterministic AI runtime that treats LLM outputs as sensor measurements, not decisions. The control plane around the model — gates, state, audit — is reproducible; the model itself stays probabilistic. Beyond governance, Phionyx Core ships a **physics module** that produces deterministic coherence telemetry over a structured state vector — useful for NPC/agent drift detection, session-level coherence tracking, and reproducible runtime evaluation.
+Beyond governance, Phionyx Core ships a **physics module** that produces deterministic coherence telemetry over a structured state vector — useful for NPC/agent drift detection, session-level coherence tracking, and reproducible runtime evaluation.
 
 [![CI](https://github.com/halvrenofviryel/phionyx-research/actions/workflows/ci.yml/badge.svg)](https://github.com/halvrenofviryel/phionyx-research/actions/workflows/ci.yml)
 [![PyPI](https://img.shields.io/pypi/v/phionyx-core.svg)](https://pypi.org/project/phionyx-core/)
 [![License](https://img.shields.io/badge/license-AGPL--3.0-blue.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
-[![Tests](https://img.shields.io/badge/tests-1%2C137%20pass-brightgreen.svg)](tests/)
+[![Tests](https://img.shields.io/badge/tests-1%2C131%20pass%20%2F%207%20skip-brightgreen.svg)](tests/)
 [![Mypy](https://img.shields.io/badge/mypy-strict%20%7C%200%20errors-brightgreen.svg)](.github/workflows/ci.yml)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20027534.svg)](https://doi.org/10.5281/zenodo.20027534)
+[![ORCID](https://img.shields.io/badge/ORCID-0009--0002--3718--4010-A6CE39?logo=orcid&logoColor=white)](https://orcid.org/0009-0002-3718-4010)
 [![Substack](https://img.shields.io/badge/Substack-Deterministic%20AI%20Engineering-FF6719?logo=substack&logoColor=white)](https://phionyxresearch.substack.com)
 
 ```bash
@@ -204,7 +204,7 @@ across Python 3.10–3.13.
 
 ```bash
 pytest tests/core tests/contract tests/benchmarks
-# Public CI subset on v0.3.0: 1,137 collected, 0 failed
+# Public CI on commit c8fa1f9 (Python 3.12): 1,131 pass / 7 skip / 0 fail
 ```
 
 > The historical / internal corpus across the private monorepo (which
@@ -274,19 +274,28 @@ A commercial license is available for use cases where AGPL-3.0 copyleft is not s
 
 ---
 
-## Further Reading
+## Documentation & Research
 
-- [Why Every AI Runtime Needs a Kill Switch](https://phionyxresearch.substack.com/p/why-every-ai-runtime-needs-a-kill)
-- [Inside the 46-Block Deterministic AI Pipeline](https://phionyxresearch.substack.com/p/inside-the-46-block-deterministic)
+- **Research website:** [phionyx.ai](https://phionyx.ai)
+- **Posts (Deterministic AI Engineering series):** [phionyx.ai/research/posts](https://phionyx.ai/research/posts)
+- **Substack (read direct):** [phionyxresearch.substack.com](https://phionyxresearch.substack.com)
+- **Companion repo (Evaluation Standard):** [phionyx-evaluation-standard](https://github.com/halvrenofviryel/phionyx-evaluation-standard) — JSON Schema for governance evidence rows + worked examples
+
+### Latest essays in the series
+
+- [Post 4 — The Phionyx Architecture: Treating LLMs as Sensors, Not Oracles](https://phionyxresearch.substack.com/p/the-phionyx-architecture-treating) (2026-05-09)
+- [Post 3 — The LLM Is Not the Product](https://phionyxresearch.substack.com) (2026-05-01)
+- [Post 2 — Inside the 46-Block Deterministic AI Pipeline](https://phionyxresearch.substack.com/p/inside-the-46-block-deterministic) (2026-04-28)
+- [Post 1 — Why Every AI Runtime Needs a Kill Switch](https://phionyxresearch.substack.com/p/why-every-ai-runtime-needs-a-kill) (2026-04-24)
 
 ---
 
 ## Links
 
 - **Website:** [phionyx.ai](https://phionyx.ai)
-- **Evaluation Standard:** [phionyx-evaluation-standard](https://github.com/halvrenofviryel/phionyx-evaluation-standard)
-- **arXiv Paper:** Submission pending (cs.AI)
-- **Author:** Ali Toygar Abak ([Phionyx Research](https://phionyx.ai))
+- **Author / ORCID:** [0009-0002-3718-4010](https://orcid.org/0009-0002-3718-4010)
+- **arXiv Paper 1 (Architecture):** Submission in moderation (cs.AI primary, cs.SE secondary) — ID will be added when announced
+- **arXiv Paper 2 (Evidence Protocol):** Paused, gated on Paper 1 ID + repo alignment
 
 ---
 
