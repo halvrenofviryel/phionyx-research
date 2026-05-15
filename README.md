@@ -14,6 +14,7 @@ Deterministic AI runtime that treats LLM outputs as sensor measurements, not dec
 [![Tests](https://img.shields.io/badge/tests-1%2C137%20pass-brightgreen.svg)](tests/)
 [![Mypy](https://img.shields.io/badge/mypy-strict%20%7C%200%20errors-brightgreen.svg)](.github/workflows/ci.yml)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20027534.svg)](https://doi.org/10.5281/zenodo.20027534)
+[![Substack](https://img.shields.io/badge/Substack-Deterministic%20AI%20Engineering-FF6719?logo=substack&logoColor=white)](https://phionyxresearch.substack.com)
 
 ```bash
 pip install phionyx-core
@@ -29,6 +30,8 @@ bash <(curl -sSL https://raw.githubusercontent.com/halvrenofviryel/phionyx-resea
 Most AI frameworks let the LLM decide. Phionyx doesn't. Every LLM response passes through a 46-block deterministic pipeline with safety gates, ethics checks, and physics-based state tracking — before it reaches the user.
 
 The substrate is demonstrable in seconds **without an LLM, server, or API key** — see the [demo table](#try-it-in-30-seconds) below.
+
+> 📖 **The project explained as a series:** [Deterministic AI Engineering on Substack](https://phionyxresearch.substack.com) — four essays on the design choices behind this repo. Latest: [*Treating LLMs as Sensors, Not Oracles*](https://phionyxresearch.substack.com/p/the-phionyx-architecture-treating) (2026-05-09).
 
 ---
 
