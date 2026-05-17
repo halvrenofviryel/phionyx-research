@@ -19,6 +19,7 @@ Every notebook runs end-to-end on a fresh `pip install phionyx-core`. No LLM, no
 | Example | Description | Status |
 |---------|-------------|--------|
 | [FastAPI](fastapi/) | HTTP `POST /govern` endpoint over the governance pipeline. See [`fastapi/README.md`](fastapi/README.md) for run instructions | Runnable |
+| [`cli/run_governed.py`](cli/run_governed.py) | Single-command governed pipeline turn — ``python examples/cli/run_governed.py "your prompt"`` | Runnable |
 | [`envelopes/governed_response.json`](envelopes/governed_response.json) | Canonical governed-response envelope sample (output of notebook 04) | Reference |
 | [`envelopes/governed_response.schema.json`](envelopes/governed_response.schema.json) + [`validate.py`](envelopes/validate.py) | JSON Schema (Draft 2020-12) for the governed-response envelope plus a small validator. Run `pip install jsonschema && python examples/envelopes/validate.py` to confirm conformance | Runnable |
 | [`profiles/`](profiles/) | Three runnable profile YAMLs — `education`, `creative_writing`, `customer_support`. All validate against `phionyx_core.Profile` | Reference |
