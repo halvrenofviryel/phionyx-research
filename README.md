@@ -15,6 +15,7 @@ Beyond governance, Phionyx Core ships a **physics module** that produces determi
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20027534.svg)](https://doi.org/10.5281/zenodo.20027534)
 [![ORCID](https://img.shields.io/badge/ORCID-0009--0002--3718--4010-A6CE39?logo=orcid&logoColor=white)](https://orcid.org/0009-0002-3718-4010)
 [![Substack](https://img.shields.io/badge/Substack-Deterministic%20AI%20Engineering-FF6719?logo=substack&logoColor=white)](https://phionyxresearch.substack.com)
+[![Discussions](https://img.shields.io/github/discussions/halvrenofviryel/phionyx-research?logo=github&color=5e60ce)](https://github.com/halvrenofviryel/phionyx-research/discussions)
 
 ```bash
 pip install phionyx-core
@@ -262,7 +263,9 @@ See also [`docs/mappings/README.md`](docs/mappings/README.md) for reading conven
 
 Contributions welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
-Check out [Good First Issues](https://github.com/halvrenofviryel/phionyx-research/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) for a place to start.
+- **Got a question, integration scenario, or roadmap idea?** Open a [Discussion](https://github.com/halvrenofviryel/phionyx-research/discussions). Q&A, Ideas, and Show-and-tell categories are open; the v0.4.0 roadmap conversation lives in [Ideas #77](https://github.com/halvrenofviryel/phionyx-research/discussions/77).
+- **Want to ship code?** Pick a [Good First Issue](https://github.com/halvrenofviryel/phionyx-research/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22). Each one has acceptance criteria, a layer label, and a determinism contract clause — small, scoped, reviewable.
+- **Found a bug or hit an unexpected behaviour?** Open an [Issue](https://github.com/halvrenofviryel/phionyx-research/issues/new/choose).
 
 ---
 
