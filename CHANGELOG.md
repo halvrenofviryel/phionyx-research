@@ -9,7 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-_(no changes yet)_
+### Added
+
+- **CLI governed pipeline demo** (`examples/cli/run_governed.py`) — single-file script that runs a prompt through the Phionyx governance pipeline (input safety → state → Φ → kill switch → audit hash) and prints a schema-valid governed-response envelope to stdout. No LLM or API key required. See `examples/cli/run_governed.py` docstring for run instructions. (Issue #68)
 
 ---
 
