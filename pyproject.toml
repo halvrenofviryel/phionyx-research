@@ -135,6 +135,10 @@ total = 80
 
 # Per-module thresholds (can be adjusted per module)
 [tool.pytest.ini_options]
+# pytest-asyncio auto-mode: treat plain `async def test_*` functions as
+# async tests without needing an explicit @pytest.mark.asyncio decorator.
+# Required for tests/core/pipeline/test_agi_pipeline_blocks.py (added 2026-05-17).
+asyncio_mode = "auto"
 # Coverage options for pytest-cov
 addopts = """
     --cov=echo-server/app
