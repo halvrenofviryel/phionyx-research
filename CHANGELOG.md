@@ -9,9 +9,61 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Added
+(nothing yet)
 
-- **CLI governed pipeline demo** (`examples/cli/run_governed.py`) — single-file script that runs a prompt through the Phionyx governance pipeline (input safety → state → Φ → kill switch → audit hash) and prints a schema-valid governed-response envelope to stdout. No LLM or API key required. See `examples/cli/run_governed.py` docstring for run instructions. (Issue #68)
+---
+
+## [0.4.0] — 2026-05-19
+
+**Theme: signed runtime evidence over agentic AI — MCP + OpenTelemetry + Inspect AI + RGE v0.2.**
+
+v0.4.0 extends Phionyx Core from a deterministic governance runtime into a full evidence stack that emits signed records both *outward* (third-party MCP tool calls) and *inward* (the agent's own self-reports), exports those records into vendor-portable OpenTelemetry GenAI spans, and bridges them into Inspect AI's evaluation logs for the eval frameworks several government safety institutes already use.
+
+The hot lane is four feature releases plus one schema RFC, shipped in five sequential weeks (W1 → W4 + W2.1 integration):
+
+### Added — W1: Reasoned Governance Envelope v0.2 RFC
+
+- **RGE v0.2 6-file RFC artifact set** in [`examples/envelopes/rge_v0_2/`](examples/envelopes/rge_v0_2/) — schema (Draft 2020-12), RFC text (motivation, design, signature scope, alternatives), worked examples, MCP-envelope sample, migration matrix v0.1 → v0.2. Four optional blocks (`reasoning`, `retrieval`, `subagent_chain`, `mcp_tool_audit`) reserve the surface for downstream features; v0.1 envelopes validate against v0.2 after bumping the `schema` string.
+
+### Added — W2: MCP trust boundary governance layer
+
+- **`phionyx-mcp-server` companion package** ([github.com/halvrenofviryel/phionyx-mcp-server](https://github.com/halvrenofviryel/phionyx-mcp-server), AGPL-3.0). MCP trust boundary for any MCP-capable host (Claude Desktop, Cursor, Zed, VS Code, JetBrains). Eight-capability surface aligned with arXiv:2512.06556 (Jamshidi et al., *Securing the Model Context Protocol*) — tool poisoning, shadowing, rug pulls. Five capabilities fully implemented (descriptor hash, change detection, I/O hash, signed envelope, chain verification CLI), three stubbed with explicit `not_implemented` markers (permission scope, user approval state, runtime anomaly flag). Persists envelopes under `~/.phionyx/mcp_audit/<trace_id>/` with HMAC signing in demo mode (Ed25519 in production).
+
+### Added — W2.1: Shared-trace integration (ADR-0006)
+
+- **`phionyx-pipeline-mcp` companion package** ([github.com/halvrenofviryel/phionyx-pipeline-mcp](https://github.com/halvrenofviryel/phionyx-pipeline-mcp), AGPL-3.0). Self-governance MCP for Claude Code — three-layer claim verification: LLM declaration → `git diff` truth → deterministic physics gate (a 9-block composition from the 46-block runtime). Returns a directive: `pass | regenerate | reject`.
+- **Shared trace contract** between the two MCPs via `PHIONYX_TRACE_ID` env var with `~/.phionyx/active_trace` file fallback. One Claude Code session = one trace = end-to-end view of every third-party tool call AND every agent self-claim gate decision. `phionyx_session_report` surfaces the server-MCP envelope chain head + validity inline (count, head_hash, valid, broken_at) so a reviewer can join both layers in one JSON. Read-only across the package boundary; no cross-package write coupling.
+
+### Added — W3: OpenTelemetry GenAI exporter (experimental, version-pinned)
+
+- **`phionyx_core.telemetry.otel_export`** — maps RGE v0.1 / v0.2 envelopes to OpenTelemetry GenAI spans with hybrid attribute namespace: standard `gen_ai.*` for vendor-portable identification (system, request.model, response.id, usage tokens, operation name) plus `phionyx.*` for governance evidence with no spec counterpart (trace_id, decision, policy basis, path blocks, integrity chain, MCP tool audit fields).
+- **Version-pinning** via `phionyx_core/telemetry/otel_semantic_v1_36_0.py` — frozen attribute name table pinned to OpenTelemetry GenAI semantic conventions v1.36.0 (status: Development). Override with `PHIONYX_OTEL_SEMANTIC_VERSION`. Unsupported versions raise `ValueError` at first call rather than silently emitting against the wrong spec. Bump policy: [`docs/conventions/otel_semantic_bump_policy.md`](docs/conventions/otel_semantic_bump_policy.md) — two-version compatibility window, CHANGELOG entry on every spec change we tracked.
+- **Opt-in** via `PHIONYX_OTEL_EXPORT_ENVELOPES=true`. Default is OFF. Clean no-op when the OpenTelemetry SDK isn't installed (the SDK remains an optional dependency).
+- **Examples** at [`examples/otel_export/`](https://github.com/halvrenofviryel/phionyx-research/tree/main/examples/otel_export) — one-command Tempo + Grafana docker-compose stack with `run_example.py` emitting one envelope as an OTLP span.
+
+### Added — W4: Inspect AI interoperability bridge
+
+- **`phionyx-eval-inspect` companion package** ([github.com/halvrenofviryel/phionyx-eval-inspect](https://github.com/halvrenofviryel/phionyx-eval-inspect), AGPL-3.0). One-way interoperability adapter: RGE envelope chain → Inspect AI `.eval` log file. Phionyx-specific evidence (trace id, decision, policy basis, pipeline path, integrity chain, MCP tool audit fields) lives under `sample.metadata.phionyx` — namespaced so native Inspect tooling ignores it; Phionyx-aware tools surface it. CLI: `phionyx-eval-inspect convert` / `show`. Schema pinned to Inspect log format v0.3.x.
+- **Strict framing — what this is NOT.** Not a partnership with, or endorsement by, UK AISI, US CAISI, EU AI Office, Japan AISI, or Korea AISI. Not a scorer. Not a required dependency on `inspect-ai` (the adapter writes the standard `.eval` JSON shape directly; the `[inspect]` extra exists only for `inspect view`). The framing is interoperability, not endorsement.
+- **Wiring documentation** ([`phionyx-eval-inspect/docs/wiring_phionyx_mcp_in_inspect_task.md`](https://github.com/halvrenofviryel/phionyx-eval-inspect/blob/main/docs/wiring_phionyx_mcp_in_inspect_task.md)) — concrete code snippet for registering `phionyx-mcp-server` as a tool source inside an Inspect AI eval task, closing the loop so the agent under evaluation goes through Phionyx's outward trust boundary on every tool call.
+
+### Tests
+
+- `phionyx_core/telemetry/` OTel exporter: 22 unit tests (mapping, namespace split, mcp_tool_audit branch, None scrubbing, events, opt-in env var, version pinning, no-op fallbacks).
+- W2.1 shared-trace integration: 7 tests (env precedence, file fallback, generate+persist, cross-MCP convergence, session_report join, tamper detection, graceful degradation).
+- Server MCP regression: 22 tests stay green.
+- `phionyx-eval-inspect` standalone: 22 tests (adapter shape, sample fields, events, metadata.phionyx, None scrubbing, schema pinning, write_log persistence + path-traversal sanitisation, CLI smoke).
+
+### Companion-package ecosystem
+
+| Package | Role |
+|---|---|
+| **`phionyx-core`** (this) | Deterministic AI runtime governance — 46-block pipeline, kill switch, ethics + safety gates, signed audit envelopes, OTel exporter |
+| **`phionyx-mcp-server`** | MCP trust boundary (descriptor + audit chain) |
+| **`phionyx-pipeline-mcp`** | Self-governance gate over the agent's own claims (three-layer verification) |
+| **`phionyx-eval-inspect`** | Interoperability bridge into Inspect AI eval logs |
+
+All four are AGPL-3.0. The three companions live in their own GitHub repositories under `halvrenofviryel/*` and follow `phionyx-core`'s release cadence.
 
 ---
 
