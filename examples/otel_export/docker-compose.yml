@@ -1,0 +1,46 @@
+# Phionyx envelope-export demo stack — Tempo + Grafana.
+#
+# Brings up:
+#   - Tempo on :4317 (OTLP gRPC ingest) and :3200 (HTTP API)
+#   - Grafana on :3000 with Tempo pre-configured as a data source
+#
+# Usage:
+#   docker compose up -d
+#   PHIONYX_OTEL_EXPORT_ENVELOPES=true python run_example.py
+#   open http://localhost:3000 → Explore → Tempo → search service "phionyx.envelope_export"
+#
+# Stop + clean:
+#   docker compose down -v
+
+services:
+
+  tempo:
+    image: grafana/tempo:2.5.0
+    command: ["-config.file=/etc/tempo/tempo.yaml"]
+    volumes:
+      - ./tempo.yaml:/etc/tempo/tempo.yaml:ro
+      - tempo-data:/var/tempo
+    ports:
+      - "4317:4317"   # OTLP gRPC
+      - "4318:4318"   # OTLP HTTP
+      - "3200:3200"   # Tempo HTTP API
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:11.0.0
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+      GF_AUTH_ANONYMOUS_ENABLED: "true"
+      GF_AUTH_ANONYMOUS_ORG_ROLE: Admin
+      GF_FEATURE_TOGGLES_ENABLE: traceqlEditor
+    volumes:
+      - ./grafana-datasources.yaml:/etc/grafana/provisioning/datasources/datasources.yaml:ro
+    ports:
+      - "3000:3000"
+    depends_on:
+      - tempo
+    restart: unless-stopped
+
+volumes:
+  tempo-data:
