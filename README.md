@@ -244,6 +244,24 @@ Phionyx systems are evaluated against the [Phionyx Evaluation Standard v0.1](htt
 
 ---
 
+## MCP companion packages — runtime evidence over Claude Code
+
+Two sibling packages turn the Phionyx runtime into a **two-layer evidence surface** for AI coding agents (Claude Code, Cursor, Zed, VS Code, JetBrains — any MCP-capable host):
+
+- **[`phionyx-mcp-server`](https://github.com/halvrenofviryel/phionyx-mcp-server)** — *outward-facing layer.* MCP trust boundary governance: hashes tool descriptors at first observation, detects post-approval drift, signs every third-party tool call as a Reasoned Governance Envelope (RGE v0.2), and maintains a tamper-evident hash chain. Threat surface aligned with arXiv:2512.06556 (Jamshidi et al.) — tool poisoning, shadowing, rug pulls.
+- **[`phionyx-pipeline-mcp`](https://github.com/halvrenofviryel/phionyx-pipeline-mcp)** — *inward-facing layer.* Self-governance gate over the agent's own *"I fixed this / I tested that / this code path changed"* declarations. Three-layer verification: LLM declaration → `git diff` truth → deterministic physics gate (a 9-block composition from the 46-block runtime). Returns a directive: `pass | regenerate | reject`.
+
+When both packages are installed and registered with the same Claude Code host, they share a single `trace_id` per session (via `PHIONYX_TRACE_ID` env var with `~/.phionyx/active_trace` file fallback). One Claude Code conversation = one trace = end-to-end view of every third-party MCP tool call AND every agent self-claim gate decision.
+
+```bash
+# Install both, register them in your project's .claude/mcp.json:
+pip install phionyx-pipeline-mcp[mcp-server-integration]
+```
+
+The integration contract is documented in each repo; the trace coordination module is **read-only across the package boundary** — no cross-package write coupling.
+
+---
+
 ## Compliance mappings
 
 Phionyx publishes **evidence mappings** — not certifications — connecting runtime artifacts to industry threat models and risk frameworks:
@@ -283,6 +301,8 @@ A commercial license is available for use cases where AGPL-3.0 copyleft is not s
 - **Posts (Deterministic AI Engineering series):** [phionyx.ai/research/posts](https://phionyx.ai/research/posts)
 - **Substack (read direct):** [phionyxresearch.substack.com](https://phionyxresearch.substack.com)
 - **Companion repo (Evaluation Standard):** [phionyx-evaluation-standard](https://github.com/halvrenofviryel/phionyx-evaluation-standard) — JSON Schema for governance evidence rows + worked examples
+- **MCP outward layer:** [phionyx-mcp-server](https://github.com/halvrenofviryel/phionyx-mcp-server) — MCP trust boundary governance (descriptor hash, signed RGE v0.2 envelope, audit chain)
+- **MCP inward layer:** [phionyx-pipeline-mcp](https://github.com/halvrenofviryel/phionyx-pipeline-mcp) — self-governance gate over the agent's own "fixed / tested / changed" claims
 
 ### Latest essays in the series
 
