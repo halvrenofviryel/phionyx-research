@@ -32,8 +32,49 @@ def is_opentelemetry_enabled() -> bool:
         return False
 
 
+def _lazy_import_export():
+    """Import otel_export lazily so phionyx-core stays import-safe without OTel SDK."""
+    from .otel_export import (
+        DEFAULT_SEMANTIC_VERSION,
+        ENV_EXPORT_ENVELOPES,
+        ENV_SEMANTIC_VERSION,
+        EnvelopeToSpanMapper,
+        envelope_export_enabled,
+        export_envelope,
+    )
+    return {
+        "DEFAULT_SEMANTIC_VERSION": DEFAULT_SEMANTIC_VERSION,
+        "ENV_EXPORT_ENVELOPES": ENV_EXPORT_ENVELOPES,
+        "ENV_SEMANTIC_VERSION": ENV_SEMANTIC_VERSION,
+        "EnvelopeToSpanMapper": EnvelopeToSpanMapper,
+        "envelope_export_enabled": envelope_export_enabled,
+        "export_envelope": export_envelope,
+    }
+
+
+def __getattr__(name: str):
+    """PEP 562: lazy attribute access for the envelope-export surface."""
+    if name in {
+        "DEFAULT_SEMANTIC_VERSION",
+        "ENV_EXPORT_ENVELOPES",
+        "ENV_SEMANTIC_VERSION",
+        "EnvelopeToSpanMapper",
+        "envelope_export_enabled",
+        "export_envelope",
+    }:
+        return _lazy_import_export()[name]
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
+
+
 __all__ = [
     'get_tracer',
     'is_opentelemetry_enabled',
+    # Envelope export (W3 — F2 OTel exporter, v0.4.0)
+    'DEFAULT_SEMANTIC_VERSION',
+    'ENV_EXPORT_ENVELOPES',
+    'ENV_SEMANTIC_VERSION',
+    'EnvelopeToSpanMapper',
+    'envelope_export_enabled',
+    'export_envelope',
 ]
 

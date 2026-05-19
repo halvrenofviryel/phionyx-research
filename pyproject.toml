@@ -1,169 +1,121 @@
 [build-system]
-requires = ["setuptools>=68.0", "wheel"]
+requires = ["setuptools>=65.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "phionyx-core"
-version = "0.3.0"
-description = "Deterministic, auditable AI cognition runtime — not an LLM wrapper"
+version = "0.4.0"
+description = "Phionyx Core SDK - AI↔AI Mediator and Echo Engine"
 readme = "README.md"
 requires-python = ">=3.10"
-license = {text = "AGPL-3.0-or-later"}
+license = {text = "Proprietary"}
 authors = [
-    {name = "Phionyx Research", email = "founder@phionyx.ai"}
+    {name = "Phionyx Labs", email = "dev@phionyx.ai"}
 ]
-keywords = [
-    "ai",
-    "cognitive-architecture",
-    "deterministic",
-    "echoism",
-    "phionyx",
-    "physics-engine",
-    "pipeline",
-    "auditable",
-]
+keywords = ["phionyx", "ai", "llm", "mediator", "echo-engine"]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
-    "Intended Audience :: Science/Research",
-    "License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)",
-    "Operating System :: OS Independent",
+    "License :: Other/Proprietary License",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
-    "Programming Language :: Python :: 3.13",
-    "Topic :: Scientific/Engineering :: Artificial Intelligence",
-    "Topic :: Software Development :: Libraries :: Python Modules",
-    "Typing :: Typed",
 ]
 
-# Minimal core dependencies — only what phionyx_core hard-requires at import time
+# Minimal core dependencies
 dependencies = [
-    "pydantic>=2.0.0,<3.0.0",
-    "typing-extensions>=4.0.0",
-    "PyYAML>=6.0",
-    "numpy>=1.24.0",
+    "pydantic>=2.0.0",
+    "pydantic-settings>=2.0.0",
+    "jsonpath-ng>=1.6.1",  # Required for oracle evaluator (hard requirement)
+    "pyyaml>=6.0",  # Required for physics profiles
+    "numpy>=1.24.0",  # Required for UKF state estimation
 ]
 
+# Optional dependencies
 [project.optional-dependencies]
-# Graph / intuition layer (networkx for CausalGraph, graph_engine)
-graph = [
-    "networkx>=3.0",
-]
-# OpenTelemetry instrumentation
-telemetry = [
+# OpenTelemetry dependencies (optional - graceful degradation if not installed)
+otel = [
     "opentelemetry-api>=1.21.0",
     "opentelemetry-sdk>=1.21.0",
+    "opentelemetry-exporter-otlp>=1.21.0",
+    "opentelemetry-instrumentation-fastapi>=0.42b0",
 ]
-# Postgres persistence adapter
-postgres = [
-    "asyncpg>=0.28.0",
+# Benchmark extras
+bench = [
+    "pytest>=7.0.0",
+    "pytest-asyncio>=0.21.0",
+    "pytest-cov>=4.1.0",
+    "jsonschema>=4.0.0",
+    "jsonpath-ng>=1.6.0",
+    "networkx>=3.0",
 ]
-# Supabase persistence adapter
+# Supabase extras
 supabase = [
     "supabase>=2.0.0",
 ]
-# Everything a developer needs to contribute
-dev = [
+# Echo Server dependencies
+server = [
+    "fastapi>=0.104.0",
+    "uvicorn[standard]>=0.24.0",
+    "python-dotenv>=1.0.0",
+    "litellm>=1.0.0",
+    "httpx>=0.25.0",
+    "structlog>=23.0.0",
+]
+# Full extras (all optional dependencies)
+all = [
     "pytest>=7.0.0",
     "pytest-asyncio>=0.21.0",
-    "pytest-cov>=4.0.0",
-    "ruff>=0.4.0",
-    "mypy>=1.0.0",
-    "types-PyYAML>=6.0",
+    "pytest-cov>=4.1.0",
+    "jsonschema>=4.0.0",
+    "jsonpath-ng>=1.6.0",
+    "networkx>=3.0",
+    "hypothesis>=6.0.0",
+    "prometheus_client>=0.17.0",
+    "supabase>=2.0.0",
+    "fastapi>=0.104.0",
+    "uvicorn[standard]>=0.24.0",
+    "python-dotenv>=1.0.0",
+    "litellm>=1.0.0",
+    "httpx>=0.25.0",
+    "structlog>=23.0.0",
 ]
-# All optional runtime adapters
-all = [
-    "phionyx-core[graph,telemetry]",
-]
+
+[project.scripts]
+phionyx = "scripts.phionyx_cli:main"
+phionyx-bench = "scripts.phionyx_bench_cli:main"
 
 [project.urls]
-Homepage = "https://phionyx.ai"
-Documentation = "https://github.com/halvrenofviryel/phionyx-research#readme"
-Installation = "https://github.com/halvrenofviryel/phionyx-research/blob/main/INSTALLATION.md"
+Homepage = "https://github.com/halvrenofviryel/phionyx-research"
+Documentation = "https://phionyx.ai/docs"
 Repository = "https://github.com/halvrenofviryel/phionyx-research"
 Issues = "https://github.com/halvrenofviryel/phionyx-research/issues"
-Changelog = "https://github.com/halvrenofviryel/phionyx-research/blob/main/CHANGELOG.md"
-Discussions = "https://github.com/halvrenofviryel/phionyx-research/discussions"
 
-[tool.setuptools]
-packages = {find = {where = ["."], include = ["phionyx_core*"]}}
+[tool.setuptools.packages.find]
+include = ["phionyx_core*", "phionyx_bridge*", "phionyx_agents*", "benchmarks*", "scripts*"]
 
 [tool.setuptools.package-data]
-"phionyx_core" = [
-    "*.json",
-    "*.yaml",
-    "*.yml",
-    "contracts/**/*.json",
-    "profiles/**/*.yaml",
-    "templates/**/*.json",
-]
+"*" = ["*.json", "*.md", "*.yaml", "*.yml"]
 
-[tool.ruff]
-line-length = 100
-target-version = "py310"
-
-[tool.ruff.lint]
-select = [
-    "E",   # pycodestyle errors
-    "W",   # pycodestyle warnings
-    "F",   # pyflakes
-    "I",   # isort
-    "B",   # flake8-bugbear
-    "C4",  # flake8-comprehensions
-    "UP",  # pyupgrade
-]
-ignore = [
-    "E501",  # line too long (formatter handles this)
-    "B008",  # do not perform function calls in argument defaults
-]
-
-[tool.mypy]
-python_version = "3.10"
-warn_return_any = true
-warn_unused_configs = true
-disallow_untyped_defs = false
-ignore_missing_imports = true
-plugins = ["pydantic.mypy"]
-
-[tool.pydantic-mypy]
-init_forbid_extra = true
-init_typed = true
-warn_required_dynamic_aliases = true
-
-[tool.pytest.ini_options]
-testpaths = ["tests"]
-python_files = ["test_*.py"]
-python_classes = ["Test*"]
-python_functions = ["test_*"]
-asyncio_mode = "auto"
-addopts = [
-    "-v",
-    "--strict-markers",
-    "--tb=short",
-]
-markers = [
-    "integration: opt-in tests that hit the network / PyPI / external services. Run with `-m integration`. Excluded from the default CI matrix.",
-    "unit: isolated unit tests with no I/O.",
-    "contract: contract / interface boundary tests.",
-    "critical: tests that must never fail in CI.",
-    "smoke: quick sanity checks.",
-    "safety: governance and safety-critical assertions.",
-    "adversarial: tests modelling attack or stress scenarios.",
-]
-
+# Coverage configuration
 [tool.coverage.run]
-source = ["phionyx_core"]
+source = ["echo-server/app", "adapters", "scripts"]
 omit = [
     "*/tests/*",
     "*/test_*.py",
     "*/__pycache__/*",
+    "*/migrations/*",
+    "*/legacy/*",
+    "*/venv/*",
+    "*/virtualenv/*",
+    "*/site-packages/*",
 ]
 
 [tool.coverage.report]
 precision = 2
 show_missing = true
+skip_covered = false
 exclude_lines = [
     "pragma: no cover",
     "def __repr__",
@@ -172,4 +124,29 @@ exclude_lines = [
     "if __name__ == .__main__.:",
     "if TYPE_CHECKING:",
     "@abstractmethod",
+    "class .*\\bProtocol\\):",
+    "@(abc\\.)?abstractmethod",
+]
+
+# Coverage thresholds (fail if below these percentages)
+[tool.coverage.report.fail_under]
+# Overall coverage threshold
+total = 80
+
+# Per-module thresholds (can be adjusted per module)
+[tool.pytest.ini_options]
+# Coverage options for pytest-cov
+addopts = """
+    --cov=echo-server/app
+    --cov=adapters
+    --cov=scripts
+    --cov-report=term-missing
+    --cov-report=html:htmlcov
+    --cov-report=xml:coverage.xml
+    --cov-fail-under=80
+"""
+
+[dependency-groups]
+bench = [
+    "jsonpath-ng (>=1.7.0,<2.0.0)"
 ]
