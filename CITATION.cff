@@ -28,8 +28,9 @@ identifiers:
   - type: doi
     value: "10.5281/zenodo.20027535"
     description: "Zenodo v0.3.0 versioned DOI"
-  # v0.4.0 versioned DOI will be assigned automatically when the GitHub
-  # release is published. Update this file post-release.
+  - type: doi
+    value: "10.5281/zenodo.20297990"
+    description: "Zenodo v0.4.0 versioned DOI"
 preferred-citation:
   type: article
   title: "Phionyx: A Deterministic AI Runtime Architecture with Structured State Management and Pre-Response Governance"
