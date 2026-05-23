@@ -311,10 +311,21 @@ A commercial license is available for use cases where AGPL-3.0 copyleft is not s
 
 ### Latest essays in the series
 
+- [Post 5 — Persistent Worlds Need Deterministic Governance](https://phionyxresearch.substack.com/p/persistent-worlds-need-deterministic) (2026-05-22)
 - [Post 4 — The Phionyx Architecture: Treating LLMs as Sensors, Not Oracles](https://phionyxresearch.substack.com/p/the-phionyx-architecture-treating) (2026-05-09)
 - [Post 3 — The LLM Is Not the Product](https://phionyxresearch.substack.com) (2026-05-01)
 - [Post 2 — Inside the 46-Block Deterministic AI Pipeline](https://phionyxresearch.substack.com/p/inside-the-46-block-deterministic) (2026-04-28)
 - [Post 1 — Why Every AI Runtime Needs a Kill Switch](https://phionyxresearch.substack.com/p/why-every-ai-runtime-needs-a-kill) (2026-04-24)
+
+### Stay updated
+
+If runtime evidence for agentic AI is a problem you have, **[Watch this repo](https://github.com/halvrenofviryel/phionyx-research/subscription)** for email notifications when we ship new experiments, MCP capabilities, or evidence-pack updates.
+
+Other channels:
+
+- **Substack:** [phionyxresearch.substack.com](https://phionyxresearch.substack.com) — long-form engineering notes
+- **X (Twitter):** [@phionyx_ai](https://x.com/phionyx_ai) — short-form runtime evidence updates
+- **GitHub Discussions:** [phionyx-research/discussions](https://github.com/halvrenofviryel/phionyx-research/discussions) — questions, comparisons, examples
 
 ---
 
@@ -339,7 +350,7 @@ If you use Phionyx Core in academic work, please cite both the software and the 
   title     = {Phionyx Core SDK},
   year      = {2026},
   publisher = {Phionyx Research},
-  version   = {0.3.0},
+  version   = {0.4.0},
   doi       = {10.5281/zenodo.20027534},
   url       = {https://doi.org/10.5281/zenodo.20027534}
 }
