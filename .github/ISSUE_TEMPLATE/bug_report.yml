@@ -15,7 +15,7 @@ body:
     attributes:
       label: phionyx-core version
       description: Output of `python -c "import phionyx_core; print(phionyx_core.__version__)"`
-      placeholder: "0.2.1"
+      placeholder: "0.4.0"
     validations:
       required: true
 
