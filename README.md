@@ -32,7 +32,9 @@ Most AI frameworks let the LLM decide. Phionyx doesn't. Every LLM response passe
 
 The substrate is demonstrable in seconds **without an LLM, server, or API key** — see the [demo table](#try-it-in-30-seconds) below.
 
-> 📖 **The project explained as a series:** [Deterministic AI Engineering on Substack](https://phionyxresearch.substack.com) — four essays on the design choices behind this repo. Latest: [*Treating LLMs as Sensors, Not Oracles*](https://phionyxresearch.substack.com/p/the-phionyx-architecture-treating) (2026-05-09).
+> 📖 **The project explained as a series:** [Deterministic AI Engineering on Substack](https://phionyxresearch.substack.com) — essays on the design choices behind this repo. Latest: [*Persistent Worlds Need Deterministic Governance*](https://phionyxresearch.substack.com/p/persistent-worlds-need-deterministic) (2026-05-22).
+>
+> 🧭 **Where this fits on [phionyx.ai](https://phionyx.ai):** the core runtime sits behind the [**Bounded Authority**](https://phionyx.ai/bounded-authority) entry (safety-first AI providers); the NPC drift reference trace under [`examples/physics/`](https://github.com/halvrenofviryel/phionyx-research/blob/main/examples/physics/npc_drift_demo.py) sits behind [**Narrative Coherence**](https://phionyx.ai/narrative-coherence); the [`tests/`](tests/), [`docs/mappings/`](docs/mappings/), and Zenodo deposits sit behind [**Reviewer Evidence**](https://phionyx.ai/evidence).
 
 ---
 
@@ -244,25 +246,36 @@ Phionyx systems are evaluated against the [Phionyx Evaluation Standard v0.1](htt
 
 ---
 
-## MCP companion packages — runtime evidence over Claude Code
+## Companion packages — five siblings across MCP, Inspect, LangChain, and OpenAI Agents
 
-Three sibling packages extend the Phionyx runtime into an end-to-end evidence stack for AI coding agents (Claude Code, Cursor, Zed, VS Code, JetBrains — any MCP-capable host):
+Five PyPI-published companion packages extend the Phionyx runtime into an end-to-end evidence stack for the agentic AI ecosystem. They group naturally by where they sit on the [phionyx.ai](https://phionyx.ai) audience pillars:
+
+**MCP integration — surfaces under [Bounded Authority](https://phionyx.ai/bounded-authority).** Trust boundary + self-claim gate for AI coding agents (Claude Code, Cursor, Zed, VS Code, JetBrains — any MCP-capable host):
 
 - **[`phionyx-mcp-server`](https://github.com/halvrenofviryel/phionyx-mcp-server)** — *outward-facing layer.* MCP trust boundary governance: hashes tool descriptors at first observation, detects post-approval drift, signs every third-party tool call as a Reasoned Governance Envelope (RGE v0.2), and maintains a tamper-evident hash chain. Threat surface aligned with arXiv:2512.06556 (Jamshidi et al.) — tool poisoning, shadowing, rug pulls.
 - **[`phionyx-pipeline-mcp`](https://github.com/halvrenofviryel/phionyx-pipeline-mcp)** — *inward-facing layer.* Self-governance gate over the agent's own *"I fixed this / I tested that / this code path changed"* declarations. Three-layer verification: LLM declaration → `git diff` truth → deterministic physics gate (a 9-block composition from the 46-block runtime). Returns a directive: `pass | regenerate | reject`.
-- **[`phionyx-eval-inspect`](https://github.com/halvrenofviryel/phionyx-eval-inspect)** — *interoperability bridge.* Convert a Phionyx envelope chain into an [Inspect AI](https://github.com/UKGovernmentBEIS/inspect_ai) `.eval` log so Phionyx-governed runs are natively viewable in Inspect's tooling. Companion to the two MCP servers above; lets evaluation workflows consume Phionyx evidence without endorsement or partnership claims.
 
-When the MCP servers are installed and registered with the same Claude Code host, they share a single `trace_id` per session (via `PHIONYX_TRACE_ID` env var with `~/.phionyx/active_trace` file fallback). One Claude Code conversation = one trace = end-to-end view of every third-party MCP tool call AND every agent self-claim gate decision. The Inspect bridge then converts that chain into the framework many eval teams already use.
+**Evidence export — surfaces under [Reviewer Evidence](https://phionyx.ai/evidence).** Bridges that turn runs in third-party frameworks into reviewer-runnable Phionyx envelopes:
+
+- **[`phionyx-eval-inspect`](https://github.com/halvrenofviryel/phionyx-eval-inspect)** — *Inspect AI bridge.* Convert a Phionyx envelope chain into an [Inspect AI](https://github.com/UKGovernmentBEIS/inspect_ai) `.eval` log so Phionyx-governed runs are natively viewable in Inspect's tooling. Interop-only; no endorsement or partnership claim.
+- **[`phionyx-langchain-langgraph`](https://github.com/halvrenofviryel/phionyx_langchain_langgraph)** — *LangChain + LangGraph adapters (v0.5.0+).* Every chain / tool / LLM event + supervisor handoff becomes a signed, hash-chained envelope. Includes a `PhionyxLangGraphSupervisor` for the F5 multi-agent ingestion pattern.
+- **[`phionyx-openai-agents`](https://github.com/halvrenofviryel/phionyx_openai_agents)** — *OpenAI Agents SDK tracing bridge (v0.5.0+).* Every Trace and Span becomes a signed, hash-chained envelope.
+
+When the two MCP servers are installed and registered with the same Claude Code host, they share a single `trace_id` per session (via `PHIONYX_TRACE_ID` env var with `~/.phionyx/active_trace` file fallback). One Claude Code conversation = one trace = end-to-end view of every third-party MCP tool call AND every agent self-claim gate decision. The Inspect bridge and the framework adapters consume envelopes off-host; they don't need to share the live trace.
 
 ```bash
-# Install both MCPs (governance for live sessions):
+# MCP governance for live coding sessions:
 pip install phionyx-pipeline-mcp[mcp-server-integration]
 
-# Plus the Inspect AI bridge (post-session evaluation surface):
+# Inspect AI bridge (post-session evaluation surface):
 pip install phionyx-eval-inspect
+
+# Framework adapters (v0.5.0+):
+pip install phionyx-langchain-langgraph
+pip install phionyx-openai-agents
 ```
 
-The integration contract is documented in each repo; the trace coordination module is **read-only across the package boundary** — no cross-package write coupling.
+Each repo documents its own integration contract; the trace coordination module is **read-only across the package boundary** — no cross-package write coupling.
 
 ---
 
@@ -285,7 +298,7 @@ See also [`docs/mappings/README.md`](docs/mappings/README.md) for reading conven
 
 Contributions welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
-- **Got a question, integration scenario, or roadmap idea?** Open a [Discussion](https://github.com/halvrenofviryel/phionyx-research/discussions). Q&A, Ideas, and Show-and-tell categories are open; the v0.4.0 roadmap conversation lives in [Ideas #77](https://github.com/halvrenofviryel/phionyx-research/discussions/77).
+- **Got a question, integration scenario, or roadmap idea?** Open a [Discussion](https://github.com/halvrenofviryel/phionyx-research/discussions). Q&A, Ideas, and Show-and-tell categories are open.
 - **Want to ship code?** Pick a [Good First Issue](https://github.com/halvrenofviryel/phionyx-research/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22). Each one has acceptance criteria, a layer label, and a determinism contract clause — small, scoped, reviewable.
 - **Found a bug or hit an unexpected behaviour?** Open an [Issue](https://github.com/halvrenofviryel/phionyx-research/issues/new/choose).
 
@@ -308,6 +321,8 @@ A commercial license is available for use cases where AGPL-3.0 copyleft is not s
 - **MCP outward layer:** [phionyx-mcp-server](https://github.com/halvrenofviryel/phionyx-mcp-server) — MCP trust boundary governance (descriptor hash, signed RGE v0.2 envelope, audit chain)
 - **MCP inward layer:** [phionyx-pipeline-mcp](https://github.com/halvrenofviryel/phionyx-pipeline-mcp) — self-governance gate over the agent's own "fixed / tested / changed" claims
 - **Inspect AI bridge:** [phionyx-eval-inspect](https://github.com/halvrenofviryel/phionyx-eval-inspect) — RGE envelope chain → Inspect `.eval` log; viewable with `inspect view`
+- **LangChain / LangGraph adapters:** [phionyx-langchain-langgraph](https://github.com/halvrenofviryel/phionyx_langchain_langgraph) — chain / tool / LLM events + supervisor handoff → signed envelopes
+- **OpenAI Agents tracing bridge:** [phionyx-openai-agents](https://github.com/halvrenofviryel/phionyx_openai_agents) — Trace + Span → signed envelopes
 
 ### Latest essays in the series
 
@@ -350,13 +365,13 @@ If you use Phionyx Core in academic work, please cite both the software and the 
   title     = {Phionyx Core SDK},
   year      = {2026},
   publisher = {Phionyx Research},
-  version   = {0.4.0},
+  version   = {0.5.0},
   doi       = {10.5281/zenodo.20027534},
   url       = {https://doi.org/10.5281/zenodo.20027534}
 }
 ```
 
-The DOI above is the **concept DOI** — it always resolves to the latest archived version. To pin a specific release, use the version DOI in [`CITATION.cff`](CITATION.cff): v0.3.0 is `10.5281/zenodo.20027535`; v0.4.0 is `10.5281/zenodo.20297990`.
+The DOI above is the **concept DOI** — it always resolves to the latest archived version (v0.5.0 at the time of writing). To pin a specific release, use the version DOI in [`CITATION.cff`](CITATION.cff): v0.3.0 is `10.5281/zenodo.20027535`; v0.4.0 is `10.5281/zenodo.20297990`; v0.5.0 resolves via the concept DOI above.
 
 **Architecture paper (companion):**
 
