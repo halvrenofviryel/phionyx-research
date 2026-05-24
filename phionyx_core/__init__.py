@@ -32,7 +32,42 @@ Public API is organized into the following namespaces:
 - ``phionyx_core.cep``         -- Conscious Echo Proof engine, guards, config
 """
 
-__version__ = "0.4.0"
+__version__ = "0.5.0"
+
+# ---------------------------------------------------------------------------
+# Official companion packages (added in v0.5.0)
+# ---------------------------------------------------------------------------
+# Discoverable list of the official Phionyx ecosystem packages on PyPI.
+# Each entry is (pypi_name, github_repo, what_it_does). Surfaced so
+# downstream users can enumerate the ecosystem from inside phionyx_core
+# without hardcoding a list elsewhere.
+__companions__ = {
+    "phionyx-mcp-server": (
+        "halvrenofviryel/phionyx-mcp-server",
+        "MCP trust boundary — descriptor signing, signed envelopes, "
+        "audit chain over third-party MCP tool calls.",
+    ),
+    "phionyx-pipeline-mcp": (
+        "halvrenofviryel/phionyx-pipeline-mcp",
+        "Agent self-claim gate — verifies what the agent says it did "
+        "against the repository's actual diff.",
+    ),
+    "phionyx-eval-inspect": (
+        "halvrenofviryel/phionyx-eval-inspect",
+        "Inspect AI bridge — Phionyx runtime evidence exported into "
+        "Inspect eval logs.",
+    ),
+    "phionyx-langchain-langgraph": (
+        "halvrenofviryel/phionyx_langchain_langgraph",
+        "LangChain + LangGraph adapters — every chain / tool / LLM event "
+        "and every supervisor handoff becomes a signed envelope.",
+    ),
+    "phionyx-openai-agents": (
+        "halvrenofviryel/phionyx_openai_agents",
+        "OpenAI Agents SDK tracing bridge — every Trace and Span becomes "
+        "a signed envelope.",
+    ),
+}
 
 # ---------------------------------------------------------------------------
 # Pipeline (always available -- no external deps)
@@ -118,6 +153,7 @@ from .state.echo_state_2 import EchoState2, EchoState2Plus
 __all__ = [
     # Version
     "__version__",
+    "__companions__",
 
     # Pipeline
     "PipelineBlock",

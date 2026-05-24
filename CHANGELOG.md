@@ -13,6 +13,36 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.5.0] — 2026-05-24
+
+**Theme: Distribution & First-Run Proof — ecosystem milestone release.**
+
+v0.5.0 is an **ecosystem milestone release**. The `phionyx-core` public API surface is unchanged from v0.4.0 except for one new discoverability namespace (`phionyx_core.__companions__`). What changed is the surrounding ecosystem: two new PyPI companion packages, two new website discovery surfaces, and three runnable framework example bundles. The milestone shipped ~2 months ahead of its 2026-07-28 target.
+
+### Added
+
+- **`phionyx_core.__companions__`** — a discoverable `dict` listing the five official Phionyx ecosystem packages on PyPI. Each entry is `(pypi_name, github_repo, what_it_does)`. Surfaced so downstream users can enumerate the ecosystem from inside `phionyx-core` without hardcoding the list. Added to `__all__`; backwards-compatible.
+
+### Ecosystem additions (separate PyPI releases, not phionyx-core code)
+
+- **`phionyx-langchain-langgraph` 0.1.0a1** (PyPI alpha) — native adapters for LangChain `BaseCallbackHandler` and LangGraph supervisor patterns. Every LangChain chain / tool / LLM event and every LangGraph supervisor handoff is recorded as a signed, hash-chained envelope (`AgentMessageEnvelope` inner record + `phionyx.langchain_event_envelope.v1` outer schema). 52 tests. Repo: [halvrenofviryel/phionyx_langchain_langgraph](https://github.com/halvrenofviryel/phionyx_langchain_langgraph).
+- **`phionyx-openai-agents` 0.1.0a1** (PyPI alpha) — OpenAI Agents SDK tracing bridge. Implements the SDK's `TracingProcessor` interface (six abstract methods). `AgentMessageEnvelope` inner record + `phionyx.openai_agents_event_envelope.v1` outer schema. SDK-deferred import (loads cleanly without `openai-agents` installed). 37 tests including a 5-thread × 20-callback concurrency test that verifies cross-thread emission lock. Repo: [halvrenofviryel/phionyx_openai_agents](https://github.com/halvrenofviryel/phionyx_openai_agents).
+- **`phionyx.ai/standard`** — 3-button discovery hero on the Evaluation Standard page. CTAs: Read the Standard (GitHub spec), See a Sample Report (GitHub example), Bridge via Inspect AI (`phionyx-eval-inspect` companion).
+- **`phionyx.ai/examples`** — unified showcase comparing the three framework bundles side-by-side. Each card: framework name, package + PyPI link, what the example shows, expected envelope output, install command, run command, GitHub source link.
+
+### Unchanged
+
+- 46-block pipeline contract v3.8.0 — no block additions, removals, or reordering.
+- All v0.4.0 public API exports (87 functions/classes/types) — preserved.
+- All v0.4.0 evidence guarantees — preserved.
+- `phionyx-mcp-server`, `phionyx-pipeline-mcp`, `phionyx-eval-inspect` — unchanged from v0.4.0.
+
+### Release notes
+
+Full milestone release notes (with plan-vs-actual variance breakdown and v0.6.0 preview) live in the Viryel monorepo at `docs/releases/v0.5.0_RELEASE_NOTES.md`.
+
+---
+
 ## [0.4.0] — 2026-05-19
 
 **Theme: signed runtime evidence over agentic AI — MCP + OpenTelemetry + Inspect AI + RGE v0.2.**
