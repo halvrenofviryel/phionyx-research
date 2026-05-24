@@ -8,9 +8,8 @@ same scenario, four turns: in-character → mild drift → coherence warning →
 severe break. Each turn is scored with the documented physics formulas
 and classified on the normalized [0, 1] scale.
 
-This script is the §6 case study evidence for arXiv Paper 2
-("Detecting Trajectory Failures in Agentic AI Systems") and the public
-Phase 2 P0 #1 demo for the NPC use case.
+This script is a worked reference trace of the NPC drift detection
+pattern that Phionyx applies to character-coherence governance.
 
 Run:
     pip install -e .
@@ -27,9 +26,8 @@ even as the character is melting down. For drift detection in NPC and
 session-coherence contexts, the published guidance is to use Φ_cognitive
 as the assessment signal and to expose Φ_physical alongside as a separate
 "engagement intensity" channel. This demo prints both columns and
-classifies on Φ_cognitive. See:
-    docs/research/PHIONYX_PHYSICS_FORMULAS_REPORT.md §6 (telemetry vs verdict)
-    docs/physics/classification.md (threshold table)
+classifies on Φ_cognitive. The classifier thresholds are embedded in
+the envelope this script writes (see ``classifier.thresholds``).
 
 The state-vector inputs validate against:
     schemas/physics/phionyx_state_vector.schema.json
@@ -231,7 +229,7 @@ def build_envelope(rows: list[dict]) -> dict:
             "name": "npc_drift_demo",
             "version": "0.1.0",
             "purpose": (
-                "Reference trace for arXiv Paper 2 §6 case study: same NPC "
+                "Reference trace of the NPC drift detection pattern: same NPC "
                 "profile, same scenario, drift detected on the cognitive "
                 "channel one turn before visible character break."
             ),
@@ -260,8 +258,7 @@ def build_envelope(rows: list[dict]) -> dict:
             "with arousal and would mask drift in NPC contexts.",
             "Φ_total and Φ_physical are reported alongside as engagement "
             "intensity context, not as compliance verdicts.",
-            "The classifier is a telemetry primitive, not a regulatory "
-            "verdict; see Paper 2 §7 Limitations.",
+            "The classifier is a telemetry primitive, not a regulatory verdict.",
         ],
     }
 
