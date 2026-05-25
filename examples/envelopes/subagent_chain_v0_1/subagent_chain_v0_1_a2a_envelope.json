@@ -1,0 +1,176 @@
+{
+  "_comment": "A2A worked example. Shows what a Linux Foundation Agent2Agent (A2A) handoff would look like under the v0.1 subagent_chain block. 3-agent chain: research-agent (root, A2A agent card URI) → drafting-agent (child) → review-agent (leaf). Phionyx envelopes wrap A2A traffic; the protocol field is 'a2a' and protocol_data carries the A2A task identifier. v0.1 does NOT specify the wire-level A2A task-acknowledgement signature alongside — that's v1.1 full A2A adapter scope. v0.1 only commits to its OWN handoff_signature (signed by the producer runtime's key) plus the wrapped A2A task_id reference.",
+  "envelopes": [
+    {
+      "schema": "phionyx.governed_response_envelope.v0_2",
+      "subject": {
+        "runtime": "phionyx-a2a-bridge-prototype",
+        "version": "0.0.1",
+        "producer": "a2a.research-agent",
+        "turn_index": 1,
+        "timestamp_utc": "2026-05-25T11:00:00Z"
+      },
+      "input": {
+        "user_text": "Summarise the runtime evidence properties of the Phionyx Evaluation Standard v0.2.0.",
+        "state_vector": {
+          "valence": 0.0,
+          "arousal": 0.5,
+          "stability": 0.8,
+          "entropy": 0.3,
+          "time_delta": 0.0,
+          "amplitude": 5.0,
+          "context_profile": "balanced",
+          "gamma": 0.15
+        },
+        "safety": {"verdict": "admit", "rule_id": null}
+      },
+      "path": [
+        {"block": "input_safety_gate", "disposition": "admit"},
+        {"block": "audit_layer", "disposition": "record"}
+      ],
+      "output": {"text": "Drafting evidence summary...", "redacted": false},
+      "metrics": {
+        "phi_cognitive": 0.62,
+        "phi_physical": 2.40,
+        "phi_total": 1.07,
+        "cognitive_verdict": "engaged"
+      },
+      "subagent_chain": {
+        "status": "active",
+        "agent_id": "agents.example.com/research-agent",
+        "role": "root",
+        "chain_depth": 0,
+        "protocol": "a2a",
+        "parent_envelope_hash": null,
+        "parent_agent_id": null,
+        "child_agent_ids": ["agents.example.com/drafting-agent"],
+        "handoff_signature": null,
+        "handoff_timestamp_utc": null,
+        "protocol_data": {
+          "a2a_task_id": "task_e6a575f0a1b2c3d4",
+          "a2a_agent_card_fragment": "research-agent"
+        }
+      },
+      "integrity": {
+        "previous": "sha256:0000000000000000",
+        "current": "sha256:b1c2d3e4f5061827",
+        "signature": "ed25519:7a8b9c0d1e2f3041",
+        "canonical_json": true
+      }
+    },
+    {
+      "schema": "phionyx.governed_response_envelope.v0_2",
+      "subject": {
+        "runtime": "phionyx-a2a-bridge-prototype",
+        "version": "0.0.1",
+        "producer": "a2a.drafting-agent",
+        "turn_index": 2,
+        "timestamp_utc": "2026-05-25T11:00:30Z"
+      },
+      "input": {
+        "user_text": "Three evidence rows prepared by research-agent (research_evidence_v0_1.jsonl).",
+        "state_vector": {
+          "valence": 0.1,
+          "arousal": 0.5,
+          "stability": 0.75,
+          "entropy": 0.4,
+          "time_delta": 30.0,
+          "amplitude": 5.0,
+          "context_profile": "balanced",
+          "gamma": 0.15
+        },
+        "safety": {"verdict": "admit", "rule_id": null}
+      },
+      "path": [
+        {"block": "input_safety_gate", "disposition": "admit"},
+        {"block": "audit_layer", "disposition": "record"}
+      ],
+      "output": {"text": "Drafted paragraphs ready for editor review.", "redacted": false},
+      "metrics": {
+        "phi_cognitive": 0.58,
+        "phi_physical": 2.31,
+        "phi_total": 1.01,
+        "cognitive_verdict": "engaged"
+      },
+      "subagent_chain": {
+        "status": "active",
+        "agent_id": "agents.example.com/drafting-agent",
+        "role": "child",
+        "chain_depth": 1,
+        "protocol": "a2a",
+        "parent_envelope_hash": "sha256:b1c2d3e4f5061827",
+        "parent_agent_id": "agents.example.com/research-agent",
+        "child_agent_ids": ["agents.example.com/review-agent"],
+        "handoff_signature": "ed25519:3d4e5f6071829304",
+        "handoff_timestamp_utc": "2026-05-25T11:00:00Z",
+        "protocol_data": {
+          "a2a_task_id": "task_e6a575f0a1b2c3d4",
+          "a2a_agent_card_fragment": "drafting-agent"
+        }
+      },
+      "integrity": {
+        "previous": "sha256:b1c2d3e4f5061827",
+        "current": "sha256:8d9e0a1b2c3d4e5f",
+        "signature": "ed25519:90a1b2c3d4e5f607",
+        "canonical_json": true
+      }
+    },
+    {
+      "schema": "phionyx.governed_response_envelope.v0_2",
+      "subject": {
+        "runtime": "phionyx-a2a-bridge-prototype",
+        "version": "0.0.1",
+        "producer": "a2a.review-agent",
+        "turn_index": 3,
+        "timestamp_utc": "2026-05-25T11:01:00Z"
+      },
+      "input": {
+        "user_text": "Drafting-agent output ready for editorial review.",
+        "state_vector": {
+          "valence": 0.15,
+          "arousal": 0.4,
+          "stability": 0.8,
+          "entropy": 0.35,
+          "time_delta": 30.0,
+          "amplitude": 5.0,
+          "context_profile": "balanced",
+          "gamma": 0.15
+        },
+        "safety": {"verdict": "admit", "rule_id": null}
+      },
+      "path": [
+        {"block": "input_safety_gate", "disposition": "admit"},
+        {"block": "audit_layer", "disposition": "record"}
+      ],
+      "output": {"text": "Final summary emitted to caller.", "redacted": false},
+      "metrics": {
+        "phi_cognitive": 0.66,
+        "phi_physical": 2.45,
+        "phi_total": 1.11,
+        "cognitive_verdict": "engaged"
+      },
+      "subagent_chain": {
+        "status": "active",
+        "agent_id": "agents.example.com/review-agent",
+        "role": "leaf",
+        "chain_depth": 2,
+        "protocol": "a2a",
+        "parent_envelope_hash": "sha256:8d9e0a1b2c3d4e5f",
+        "parent_agent_id": "agents.example.com/drafting-agent",
+        "child_agent_ids": [],
+        "handoff_signature": "ed25519:c0d1e2f30415263a",
+        "handoff_timestamp_utc": "2026-05-25T11:00:30Z",
+        "protocol_data": {
+          "a2a_task_id": "task_e6a575f0a1b2c3d4",
+          "a2a_agent_card_fragment": "review-agent"
+        }
+      },
+      "integrity": {
+        "previous": "sha256:8d9e0a1b2c3d4e5f",
+        "current": "sha256:f1e2d3c4b5a69708",
+        "signature": "ed25519:6273849506a1b2c3",
+        "canonical_json": true
+      }
+    }
+  ]
+}

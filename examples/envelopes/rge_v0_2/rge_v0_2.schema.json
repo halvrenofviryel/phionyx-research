@@ -1,0 +1,315 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://phionyx.ai/schemas/rge_v0_2.schema.json",
+  "title": "Reasoned Governance Envelope (RGE) v0.2",
+  "description": "Per-turn signed evidence envelope for governed AI runtime decisions. v0.2 extends v0.1 with four optional blocks (reasoning, retrieval, subagent_chain, mcp_tool_audit) to cover MCP tool calls, RAG evidence chains, multi-agent handoffs, and reasoning-surface metadata. All additions are opt-in; v0.1 surface payloads validate against v0.2 after bumping the `schema` field.",
+  "type": "object",
+  "required": ["schema", "subject", "input", "path", "output", "metrics", "integrity"],
+  "additionalProperties": false,
+  "properties": {
+    "schema": {
+      "type": "string",
+      "const": "phionyx.governed_response_envelope.v0_2",
+      "description": "Schema identifier. v0.2 envelopes MUST set this exact value. v0.1 envelopes (`...v0_1`) are migrated by changing this string and (optionally) populating new v0.2 blocks."
+    },
+    "subject": {
+      "$ref": "#/$defs/subject"
+    },
+    "input": {
+      "$ref": "#/$defs/input"
+    },
+    "path": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/path_step"},
+      "description": "Ordered list of pipeline block dispositions for this turn. First step is canonically `input_safety_gate`; last step is canonically `audit_layer`."
+    },
+    "output": {
+      "$ref": "#/$defs/output"
+    },
+    "metrics": {
+      "$ref": "#/$defs/metrics"
+    },
+    "reasoning": {
+      "$ref": "#/$defs/reasoning",
+      "description": "Optional. Decision rationale + confidence delta + evidence links. NOT raw chain-of-thought. Provider reasoning tokens stay private; this block surfaces metadata the model publicly stated plus runtime-derived scoring. Populated when the producer surfaced a rationale or proposed an action."
+    },
+    "retrieval": {
+      "$ref": "#/$defs/retrieval",
+      "description": "Optional. RAG evidence chain: admitted / cited / contradicted / rejected document IDs with per-document signed evidence. F8 implementation deferred to v0.4.1; schema reserves the block so v0.4.0 envelopes can opt-in early."
+    },
+    "subagent_chain": {
+      "$ref": "#/$defs/subagent_chain",
+      "description": "Optional. Multi-agent handoff audit chain. Each handoff carries parent envelope hash + handoff signature. v0.1 active specification published 2026-05-25 at `examples/envelopes/subagent_chain_v0_1/` (Phionyx v0.6.0 W1)."
+    },
+    "mcp_tool_audit": {
+      "$ref": "#/$defs/mcp_tool_audit",
+      "description": "Optional. MCP trust boundary governance evidence: tool descriptor hash, change detection, permission scope, call I/O hash, user approval, runtime anomaly flag, signed envelope reference. Reserved for v0.4.0 F1 (MCP governance recorder). status='reserved-for-v0.4.0-f1' until F1 ships."
+    },
+    "integrity": {
+      "$ref": "#/$defs/integrity"
+    }
+  },
+  "$defs": {
+    "subject": {
+      "type": "object",
+      "required": ["runtime", "version", "producer", "turn_index", "timestamp_utc"],
+      "additionalProperties": false,
+      "properties": {
+        "runtime": {"type": "string", "description": "Runtime identifier, e.g. `phionyx-governance-wrapper` or `phionyx-core`."},
+        "version": {"type": "string", "description": "Runtime version (SemVer)."},
+        "producer": {"type": "string", "description": "Per-turn producer label, e.g. `langgraph.research_node` or `openai-agents.tool_dispatcher`."},
+        "turn_index": {"type": "integer", "minimum": 1, "description": "Monotonic per-trace turn counter."},
+        "timestamp_utc": {"type": "string", "format": "date-time", "description": "ISO-8601 UTC timestamp."}
+      }
+    },
+    "input": {
+      "type": "object",
+      "required": ["user_text", "state_vector", "safety"],
+      "additionalProperties": false,
+      "properties": {
+        "user_text": {"type": "string", "minLength": 1, "maxLength": 4000},
+        "state_vector": {
+          "type": "object",
+          "required": ["valence", "arousal", "stability", "entropy", "time_delta", "amplitude", "context_profile", "gamma"],
+          "additionalProperties": false,
+          "properties": {
+            "valence": {"type": "number", "minimum": -1.0, "maximum": 1.0},
+            "arousal": {"type": "number", "minimum": 0.0, "maximum": 1.0},
+            "stability": {"type": "number", "minimum": 0.0, "maximum": 1.0},
+            "entropy": {"type": "number", "minimum": 0.0, "maximum": 1.0},
+            "time_delta": {"type": "number", "minimum": 0.0, "description": "Seconds since previous turn; 0.1 for first turn."},
+            "amplitude": {"type": "number", "minimum": 0.0},
+            "context_profile": {"type": "string", "description": "Profile name, e.g. `DEFAULT`, `STRICT_GOVERNANCE`, `HIGH_RISK`."},
+            "gamma": {"type": "number", "minimum": 0.0, "maximum": 1.0}
+          }
+        },
+        "safety": {
+          "type": "object",
+          "required": ["allowed", "reason"],
+          "additionalProperties": false,
+          "properties": {
+            "allowed": {"type": "boolean"},
+            "reason": {"type": ["string", "null"]}
+          }
+        }
+      }
+    },
+    "path_step": {
+      "type": "object",
+      "required": ["block", "disposition"],
+      "additionalProperties": true,
+      "properties": {
+        "block": {"type": "string", "description": "Pipeline block identifier (e.g. `input_safety_gate`, `phi`, `audit_layer`)."},
+        "disposition": {"type": "string", "enum": ["admit", "block", "record", "defer", "bypass"], "description": "Block-level decision for this turn."},
+        "reason": {"type": ["string", "null"], "description": "Optional human-readable rationale. Required when disposition is `block` or `defer`."}
+      }
+    },
+    "output": {
+      "type": "object",
+      "required": ["redacted", "text"],
+      "additionalProperties": false,
+      "properties": {
+        "redacted": {"type": "boolean", "description": "True if any block intervened on the model output (block, redact, defer)."},
+        "text": {"type": ["string", "null"], "description": "Final text the runtime would emit. NULL when redacted."}
+      }
+    },
+    "metrics": {
+      "type": "object",
+      "required": ["phi_cognitive", "phi_physical", "phi_total", "cognitive_verdict"],
+      "additionalProperties": false,
+      "properties": {
+        "phi_cognitive": {"type": "number"},
+        "phi_physical": {"type": "number"},
+        "phi_total": {"type": "number"},
+        "cognitive_verdict": {"type": "string", "description": "Normalised resonance class, e.g. `coherent`, `unstable`, `degraded`."}
+      }
+    },
+    "reasoning": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["runtime_decision", "decision_reason"],
+      "properties": {
+        "model_proposed_action": {
+          "type": ["object", "null"],
+          "description": "Action shape proposed by the producer (e.g. tool call payload), if any."
+        },
+        "model_stated_rationale": {
+          "type": ["string", "null"],
+          "description": "Publicly stated rationale from the model. NULL if the producer surfaced no rationale. NOT a reconstruction of private CoT."
+        },
+        "runtime_policy_basis": {
+          "type": "array",
+          "items": {"type": "string"},
+          "description": "Ordered list of policy/gate identifiers that fed the runtime decision (e.g. `input_safety_gate`, `deliberative_ethics`, `kill_switch`)."
+        },
+        "runtime_decision": {
+          "type": "string",
+          "enum": ["release", "block", "defer", "redact"]
+        },
+        "decision_reason": {
+          "type": "string",
+          "description": "Human-readable runtime decision rationale (NOT model rationale)."
+        },
+        "rationale_action_consistency": {
+          "type": ["number", "null"],
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "description": "Score in [0, 1]. NULL when no rationale was stated."
+        },
+        "policy_alignment_score": {
+          "type": ["number", "null"],
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "description": "Score in [0, 1] for alignment between stated rationale and runtime policy basis. NULL when no rationale was stated."
+        },
+        "confidence_delta": {
+          "type": ["number", "null"],
+          "description": "Optional. Producer-reported confidence delta across the turn (e.g. pre-thinking vs post-thinking self-rated confidence). NULL when not surfaced. Provider semantics vary; see scoring_method."
+        },
+        "evidence_links": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["kind", "ref"],
+            "additionalProperties": false,
+            "properties": {
+              "kind": {"type": "string", "enum": ["retrieval", "tool_call", "memory", "policy", "external_url"]},
+              "ref": {"type": "string", "description": "Identifier or URI for the referenced evidence."},
+              "hash": {"type": "string", "description": "Optional content hash of the referenced evidence."}
+            }
+          },
+          "description": "Optional. Pointers to evidence the rationale depends on. Reasoning is only as auditable as its evidence pointers."
+        },
+        "scoring_method": {
+          "type": "string",
+          "description": "Identifier of the scorer that produced rationale_action_consistency / policy_alignment_score / confidence_delta, e.g. `phionyx.governance_wrapper.v0_1.placeholder` or `phionyx.core.v0_3.reasoning_surface`."
+        }
+      }
+    },
+    "retrieval": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "documents"],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["reserved-for-v0.4.1-f8", "active"],
+          "description": "`reserved-for-v0.4.1-f8` until F8 (Retrieval Audit) implementation lands. `active` once Phionyx populates this block at runtime."
+        },
+        "documents": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "role"],
+            "additionalProperties": false,
+            "properties": {
+              "id": {"type": "string", "description": "Document identifier (URI, hash, or store-specific key)."},
+              "role": {"type": "string", "enum": ["retrieved", "admitted", "cited", "contradicted", "rejected"], "description": "Operational role chain: retrieved → admitted → cited → contradicted → rejected → signed. Each document records its final role for this turn."},
+              "score": {"type": ["number", "null"], "minimum": 0.0, "maximum": 1.0, "description": "Retrieval score from the underlying store."},
+              "hash": {"type": "string", "description": "Optional content hash for tamper-evidence."},
+              "signed_evidence_ref": {"type": ["string", "null"], "description": "Optional reference to a signed evidence record (envelope or audit chain entry)."}
+            }
+          }
+        },
+        "store_id": {"type": "string", "description": "Optional retrieval store identifier (e.g. `vector://docs`, `bm25://kb-primary`)."},
+        "query_hash": {"type": "string", "description": "Optional hash of the retrieval query for replay."}
+      }
+    },
+    "subagent_chain": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "agent_id", "role"],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["reserved-for-v0.6.0-f5", "active"],
+          "description": "v0.2-era enum. New producers (2026-05-25 onward) MUST set `active` and populate the full v0.1 surface specified in `examples/envelopes/subagent_chain_v0_1/subagent_chain_v0_1.schema.json`. `reserved-for-v0.6.0-f5` is retained for backward-compat with envelopes emitted during the reserved phase."
+        },
+        "agent_id": {"type": "string", "description": "This agent's identifier in the chain."},
+        "role": {"type": "string", "enum": ["root", "child", "leaf"], "description": "Position in the agent hierarchy for this turn."},
+        "parent_envelope_hash": {"type": ["string", "null"], "description": "Hash of the parent agent's envelope that handed off to this turn. NULL when role=`root`."},
+        "handoff_signature": {"type": ["string", "null"], "description": "Signed handoff payload from the parent (Ed25519 or HMAC). NULL when role=`root`."},
+        "protocol": {"type": "string", "enum": ["a2a", "agntcy", "phionyx_native", "langgraph_subgraph", "crewai", "autogen"], "description": "Inter-agent protocol identifier."}
+      }
+    },
+    "mcp_tool_audit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status"],
+      "description": "MCP trust boundary governance evidence. 8-capability surface tracking tool descriptor integrity + per-call signed evidence + runtime anomaly detection. Implementation lands in v0.4.0 F1 (MCP governance recorder); v0.2 schema reserves the block.",
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["reserved-for-v0.4.0-f1", "active"],
+          "description": "`reserved-for-v0.4.0-f1` until F1 (MCP governance recorder) implementation lands. `active` once Phionyx populates this block at runtime."
+        },
+        "tool_descriptor_hash": {
+          "type": ["string", "null"],
+          "description": "Capability 1: SHA-256 hash of the FULL tool descriptor as observed at this turn, INCLUDING the MCP `protocolVersion` field. Format: `sha256:<64-hex>`. Computed over canonical-JSON encoding (RFC 8785 / Phionyx canonical: sort_keys, no whitespace, ensure_ascii) of the complete descriptor object as received from the MCP server. Spec-version drift therefore changes the hash even when the descriptor body is identical. NULL when tool descriptor unavailable (e.g. during user-approval bootstrap before first descriptor exchange). Founder decision Q3 (2026-05-19)."
+        },
+        "descriptor_change_detected": {
+          "type": ["boolean", "null"],
+          "description": "Capability 2: True if the descriptor hash differs from the user-approved baseline (rug-pull detection). NULL when no baseline exists yet."
+        },
+        "tool_permission_scope": {
+          "type": ["array", "null"],
+          "items": {"type": "string"},
+          "description": "Capability 3: Capability profile entries authorised for this tool at this turn (e.g. `[\"read_files\", \"http_get\"]`)."
+        },
+        "tool_call_io_hash": {
+          "type": ["object", "null"],
+          "additionalProperties": false,
+          "properties": {
+            "input_hash": {"type": "string"},
+            "output_hash": {"type": "string"}
+          },
+          "required": ["input_hash", "output_hash"],
+          "description": "Capability 4: Per-call signed evidence — content hashes of the tool input and tool output."
+        },
+        "user_approval_state": {
+          "type": ["object", "null"],
+          "additionalProperties": false,
+          "properties": {
+            "approved": {"type": "boolean"},
+            "approval_ref": {"type": ["string", "null"], "description": "Optional reference to the approval audit record."},
+            "approved_at_utc": {"type": ["string", "null"], "format": "date-time"}
+          },
+          "required": ["approved"],
+          "description": "Capability 5: Consent capture + audit. Records the user-side approval state for this tool at this turn."
+        },
+        "runtime_anomaly_flag": {
+          "type": ["object", "null"],
+          "additionalProperties": false,
+          "properties": {
+            "anomaly": {"type": "boolean"},
+            "source": {"type": "string", "enum": ["behavioral_drift", "action_intent_gate", "manual_override"], "description": "Which Phionyx gate raised the flag."},
+            "severity": {"type": "string", "enum": ["info", "warn", "block"]},
+            "detail": {"type": ["string", "null"]}
+          },
+          "required": ["anomaly", "source", "severity"],
+          "description": "Capability 6: Anomaly flag fed by Phionyx's behavioral_drift + action_intent_gate blocks."
+        },
+        "signed_envelope_ref": {
+          "type": ["string", "null"],
+          "description": "Capability 7: Reference (URI or hash) to the signed RGE envelope record persisting this MCP tool audit. Typically `envelope://<integrity.current>` (self-reference). NOTE: this field is OUTSIDE the hash domain — builders + verifiers MUST normalise it to null before computing `integrity.current` to avoid a hash-fixpoint paradox. The field is persisted alongside the envelope so external consumers can resolve it, but it is NOT covered by `integrity.signature`. See RFC §4.1."
+        },
+        "chain_verify_command": {
+          "type": ["string", "null"],
+          "description": "Capability 8: CLI command users can run to verify the chain integrity for this turn, e.g. `phionyx-mcp verify-chain --trace <trace_id> --turn <turn_index>`."
+        }
+      }
+    },
+    "integrity": {
+      "type": "object",
+      "required": ["previous", "current", "signature", "canonical_json"],
+      "additionalProperties": false,
+      "properties": {
+        "previous": {"type": "string", "pattern": "^sha256:[0-9a-f]+$", "description": "Hash of the previous envelope in the chain. Genesis = `sha256:00000000` (8 zero bytes truncated)."},
+        "current": {"type": "string", "pattern": "^sha256:[0-9a-f]+$", "description": "Hash of this envelope's payload + previous. SHA-256 over canonical JSON, truncated to 16 hex chars in the demo wrapper; full digest in Core."},
+        "signature": {"type": "string", "description": "Ed25519 signature in Core (`ed25519:<hex>`) or `demo-hmac:<hex>` in the launch wrapper. Signing key identity tracked separately."},
+        "canonical_json": {"type": "boolean", "description": "True if the hash was computed over canonical-JSON-encoded payload (sort_keys, no whitespace, ASCII-safe)."}
+      }
+    }
+  }
+}
