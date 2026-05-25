@@ -142,7 +142,14 @@ ignore_missing_imports = true
 plugins = ["pydantic.mypy"]
 # Keep these on so real type errors in phionyx_core itself still fail CI.
 check_untyped_defs = false
-warn_unused_ignores = true
+# warn_unused_ignores is FALSE because phionyx_core uses conditional
+# `try: from opentelemetry import trace; Status = trace.Status` /
+# `except ImportError: Status = None  # type: ignore` patterns. The
+# type: ignore is correct when opentelemetry is not installed (CI
+# environment with thin [dev] extras) and "unused" only when otel
+# happens to be installed locally. Forcing this on would oscillate
+# the build green/red based on which optional deps are installed.
+warn_unused_ignores = false
 warn_redundant_casts = true
 
 [tool.pydantic-mypy]

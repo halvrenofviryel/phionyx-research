@@ -161,7 +161,7 @@ def synchronized(func: Callable[..., T]) -> Callable[..., T]:
 
     @wraps(func)
     def wrapper(*args, **kwargs):
-        with func.__lock__:
+        with func.__lock__:  # type: ignore[attr-defined]
             return func(*args, **kwargs)
 
     return wrapper
