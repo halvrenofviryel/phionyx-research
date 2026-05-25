@@ -13,6 +13,52 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.6.0] — 2026-05-25
+
+**Theme: Multi-Agent Evidence.**
+
+v0.6.0 answers the next question after *a model saying fixed is not evidence*: when multiple agents collaborate, what shape lets a reviewer reconstruct the flow from the signed evidence alone, with no insider access and no trust in any single agent's narration?
+
+Four features ship: the multi-agent envelope chain (F5), an LLM-as-judge eval primitive (F9, in the separate `phionyx-eval` companion package), cross-runtime evidence portability for Langfuse / LangSmith (F13, also in `phionyx-eval`), and the F12-plus extension to the Claude Code plugin from v0.5.1. Plus the v0.6 schema portfolio is published as a stabilisation candidate.
+
+### Added
+
+- **F5 — `subagent_chain` v0.1 active spec.** Multi-agent / subagent audit chain block. The block reserved in RGE v0.2 §2.2.3 as `reserved-for-v0.6.0-f5` is now an active specification.
+  - `phionyx_core.contracts.envelopes.SubagentChainV0` — Pydantic v2 model.
+  - `phionyx_core.contracts.envelopes.SubagentChainProtocol` — Literal type covering `a2a`, `agntcy`, `phionyx_native`, `langgraph_subgraph`, `crewai`, `autogen`.
+  - `phionyx_core.contracts.envelopes.SubagentChainRole` — Literal type covering `root`, `child`, `leaf`.
+  - `phionyx_core.contracts.envelopes.compute_handoff_signing_body()` — canonical-JSON encoding (sort_keys, no whitespace, ASCII-safe) of the 5-field handoff signing body per RFC §2.4.
+  - JSON Schema (Draft 2020-12) at `examples/envelopes/subagent_chain_v0_1/subagent_chain_v0_1.schema.json`.
+  - 6-file RFC bundle in `examples/envelopes/subagent_chain_v0_1/`: RFC (`subagent_chain_v0_1.md`), JSON Schema, 3-agent minimal envelope example, A2A protocol-mapped worked example, extended walkthroughs, migration doc from RGE v0.2 reserved status to v0.1 active.
+- **RGE v0.2 RFC bundle backport.** `examples/envelopes/rge_v0_2/` — the 6-file RFC originally shipped with v0.4.0 W1, now published in the open repo alongside the new subagent_chain v0.1 RFC.
+- **ADR-0007 — Multi-Agent Envelope Chain.** Decision record in `docs/adr/0007-multi-agent-envelope-chain.md`.
+- **v0.6 Schema portfolio.** `examples/envelopes/v0_6_schema_portfolio.md` catalogues the seven schemas Phionyx publishes at v0.6.0 across the Core SDK and four companion packages, plus the additive-only versioning policy.
+- **v0.6.0 release notes.** `docs/releases/v0.6.0_RELEASE_NOTES.md` — full release content + effort matrix + what is NOT in release + migration guide.
+- **Public surface growth.** `phionyx_core.contracts.envelopes.__all__` grew from 8 to 12 exports (additive only).
+
+### Changed
+
+- **`phionyx_core.__version__`** 0.5.0 → 0.6.0.
+- **`pyproject.toml` version** 0.5.0 → 0.6.0.
+
+### Companion package shipping alongside (separate PyPI releases, not phionyx-core code)
+
+- **`phionyx-eval` 0.1.0a1** — LLM-as-judge primitive (F9) + Langfuse / LangSmith import-only cross-runtime portability (F13). New companion package; first release at v0.6.0. Repo: `halvrenofviryel/phionyx-eval`.
+- **Claude Code plugin F12-plus extension** — `/phionyx:replay-trace` slash command added to the v0.5.1 plugin for walking multi-agent envelope chains. Two worked walkthroughs (LangGraph + OpenAI Agents). No new MCP tools; the command interprets persisted envelopes.
+
+### What is NOT in v0.6.0
+
+- Cross-runtime export (Phionyx → Langfuse / LangSmith) — v0.7.0 candidate.
+- OpenAI Agents `subagent_chain` integration — demand-driven add in v0.7.0+.
+- AGNTCY/ACP worked example — v0.6.x patch if adoption signals.
+- Full A2A protocol adapter — v1.1 per public roadmap.
+
+### Breaking changes
+
+**None.** v0.6.0 is fully backwards-compatible with v0.5.0. The new optional `subagent_chain` field added to `phionyx.langchain_event_envelope.v1` (in the companion package) is strictly additive — old envelopes verify byte-identically.
+
+---
+
 ## [0.5.0] — 2026-05-24
 
 **Theme: Distribution & First-Run Proof — ecosystem milestone release.**

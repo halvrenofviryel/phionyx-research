@@ -1,0 +1,91 @@
+{
+  "schema": "phionyx.governed_response_envelope.v0_2",
+  "subject": {
+    "runtime": "phionyx-core",
+    "version": "0.4.0-rc1",
+    "producer": "claude-desktop.mcp.github_server",
+    "turn_index": 7,
+    "timestamp_utc": "2026-06-12T10:31:14.521000+00:00"
+  },
+  "input": {
+    "user_text": "Open issue #42 in the halvrenofviryel/phionyx-research repository and read its body.",
+    "state_vector": {
+      "valence": 0.10,
+      "arousal": 0.55,
+      "stability": 0.78,
+      "entropy": 0.22,
+      "time_delta": 4.3,
+      "amplitude": 5.0,
+      "context_profile": "STRICT_GOVERNANCE",
+      "gamma": 0.15
+    },
+    "safety": {
+      "allowed": true,
+      "reason": null
+    }
+  },
+  "path": [
+    {"block": "input_safety_gate", "disposition": "admit", "reason": null},
+    {"block": "mcp_tool_descriptor_verify", "disposition": "admit", "reason": "descriptor hash matches user-approved baseline"},
+    {"block": "action_intent_gate", "disposition": "admit", "reason": "scope: read-only github tool call"},
+    {"block": "phi", "disposition": "admit", "phi_cog": 0.541, "phi_phy": 0.502},
+    {"block": "behavioral_drift", "disposition": "admit", "anomaly_score": 0.08},
+    {"block": "audit_layer", "disposition": "record"}
+  ],
+  "output": {
+    "redacted": false,
+    "text": "Issue #42 (\"Reasoned Governance Envelope v0.2 — RFC artifact set\"): proposes a 6-file RFC bundle (schema + RFC + examples + migration + 2 reference envelopes). Status: open, assigned to founder, milestone v0.4.0."
+  },
+  "metrics": {
+    "phi_cognitive": 0.541,
+    "phi_physical": 0.502,
+    "phi_total": 0.521,
+    "cognitive_verdict": "coherent"
+  },
+  "reasoning": {
+    "model_proposed_action": {
+      "tool": "github.get_issue",
+      "arguments": {"owner": "halvrenofviryel", "repo": "phionyx-research", "number": 42}
+    },
+    "model_stated_rationale": "User asked to read issue #42; the github.get_issue tool is the most direct way to fetch issue body without spawning a wider search.",
+    "runtime_policy_basis": ["input_safety_gate", "action_intent_gate", "mcp_tool_descriptor_verify"],
+    "runtime_decision": "release",
+    "decision_reason": "Tool call scope is read-only and matches user-approved capability profile; descriptor unchanged; no anomaly raised.",
+    "rationale_action_consistency": 0.92,
+    "policy_alignment_score": 0.88,
+    "confidence_delta": null,
+    "evidence_links": [
+      {"kind": "tool_call", "ref": "mcp://github.get_issue/halvrenofviryel/phionyx-research/42", "hash": "sha256:b471e92f4c83a1d0"}
+    ],
+    "scoring_method": "phionyx.core.v0_4.reasoning_surface.placeholder"
+  },
+  "mcp_tool_audit": {
+    "status": "active",
+    "tool_descriptor_hash": "sha256:7a3f912ce41b8d05",
+    "descriptor_change_detected": false,
+    "tool_permission_scope": ["read_issues", "read_pull_requests", "read_repository_metadata"],
+    "tool_call_io_hash": {
+      "input_hash": "sha256:c0ffee1234abcd56",
+      "output_hash": "sha256:b471e92f4c83a1d0"
+    },
+    "user_approval_state": {
+      "approved": true,
+      "approval_ref": "audit://approval/2026-06-10T09:22:01Z/github_server",
+      "approved_at_utc": "2026-06-10T09:22:01.000000+00:00"
+    },
+    "runtime_anomaly_flag": {
+      "anomaly": false,
+      "source": "behavioral_drift",
+      "severity": "info",
+      "detail": null
+    },
+    "signed_envelope_ref": "envelope://sha256:f8e7d6c5b4a30219",
+    "chain_verify_command": "phionyx-mcp verify-chain --trace trace_b471e92f --turn 7"
+  },
+  "integrity": {
+    "previous": "sha256:a1b2c3d4e5f60718",
+    "current": "sha256:f8e7d6c5b4a30219",
+    "signature": "ed25519:3c9a8b7d6e5f4012c0b1a2d3e4f5061728394a5b",
+    "canonical_json": true
+  }
+}
