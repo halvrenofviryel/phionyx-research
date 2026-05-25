@@ -197,6 +197,7 @@ omit = [
 precision = 2
 show_missing = true
 skip_covered = false
+fail_under = 80.0
 exclude_lines = [
     "pragma: no cover",
     "def __repr__",
@@ -209,10 +210,12 @@ exclude_lines = [
     "@(abc\\.)?abstractmethod",
 ]
 
-# Coverage thresholds (fail if below these percentages)
-[tool.coverage.report.fail_under]
-# Overall coverage threshold
-total = 80
+# Coverage thresholds (fail if below this percentage).
+# Pre-2026-05-25 form `[tool.coverage.report.fail_under] total = 80`
+# was rejected by coverage.py (it expects a float, not a sub-table)
+# and silently broke pytest invocations under any --cov plugin. Now
+# expressed as a single float in the parent [tool.coverage.report]
+# block.
 
 # Per-module thresholds (can be adjusted per module)
 [tool.pytest.ini_options]
@@ -220,16 +223,14 @@ total = 80
 # async tests without needing an explicit @pytest.mark.asyncio decorator.
 # Required for tests/core/pipeline/test_agi_pipeline_blocks.py (added 2026-05-17).
 asyncio_mode = "auto"
-# Coverage options for pytest-cov
-addopts = """
-    --cov=echo-server/app
-    --cov=adapters
-    --cov=scripts
-    --cov-report=term-missing
-    --cov-report=html:htmlcov
-    --cov-report=xml:coverage.xml
-    --cov-fail-under=80
-"""
+# Pre-2026-05-25 form had `addopts` loading --cov against monorepo-only
+# directories (echo-server/app, adapters, scripts) that do not exist
+# in the public phionyx-research checkout. The pytest-cov plugin then
+# crashed at config-load time with "Option [tool.coverage.report]
+# fail_under is not a float" and prevented every test from running.
+# Coverage targets for CI now come from explicit --cov flags on the
+# CI command line where applicable; the public-repo default is to run
+# tests without coverage instrumentation.
 
 [dependency-groups]
 bench = [
