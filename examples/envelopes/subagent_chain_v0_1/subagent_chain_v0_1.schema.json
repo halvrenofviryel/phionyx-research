@@ -1,0 +1,122 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://phionyx.ai/schemas/subagent_chain_v0_1.schema.json",
+  "title": "Phionyx Subagent Chain Block v0.1",
+  "description": "Active specification for the `subagent_chain` block reserved in Reasoned Governance Envelope (RGE) v0.2 §2.2.3 as `reserved-for-v0.6.0-f5`. v0.1 defines the protocol-agnostic shape used to record multi-agent (parent → child → grandchild → leaf) handoff evidence inside a per-turn RGE envelope. Full A2A adapter shipped separately in v1.1.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "status",
+    "agent_id",
+    "role",
+    "chain_depth",
+    "protocol",
+    "parent_envelope_hash",
+    "handoff_signature",
+    "handoff_timestamp_utc"
+  ],
+  "properties": {
+    "status": {
+      "type": "string",
+      "const": "active",
+      "description": "v0.1 envelopes MUST set `active`. The RGE v0.2 reserved value `reserved-for-v0.6.0-f5` is migrated to `active` upon F5 adoption."
+    },
+    "agent_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256,
+      "description": "Stable identifier of THIS agent in the chain. For LangGraph supervisors the node name; for A2A the agent-card URI fragment; for AGNTCY/ACP the agent DID."
+    },
+    "role": {
+      "type": "string",
+      "enum": ["root", "child", "leaf"],
+      "description": "Position in the chain for THIS turn. `root` is the originating agent (no parent); `child` is any intermediate node that both receives a handoff and emits one; `leaf` receives a handoff and does not delegate further."
+    },
+    "chain_depth": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Depth of this agent in the chain. `root` MUST have depth=0; every child increments by 1. Bounded by `max_chain_depth` (recommended 16) in production runtimes; producers exceeding the bound MUST set `protocol_data.depth_exceeded=true` and emit a `runtime_anomaly_flag` in the parent RGE envelope."
+    },
+    "protocol": {
+      "type": "string",
+      "enum": [
+        "a2a",
+        "agntcy",
+        "phionyx_native",
+        "langgraph_subgraph",
+        "crewai",
+        "autogen"
+      ],
+      "description": "Inter-agent protocol identifier. `a2a` covers Linux Foundation Agentic AI Foundation Agent2Agent envelopes; `agntcy` covers Cisco/Outshift AGNTCY/ACP; `langgraph_subgraph` covers LangGraph supervisor handoffs (the v0.5.0 PhionyxLangGraphSupervisor adapter); `crewai` and `autogen` cover their respective Python frameworks; `phionyx_native` is a Phionyx-internal handoff between two RGE producers without a third-party protocol."
+    },
+    "parent_envelope_hash": {
+      "type": ["string", "null"],
+      "pattern": "^(sha256:[0-9a-f]{16,64})?$",
+      "description": "Hash of the parent agent's `integrity.current` field, copied verbatim. NULL when role=`root`. Establishes the cross-envelope hash chain that lets a verifier walk parent envelopes from any child envelope without side-channel metadata."
+    },
+    "parent_agent_id": {
+      "type": ["string", "null"],
+      "minLength": 1,
+      "maxLength": 256,
+      "description": "Optional. The parent's `agent_id`. NULL when role=`root`. Producers SHOULD populate this when known; it lets evidence-inspector UIs render the chain without resolving `parent_envelope_hash` against the store first."
+    },
+    "child_agent_ids": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1, "maxLength": 256},
+      "minItems": 0,
+      "description": "Optional. For non-leaf nodes, the `agent_id` of each child this agent handed off to during this turn. Empty array when role=`leaf` or when this agent has not yet emitted any handoffs in this turn. Fan-out (multiple entries) is permitted."
+    },
+    "handoff_signature": {
+      "type": ["string", "null"],
+      "description": "Signed handoff payload from the parent. Format: `ed25519:<hex>` in Core, `demo-hmac:<hex>` in the launch wrapper. NULL when role=`root`. The signed body is the canonical-JSON encoding of `{parent_envelope_hash, parent_agent_id, child_agent_id, child_protocol, handoff_timestamp_utc}` as specified in §3.1 of the v0.1 RFC. The signing key MUST be the parent runtime's own signing key (same key used for the parent envelope's `integrity.signature`)."
+    },
+    "handoff_timestamp_utc": {
+      "type": ["string", "null"],
+      "format": "date-time",
+      "description": "ISO-8601 UTC timestamp at which the parent finalised the handoff (i.e. emitted the parent envelope). NULL when role=`root`. MUST equal the parent envelope's `subject.timestamp_utc` when both are available. Replay protection: a child envelope whose handoff timestamp is older than `replay_window_seconds` (recommended 300s) MUST be flagged."
+    },
+    "protocol_data": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Protocol-specific extension payload. Open object. Reserved keys: `depth_exceeded` (boolean), `replay_window_seconds_used` (integer), `a2a_task_id` (string, A2A only), `agntcy_acp_envelope_id` (string, AGNTCY only), `langgraph_thread_id` (string, LangGraph only). Producers MUST namespace any non-reserved key by protocol (`a2a_*`, `crewai_*`, etc.)."
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"role": {"const": "root"}}},
+      "then": {
+        "properties": {
+          "chain_depth": {"const": 0},
+          "parent_envelope_hash": {"type": "null"},
+          "parent_agent_id": {"type": "null"},
+          "handoff_signature": {"type": "null"},
+          "handoff_timestamp_utc": {"type": "null"}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"role": {"enum": ["child", "leaf"]}}},
+      "then": {
+        "properties": {
+          "chain_depth": {"minimum": 1},
+          "parent_envelope_hash": {"type": "string"},
+          "handoff_signature": {"type": "string"},
+          "handoff_timestamp_utc": {"type": "string"}
+        },
+        "required": [
+          "parent_envelope_hash",
+          "handoff_signature",
+          "handoff_timestamp_utc"
+        ]
+      }
+    },
+    {
+      "if": {"properties": {"role": {"const": "leaf"}}},
+      "then": {
+        "properties": {
+          "child_agent_ids": {"maxItems": 0}
+        }
+      }
+    }
+  ]
+}

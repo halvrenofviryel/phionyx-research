@@ -1,0 +1,173 @@
+{
+  "_comment": "Minimal worked example: 3-agent chain (researcher root → writer child → editor leaf) using protocol=langgraph_subgraph. Each envelope is a per-turn Reasoned Governance Envelope (RGE v0.2) with the v0.1 subagent_chain block populated. Hashes use the 16-hex-char truncated form documented in RGE v0.2 §2.3 for the launch wrapper.",
+  "envelopes": [
+    {
+      "schema": "phionyx.governed_response_envelope.v0_2",
+      "subject": {
+        "runtime": "phionyx-langchain-langgraph",
+        "version": "0.1.0a1",
+        "producer": "langgraph.researcher",
+        "turn_index": 1,
+        "timestamp_utc": "2026-05-25T10:00:00Z"
+      },
+      "input": {
+        "user_text": "What evidence formats does the Phionyx Evaluation Standard v0.2.0 require for governance claims?",
+        "state_vector": {
+          "valence": 0.0,
+          "arousal": 0.5,
+          "stability": 0.8,
+          "entropy": 0.3,
+          "time_delta": 0.0,
+          "amplitude": 5.0,
+          "context_profile": "balanced",
+          "gamma": 0.15
+        },
+        "safety": {"verdict": "admit", "rule_id": null}
+      },
+      "path": [
+        {"block": "input_safety_gate", "disposition": "admit"},
+        {"block": "audit_layer", "disposition": "record"}
+      ],
+      "output": {"text": "Drafting evidence-format outline...", "redacted": false},
+      "metrics": {
+        "phi_cognitive": 0.62,
+        "phi_physical": 2.40,
+        "phi_total": 1.07,
+        "cognitive_verdict": "engaged"
+      },
+      "subagent_chain": {
+        "status": "active",
+        "agent_id": "researcher",
+        "role": "root",
+        "chain_depth": 0,
+        "protocol": "langgraph_subgraph",
+        "parent_envelope_hash": null,
+        "parent_agent_id": null,
+        "child_agent_ids": ["writer"],
+        "handoff_signature": null,
+        "handoff_timestamp_utc": null,
+        "protocol_data": {
+          "langgraph_thread_id": "thr_2026_05_25_demo"
+        }
+      },
+      "integrity": {
+        "previous": "sha256:0000000000000000",
+        "current": "sha256:a1b2c3d4e5f60718",
+        "signature": "demo-hmac:8a3c7e9f1b2d4068",
+        "canonical_json": true
+      }
+    },
+    {
+      "schema": "phionyx.governed_response_envelope.v0_2",
+      "subject": {
+        "runtime": "phionyx-langchain-langgraph",
+        "version": "0.1.0a1",
+        "producer": "langgraph.writer",
+        "turn_index": 2,
+        "timestamp_utc": "2026-05-25T10:00:30Z"
+      },
+      "input": {
+        "user_text": "Source-bundle prepared by researcher (3 cited refs).",
+        "state_vector": {
+          "valence": 0.1,
+          "arousal": 0.5,
+          "stability": 0.75,
+          "entropy": 0.4,
+          "time_delta": 30.0,
+          "amplitude": 5.0,
+          "context_profile": "balanced",
+          "gamma": 0.15
+        },
+        "safety": {"verdict": "admit", "rule_id": null}
+      },
+      "path": [
+        {"block": "input_safety_gate", "disposition": "admit"},
+        {"block": "audit_layer", "disposition": "record"}
+      ],
+      "output": {"text": "Drafted paragraphs for editor review.", "redacted": false},
+      "metrics": {
+        "phi_cognitive": 0.58,
+        "phi_physical": 2.31,
+        "phi_total": 1.01,
+        "cognitive_verdict": "engaged"
+      },
+      "subagent_chain": {
+        "status": "active",
+        "agent_id": "writer",
+        "role": "child",
+        "chain_depth": 1,
+        "protocol": "langgraph_subgraph",
+        "parent_envelope_hash": "sha256:a1b2c3d4e5f60718",
+        "parent_agent_id": "researcher",
+        "child_agent_ids": ["editor"],
+        "handoff_signature": "demo-hmac:4f7b2a8c91e36042",
+        "handoff_timestamp_utc": "2026-05-25T10:00:00Z",
+        "protocol_data": {
+          "langgraph_thread_id": "thr_2026_05_25_demo"
+        }
+      },
+      "integrity": {
+        "previous": "sha256:a1b2c3d4e5f60718",
+        "current": "sha256:7c8e9d0a1b2c3d4f",
+        "signature": "demo-hmac:9a8b7c6d5e4f3021",
+        "canonical_json": true
+      }
+    },
+    {
+      "schema": "phionyx.governed_response_envelope.v0_2",
+      "subject": {
+        "runtime": "phionyx-langchain-langgraph",
+        "version": "0.1.0a1",
+        "producer": "langgraph.editor",
+        "turn_index": 3,
+        "timestamp_utc": "2026-05-25T10:01:00Z"
+      },
+      "input": {
+        "user_text": "Draft from writer ready for editorial review.",
+        "state_vector": {
+          "valence": 0.15,
+          "arousal": 0.4,
+          "stability": 0.8,
+          "entropy": 0.35,
+          "time_delta": 30.0,
+          "amplitude": 5.0,
+          "context_profile": "balanced",
+          "gamma": 0.15
+        },
+        "safety": {"verdict": "admit", "rule_id": null}
+      },
+      "path": [
+        {"block": "input_safety_gate", "disposition": "admit"},
+        {"block": "audit_layer", "disposition": "record"}
+      ],
+      "output": {"text": "Final text emitted to user.", "redacted": false},
+      "metrics": {
+        "phi_cognitive": 0.66,
+        "phi_physical": 2.45,
+        "phi_total": 1.11,
+        "cognitive_verdict": "engaged"
+      },
+      "subagent_chain": {
+        "status": "active",
+        "agent_id": "editor",
+        "role": "leaf",
+        "chain_depth": 2,
+        "protocol": "langgraph_subgraph",
+        "parent_envelope_hash": "sha256:7c8e9d0a1b2c3d4f",
+        "parent_agent_id": "writer",
+        "child_agent_ids": [],
+        "handoff_signature": "demo-hmac:1a2b3c4d5e6f7081",
+        "handoff_timestamp_utc": "2026-05-25T10:00:30Z",
+        "protocol_data": {
+          "langgraph_thread_id": "thr_2026_05_25_demo"
+        }
+      },
+      "integrity": {
+        "previous": "sha256:7c8e9d0a1b2c3d4f",
+        "current": "sha256:e0f1a2b3c4d5e607",
+        "signature": "demo-hmac:6b7c8d9e0a1b2c3d",
+        "canonical_json": true
+      }
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "schema": "phionyx.governed_response_envelope.v0_2",
+  "subject": {
+    "runtime": "phionyx-governance-wrapper",
+    "version": "0.1.0",
+    "producer": "langgraph.research_node",
+    "turn_index": 1,
+    "timestamp_utc": "2026-05-19T14:00:00.000000+00:00"
+  },
+  "input": {
+    "user_text": "Summarise the EU AI Act high-risk timeline.",
+    "state_vector": {
+      "valence": 0.30,
+      "arousal": 0.42,
+      "stability": 0.85,
+      "entropy": 0.18,
+      "time_delta": 0.1,
+      "amplitude": 5.0,
+      "context_profile": "DEFAULT",
+      "gamma": 0.15
+    },
+    "safety": {
+      "allowed": true,
+      "reason": null
+    }
+  },
+  "path": [
+    {"block": "input_safety_gate", "disposition": "admit", "reason": null},
+    {"block": "phi", "disposition": "admit", "phi_cog": 0.612, "phi_phy": 0.488},
+    {"block": "audit_layer", "disposition": "record"}
+  ],
+  "output": {
+    "redacted": false,
+    "text": "High-risk obligations (Articles 9-15) under Annex III apply from 2 December 2027 per the 7 May 2026 Council/Parliament Digital Omnibus agreement; Annex I product-embedded high-risk applies from 2 August 2028."
+  },
+  "metrics": {
+    "phi_cognitive": 0.612,
+    "phi_physical": 0.488,
+    "phi_total": 0.550,
+    "cognitive_verdict": "coherent"
+  },
+  "integrity": {
+    "previous": "sha256:0000000000000000",
+    "current": "sha256:a1b2c3d4e5f60718",
+    "signature": "demo-hmac:9f3a52ce4b8d2147",
+    "canonical_json": true
+  }
+}
