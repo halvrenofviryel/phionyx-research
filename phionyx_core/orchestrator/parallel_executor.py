@@ -34,8 +34,8 @@ except ImportError:
     get_tracer = None  # type: ignore[assignment]
     def is_opentelemetry_enabled() -> bool:
         return False
-    Status = None  # type: ignore[assignment,misc]
-    StatusCode = None  # type: ignore[assignment,misc]
+    Status = None
+    StatusCode = None
 
 
 @dataclass

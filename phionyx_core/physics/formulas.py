@@ -745,7 +745,7 @@ def calculate_phi_v2(
     }
 
 
-def compute_phi_components(params: 'NPCPhysicsParams') -> 'PhiComponents':  # type: ignore
+def compute_phi_components(params: 'NPCPhysicsParams') -> 'PhiComponents':
     """
     Compute Φ components for Emotional AI NPC using Plutchik → Circumplex → Φ Physics pipeline.
 
