@@ -371,7 +371,7 @@ If you use Phionyx Core in academic work, please cite both the software and the 
 }
 ```
 
-The DOI above is the **concept DOI** — it always resolves to the latest archived version (v0.5.0 at the time of writing). To pin a specific release, use the version DOI in [`CITATION.cff`](CITATION.cff): v0.3.0 is `10.5281/zenodo.20027535`; v0.4.0 is `10.5281/zenodo.20297990`; v0.5.0 resolves via the concept DOI above.
+The DOI above is the **concept DOI** — it always resolves to the latest archived version (v0.6.0 at the time of writing). To pin a specific release, use the version DOI in [`CITATION.cff`](CITATION.cff): v0.3.0 is `10.5281/zenodo.20027535`; v0.4.0 is `10.5281/zenodo.20297990`; v0.5.0 and v0.6.0 resolve via the concept DOI above (per-version DOIs auto-issued on Zenodo release).
 
 **Architecture paper (companion):**
 
