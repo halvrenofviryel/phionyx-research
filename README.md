@@ -279,6 +279,14 @@ Each repo documents its own integration contract; the trace coordination module 
 
 ---
 
+## Case studies
+
+Phionyx applies its own runtime-evidence protocol reflexively to its own development. The first published case study measures whether Claude (the AI coding agent writing Phionyx) actually invokes the gates the rules require — and what changes when the binding hook layer becomes operative.
+
+- [`case-studies/agentic-development-2026-05/`](case-studies/agentic-development-2026-05/) — baseline audit (7.5% coverage), post-intervention audit (9.5%), 13-scenario verification suite (13/13 pass), coverage timeline figure. Consumer-facing landing at [phionyx.ai/agentic-development](https://phionyx.ai/agentic-development). The case-study manuscript is in preparation; this directory holds the underlying data + the deterministic measurement scripts.
+
+---
+
 ## Compliance mappings
 
 Phionyx publishes **evidence mappings** — not certifications — connecting runtime artifacts to industry threat models and risk frameworks:
