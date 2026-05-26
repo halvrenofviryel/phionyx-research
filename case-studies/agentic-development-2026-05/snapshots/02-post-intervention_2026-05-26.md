@@ -81,20 +81,29 @@ CLAUDE.md itself names — only Claude Code hooks bind invocation deterministica
 - Manifesto §3.1 ("evidence is reproducible or it is not evidence") — git
   history is reproducible, but the per-claim envelope chain that ties a commit
   to its verification artefacts is mostly empty.
-- Brand credibility — Phionyx public copy commits to deterministic runtime
-  evidence. Internal AI-pair-programming sessions running at this coverage
-  rate weaken that commitment if surfaced externally.
+- **Reflexive test of the published discipline.** Phionyx publishes the
+  discipline that production AI systems should follow. The whole point of this
+  case study is that the same discipline must also constrain Phionyx's own
+  AI-assisted development. The pre-intervention coverage rate is the honest
+  answer to whether that discipline existed before the binding layer was built —
+  and the answer is *mostly no*. The intervention is what changes that.
 
 ## What closes this gap (sequenced)
 
-1. **Binding hooks (Katman A)** — pre-commit BLOCK on missing gate call,
-   PreToolUse Edit/Write threshold, PostToolUse commit auto-attestation,
-   session-idle timeout. Status: Stop hook for question-grounding shipped
-   2026-05-25 (commit `079a52e0`). Remaining 4 hooks pending.
+1. **Binding hooks (Katman A)** — Stop hook for question-grounding +
+   PreToolUse on Bash (commit / external-effect) + PreToolUse on Edit/Write
+   (size + gate-staleness threshold) + PreToolUse on Agent (subagent spawn)
+   + observability hooks on SessionStart, UserPromptSubmit, PreCompact,
+   SubagentStop, PostToolUse Bash/Web, PreToolUse mcp__.*. Status: **12 hooks
+   shipped 2026-05-25 → 2026-05-26**. 4 blocking + 8 observability.
+   `PHIONYX_MCP_GATE_STRICT=1` is the default project setting.
 
-2. **Founder Console MCP panel (Katman B)** — live dashboard showing the
-   numbers above per session, with per-commit attestation badges and
-   cross-session aggregates. Status: not yet built.
+2. **Founder Console runtime-evidence dashboard (Katman B)** — live two-window
+   view at `localhost:3005/runtime-evidence`: rolling window (historical mix)
+   + binding-active window (since 2026-05-26 07:00 UTC, the first binding-hook
+   commit). Per-commit attestation badges, per-day coverage breakdown,
+   directive distribution. Status: **shipped 2026-05-26**. Daily snapshots
+   to this `case-studies/` directory automate the public surface.
 
 3. **Structural — conversation envelope wrapping (Katman C)** — every
    assistant message produces an envelope automatically; gate invocation
