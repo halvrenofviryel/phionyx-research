@@ -57,7 +57,61 @@
     "evidence_links": [
       {"kind": "tool_call", "ref": "mcp://github.get_issue/halvrenofviryel/phionyx-research/42", "hash": "sha256:b471e92f4c83a1d0"}
     ],
-    "scoring_method": "phionyx.core.v0_4.reasoning_surface.placeholder"
+    "scoring_method": "phionyx.core.v0_4.reasoning_surface.placeholder",
+    "rationale_summary": "User requested issue #42 contents; read-only github.get_issue call satisfies the request within the user-approved capability profile.",
+    "knowledge_sources_consulted": [
+      {"kind": "tool_descriptor_clause", "ref": "github.get_issue.v1.read_only_scope", "hash": "sha256:7a3f912ce41b8d05"},
+      {"kind": "system_prompt", "ref": "CLAUDE.md §MCP Self-Governance (rule 6 — verify_tool_descriptor)"}
+    ],
+    "constraints_acknowledged": [
+      {"kind": "policy", "ref": "input_safety_gate", "satisfied": true},
+      {"kind": "policy", "ref": "mcp_tool_descriptor_verify", "satisfied": true},
+      {"kind": "user_directive", "ref": "User scope: read-only access to halvrenofviryel/phionyx-research", "satisfied": true}
+    ]
+  },
+  "retrieval": {
+    "status": "active",
+    "documents": [
+      {
+        "id": "issue-42-body-chunk-0",
+        "role": "cited",
+        "score": 0.94,
+        "hash": "sha256:c8e1f70b29a4d5e3",
+        "signed_evidence_ref": null,
+        "chunk_offset": 0,
+        "source_url": "https://github.com/halvrenofviryel/phionyx-research/issues/42",
+        "retrieved_at": "2026-05-27T10:14:55+00:00"
+      },
+      {
+        "id": "issue-42-comment-3",
+        "role": "admitted",
+        "score": 0.71,
+        "hash": "sha256:91a0e4c5fd726b8e",
+        "signed_evidence_ref": null,
+        "chunk_offset": null,
+        "source_url": "https://github.com/halvrenofviryel/phionyx-research/issues/42#issuecomment-3",
+        "retrieved_at": "2026-05-27T10:14:55+00:00"
+      },
+      {
+        "id": "issue-99-body",
+        "role": "rejected",
+        "score": 0.48,
+        "hash": "sha256:abcd0123456789ef",
+        "signed_evidence_ref": null,
+        "chunk_offset": null,
+        "source_url": "https://github.com/halvrenofviryel/phionyx-research/issues/99",
+        "retrieved_at": "2026-05-27T10:14:55+00:00"
+      }
+    ],
+    "store_id": "github://halvrenofviryel/phionyx-research/issues",
+    "corpus": {
+      "name": "phionyx-research-issues",
+      "version": "snapshot-2026-05-27",
+      "language": "en"
+    },
+    "similarity_threshold": 0.5,
+    "query_hash": "sha256:e7a92c8f51b4d063",
+    "query_text_hash": "sha256:bcdef1234567890a"
   },
   "mcp_tool_audit": {
     "status": "active",
