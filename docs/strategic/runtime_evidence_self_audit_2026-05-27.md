@@ -1,0 +1,110 @@
+# Runtime Evidence Self-Audit — 2026-05-27
+
+**Window:** since 2026-04-27 (last 30 days)
+**Source:** `data/mcp_telemetry/session_*.json` + `git log`
+**Method:** [`scripts/active/runtime_evidence_self_audit.py`](../../scripts/active/runtime_evidence_self_audit.py) — re-run any time, deterministic.
+
+## Question this measures
+
+Manifesto v1.1 §2 commits: *"AI ethics statements are not enough. Governance must be executable at runtime."*
+
+CLAUDE.md rule: *Before claiming 'fixed' or 'done', call `phionyx_verify_claim`. Before deploying or committing, call `phionyx_response_gate`.*
+
+**Expected gate calls per commit: 2** (one verify_claim, one response_gate).
+
+## Headline
+
+- **317** commits in window
+- **106** gate calls (phionyx_response_gate, phionyx_verify_claim)
+- **392** pipeline-mcp calls total (all 6 tools)
+- Expected gate calls per CLAUDE.md: **634** (= 317 commits × 2)
+- **Coverage: 16.7%**
+
+## Per-day breakdown
+
+| Day | Commits | Gate calls | All mcp calls | Coverage |
+|---|---:|---:|---:|---:|
+| 2026-05-27 | 16 | 30 | 114 |  93.8% |
+| 2026-05-26 | 40 | 37 | 213 |  46.2% |
+| 2026-05-25 | 34 | 2 | 5 |   2.9% |
+| 2026-05-24 | 26 | 4 | 16 |   7.7% |
+| 2026-05-23 | 27 | 0 | 0 |   0.0% |
+| 2026-05-22 | 17 | 0 | 0 |   0.0% |
+| 2026-05-21 | 6 | 0 | 0 |   0.0% |
+| 2026-05-20 | 3 | 0 | 0 |   0.0% |
+| 2026-05-19 | 18 | 0 | 0 |   0.0% |
+| 2026-05-18 | 2 | 0 | 0 |   0.0% |
+| 2026-05-16 | 13 | 0 | 0 |   0.0% |
+| 2026-05-15 | 16 | 0 | 0 |   0.0% |
+| 2026-05-13 | 1 | 0 | 0 |   0.0% |
+| 2026-05-11 | 1 | 0 | 0 |   0.0% |
+| 2026-05-10 | 14 | 0 | 0 |   0.0% |
+| 2026-05-09 | 4 | 0 | 2 |   0.0% |
+| 2026-05-08 | 10 | 5 | 5 |  25.0% |
+| 2026-05-07 | 18 | 16 | 17 |  44.4% |
+| 2026-05-06 | 8 | 7 | 10 |  43.8% |
+| 2026-05-05 | 14 | 5 | 10 |  17.9% |
+| 2026-05-04 | 7 | 0 | 0 |   0.0% |
+| 2026-05-03 | 5 | 0 | 0 |   0.0% |
+| 2026-05-02 | 1 | 0 | 0 |   0.0% |
+| 2026-05-01 | 7 | 0 | 0 |   0.0% |
+| 2026-04-30 | 3 | 0 | 0 |   0.0% |
+| 2026-04-29 | 6 | 0 | 0 |   0.0% |
+
+## Directive distribution
+
+| Directive | Count |
+|---|---:|
+| auto_attest | 252 |
+| pass | 102 |
+| n/a | 21 |
+| checkpoint | 12 |
+| reject | 2 |
+| ok | 1 |
+| rewrite | 1 |
+| regenerate | 1 |
+
+## Honest reading
+
+This window covers 23 MCP sessions. The advisory CLAUDE.md rule
+would have required at least 2 gate calls per commit; actual coverage is
+**16.7%**. The pattern is consistent across days: pipeline-mcp
+is installed, configured, and active, but Claude (this assistant) does not
+invoke it on most commits. This is the *stochastic input generation* gap
+CLAUDE.md itself names — only Claude Code hooks bind invocation deterministically.
+
+## What this gap blocks
+
+- Manifesto §5.1 ("decisions are inspectable by a third party") — infrastructure
+  exists (audit chain envelope), but most commits leave no envelope behind.
+- Manifesto §3.1 ("evidence is reproducible or it is not evidence") — git
+  history is reproducible, but the per-claim envelope chain that ties a commit
+  to its verification artefacts is mostly empty.
+- Brand credibility — Phionyx public copy commits to deterministic runtime
+  evidence. Internal AI-pair-programming sessions running at this coverage
+  rate weaken that commitment if surfaced externally.
+
+## What closes this gap (sequenced)
+
+1. **Binding hooks (Katman A)** — pre-commit BLOCK on missing gate call,
+   PreToolUse Edit/Write threshold, PostToolUse commit auto-attestation,
+   session-idle timeout. Status: Stop hook for question-grounding shipped
+   2026-05-25 (commit `079a52e0`). Remaining 4 hooks pending.
+
+2. **Founder Console MCP panel (Katman B)** — live dashboard showing the
+   numbers above per session, with per-commit attestation badges and
+   cross-session aggregates. Status: not yet built.
+
+3. **Structural — conversation envelope wrapping (Katman C)** — every
+   assistant message produces an envelope automatically; gate invocation
+   becomes a property of the runtime, not of the assistant's discretion.
+   Status: design phase.
+
+## Reproduction
+
+```bash
+python3 scripts/active/runtime_evidence_self_audit.py --days 30
+```
+
+_Generated 2026-05-27T20:00:23 by_
+_`scripts/active/runtime_evidence_self_audit.py` against `data/mcp_telemetry/`._

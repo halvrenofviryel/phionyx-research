@@ -1,0 +1,153 @@
+% references.bib for "Self-Governing AI-Pair-Programming: Measuring and
+% Closing the Stochastic Input Generation Gap with Deterministic Runtime
+% Hooks" (Phionyx arXiv Paper 03)
+%
+% Discipline: every entry points at a publicly accessible source. Entries
+% reused from paper_02/references.bib carry the same citation key for
+% cross-paper consistency.
+
+% --- Self-citations (Phionyx artefacts) -----------------------------------
+
+@unpublished{abak2026evidenceprotocol,
+  author       = {Abak, Ali Toygar},
+  title        = {Evidence-Oriented Runtime Telemetry for Agentic {AI} Governance: Trajectory Failures, Assessment Signals, and Reviewer-Runnable Evidence},
+  year         = {2026},
+  note         = {Phionyx arXiv Paper 02. Manuscript available at \url{https://github.com/halvrenofviryel/phionyx-research/tree/main/docs/arxiv/paper_02_evidence_protocol}. Pinned commit: 4bca5f3e.}
+}
+
+@misc{phionyx_manifesto_2026,
+  author       = {Abak, Ali Toygar},
+  title        = {Phionyx Principles -- Runtime Governance for Probabilistic {AI} Systems},
+  year         = {2026},
+  howpublished = {\url{https://phionyx.ai/principles}},
+  note         = {Source: \texttt{apps/phionyx-website/content/manifesto.md}. Accessed 2026-05-26.}
+}
+
+@misc{phionyx_canonical_blocks_v3_8,
+  author       = {Abak, Ali Toygar},
+  title        = {Phionyx Core Canonical Pipeline Block Order, v3.8.0},
+  year         = {2026},
+  howpublished = {Source: \texttt{phionyx\_core/contracts/telemetry/canonical\_blocks\_v3\_8\_0.json}},
+  note         = {46 blocks; v3.7.0 (45 blocks) remains loadable.}
+}
+
+@misc{adr0006_mcp_integration,
+  author       = {Abak, Ali Toygar},
+  title        = {{ADR-0006}: {MCP} Shared-Trace Integration -- Pipeline + Server},
+  year         = {2026},
+  month        = {5},
+  howpublished = {Source: \texttt{docs/adr/0006-mcp-integration.md}},
+  note         = {Accepted 2026-05-19. Pinned commit: 4bca5f3e.}
+}
+
+% --- MCP and Claude Code primitives ---------------------------------------
+
+@misc{mcp_specification_2025,
+  author       = {{Anthropic and contributors}},
+  title        = {{Model Context Protocol} specification, 2025-11-25},
+  year         = {2025},
+  howpublished = {\url{https://modelcontextprotocol.io/specification/2025-11-25}},
+  note         = {Accessed 2026-05-26.}
+}
+
+@misc{anthropic_claude_code,
+  author       = {{Anthropic}},
+  title        = {Claude Code documentation -- hooks, MCP integration, lifecycle},
+  year         = {2026},
+  howpublished = {\url{https://docs.claude.com/en/docs/claude-code}},
+  note         = {Accessed 2026-05-26.}
+}
+
+@misc{anthropic_rsp,
+  author       = {{Anthropic}},
+  title        = {Responsible Scaling Policy},
+  year         = {2024},
+  howpublished = {\url{https://www.anthropic.com/responsible-scaling-policy}},
+  note         = {Accessed 2026-05-26.}
+}
+
+@misc{jamshidi2026mcp,
+  author       = {Jamshidi, Salar and others},
+  title        = {Securing the {Model Context Protocol}: Threat Taxonomy and Mitigations},
+  year         = {2025},
+  eprint       = {2512.06556},
+  archivePrefix = {arXiv},
+  primaryClass = {cs.CR},
+  note         = {Tool poisoning, shadowing, rug pulls. The threat model the Phionyx server MCP is designed against.}
+}
+
+% --- Adjacent frameworks (reused from paper_02) ---------------------------
+
+@misc{langgraph_docs,
+  author       = {{LangChain Inc.}},
+  title        = {{LangGraph} documentation -- Durable execution and stateful workflows},
+  year         = {2026},
+  howpublished = {\url{https://langchain-ai.github.io/langgraph/}},
+  note         = {Accessed 2026-05-07.}
+}
+
+@misc{openai_agents_sdk,
+  author       = {{OpenAI}},
+  title        = {{OpenAI Agents SDK} -- Tools, hand-offs, tracing, guardrails},
+  year         = {2026},
+  howpublished = {\url{https://openai.github.io/openai-agents-python/}},
+  note         = {Accessed 2026-05-07.}
+}
+
+@misc{nemo_guardrails,
+  author       = {{NVIDIA}},
+  title        = {{NeMo Guardrails} -- Programmable guardrails for conversational systems},
+  year         = {2026},
+  howpublished = {\url{https://github.com/NVIDIA/NeMo-Guardrails}},
+  note         = {Accessed 2026-05-07.}
+}
+
+@misc{guardrails_ai,
+  author       = {{Guardrails AI}},
+  title        = {Guardrails {AI} -- Validation framework for {LLM} applications},
+  year         = {2026},
+  howpublished = {\url{https://www.guardrailsai.com/docs}},
+  note         = {Accessed 2026-05-07.}
+}
+
+% --- Governance and trustworthiness frameworks (reused from paper_02) ----
+
+@techreport{nist_ai_rmf_1_2023,
+  author      = {{National Institute of Standards and Technology}},
+  title       = {Artificial Intelligence Risk Management Framework ({AI RMF} 1.0)},
+  number      = {NIST AI 100-1},
+  institution = {U.S. Department of Commerce},
+  year        = {2023},
+  month       = {1},
+  doi         = {10.6028/NIST.AI.100-1}
+}
+
+@misc{iso_iec_42001_2023,
+  author       = {{International Organization for Standardization and International Electrotechnical Commission}},
+  title        = {{ISO/IEC 42001}:2023 -- Information technology -- Artificial intelligence -- Management system},
+  year         = {2023},
+  howpublished = {\url{https://www.iso.org/standard/81230.html}}
+}
+
+@misc{owasp_agentic_ai_v1_2025,
+  author       = {{OWASP Foundation}},
+  title        = {Agentic {AI} -- Threats and Mitigations},
+  edition      = {Version 1.0},
+  year         = {2025},
+  month        = {2},
+  howpublished = {\url{https://genai.owasp.org/resource/agentic-ai-threats-and-mitigations/}},
+  note         = {OWASP Generative AI Security Project. Accessed 2026-05-07.}
+}
+
+% --- Reproducibility tradition --------------------------------------------
+
+@article{pineau2021reproducibility,
+  author    = {Pineau, Joelle and Vincent-Lamarre, Philippe and Sinha, Koustuv and Larivière, Vincent and Beygelzimer, Alina and d'Alché-Buc, Florence and Fox, Emily and Larochelle, Hugo},
+  title     = {Improving Reproducibility in Machine Learning Research},
+  journal   = {Journal of Machine Learning Research},
+  volume    = {22},
+  number    = {164},
+  pages     = {1--20},
+  year      = {2021},
+  url       = {https://jmlr.org/papers/v22/20-303.html}
+}
