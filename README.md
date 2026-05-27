@@ -258,8 +258,8 @@ Five PyPI-published companion packages extend the Phionyx runtime into an end-to
 **Evidence export — surfaces under [Reviewer Evidence](https://phionyx.ai/evidence).** Bridges that turn runs in third-party frameworks into reviewer-runnable Phionyx envelopes:
 
 - **[`phionyx-eval-inspect`](https://github.com/halvrenofviryel/phionyx-eval-inspect)** — *Inspect AI bridge.* Convert a Phionyx envelope chain into an [Inspect AI](https://github.com/UKGovernmentBEIS/inspect_ai) `.eval` log so Phionyx-governed runs are natively viewable in Inspect's tooling. Interop-only; no endorsement or partnership claim.
-- **[`phionyx-langchain-langgraph`](https://github.com/halvrenofviryel/phionyx_langchain_langgraph)** — *LangChain + LangGraph adapters (v0.5.0+).* Every chain / tool / LLM event + supervisor handoff becomes a signed, hash-chained envelope. Includes a `PhionyxLangGraphSupervisor` for the F5 multi-agent ingestion pattern.
-- **[`phionyx-openai-agents`](https://github.com/halvrenofviryel/phionyx_openai_agents)** — *OpenAI Agents SDK tracing bridge (v0.5.0+).* Every Trace and Span becomes a signed, hash-chained envelope.
+- **[`phionyx-langchain-langgraph`](https://github.com/halvrenofviryel/phionyx-langchain-langgraph)** — *LangChain + LangGraph adapters (v0.5.0+).* Every chain / tool / LLM event + supervisor handoff becomes a signed, hash-chained envelope. Includes a `PhionyxLangGraphSupervisor` for the F5 multi-agent ingestion pattern.
+- **[`phionyx-openai-agents`](https://github.com/halvrenofviryel/phionyx-openai-agents)** — *OpenAI Agents SDK tracing bridge (v0.5.0+).* Every Trace and Span becomes a signed, hash-chained envelope.
 
 When the two MCP servers are installed and registered with the same Claude Code host, they share a single `trace_id` per session (via `PHIONYX_TRACE_ID` env var with `~/.phionyx/active_trace` file fallback). One Claude Code conversation = one trace = end-to-end view of every third-party MCP tool call AND every agent self-claim gate decision. The Inspect bridge and the framework adapters consume envelopes off-host; they don't need to share the live trace.
 
@@ -329,8 +329,8 @@ A commercial license is available for use cases where AGPL-3.0 copyleft is not s
 - **MCP outward layer:** [phionyx-mcp-server](https://github.com/halvrenofviryel/phionyx-mcp-server) — MCP trust boundary governance (descriptor hash, signed RGE v0.2 envelope, audit chain)
 - **MCP inward layer:** [phionyx-pipeline-mcp](https://github.com/halvrenofviryel/phionyx-pipeline-mcp) — self-governance gate over the agent's own "fixed / tested / changed" claims
 - **Inspect AI bridge:** [phionyx-eval-inspect](https://github.com/halvrenofviryel/phionyx-eval-inspect) — RGE envelope chain → Inspect `.eval` log; viewable with `inspect view`
-- **LangChain / LangGraph adapters:** [phionyx-langchain-langgraph](https://github.com/halvrenofviryel/phionyx_langchain_langgraph) — chain / tool / LLM events + supervisor handoff → signed envelopes
-- **OpenAI Agents tracing bridge:** [phionyx-openai-agents](https://github.com/halvrenofviryel/phionyx_openai_agents) — Trace + Span → signed envelopes
+- **LangChain / LangGraph adapters:** [phionyx-langchain-langgraph](https://github.com/halvrenofviryel/phionyx-langchain-langgraph) — chain / tool / LLM events + supervisor handoff → signed envelopes
+- **OpenAI Agents tracing bridge:** [phionyx-openai-agents](https://github.com/halvrenofviryel/phionyx-openai-agents) — Trace + Span → signed envelopes
 
 ### Latest essays in the series
 
