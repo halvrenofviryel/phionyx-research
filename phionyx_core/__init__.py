@@ -58,12 +58,12 @@ __companions__ = {
         "Inspect eval logs.",
     ),
     "phionyx-langchain-langgraph": (
-        "halvrenofviryel/phionyx_langchain_langgraph",
+        "halvrenofviryel/phionyx-langchain-langgraph",
         "LangChain + LangGraph adapters — every chain / tool / LLM event "
         "and every supervisor handoff becomes a signed envelope.",
     ),
     "phionyx-openai-agents": (
-        "halvrenofviryel/phionyx_openai_agents",
+        "halvrenofviryel/phionyx-openai-agents",
         "OpenAI Agents SDK tracing bridge — every Trace and Span becomes "
         "a signed envelope.",
     ),
