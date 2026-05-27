@@ -68,6 +68,16 @@ def run_pytest(out_dir: Path) -> dict:
         "--cov=phionyx_core",
         f"--cov-report=xml:{coverage_xml}",
         "--cov-report=term-missing:skip-covered",
+        # The pack runs a subset of the full test tree (core + contract +
+        # benchmarks only — tests/research_engine / tests/behavioral_eval
+        # / tests/integration deliberately excluded for reproducibility-
+        # pack speed). That subset cannot meet the global fail_under=80
+        # threshold defined in [tool.coverage.report], so we override
+        # the gate to 0 for the pack. Full-suite coverage gating
+        # belongs in the dedicated CI test job, not in the pack
+        # generator. Fix added 2026-05-27 after v0.7.0 release workflow
+        # repro-pack step failed with coverage at 37.5%.
+        "--cov-fail-under=0",
         "--no-header",
     ]
     print("→ running pytest …")
