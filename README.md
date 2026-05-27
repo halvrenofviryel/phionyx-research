@@ -373,7 +373,7 @@ If you use Phionyx Core in academic work, please cite both the software and the 
   title     = {Phionyx Core SDK},
   year      = {2026},
   publisher = {Phionyx Research},
-  version   = {0.5.0},
+  version   = {0.7.0},
   doi       = {10.5281/zenodo.20027534},
   url       = {https://doi.org/10.5281/zenodo.20027534}
 }
