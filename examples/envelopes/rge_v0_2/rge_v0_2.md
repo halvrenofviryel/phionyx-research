@@ -61,7 +61,13 @@ Optional keys:
 - `evidence_links[]` — typed pointers (retrieval / tool_call / memory / policy / external_url) to evidence the rationale depends on.
 - `scoring_method` — scorer identifier so downstream consumers can interpret scores.
 
-The block is partially live in v0.1 (the wrapper populates a subset). F4 ("Reasoning surface audit") delivers the full structured surface in v0.5.0.
+**v0.7.0 W2.1 (F4) extension — three additional optional fields:**
+
+- `rationale_summary` — runtime-produced, length-bounded one-line distillation of the reasoning surface, distinct from `model_stated_rationale` (which captures whatever the producer publicly stated). Surfaces in dashboards and compliance reports. NULL when no rationale surface was produced.
+- `knowledge_sources_consulted[]` — ordered list of typed sources the producer consulted while forming this turn's reasoning, even sources that did not become citations. Enum kinds: `retrieval_corpus`, `memory_block`, `tool_output`, `tool_descriptor_clause`, `static_doc`, `system_prompt`, `external_api`. Complements `evidence_links[]` (which lists artefacts the rationale depends on).
+- `constraints_acknowledged[]` — ordered list of constraints the producer publicly acknowledged. Enum kinds: `policy`, `user_directive`, `safety_boundary`, `tool_descriptor_clause`, `regulatory`, `self_imposed`. Each carries an optional `satisfied` boolean. Surfaces constraint-awareness even when no constraint was binding for the decision.
+
+The block is partially live in v0.1 (the wrapper populates a subset). F4 ("Reasoning surface audit") delivers the full structured surface in v0.7.0.
 
 #### 2.2.2 `retrieval` (Phionyx Feature F8)
 
@@ -71,7 +77,21 @@ Required keys: `documents[]` (each with `id`, `role` ∈ {retrieved, admitted, c
 
 Optional per-document keys: `score`, `hash`, `signed_evidence_ref`. Optional block-level keys: `store_id`, `query_hash`.
 
-The block's job is to make RAG **trajectories** auditable, not just retrieval scores. *"Document X was admitted at step 2, cited in the answer at step 5, contradicted by document Y at step 7, signed into the audit chain at step 8"* is the kind of replay this block enables. F8 ("Retrieval audit") delivers the populating logic in v0.4.1.
+The block's job is to make RAG **trajectories** auditable, not just retrieval scores. *"Document X was admitted at step 2, cited in the answer at step 5, contradicted by document Y at step 7, signed into the audit chain at step 8"* is the kind of replay this block enables.
+
+**v0.7.0 W2.2 (F8) extension — block-level + per-document provenance:**
+
+Block-level:
+- `corpus` (object | null) — named corpus metadata (more semantic than `store_id`). Fields: `name` (required), `version` (optional, may be semver / content hash / snapshot timestamp), `language` (optional BCP-47 tag).
+- `similarity_threshold` (number 0.0–1.0 | null) — block-level minimum-similarity cutoff used to gate documents from `retrieved` into the candidate set. NULL when no threshold was applied.
+- `query_text_hash` (string | null) — SHA-256 of the user-or-system-formatted query TEXT (distinct from `query_hash`, which may hash the structured store-query object).
+
+Per-document:
+- `chunk_offset` (integer ≥0 | null) — zero-indexed chunk offset within the source document when chunked retrieval is used.
+- `source_url` (string | null) — human-resolvable URL to the source document (distinct from `id`, which may be a store-internal key).
+- `retrieved_at` (ISO-8601 | null) — when this specific document was retrieved (may predate the envelope's `timestamp_utc` when retrieval is cached).
+
+F8 ("Retrieval audit") delivers the populating logic in v0.7.0. The reserved phase ran 2026-04-26 → 2026-05-26; v0.7.0 W2.2 flips Phionyx's own producers from `reserved-for-v0.4.1-f8` to `active`. Builder helper: `phionyx_mcp_server.audit_chain.build_retrieval_block(RetrievalContext)`.
 
 #### 2.2.3 `subagent_chain` (Phionyx Feature F5)
 

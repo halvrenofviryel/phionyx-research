@@ -13,6 +13,45 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.7.0] — 2026-05-27
+
+**Theme: Compliance Evidence Pack.**
+
+v0.7.0 takes the evidence layer from "auditable by reviewers" (v0.6.0 multi-agent) to "framework-readable by compliance officers." Same envelope chain. Different vocabulary.
+
+Six work blocks ship: phionyx-compliance with four framework templates (W1), RGE v0.2 reasoning + retrieval extensions (W2.1 + W2.2), schema portfolio bump (W2.3), phionyx-letta memory mutation audit (W3), and the HearthOS bounded-authority envelope foundation with three reviewer-runnable pinned traces (W4.1 + W4.2.a).
+
+**Two new schemas:** Schema 8 `phionyx.memory_mutation_envelope.v1` (Letta) and Schema 9 `phionyx.bounded_authority_envelope.v1` (HearthOS). Both additive — every v0.6.0 envelope continues to validate; no breaking changes.
+
+### Added
+
+- **F14 — `phionyx-compliance` package** (separate public repo: `halvrenofviryel/phionyx-compliance` — coming when GHA billing resolved). Read-only over the envelope chain. Produces framework-shaped markdown drafts. Four templates ship at v1.0.0: EU AI Act Article 13, NIST AI RMF 1.0, ISO/IEC 42001:2023, OWASP Top 10 for Agentic Applications. Every report carries the canonical "evidence-oriented mapping, not legal compliance guarantee" disclaimer.
+- **F4 — RGE v0.2 reasoning surface extension** (W2.1). Three optional fields on `reasoning`: `rationale_summary`, `knowledge_sources_consulted[]`, `constraints_acknowledged[]`. Additive; v0.6.0 envelopes continue to validate.
+- **F8 — RGE v0.2 retrieval block activation** (W2.2). `retrieval.status` flips from `reserved-for-v0.4.1-f8` to `active` for Phionyx producers. Block-level additions: `corpus` (name/version/language), `similarity_threshold`, `query_text_hash`. Per-document additions: `chunk_offset`, `source_url`, `retrieved_at`.
+- **F15 — `phionyx-letta` memory mutation audit** (W3). New companion package. Schema 8 `phionyx.memory_mutation_envelope.v1`. Per-mutation signed envelope with structured before/after diff. Six mutation kinds: write/append/clear/delete/forget/consolidate. Optional `MemoryConsolidationAudit` subblock cross-references canonical pipeline block #43. Cross-runtime composition via `subject.metadata.memory_audit`.
+- **HearthOS bounded-authority envelope** (W4.1 + W4.2.a). Schema 9 `phionyx.bounded_authority_envelope.v1`. Eight event types covering the bounded-authority lifecycle (propose / execute_requested / execute_approved / execute_rejected / execute_completed / safety_gate_blocked / authority_tier_change / proof_recorded). Seven preservation rules formalised in a separate `verifyBoundedAuthority()` verifier. Three pinned demo traces (Diagnostic, Weekly Reset, Boundary Script) under `examples/hearthos_traces/` — reviewer-runnable offline.
+- **v0.7.0 schema portfolio document** at `examples/envelopes/v0_7_schema_portfolio.md` — eight schemas catalogued; versioning policy reaffirmed.
+
+### Changed
+
+- `examples/envelopes/rge_v0_2/rge_v0_2.schema.json` extended with W2.1 and W2.2 additive fields.
+- `examples/envelopes/rge_v0_2/rge_v0_2.md` (spec doc) §2.2.1 + §2.2.2 updated.
+- `examples/envelopes/rge_v0_2/rge_v0_2_mcp_envelope.json` example envelope extended.
+
+### Migration
+
+**Nothing required from v0.6.0.** All schemas backward compatible. New fields optional or null-default. New schemas (8, 9) are additive new identifiers. Mixed-schema chains still rejected — keep one schema id per trace.
+
+### Tests
+
+70/70 across new/extended packages: 20 phionyx-mcp-server (W2.1+W2.2) + 20 phionyx-letta (W3) + 30 phionyx-compliance (W1). Three pinned HearthOS traces self-verify deterministically (14 + 16 + 11 envelopes, chains intact).
+
+### PyPI release
+
+`phionyx-letta` and `phionyx-compliance` PyPI uploads are gated on GitHub Actions billing resolution. Release workflow infrastructure is ready; PyPI publish will trigger when CI is unblocked.
+
+---
+
 ## [0.6.0] — 2026-05-25
 
 **Theme: Multi-Agent Evidence.**

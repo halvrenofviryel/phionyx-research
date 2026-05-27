@@ -184,6 +184,58 @@
         "scoring_method": {
           "type": "string",
           "description": "Identifier of the scorer that produced rationale_action_consistency / policy_alignment_score / confidence_delta, e.g. `phionyx.governance_wrapper.v0_1.placeholder` or `phionyx.core.v0_3.reasoning_surface`."
+        },
+        "rationale_summary": {
+          "type": ["string", "null"],
+          "description": "Optional short summary of the reasoning surface for this turn — distinct from `model_stated_rationale`. The model_stated_rationale captures whatever the producer publicly stated; rationale_summary is a runtime-produced, length-bounded one-line distillation for surfacing in dashboards and compliance reports. NULL when no rationale surface was produced. Added in v0.7.0 (F4)."
+        },
+        "knowledge_sources_consulted": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["kind", "ref"],
+            "additionalProperties": false,
+            "properties": {
+              "kind": {
+                "type": "string",
+                "enum": ["retrieval_corpus", "memory_block", "tool_output", "tool_descriptor_clause", "static_doc", "system_prompt", "external_api"],
+                "description": "Source category. `retrieval_corpus` and `tool_output` cross-reference the existing `retrieval` and `mcp_tool_audit` blocks. `tool_descriptor_clause` references a specific clause of an MCP tool descriptor (e.g. permission scope, parameter constraint). `memory_block` references Letta/F15 memory mutations. `static_doc` covers fixed reference material loaded into context."
+              },
+              "ref": {
+                "type": "string",
+                "description": "Identifier or URI for the consulted source (corpus name, memory key, doc URL, etc.)."
+              },
+              "hash": {
+                "type": "string",
+                "description": "Optional content hash for tamper-evidence."
+              }
+            }
+          },
+          "description": "Optional. Ordered list of knowledge sources the producer consulted while forming this turn's reasoning. Complements `evidence_links`: evidence_links points to artefacts the rationale depends on; knowledge_sources_consulted lists what was looked at even if not ultimately cited. Added in v0.7.0 (F4)."
+        },
+        "constraints_acknowledged": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["kind", "ref"],
+            "additionalProperties": false,
+            "properties": {
+              "kind": {
+                "type": "string",
+                "enum": ["policy", "user_directive", "safety_boundary", "tool_descriptor_clause", "regulatory", "self_imposed"],
+                "description": "Constraint category. `policy` cross-references runtime_policy_basis. `user_directive` captures explicit user instructions the producer recognised. `regulatory` may point to EU AI Act Article number, NIST AI RMF subcategory, etc. `self_imposed` marks constraints the producer chose without external mandate."
+              },
+              "ref": {
+                "type": "string",
+                "description": "Constraint identifier (policy name, regulatory clause, user-directive text excerpt up to 200 chars, etc.)."
+              },
+              "satisfied": {
+                "type": ["boolean", "null"],
+                "description": "Whether the producer believes the constraint was satisfied by this turn. NULL when uncertain or non-binary."
+              }
+            }
+          },
+          "description": "Optional. Ordered list of constraints the producer publicly acknowledged while forming this turn's response. Surfaces constraint-awareness even when no constraint was binding for the decision. Added in v0.7.0 (F4)."
         }
       }
     },
@@ -191,11 +243,12 @@
       "type": "object",
       "additionalProperties": false,
       "required": ["status", "documents"],
+      "description": "RAG / retrieval evidence chain. F8 implementation lands in v0.7.0 W2.2; envelopes emitted before that may still carry `status=reserved-for-v0.4.1-f8` for the reserved-block phase. New producers SHOULD emit `status=active` and populate per-document provenance.",
       "properties": {
         "status": {
           "type": "string",
           "enum": ["reserved-for-v0.4.1-f8", "active"],
-          "description": "`reserved-for-v0.4.1-f8` until F8 (Retrieval Audit) implementation lands. `active` once Phionyx populates this block at runtime."
+          "description": "`reserved-for-v0.4.1-f8` for envelopes emitted during the reserved phase (block exists in v0.2 schema but no populating logic). `active` once Phionyx (or any conforming producer) populates this block at runtime. v0.7.0 W2.2 (F8) flips Phionyx's own producers to `active`."
         },
         "documents": {
           "type": "array",
@@ -208,12 +261,47 @@
               "role": {"type": "string", "enum": ["retrieved", "admitted", "cited", "contradicted", "rejected"], "description": "Operational role chain: retrieved → admitted → cited → contradicted → rejected → signed. Each document records its final role for this turn."},
               "score": {"type": ["number", "null"], "minimum": 0.0, "maximum": 1.0, "description": "Retrieval score from the underlying store."},
               "hash": {"type": "string", "description": "Optional content hash for tamper-evidence."},
-              "signed_evidence_ref": {"type": ["string", "null"], "description": "Optional reference to a signed evidence record (envelope or audit chain entry)."}
+              "signed_evidence_ref": {"type": ["string", "null"], "description": "Optional reference to a signed evidence record (envelope or audit chain entry)."},
+              "chunk_offset": {
+                "type": ["integer", "null"],
+                "minimum": 0,
+                "description": "v0.7.0 W2.2 (F8). Optional zero-indexed chunk offset within the source document when the retrieval store returns chunked content. NULL when the store returns whole documents or chunking is opaque."
+              },
+              "source_url": {
+                "type": ["string", "null"],
+                "description": "v0.7.0 W2.2 (F8). Optional human-resolvable URL to the source document (distinct from `id`, which may be a store-internal key). NULL when no canonical URL exists (e.g. internal-only documents)."
+              },
+              "retrieved_at": {
+                "type": ["string", "null"],
+                "format": "date-time",
+                "description": "v0.7.0 W2.2 (F8). Optional ISO-8601 UTC timestamp marking when this specific document was retrieved (may predate the envelope `timestamp_utc` when retrieval is cached). NULL when not tracked."
+              }
             }
           }
         },
         "store_id": {"type": "string", "description": "Optional retrieval store identifier (e.g. `vector://docs`, `bm25://kb-primary`)."},
-        "query_hash": {"type": "string", "description": "Optional hash of the retrieval query for replay."}
+        "corpus": {
+          "type": ["object", "null"],
+          "additionalProperties": false,
+          "required": ["name"],
+          "description": "v0.7.0 W2.2 (F8). Optional corpus metadata, more semantic than `store_id`. Captures which named knowledge base + version was queried. NULL when only `store_id` is meaningful.",
+          "properties": {
+            "name": {"type": "string", "description": "Human-readable corpus name (e.g. `phionyx-evaluation-standard`, `eu-ai-act-regulation-text`)."},
+            "version": {"type": ["string", "null"], "description": "Optional corpus version identifier (semver, content hash, snapshot timestamp). NULL when corpus is rolling/unversioned."},
+            "language": {"type": ["string", "null"], "description": "Optional BCP-47 language tag of the corpus contents (e.g. `en`, `tr`, `de-DE`). NULL when multilingual or unspecified."}
+          }
+        },
+        "similarity_threshold": {
+          "type": ["number", "null"],
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "description": "v0.7.0 W2.2 (F8). Optional block-level minimum similarity cutoff used to gate documents from `retrieved` into the candidate set. Documents with `score < similarity_threshold` were excluded before role assignment. NULL when no threshold was applied (the store returned a fixed top-k regardless of score)."
+        },
+        "query_hash": {"type": "string", "description": "Optional hash of the retrieval query for replay."},
+        "query_text_hash": {
+          "type": ["string", "null"],
+          "description": "v0.7.0 W2.2 (F8). Optional SHA-256 hash of the user-or-system-formatted query TEXT (distinct from `query_hash`, which may hash the structured store-query object). Useful for replay across stores that serialize queries differently. Format: `sha256:<64-hex>`. NULL when not tracked."
+        }
       }
     },
     "subagent_chain": {
