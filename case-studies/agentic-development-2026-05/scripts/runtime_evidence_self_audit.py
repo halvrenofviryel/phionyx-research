@@ -60,23 +60,40 @@ def load_sessions(since: datetime) -> list[dict]:
 
 
 def per_day_tool_counts(sessions: list[dict]) -> dict[date, Counter]:
-    """For each day, count tool calls across all sessions starting that day."""
+    """For each day, count tool calls bucketed by the entry's OWN timestamp.
+
+    BUGFIX 2026-05-27: previously bucketed by session_start, which
+    attributed *every* timeline entry to the date the session began.
+    For long-running sessions that span multiple calendar days, this
+    inflated the session-start day's coverage and zeroed out the
+    later days. Cf. /api/runtime-evidence (Founder Console) which
+    correctly buckets by entry.timestamp; the discrepancy surfaced when
+    a 24+ hour session showed 67 gate calls on the start day and 0 on
+    the next day while the FC dashboard showed 38 + 29 = 67 split
+    correctly.
+    """
     by_day: dict[date, Counter] = defaultdict(Counter)
     for s in sessions:
-        ts = s.get("session_start") or 0
-        d = datetime.fromtimestamp(ts).date()
+        session_start = s.get("session_start") or 0
         for entry in s.get("timeline", []):
+            entry_ts = entry.get("timestamp") or session_start
+            d = datetime.fromtimestamp(entry_ts).date()
             tool = entry.get("tool", "unknown")
             by_day[d][tool] += 1
     return by_day
 
 
 def per_day_directives(sessions: list[dict]) -> dict[date, Counter]:
+    """For each day, count directive emissions bucketed by entry timestamp.
+
+    Same BUGFIX as per_day_tool_counts (2026-05-27).
+    """
     by_day: dict[date, Counter] = defaultdict(Counter)
     for s in sessions:
-        ts = s.get("session_start") or 0
-        d = datetime.fromtimestamp(ts).date()
+        session_start = s.get("session_start") or 0
         for entry in s.get("timeline", []):
+            entry_ts = entry.get("timestamp") or session_start
+            d = datetime.fromtimestamp(entry_ts).date()
             directive = entry.get("directive", "n/a")
             by_day[d][directive] += 1
     return by_day
@@ -297,10 +314,86 @@ def render_report(
     return "\n".join(lines)
 
 
+def render_json_feed(
+    since: datetime,
+    sessions: list[dict],
+    tool_counts: dict[date, Counter],
+    directives: dict[date, Counter],
+    commits: dict[date, int],
+    window_days: int,
+) -> dict:
+    """Public-safe JSON shape for the daily feed at phionyx-research/case-studies/.
+
+    Mirrors the /api/runtime-evidence shape so the public phionyx.ai page can
+    render the same dashboard from static build-time fetch.
+    """
+    total_commits = sum(commits.values())
+    total_gate_calls = sum(c for day, counter in tool_counts.items() for tool, c in counter.items() if tool in GATE_TOOLS)
+    total_all_calls = sum(c for day, counter in tool_counts.items() for tool, c in counter.items() if tool in ALL_TOOLS)
+    expected_gate_calls = total_commits * 2
+    coverage_percent = (total_gate_calls / expected_gate_calls * 100) if expected_gate_calls else 0.0
+
+    directives_total: Counter = Counter()
+    for day_directives in directives.values():
+        directives_total.update(day_directives)
+
+    per_day = []
+    all_days = sorted(set(tool_counts.keys()) | set(commits.keys()) | set(directives.keys()), reverse=True)
+    for d in all_days:
+        c = commits.get(d, 0)
+        gc = sum(tool_counts.get(d, Counter()).get(t, 0) for t in GATE_TOOLS)
+        ac = sum(tool_counts.get(d, Counter()).get(t, 0) for t in ALL_TOOLS)
+        cov = (gc / (c * 2) * 100) if c > 0 else None
+        per_day.append({
+            "date": d.isoformat(),
+            "commits": c,
+            "gate_calls": gc,
+            "all_calls": ac,
+            "coverage_percent": cov,
+        })
+
+    return {
+        "generated_at_iso": datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "window_days": window_days,
+        "since_iso": since.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "headline": {
+            "total_commits": total_commits,
+            "total_gate_calls": total_gate_calls,
+            "total_all_calls": total_all_calls,
+            "expected_gate_calls": expected_gate_calls,
+            "coverage_percent": round(coverage_percent, 2),
+        },
+        "directives": dict(directives_total),
+        "per_day": per_day,
+        "session_count": len(sessions),
+        "source": "github.com/halvrenofviryel/phionyx-research",
+        "reproduce": (
+            f"python3 case-studies/agentic-development-2026-05/scripts/"
+            f"runtime_evidence_self_audit.py --days {window_days}"
+        ),
+        "schema_version": "v1.0",
+        "disclaimer": (
+            "Public read-only feed. Per-day counts derive from local telemetry "
+            "+ git log of the private dev monorepo. Numbers are aggregate; no "
+            "claim content, file paths, or credentials surface."
+        ),
+    }
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--days", type=int, default=30, help="Window in days (default 30)")
     parser.add_argument("--out", type=Path, default=None, help="Output report path")
+    parser.add_argument(
+        "--json-out",
+        type=Path,
+        default=None,
+        help=(
+            "Optional second output: write the public-safe JSON feed to this "
+            "path. Used by publish_case_study_snapshot.sh to keep "
+            "phionyx-research/case-studies/.../feed/latest.json in sync."
+        ),
+    )
     parser.add_argument(
         "--author-filter",
         action="store_true",
@@ -331,6 +424,12 @@ def main() -> None:
     out_path.write_text(report)
     print(report)
     print(f"\n=== Written to: {out_path}")
+
+    if args.json_out is not None:
+        feed = render_json_feed(since, sessions, tool_counts, directives, commits, args.days)
+        args.json_out.parent.mkdir(parents=True, exist_ok=True)
+        args.json_out.write_text(json.dumps(feed, indent=2, ensure_ascii=False))
+        print(f"=== JSON feed written to: {args.json_out}")
 
 
 if __name__ == "__main__":
