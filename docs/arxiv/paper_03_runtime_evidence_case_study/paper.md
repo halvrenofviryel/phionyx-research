@@ -4,7 +4,7 @@
 
 **Author:** Ali Toygar Abak (Phionyx Research) — ORCID [0009-0002-3718-4010](https://orcid.org/0009-0002-3718-4010)
 **Date:** 2026-05-27 (T+1 follow-up measurement integrated); title revision 2026-05-26; first draft 2026-05-26
-**Pinned commit:** `0ffb9dd9` (Phionyx monorepo at T+1 measurement; previous pin `8595a7a6` at title-revision time)
+**Pinned release:** [`v0.7.2`](https://github.com/halvrenofviryel/phionyx-research/releases/tag/v0.7.2) on the public mirror (`halvrenofviryel/phionyx-research`). Substrate files and figures in this paper are reproducible from a fresh clone of that tag. Earlier pins: `0ffb9dd9` (T+1 measurement), `8595a7a6` (title-revision time).
 **Categories:** primary `cs.SE` (software engineering); secondary `cs.AI`
 **Keywords:** runtime governance, AI-assisted development, Model Context Protocol, audit chain, deterministic hooks, reproducibility, evidence-oriented telemetry, agentic AI.
 
@@ -491,30 +491,49 @@ No row of Table 2 says any other framework is *wrong*. Each is correct for its c
 
 ## §8 Reviewer-runnable evidence
 
-The reproducibility surface is the public repository at [github.com/halvrenofviryel/phionyx-research](https://github.com/halvrenofviryel/phionyx-research). All claims in this paper are pinned to commit `4bca5f3e` of the same.
+The reproducibility surface is the public repository at [github.com/halvrenofviryel/phionyx-research](https://github.com/halvrenofviryel/phionyx-research). All claims in this paper are pinned to **release `v0.7.2`** of the same.
+
+**Versioned release artefacts (2026-05-27 ship sequence):**
+
+| Tag | Codename | Release URL |
+|---|---|---|
+| `v0.7.0` | Compliance Evidence Pack | [github.com/halvrenofviryel/phionyx-research/releases/tag/v0.7.0](https://github.com/halvrenofviryel/phionyx-research/releases/tag/v0.7.0) |
+| `v0.7.1` | Reasoning Memory Layer | [github.com/halvrenofviryel/phionyx-research/releases/tag/v0.7.1](https://github.com/halvrenofviryel/phionyx-research/releases/tag/v0.7.1) |
+| `v0.7.2` | Self-Correcting Loop (this paper) | [github.com/halvrenofviryel/phionyx-research/releases/tag/v0.7.2](https://github.com/halvrenofviryel/phionyx-research/releases/tag/v0.7.2) |
 
 **Public CI status.** The public reproduction at commit `c8fa1f9` on Python 3.12 reports `1131 passed, 7 skipped in 13.73s`. This is the canonical evidence table entry **T7** at `docs/arxiv/CANONICAL_EVIDENCE_TABLE.md` and the value cited in any external communication.
+
+**PyPI install (current release):**
+
+```bash
+pip install phionyx-core==0.7.2
+python -c "import phionyx_core; print(phionyx_core.__version__)"
+```
+
+The `phionyx-core` package source modules (`phionyx_core/`) are unchanged from `v0.7.0`; `v0.7.2` is a substrate-evolution bump that bundles the example artefacts documented in this paper. The companion `phionyx-compliance==0.1.1` ships the EU AI Act Article 13 §3.3 acceptance criterion that §4 references.
 
 **Coverage measurement reproduction.**
 
 ```bash
-git clone https://github.com/halvrenofviryel/phionyx-research
+git clone --branch v0.7.2 https://github.com/halvrenofviryel/phionyx-research
 cd phionyx-research
-git checkout 4bca5f3e
 python3 scripts/active/runtime_evidence_self_audit.py --days 30
 ```
 
-The output is written to `docs/strategic/runtime_evidence_self_audit_<DATE>.md`. Within the limit that the reviewer's clone may have a different telemetry archive (the telemetry is the dataset, the script is the deterministic transformation), the script's behaviour matches the reports cited in §6.
+The output is written to `docs/strategic/runtime_evidence_self_audit_<DATE>.md`. Within the limit that the reviewer's clone may have a different telemetry archive (the telemetry is the dataset, the script is the deterministic transformation), the script's behaviour matches the reports cited in §6. The audit script in `v0.7.2` includes the entry-timestamp bucketing fix described in §6.4.1.
 
-**Dashboard reproduction.**
+**Substrate unit-test reproduction (v0.7.x).**
 
 ```bash
-cd apps/founder-console
-npm install && npm run dev
-# open http://localhost:3005/runtime-evidence
+git clone --branch v0.7.2 https://github.com/halvrenofviryel/phionyx-research
+cd phionyx-research
+pip install -e ".[dev]"
+python3 -m pytest tools/claude_code_mcp/tests/ -q
 ```
 
-The dashboard renders the same numbers as the audit script, via `/api/runtime-evidence?days=30`.
+Expected: `27 passed` (11 reasoning-memory-graph + 16 memory-schema tests). The hook scripts and subagent prompt documented in §4.4 + §4.5 are at `tools/claude_code_mcp/` and `.claude/agents/diff-reviewer.md` of the same checkout.
+
+**Dashboard reproduction (private — founder-side).** The Founder Console at `apps/founder-console/` lives in the private development monorepo; the public mirror does not include it. The numbers it renders match the audit-script output above, via `/api/runtime-evidence?days=30`.
 
 **Architecture-constants reproduction.** From `docs/arxiv/CANONICAL_EVIDENCE_TABLE.md`: 46 pipeline blocks (A1), pipeline contract v3.8.0 (A2), CQS 0.862 (A3), 4 kill-switch triggers (A6), 4 ethics frameworks (A7).
 
