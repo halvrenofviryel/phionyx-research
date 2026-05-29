@@ -1,45 +1,60 @@
 {
-  "generated_at_iso": "2026-05-27T22:00:01Z",
+  "generated_at_iso": "2026-05-29T22:47:00Z",
   "window_days": 30,
-  "since_iso": "2026-04-28T01:00:01Z",
+  "since_iso": "2026-04-30T01:47:00Z",
   "headline": {
-    "total_commits": 330,
-    "total_gate_calls": 102,
-    "total_all_calls": 135,
-    "expected_gate_calls": 660,
-    "coverage_percent": 15.45
+    "total_commits": 405,
+    "total_gate_calls": 145,
+    "total_all_calls": 169,
+    "expected_gate_calls": 810,
+    "coverage_percent": 17.9
   },
   "directives": {
-    "n/a": 21,
-    "pass": 98,
-    "checkpoint": 12,
+    "n/a": 16,
+    "pass": 134,
+    "checkpoint": 8,
     "reject": 2,
-    "regenerate": 1,
-    "auto_attest": 253,
-    "ok": 1,
-    "rewrite": 1
+    "regenerate": 2,
+    "require_tool": 1,
+    "rewrite": 6,
+    "auto_attest": 614,
+    "ok": 1
   },
   "per_day": [
     {
+      "date": "2026-05-30",
+      "commits": 0,
+      "gate_calls": 4,
+      "all_calls": 4,
+      "coverage_percent": null
+    },
+    {
+      "date": "2026-05-29",
+      "commits": 19,
+      "gate_calls": 33,
+      "all_calls": 33,
+      "coverage_percent": 86.8421052631579
+    },
+    {
       "date": "2026-05-28",
-      "commits": 5,
-      "gate_calls": 6,
-      "all_calls": 6,
-      "coverage_percent": 60.0
+      "commits": 67,
+      "gate_calls": 51,
+      "all_calls": 51,
+      "coverage_percent": 38.059701492537314
     },
     {
       "date": "2026-05-27",
       "commits": 24,
-      "gate_calls": 39,
-      "all_calls": 39,
-      "coverage_percent": 81.25
+      "gate_calls": 36,
+      "all_calls": 36,
+      "coverage_percent": 75.0
     },
     {
       "date": "2026-05-26",
       "commits": 40,
-      "gate_calls": 18,
-      "all_calls": 25,
-      "coverage_percent": 22.5
+      "gate_calls": 15,
+      "all_calls": 22,
+      "coverage_percent": 18.75
     },
     {
       "date": "2026-05-25",
@@ -142,30 +157,30 @@
     {
       "date": "2026-05-08",
       "commits": 10,
-      "gate_calls": 5,
-      "all_calls": 5,
-      "coverage_percent": 25.0
+      "gate_calls": 0,
+      "all_calls": 0,
+      "coverage_percent": 0.0
     },
     {
       "date": "2026-05-07",
       "commits": 18,
-      "gate_calls": 16,
-      "all_calls": 17,
-      "coverage_percent": 44.44444444444444
+      "gate_calls": 0,
+      "all_calls": 0,
+      "coverage_percent": 0.0
     },
     {
       "date": "2026-05-06",
       "commits": 8,
-      "gate_calls": 7,
-      "all_calls": 10,
-      "coverage_percent": 43.75
+      "gate_calls": 0,
+      "all_calls": 0,
+      "coverage_percent": 0.0
     },
     {
       "date": "2026-05-05",
       "commits": 14,
-      "gate_calls": 5,
-      "all_calls": 10,
-      "coverage_percent": 17.857142857142858
+      "gate_calls": 0,
+      "all_calls": 0,
+      "coverage_percent": 0.0
     },
     {
       "date": "2026-05-04",
@@ -201,16 +216,9 @@
       "gate_calls": 0,
       "all_calls": 0,
       "coverage_percent": 0.0
-    },
-    {
-      "date": "2026-04-29",
-      "commits": 6,
-      "gate_calls": 0,
-      "all_calls": 0,
-      "coverage_percent": 0.0
     }
   ],
-  "session_count": 23,
+  "session_count": 33,
   "source": "github.com/halvrenofviryel/phionyx-research",
   "reproduce": "python3 case-studies/agentic-development-2026-05/scripts/runtime_evidence_self_audit.py --days 30",
   "schema_version": "v1.0",
