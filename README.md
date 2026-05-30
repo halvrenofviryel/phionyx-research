@@ -7,7 +7,7 @@ A deterministic AI runtime that maps every model output through 46 evaluation bl
 Beyond governance, Phionyx Core ships a **physics module** that produces deterministic coherence telemetry over a structured state vector — useful for NPC/agent drift detection, session-level coherence tracking, and reproducible runtime evaluation.
 
 > **Where this sits in the Phionyx stack.** This repo is the **engine** — the SDK
-> `phionyx-core` (PyPI, latest **v0.7.2**), the deterministic-cognition runtime. It is the
+> `phionyx-core` (PyPI, latest **v0.7.2**), the deterministic runtime. It is the
 > **reference implementation** that scores **L3 (evaluation maturity) + D3 (determinism)**
 > on the vendor-neutral [Phionyx Evaluation Standard](https://github.com/halvrenofviryel/phionyx-evaluation-standard).
 > The SDK is **not** itself claim-governance-rated: the Claim-Governance ladder (CG-L0…CG-L5)
@@ -54,7 +54,7 @@ The substrate is demonstrable in seconds **without an LLM, server, or API key** 
 | Response control | Post-hoc filtering | Pre-response governance (46-block pipeline) |
 | State tracking | Stateless or conversation history | Structured state vector (A, V, H, phi, entropy) |
 | Safety | Optional guardrails | Mandatory gates (kill switch, ethics, HITL) |
-| Determinism | Non-deterministic | Reproducible cognitive path |
+| Determinism | Non-deterministic | Reproducible evidence path |
 | Memory | RAG / vector search | Impact-weighted semantic time eviction |
 
 ---
@@ -151,7 +151,7 @@ These are **internal** runtime layers of the engine; do not confuse them with th
 separate 5-layer governance stack in which the self-governance gate
 `phionyx-pipeline-mcp` is the third governance layer.
 
-**Engine Layer 1 — Deterministic Cognitive Kernel**
+**Engine Layer 1 — Deterministic Kernel**
 - 46-block canonical pipeline (contract v3.8.0)
 - Structured state vector: arousal, valence, entropy, time
 - Hybrid Resonance Model for cognitive quality (Phi)
