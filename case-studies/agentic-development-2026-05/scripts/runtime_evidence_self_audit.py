@@ -281,25 +281,25 @@ def render_report(
         "- Manifesto §3.1 (\"evidence is reproducible or it is not evidence\") — git",
         "  history is reproducible, but the per-claim envelope chain that ties a commit",
         "  to its verification artefacts is mostly empty.",
-        "- Brand credibility — Phionyx public copy commits to deterministic runtime",
-        "  evidence. Internal AI-pair-programming sessions running at this coverage",
-        "  rate weaken that commitment if surfaced externally.",
         "",
         "## What closes this gap (sequenced)",
         "",
         "1. **Binding hooks (Katman A)** — pre-commit BLOCK on missing gate call,",
         "   PreToolUse Edit/Write threshold, PostToolUse commit auto-attestation,",
-        "   session-idle timeout. Status: Stop hook for question-grounding shipped",
-        "   2026-05-25 (commit `079a52e0`). Remaining 4 hooks pending.",
+        "   session-idle timeout. Status: the binding hook layer shipped (v0.7.2) —",
+        "   commit/push, Edit/Write, Agent-spawn and Stop-grounding hooks now bind",
+        "   invocation deterministically rather than leaving it to discretion.",
         "",
         "2. **Founder Console MCP panel (Katman B)** — live dashboard showing the",
         "   numbers above per session, with per-commit attestation badges and",
-        "   cross-session aggregates. Status: not yet built.",
+        "   cross-session aggregates. Status: shipped — the /runtime-evidence",
+        "   dashboard renders these per session (now lifecycle-led, not coverage-led).",
         "",
         "3. **Structural — conversation envelope wrapping (Katman C)** — every",
         "   assistant message produces an envelope automatically; gate invocation",
         "   becomes a property of the runtime, not of the assistant's discretion.",
-        "   Status: design phase.",
+        "   Status: partial — a signed envelope chain (RGE v0.2) now persists per",
+        "   gated turn; automatic per-message wrapping remains in design.",
         "",
         "## Reproduction",
         "",
@@ -352,6 +352,51 @@ def render_json_feed(
             "coverage_percent": cov,
         })
 
+    # ── L3 self-governance signals (aggregate-only counts/mean; public-safe) ──────────
+    import os as _os
+    _dc = [e.get("declaration_coverage") for s in sessions for e in s.get("timeline", [])
+           if isinstance(e.get("declaration_coverage"), (int, float))]
+    faithfulness = {
+        "n": len(_dc),
+        "mean": round(sum(_dc) / len(_dc), 3) if _dc else None,
+        "low": sum(1 for v in _dc if v < 0.5),
+    }
+    _envelopes = _traces = 0
+    for _r in [_os.environ.get("PHIONYX_MCP_AUDIT_ROOT"), str(Path("~/.phionyx/mcp_audit").expanduser())]:
+        if not _r:
+            continue
+        _rp = Path(_r)
+        if not _rp.is_dir():
+            continue
+        for _td in _rp.iterdir():
+            _chain = _td / "chain.jsonl"
+            if _chain.exists():
+                _traces += 1
+                try:
+                    _envelopes += sum(1 for ln in _chain.read_text().splitlines() if ln.strip())
+                except OSError:
+                    pass
+        if _traces:
+            break
+    signed_chain = {"envelopes": _envelopes, "traces": _traces, "live": _traces > 0}
+    _labels_path = Path("~/.phionyx/detector_labels.jsonl").expanduser()
+    _n_labels = 0
+    if _labels_path.exists():
+        try:
+            _n_labels = sum(1 for ln in _labels_path.read_text().splitlines() if ln.strip())
+        except OSError:
+            pass
+    lifecycle = {
+        "n_governed_claims": total_gate_calls,
+        "n_signed_records": _envelopes,
+        "n_real_outcome_labels": _n_labels,
+        "note": (
+            "Aggregate funnel — different scopes, do not divide. Per-claim lifecycle-completion "
+            "(signed record AND a real observed outcome) is ~0 today because real outcomes "
+            "accumulate forward; never fabricated."
+        ),
+    }
+
     return {
         "generated_at_iso": datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
         "window_days": window_days,
@@ -371,12 +416,16 @@ def render_json_feed(
             f"python3 case-studies/agentic-development-2026-05/scripts/"
             f"runtime_evidence_self_audit.py --days {window_days}"
         ),
-        "schema_version": "v1.0",
+        "schema_version": "v1.1",
         "disclaimer": (
             "Public read-only feed. Per-day counts derive from local telemetry "
             "+ git log of the private dev monorepo. Numbers are aggregate; no "
             "claim content, file paths, or credentials surface."
         ),
+        # ── L3 self-governance signals (aggregate-only; v1.1) ──
+        "faithfulness": faithfulness,
+        "signed_chain": signed_chain,
+        "lifecycle": lifecycle,
     }
 
 

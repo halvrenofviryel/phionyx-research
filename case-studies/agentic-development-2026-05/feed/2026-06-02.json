@@ -1,7 +1,7 @@
 {
-  "generated_at_iso": "2026-06-02T20:25:40Z",
+  "generated_at_iso": "2026-06-02T20:51:03Z",
   "window_days": 30,
-  "since_iso": "2026-05-03T23:25:40Z",
+  "since_iso": "2026-05-03T23:51:03Z",
   "headline": {
     "total_commits": 429,
     "total_gate_calls": 161,
@@ -14,7 +14,7 @@
     "pass": 165,
     "checkpoint": 8,
     "reject": 2,
-    "auto_attest": 671,
+    "auto_attest": 688,
     "regenerate": 2,
     "require_tool": 1,
     "rewrite": 6,
@@ -24,9 +24,9 @@
     {
       "date": "2026-06-02",
       "commits": 10,
-      "gate_calls": 23,
-      "all_calls": 35,
-      "coverage_percent": 114.99999999999999
+      "gate_calls": 25,
+      "all_calls": 37,
+      "coverage_percent": 125.0
     },
     {
       "date": "2026-06-01",
@@ -38,9 +38,9 @@
     {
       "date": "2026-05-31",
       "commits": 27,
-      "gate_calls": 9,
-      "all_calls": 10,
-      "coverage_percent": 16.666666666666664
+      "gate_calls": 7,
+      "all_calls": 8,
+      "coverage_percent": 12.962962962962962
     },
     {
       "date": "2026-05-29",

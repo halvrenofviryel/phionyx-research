@@ -435,7 +435,7 @@ def t_c7_auto_attest_writes_commit_attestation() -> Result:
 
 def t_c8_question_grounding_blocks_unread_artifact() -> Result:
     r = Result("C8", "Hook layer",
-               "Stop hook check_question_grounding blocks responses that "
+               "Stop hook check_claim_grounding blocks responses that "
                "reference a named artifact not opened this turn.")
     with tempfile.TemporaryDirectory() as td:
         # Synthetic transcript JSONL. Two messages:
@@ -458,7 +458,7 @@ def t_c8_question_grounding_blocks_unread_artifact() -> Result:
                                     ]}}),
         ]) + "\n")
         rc, out, err = run_hook(
-            "check_question_grounding.py",
+            "check_claim_grounding.py",
             {"session_id": "t-c8",
              "transcript_path": str(transcript),
              "stop_hook_active": False},
