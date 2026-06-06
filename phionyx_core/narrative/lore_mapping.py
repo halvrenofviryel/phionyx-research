@@ -10,9 +10,9 @@ Version: 1.0.0
 Status: Production Ready
 """
 
+from typing import Dict, List, Optional
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any
 
 
 class RiskLevel(str, Enum):
@@ -41,8 +41,8 @@ class LoreMapping:
     lore_theme: str
     lore_description: str
     universe_mechanic: str
-    npc_suggestion: str | None = None
-    world_location: str | None = None
+    npc_suggestion: Optional[str] = None
+    world_location: Optional[str] = None
 
 
 @dataclass
@@ -58,7 +58,7 @@ class InterventionMapping:
 # 1. EMOTIONAL RISK & BEHAVIOR MAPPING
 # ============================================================================
 
-EMOTIONAL_RISK_MAPPING: list[LoreMapping] = [
+EMOTIONAL_RISK_MAPPING: List[LoreMapping] = [
     LoreMapping(
         inspection_finding="Anxiety (exam, social)",
         clinical_meaning="Aşırı belirsizlik, kaçınma",
@@ -137,7 +137,7 @@ EMOTIONAL_RISK_MAPPING: list[LoreMapping] = [
 # 2. SOCIAL BEHAVIOR & RELATIONSHIP MAPPING
 # ============================================================================
 
-SOCIAL_BEHAVIOR_MAPPING: list[LoreMapping] = [
+SOCIAL_BEHAVIOR_MAPPING: List[LoreMapping] = [
     LoreMapping(
         inspection_finding="Peer Conflict",
         clinical_meaning="Akran çatışması",
@@ -198,7 +198,7 @@ SOCIAL_BEHAVIOR_MAPPING: list[LoreMapping] = [
 # 3. ACADEMIC BEHAVIOR & SCHOOL RISKS MAPPING
 # ============================================================================
 
-ACADEMIC_BEHAVIOR_MAPPING: list[LoreMapping] = [
+ACADEMIC_BEHAVIOR_MAPPING: List[LoreMapping] = [
     LoreMapping(
         inspection_finding="Exam Stress",
         clinical_meaning="Performans kaygısı",
@@ -250,7 +250,7 @@ ACADEMIC_BEHAVIOR_MAPPING: list[LoreMapping] = [
 # 4. INTERVENTION TYPE → LORE MECHANIC MAPPING
 # ============================================================================
 
-INTERVENTION_MAPPING: list[InterventionMapping] = [
+INTERVENTION_MAPPING: List[InterventionMapping] = [
     InterventionMapping(
         intervention_type=InterventionType.CBT_REFRAMING,
         pedagogical_purpose="Düşünce yeniden yapılandırma",
@@ -293,7 +293,7 @@ INTERVENTION_MAPPING: list[InterventionMapping] = [
 # 5. RISK LEVEL → SCENARIO DIFFICULTY MAPPING
 # ============================================================================
 
-RISK_TO_DIFFICULTY: dict[RiskLevel, dict[str, Any]] = {
+RISK_TO_DIFFICULTY: Dict[RiskLevel, Dict[str, any]] = {
     RiskLevel.LOW: {
         "teacher_view": "Monitor",
         "student_experience": "Hafif, keşif odaklı",
@@ -324,7 +324,7 @@ RISK_TO_DIFFICULTY: dict[RiskLevel, dict[str, Any]] = {
 # 6. HELPER FUNCTIONS
 # ============================================================================
 
-def get_lore_mapping(inspection_finding: str) -> LoreMapping | None:
+def get_lore_mapping(inspection_finding: str) -> Optional[LoreMapping]:
     """Get lore mapping for a given Inspection finding."""
     all_mappings = (
         EMOTIONAL_RISK_MAPPING +
@@ -339,7 +339,7 @@ def get_lore_mapping(inspection_finding: str) -> LoreMapping | None:
     return None
 
 
-def get_intervention_mapping(intervention_type: InterventionType) -> InterventionMapping | None:
+def get_intervention_mapping(intervention_type: InterventionType) -> Optional[InterventionMapping]:
     """Get lore mechanic for a given intervention type."""
     for mapping in INTERVENTION_MAPPING:
         if mapping.intervention_type == intervention_type:
@@ -348,7 +348,7 @@ def get_intervention_mapping(intervention_type: InterventionType) -> Interventio
     return None
 
 
-def get_risk_difficulty(risk_level: RiskLevel) -> dict[str, Any]:
+def get_risk_difficulty(risk_level: RiskLevel) -> Dict[str, any]:
     """Get scenario difficulty parameters for a given risk level."""
     return RISK_TO_DIFFICULTY.get(risk_level, RISK_TO_DIFFICULTY[RiskLevel.MEDIUM])
 

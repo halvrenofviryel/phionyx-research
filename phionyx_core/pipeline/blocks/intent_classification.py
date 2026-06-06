@@ -12,11 +12,10 @@ This block:
 """
 
 import logging
-from typing import Any
+from typing import Any, Optional
 
+from ..base import PipelineBlock, BlockContext, BlockResult
 from phionyx_core.services.intent_classifier import IntentClassifier, IntentType
-
-from ..base import BlockContext, BlockResult, PipelineBlock
 
 logger = logging.getLogger(__name__)
 
@@ -33,9 +32,9 @@ class IntentClassificationBlock(PipelineBlock):
 
     def __init__(
         self,
-        intent_classifier: IntentClassifier | None = None,
-        embedding_cache: Any | None = None,
-        llm_provider: Any | None = None
+        intent_classifier: Optional[IntentClassifier] = None,
+        embedding_cache: Optional[Any] = None,
+        llm_provider: Optional[Any] = None
     ):
         """
         Initialize block.

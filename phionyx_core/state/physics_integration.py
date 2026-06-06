@@ -9,15 +9,14 @@ Ensures all physics formulas use state.dt as SINGLE SOURCE OF TRUTH.
 
 from __future__ import annotations
 
-from typing import Any
-
+from typing import Dict, Any, Optional
 from phionyx_core.state.echo_state_2 import EchoState2
 from phionyx_core.state.time_manager import TimeManager
 
 
 def get_time_delta_from_state(
-    echo_state2: EchoState2 | None = None,
-    time_manager: TimeManager | None = None,
+    echo_state2: Optional[EchoState2] = None,
+    time_manager: Optional[TimeManager] = None,
     fallback_dt: float = 1.0
 ) -> float:
     """
@@ -48,7 +47,7 @@ def calculate_phi_v2_with_state(
     stability: float,
     context_mode: str = "DEFAULT",
     gamma: float = 0.15
-) -> dict[str, Any]:
+) -> Dict[str, Any]:
     """
     Calculate Phi v2 using state.dt as SINGLE SOURCE OF TRUTH.
 
@@ -78,10 +77,10 @@ def calculate_phi_v2_with_state(
 
 
 def update_physics_params_with_state(
-    physics_params: dict[str, Any],
-    echo_state2: EchoState2 | None = None,
-    time_manager: TimeManager | None = None
-) -> dict[str, Any]:
+    physics_params: Dict[str, Any],
+    echo_state2: Optional[EchoState2] = None,
+    time_manager: Optional[TimeManager] = None
+) -> Dict[str, Any]:
     """
     Update physics_params with state.dt (SINGLE SOURCE OF TRUTH).
 

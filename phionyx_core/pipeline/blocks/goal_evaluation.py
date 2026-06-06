@@ -10,17 +10,17 @@ Evaluates active goals, computes legitimacy and utility scores.
 """
 
 import logging
-from typing import Any, Protocol
+from typing import Optional, Protocol, List, Any
 
-from ..base import BlockContext, BlockResult, PipelineBlock
+from ..base import PipelineBlock, BlockContext, BlockResult
 
 logger = logging.getLogger(__name__)
 
 
 class GoalRegistryProtocol(Protocol):
     """Protocol for goal registry service."""
-    async def get_active_goals(self) -> list[Any]: ...
-    async def evaluate_goals(self, context: Any) -> list[Any]: ...
+    async def get_active_goals(self) -> List[Any]: ...
+    async def evaluate_goals(self, context: Any) -> List[Any]: ...
 
 
 class GoalEvaluationBlock(PipelineBlock):
@@ -31,11 +31,11 @@ class GoalEvaluationBlock(PipelineBlock):
     Updates goal priorities and detects goal drift.
     """
 
-    def __init__(self, goal_registry: GoalRegistryProtocol | None = None):
+    def __init__(self, goal_registry: Optional[GoalRegistryProtocol] = None):
         super().__init__("goal_evaluation")
         self.goal_registry = goal_registry
 
-    def should_skip(self, context: BlockContext) -> str | None:
+    def should_skip(self, context: BlockContext) -> Optional[str]:
         if context.pipeline_version < "3.0.0":
             return "v4_block_requires_pipeline_v3"
         # goal_registry=None → inline fallback in execute() (goals_evaluated: 0)

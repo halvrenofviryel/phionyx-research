@@ -34,7 +34,7 @@ Cognitive vs. automation: Infrastructure (seeded parameter search)
 
 import logging
 import random
-from collections.abc import Callable
+from typing import Callable, Dict, List, Optional, Set, Tuple
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 
@@ -67,7 +67,7 @@ class ExplorationOutcome:
     score_after: float
     score_delta: float
     guardrails_passed: bool
-    violations: list[str] = field(default_factory=list)
+    violations: List[str] = field(default_factory=list)
 
     @property
     def improved(self) -> bool:
@@ -81,8 +81,8 @@ class ExplorationWindowResult:
     total_steps: int
     improvements_found: int
     violations_count: int
-    outcomes: list[ExplorationOutcome]
-    best_outcome: ExplorationOutcome | None
+    outcomes: List[ExplorationOutcome]
+    best_outcome: Optional[ExplorationOutcome]
     opened_at: str
     closed_at: str
     budget_remaining: int
@@ -111,8 +111,8 @@ class ExplorationWindow:
     def __init__(
         self,
         seed: int,
-        allowed_parameters: set[str] | None = None,
-        parameter_ranges: dict[str, tuple[float, float]] | None = None,
+        allowed_parameters: Optional[Set[str]] = None,
+        parameter_ranges: Optional[Dict[str, Tuple[float, float]]] = None,
         max_perturbations: int = DEFAULT_MAX_PERTURBATIONS,
         max_delta_fraction: float = DEFAULT_MAX_DELTA_FRACTION,
         budget: int = DEFAULT_WINDOW_BUDGET,
@@ -135,13 +135,13 @@ class ExplorationWindow:
         self.budget = budget
         self._rng = random.Random(seed)
         self._step_count = 0
-        self._outcomes: list[ExplorationOutcome] = []
+        self._outcomes: List[ExplorationOutcome] = []
 
     def run(
         self,
-        current_values: dict[str, float],
-        evaluate_fn: Callable[[dict[str, float]], float],
-        guardrail_fn: Callable[[dict[str, float], float], tuple[bool, list[str]]] | None = None,
+        current_values: Dict[str, float],
+        evaluate_fn: Callable[[Dict[str, float]], float],
+        guardrail_fn: Optional[Callable[[Dict[str, float], float], Tuple[bool, List[str]]]] = None,
     ) -> ExplorationWindowResult:
         """
         Execute the exploration window.
@@ -240,9 +240,9 @@ class ExplorationWindow:
 
     def generate_perturbations(
         self,
-        current_values: dict[str, float],
+        current_values: Dict[str, float],
         count: int = 1,
-    ) -> list[Perturbation]:
+    ) -> List[Perturbation]:
         """
         Generate perturbations without executing evaluation.
 
@@ -265,7 +265,7 @@ class ExplorationWindow:
 
         return perturbations
 
-    def _filter_allowed(self, values: dict[str, float]) -> dict[str, float]:
+    def _filter_allowed(self, values: Dict[str, float]) -> Dict[str, float]:
         """Filter parameter values to only allowed ones."""
         if self.allowed_parameters is None:
             return dict(values)
@@ -279,7 +279,7 @@ class ExplorationWindow:
         param_name: str,
         current_value: float,
         step_index: int,
-    ) -> Perturbation | None:
+    ) -> Optional[Perturbation]:
         """Generate a single bounded perturbation."""
         if current_value == 0:
             # Can't compute fraction of zero; use small absolute delta

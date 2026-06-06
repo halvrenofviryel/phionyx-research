@@ -7,10 +7,10 @@ Uses Pydantic for validation and YAML for preset storage.
 """
 
 from enum import Enum
-from pathlib import Path
-
+from typing import Optional, Dict
+from pydantic import BaseModel, Field, field_validator
 import yaml
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from pathlib import Path
 
 
 class BaseMode(str, Enum):
@@ -42,7 +42,7 @@ class PhysicsProfile(BaseModel):
     reactivity: float = Field(0.5, ge=0.0, le=1.0, description="Response speed (0=slow, 1=fast)")
     resilience: float = Field(0.5, ge=0.0, le=1.0, description="Stability (0=fragile, 1=robust)")
     safety: float = Field(0.5, ge=0.0, le=1.0, description="Safety strictness (0=permissive, 1=strict)")
-    description: str | None = Field(None, description="Human-readable description")
+    description: Optional[str] = Field(None, description="Human-readable description")
 
     @field_validator('reactivity', 'resilience', 'safety')
     @classmethod
@@ -50,11 +50,22 @@ class PhysicsProfile(BaseModel):
         """Ensure values are in [0, 1] range."""
         return max(0.0, min(1.0, v))
 
-    model_config = ConfigDict(
-        use_enum_values=True,
-        extra='allow',
-        json_schema_extra={'example': {'name': 'SCHOOL_DEFAULT', 'base_mode': 'SCHOOL', 'reactivity': 0.2, 'resilience': 0.9, 'safety': 0.8, 'description': 'High resilience, low reactivity for educational settings'}},
-    )
+    class Config:
+        """Pydantic config."""
+        use_enum_values = True
+        extra = "allow"  # ENTERPRISE UPGRADE: Allow extra fields like max_entropy from YAML
+        json_schema_extra = {
+            "example": {
+                "name": "SCHOOL_DEFAULT",
+                "base_mode": "SCHOOL",
+                "reactivity": 0.2,
+                "resilience": 0.9,
+                "safety": 0.8,
+                "description": "High resilience, low reactivity for educational settings"
+            }
+        }
+
+
 class ProfileLoader:
     """
     Loads and manages physics profiles from YAML files.
@@ -65,7 +76,7 @@ class ProfileLoader:
         >>> print(profile.resilience)  # 0.9
     """
 
-    def __init__(self, profiles_file: Path | None = None):
+    def __init__(self, profiles_file: Optional[Path] = None):
         """
         Initialize profile loader.
 
@@ -77,7 +88,7 @@ class ProfileLoader:
             profiles_file = Path(__file__).parent / "profiles.yaml"
 
         self.profiles_file = profiles_file
-        self._profiles: dict[str, PhysicsProfile] = {}
+        self._profiles: Dict[str, PhysicsProfile] = {}
         self._load_profiles()
 
     def _load_profiles(self) -> None:
@@ -88,7 +99,7 @@ class ProfileLoader:
                 f"Please create profiles.yaml with default presets."
             )
 
-        with open(self.profiles_file, encoding='utf-8') as f:
+        with open(self.profiles_file, 'r', encoding='utf-8') as f:
             data = yaml.safe_load(f)
 
         if not isinstance(data, dict) or 'profiles' not in data:
@@ -128,7 +139,7 @@ class ProfileLoader:
         reactivity: float,
         resilience: float,
         safety: float,
-        description: str | None = None
+        description: Optional[str] = None
     ) -> PhysicsProfile:
         """
         Create a custom profile programmatically.

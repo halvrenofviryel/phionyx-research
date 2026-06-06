@@ -15,20 +15,20 @@ This module orchestrates the full chain.
 
 from __future__ import annotations
 
+from typing import Dict, Any, Optional, List
 from datetime import datetime
-from typing import Any
 
 from phionyx_core.state.echo_event import EchoEvent
 from phionyx_core.state.echo_state_2 import EchoState2
 
 # Import trace functions if available
 try:
-    from phionyx_core.memory.trace import aggregate_trace, trace_weight
+    from phionyx_core.memory.trace import trace_weight, aggregate_trace
     TRACE_AVAILABLE = True
 except ImportError:
     TRACE_AVAILABLE = False
-    trace_weight = None  # type: ignore[assignment]
-    aggregate_trace = None  # type: ignore[assignment]
+    trace_weight = None
+    aggregate_trace = None
 
 
 class EchoOntology:
@@ -52,14 +52,14 @@ class EchoOntology:
         """
         self.state = echo_state2
         self.half_life_seconds = half_life_seconds
-        self.event_history: list[EchoEvent] = []
+        self.event_history: List[EchoEvent] = []
 
     def effect_to_event(
         self,
         effect_type: str,
         intensity: float,
-        tags: list[str],
-        payload: dict[str, Any] | None = None
+        tags: List[str],
+        payload: Optional[Dict[str, Any]] = None
     ) -> EchoEvent:
         """
         Convert effect to event (Step 1: Effect → Event).
@@ -98,9 +98,9 @@ class EchoOntology:
     def event_to_trace(
         self,
         event: EchoEvent,
-        now: datetime | None = None,
-        dt: float | None = None,
-        confidence: float | None = None
+        now: Optional[datetime] = None,
+        dt: Optional[float] = None,
+        confidence: Optional[float] = None
     ) -> float:
         """
         Calculate trace weight from event (Step 2: Event → Trace).
@@ -142,17 +142,16 @@ class EchoOntology:
             return weight
         except ImportError:
             # Fallback to simple trace_weight if standard API not available
-            from phionyx_core.memory.trace import trace_weight as _trace_weight_simple
             if now is None:
                 now = self.state.t_now
 
-            return _trace_weight_simple(event, now, self.half_life_seconds)
+            return trace_weight(event, now, self.half_life_seconds)
 
     def trace_to_echo(
         self,
-        events: list[EchoEvent],
-        now: datetime | None = None
-    ) -> dict[str, Any]:
+        events: List[EchoEvent],
+        now: Optional[datetime] = None
+    ) -> Dict[str, Any]:
         """
         Generate echo from trace (Step 3: Trace → Echo).
 
@@ -195,9 +194,9 @@ class EchoOntology:
 
     def echo_to_transformation(
         self,
-        echo: dict[str, Any],
-        state_update: dict[str, float] | None = None
-    ) -> dict[str, float]:
+        echo: Dict[str, Any],
+        state_update: Optional[Dict[str, float]] = None
+    ) -> Dict[str, float]:
         """
         Apply transformation to state (Step 4: Echo → Transformation).
 
@@ -240,10 +239,10 @@ class EchoOntology:
         self,
         effect_type: str,
         intensity: float,
-        tags: list[str],
-        payload: dict[str, Any] | None = None,
-        state_update: dict[str, float] | None = None
-    ) -> dict[str, Any]:
+        tags: List[str],
+        payload: Optional[Dict[str, Any]] = None,
+        state_update: Optional[Dict[str, float]] = None
+    ) -> Dict[str, Any]:
         """
         Process full chain: Effect → Event → Trace → Echo → Transformation.
 

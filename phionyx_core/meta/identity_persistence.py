@@ -16,9 +16,10 @@ AGI mapping: Self-model update + Memory continuity + Reflective control
 Mind-loop stages: UpdateSelfModel, Reflect+Revise
 """
 
-import logging
 import math
+import logging
 from dataclasses import dataclass
+from typing import Dict, List
 
 logger = logging.getLogger(__name__)
 
@@ -27,7 +28,7 @@ logger = logging.getLogger(__name__)
 class IdentitySnapshot:
     """A snapshot of the system's identity at a point in time."""
     turn_index: int
-    features: list[float]  # 5-dim vector [ethical, length, entropy, confidence, drift]
+    features: List[float]  # 5-dim vector [ethical, length, entropy, confidence, drift]
 
     @property
     def ethical_conservatism(self) -> float:
@@ -56,7 +57,7 @@ class IdentityPersistenceReport:
     current_score: float  # 0-1 cosine similarity to baseline
     window_size: int
     snapshots_collected: int
-    dimension_stability: dict[str, float]  # per-dimension variance
+    dimension_stability: Dict[str, float]  # per-dimension variance
     trend: str  # "stable", "drifting", "recovering"
 
 
@@ -78,11 +79,11 @@ class IdentityTracker:
     ]
 
     def __init__(self, max_history: int = 500):
-        self._history: list[IdentitySnapshot] = []
+        self._history: List[IdentitySnapshot] = []
         self._max_history = max_history
         self._turn_counter = 0
 
-    def observe(self, features: list[float]) -> IdentitySnapshot:
+    def observe(self, features: List[float]) -> IdentitySnapshot:
         """Record a new identity observation.
 
         Args:
@@ -179,7 +180,7 @@ class IdentityTracker:
         )
 
     @staticmethod
-    def _average_features(snapshots: list[IdentitySnapshot]) -> list[float]:
+    def _average_features(snapshots: List[IdentitySnapshot]) -> List[float]:
         """Compute element-wise average of feature vectors."""
         if not snapshots:
             return [0.0] * 5
@@ -191,7 +192,7 @@ class IdentityTracker:
         return [v / n for v in avg]
 
     @staticmethod
-    def _cosine_similarity(a: list[float], b: list[float]) -> float:
+    def _cosine_similarity(a: List[float], b: List[float]) -> float:
         """Compute cosine similarity between two vectors."""
         dot = sum(x * y for x, y in zip(a, b, strict=False))
         norm_a = math.sqrt(sum(x * x for x in a))

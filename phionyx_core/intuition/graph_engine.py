@@ -1,11 +1,6 @@
-# mypy: ignore-errors
 """
 Graph Engine - The Intuition Motor
 ==================================
-
-Why ignore-errors: same Supabase-optional pattern as memory/user_profile.py.
-Every call site is gated on SUPABASE_AVAILABLE, but mypy can't narrow
-across that runtime check.
 
 This module implements a lightweight GraphRAG system that:
 1. Extracts concepts from user input using LLM
@@ -19,10 +14,10 @@ through the graph: Darkness -> Cave -> Fear (weight: 0.9)
 
 import logging
 import os
-import uuid
+from typing import List, Dict, Optional, Tuple, Any, TYPE_CHECKING
 from dataclasses import dataclass
 from enum import Enum
-from typing import TYPE_CHECKING, Any, Optional
+import uuid
 
 try:
     import networkx as nx
@@ -30,15 +25,15 @@ except ImportError:
     nx = None
 
 try:
-    from supabase import Client, create_client
+    from supabase import create_client, Client
 except ImportError:
     create_client = None
     Client = None
 # litellm imports removed - using centralized LLM service instead
 
 if TYPE_CHECKING:
-    from phionyx_core.contracts.database import GraphRepositoryProtocol
     from phionyx_core.contracts.llm_provider import LLMProviderProtocol
+    from phionyx_core.contracts.database import GraphRepositoryProtocol
 
 logger = logging.getLogger(__name__)
 
@@ -61,13 +56,13 @@ class EdgeType(str, Enum):
 @dataclass
 class Concept:
     """A concept extracted from text."""
-    id: str | None = None
+    id: Optional[str] = None
     name: str = ""
     normalized_name: str = ""
     category: str = ""  # emotion, person, location, abstract, object, action, trait
     confidence: float = 0.0
     observation_source: str = ""  # v4: where this concept was observed (user_input, llm, system)
-    first_observed: str | None = None  # v4: ISO timestamp of first observation
+    first_observed: Optional[str] = None  # v4: ISO timestamp of first observation
 
 
 @dataclass
@@ -78,7 +73,7 @@ class Association:
     weight: float
     formation_phi: float
     edge_type: str = EdgeType.RELATED.value  # v4: typed relationship
-    context: str | None = None
+    context: Optional[str] = None
 
 
 @dataclass
@@ -130,7 +125,7 @@ class GraphEngine:
         # Store repository (if provided)
         self._graph_repository = graph_repository
 
-        self.client: Client | None = None
+        self.client: Optional[Client] = None
         self._init_supabase()
 
         # In-memory graph for fast traversal (loaded from DB)
@@ -208,7 +203,7 @@ class GraphEngine:
         self,
         text: str,
         model: str = None
-    ) -> list[Concept]:
+    ) -> List[Concept]:
         """
         Extract key concepts from user input using centralized LLM service.
 
@@ -272,7 +267,7 @@ class GraphEngine:
         )
         return None
 
-    async def _generate_embedding(self, text: str) -> list[float] | None:
+    async def _generate_embedding(self, text: str) -> Optional[List[float]]:
         """
         Generate embedding for entity resolution (Microsoft GraphRAG style).
 
@@ -312,7 +307,7 @@ class GraphEngine:
         self,
         concept: Concept,
         phi: float = 0.0
-    ) -> str | None:
+    ) -> Optional[str]:
         """
         Get existing concept ID or create new one in database.
 
@@ -381,11 +376,11 @@ class GraphEngine:
 
     async def form_associations(
         self,
-        concepts: list[Concept],
+        concepts: List[Concept],
         phi: float,
-        context: str | None = None,
+        context: Optional[str] = None,
         edge_type: str = EdgeType.RELATED.value,
-    ) -> list[Association]:
+    ) -> List[Association]:
         """
         Form associations between all pairs of concepts, weighted by Phi.
 
@@ -414,8 +409,8 @@ class GraphEngine:
             return []
 
         # Form associations between all pairs
-        for i, (source_id, _source_concept) in enumerate(concept_ids):
-            for target_id, _target_concept in concept_ids[i+1:]:
+        for i, (source_id, source_concept) in enumerate(concept_ids):
+            for target_id, target_concept in concept_ids[i+1:]:
                 # Prevent self-loops
                 if source_id == target_id:
                     continue
@@ -522,7 +517,7 @@ class GraphEngine:
                 [source_concept, target_concept], weight, edge_type=edge_type
             ))
 
-    def infer_context(self, text: str) -> dict[str, Any]:
+    def infer_context(self, text: str) -> Dict[str, Any]:
         """
         Infer context from text (synchronous wrapper for testing).
 
@@ -557,10 +552,10 @@ class GraphEngine:
 
     async def infer_hidden_context(
         self,
-        concept_names: list[str],
+        concept_names: List[str],
         max_hops: int = 2,
         min_weight: float = 0.3
-    ) -> list[HiddenContext]:
+    ) -> List[HiddenContext]:
         """
         Infer hidden context using Microsoft GraphRAG-style PageRank algorithm.
 
@@ -616,7 +611,7 @@ class GraphEngine:
 
         # Expand ego-graph: include neighbors up to max_hops
         current_level = set(concept_ids)
-        for _hop in range(max_hops):
+        for hop in range(max_hops):
             next_level = set()
             for node_id in current_level:
                 # Add node to subgraph
@@ -711,7 +706,7 @@ class GraphEngine:
         concept_name: str,
         limit: int = 10,
         depth: int = 1
-    ) -> list[dict]:
+    ) -> List[Dict]:
         """
         Get directly related concepts (1-hop neighbors).
 
@@ -754,7 +749,7 @@ class GraphEngine:
             logger.error(f"GraphEngine: Failed to get related concepts: {e}")
             return []
 
-    def get_edges_by_type(self, edge_type: str) -> list[tuple[str, str, dict]]:
+    def get_edges_by_type(self, edge_type: str) -> List[Tuple[str, str, Dict]]:
         """
         Get all edges of a specific type from the in-memory graph.
 
@@ -784,7 +779,7 @@ class GraphEngine:
         subgraph.add_edges_from(causal_edges)
         return subgraph
 
-    def get_contradictions(self) -> list[tuple[str, str, dict]]:
+    def get_contradictions(self) -> List[Tuple[str, str, Dict]]:
         """Get all contradiction edges."""
         return self.get_edges_by_type(EdgeType.CONTRADICTS.value)
 
@@ -800,9 +795,9 @@ class GraphEngine:
         self,
         character_id: str,
         event_type: str,
-        event_payload: dict,
-        concept_id: str | None = None
-    ) -> str | None:
+        event_payload: Dict,
+        concept_id: Optional[str] = None
+    ) -> Optional[str]:
         """
         Add or update an event node in Chronicle Graph.
 
@@ -848,7 +843,7 @@ class GraphEngine:
         character_id: str,
         window: int = 10,
         include_relationships: bool = True
-    ) -> dict:
+    ) -> Dict:
         """
         Get relevant subgraph for narrative generation.
 
@@ -927,7 +922,7 @@ class GraphEngine:
 
     def _generate_chronicle_summary(
         self,
-        events: list[dict],
+        events: List[Dict],
         character_id: str
     ) -> str:
         """

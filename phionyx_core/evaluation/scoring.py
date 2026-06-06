@@ -8,10 +8,11 @@ for human comparative evaluation.
 Roadmap Faz 2.3
 """
 
-import math
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any
+from typing import Any, Dict, List, Tuple
+import math
+
 
 # ═══════════════════════════════════════════════════════════════════
 # 1. Elo Rating System
@@ -28,8 +29,8 @@ class EloRating:
     def __init__(self, k_factor: float = 32.0, initial_rating: float = 1500.0):
         self.k_factor = k_factor
         self.initial_rating = initial_rating
-        self._ratings: dict[str, float] = {}
-        self._match_history: list[dict[str, Any]] = []
+        self._ratings: Dict[str, float] = {}
+        self._match_history: List[Dict[str, Any]] = []
 
     def register(self, player_id: str) -> None:
         if player_id not in self._ratings:
@@ -48,7 +49,7 @@ class EloRating:
         loser_id: str,
         task_id: str = "",
         draw: bool = False,
-    ) -> tuple[float, float]:
+    ) -> Tuple[float, float]:
         """
         Record a match result. Returns (new_winner_rating, new_loser_rating).
         If draw=True, both get partial credit.
@@ -86,9 +87,9 @@ class EloRating:
 
     def record_three_way(
         self,
-        rankings: list[str],
+        rankings: List[str],
         task_id: str = "",
-    ) -> dict[str, float]:
+    ) -> Dict[str, float]:
         """
         Record a 3-way comparison result.
         rankings[0] = best, rankings[1] = second, rankings[2] = worst.
@@ -108,7 +109,7 @@ class EloRating:
         return {r: self.get_rating(r) for r in rankings}
 
     @property
-    def rankings(self) -> list[tuple[str, float]]:
+    def rankings(self) -> List[Tuple[str, float]]:
         """Return players sorted by rating (highest first)."""
         return sorted(self._ratings.items(), key=lambda x: x[1], reverse=True)
 
@@ -116,7 +117,7 @@ class EloRating:
     def match_count(self) -> int:
         return len(self._match_history)
 
-    def get_history(self) -> list[dict[str, Any]]:
+    def get_history(self) -> List[Dict[str, Any]]:
         return list(self._match_history)
 
 
@@ -148,7 +149,7 @@ class PreferenceScorer:
     """
 
     def __init__(self):
-        self._votes: list[PreferenceVote] = []
+        self._votes: List[PreferenceVote] = []
 
     def add_vote(self, vote: PreferenceVote) -> None:
         self._votes.append(vote)
@@ -183,12 +184,12 @@ class PreferenceScorer:
         """Accuracy Delta = Phionyx accuracy - Expert accuracy."""
         return phionyx_accuracy - expert_accuracy
 
-    def get_votes_for_task(self, task_id: str) -> list[PreferenceVote]:
+    def get_votes_for_task(self, task_id: str) -> List[PreferenceVote]:
         return [v for v in self._votes if v.task_id == task_id]
 
-    def per_task_winner(self) -> dict[str, PreferenceWinner]:
+    def per_task_winner(self) -> Dict[str, PreferenceWinner]:
         """Majority winner per task."""
-        task_votes: dict[str, dict[PreferenceWinner, float]] = {}
+        task_votes: Dict[str, Dict[PreferenceWinner, float]] = {}
         for vote in self._votes:
             if vote.task_id not in task_votes:
                 task_votes[vote.task_id] = {}
@@ -197,10 +198,10 @@ class PreferenceScorer:
 
         result = {}
         for task_id, counts in task_votes.items():
-            result[task_id] = max(counts, key=lambda k: counts[k])
+            result[task_id] = max(counts, key=counts.get)
         return result
 
-    def summary(self) -> dict[str, Any]:
+    def summary(self) -> Dict[str, Any]:
         return {
             "total_votes": self.vote_count,
             "phionyx_preference": self.phionyx_preference_score(),
@@ -230,7 +231,7 @@ class CalibrationMetrics:
 
     def __init__(self, n_bins: int = 10):
         self.n_bins = n_bins
-        self._entries: list[CalibrationEntry] = []
+        self._entries: List[CalibrationEntry] = []
 
     def add_entry(self, entry: CalibrationEntry) -> None:
         self._entries.append(entry)
@@ -247,14 +248,14 @@ class CalibrationMetrics:
         if not self._entries:
             return 0.0
 
-        bins: dict[int, list[CalibrationEntry]] = {i: [] for i in range(self.n_bins)}
+        bins: Dict[int, List[CalibrationEntry]] = {i: [] for i in range(self.n_bins)}
         for entry in self._entries:
             bin_idx = min(int(entry.stated_confidence * self.n_bins), self.n_bins - 1)
             bins[bin_idx].append(entry)
 
         ece = 0.0
         total = len(self._entries)
-        for _bin_idx, entries in bins.items():
+        for bin_idx, entries in bins.items():
             if not entries:
                 continue
             avg_confidence = sum(e.stated_confidence for e in entries) / len(entries)
@@ -279,9 +280,9 @@ class CalibrationMetrics:
         right = sum(1 for e in low_confidence if e.was_correct)
         return right / len(low_confidence)
 
-    def reliability_diagram_data(self) -> list[dict[str, float]]:
+    def reliability_diagram_data(self) -> List[Dict[str, float]]:
         """Data for reliability diagram (calibration plot)."""
-        bins: dict[int, list[CalibrationEntry]] = {i: [] for i in range(self.n_bins)}
+        bins: Dict[int, List[CalibrationEntry]] = {i: [] for i in range(self.n_bins)}
         for entry in self._entries:
             bin_idx = min(int(entry.stated_confidence * self.n_bins), self.n_bins - 1)
             bins[bin_idx].append(entry)
@@ -301,7 +302,7 @@ class CalibrationMetrics:
             })
         return data
 
-    def summary(self) -> dict[str, Any]:
+    def summary(self) -> Dict[str, Any]:
         return {
             "total_entries": self.entry_count,
             "calibration_error": self.calibration_error(),

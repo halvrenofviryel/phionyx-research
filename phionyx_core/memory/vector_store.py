@@ -1,25 +1,15 @@
-# mypy: ignore-errors
 """
 Vector Store - RAG Operations
 ==============================
 
 Semantic memory storage and retrieval using Supabase pgvector.
-
-Why ignore-errors: same pattern as `user_profile.py` — supabase is an
-optional adapter (`pip install phionyx-core[supabase]`). When it's not
-installed, `Client` and `create_client` fall through to `None`. Every
-call site is gated on a runtime `if not SUPABASE_AVAILABLE` check, but
-mypy can't narrow across that pattern. The type errors are real
-ambiguities of an optional integration that is dead code in the public
-SDK without the extra installed.
 """
 
-import logging
+from typing import List, Dict, Optional, TYPE_CHECKING
 import os
-from typing import TYPE_CHECKING, Optional
-
+import logging
 try:
-    from supabase import Client, create_client
+    from supabase import create_client, Client
     SUPABASE_AVAILABLE = True
 except ImportError:
     SUPABASE_AVAILABLE = False
@@ -29,12 +19,12 @@ except ImportError:
 # litellm imports removed - using centralized LLM service instead
 
 if TYPE_CHECKING:
-    from phionyx_core.contracts.config import ConfigProtocol
-    from phionyx_core.contracts.database import MemoryRepositoryProtocol
     from phionyx_core.contracts.llm_provider import LLMProviderProtocol
+    from phionyx_core.contracts.database import MemoryRepositoryProtocol
+    from phionyx_core.contracts.config import ConfigProtocol
 
 # Import embedding cache
-from phionyx_core.memory.embedding_cache import EmbeddingCache, get_embedding_cache
+from phionyx_core.memory.embedding_cache import get_embedding_cache, EmbeddingCache
 
 logger = logging.getLogger(__name__)
 
@@ -53,7 +43,7 @@ class VectorStore:
         self,
         llm_provider: Optional['LLMProviderProtocol'] = None,
         memory_repository: Optional['MemoryRepositoryProtocol'] = None,
-        embedding_cache: EmbeddingCache | None = None,
+        embedding_cache: Optional[EmbeddingCache] = None,
         config: Optional['ConfigProtocol'] = None
     ):
         """
@@ -121,7 +111,7 @@ class VectorStore:
             # Backward compatible: Use direct Supabase client
             if not self.supabase_url or not self.supabase_key:
                 logger.warning("Supabase credentials not found. Vector store disabled.")
-                self.client: Client | None = None
+                self.client: Optional[Client] = None
             else:
                 self.client = create_client(self.supabase_url, self.supabase_key)
                 logger.info("Supabase vector store initialized (direct client - backward compatible)")
@@ -164,8 +154,8 @@ class VectorStore:
     async def generate_embedding(
         self,
         text: str,
-        profile_id: str | None = None
-    ) -> list[float]:
+        profile_id: Optional[str] = None
+    ) -> List[float]:
         """
         Generate semantic embedding for text using centralized LLM service with caching.
 
@@ -237,11 +227,11 @@ class VectorStore:
         self,
         content: str,
         actor_ref: str,  # SPRINT 5: Replaced user_id with actor_ref (core-neutral)
-        embedding: list[float] | None = None,
+        embedding: Optional[List[float]] = None,
         importance: float = 0.5,
-        metadata: dict | None = None,
-        context_tags: list[str] | None = None
-    ) -> str | None:
+        metadata: Optional[Dict] = None,
+        context_tags: Optional[List[str]] = None
+    ) -> Optional[str]:
         """
         Add a memory to the vector store.
 
@@ -307,9 +297,9 @@ class VectorStore:
     async def store(
         self,
         content: str,
-        metadata: dict | None = None,
-        context_tags: list[str] | None = None
-    ) -> str | None:
+        metadata: Optional[Dict] = None,
+        context_tags: Optional[List[str]] = None
+    ) -> Optional[str]:
         """
         Store a memory (alias for add_memory for backward compatibility).
 
@@ -339,12 +329,12 @@ class VectorStore:
 
     async def search_similar(
         self,
-        query_embedding: list[float],
+        query_embedding: List[float],
         actor_ref: str,  # SPRINT 5: Replaced user_id with actor_ref (core-neutral)
         limit: int = 3,
         threshold: float = 0.7,
-        filter_tags: list[str] | None = None
-    ) -> list[dict]:
+        filter_tags: Optional[List[str]] = None
+    ) -> List[Dict]:
         """
         Search for similar memories using cosine similarity.
 
@@ -389,8 +379,8 @@ class VectorStore:
         actor_ref: str,  # SPRINT 5: Replaced user_id with actor_ref (core-neutral)
         limit: int = 3,
         min_similarity: float = 0.7,
-        metadata_filter: dict | None = None
-    ) -> list[dict]:
+        metadata_filter: Optional[Dict] = None
+    ) -> List[Dict]:
         """
         Search for relevant memories with optional metadata filtering.
 
@@ -481,9 +471,9 @@ class VectorStore:
         self,
         query: str,
         limit: int = 5,
-        filter_tags: list[str] | None = None,
-        actor_ref: str | None = None  # SPRINT 5: Replaced user_id with actor_ref (core-neutral)
-    ) -> list[dict]:
+        filter_tags: Optional[List[str]] = None,
+        actor_ref: Optional[str] = None  # SPRINT 5: Replaced user_id with actor_ref (core-neutral)
+    ) -> List[Dict]:
         """
         Retrieve relevant memories (alias for search_similar for backward compatibility).
 
@@ -517,8 +507,8 @@ class VectorStore:
         query_text: str,
         user_id: str,
         limit: int = 3,
-        filter_tags: list[str] | None = None
-    ) -> list[dict]:
+        filter_tags: Optional[List[str]] = None
+    ) -> List[Dict]:
         """
         Retrieve relevant memories for a query with optional context tag filtering.
 

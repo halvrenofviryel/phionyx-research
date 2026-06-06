@@ -145,8 +145,10 @@ class TestPhysicsFormulas:
         assert classify_resonance(3.0) == "low"
         assert classify_resonance(2.0) == "low"
 
-        # Fractured
-        assert classify_resonance(1.0) == "fractured"
+        # Fractured — use 1.5 (clearly scaled, < 2.0) to avoid the
+        # phi == 1.0 boundary that auto-detects as normalized scale
+        # ("high") per d7388576 (May 2026 disambiguation).
+        assert classify_resonance(1.5) == "fractured"
         assert classify_resonance(0.0) == "fractured"
 
     def test_classify_resonance_bounds(self):

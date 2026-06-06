@@ -12,37 +12,37 @@ Features:
 - Result merging
 """
 
-import asyncio
 import logging
+import asyncio
 import time
-from copy import deepcopy
+from typing import Dict, List, Set, Tuple
 from dataclasses import dataclass, field
+from copy import deepcopy
 
-from ..pipeline.base import BlockContext, BlockResult, PipelineBlock
+from ..pipeline.base import PipelineBlock, BlockContext, BlockResult
 from .dependency_validator import DependencyValidator
 
 logger = logging.getLogger(__name__)
 
 # OpenTelemetry integration (optional)
 try:
-    from opentelemetry.trace import Status, StatusCode
-
     from phionyx_core.telemetry import get_tracer, is_opentelemetry_enabled
+    from opentelemetry.trace import Status, StatusCode
     OPENTELEMETRY_AVAILABLE = True
 except ImportError:
     OPENTELEMETRY_AVAILABLE = False
-    get_tracer = None  # type: ignore[assignment]
+    get_tracer = None
     def is_opentelemetry_enabled() -> bool:
         return False
-    Status = None  # type: ignore[assignment,misc]
-    StatusCode = None  # type: ignore[assignment,misc]
+    Status = None
+    StatusCode = None
 
 
 @dataclass
 class ParallelGroup:
     """Group of blocks that can be executed in parallel."""
-    block_ids: list[str]
-    dependencies: set[str] = field(default_factory=set)
+    block_ids: List[str]
+    dependencies: Set[str] = field(default_factory=set)
     read_only: bool = True  # If True, blocks only read from context
 
     def __post_init__(self):
@@ -79,10 +79,10 @@ class ParallelExecutor:
 
     def identify_parallel_groups(
         self,
-        block_order: list[str],
-        executed_blocks: set[str],
+        block_order: List[str],
+        executed_blocks: Set[str],
         context: BlockContext
-    ) -> list[ParallelGroup]:
+    ) -> List[ParallelGroup]:
         """
         Identify groups of blocks that can be executed in parallel.
 
@@ -188,7 +188,7 @@ class ParallelExecutor:
         # Check for overlap
         return bool(writes1 & writes2)
 
-    def _is_read_only_group(self, block_ids: list[str]) -> bool:
+    def _is_read_only_group(self, block_ids: List[str]) -> bool:
         """
         Check if a group of blocks is read-only.
 
@@ -207,9 +207,9 @@ class ParallelExecutor:
     async def execute_parallel_group(
         self,
         group: ParallelGroup,
-        blocks: dict[str, PipelineBlock],
+        blocks: Dict[str, PipelineBlock],
         context: BlockContext
-    ) -> dict[str, BlockResult]:
+    ) -> Dict[str, BlockResult]:
         """
         Execute a group of blocks in parallel.
 
@@ -274,7 +274,7 @@ class ParallelExecutor:
                 contexts[block_id] = self._copy_context(context)
 
             # Execute all blocks in parallel
-            async def execute_block(block_id: str) -> tuple[str, BlockResult]:
+            async def execute_block(block_id: str) -> Tuple[str, BlockResult]:
                 # OpenTelemetry: Create block-level span within parallel group
                 block_span = None
                 block_start_time = None
@@ -363,7 +363,7 @@ class ParallelExecutor:
             success_count = 0
             error_count = 0
             for result_item in results_list:
-                if isinstance(result_item, BaseException):
+                if isinstance(result_item, Exception):
                     logger.error(f"Parallel execution task failed: {result_item}")
                     error_count += 1
                     continue
@@ -445,7 +445,7 @@ class ParallelExecutor:
 
     def merge_results(
         self,
-        results: dict[str, BlockResult],
+        results: Dict[str, BlockResult],
         context: BlockContext
     ) -> BlockContext:
         """

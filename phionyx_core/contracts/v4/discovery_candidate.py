@@ -6,11 +6,10 @@ Extends IntuitionGraph with novelty/transfer/robustness scoring
 for open-ended discovery evaluation.
 """
 
-import uuid
+from typing import Optional, Dict, Any, List
+from pydantic import BaseModel, Field
 from datetime import datetime, timezone
-from typing import Any
-
-from pydantic import BaseModel, ConfigDict, Field
+import uuid
 
 
 class DiscoveryCandidate(BaseModel):
@@ -48,11 +47,11 @@ class DiscoveryCandidate(BaseModel):
     )
 
     # Discovery provenance
-    source_graph_nodes: list[str] = Field(
+    source_graph_nodes: List[str] = Field(
         default_factory=list,
         description="IntuitionGraph node IDs that contributed"
     )
-    source_patterns: list[str] = Field(
+    source_patterns: List[str] = Field(
         default_factory=list,
         description="Patterns identified"
     )
@@ -62,13 +61,13 @@ class DiscoveryCandidate(BaseModel):
     )
 
     # Cross-domain relevance
-    domain_relevance: dict[str, float] = Field(
+    domain_relevance: Dict[str, float] = Field(
         default_factory=dict,
         description="Relevance score per domain"
     )
 
     # Embedding for similarity computation
-    embedding_vector: list[float] | None = Field(
+    embedding_vector: Optional[List[float]] = Field(
         None,
         description="Embedding vector for novelty computation"
     )
@@ -78,17 +77,17 @@ class DiscoveryCandidate(BaseModel):
         default=False,
         description="Whether a human has validated this discovery"
     )
-    validation_score: float | None = Field(
+    validation_score: Optional[float] = Field(
         None, ge=0.0, le=1.0,
         description="Human validation score"
     )
 
     # Timestamps
     discovered_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
-    validated_at: datetime | None = None
+    validated_at: Optional[datetime] = None
 
     # Metadata
-    metadata: dict[str, Any] = Field(default_factory=dict)
+    metadata: Dict[str, Any] = Field(default_factory=dict)
 
     def compute_composite(
         self,
@@ -104,4 +103,12 @@ class DiscoveryCandidate(BaseModel):
         )
         return self.composite_score
 
-    model_config = ConfigDict(json_schema_extra={'example': {'description': 'Emotional resonance correlates with learning retention', 'novelty_score': 0.85, 'transfer_potential': 0.6, 'robustness_score': 0.7}})
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "description": "Emotional resonance correlates with learning retention",
+                "novelty_score": 0.85,
+                "transfer_potential": 0.6,
+                "robustness_score": 0.7,
+            }
+        }

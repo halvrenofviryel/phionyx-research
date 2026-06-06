@@ -7,17 +7,15 @@ Updates time semantics using TimeManager (single source of truth per Echoism Cor
 """
 
 import logging
-from typing import Any, Protocol
+from typing import Optional, Protocol
 
-from ..base import BlockContext, BlockResult, PipelineBlock
+from ..base import PipelineBlock, BlockContext, BlockResult
 
 logger = logging.getLogger(__name__)
 
 
 class TimeManagerProtocol(Protocol):
     """Protocol for TimeManager to avoid direct dependency."""
-    state: Any  # TimeManager.state holds _is_first_tick and other turn-local flags
-
     def advance_turn(self) -> float:
         """Advance turn and return time_delta in seconds."""
         ...
@@ -55,7 +53,7 @@ class TimeUpdateSotBlock(PipelineBlock):
         self.time_manager = time_manager
         self.participant_id = participant_id
 
-    def should_skip(self, context: BlockContext) -> str | None:
+    def should_skip(self, context: BlockContext) -> Optional[str]:
         """Skip if time_manager not available."""
         if self.time_manager is None:
             return "time_manager_not_available"
@@ -75,7 +73,7 @@ class TimeUpdateSotBlock(PipelineBlock):
             # Advance turn and get dt from state (SINGLE SOURCE OF TRUTH)
             time_delta_raw = self.time_manager.advance_turn()
             # Defensive: ensure numeric return (guards against misconfigured DI)
-            if not isinstance(time_delta_raw, int | float):
+            if not isinstance(time_delta_raw, (int, float)):
                 time_delta_raw = 1.0
             original_dt = time_delta_raw
 
@@ -139,7 +137,7 @@ class TimeUpdateSotBlock(PipelineBlock):
             if not isinstance(turn_index, int):
                 turn_index = 0
             t_now = self.time_manager.get_t_now()
-            if not isinstance(t_now, int | float):
+            if not isinstance(t_now, (int, float)):
                 t_now = 0.0
 
             # Propagate time values to context metadata for downstream blocks

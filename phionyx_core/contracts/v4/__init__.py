@@ -9,19 +9,20 @@ All v4 schemas are backward-compatible — existing pipelines continue
 to work without v4 fields (Optional everywhere).
 """
 
+from .input_signal import InputSignal
+from .perceptual_frame import PerceptualFrame
+from .world_state_snapshot import WorldStateSnapshot
+from .goal_object import GoalObject, GoalPriority, GoalStatus
+from .memory_entry import MemoryEntry, BoundaryZone
 from .action_intent import ActionIntent, ActionType, ReversibilityLevel
-from .audit_record import AuditRecord
+from .ethics_decision import EthicsDecision, EthicsVerdict, DeliberationLayer
 from .confidence_payload import ConfidencePayload, UncertaintyType
+from .workspace_event import WorkspaceEvent, SalienceLevel
+from .audit_record import AuditRecord
+from .learning_update import LearningUpdate, LearningGateDecision
 from .discovery_candidate import DiscoveryCandidate
 from .error_payload import ErrorPayload, ErrorSeverity
-from .ethics_decision import DeliberationLayer, EthicsDecision, EthicsVerdict
-from .goal_object import GoalObject, GoalPriority, GoalStatus
-from .input_signal import InputSignal
-from .learning_update import LearningGateDecision, LearningUpdate
-from .memory_entry import BoundaryZone, MemoryEntry
-from .perceptual_frame import PerceptualFrame
-from .workspace_event import SalienceLevel, WorkspaceEvent
-from .world_state_snapshot import WorldStateSnapshot
+from .claim import Claim, ClaimType, LifecycleStage, lifecycle_completion
 
 __all__ = [
     # Schemas
@@ -38,6 +39,7 @@ __all__ = [
     "LearningUpdate", "LearningGateDecision",
     "DiscoveryCandidate",
     "ErrorPayload", "ErrorSeverity",
+    "Claim", "ClaimType", "LifecycleStage", "lifecycle_completion",
 ]
 
 V4_SCHEMA_VERSION = "4.0.0"

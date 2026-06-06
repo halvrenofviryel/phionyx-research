@@ -15,6 +15,7 @@ import json
 import logging
 from dataclasses import dataclass, field
 from pathlib import Path
+from typing import Optional
 
 logger = logging.getLogger(__name__)
 
@@ -80,8 +81,8 @@ class PREAGIImpactAnalyzer:
 
     def __init__(
         self,
-        experiments_path: Path | None = None,
-        surfaces_path: Path | None = None,
+        experiments_path: Optional[Path] = None,
+        surfaces_path: Optional[Path] = None,
     ):
         self._experiments_path = experiments_path or DEFAULT_EXPERIMENTS_PATH
         self._surfaces_path = surfaces_path or DEFAULT_SURFACES_PATH
@@ -224,7 +225,7 @@ class PREAGIImpactAnalyzer:
 
         return report
 
-    def save_report(self, output_path: Path | None = None) -> Path:
+    def save_report(self, output_path: Optional[Path] = None) -> Path:
         """Generate and save report as JSON."""
         report = self.generate_campaign_report()
         if output_path is None:

@@ -8,7 +8,7 @@ Components:
 - TrustPropagation: Transitive trust computation
 """
 
-from .trust_propagation import TrustAssessment, TrustEdge, TrustNetwork
+from .trust_propagation import TrustNetwork, TrustEdge, TrustAssessment
 
 __all__ = [
     "TrustNetwork",

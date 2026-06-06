@@ -5,9 +5,10 @@ Context Definitions - Mode and Rule Definitions
 Defines available context modes and their associated memory rules.
 """
 
-import logging
-from dataclasses import dataclass
 from enum import Enum
+from typing import List, Dict, Optional
+from dataclasses import dataclass
+import logging
 
 logger = logging.getLogger(__name__)
 
@@ -28,7 +29,7 @@ class ContextRule:
     """Rule defining which memory blocks are active in a mode."""
 
     mode: ContextMode
-    memory_tags: list[str]  # Tags to filter memories (e.g., ["sdk_architecture", "api_design"])
+    memory_tags: List[str]  # Tags to filter memories (e.g., ["sdk_architecture", "api_design"])
     system_prompt_prefix: str  # System prompt to inject when switching to this mode
     priority: int = 0  # Higher priority = more important
 
@@ -43,10 +44,10 @@ class ContextDefinition:
     """Complete context definition with mode and rules."""
 
     mode: ContextMode
-    rules: list[ContextRule]
+    rules: List[ContextRule]
     description: str = ""
 
-    def get_primary_rule(self) -> ContextRule | None:
+    def get_primary_rule(self) -> Optional[ContextRule]:
         """Get the highest priority rule."""
         if not self.rules:
             return None
@@ -58,7 +59,7 @@ class ContextDefinitions:
 
     def __init__(self):
         """Initialize with default context definitions."""
-        self.definitions: dict[ContextMode, ContextDefinition] = {}
+        self.definitions: Dict[ContextMode, ContextDefinition] = {}
         self._initialize_defaults()
 
     def _initialize_defaults(self):
@@ -154,11 +155,11 @@ class ContextDefinitions:
             description="Default context with no restrictions"
         )
 
-    def get_definition(self, mode: ContextMode) -> ContextDefinition | None:
+    def get_definition(self, mode: ContextMode) -> Optional[ContextDefinition]:
         """Get context definition for a mode."""
         return self.definitions.get(mode)
 
-    def get_all_modes(self) -> list[ContextMode]:
+    def get_all_modes(self) -> List[ContextMode]:
         """Get all available context modes."""
         return list(self.definitions.keys())
 

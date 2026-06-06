@@ -6,13 +6,13 @@ Main engine for evaluating responses against Conscious Echo Proof (CEP) criteria
 Detects self-narrative patterns, trauma language, and echo repetition.
 """
 
-import logging
 import re
+import logging
+from typing import Optional, Dict, List, Literal
 from difflib import SequenceMatcher
-from typing import Any, Literal, cast
 
+from .cep_types import CEPMetrics, CEPFlags, CEPResult
 from .cep_config import CEPConfig
-from .cep_types import CEPFlags, CEPMetrics, CEPResult
 
 logger = logging.getLogger(__name__)
 
@@ -30,7 +30,7 @@ class ConsciousEchoProofEngine:
     Provides sanitization capabilities for unsafe content.
     """
 
-    def __init__(self, config: CEPConfig | None = None, profile_name: str | None = None):
+    def __init__(self, config: Optional[CEPConfig] = None, profile_name: Optional[str] = None):
         """
         Initialize CEP engine.
 
@@ -129,10 +129,10 @@ class ConsciousEchoProofEngine:
         raw_text: str,
         phi: float,
         entropy: float,
-        unified_state: dict[str, float] | None = None,
-        conversation_history: list[str] | None = None,
-        npc_role: str | None = None,
-        profile_name: str | None = None
+        unified_state: Optional[Dict[str, float]] = None,
+        conversation_history: Optional[List[str]] = None,
+        npc_role: Optional[str] = None,
+        profile_name: Optional[str] = None
     ) -> CEPResult:
         """
         Evaluate response against CEP criteria.
@@ -236,7 +236,7 @@ class ConsciousEchoProofEngine:
         raw_text: str,
         phi: float,
         entropy: float,
-        unified_state: dict[str, float] | None = None
+        unified_state: Optional[Dict[str, float]] = None
     ) -> CEPMetrics:
         """
         Compute base metrics from physics parameters.
@@ -393,7 +393,7 @@ class ConsciousEchoProofEngine:
 
         return max(0.0, min(1.0, total_score))
 
-    def _run_echo_variation_test(self, raw_text: str, conversation_history: list[str]) -> float:
+    def _run_echo_variation_test(self, raw_text: str, conversation_history: List[str]) -> float:
         """
         Test for echo variation/novelty using embedding-based similarity.
 
@@ -465,7 +465,7 @@ class ConsciousEchoProofEngine:
 
         return max(0.0, min(1.0, novelty_score))
 
-    def _get_embeddings(self, texts: list[str]) -> list[list[float]] | None:
+    def _get_embeddings(self, texts: List[str]) -> Optional[List[List[float]]]:
         """
         Get embeddings for texts.
 
@@ -481,12 +481,12 @@ class ConsciousEchoProofEngine:
         # Try to use vector store if available (future: integrate with phionyx_memory)
         # For now, use simple TF-IDF-like approach
         try:
-            import numpy as np
             from sklearn.feature_extraction.text import TfidfVectorizer
+            import numpy as np
 
             vectorizer = TfidfVectorizer(max_features=100, stop_words='english')
             embeddings = vectorizer.fit_transform(texts).toarray()
-            return cast("list[list[float]]", embeddings.tolist())
+            return embeddings.tolist()
         except ImportError:
             # Fallback: Simple word-based embedding (bag of words normalized)
             try:
@@ -501,14 +501,14 @@ class ConsciousEchoProofEngine:
                 if not all_words:
                     return None
 
-                word_list = sorted(all_words)
+                word_list = sorted(list(all_words))
                 embeddings = []
                 for text in texts:
                     words = text.lower().split()
                     word_freq = {word: words.count(word) for word in word_list}
-                    embedding: list[float] = [float(word_freq.get(word, 0)) for word in word_list]
+                    embedding = [word_freq.get(word, 0) for word in word_list]
                     # Normalize
-                    norm = float(np.linalg.norm(embedding))
+                    norm = np.linalg.norm(embedding)
                     if norm > 0:
                         embedding = [x / norm for x in embedding]
                     embeddings.append(embedding)
@@ -518,7 +518,7 @@ class ConsciousEchoProofEngine:
                 logger.debug(f"Simple embedding generation failed: {e}")
                 return None
 
-    def _cosine_similarity(self, vec1: list[float], vec2: list[float]) -> float:
+    def _cosine_similarity(self, vec1: List[float], vec2: List[float]) -> float:
         """
         Calculate cosine similarity between two vectors.
 
@@ -559,7 +559,7 @@ class ConsciousEchoProofEngine:
             norm2 = sum(b * b for b in vec2) ** 0.5
             if norm1 == 0 or norm2 == 0:
                 return 0.0
-            return float(max(0.0, min(1.0, dot / (norm1 * norm2))))
+            return max(0.0, min(1.0, dot / (norm1 * norm2)))
 
     def _run_mirror_self_test(self, raw_text: str) -> float:
         """
@@ -594,7 +594,7 @@ class ConsciousEchoProofEngine:
             return 0.0
 
         # Find all pattern matches with their positions
-        matches: list[dict[str, Any]] = []
+        matches = []
         for pattern in self.mirror_self_patterns:
             pattern_matches = re.finditer(pattern, text_lower, re.IGNORECASE)
             for match in pattern_matches:
@@ -622,8 +622,8 @@ class ConsciousEchoProofEngine:
             r'aslında\s+şöyleyim|kendimi\s+analiz|kendimi\s+yorumluyorum'
         ]
 
-        for m in matches:
-            match_text = m['text']
+        for match in matches:
+            match_text = match['text']
             # Check if it's a strong pattern
             is_strong = any(re.search(sp, match_text, re.IGNORECASE) for sp in strong_patterns)
             if is_strong:
@@ -640,14 +640,12 @@ class ConsciousEchoProofEngine:
 
         for sentence in sentences:
             sentence_lower = sentence.lower()
-            for m in matches:
-                m_start = int(m['start'])
-                m_end = int(m['end'])
-                if m_start < len(sentence_lower):
+            for match in matches:
+                if match['start'] < len(sentence_lower):
                     # Check if this match is in this sentence
-                    sentence_start = raw_text[:m_start].rfind('.')
-                    sentence_end = raw_text.find('.', m_end)
-                    if sentence_start < m_start < sentence_end:
+                    sentence_start = raw_text[:match['start']].rfind('.')
+                    sentence_end = raw_text.find('.', match['end'])
+                    if sentence_start < match['start'] < sentence_end:
                         sentences_with_patterns += 1
                         break
 
@@ -742,8 +740,8 @@ class ConsciousEchoProofEngine:
         raw_text: str,
         flags: CEPFlags,
         mode: Literal["universal", "fiction"],
-        npc_role: str | None = None
-    ) -> str | None:
+        npc_role: Optional[str] = None
+    ) -> Optional[str]:
         """
         Sanitize text if flags indicate need.
 

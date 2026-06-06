@@ -2,7 +2,6 @@
 import json
 import shutil
 from pathlib import Path
-from typing import Any
 
 
 class ConfigSnapshot:
@@ -24,7 +23,7 @@ class ConfigSnapshot:
         snap_dir = self._dir / experiment_id
         snap_dir.mkdir(parents=True, exist_ok=True)
 
-        manifest: dict[str, Any] = {"experiment_id": experiment_id, "files": []}
+        manifest = {"experiment_id": experiment_id, "files": []}
 
         for file_path in files:
             src = Path(file_path)

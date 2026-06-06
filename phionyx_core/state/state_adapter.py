@@ -10,10 +10,10 @@ UnifiedEchoState format when needed.
 
 from __future__ import annotations
 
-from typing import Any
+from typing import Dict, Any, Optional
 
-from phionyx_core.state.aux_state import AuxState
 from phionyx_core.state.echo_state_2 import EchoState2
+from phionyx_core.state.aux_state import AuxState
 
 
 class EchoState2Adapter:
@@ -29,7 +29,7 @@ class EchoState2Adapter:
     def __init__(
         self,
         echo_state2: EchoState2,
-        aux_state: AuxState | None = None
+        aux_state: Optional[AuxState] = None
     ):
         """
         Initialize adapter.
@@ -94,7 +94,7 @@ class EchoState2Adapter:
     # Dictionary Format (Backward Compatibility)
     # ============================================================
 
-    def to_physics_state(self) -> dict[str, Any]:
+    def to_physics_state(self) -> Dict[str, Any]:
         """
         Convert to physics_state dict format (backward compatibility).
 
@@ -118,7 +118,7 @@ class EchoState2Adapter:
             "t_global": self.echo_state2.t_global
         }
 
-    def to_unified_echo_state_dict(self) -> dict[str, Any]:
+    def to_unified_echo_state_dict(self) -> Dict[str, Any]:
         """
         Convert to UnifiedEchoState dict format (backward compatibility).
 
@@ -136,7 +136,7 @@ class EchoState2Adapter:
             "trust_trend": self.aux_state.trust_trend,
             "risk_score": self.risk_score,
             "high_risk_flag": self.aux_state.high_risk_flag,
-            "memory_tags": [tag.tag for tag in self.echo_state2.E_tags],
+            "memory_tags": [tag.semantic_context for tag in self.echo_state2.E_tags],
             "memory_strength": 0.5,  # Default
             "metadata": {
                 **self.aux_state.metadata,
@@ -171,7 +171,7 @@ class EchoState2Adapter:
     # Update Methods
     # ============================================================
 
-    def update_from_physics_state(self, physics_state: dict[str, Any]) -> None:
+    def update_from_physics_state(self, physics_state: Dict[str, Any]) -> None:
         """
         Update EchoState2 from physics_state dict (backward compatibility).
 

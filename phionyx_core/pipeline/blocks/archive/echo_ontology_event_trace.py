@@ -9,7 +9,7 @@ Processes echo ontology event and creates trace.
 import logging
 from typing import Any, Protocol
 
-from ...base import BlockContext, BlockResult, PipelineBlock
+from ...base import PipelineBlock, BlockContext, BlockResult
 
 logger = logging.getLogger(__name__)
 

@@ -2,8 +2,8 @@
 Phionyx Policy SDK Package
 """
 
-from .engine import PolicyEngine
 from .policies import Policy, PolicyPresets
+from .engine import PolicyEngine
 
 __all__ = [
     "Policy",

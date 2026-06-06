@@ -11,7 +11,7 @@ Position in pipeline: After confidence_fusion, before narrative_layer.
 
 import logging
 
-from ..base import BlockContext, BlockResult, PipelineBlock
+from ..base import PipelineBlock, BlockContext, BlockResult
 
 logger = logging.getLogger(__name__)
 

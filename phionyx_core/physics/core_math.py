@@ -10,8 +10,8 @@ Scientific Grounding:
 - Sigmoid Normalization: Standard mathematical normalization
 """
 
-import math
 import zlib
+import math
 
 
 def calculate_kolmogorov_complexity(data: str) -> float:

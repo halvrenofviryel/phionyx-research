@@ -15,6 +15,7 @@ Cognitive vs. automation: Automation (experiment selection heuristic)
 
 import logging
 from dataclasses import dataclass
+from typing import List, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -45,7 +46,7 @@ class SelectionPolicy:
     w_stages: float = 0.10    # Mind-loop stage coverage importance
 
 
-def load_campaigns(surfaces_data: dict) -> list[dict]:
+def load_campaigns(surfaces_data: dict) -> List[dict]:
     """Extract campaign definitions from surfaces.yaml data.
 
     Args:
@@ -77,7 +78,7 @@ def compute_urgency(campaign: dict) -> float:
 
     # Gap ratio: 0 = at threshold, 1 = at zero
     gap = (threshold - baseline) / threshold
-    return float(min(1.0, max(0.0, gap)))
+    return min(1.0, max(0.0, gap))
 
 
 def compute_stage_coverage(campaign: dict) -> float:
@@ -145,9 +146,9 @@ def score_campaign(campaign: dict, policy: SelectionPolicy) -> CampaignScore:
 
 
 def select_campaign(
-    campaigns: list[dict],
-    policy: SelectionPolicy | None = None,
-) -> CampaignScore | None:
+    campaigns: List[dict],
+    policy: Optional[SelectionPolicy] = None,
+) -> Optional[CampaignScore]:
     """Select the highest-scored campaign.
 
     Args:
@@ -166,9 +167,9 @@ def select_campaign(
 
 
 def rank_campaigns(
-    campaigns: list[dict],
-    policy: SelectionPolicy | None = None,
-) -> list[CampaignScore]:
+    campaigns: List[dict],
+    policy: Optional[SelectionPolicy] = None,
+) -> List[CampaignScore]:
     """Rank all campaigns by selection score (descending).
 
     Args:

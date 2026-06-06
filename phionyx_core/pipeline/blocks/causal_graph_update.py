@@ -10,8 +10,9 @@ Position in pipeline: After state_update_physics, before causal_intervention.
 """
 
 import logging
+from typing import Dict, List, Tuple
 
-from ..base import BlockContext, BlockResult, PipelineBlock
+from ..base import PipelineBlock, BlockContext, BlockResult
 
 logger = logging.getLogger(__name__)
 
@@ -19,7 +20,7 @@ logger = logging.getLogger(__name__)
 # 12 pairs covering all 8 physics variables: phi, entropy, coherence,
 # valence, arousal, amplitude, resonance, drift.
 # Deterministic: static list, same input → same output.
-OBSERVATION_PAIRS: list[tuple[str, str]] = [
+OBSERVATION_PAIRS: List[Tuple[str, str]] = [
     ("entropy", "coherence"),
     ("phi", "resonance"),
     ("valence", "amplitude"),
@@ -70,7 +71,7 @@ class CausalGraphUpdateBlock(PipelineBlock):
                 self._builder.add_physics_variables(physics_state)
 
             # Collect variable values from all sources
-            var_values: dict[str, float] = {}
+            var_values: Dict[str, float] = {}
             for var_name in ["phi", "entropy", "coherence", "valence",
                              "arousal", "amplitude", "resonance", "drift"]:
                 val = physics_state.get(var_name)

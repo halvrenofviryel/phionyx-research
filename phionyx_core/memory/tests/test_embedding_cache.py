@@ -2,12 +2,11 @@
 Unit tests for EmbeddingCache
 """
 import time
-
 from phionyx_core.memory.embedding_cache import (
     EmbeddingCache,
     EmbeddingCacheEntry,
     get_embedding_cache,
-    reset_global_cache,
+    reset_global_cache
 )
 
 

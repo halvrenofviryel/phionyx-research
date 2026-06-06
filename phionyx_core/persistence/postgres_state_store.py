@@ -7,11 +7,10 @@ Uses asyncpg for async PostgreSQL operations.
 Uses JSONB column for EchoState2 storage.
 """
 
-import json
 import logging
-
+import json
+from typing import Optional
 import asyncpg
-
 from phionyx_core.state.echo_state_2 import EchoState2
 
 logger = logging.getLogger(__name__)
@@ -35,7 +34,7 @@ class PostgreSQLStateStore:
         """
         self.connection_string = connection_string
         self.pool_size = pool_size
-        self.pool: asyncpg.Pool | None = None
+        self.pool: Optional[asyncpg.Pool] = None
         logger.info(f"PostgreSQLStateStore initialized (pool_size={pool_size})")
 
     async def initialize(self) -> None:
@@ -62,8 +61,6 @@ class PostgreSQLStateStore:
 
     async def _create_table_if_not_exists(self) -> None:
         """Create echo_states table if it doesn't exist."""
-        if self.pool is None:
-            raise RuntimeError("Postgres pool not initialized; call initialize() first")
         async with self.pool.acquire() as conn:
             await conn.execute("""
                 CREATE TABLE IF NOT EXISTS echo_states (
@@ -118,7 +115,7 @@ class PostgreSQLStateStore:
             logger.error(f"Failed to save state for session {session_id}: {e}", exc_info=True)
             raise
 
-    async def load_state(self, session_id: str) -> EchoState2 | None:
+    async def load_state(self, session_id: str) -> Optional[EchoState2]:
         """
         Load state from PostgreSQL.
 

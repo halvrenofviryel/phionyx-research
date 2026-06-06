@@ -7,12 +7,11 @@ Generates narrative response using LLM.
 """
 
 import logging
-from typing import Any, Protocol
+from typing import Dict, Any, Optional, Protocol
 
-from phionyx_core.templates import TemplateManager, get_template_manager
+from ..base import PipelineBlock, BlockContext, BlockResult
+from phionyx_core.templates import get_template_manager
 from phionyx_core.templates.response_templates import IntentType
-
-from ..base import BlockContext, BlockResult, PipelineBlock
 
 logger = logging.getLogger(__name__)
 
@@ -27,10 +26,9 @@ class NarrativeLayerProcessorProtocol(Protocol):
         card_result: str,
         scene_context: str,
         enhanced_context_string: str,
-        system_prompt: str | None = None,
-        physics_state: dict[str, Any] | None = None,
-        selected_intent: dict[str, Any] | None = None,
-        conversation_history: list[dict[str, Any]] | None = None,
+        system_prompt: Optional[str] = None,
+        physics_state: Optional[Dict[str, Any]] = None,
+        selected_intent: Optional[Dict[str, Any]] = None
     ) -> tuple[Any, str, Any]:  # Returns (frame, narrative_text, narrative_result)
         """Process narrative layer."""
         ...
@@ -47,7 +45,7 @@ class NarrativeLayerBlock(PipelineBlock):
 
     CLAIM_REFS = ("SF1:C4", "SF1:C14", "SF1:C15")
 
-    def __init__(self, processor: NarrativeLayerProcessorProtocol | None = None, enable_templates: bool = True):
+    def __init__(self, processor: Optional[NarrativeLayerProcessorProtocol] = None, enable_templates: bool = True):
         """
         Initialize block.
 
@@ -58,11 +56,12 @@ class NarrativeLayerBlock(PipelineBlock):
         super().__init__("narrative_layer", claim_refs=self.CLAIM_REFS)
         self.processor = processor
         self.enable_templates = enable_templates
-        self.template_manager: TemplateManager | None = (
-            get_template_manager() if enable_templates else None
-        )
+        if enable_templates:
+            self.template_manager = get_template_manager()
+        else:
+            self.template_manager = None
 
-    def should_skip(self, context: BlockContext) -> str | None:
+    def should_skip(self, context: BlockContext) -> Optional[str]:
         """Skip if processor not available."""
         if self.processor is None:
             return "processor_not_available"
@@ -94,7 +93,7 @@ class NarrativeLayerBlock(PipelineBlock):
 
             # --- Memory context injection: append retrieved memories ---
             retrieved_memories = metadata.get("retrieved_memories")
-            if retrieved_memories and isinstance(retrieved_memories, list | tuple):
+            if retrieved_memories and isinstance(retrieved_memories, (list, tuple)):
                 memory_lines = []
                 for m in retrieved_memories[:5]:  # Max 5 memories to control token budget
                     if isinstance(m, dict):
@@ -116,7 +115,7 @@ class NarrativeLayerBlock(PipelineBlock):
             sm = metadata.get("_agi_self_model", {})
             if sm.get("can_do") is not None:
                 conf = sm.get("confidence", 0)
-                conf_str = f"{conf:.2f}" if isinstance(conf, int | float) else str(conf)
+                conf_str = f"{conf:.2f}" if isinstance(conf, (int, float)) else str(conf)
                 agi_sections.append(
                     f"Self-Model: can_do={sm['can_do']}, confidence={conf_str}, "
                     f"available={sm.get('capabilities_available', 0)}, "
@@ -130,7 +129,7 @@ class NarrativeLayerBlock(PipelineBlock):
             kb = metadata.get("_agi_knowledge_boundary", {})
             if kb.get("recommendation") is not None:
                 bscore = kb.get("boundary_score", 0)
-                bscore_str = f"{bscore:.3f}" if isinstance(bscore, int | float) else str(bscore)
+                bscore_str = f"{bscore:.3f}" if isinstance(bscore, (int, float)) else str(bscore)
                 agi_sections.append(
                     f"Knowledge Boundary: within={kb.get('within_boundary')}, "
                     f"score={bscore_str}, "
@@ -164,9 +163,9 @@ class NarrativeLayerBlock(PipelineBlock):
                     "guardrails. Regenerate under the following constraints:",
                     f"- Trigger reasons: {', '.join(str(r) for r in reasons) or 'unspecified'}",
                 ]
-                if isinstance(target_phi, int | float):
+                if isinstance(target_phi, (int, float)):
                     parts.append(f"- Target phi floor: phi must be ≥ {target_phi}")
-                if isinstance(target_conf, int | float):
+                if isinstance(target_conf, (int, float)):
                     parts.append(f"- Target confidence: ≥ {target_conf}")
                 if prior_hash:
                     parts.append(f"- Prior rejected narrative hash: {prior_hash}")
@@ -235,7 +234,6 @@ class NarrativeLayerBlock(PipelineBlock):
                             logger.debug(f"Template check skipped: {e}")
 
             # Normal LLM processing (no template match)
-            assert self.processor is not None  # narrowed by should_skip()
             updated_frame, narrative_text, narrative_result = await self.processor.process_narrative_layer(
                 frame=frame,
                 user_input=context.user_input,

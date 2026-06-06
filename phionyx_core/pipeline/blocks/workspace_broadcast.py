@@ -11,9 +11,9 @@ High-salience events are broadcast to all subscribed modules.
 """
 
 import logging
-from typing import Any, Protocol
+from typing import Optional, Protocol, List, Any
 
-from ..base import BlockContext, BlockResult, PipelineBlock
+from ..base import PipelineBlock, BlockContext, BlockResult
 
 logger = logging.getLogger(__name__)
 
@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 class GlobalWorkspaceProtocol(Protocol):
     """Protocol for global workspace service."""
     async def broadcast(self, event: Any) -> None: ...
-    async def get_pending_events(self) -> list[Any]: ...
+    async def get_pending_events(self) -> List[Any]: ...
 
 
 class WorkspaceBroadcastBlock(PipelineBlock):
@@ -32,18 +32,18 @@ class WorkspaceBroadcastBlock(PipelineBlock):
     and broadcasts them to subscribed modules.
     """
 
-    def __init__(self, workspace: GlobalWorkspaceProtocol | None = None):
+    def __init__(self, workspace: Optional[GlobalWorkspaceProtocol] = None):
         super().__init__("workspace_broadcast")
         self.workspace = workspace
 
-    def should_skip(self, context: BlockContext) -> str | None:
+    def should_skip(self, context: BlockContext) -> Optional[str]:
         if context.pipeline_version < "3.0.0":
             return "v4_block_requires_pipeline_v3"
         return None
 
     async def execute(self, context: BlockContext) -> BlockResult:
         try:
-            from ...contracts.v4.workspace_event import SalienceLevel, WorkspaceEvent
+            from ...contracts.v4.workspace_event import WorkspaceEvent, SalienceLevel
 
             metadata = context.metadata or {}
             events_broadcast = 0

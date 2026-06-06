@@ -13,12 +13,11 @@ This module maps LLM text output to measurement vector.
 from __future__ import annotations
 
 import logging
-import math
-import re
+from typing import Dict, Any, Optional, List, TYPE_CHECKING
 from datetime import datetime
-from typing import TYPE_CHECKING, Any
-
 from pydantic import BaseModel, Field
+import re
+import math
 
 if TYPE_CHECKING:
     from phionyx_core.state.measurement_packet import MeasurementPacket
@@ -65,7 +64,7 @@ class MeasurementVector(BaseModel):
         description="Measurement confidence (0.0-1.0)"
     )
 
-    def to_dict(self) -> dict[str, Any]:
+    def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary."""
         return {
             "A_meas": self.A_meas,
@@ -75,7 +74,7 @@ class MeasurementVector(BaseModel):
         }
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> MeasurementVector:
+    def from_dict(cls, data: Dict[str, Any]) -> MeasurementVector:
         """Create from dictionary."""
         return cls(
             A_meas=data.get("A_meas", 0.5),
@@ -124,8 +123,8 @@ class MeasurementMapper:
     def map_text_to_measurement(
         self,
         raw_llm_output: str,
-        provider_metadata: dict[str, Any] | None = None,
-        llm_output: dict[str, Any] | None = None  # Deprecated: use raw_llm_output
+        provider_metadata: Optional[Dict[str, Any]] = None,
+        llm_output: Optional[Dict[str, Any]] = None  # Deprecated: use raw_llm_output
     ) -> MeasurementVector:
         """
         Map LLM text output to measurement vector.
@@ -180,7 +179,7 @@ class MeasurementMapper:
     def _adjust_confidence_by_provider(
         self,
         base_confidence: float,
-        provider_metadata: dict[str, Any]
+        provider_metadata: Dict[str, Any]
     ) -> float:
         """
         Adjust confidence based on provider metadata.
@@ -201,7 +200,7 @@ class MeasurementMapper:
 
         # Get quality tier
         quality_tier = provider_metadata.get("quality_tier", "medium")
-        if isinstance(quality_tier, int | float):
+        if isinstance(quality_tier, (int, float)):
             quality_score = float(quality_tier)
         elif isinstance(quality_tier, str):
             quality_map = {"high": 1.0, "medium": 0.7, "low": 0.4}
@@ -233,8 +232,8 @@ class MeasurementMapper:
 
     def _parse_structured_output(
         self,
-        llm_output: dict[str, Any]
-    ) -> MeasurementVector | None:
+        llm_output: Dict[str, Any]
+    ) -> Optional[MeasurementVector]:
         """
         Parse structured output from LLM (if available).
 
@@ -271,15 +270,15 @@ class MeasurementMapper:
 
     def _extract_float(
         self,
-        data: dict[str, Any],
-        keys: list[str],
+        data: Dict[str, Any],
+        keys: List[str],
         default: float
     ) -> float:
         """Extract float value from dict using multiple possible keys."""
         for key in keys:
             if key in data:
                 value = data[key]
-                if isinstance(value, int | float):
+                if isinstance(value, (int, float)):
                     return float(value)
                 elif isinstance(value, str):
                     try:
@@ -405,7 +404,7 @@ class MeasurementMapper:
         confidence: float,
         base_noise: float = 0.05,
         state_dim: int = 6
-    ) -> list[list[float]]:
+    ) -> List[List[float]]:
         """
         Create measurement noise covariance matrix R.
 
@@ -429,7 +428,7 @@ class MeasurementMapper:
     def map_text_to_measurement_packet(
         self,
         raw_llm_output: str,
-        provider_metadata: dict[str, Any] | None = None,
+        provider_metadata: Optional[Dict[str, Any]] = None,
         enable_dominance: bool = False
     ) -> MeasurementPacket:
         """
@@ -449,30 +448,29 @@ class MeasurementMapper:
         """
         # Import MeasurementPacket (avoid circular import)
         try:
-            from phionyx_core.state.measurement_packet import EvidenceSpan, MeasurementPacket
+            from phionyx_core.state.measurement_packet import MeasurementPacket, EvidenceSpan
         except ImportError:
             # Fallback: create minimal MeasurementPacket-like object
+            from pydantic import BaseModel
             from datetime import datetime
 
-            from pydantic import BaseModel
-
-            class EvidenceSpan(BaseModel):  # type: ignore[no-redef]
+            class EvidenceSpan(BaseModel):
                 text: str
                 start: int
                 end: int
                 tag: str
 
-            class MeasurementPacket(BaseModel):  # type: ignore[no-redef]
+            class MeasurementPacket(BaseModel):
                 A: float
                 V: float
-                D: float | None = None
+                D: Optional[float] = None
                 H: float
                 confidence: float
-                provider: dict[str, Any]
+                provider: Dict[str, Any]
                 timestamp: datetime
-                evidence_spans: list[EvidenceSpan] = []
+                evidence_spans: List[EvidenceSpan] = []
 
-                def to_dict(self) -> dict[str, Any]:
+                def to_dict(self) -> Dict[str, Any]:
                     """Convert to dictionary."""
                     return {
                         "A": self.A,
@@ -482,7 +480,7 @@ class MeasurementMapper:
                         "confidence": self.confidence,
                         "provider": self.provider,
                         "timestamp": self.timestamp.isoformat(),
-                        "evidence_spans": [span.model_dump() if hasattr(span, 'dict') else {"text": span.text, "start": span.start, "end": span.end, "tag": span.tag} for span in self.evidence_spans]
+                        "evidence_spans": [span.dict() if hasattr(span, 'dict') else {"text": span.text, "start": span.start, "end": span.end, "tag": span.tag} for span in self.evidence_spans]
                     }
 
         # Get base measurement

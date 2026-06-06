@@ -17,13 +17,12 @@ Key Principles:
 
 from __future__ import annotations
 
+from dataclasses import dataclass
+from typing import List, Dict, Any, Optional
+from datetime import datetime
+from pydantic import BaseModel, Field
 import math
 import time as time_module  # For monotonic clock
-from dataclasses import dataclass
-from datetime import datetime
-from typing import Any
-
-from pydantic import BaseModel, ConfigDict, Field
 
 # ============================================================
 # Configurable Constants (Patent-Referenced Parameters)
@@ -44,7 +43,7 @@ except ImportError:
     EVENT_REFERENCE_AVAILABLE = False
     # Fallback EventReference definition
     @dataclass
-    class EventReference:  # type: ignore[no-redef]
+    class EventReference:
         id: str
         tag: str
         intensity: float
@@ -126,7 +125,7 @@ class EchoState2(BaseModel):
         description="Time since relationship start (seconds)"
     )
 
-    E_tags: list[EventReference] = Field(
+    E_tags: List[EventReference] = Field(
         default_factory=list,
         description="Event references (last N events: id + tag + intensity)"
     )
@@ -215,7 +214,7 @@ class EchoState2(BaseModel):
                 gamma=0.15  # Default recovery rate
             )
 
-            return float(phi_result.get("phi", 0.5))
+            return phi_result.get("phi", 0.5)
         except ImportError:
             # Fallback: Simple heuristic
             # Higher A and positive V with low H = higher phi
@@ -254,7 +253,7 @@ class EchoState2(BaseModel):
 
     def update_time(
         self,
-        current_time: datetime | None = None,
+        current_time: Optional[datetime] = None,
         increment_turn: bool = True
     ) -> float:
         """
@@ -343,7 +342,7 @@ class EchoState2(BaseModel):
 
         return self.dt
 
-    def from_physics_state(self, physics_state: dict[str, Any]) -> None:
+    def from_physics_state(self, physics_state: Dict[str, Any]) -> None:
         """
         Update EchoState2 from physics state dictionary.
 
@@ -365,21 +364,21 @@ class EchoState2(BaseModel):
         # Update entropy (H)
         if "entropy" in physics_state:
             entropy = physics_state["entropy"]
-            if isinstance(entropy, int | float):
+            if isinstance(entropy, (int, float)):
                 # Clamp to valid range [0.01, 1.0]
                 self.H = max(ENTROPY_FLOOR, min(1.0, float(entropy)))
 
         # Update valence (V)
         if "valence" in physics_state:
             valence = physics_state["valence"]
-            if isinstance(valence, int | float):
+            if isinstance(valence, (int, float)):
                 # Clamp to valid range [-1.0, 1.0]
                 self.V = max(-1.0, min(1.0, float(valence)))
 
         # Update arousal (A)
         if "arousal" in physics_state:
             arousal = physics_state["arousal"]
-            if isinstance(arousal, int | float):
+            if isinstance(arousal, (int, float)):
                 # Clamp to valid range [0.0, 1.0]
                 self.A = max(0.0, min(1.0, float(arousal)))
 
@@ -396,8 +395,8 @@ class EchoState2(BaseModel):
         event_type: str,
         intensity: float,
         semantic_context: str,
-        metadata: dict[str, Any] | None = None,
-        timestamp: datetime | None = None
+        metadata: Optional[Dict[str, Any]] = None,
+        timestamp: Optional[datetime] = None
     ) -> None:
         """
         Add event tag (immutable append-only).
@@ -415,22 +414,30 @@ class EchoState2(BaseModel):
         if timestamp is None:
             timestamp = self.t_now
 
-        # Create EventReference (simplified for E_tags). Both branches use
-        # the same schema (id, tag, intensity); the import-availability flag
-        # only switches between the canonical class and its inline fallback.
-        ref = EventReference(
-            id=f"event_{len(self.E_tags)}",
-            tag=semantic_context or event_type,
-            intensity=max(0.0, min(1.0, intensity)),
-        )
-        self.E_tags.append(ref)
+        # Create EventReference (simplified for E_tags)
+        if EVENT_REFERENCE_AVAILABLE:
+            ref = EventReference(
+                event_id=f"event_{len(self.E_tags)}",
+                event_type=event_type,
+                intensity=max(0.0, min(1.0, intensity)),
+                tags=[semantic_context] if semantic_context else []
+            )
+            self.E_tags.append(ref)
+        else:
+            # Fallback
+            ref = EventReference(
+                id=f"event_{len(self.E_tags)}",
+                tag=semantic_context or event_type,
+                intensity=max(0.0, min(1.0, intensity))
+            )
+            self.E_tags.append(ref)
 
     def update_state(
         self,
-        A_new: float | None = None,
-        V_new: float | None = None,
-        H_new: float | None = None,
-        current_time: datetime | None = None,
+        A_new: Optional[float] = None,
+        V_new: Optional[float] = None,
+        H_new: Optional[float] = None,
+        current_time: Optional[datetime] = None,
         increment_turn: bool = True
     ) -> float:
         """
@@ -477,7 +484,7 @@ class EchoState2(BaseModel):
 
         return dt
 
-    def get_recent_events(self, time_window: float = 300.0) -> list[EventReference]:
+    def get_recent_events(self, time_window: float = 300.0) -> List[EventReference]:
         """
         Get recent events within time window.
 
@@ -494,7 +501,7 @@ class EchoState2(BaseModel):
         # (In practice, E_tags should be limited to recent N events)
         return self.E_tags[-10:] if len(self.E_tags) > 10 else self.E_tags
 
-    def to_dict(self) -> dict[str, Any]:
+    def to_dict(self) -> Dict[str, Any]:
         """
         Convert to dictionary (for serialization).
 
@@ -529,7 +536,7 @@ class EchoState2(BaseModel):
         }
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> EchoState2:
+    def from_dict(cls, data: Dict[str, Any]) -> EchoState2:
         """
         Create from dictionary (for deserialization).
 
@@ -578,10 +585,12 @@ class EchoState2(BaseModel):
             relationship_start=relationship_start
         )
 
-    model_config = ConfigDict(
-        arbitrary_types_allowed=True,
-        validate_assignment=True,
-    )
+    class Config:
+        """Pydantic config."""
+        arbitrary_types_allowed = True
+        validate_assignment = True
+
+
 class EchoState2Plus(EchoState2):
     """
     EchoState2Plus - Echoism Core v1.1 Extended State Model
@@ -624,7 +633,7 @@ class EchoState2Plus(EchoState2):
         description="Coherence (0.0-1.0): Measurement-state consistency (diagnostic). Low C → entropy boost signal"
     )
 
-    D: float | None = Field(
+    D: Optional[float] = Field(
         default=None,
         ge=0.0,
         le=1.0,
@@ -636,25 +645,25 @@ class EchoState2Plus(EchoState2):
     # ============================================================
 
     # Assumptions tracking (Karpathy Problem 1)
-    assumptions: list[dict[str, Any]] = Field(
+    assumptions: List[Dict[str, Any]] = Field(
         default_factory=list,
         description="List of assumptions extracted during code generation. Each assumption has: type, description, code_reference, confidence, evidence"
     )
 
     # Inconsistencies tracking (Karpathy Problem 2)
-    inconsistencies: list[dict[str, Any]] = Field(
+    inconsistencies: List[Dict[str, Any]] = Field(
         default_factory=list,
         description="List of inconsistencies detected between code, plan, tests, and requirements. Each inconsistency has: type, description, severity, code_reference, resolution_suggestion, evidence"
     )
 
     # Complexity metrics tracking (Karpathy Problem 7)
-    complexity_metrics: dict[str, Any] | None = Field(
+    complexity_metrics: Optional[Dict[str, Any]] = Field(
         default=None,
         description="Complexity metrics: cyclomatic, cognitive, nesting_depth, function_length, class_complexity"
     )
 
     # Complexity budget configuration
-    complexity_budget: dict[str, Any] | None = Field(
+    complexity_budget: Optional[Dict[str, Any]] = Field(
         default=None,
         description="Complexity budget limits: max_cyclomatic, max_cognitive, max_nesting, max_function_length, max_class_complexity"
     )
@@ -771,9 +780,9 @@ class EchoState2Plus(EchoState2):
 
     def update_coherence(
         self,
-        measurement: dict[str, float],
-        state: dict[str, float] | None = None,
-        confidence: float | None = None
+        measurement: Dict[str, float],
+        state: Optional[Dict[str, float]] = None,
+        confidence: Optional[float] = None
     ) -> None:
         """
         Update Coherence (C) from measurement-state consistency.
@@ -794,7 +803,7 @@ class EchoState2Plus(EchoState2):
         try:
             from phionyx_core.physics.coherence import (
                 calculate_coherence,
-                calculate_coherence_with_confidence,
+                calculate_coherence_with_confidence
             )
 
             if confidence is not None:
@@ -860,9 +869,7 @@ class EchoState2Plus(EchoState2):
             Adjusted process noise Q
         """
         try:
-            from phionyx_core.physics.inertia import (
-                apply_inertia_to_ukf_process_noise as apply_inertia,
-            )
+            from phionyx_core.physics.inertia import apply_inertia_to_ukf_process_noise as apply_inertia
             return apply_inertia(base_Q, self.I)
         except ImportError:
             # Fallback
@@ -884,16 +891,14 @@ class EchoState2Plus(EchoState2):
             Adjusted gain
         """
         try:
-            from phionyx_core.physics.inertia import (
-                apply_inertia_to_derivative_gain as apply_inertia,
-            )
+            from phionyx_core.physics.inertia import apply_inertia_to_derivative_gain as apply_inertia
             return apply_inertia(base_gain, self.I)
         except ImportError:
             # Fallback
             adjusted = base_gain * (1.0 - self.I)
             return max(0.1, min(1.0, adjusted))
 
-    def to_dict(self) -> dict[str, Any]:
+    def to_dict(self) -> Dict[str, Any]:
         """
         Convert to dictionary (includes v1.1 fields and Karpathy extensions).
 
@@ -917,9 +922,9 @@ class EchoState2Plus(EchoState2):
         self,
         assumption_type: str,
         description: str,
-        code_reference: str | None = None,
+        code_reference: Optional[str] = None,
         confidence: float = 1.0,
-        evidence: list[str] | None = None
+        evidence: Optional[List[str]] = None
     ) -> None:
         """
         Add an assumption to state.
@@ -944,9 +949,9 @@ class EchoState2Plus(EchoState2):
         inconsistency_type: str,
         description: str,
         severity: str,
-        code_reference: str | None = None,
-        resolution_suggestion: str | None = None,
-        evidence: list[str] | None = None
+        code_reference: Optional[str] = None,
+        resolution_suggestion: Optional[str] = None,
+        evidence: Optional[List[str]] = None
     ) -> None:
         """
         Add an inconsistency to state.
@@ -1027,7 +1032,7 @@ class EchoState2Plus(EchoState2):
         I_default: float = 0.6,
         R_default: float = 0.05,
         C_default: float = 0.5,
-        D_default: float | None = None
+        D_default: Optional[float] = None
     ) -> EchoState2Plus:
         """
         Create EchoState2Plus from EchoState2 (backward compatibility).
@@ -1073,7 +1078,7 @@ class EchoState2Plus(EchoState2):
         )
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> EchoState2Plus:
+    def from_dict(cls, data: Dict[str, Any]) -> EchoState2Plus:
         """
         Create from dictionary (includes v1.1 fields).
 
@@ -1107,7 +1112,7 @@ class EchoState2Plus(EchoState2):
             D=data.get("D", None)
         )
 
-    model_config = ConfigDict(
-        arbitrary_types_allowed=True,
-        validate_assignment=True,
-    )
+    class Config:
+        """Pydantic config."""
+        arbitrary_types_allowed = True
+        validate_assignment = True

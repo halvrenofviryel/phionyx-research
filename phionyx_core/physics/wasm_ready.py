@@ -6,15 +6,16 @@ Wrapper layer for WASM compilation compatibility.
 Ensures all functions are pure, typed, and SIMD-friendly.
 """
 
-
+from typing import List
 from .formulas import (
-    calculate_functional_coherence_score,
     calculate_phi_v2,
+    calculate_functional_coherence_score,
 )
 
+
 # Type aliases for WASM compatibility
-Float32Array = list[float]
-Float64Array = list[float]
+Float32Array = List[float]
+Float64Array = List[float]
 
 
 def calculate_phi_v2_batch(
@@ -55,9 +56,7 @@ def calculate_phi_v2_batch(
             gamma=gamma_array[i],
             context_mode=context_mode
         )
-        # `result["phi"]` is always a float; `calculate_phi_v2` returns
-        # dict[str, float | str] only because "context" is a string label.
-        results.append(float(result.get("phi", 0.0)))
+        results.append(result.get("phi", 0.0))
 
     return results
 

@@ -7,9 +7,9 @@ Updates unified state (EchoState2) from physics state.
 """
 
 import logging
-from typing import Any, Protocol
+from typing import Dict, Any, Optional, Protocol
 
-from ..base import BlockContext, BlockResult, PipelineBlock
+from ..base import PipelineBlock, BlockContext, BlockResult
 
 logger = logging.getLogger(__name__)
 
@@ -19,7 +19,7 @@ class UnifiedStateUpdaterProtocol(Protocol):
     def update_from_physics_state(
         self,
         unified_state: Any,
-        physics_state: dict[str, Any]
+        physics_state: Dict[str, Any]
     ) -> Any:  # Returns updated unified_state
         """Update unified state from physics state."""
         ...
@@ -32,7 +32,7 @@ class UnifiedStateUpdateEscBlock(PipelineBlock):
     Updates unified state (EchoState2) from physics state.
     """
 
-    def __init__(self, updater: UnifiedStateUpdaterProtocol | None = None):
+    def __init__(self, updater: Optional[UnifiedStateUpdaterProtocol] = None):
         """
         Initialize block.
 
@@ -42,7 +42,7 @@ class UnifiedStateUpdateEscBlock(PipelineBlock):
         super().__init__("unified_state_update_esc")
         self.updater = updater
 
-    def should_skip(self, context: BlockContext) -> str | None:
+    def should_skip(self, context: BlockContext) -> Optional[str]:
         """Skip if no updater or unified_state available."""
         metadata = context.metadata or {}
         if not self.updater or not metadata.get("unified_state"):

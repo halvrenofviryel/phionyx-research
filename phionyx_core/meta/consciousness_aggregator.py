@@ -25,6 +25,7 @@ preventing metric hacking by excelling on one proxy while ignoring others.
 
 import logging
 from dataclasses import dataclass, field
+from typing import Dict, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -38,9 +39,9 @@ class ConsciousnessProxyReport:
     identity_persistence: float = 0.0    # [0,1]
     drift_stability: float = 0.0         # [0,1]
     agi_readiness_score: float = 0.0     # geometric mean
-    details: dict[str, str] = field(default_factory=dict)
+    details: Dict[str, str] = field(default_factory=dict)
 
-    def to_dict(self) -> dict[str, float]:
+    def to_dict(self) -> Dict[str, float]:
         return {
             "state_hash_consistency": round(self.state_hash_consistency, 4),
             "trace_integrity": round(self.trace_integrity, 4),
@@ -73,7 +74,7 @@ class ConsciousnessProxyAggregator:
         cf_self: float = 0.0,
         identity: float = 0.0,
         drift: float = 0.0,
-        details: dict[str, str] | None = None,
+        details: Optional[Dict[str, str]] = None,
     ) -> ConsciousnessProxyReport:
         """Compute AGI readiness score from 5 proxies.
 
@@ -111,7 +112,7 @@ class ConsciousnessProxyAggregator:
         )
 
     @staticmethod
-    def compute_from_dict(proxies: dict[str, float]) -> ConsciousnessProxyReport:
+    def compute_from_dict(proxies: Dict[str, float]) -> ConsciousnessProxyReport:
         """Compute from a dict of proxy name → value."""
         return ConsciousnessProxyAggregator.compute(
             state_hash=proxies.get("state_hash_consistency", 0.0),

@@ -13,18 +13,18 @@ import hashlib
 import json
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
-from typing import Any
+from typing import Any, Dict, List, Optional, Set
 
 
 @dataclass
 class StateSnapshot:
     """A versioned, hash-verified snapshot of world state."""
     version: int
-    state: dict[str, Any]
+    state: Dict[str, Any]
     hash: str
     timestamp: str
     turn_index: int
-    parent_version: int | None = None
+    parent_version: Optional[int] = None
 
     def verify(self) -> bool:
         """Verify hash integrity."""
@@ -37,9 +37,9 @@ class StateDiff:
     """Difference between two state snapshots."""
     from_version: int
     to_version: int
-    added: dict[str, Any] = field(default_factory=dict)
-    removed: dict[str, Any] = field(default_factory=dict)
-    changed: dict[str, dict[str, Any]] = field(default_factory=dict)  # key → {old, new}
+    added: Dict[str, Any] = field(default_factory=dict)
+    removed: Dict[str, Any] = field(default_factory=dict)
+    changed: Dict[str, Dict[str, Any]] = field(default_factory=dict)  # key → {old, new}
 
     @property
     def is_empty(self) -> bool:
@@ -50,7 +50,7 @@ class StateDiff:
         return len(self.added) + len(self.removed) + len(self.changed)
 
     @property
-    def changed_keys(self) -> set[str]:
+    def changed_keys(self) -> Set[str]:
         return set(self.added.keys()) | set(self.removed.keys()) | set(self.changed.keys())
 
 
@@ -76,11 +76,11 @@ class StateVersioning:
 
     def __init__(self, max_versions: int = 50):
         self.max_versions = max(1, max_versions)
-        self._snapshots: list[StateSnapshot] = []
+        self._snapshots: List[StateSnapshot] = []
         self._current_version: int = 0
 
     @staticmethod
-    def compute_hash(state: dict[str, Any]) -> str:
+    def compute_hash(state: Dict[str, Any]) -> str:
         """Compute SHA256 hash of a state dict."""
         canonical = json.dumps(state, sort_keys=True, default=str)
         return hashlib.sha256(canonical.encode()).hexdigest()
@@ -95,9 +95,9 @@ class StateVersioning:
 
     def snapshot(
         self,
-        state: dict[str, Any],
+        state: Dict[str, Any],
         turn_index: int = 0,
-        timestamp: str | None = None,
+        timestamp: Optional[str] = None,
     ) -> StateSnapshot:
         """
         Create a new versioned snapshot.
@@ -125,18 +125,18 @@ class StateVersioning:
 
         return snap
 
-    def get_snapshot(self, version: int) -> StateSnapshot | None:
+    def get_snapshot(self, version: int) -> Optional[StateSnapshot]:
         """Get a specific version snapshot."""
         for snap in self._snapshots:
             if snap.version == version:
                 return snap
         return None
 
-    def get_latest(self) -> StateSnapshot | None:
+    def get_latest(self) -> Optional[StateSnapshot]:
         """Get the most recent snapshot."""
         return self._snapshots[-1] if self._snapshots else None
 
-    def diff(self, from_version: int, to_version: int) -> StateDiff | None:
+    def diff(self, from_version: int, to_version: int) -> Optional[StateDiff]:
         """Compute diff between two versions."""
         snap_from = self.get_snapshot(from_version)
         snap_to = self.get_snapshot(to_version)
@@ -204,7 +204,7 @@ class StateVersioning:
                 return False
         return True
 
-    def get_history(self) -> list[dict[str, Any]]:
+    def get_history(self) -> List[Dict[str, Any]]:
         """Get version history summary."""
         return [
             {

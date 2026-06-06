@@ -18,12 +18,10 @@ Options:
 import json
 import re
 import sys
-from collections import Counter
+import yaml
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any
-
-import yaml
+from collections import Counter
 
 # ── Paths ──
 
@@ -44,7 +42,7 @@ def load_surfaces() -> list[dict]:
     """Load all surface entries from surfaces.yaml."""
     with open(SURFACES_PATH) as f:
         data = yaml.safe_load(f)
-    return list(data.get("surfaces", []))
+    return data.get("surfaces", [])
 
 
 def count_params(surfaces: list[dict]) -> dict:
@@ -232,8 +230,8 @@ def compute_summary(surfaces: list[dict], tracker_text: str) -> dict:
     total_experimented = total_optimized + experimented
 
     # CQS slot distribution for Tier A only
-    cqs_distribution: Counter[str] = Counter()
-    cqs_optimized: Counter[str] = Counter()
+    cqs_distribution = Counter()
+    cqs_optimized = Counter()
     for name, slot in cqs_slots.items():
         status = statuses.get(name, "COVERED")
         # Only count Tier A params
@@ -316,7 +314,7 @@ def _parse_candidates(tracker_text: str) -> list[dict]:
 
     Row: | Pri | Parameter | File | CQS Slot | Readiness | Sensitivity | Risk | Est. Exps | Rationale |
     """
-    candidates: list[dict] = []
+    candidates = []
     # Find the candidates section
     section = re.search(
         r"## Next Best Candidates.*?\n(.*?)(?=\n---|\n## |\Z)",
@@ -359,7 +357,7 @@ def _parse_campaign_policy(tracker_text: str) -> dict:
     Row: | Policy | Slots | Action |
     Returns: {slot: {priority, rationale}} for each slot mentioned.
     """
-    policy: dict[str, dict[str, str]] = {}
+    policy = {}
     section = re.search(
         r"### Slot-Level Campaign Policy.*?\n(.*?)(?=\n---|\n## |\Z)",
         tracker_text,
@@ -394,7 +392,7 @@ def _parse_module_summary(tracker_text: str) -> dict:
 
     Row: | Module | Source Files | Tunables | RE-Experimented | RE-Optimized | Pre-Existing | Gold | ... |
     """
-    modules: dict[str, dict[str, Any]] = {}
+    modules = {}
     section = re.search(
         r"## Module Summary.*?\n(.*?)(?=\n---|\n## |\Z)",
         tracker_text,
@@ -432,7 +430,7 @@ def _parse_lineage(tracker_text: str) -> list[dict]:
 
     Row: | # | Parameter | Experiments | KEEP | Delta CQS | Baseline Date | Gold Date | Note |
     """
-    lineage: list[dict] = []
+    lineage = []
     section = re.search(
         r"### RE-Optimized Parameters.*?\n(.*?)(?=\n###|\n---|\n## |\Z)",
         tracker_text,
@@ -727,9 +725,9 @@ def build_json_report() -> dict:
 
 # ── Verify ──
 
-def extract_tracker_summary(tracker_text: str) -> dict[str, int]:
+def extract_tracker_summary(tracker_text: str) -> dict[str, str]:
     """Extract claimed values from the tracker Summary table."""
-    claimed: dict[str, int] = {}
+    claimed = {}
     # Pattern: | **label** | value | note |
     for m in re.finditer(
         r"^\|\s*\*?\*?([^|*]+?)\*?\*?\s*\|\s*(\d+)\s*\|",
@@ -855,7 +853,16 @@ def main():
     if "--json" in sys.argv:
         report = build_json_report()
         print(json.dumps(report, ensure_ascii=False))
-        sys.exit(0 if report["verification"]["passed"] else 1)
+        # In JSON mode the verification status is in the payload
+        # (report["verification"]["passed"]); the process exit code is
+        # reserved for actual execution failures so that subprocess
+        # consumers (Founder Console /api/pre-tracker, scripts) can
+        # treat non-zero exits as "the command itself failed" rather
+        # than "the report says some metric was below target".
+        # Fixed 2026-05-27 — matches the same fix shipped today to
+        # scripts/active/runtime_evidence_self_audit.py (JUnit XML
+        # over exit code).
+        sys.exit(0)
 
     stamp = "--stamp" in sys.argv
     ok = verify()

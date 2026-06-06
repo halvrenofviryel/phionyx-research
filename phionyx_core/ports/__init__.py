@@ -12,16 +12,16 @@ Port-Adapter Pattern:
 - Product profiles select which ports to use
 """
 
-from .intuition_port import IntuitionPort
-from .memory_port import MemoryPort
-from .meta_port import MetaPort
-from .narrative_port import NarrativePort
-from .pedagogy_port import PedagogyPort
 from .physics_port import PhysicsPort
+from .memory_port import MemoryPort
+from .intuition_port import IntuitionPort
+from .pedagogy_port import PedagogyPort
 from .policy_port import PolicyPort
+from .narrative_port import NarrativePort
+from .meta_port import MetaPort
 
-# NOTE: InspectionPort moved to apps/product_ingest/ports/inspection_port.py
-# Per Echoism Core v1.0: Inspection is product-specific, not part of core SDK
+# NOTE: product-specific inspection adapters live in the product layer, not core.
+# Per Echoism Core v1.0: domain-specific ingest ports are product-specific, not part of core SDK
 
 __all__ = [
     "PhysicsPort",

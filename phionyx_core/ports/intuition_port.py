@@ -7,7 +7,7 @@ Enables swapping GraphRAG with Null implementation.
 """
 
 from abc import ABC, abstractmethod
-from typing import Any
+from typing import Dict, Any, List, Optional
 
 
 class IntuitionPort(ABC):
@@ -17,7 +17,7 @@ class IntuitionPort(ABC):
     async def extract_concepts(
         self,
         text: str
-    ) -> list[str]:
+    ) -> List[str]:
         """
         Extract concepts from text.
 
@@ -30,8 +30,8 @@ class IntuitionPort(ABC):
     async def discover_hidden_context(
         self,
         user_text: str,  # SPRINT 5: Accept user_text (will extract concepts internally)
-        actor_ref: str | None = None  # SPRINT 5: Replaced user_id with actor_ref (core-neutral)
-    ) -> dict[str, Any] | None:
+        actor_ref: Optional[str] = None  # SPRINT 5: Replaced user_id with actor_ref (core-neutral)
+    ) -> Optional[Dict[str, Any]]:
         """
         Discover hidden context from user text using GraphRAG.
 
@@ -47,9 +47,9 @@ class IntuitionPort(ABC):
     @abstractmethod
     async def infer_hidden_context(
         self,
-        concepts: list[str],
-        actor_ref: str | None = None  # SPRINT 5: Replaced user_id with actor_ref (core-neutral)
-    ) -> dict[str, Any] | None:
+        concepts: List[str],
+        actor_ref: Optional[str] = None  # SPRINT 5: Replaced user_id with actor_ref (core-neutral)
+    ) -> Optional[Dict[str, Any]]:
         """
         Infer hidden context from concepts using GraphRAG.
 
@@ -65,9 +65,9 @@ class IntuitionPort(ABC):
     @abstractmethod
     async def build_concept_graph(
         self,
-        concepts: list[str],
-        relationships: list[dict[str, Any]] | None = None
-    ) -> dict[str, Any] | None:
+        concepts: List[str],
+        relationships: Optional[List[Dict[str, Any]]] = None
+    ) -> Optional[Dict[str, Any]]:
         """Build concept graph."""
         pass
 

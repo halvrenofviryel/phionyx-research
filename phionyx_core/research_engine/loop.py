@@ -10,19 +10,19 @@ import uuid
 from pathlib import Path
 from typing import Any
 
-from .audit.logger import AuditLogger
 from .config import EngineConfig
 from .decision import decide
 from .evaluation.runner import BenchmarkRunner
 from .evaluation.scoring import check_guardrails, compute_cqs
 from .governance.budget_monitor import BudgetMonitor
-from .mutation.planner import create_plan
-from .mutation.range_validator import validate_range
-from .mutation.scope_validator import validate_scope
-from .rollback.config_snapshot import ConfigSnapshot
-from .rollback.git_manager import GitManager
-from .store.baseline_store import BaselineStore
+from .audit.logger import AuditLogger
 from .store.experiment_store import ExperimentStore
+from .store.baseline_store import BaselineStore
+from .rollback.git_manager import GitManager
+from .rollback.config_snapshot import ConfigSnapshot
+from .mutation.planner import create_plan
+from .mutation.scope_validator import validate_scope
+from .mutation.range_validator import validate_range
 
 logger = logging.getLogger(__name__)
 
@@ -123,7 +123,7 @@ def run_session(
     baseline_store = BaselineStore(config.data_dir)
     git = GitManager()
     snapshots = ConfigSnapshot(config.data_dir)
-    runner = BenchmarkRunner(timeout=int(config.session.benchmark_timeout_seconds))
+    runner = BenchmarkRunner(timeout=config.session.benchmark_timeout_seconds)
 
     # Log session start
     audit.log_session_start(session_id, {
@@ -175,7 +175,7 @@ def run_session(
             return {"error": "Baseline CQS zero", "session_id": session_id}
 
     # Session tracking
-    results: dict[str, Any] = {
+    results = {
         "session_id": session_id,
         "start_time": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "experiments": [],

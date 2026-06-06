@@ -6,12 +6,11 @@ Extends ProfileTuner with boundary gate and approval flow.
 Learning updates must pass through a gate before modifying parameters.
 """
 
-import uuid
-from datetime import datetime, timezone
+from typing import Optional, Dict, Any, List
 from enum import Enum
-from typing import Any
-
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, Field
+from datetime import datetime, timezone
+import uuid
 
 
 class LearningGateDecision(str, Enum):
@@ -47,7 +46,7 @@ class LearningUpdate(BaseModel):
         ...,
         description="Proposed new value"
     )
-    delta: float | None = Field(
+    delta: Optional[float] = Field(
         None,
         description="Numeric delta (proposed - current) if applicable"
     )
@@ -71,7 +70,7 @@ class LearningUpdate(BaseModel):
         default=0.0, ge=0.0, le=1.0,
         description="Estimated impact of this change"
     )
-    affected_modules: list[str] = Field(
+    affected_modules: List[str] = Field(
         default_factory=list,
         description="Modules affected by this update"
     )
@@ -85,16 +84,16 @@ class LearningUpdate(BaseModel):
         default="learning_engine",
         description="Module proposing this update"
     )
-    evidence: list[dict[str, Any]] = Field(
+    evidence: List[Dict[str, Any]] = Field(
         default_factory=list,
         description="Evidence supporting this update"
     )
-    turn_id: int | None = None
+    turn_id: Optional[int] = None
 
     # Approval flow
-    approved_by: str | None = None
-    approved_at: datetime | None = None
-    applied_at: datetime | None = None
+    approved_by: Optional[str] = None
+    approved_at: Optional[datetime] = None
+    applied_at: Optional[datetime] = None
 
     # Evidence criteria (Learning Gate Contract v1.0 §4)
     min_experiments: int = Field(
@@ -114,9 +113,18 @@ class LearningUpdate(BaseModel):
 
     # Timestamps
     proposed_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
-    rolled_back_at: datetime | None = None
+    rolled_back_at: Optional[datetime] = None
 
     # Metadata
-    metadata: dict[str, Any] = Field(default_factory=dict)
+    metadata: Dict[str, Any] = Field(default_factory=dict)
 
-    model_config = ConfigDict(json_schema_extra={'example': {'target_parameter': 'physics.gamma', 'current_value': 0.15, 'proposed_value': 0.18, 'delta': 0.03, 'boundary_zone': 'adaptive'}})
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "target_parameter": "physics.gamma",
+                "current_value": 0.15,
+                "proposed_value": 0.18,
+                "delta": 0.03,
+                "boundary_zone": "adaptive",
+            }
+        }

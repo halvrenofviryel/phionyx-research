@@ -1,18 +1,18 @@
 """Range validator — enforces parameter safe ranges."""
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, List
 
 
 @dataclass(frozen=True)
 class RangeValidationResult:
     valid: bool
-    violations: list[str]
+    violations: List[str]
 
 
 def validate_range(
     param_name: str,
     value: Any,
-    surface_params: list[dict],  # List of parameter defs from surfaces.yaml
+    surface_params: List[dict],  # List of parameter defs from surfaces.yaml
 ) -> RangeValidationResult:
     """Validate that a parameter value is within its declared safe range.
 
@@ -75,7 +75,7 @@ def validate_constraint(
     param_name: str,
     value: Any,
     related_params: dict[str, Any],
-    constraints: list[dict],
+    constraints: List[dict],
 ) -> RangeValidationResult:
     """Validate cross-parameter constraints (e.g., weights must sum to 1.0)."""
     violations = []

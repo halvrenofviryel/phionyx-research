@@ -6,12 +6,11 @@ Wraps existing EthicsVector + apply_ethics_enforcement() with v4
 verdict enum, deliberation layer, and decision trace.
 """
 
-import uuid
-from datetime import datetime, timezone
+from typing import Optional, Dict, Any, List
 from enum import Enum
-from typing import Any
-
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, Field
+from datetime import datetime, timezone
+import uuid
 
 
 class EthicsVerdict(str, Enum):
@@ -56,7 +55,7 @@ class EthicsDecision(BaseModel):
         default=False,
         description="Whether enforcement was triggered (from apply_ethics_enforcement)"
     )
-    triggered_risks: list[str] = Field(
+    triggered_risks: List[str] = Field(
         default_factory=list,
         description="Risk types that triggered enforcement"
     )
@@ -64,17 +63,17 @@ class EthicsDecision(BaseModel):
         default=0.0, ge=0.0, le=1.0,
         description="Maximum risk score across all dimensions"
     )
-    safety_message: str | None = Field(
+    safety_message: Optional[str] = Field(
         None,
         description="Safety message if enforcement triggered"
     )
 
     # v4 deliberation trace
-    deliberation_steps: list[dict[str, Any]] = Field(
+    deliberation_steps: List[Dict[str, Any]] = Field(
         default_factory=list,
         description="Ordered deliberation steps with reasoning"
     )
-    rules_evaluated: list[str] = Field(
+    rules_evaluated: List[str] = Field(
         default_factory=list,
         description="Ethics rules that were evaluated"
     )
@@ -84,21 +83,29 @@ class EthicsDecision(BaseModel):
     )
 
     # Effects
-    entropy_adjustment: float | None = Field(
+    entropy_adjustment: Optional[float] = Field(
         None,
         description="Entropy adjustment applied (e.g., 0.95 boost)"
     )
-    amplitude_damping: float | None = Field(
+    amplitude_damping: Optional[float] = Field(
         None,
         description="Amplitude damping factor applied (e.g., 0.3)"
     )
 
     # Provenance
-    source_action_id: str | None = Field(
+    source_action_id: Optional[str] = Field(
         None,
         description="ActionIntent that triggered this evaluation"
     )
     timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
-    metadata: dict[str, Any] = Field(default_factory=dict)
+    metadata: Dict[str, Any] = Field(default_factory=dict)
 
-    model_config = ConfigDict(json_schema_extra={'example': {'verdict': 'allow', 'deliberation_layer': 'rule_based', 'enforced': False, 'max_risk_score': 0.2}})
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "verdict": "allow",
+                "deliberation_layer": "rule_based",
+                "enforced": False,
+                "max_risk_score": 0.2,
+            }
+        }

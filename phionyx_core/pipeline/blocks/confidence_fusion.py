@@ -10,8 +10,9 @@ Fuses confidence estimates from multiple modules using W_final.
 """
 
 import logging
+from typing import Optional
 
-from ..base import BlockContext, BlockResult, PipelineBlock
+from ..base import PipelineBlock, BlockContext, BlockResult
 
 logger = logging.getLogger(__name__)
 
@@ -27,7 +28,7 @@ class ConfidenceFusionBlock(PipelineBlock):
     def __init__(self):
         super().__init__("confidence_fusion")
 
-    def should_skip(self, context: BlockContext) -> str | None:
+    def should_skip(self, context: BlockContext) -> Optional[str]:
         # No skip — v2.5 uses inline fallback, v3.0+ uses full v4 path
         return None
 

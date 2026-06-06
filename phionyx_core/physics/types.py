@@ -5,9 +5,8 @@ Physics Types - Pydantic Models for Type Safety
 Type definitions for physics calculations.
 """
 
-from typing import Literal
-
 from pydantic import BaseModel, Field
+from typing import Literal
 
 
 class PhysicsInput(BaseModel):

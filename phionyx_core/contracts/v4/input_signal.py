@@ -6,11 +6,10 @@ Wraps TurnEnvelope with v4-required fields: source_module, signal_type.
 AD-1: Composition — TurnEnvelope is composed, not replaced.
 """
 
-from datetime import datetime, timezone
+from typing import Optional, Dict, Any, List
 from enum import Enum
-from typing import Any
-
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, Field
+from datetime import datetime, timezone
 
 from ..envelopes.turn_envelope import TurnEnvelope
 
@@ -43,7 +42,7 @@ class InputSignal(BaseModel):
         default=SignalType.USER_TEXT,
         description="Signal classification for routing"
     )
-    modalities: list[str] = Field(
+    modalities: List[str] = Field(
         default_factory=lambda: ["text"],
         description="Input modalities (text, audio, image, sensor)"
     )
@@ -52,11 +51,11 @@ class InputSignal(BaseModel):
         ge=0, le=10,
         description="Signal priority (0=normal, 10=critical)"
     )
-    trace_id: str | None = Field(
+    trace_id: Optional[str] = Field(
         None,
         description="Distributed trace ID for cross-module tracking"
     )
-    correlation_id: str | None = Field(
+    correlation_id: Optional[str] = Field(
         None,
         description="Correlation ID for request grouping"
     )
@@ -64,9 +63,17 @@ class InputSignal(BaseModel):
         default_factory=lambda: datetime.now(timezone.utc),
         description="Signal creation timestamp (UTC)"
     )
-    metadata: dict[str, Any] = Field(
+    metadata: Dict[str, Any] = Field(
         default_factory=dict,
         description="Extensible metadata"
     )
 
-    model_config = ConfigDict(json_schema_extra={'example': {'source_module': 'user_interface', 'signal_type': 'user_text', 'modalities': ['text'], 'priority': 0}})
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "source_module": "user_interface",
+                "signal_type": "user_text",
+                "modalities": ["text"],
+                "priority": 0,
+            }
+        }

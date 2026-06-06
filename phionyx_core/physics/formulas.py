@@ -16,28 +16,28 @@ Formulas (v2.0 - Hybrid State Model):
 """
 
 import math
-from typing import TYPE_CHECKING
+from typing import List, Dict, Optional, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from .types import NPCPhysicsParams, PhiComponents
 
 # Import constants from single source of truth
 from .constants import (
-    AMPLITUDE_MAX,
-    AMPLITUDE_MIN,
-    CONSCIOUSNESS_MAX,
-    CONSCIOUSNESS_MIN,
-    CONTEXT_WEIGHTS,
     DEFAULT_F_SELF,
-    ENTROPY_MAX,
-    ENTROPY_MIN,
-    GAMMA_MAX,
-    GAMMA_MIN,
-    MAX_STABILITY,
-    MIN_STABILITY,
     MIN_TIME_DELTA,
-    PHI_MAX,
     PHI_MIN,
+    PHI_MAX,
+    CONSCIOUSNESS_MIN,
+    CONSCIOUSNESS_MAX,
+    AMPLITUDE_MIN,
+    AMPLITUDE_MAX,
+    GAMMA_MIN,
+    GAMMA_MAX,
+    ENTROPY_MIN,
+    ENTROPY_MAX,
+    MIN_STABILITY,
+    MAX_STABILITY,
+    CONTEXT_WEIGHTS,
 )
 
 # ── Tunable Parameters (Tier A: Research Engine may modify) ──
@@ -145,7 +145,7 @@ def calculate_echo_energy(
     return phi * links * delta_entropy
 
 
-def calculate_entropy_shannon(probabilities: list[float]) -> float:
+def calculate_entropy_shannon(probabilities: List[float]) -> float:
     """
     Calculate S (Shannon Entropy).
 
@@ -236,8 +236,8 @@ def calculate_temporal_echo(
 
 
 def calculate_c_echo_series(
-    phi_values: list[float],
-    time_deltas: list[float],
+    phi_values: List[float],
+    time_deltas: List[float],
     f_self: float = DEFAULT_F_SELF
 ) -> float:
     """
@@ -271,28 +271,30 @@ def calculate_c_echo_series(
     return sum(consciousness_values) / len(consciousness_values)
 
 
-def classify_resonance(phi: float) -> str:
+def classify_resonance_scaled(phi: float) -> str:
     """
-    Classify resonance level based on Φ value.
+    Classify resonance level based on Φ value on the 0–10 scale.
 
-    Assumes Φ is in range [PHI_MIN, PHI_MAX] = [0.0, 10.0]
+    Use this when Φ is reported on the theoretical-maximum scale
+    [PHI_MIN, PHI_MAX] = [0.0, 10.0]. This applies to outputs of
+    `calculate_phi_v2_1` when state-vector inputs include amplitude
+    in the [0, 10] range and the cognitive component is added at
+    full weight.
 
-    Thresholds (for 0-10 range):
-        - high: >= 8.0
-        - medium: >= 5.0
-        - low: >= 2.0
-        - fractured: < 2.0
+    Thresholds:
+        - high:      >= 8.0
+        - medium:    >= 5.0
+        - low:       >= 2.0
+        - fractured: <  2.0
 
     Args:
-        phi: Echo Quality (Φ), expected range 0-10
+        phi: Echo Quality (Φ) on the 0–10 scale
 
     Returns:
         "high" | "medium" | "low" | "fractured"
     """
-    # Clamp phi to valid range first
     phi = max(PHI_MIN, min(PHI_MAX, phi))
 
-    # Thresholds for 0-10 range
     if phi >= 8.0:
         return "high"
     elif phi >= 5.0:
@@ -301,6 +303,62 @@ def classify_resonance(phi: float) -> str:
         return "low"
     else:
         return "fractured"
+
+
+def classify_resonance_normalized(phi: float) -> str:
+    """
+    Classify resonance level based on Φ value on the normalized 0–1 scale.
+
+    Use this when the cognitive Φ component (or a normalized total Φ)
+    is reported in the [0.0, 1.0] range. This is the common case for
+    runtime telemetry pipelines, NPC coherence tracking, and demo
+    scenarios where state-vector inputs are bounded to [0, 1].
+
+    Thresholds (proportional to the 0–10 scale):
+        - high:      >= 0.75
+        - medium:    >= 0.50
+        - low:       >= 0.25
+        - fractured: <  0.25
+
+    Args:
+        phi: Φ on the 0–1 scale
+
+    Returns:
+        "high" | "medium" | "low" | "fractured"
+    """
+    phi = max(0.0, min(1.0, phi))
+
+    if phi >= 0.75:
+        return "high"
+    elif phi >= 0.50:
+        return "medium"
+    elif phi >= 0.25:
+        return "low"
+    else:
+        return "fractured"
+
+
+def classify_resonance(phi: float) -> str:
+    """
+    Classify resonance level. Auto-detects scale by magnitude.
+
+    For backward compatibility. New code should call
+    `classify_resonance_normalized` (Φ in [0, 1]) or
+    `classify_resonance_scaled` (Φ in [0, 10]) explicitly.
+
+    Heuristic: if `phi <= 1.0`, treat as the normalized scale;
+    otherwise treat as the 0–10 scale. Edge case: `phi = 1.0`
+    is interpreted as normalized (returns "high").
+
+    Args:
+        phi: Echo Quality (Φ); scale auto-detected
+
+    Returns:
+        "high" | "medium" | "low" | "fractured"
+    """
+    if phi <= 1.0:
+        return classify_resonance_normalized(phi)
+    return classify_resonance_scaled(phi)
 
 
 def adjust_gamma(
@@ -380,7 +438,7 @@ def calculate_intrinsic_drive(phi: float, entropy: float, risk_level: str) -> fl
 # PHYSICS v2.0 - Hybrid Resonance Model
 # ============================================================================
 
-def get_context_weights(context_mode: str) -> dict[str, float]:
+def get_context_weights(context_mode: str) -> Dict[str, float]:
     """
     Get cognitive (wc) and physical (wp) weights based on context.
 
@@ -398,8 +456,8 @@ def calculate_phi_cognitive(
     stability: float,
     valence: float = 0.0,
     entropy_penalty_k: float = entropy_penalty_k,
-    previous_entropy: float | None = None,
-    previous_valence: float | None = None,
+    previous_entropy: Optional[float] = None,
+    previous_valence: Optional[float] = None,
     recovery_gain: float = recovery_gain,
     base_resonance: float = base_resonance,
 ) -> float:
@@ -588,7 +646,7 @@ def calculate_phi_v2_1(
     w_c: float,
     w_p: float,
     entropy_penalty_k: float = 1.15  # Default to micro-calibrated value (15% increase)
-) -> dict[str, float]:
+) -> Dict[str, float]:
     """
     Calculate Total Echo Quality (Φ) using Hybrid Resonance Model (Circumplex-integrated with Base Life Support).
 
@@ -675,7 +733,7 @@ def calculate_phi_v2(
     valence: float = 0.0,
     arousal: float = 1.0,
     entropy_penalty_k: float = entropy_penalty_k,
-) -> dict[str, float | str]:
+) -> Dict[str, float]:
     """
     Calculate Total Echo Quality (Φ) using Hybrid Resonance Model v2.0 (backward compatible).
 

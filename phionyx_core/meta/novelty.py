@@ -6,8 +6,9 @@ Novelty Score = 1 - max(cosine_sim) with existing knowledge.
 Transfer Potential = avg(relevance across domains).
 """
 
-import logging
 import math
+import logging
+from typing import List, Dict, Optional
 from dataclasses import dataclass
 
 logger = logging.getLogger(__name__)
@@ -18,7 +19,7 @@ class NoveltyResult:
     """Result of novelty assessment."""
     novelty_score: float       # 0=familiar, 1=completely novel
     max_similarity: float      # Highest similarity found
-    closest_item_id: str | None
+    closest_item_id: Optional[str]
     is_novel: bool             # novelty > threshold
 
 
@@ -26,15 +27,15 @@ class NoveltyResult:
 class TransferResult:
     """Result of transfer potential assessment."""
     transfer_potential: float  # 0=no transfer, 1=universal
-    domain_scores: dict[str, float]
+    domain_scores: Dict[str, float]
     best_domain: str
     worst_domain: str
 
 
 def compute_novelty_score(
-    candidate_embedding: list[float],
-    existing_embeddings: list[list[float]],
-    existing_ids: list[str] | None = None,
+    candidate_embedding: List[float],
+    existing_embeddings: List[List[float]],
+    existing_ids: Optional[List[str]] = None,
     threshold: float = 0.7,
 ) -> NoveltyResult:
     """
@@ -78,8 +79,8 @@ def compute_novelty_score(
 
 
 def compute_transfer_potential(
-    candidate_embedding: list[float],
-    domain_embeddings: dict[str, list[list[float]]],
+    candidate_embedding: List[float],
+    domain_embeddings: Dict[str, List[List[float]]],
 ) -> TransferResult:
     """
     Transfer Potential = avg(relevance across domains).
@@ -119,8 +120,8 @@ def compute_transfer_potential(
         )
 
     transfer = sum(domain_scores.values()) / len(domain_scores)
-    best = max(domain_scores, key=lambda k: domain_scores[k])
-    worst = min(domain_scores, key=lambda k: domain_scores[k])
+    best = max(domain_scores, key=domain_scores.get)
+    worst = min(domain_scores, key=domain_scores.get)
 
     return TransferResult(
         transfer_potential=max(0.0, min(1.0, transfer)),
@@ -130,7 +131,7 @@ def compute_transfer_potential(
     )
 
 
-def _cosine_similarity(a: list[float], b: list[float]) -> float:
+def _cosine_similarity(a: List[float], b: List[float]) -> float:
     """Cosine similarity between two vectors."""
     if len(a) != len(b) or not a:
         return 0.0

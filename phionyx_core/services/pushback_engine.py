@@ -7,9 +7,9 @@ Faz 2.4: Push-back Interface - Tam Fonksiyonel
 Push-back mechanism for requirement, constraint, and profile violations.
 """
 
+from typing import List, Dict, Any, Optional
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any
 
 from phionyx_core.pipeline.base import BlockContext
 
@@ -27,19 +27,19 @@ class PushBackMessage:
     """Push-back message structure."""
     violation_type: ViolationType
     violation_description: str
-    constraint_name: str | None = None
-    requirement_name: str | None = None
-    profile_name: str | None = None
+    constraint_name: Optional[str] = None
+    requirement_name: Optional[str] = None
+    profile_name: Optional[str] = None
     severity: str = "medium"  # "low", "medium", "high", "critical"
-    suggested_action: str | None = None
-    user_feedback_request: str | None = None
+    suggested_action: Optional[str] = None
+    user_feedback_request: Optional[str] = None
 
 
 @dataclass
 class PushBackResult:
     """Result of push-back evaluation."""
     should_push_back: bool
-    messages: list[PushBackMessage]
+    messages: List[PushBackMessage]
     violations_count: int
     can_proceed: bool  # Whether execution can proceed despite violations
 
@@ -57,7 +57,7 @@ class PushBackEngine:
     - User feedback loop
     """
 
-    def __init__(self, governance_node: Any | None = None):
+    def __init__(self, governance_node: Optional[Any] = None):
         """
         Initialize push-back engine.
 
@@ -65,15 +65,15 @@ class PushBackEngine:
             governance_node: GovernanceNode instance (optional)
         """
         self.governance_node = governance_node
-        self.violation_history: list[PushBackMessage] = []
-        self.user_feedback_cache: dict[str, Any] = {}
+        self.violation_history: List[PushBackMessage] = []
+        self.user_feedback_cache: Dict[str, Any] = {}
 
     def evaluate_push_back(
         self,
         context: BlockContext,
-        requirements: list[dict[str, Any]] | None = None,
-        constraints: list[dict[str, Any]] | None = None,
-        profile: Any | None = None
+        requirements: Optional[List[Dict[str, Any]]] = None,
+        constraints: Optional[List[Dict[str, Any]]] = None,
+        profile: Optional[Any] = None
     ) -> PushBackResult:
         """
         Evaluate if push-back is needed.
@@ -129,8 +129,8 @@ class PushBackEngine:
     def _check_requirement_violations(
         self,
         context: BlockContext,
-        requirements: list[dict[str, Any]]
-    ) -> list[PushBackMessage]:
+        requirements: List[Dict[str, Any]]
+    ) -> List[PushBackMessage]:
         """Check requirement violations."""
         violations = []
 
@@ -156,8 +156,8 @@ class PushBackEngine:
     def _check_constraint_violations(
         self,
         context: BlockContext,
-        constraints: list[dict[str, Any]]
-    ) -> list[PushBackMessage]:
+        constraints: List[Dict[str, Any]]
+    ) -> List[PushBackMessage]:
         """Check constraint violations."""
         violations = []
 
@@ -184,7 +184,7 @@ class PushBackEngine:
         self,
         context: BlockContext,
         profile: Any
-    ) -> list[PushBackMessage]:
+    ) -> List[PushBackMessage]:
         """Check profile violations."""
         violations = []
 
@@ -221,9 +221,9 @@ class PushBackEngine:
     def _check_governance_violations(
         self,
         context: BlockContext
-    ) -> list[PushBackMessage]:
+    ) -> List[PushBackMessage]:
         """Check governance violations using Governance Node."""
-        violations: list[PushBackMessage] = []
+        violations = []
 
         if not self.governance_node:
             return violations
@@ -289,7 +289,7 @@ class PushBackEngine:
     def _check_threshold(
         self,
         value: float,
-        threshold: dict[str, Any]
+        threshold: Dict[str, Any]
     ) -> bool:
         """Check if value is within threshold."""
         min_val = threshold.get("min")
@@ -352,8 +352,8 @@ class PushBackEngine:
     def process_user_feedback(
         self,
         violation_id: str,
-        feedback: dict[str, Any]
-    ) -> dict[str, Any]:
+        feedback: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """
         Process user feedback for a violation.
 

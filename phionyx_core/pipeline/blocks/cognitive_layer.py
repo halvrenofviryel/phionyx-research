@@ -7,9 +7,9 @@ Processes cognitive layer (memory, intuition, physics).
 """
 
 import logging
-from typing import Any, Protocol
+from typing import Dict, Any, Optional, Protocol
 
-from ..base import BlockContext, BlockResult, PipelineBlock
+from ..base import PipelineBlock, BlockContext, BlockResult
 
 logger = logging.getLogger(__name__)
 
@@ -23,7 +23,7 @@ class CognitiveLayerProcessorProtocol(Protocol):
         card_type: str,
         card_result: str,
         scene_context: str,
-        physics_params: dict[str, Any],
+        physics_params: Dict[str, Any],
         **kwargs
     ) -> Any:  # Returns updated frame
         """Process cognitive layer."""
@@ -42,7 +42,7 @@ class CognitiveLayerBlock(PipelineBlock):
 
     determinism = "noisy_sensor"  # delegates to injected processor; LLM-backed in default wiring
 
-    def __init__(self, processor: CognitiveLayerProcessorProtocol | None = None):
+    def __init__(self, processor: Optional[CognitiveLayerProcessorProtocol] = None):
         """
         Initialize block.
 
@@ -52,7 +52,7 @@ class CognitiveLayerBlock(PipelineBlock):
         super().__init__("cognitive_layer")
         self.processor = processor
 
-    def should_skip(self, context: BlockContext) -> str | None:
+    def should_skip(self, context: BlockContext) -> Optional[str]:
         """Skip if processor not available."""
         if self.processor is None:
             return "processor_not_available"
@@ -80,13 +80,6 @@ class CognitiveLayerBlock(PipelineBlock):
 
             # Get physics params
             physics_params = context.metadata.get("physics_params", {}) if context.metadata else {}
-
-            if self.processor is None:
-                return BlockResult(
-                    block_id=self.block_id,
-                    status="error",
-                    error=RuntimeError("CognitiveLayerProcessor not configured")
-                )
 
             # Process cognitive layer
             updated_frame = await self.processor.process_cognitive_layer(

@@ -6,13 +6,12 @@ Extends existing PedagogyLogger + audit_layer with Ed25519 signing,
 hash chain for immutability, and structured audit trail.
 """
 
+from typing import Optional, Dict, Any, List
+from pydantic import BaseModel, Field
+from datetime import datetime, timezone
+import uuid
 import hashlib
 import json
-import uuid
-from datetime import datetime, timezone
-from typing import Any, Optional
-
-from pydantic import BaseModel, ConfigDict, Field
 
 
 class AuditRecord(BaseModel):
@@ -38,17 +37,17 @@ class AuditRecord(BaseModel):
         default="0" * 64,
         description="SHA-256 hash of previous audit record (genesis = 0*64)"
     )
-    record_hash: str | None = Field(
+    record_hash: Optional[str] = Field(
         None,
         description="SHA-256 hash of this record's content"
     )
 
     # Signature (Ed25519)
-    signature: str | None = Field(
+    signature: Optional[str] = Field(
         None,
         description="Ed25519 signature of record_hash (hex-encoded)"
     )
-    signer_public_key: str | None = Field(
+    signer_public_key: Optional[str] = Field(
         None,
         description="Public key of signer (hex-encoded)"
     )
@@ -72,25 +71,25 @@ class AuditRecord(BaseModel):
     )
 
     # Snapshot data
-    state_snapshot: dict[str, Any] | None = Field(
+    state_snapshot: Optional[Dict[str, Any]] = Field(
         None,
         description="State snapshot at audit time"
     )
-    input_hash: str | None = Field(
+    input_hash: Optional[str] = Field(
         None,
         description="SHA-256 of input that triggered this event"
     )
-    output_hash: str | None = Field(
+    output_hash: Optional[str] = Field(
         None,
         description="SHA-256 of output produced"
     )
 
     # Explainability
-    decision_trace: list[dict[str, Any]] = Field(
+    decision_trace: List[Dict[str, Any]] = Field(
         default_factory=list,
         description="Decision trace for explainability"
     )
-    block_results: dict[str, Any] | None = Field(
+    block_results: Optional[Dict[str, Any]] = Field(
         None,
         description="Pipeline block results summary"
     )
@@ -100,14 +99,14 @@ class AuditRecord(BaseModel):
 
     # Metadata
     schema_version: str = Field(default="4.0.0")
-    metadata: dict[str, Any] = Field(default_factory=dict)
+    metadata: Dict[str, Any] = Field(default_factory=dict)
 
     # Patent-claim traceability (v4.1.0 additive extension — not part of
     # hash-chained content to preserve existing hash-chain continuity).
     # Populated with the tuple of SF/Claim refs touched during the turn
     # (union of claim_refs across executed PipelineBlocks). See
     # docs/publications/patents/ukipo/BLOCK_CLAIM_IMPROVEMENT_PLAN_V2.md.
-    claim_refs: list[str] = Field(
+    claim_refs: List[str] = Field(
         default_factory=list,
         description=(
             "UKIPO patent-claim references this turn exercised, e.g. "
@@ -116,7 +115,7 @@ class AuditRecord(BaseModel):
             "compute_hash() so existing audit hash chains remain valid."
         ),
     )
-    revision_directive: dict[str, Any] | None = Field(
+    revision_directive: Optional[Dict[str, Any]] = Field(
         default=None,
         description=(
             "When response_revision_gate emitted a non-'pass' directive for "
@@ -153,4 +152,12 @@ class AuditRecord(BaseModel):
             return False
         return True
 
-    model_config = ConfigDict(json_schema_extra={'example': {'sequence_number': 42, 'turn_id': 5, 'event_type': 'turn_complete', 'actor': 'system'}})
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "sequence_number": 42,
+                "turn_id": 5,
+                "event_type": "turn_complete",
+                "actor": "system",
+            }
+        }

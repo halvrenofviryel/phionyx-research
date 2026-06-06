@@ -15,10 +15,15 @@ Exports:
 - CEPFlags: Evaluation flags
 """
 
-from .cep_config import CEPConfig, load_cep_config
 from .cep_engine import ConsciousEchoProofEngine
-from .cep_types import CEPFlags, CEPMetrics, CEPResult, CEPThresholds
 from .echo_self_guard import EchoSelfThresholdGuard
+from .cep_config import CEPConfig, load_cep_config
+from .cep_types import (
+    CEPMetrics,
+    CEPThresholds,
+    CEPFlags,
+    CEPResult
+)
 
 __all__ = [
     "ConsciousEchoProofEngine",

@@ -8,66 +8,67 @@ Contract v3.8.0.
 """
 
 import logging
-from typing import Any, cast
+from typing import Dict, Any, Optional
 
 from ..pipeline.blocks import (
-    ActionIntentGateBlock,
-    ArbitrationResolveBlock,
-    AuditLayerBlock,
-    BehavioralDriftDetectionBlock,  # Silent Failure Firewall
-    CausalGraphUpdateBlock,
-    CausalInterventionBlock,
-    CausalSimulationBlock,
-    CepEvaluationBlock,
-    CognitiveLayerBlock,
-    CoherenceQaBlock,
-    ConfidenceFusionBlock,
-    ContextRetrievalRagBlock,  # Context retrieval RAG block
-    CounterfactualAnalysisBlock,
-    CreateScenarioFrameBlock,
-    DeliberativeEthicsGateBlock,
-    DriveCoherenceUpdateBlock,
-    EchoOntologyEventTraceBlock,
-    EchoOntologyTransformationBlock,
-    EmotionEstimationBlock,
-    EmotionFromNeurotransmitterBlock,
-    EntropyAmplitudePostGateBlock,
-    EntropyAmplitudePreGateBlock,
-    EntropyComputationBlock,
-    EscStateHelperUpdateBlock,
-    EthicsPostResponseBlock,
-    EthicsPreResponseBlock,
-    GoalDecompositionBlock,
-    GoalEvaluationBlock,
-    InitializeUnifiedStateBlock,
-    InputSafetyGateBlock,  # Combined: low_input_gate + safety_layer_pre_cep
-    IntentClassificationBlock,  # Intent classification block
-    # v3.0.0 AGI World Model blocks (8)
-    KillSwitchGateBlock,
-    KnowledgeBoundaryCheckBlock,
-    LearningGateBlock,
-    MemoryConsolidationBlock,
-    NarrativeLayerBlock,
-    NeurotransmitterMemoryGrowthBlock,
-    # Feedback Loop Block (v3.6.0)
-    OutcomeFeedbackBlock,
-    PerceptualFrameEmitBlock,
-    PhiComputationBlock,
-    PhiFinalizeBlock,
-    PhiPublishBlock,
-    ResponseBuildBlock,
-    RootCauseAnalysisBlock,
-    # AGI Sprint Pipeline Binding blocks S2-S5 (11)
-    SelfModelAssessmentBlock,
-    StateUpdatePhysicsBlock,
     # Core blocks (31)
     TimeUpdateSotBlock,
-    TrustEvaluationBlock,
+    EchoOntologyEventTraceBlock,
+    EmotionFromNeurotransmitterBlock,
+    EmotionEstimationBlock,
+    CreateScenarioFrameBlock,
+    InitializeUnifiedStateBlock,
     UkfPredictBlock,
+    CognitiveLayerBlock,
+    EchoOntologyTransformationBlock,
+    InputSafetyGateBlock,  # Combined: low_input_gate + safety_layer_pre_cep
+    IntentClassificationBlock,  # Intent classification block
+    ContextRetrievalRagBlock,  # Context retrieval RAG block
+    EntropyAmplitudePreGateBlock,
+    CepEvaluationBlock,
+    EthicsPreResponseBlock,
+    NarrativeLayerBlock,
+    EthicsPostResponseBlock,
+    BehavioralDriftDetectionBlock,  # Silent Failure Firewall
     UnifiedStateUpdateEscBlock,
-    WorkspaceBroadcastBlock,
+    PhiPublishBlock,
+    EscStateHelperUpdateBlock,
+    DriveCoherenceUpdateBlock,
+    CoherenceQaBlock,
+    EntropyAmplitudePostGateBlock,
+    NeurotransmitterMemoryGrowthBlock,
+    AuditLayerBlock,
+    PhiFinalizeBlock,
+    StateUpdatePhysicsBlock,
+    ResponseBuildBlock,
+    PhiComputationBlock,
+    EntropyComputationBlock,
+    # v3.0.0 AGI World Model blocks (8)
+    KillSwitchGateBlock,
+    PerceptualFrameEmitBlock,
+    GoalEvaluationBlock,
     WorldStateSnapshotBlock,
+    ConfidenceFusionBlock,
+    ArbitrationResolveBlock,
+    ActionIntentGateBlock,
+    LearningGateBlock,
+    WorkspaceBroadcastBlock,
+    # AGI Sprint Pipeline Binding blocks S2-S5 (11)
+    SelfModelAssessmentBlock,
+    KnowledgeBoundaryCheckBlock,
+    MemoryConsolidationBlock,
+    CausalGraphUpdateBlock,
+    CausalInterventionBlock,
+    CounterfactualAnalysisBlock,
+    RootCauseAnalysisBlock,
+    CausalSimulationBlock,
+    TrustEvaluationBlock,
+    GoalDecompositionBlock,
+    DeliberativeEthicsGateBlock,
+    # Feedback Loop Block (v3.6.0)
+    OutcomeFeedbackBlock,
 )
+
 from .echo_orchestrator import OrchestratorServices
 
 logger = logging.getLogger(__name__)
@@ -77,17 +78,17 @@ try:
     from phionyx_core.memory.emotion_cache import EmotionCache as _EmotionCacheClass
     _EMOTION_CACHE_AVAILABLE = True
 except ImportError:
-    _EmotionCacheClass = None  # type: ignore[assignment,misc]
+    _EmotionCacheClass = None
     _EMOTION_CACHE_AVAILABLE = False
     logger.warning("EmotionCache not available, emotion_estimation will create its own cache")
 
 
 def create_all_blocks(
     services: OrchestratorServices,
-    engine_instance: Any | None = None,
-    participant_id: str | None = None,
-    emotion_cache: Any | None = None
-) -> dict[str, Any]:
+    engine_instance: Optional[Any] = None,
+    participant_id: Optional[str] = None,
+    emotion_cache: Optional[Any] = None
+) -> Dict[str, Any]:
     """
     Create all 43 pipeline blocks with their dependencies.
 
@@ -102,7 +103,7 @@ def create_all_blocks(
     Returns:
         Dictionary mapping block_id to block instance
     """
-    blocks: dict[str, Any] = {}
+    blocks = {}
 
     # Get time manager for participant
     time_manager = None
@@ -180,7 +181,7 @@ def create_all_blocks(
                 """Initialize adapter with processor."""
                 self.processor = processor
 
-            def get_emotion(self, user_input: str, mode: str | None = None) -> Any:
+            def get_emotion(self, user_input: str, mode: Optional[str] = None) -> Any:
                 """Get emotion from neurotransmitter."""
                 return self.processor.get_emotion_from_neurotransmitter(
                     user_input=user_input,
@@ -282,7 +283,7 @@ def create_all_blocks(
             def predict(self, unified_state: Any, time_delta: float = 1.0) -> Any:
                 """Run UKF prediction step using real process model."""
                 # Build current_state dict from unified_state for process model
-                current_state: dict[str, Any] = {}
+                current_state: Dict[str, Any] = {}
                 if unified_state is not None:
                     for attr in ("phi", "entropy", "valence", "arousal", "trust", "regulation"):
                         val = getattr(unified_state, attr, None)
@@ -419,17 +420,16 @@ def create_all_blocks(
             def __init__(self, processor: Any) -> None:
                 self.processor = processor
 
-            def apply_gate(self, cognitive_state: Any, unified_state: Any, enhanced_context_string: str) -> tuple[Any, ...]:
+            def apply_gate(self, cognitive_state: Any, unified_state: Any, enhanced_context_string: str) -> tuple:
                 """Apply entropy/amplitude gate before CEP evaluation."""
                 if hasattr(self.processor, 'apply_entropy_amplitude_pre_gate'):
-                    result = self.processor.apply_entropy_amplitude_pre_gate(
+                    return self.processor.apply_entropy_amplitude_pre_gate(
                         cognitive_state=cognitive_state,
                         unified_state=unified_state,
                         enhanced_context_string=enhanced_context_string
                     )
-                    return tuple(result) if not isinstance(result, tuple) else result
                 # Passthrough when processor lacks pre-gate method
-                return (enhanced_context_string, None)
+                return enhanced_context_string, None
 
         blocks["entropy_amplitude_pre_gate"] = EntropyAmplitudePreGateBlock(
             gate=EntropyAmplitudePreGateAdapter(services.processor)
@@ -508,7 +508,7 @@ def create_all_blocks(
             def __init__(self, processor):
                 self.processor = processor
 
-            async def process_narrative_layer(self, frame, user_input, card_type, card_result, scene_context, enhanced_context_string, system_prompt=None, physics_state=None, selected_intent=None, conversation_history=None, **kwargs):
+            async def process_narrative_layer(self, frame, user_input, card_type, card_result, scene_context, enhanced_context_string, system_prompt=None, physics_state=None, selected_intent=None, **kwargs):
                 return await self.processor.process_narrative_layer(
                     frame=frame,
                     user_input=user_input,
@@ -519,13 +519,11 @@ def create_all_blocks(
                     system_prompt=system_prompt,
                     physics_state=physics_state or {},
                     selected_intent=selected_intent,
-                    conversation_history=conversation_history,
                     **kwargs
                 )
 
-        from phionyx_core.pipeline.blocks.narrative_layer import NarrativeLayerProcessorProtocol
         blocks["narrative_layer"] = NarrativeLayerBlock(
-            processor=cast(NarrativeLayerProcessorProtocol, NarrativeLayerProcessorAdapter(services.processor))
+            processor=NarrativeLayerProcessorAdapter(services.processor)
         )
     else:
         # Fallback: block skips via should_skip() when processor=None
@@ -568,12 +566,12 @@ def create_all_blocks(
     # 18.5. behavioral_drift_detection - Silent Failure Firewall (NEW)
     # Optional: Only create if monitoring services are available
     try:
-        from phionyx_core.memory.vector_store import VectorStore  # noqa: F401
         from phionyx_core.monitoring import (
             BaselineStore,
             BehavioralDriftDetector,
             CircuitBreaker,
         )
+        from phionyx_core.memory.vector_store import VectorStore  # noqa: F401
 
         # Get vector store if available
         vector_store = None
@@ -656,7 +654,7 @@ def create_all_blocks(
             self,
             unified_state: Any,
             phi_value: float,
-            phi_components: Any | None = None
+            phi_components: Optional[Any] = None
         ) -> Any:
             """
             Publish phi value to unified state.
@@ -741,13 +739,12 @@ def create_all_blocks(
             def __init__(self, processor: Any) -> None:
                 self.processor = processor
 
-            def apply_gate(self, physics_state: dict) -> dict:
+            def apply_gate(self, physics_state: Dict) -> Dict:
                 """Apply entropy/amplitude gate after narrative generation."""
                 if hasattr(self.processor, 'apply_entropy_amplitude_post_gate'):
-                    result = self.processor.apply_entropy_amplitude_post_gate(
+                    return self.processor.apply_entropy_amplitude_post_gate(
                         physics_state=physics_state
                     )
-                    return cast(dict, result)
                 # Passthrough when processor lacks post-gate method
                 return physics_state
 
@@ -775,7 +772,7 @@ def create_all_blocks(
         blocks["neurotransmitter_memory_growth"] = NeurotransmitterMemoryGrowthBlock(
             growth_updater=NeurotransmitterMemoryGrowthAdapter(
                 services.neurotransmitter,
-                services.additional_services.get("growth_tracker") if services.additional_services else None
+                services.additional_services.get("growth_tracker")
             )
         )
 
@@ -870,11 +867,8 @@ def create_all_blocks(
                     **kwargs
                 )
 
-        # Adapter forwards (**kwargs) to the underlying response_generator;
-        # cast satisfies the structural Protocol check.
-        from phionyx_core.pipeline.blocks.response_build import ResponseBuilderProtocol
         blocks["response_build"] = ResponseBuildBlock(
-            builder=cast(ResponseBuilderProtocol, ResponseBuilderAdapter(services.response_generator))
+            builder=ResponseBuilderAdapter(services.response_generator)
         )
         logger.debug("[BLOCK_FACTORY] response_build block created with ResponseGenerator")
     else:
@@ -975,7 +969,7 @@ def create_all_blocks(
                         },
                         telemetry_summaries={}
                     )
-                    return {"phi": phi_value if isinstance(phi_value, int | float) else 0.5, "components": {}}
+                    return {"phi": phi_value if isinstance(phi_value, (int, float)) else 0.5, "components": {}}
 
                 # Final fallback
                 return {"phi": previous_phi or 0.5, "components": {}}
@@ -1066,7 +1060,7 @@ def create_all_blocks(
                         previous_entropy=previous_entropy or 0.5,
                         echo_types=[]
                     )
-                    return {"entropy": entropy_value if isinstance(entropy_value, int | float) else 0.5, "components": {}}
+                    return {"entropy": entropy_value if isinstance(entropy_value, (int, float)) else 0.5, "components": {}}
 
                 # Final fallback
                 return {"entropy": previous_entropy or 0.5, "components": {}}

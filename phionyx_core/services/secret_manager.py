@@ -6,9 +6,9 @@ Vault-first secret management with env var fallback.
 Abstracts secret access for all modules.
 """
 
-import logging
 import os
-from typing import Any
+import logging
+from typing import Optional, Dict
 
 logger = logging.getLogger(__name__)
 
@@ -25,8 +25,8 @@ class SecretManager:
 
     def __init__(
         self,
-        vault_url: str | None = None,
-        vault_token: str | None = None,
+        vault_url: Optional[str] = None,
+        vault_token: Optional[str] = None,
         vault_mount: str = "secret",
     ):
         """
@@ -40,8 +40,8 @@ class SecretManager:
         self._vault_url = vault_url or os.environ.get("VAULT_ADDR")
         self._vault_token = vault_token or os.environ.get("VAULT_TOKEN")
         self._vault_mount = vault_mount
-        self._vault_client: Any = None
-        self._cache: dict[str, str] = {}
+        self._vault_client = None
+        self._cache: Dict[str, str] = {}
 
         if self._vault_url and self._vault_token:
             self._init_vault()
@@ -67,9 +67,9 @@ class SecretManager:
     def get_secret(
         self,
         key: str,
-        default: str | None = None,
-        vault_path: str | None = None,
-    ) -> str | None:
+        default: Optional[str] = None,
+        vault_path: Optional[str] = None,
+    ) -> Optional[str]:
         """
         Get a secret value.
 
@@ -95,9 +95,8 @@ class SecretManager:
                 )
                 value = response["data"]["data"].get(key)
                 if value:
-                    value_str = str(value)
-                    self._cache[key] = value_str
-                    return value_str
+                    self._cache[key] = value
+                    return value
             except Exception as e:
                 logger.debug(f"Vault read failed for {key}: {e}")
 

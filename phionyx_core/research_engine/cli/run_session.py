@@ -14,9 +14,8 @@ Options:
 import argparse
 import re
 import sys
-from pathlib import Path
-
 import yaml
+from pathlib import Path
 
 
 def load_surfaces(surfaces_file: str | None = None) -> list[dict]:
@@ -35,7 +34,7 @@ def load_surfaces(surfaces_file: str | None = None) -> list[dict]:
     with open(path) as f:
         data = yaml.safe_load(f)
 
-    return list(data.get("surfaces", []))
+    return data.get("surfaces", [])
 
 
 def _read_actual_value(

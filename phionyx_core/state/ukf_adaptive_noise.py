@@ -10,6 +10,7 @@ Per Echoism Core v1.1:
 
 from __future__ import annotations
 
+from typing import Optional, List
 import numpy as np
 
 
@@ -96,8 +97,8 @@ def create_dynamic_measurement_noise_matrix(
 
 
 def calculate_emotional_volatility(
-    dA_history: list[float],
-    dV_history: list[float],
+    dA_history: List[float],
+    dV_history: List[float],
     window_size: int = 5
 ) -> float:
     """
@@ -213,8 +214,8 @@ def create_dynamic_process_noise_matrix(
 
 
 def get_sensor_quality_from_provider(
-    provider: str | None = None,
-    model: str | None = None
+    provider: Optional[str] = None,
+    model: Optional[str] = None
 ) -> float:
     """
     Get sensor quality coefficient from LLM provider metadata.

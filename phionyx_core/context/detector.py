@@ -5,11 +5,12 @@ Mode Detector - Intent Classification for Context Switching
 Detects when user is switching topics/modes using keyword and semantic analysis.
 """
 
+from typing import Dict, Optional, List
+from dataclasses import dataclass
 import logging
 import re
-from dataclasses import dataclass, field
 
-from .definitions import ContextDefinitions, ContextMode
+from .definitions import ContextMode, ContextDefinitions
 
 logger = logging.getLogger(__name__)
 
@@ -21,7 +22,12 @@ class DetectionResult:
     detected_mode: ContextMode
     confidence: float  # 0.0 to 1.0
     switch_required: bool  # True if context should switch
-    detected_keywords: list[str] = field(default_factory=list)
+    detected_keywords: List[str] = None  # Keywords that triggered detection
+
+    def __post_init__(self):
+        """Initialize default values."""
+        if self.detected_keywords is None:
+            self.detected_keywords = []
 
 
 class ModeDetector:
@@ -45,7 +51,7 @@ class ModeDetector:
             r"\b(appointment|scheduling|errand|household|vacation|travel)\b",
             r"\b(career|job|employment|salary|interview)\b",
             r"\b(life plan|future|goals|aspirations|dreams)\b",
-            r"\b(financial|savings|investment|retirement)\b",
+            r"\b(financial|savings|investment|budgeting)\b",
         ]
 
         # ENGINEERING keywords
@@ -93,7 +99,7 @@ class ModeDetector:
     def detect_mode(
         self,
         user_input: str,
-        current_state: dict | None = None
+        current_state: Optional[Dict] = None
     ) -> DetectionResult:
         """
         Detect context mode from user input.
@@ -115,8 +121,8 @@ class ModeDetector:
         user_input_lower = user_input.lower()
 
         # Score each mode based on keyword matches
-        mode_scores: dict[ContextMode, float] = {}
-        mode_keywords: dict[ContextMode, list[str]] = {}
+        mode_scores: Dict[ContextMode, float] = {}
+        mode_keywords: Dict[ContextMode, List[str]] = {}
 
         for mode, patterns in self.patterns.items():
             score = 0.0

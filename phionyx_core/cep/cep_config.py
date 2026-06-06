@@ -6,12 +6,12 @@ Configuration management for Conscious Echo Proof (CEP) engine.
 Supports profile-based configuration with YAML loading capability.
 """
 
-import logging
+from pydantic import BaseModel, Field
+from typing import Any, List, Literal, Optional
 from pathlib import Path
-from typing import Any, Literal
+import logging
 
 import yaml
-from pydantic import BaseModel, ConfigDict, Field
 
 from .cep_types import CEPThresholds
 
@@ -35,8 +35,12 @@ class CEPConfig(BaseModel):
         description="CEP thresholds for evaluation"
     )
 
-    model_config = ConfigDict(use_enum_values=True)
-def _cep_config_search_paths(profile_name: str) -> list[Path]:
+    class Config:
+        """Pydantic config."""
+        use_enum_values = True
+
+
+def _cep_config_search_paths(profile_name: str) -> List[Path]:
     """Return candidate paths for CEP profile YAML (first existing wins)."""
     base = Path(__file__).resolve().parent
     candidates = [
@@ -50,10 +54,10 @@ def _cep_config_search_paths(profile_name: str) -> list[Path]:
     return candidates
 
 
-def _config_from_yaml(path: Path, profile_name: str) -> CEPConfig | None:
+def _config_from_yaml(path: Path, profile_name: str) -> Optional[CEPConfig]:
     """Load CEPConfig from a YAML file. Returns None on missing/invalid."""
     try:
-        with open(path, encoding="utf-8") as f:
+        with open(path, "r", encoding="utf-8") as f:
             data: Any = yaml.safe_load(f)
         if not data or not isinstance(data, dict):
             return None
@@ -87,7 +91,7 @@ def _config_from_yaml(path: Path, profile_name: str) -> CEPConfig | None:
         return None
 
 
-def load_cep_config(profile_name: str | None = None) -> CEPConfig:
+def load_cep_config(profile_name: Optional[str] = None) -> CEPConfig:
     """
     Load CEP configuration from profile.
 

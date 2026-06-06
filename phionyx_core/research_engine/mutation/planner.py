@@ -8,6 +8,7 @@ The LLM role in v1 is limited to interpreting results, not generating hypotheses
 """
 import random
 from dataclasses import dataclass, field
+from typing import List, Set
 
 
 @dataclass
@@ -21,7 +22,7 @@ class HypothesisPlan:
     reasoning: str
 
 
-def _frange(start: float, stop: float, step: float) -> list[float]:
+def _frange(start: float, stop: float, step: float) -> List[float]:
     """Generate float range, avoiding floating point issues."""
     result = []
     current = start
@@ -39,8 +40,8 @@ def generate_grid_hypotheses(
     range_min: float,
     range_max: float,
     step: float,
-    already_tried: set[float] | None = None,
-) -> list[HypothesisPlan]:
+    already_tried: Set[float] | None = None,
+) -> List[HypothesisPlan]:
     """Generate hypotheses by systematic grid search.
 
     Tries every value in [range_min, range_max] with given step,
@@ -85,7 +86,7 @@ def generate_random_hypotheses(
     range_max: float,
     count: int = 5,
     seed: int | None = None,
-) -> list[HypothesisPlan]:
+) -> List[HypothesisPlan]:
     """Generate hypotheses by random sampling within range."""
     rng = random.Random(seed)
 
@@ -111,7 +112,7 @@ def generate_boundary_hypotheses(
     range_min: float,
     range_max: float,
     step: float,
-) -> list[HypothesisPlan]:
+) -> List[HypothesisPlan]:
     """Generate hypotheses at boundary values and extremes.
 
     Tests: min, max, min+step, max-step, midpoint.
@@ -126,7 +127,7 @@ def generate_boundary_hypotheses(
         range_max,
     ]
     # Remove current and duplicates
-    seen: set[float] = set()
+    seen: Set[float] = set()
     unique = []
     for v in candidates:
         v = round(v, 10)
@@ -152,7 +153,7 @@ def generate_boundary_hypotheses(
 class MutationPlan:
     """Complete mutation plan for an experiment session."""
     surface_file: str
-    hypotheses: list[HypothesisPlan] = field(default_factory=list)
+    hypotheses: List[HypothesisPlan] = field(default_factory=list)
 
     @property
     def remaining(self) -> int:
@@ -164,13 +165,13 @@ class MutationPlan:
         return None
 
 
-def _interleave(per_param: list[list[HypothesisPlan]]) -> list[HypothesisPlan]:
+def _interleave(per_param: List[List[HypothesisPlan]]) -> List[HypothesisPlan]:
     """Round-robin interleave hypothesis lists from different parameters.
 
     Ensures all parameters get explored even with small experiment budgets.
     Example: [A1,A2,A3], [B1,B2] -> [A1,B1,A2,B2,A3]
     """
-    result: list[HypothesisPlan] = []
+    result: List[HypothesisPlan] = []
     max_len = max((len(h) for h in per_param), default=0)
     for i in range(max_len):
         for param_hyps in per_param:
@@ -182,8 +183,8 @@ def _interleave(per_param: list[list[HypothesisPlan]]) -> list[HypothesisPlan]:
 def create_plan(
     surface_file: str,
     tier: str,
-    parameters: list[dict],
-    already_tried: dict[str, set[float]] | None = None,
+    parameters: List[dict],
+    already_tried: dict[str, Set[float]] | None = None,
     strategy: str = "grid",  # "grid", "random", "boundary", "all"
     seed: int | None = None,
 ) -> MutationPlan:
@@ -197,11 +198,11 @@ def create_plan(
     if already_tried is None:
         already_tried = {}
 
-    per_param: list[list[HypothesisPlan]] = []
+    per_param: List[List[HypothesisPlan]] = []
 
     for param in parameters:
         param_tried = already_tried.get(param["name"], set())
-        param_hyps: list[HypothesisPlan] = []
+        param_hyps: List[HypothesisPlan] = []
 
         if strategy in ("grid", "all"):
             param_hyps.extend(generate_grid_hypotheses(

@@ -7,7 +7,7 @@ Enables swapping Meta with Null implementation.
 """
 
 from abc import ABC, abstractmethod
-from typing import Any
+from typing import Dict, Any, Optional, List
 
 
 class MetaPort(ABC):
@@ -17,9 +17,9 @@ class MetaPort(ABC):
     async def estimate_confidence(
         self,
         user_input: str,
-        context: str | None = None,
-        memory_matches: list[dict[str, Any]] | None = None
-    ) -> dict[str, Any]:
+        context: Optional[str] = None,
+        memory_matches: Optional[List[Dict[str, Any]]] = None
+    ) -> Dict[str, Any]:
         """
         Estimate confidence in response.
 

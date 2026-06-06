@@ -12,9 +12,10 @@ Per Echoism Core v1.1:
 
 from __future__ import annotations
 
-import math
+from typing import Dict, Any, Optional, List
 from datetime import datetime
-from typing import Any
+import math
+
 
 # Module-level tunable defaults (Tier A — PRE surfaces)
 suppression_factor = 0.1
@@ -44,10 +45,10 @@ class EventForgettingState:
         self,
         event_id: str,
         suppressed: bool = False,
-        suppressed_at: datetime | None = None,
+        suppressed_at: Optional[datetime] = None,
         erased: bool = False,
-        erased_at: datetime | None = None,
-        original_intensity: float | None = None
+        erased_at: Optional[datetime] = None,
+        original_intensity: Optional[float] = None
     ):
         self.event_id = event_id
         self.suppressed = suppressed
@@ -63,7 +64,7 @@ def apply_passive_decay(
     dt: float,
     decay_rate_lambda: float,
     min_intensity: float = 0.001
-) -> dict[str, float]:
+) -> Dict[str, float]:
     """
     Apply passive decay to event intensity and trace weight.
 
@@ -104,7 +105,7 @@ def apply_active_suppression(
     trace_weight: float,
     suppression_factor: float = 0.1,
     min_intensity: float = 0.001
-) -> dict[str, Any]:
+) -> Dict[str, Any]:
     """
     Apply active suppression to event (user says "forget this").
 
@@ -146,8 +147,8 @@ def apply_active_suppression(
 
 
 def restore_suppressed_event(
-    suppressed_state: dict[str, Any]
-) -> dict[str, Any]:
+    suppressed_state: Dict[str, Any]
+) -> Dict[str, Any]:
     """
     Restore a suppressed event (reverse active suppression).
 
@@ -174,8 +175,8 @@ def restore_suppressed_event(
 
 def apply_full_erasure(
     event_id: str,
-    audit_log: list[dict[str, Any]] | None = None
-) -> dict[str, Any]:
+    audit_log: Optional[List[Dict[str, Any]]] = None
+) -> Dict[str, Any]:
     """
     Apply full erasure to event (user says "delete completely").
 
@@ -214,7 +215,7 @@ def apply_full_erasure(
 def create_tombstone_reference(
     event_id: str,
     original_tag: str
-) -> dict[str, Any]:
+) -> Dict[str, Any]:
     """
     Create tombstone reference for erased event in E_tags.
 
@@ -295,11 +296,11 @@ class ForgettingManager:
     - Manages event state (suppressed/erased)
     """
 
-    def __init__(self, config: ForgettingConfig | None = None):
+    def __init__(self, config: Optional[ForgettingConfig] = None):
         self.config = config or ForgettingConfig()
-        self.suppressed_events: dict[str, dict[str, Any]] = {}
-        self.erased_events: dict[str, dict[str, Any]] = {}
-        self.audit_log: list[dict[str, Any]] = []
+        self.suppressed_events: Dict[str, Dict[str, Any]] = {}
+        self.erased_events: Dict[str, Dict[str, Any]] = {}
+        self.audit_log: List[Dict[str, Any]] = []
 
     def apply_passive_decay_to_event(
         self,
@@ -308,7 +309,7 @@ class ForgettingManager:
         trace_weight: float,
         dt: float,
         decay_rate_lambda: float
-    ) -> dict[str, float]:
+    ) -> Dict[str, float]:
         """Apply passive decay to a single event."""
         return apply_passive_decay(
             event_intensity=event_intensity,
@@ -323,7 +324,7 @@ class ForgettingManager:
         event_id: str,
         event_intensity: float,
         trace_weight: float
-    ) -> dict[str, Any]:
+    ) -> Dict[str, Any]:
         """Apply active suppression to an event."""
         suppressed = apply_active_suppression(
             event_intensity=event_intensity,
@@ -348,7 +349,7 @@ class ForgettingManager:
     def restore_event(
         self,
         event_id: str
-    ) -> dict[str, Any] | None:
+    ) -> Optional[Dict[str, Any]]:
         """Restore a suppressed event."""
         if event_id not in self.suppressed_events:
             return None
@@ -373,7 +374,7 @@ class ForgettingManager:
     def erase_event(
         self,
         event_id: str
-    ) -> dict[str, Any]:
+    ) -> Dict[str, Any]:
         """Apply full erasure to an event."""
         erased = apply_full_erasure(
             event_id=event_id,
@@ -391,11 +392,11 @@ class ForgettingManager:
         self,
         event_id: str,
         original_tag: str
-    ) -> dict[str, Any]:
+    ) -> Dict[str, Any]:
         """Get tombstone reference for erased event."""
         return create_tombstone_reference(event_id, original_tag)
 
-    def get_audit_log(self) -> list[dict[str, Any]]:
+    def get_audit_log(self) -> List[Dict[str, Any]]:
         """Get erasure audit log (GDPR compliance)."""
         return self.audit_log.copy()
 

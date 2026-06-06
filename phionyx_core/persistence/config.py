@@ -5,14 +5,14 @@ State Store Configuration
 Helper functions for creating and configuring state stores based on environment variables.
 """
 
-import logging
 import os
-from typing import Any
+import logging
+from typing import Optional, Any
 
 logger = logging.getLogger(__name__)
 
 
-async def create_state_store_from_env() -> Any | None:
+async def create_state_store_from_env() -> Optional[Any]:
     """
     Create state store based on environment variables.
 
@@ -35,10 +35,10 @@ async def create_state_store_from_env() -> Any | None:
         logger.info("Creating InMemoryStateStore")
         try:
             from phionyx_core.persistence.in_memory_state_store import InMemoryStateStore
-            mem_store = InMemoryStateStore()
-            await mem_store.initialize()
+            store = InMemoryStateStore()
+            await store.initialize()
             logger.info("✅ InMemoryStateStore initialized")
-            return mem_store
+            return store
         except ImportError as e:
             logger.error(f"Failed to import InMemoryStateStore: {e}")
             return None
@@ -54,10 +54,10 @@ async def create_state_store_from_env() -> Any | None:
             from phionyx_core.persistence.postgres_state_store import PostgreSQLStateStore
 
             pool_size = int(os.getenv("STATE_STORE_POOL_SIZE", "10"))
-            pg_store = PostgreSQLStateStore(connection_string, pool_size=pool_size)
-            await pg_store.initialize()
+            store = PostgreSQLStateStore(connection_string, pool_size=pool_size)
+            await store.initialize()
             logger.info(f"✅ PostgreSQLStateStore initialized (pool_size={pool_size})")
-            return pg_store
+            return store
         except ImportError as e:
             logger.error(f"Failed to import PostgreSQLStateStore: {e}. Install asyncpg for PostgreSQL support.")
             return None
@@ -71,7 +71,7 @@ async def create_state_store_from_env() -> Any | None:
         return None
 
 
-def get_state_store_type() -> str | None:
+def get_state_store_type() -> Optional[str]:
     """
     Get configured state store type from environment.
 

@@ -13,9 +13,9 @@ Functions:
 
 from __future__ import annotations
 
-import math
+from typing import List, Dict, Any, Optional
 from datetime import datetime
-from typing import Any
+import math
 
 # Import EchoEvent if available
 try:
@@ -23,7 +23,7 @@ try:
     ECHO_EVENT_AVAILABLE = True
 except ImportError:
     ECHO_EVENT_AVAILABLE = False
-    EchoEvent = None  # type: ignore[assignment,misc]
+    EchoEvent = None
 
 
 def trace_weight(
@@ -83,11 +83,11 @@ def trace_weight(
 
 
 def aggregate_trace(
-    events: list[EchoEvent],
-    now: datetime | None = None,
+    events: List[EchoEvent],
+    now: Optional[datetime] = None,
     half_life_seconds: float = 300.0,
     max_events: int = 10
-) -> dict[str, Any]:
+) -> Dict[str, Any]:
     """
     Aggregate multiple events into trace vector.
 
@@ -120,8 +120,8 @@ def aggregate_trace(
     total_weight = 0.0
     weighted_intensity_sum = 0.0
     active_events = 0
-    trace_vector: dict[str, float] = {}  # tag -> weighted sum
-    recent_event_ids: list[str] = []
+    trace_vector: Dict[str, float] = {}  # tag -> weighted sum
+    recent_event_ids: List[str] = []
 
     for event in sorted_events:
         weight = trace_weight(event, now, half_life_seconds)
@@ -173,11 +173,11 @@ def calculate_trace_decay_rate(
 
 
 def get_active_trace_events(
-    events: list[EchoEvent],
-    now: datetime | None = None,
+    events: List[EchoEvent],
+    now: Optional[datetime] = None,
     half_life_seconds: float = 300.0,
     min_weight: float = 0.01
-) -> list[EchoEvent]:
+) -> List[EchoEvent]:
     """
     Get events with active trace (weight > min_weight).
 

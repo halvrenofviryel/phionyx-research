@@ -22,6 +22,7 @@ from phionyx_core.research_engine.evaluation.runner import (
 )
 from phionyx_core.research_engine.evaluation.scoring import compute_cqs
 
+
 # Holdout suites — tests NOT in the main composite benchmark
 HOLDOUT_SUITES: dict[str, str] = {
     "adversarial": "tests/behavioral_eval/test_adversarial_scenarios.py",
@@ -293,7 +294,7 @@ class ShadowEvaluator:
 
     def list_reports(self) -> list[dict[str, Any]]:
         """List all shadow evaluation reports (summary)."""
-        reports: list[dict[str, Any]] = []
+        reports = []
         if not self._reports_dir.exists():
             return reports
         for path in sorted(self._reports_dir.glob("*.json")):

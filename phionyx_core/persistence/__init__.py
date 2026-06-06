@@ -5,8 +5,7 @@ State Persistence Module
 Provides interfaces and implementations for persisting EchoState2.
 """
 
-from typing import TYPE_CHECKING, Any, Protocol
-
+from typing import Protocol, Optional, TYPE_CHECKING, Any
 from phionyx_core.state.echo_state_2 import EchoState2
 
 if TYPE_CHECKING:
@@ -20,14 +19,14 @@ try:
     from phionyx_core.persistence.config import (
         create_state_store_from_env,
         get_state_store_type,
-        is_state_persistence_enabled,
+        is_state_persistence_enabled
     )
 except ImportError:
     # Fallback if config module not available
-    async def create_state_store_from_env() -> Any | None:
+    async def create_state_store_from_env() -> Optional[Any]:
         return None
 
-    def get_state_store_type() -> str | None:
+    def get_state_store_type() -> Optional[str]:
         return None
 
     def is_state_persistence_enabled() -> bool:
@@ -51,7 +50,7 @@ class StateStoreProtocol(Protocol):
         """
         ...
 
-    async def load_state(self, session_id: str) -> EchoState2 | None:
+    async def load_state(self, session_id: str) -> Optional[EchoState2]:
         """
         Load state from persistent storage.
 

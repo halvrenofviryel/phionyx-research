@@ -17,8 +17,8 @@ Integrates with:
 """
 
 import logging
+from typing import Dict, List, Optional, Set, Tuple, Any
 from dataclasses import dataclass
-from typing import Any
 
 from .causal_graph import CausalGraph, CausalNode
 
@@ -36,24 +36,24 @@ class RootCauseCandidate:
     node_id: str
     name: str
     likelihood: float    # 0.0-1.0: how likely this is the root cause
-    causal_path: list[str]  # path from root cause to anomaly
+    causal_path: List[str]  # path from root cause to anomaly
     path_strength: float   # product of edge strengths along path
     anomaly_score: float   # how anomalous this node's value is
-    current_value: float | None
-    expected_value: float | None
+    current_value: Optional[float]
+    expected_value: Optional[float]
 
 
 @dataclass
 class RootCauseAnalysis:
     """Full root cause analysis result."""
     anomaly_node: str
-    anomaly_value: float | None
-    expected_range: tuple[float, float]
-    candidates: list[RootCauseCandidate]
-    top_cause: RootCauseCandidate | None
+    anomaly_value: Optional[float]
+    expected_range: Tuple[float, float]
+    candidates: List[RootCauseCandidate]
+    top_cause: Optional[RootCauseCandidate]
     reasoning: str
 
-    def to_dict(self) -> dict[str, Any]:
+    def to_dict(self) -> Dict[str, Any]:
         return {
             "anomaly": {
                 "node": self.anomaly_node,
@@ -114,8 +114,8 @@ class RootCauseAnalyzer:
     def analyze(
         self,
         anomaly_node: str,
-        anomaly_value: float | None = None,
-        expected_range: tuple[float, float] = (0.3, 0.7),
+        anomaly_value: Optional[float] = None,
+        expected_range: Tuple[float, float] = (0.3, 0.7),
     ) -> RootCauseAnalysis:
         """
         Analyze root cause of an anomaly.
@@ -176,15 +176,15 @@ class RootCauseAnalyzer:
         self,
         anomaly_node: str,
         anomaly_magnitude: float,
-        expected_range: tuple[float, float],
-    ) -> list[RootCauseCandidate]:
+        expected_range: Tuple[float, float],
+    ) -> List[RootCauseCandidate]:
         """Walk backward through causal graph to find root cause candidates."""
-        candidates: list[RootCauseCandidate] = []
-        visited: set[str] = set()
+        candidates: List[RootCauseCandidate] = []
+        visited: Set[str] = set()
 
         def _walk_back(
             current: str,
-            path: list[str],
+            path: List[str],
             cumulative_strength: float,
             depth: int,
         ):
@@ -234,8 +234,8 @@ class RootCauseAnalyzer:
 
     def _anomaly_magnitude(
         self,
-        value: float | None,
-        expected_range: tuple[float, float],
+        value: Optional[float],
+        expected_range: Tuple[float, float],
     ) -> float:
         """How far is the value from the expected range?"""
         if value is None:
@@ -252,7 +252,7 @@ class RootCauseAnalyzer:
     def _node_anomaly_score(
         self,
         node: CausalNode,
-        expected_range: tuple[float, float],
+        expected_range: Tuple[float, float],
     ) -> float:
         """Score how anomalous this node is."""
         if node.current_value is None:
@@ -269,7 +269,7 @@ class RootCauseAnalyzer:
             std = (sum((v - avg) ** 2 for v in values) / len(values)) ** 0.5
             if std > 0:
                 z_score = abs(node.current_value - avg) / std
-                return float(min(1.0, z_score / 3.0))  # Normalize: 3σ = 1.0
+                return min(1.0, z_score / 3.0)  # Normalize: 3σ = 1.0
 
         # Fallback: check against expected range
         return self._anomaly_magnitude(node.current_value, expected_range)
@@ -277,9 +277,9 @@ class RootCauseAnalyzer:
     def _build_reasoning(
         self,
         anomaly_node: str,
-        anomaly_value: float | None,
-        expected_range: tuple[float, float],
-        top_cause: RootCauseCandidate | None,
+        anomaly_value: Optional[float],
+        expected_range: Tuple[float, float],
+        top_cause: Optional[RootCauseCandidate],
     ) -> str:
         if not top_cause:
             return f"No root cause found for anomaly in {anomaly_node}"

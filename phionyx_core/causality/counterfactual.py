@@ -15,8 +15,8 @@ Integrates with:
 """
 
 import logging
+from typing import Dict, List, Optional, Any
 from dataclasses import dataclass, field
-from typing import Any
 
 from .causal_graph import CausalGraph
 from .intervention import InterventionModel, InterventionResult
@@ -33,7 +33,7 @@ class CounterfactualQuery:
     """A 'what if' question."""
     variable: str           # Which variable to change
     counterfactual_value: float  # What value it would have been
-    target_variables: list[str] = field(default_factory=list)  # What to predict (empty = all)
+    target_variables: List[str] = field(default_factory=list)  # What to predict (empty = all)
     context: str = ""       # Human-readable description
 
 
@@ -41,10 +41,10 @@ class CounterfactualQuery:
 class CounterfactualOutcome:
     """Predicted outcome for one target variable."""
     variable: str
-    factual_value: float | None
+    factual_value: Optional[float]
     counterfactual_value: float
     delta: float
-    causal_path: list[str]
+    causal_path: List[str]
     necessity_score: float  # How necessary was the cause? (0-1)
 
 
@@ -52,26 +52,26 @@ class CounterfactualOutcome:
 class CounterfactualResult:
     """Full result of counterfactual analysis."""
     query: CounterfactualQuery
-    factual_state: dict[str, float | None]
-    counterfactual_state: dict[str, float]
-    outcomes: list[CounterfactualOutcome]
+    factual_state: Dict[str, Optional[float]]
+    counterfactual_state: Dict[str, float]
+    outcomes: List[CounterfactualOutcome]
     intervention_result: InterventionResult
     reasoning: str
 
-    def get_outcome(self, variable: str) -> CounterfactualOutcome | None:
+    def get_outcome(self, variable: str) -> Optional[CounterfactualOutcome]:
         for o in self.outcomes:
             if o.variable == variable:
                 return o
         return None
 
     @property
-    def max_impact_variable(self) -> str | None:
+    def max_impact_variable(self) -> Optional[str]:
         """Variable with largest counterfactual impact."""
         if not self.outcomes:
             return None
         return max(self.outcomes, key=lambda o: abs(o.delta)).variable
 
-    def to_dict(self) -> dict[str, Any]:
+    def to_dict(self) -> Dict[str, Any]:
         return {
             "query": {
                 "variable": self.query.variable,
@@ -126,7 +126,7 @@ class CounterfactualEngine:
         self,
         variable: str,
         counterfactual_value: float,
-        targets: list[str] | None = None,
+        targets: Optional[List[str]] = None,
         context: str = "",
     ) -> CounterfactualResult:
         """
@@ -239,7 +239,7 @@ class CounterfactualEngine:
         self,
         cause: str,
         effect: str,
-        cf_value: float | None = None,
+        cf_value: Optional[float] = None,
     ) -> float:
         """Compute necessity score for cause→effect."""
         cause_node = self.graph.nodes.get(cause)
@@ -274,7 +274,7 @@ class CounterfactualEngine:
     def _build_reasoning(
         self,
         query: CounterfactualQuery,
-        outcomes: list[CounterfactualOutcome],
+        outcomes: List[CounterfactualOutcome],
     ) -> str:
         if not outcomes:
             return f"No downstream effects detected for do({query.variable}={query.counterfactual_value})"

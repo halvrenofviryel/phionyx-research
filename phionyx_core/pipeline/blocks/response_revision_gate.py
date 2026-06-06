@@ -28,9 +28,8 @@ exercised directly by behavioural tests today.
 from __future__ import annotations
 
 import logging
-from collections.abc import Mapping
-from dataclasses import asdict, dataclass, field
-from typing import Any
+from dataclasses import dataclass, field, asdict
+from typing import Any, Dict, Mapping, Optional
 
 from ..base import BlockContext, BlockResult, PipelineBlock
 
@@ -92,7 +91,7 @@ class RevisionThresholds:
     # Drift
     drift_rewrite: float = 0.60
 
-    def to_dict(self) -> dict[str, float]:
+    def to_dict(self) -> Dict[str, float]:
         return asdict(self)
 
 
@@ -102,12 +101,12 @@ class RevisionDirective:
 
     directive: str = DIRECTIVE_PASS
     reasons: list = field(default_factory=list)
-    damp_factor: float | None = None   # only set for DAMP
-    entropy_floor: float | None = None  # SF2 C1 entropy floor when damping
-    state_snapshot: dict[str, Any] = field(default_factory=dict)
+    damp_factor: Optional[float] = None   # only set for DAMP
+    entropy_floor: Optional[float] = None  # SF2 C1 entropy floor when damping
+    state_snapshot: Dict[str, Any] = field(default_factory=dict)
     claim_refs: tuple = field(default_factory=tuple)
 
-    def to_dict(self) -> dict[str, Any]:
+    def to_dict(self) -> Dict[str, Any]:
         d = asdict(self)
         d["claim_refs"] = list(self.claim_refs)
         return d
@@ -137,7 +136,7 @@ def _compute_damp_factor(entropy: float, thresholds: RevisionThresholds) -> floa
     base = 0.5
     ratio = entropy / max(thresholds.entropy_damp, 1e-6)
     factor = base ** ratio
-    return float(max(0.1, min(1.0, factor)))
+    return max(0.1, min(1.0, factor))
 
 
 class ResponseRevisionGateBlock(PipelineBlock):
@@ -165,17 +164,17 @@ class ResponseRevisionGateBlock(PipelineBlock):
         "SF2:C1", "SF2:C11",
     )
 
-    def __init__(self, thresholds: RevisionThresholds | None = None):
+    def __init__(self, thresholds: Optional[RevisionThresholds] = None):
         super().__init__("response_revision_gate", claim_refs=self.CLAIM_REFS)
         self.thresholds = thresholds or RevisionThresholds()
 
-    def should_skip(self, context: BlockContext) -> str | None:
+    def should_skip(self, context: BlockContext) -> Optional[str]:
         """Never skip — missing signals are handled by the decision logic."""
         return None
 
     # ----- decision helpers -------------------------------------------------
 
-    def _extract_state(self, context: BlockContext) -> dict[str, Any]:
+    def _extract_state(self, context: BlockContext) -> Dict[str, Any]:
         """Collect the state signals this gate cares about."""
         metadata = context.metadata or {}
         physics_state = metadata.get("physics_state") or {}
@@ -320,8 +319,8 @@ class ResponseRevisionGateBlock(PipelineBlock):
         if s["cep_flagged"]:
             escalate(DIRECTIVE_REWRITE, "cep_flagged")
 
-        damp_factor: float | None = None
-        entropy_floor: float | None = None
+        damp_factor: Optional[float] = None
+        entropy_floor: Optional[float] = None
         if current == DIRECTIVE_DAMP:
             damp_factor = _compute_damp_factor(s["entropy"], t)
             # SF2 C9: entropy floor = max(current_entropy, min_threshold)

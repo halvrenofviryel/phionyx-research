@@ -109,6 +109,13 @@ Given identical inputs:
 - Ethics verdict MUST be deterministic
 - State transitions MUST be reproducible
 
+> **Root (Echoism).** Axiom 8 is **decision/parameter-keyed** reproducibility — the runtime
+> form of the Çark-ve-Terazi invariant *"Çark zamanı değil, kararı taşır"* (the wheel carries
+> the decision, not the clock) and *"Zaman sabittir, yankı değişkendir."* The recorded time
+> value (`dt`) is one of the "identical inputs", which is why a moment **replays faithfully
+> from its own record.** Full grounding:
+> [`docs/echoism/ECHOISM_FOUNDATION.md`](../../../docs/echoism/ECHOISM_FOUNDATION.md) §4.
+
 ---
 
 ## 3. VIOLATIONS

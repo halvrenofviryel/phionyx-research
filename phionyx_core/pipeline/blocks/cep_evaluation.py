@@ -7,9 +7,9 @@ Evaluates CEP (Conscious Echo Proof) for safety and coherence.
 """
 
 import logging
-from typing import Any, Protocol
+from typing import Any, Optional, Protocol
 
-from ..base import BlockContext, BlockResult, PipelineBlock
+from ..base import PipelineBlock, BlockContext, BlockResult
 
 logger = logging.getLogger(__name__)
 
@@ -34,7 +34,7 @@ class CepEvaluationBlock(PipelineBlock):
     Evaluates CEP (Conscious Echo Proof) for safety and coherence.
     """
 
-    def __init__(self, evaluator: CEPEvaluatorProtocol | None = None):
+    def __init__(self, evaluator: Optional[CEPEvaluatorProtocol] = None):
         """
         Initialize block.
 
@@ -44,7 +44,7 @@ class CepEvaluationBlock(PipelineBlock):
         super().__init__("cep_evaluation")
         self.evaluator = evaluator
 
-    def should_skip(self, context: BlockContext) -> str | None:
+    def should_skip(self, context: BlockContext) -> Optional[str]:
         """Skip if no evaluator available."""
         if self.evaluator is None:
             return "cep_evaluator_not_available"

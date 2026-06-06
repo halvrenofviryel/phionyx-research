@@ -1,7 +1,7 @@
 """Baseline store — manages current best metrics snapshot."""
 import json
 from pathlib import Path
-from typing import Any, cast
+from typing import Any
 
 
 class BaselineStore:
@@ -26,7 +26,7 @@ class BaselineStore:
         if not self._file.exists():
             return None
         with open(self._file) as f:
-            return cast(dict, json.load(f))
+            return json.load(f)
 
     def exists(self) -> bool:
         """Check if a baseline exists."""
@@ -38,8 +38,7 @@ class BaselineStore:
         if baseline is None:
             return None
         metrics = baseline.get("metrics", {})
-        cqs = metrics.get("cqs")
-        return float(cqs) if cqs is not None else None
+        return metrics.get("cqs")
 
     def get_surface_value(self, param_name: str) -> Any | None:
         """Get a specific parameter value from the baseline."""

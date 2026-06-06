@@ -12,15 +12,15 @@ Design:
 - Audit: every submission, review, and expiry is logged
 """
 
-import json
 import logging
+import json
 import os
 import uuid
-from dataclasses import asdict, dataclass
+from typing import Dict, Any, Optional, List
+from dataclasses import dataclass, asdict
 from datetime import datetime, timedelta, timezone
 from enum import Enum
 from pathlib import Path
-from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -54,28 +54,28 @@ class ReviewItem:
     trigger_reason: str = ""
 
     # Action details
-    action_type: str | None = None
-    action_description: str | None = None
-    action_parameters: dict[str, Any] | None = None
+    action_type: Optional[str] = None
+    action_description: Optional[str] = None
+    action_parameters: Optional[Dict[str, Any]] = None
 
     # Ethics context
-    ethics_verdict: str | None = None
-    ethics_max_risk: float | None = None
-    ethics_triggered_risks: list[str] | None = None
+    ethics_verdict: Optional[str] = None
+    ethics_max_risk: Optional[float] = None
+    ethics_triggered_risks: Optional[List[str]] = None
 
     # Session context
-    turn_id: int | None = None
-    session_id: str | None = None
-    user_input_hash: str | None = None  # SHA-256, not raw input
+    turn_id: Optional[int] = None
+    session_id: Optional[str] = None
+    user_input_hash: Optional[str] = None  # SHA-256, not raw input
 
     # Review outcome
-    reviewed_at: str | None = None
-    reviewed_by: str | None = None
-    review_decision: str | None = None
-    review_notes: str | None = None
+    reviewed_at: Optional[str] = None
+    reviewed_by: Optional[str] = None
+    review_decision: Optional[str] = None
+    review_notes: Optional[str] = None
 
     # Expiry
-    expires_at: str | None = None
+    expires_at: Optional[str] = None
 
     def is_expired(self) -> bool:
         """Check if this review item has expired."""
@@ -88,12 +88,12 @@ class ReviewItem:
             expires = expires.replace(tzinfo=timezone.utc)
         return now >= expires
 
-    def to_dict(self) -> dict[str, Any]:
+    def to_dict(self) -> Dict[str, Any]:
         """Serialize to dictionary."""
         return asdict(self)
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> 'ReviewItem':
+    def from_dict(cls, data: Dict[str, Any]) -> 'ReviewItem':
         """Deserialize from dictionary."""
         return cls(**{k: v for k, v in data.items() if k in cls.__dataclass_fields__})
 
@@ -129,10 +129,10 @@ class HumanReviewQueue:
         queue.deny(item.review_id, reviewed_by="toygar", notes="Block this action")
     """
 
-    def __init__(self, config: HITLConfig | None = None):
+    def __init__(self, config: Optional[HITLConfig] = None):
         self.config = config or HITLConfig()
-        self._queue: list[ReviewItem] = []
-        self._archive: list[ReviewItem] = []  # Completed/expired items
+        self._queue: List[ReviewItem] = []
+        self._archive: List[ReviewItem] = []  # Completed/expired items
 
         # Set default storage path
         if not self.config.storage_path:
@@ -150,7 +150,7 @@ class HumanReviewQueue:
         return sum(1 for item in self._queue if item.status == ReviewStatus.PENDING.value)
 
     @property
-    def queue(self) -> list[ReviewItem]:
+    def queue(self) -> List[ReviewItem]:
         """Get current queue (read-only copy)."""
         self._expire_stale()
         return list(self._queue)
@@ -159,15 +159,15 @@ class HumanReviewQueue:
         self,
         trigger_type: str,
         trigger_reason: str,
-        action_type: str | None = None,
-        action_description: str | None = None,
-        action_parameters: dict[str, Any] | None = None,
-        ethics_verdict: str | None = None,
-        ethics_max_risk: float | None = None,
-        ethics_triggered_risks: list[str] | None = None,
-        turn_id: int | None = None,
-        session_id: str | None = None,
-        user_input_hash: str | None = None,
+        action_type: Optional[str] = None,
+        action_description: Optional[str] = None,
+        action_parameters: Optional[Dict[str, Any]] = None,
+        ethics_verdict: Optional[str] = None,
+        ethics_max_risk: Optional[float] = None,
+        ethics_triggered_risks: Optional[List[str]] = None,
+        turn_id: Optional[int] = None,
+        session_id: Optional[str] = None,
+        user_input_hash: Optional[str] = None,
         priority: str = ReviewPriority.NORMAL.value,
     ) -> ReviewItem:
         """
@@ -243,7 +243,7 @@ class HumanReviewQueue:
         review_id: str,
         reviewed_by: str,
         notes: str = "",
-    ) -> ReviewItem | None:
+    ) -> Optional[ReviewItem]:
         """
         Approve a pending review item.
 
@@ -262,7 +262,7 @@ class HumanReviewQueue:
         review_id: str,
         reviewed_by: str,
         notes: str = "",
-    ) -> ReviewItem | None:
+    ) -> Optional[ReviewItem]:
         """
         Deny a pending review item.
 
@@ -276,7 +276,7 @@ class HumanReviewQueue:
         """
         return self._review(review_id, ReviewStatus.DENIED, reviewed_by, notes)
 
-    def get_item(self, review_id: str) -> ReviewItem | None:
+    def get_item(self, review_id: str) -> Optional[ReviewItem]:
         """Get a review item by ID."""
         for item in self._queue:
             if item.review_id == review_id:
@@ -286,7 +286,7 @@ class HumanReviewQueue:
                 return item
         return None
 
-    def get_pending(self) -> list[ReviewItem]:
+    def get_pending(self) -> List[ReviewItem]:
         """Get all pending review items, sorted by priority."""
         self._expire_stale()
         pending = [i for i in self._queue if i.status == ReviewStatus.PENDING.value]
@@ -318,7 +318,7 @@ class HumanReviewQueue:
         status: ReviewStatus,
         reviewed_by: str,
         notes: str,
-    ) -> ReviewItem | None:
+    ) -> Optional[ReviewItem]:
         """Internal review handler."""
         for item in self._queue:
             if item.review_id == review_id:
@@ -392,7 +392,7 @@ class HumanReviewQueue:
             if not storage_path.exists():
                 return
 
-            with open(storage_path) as f:
+            with open(storage_path, "r") as f:
                 data = json.load(f)
 
             self._queue = [ReviewItem.from_dict(d) for d in data.get("queue", [])]
@@ -407,7 +407,7 @@ class HumanReviewQueue:
             self._queue = []
             self._archive = []
 
-    def to_dict(self) -> dict[str, Any]:
+    def to_dict(self) -> Dict[str, Any]:
         """Serialize queue state for monitoring."""
         return {
             "pending_count": self.pending_count,

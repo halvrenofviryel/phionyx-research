@@ -7,6 +7,7 @@ Enables swapping Physics v2.1 with Null implementation.
 """
 
 from abc import ABC, abstractmethod
+from typing import Dict
 
 
 class PhysicsPort(ABC):
@@ -26,7 +27,7 @@ class PhysicsPort(ABC):
         w_p: float = 0.5,
         context_mode: str = "DEFAULT",
         entropy_penalty_k: float = 1.0  # ⚠️ NEW: Entropy penalty coefficient (default 1.0, range [0, 2])
-    ) -> dict[str, float]:
+    ) -> Dict[str, float]:
         """
         Calculate Phi (Echo Quality) using Physics v2.1.
 

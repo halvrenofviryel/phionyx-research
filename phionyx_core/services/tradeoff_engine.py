@@ -7,9 +7,9 @@ Faz 3.1: Kalan Özellikler
 Alternatif mimari/fonksiyon seçeneklerini listeler ve maliyet/risk analizi yapar.
 """
 
-from dataclasses import dataclass, field
+from typing import List, Dict, Any, Optional
+from dataclasses import dataclass
 from enum import Enum
-from typing import Any
 
 
 class AlternativeType(Enum):
@@ -39,16 +39,22 @@ class Alternative:
     risk_score: float = 0.0  # 0.0-1.0, lower is better
     complexity_score: float = 0.0  # 0.0-1.0, lower is better
     maintainability_score: float = 0.0  # 0.0-1.0, higher is better
-    pros: list[str] = field(default_factory=list)
-    cons: list[str] = field(default_factory=list)
+    pros: List[str] = None
+    cons: List[str] = None
+
+    def __post_init__(self):
+        if self.pros is None:
+            self.pros = []
+        if self.cons is None:
+            self.cons = []
 
 
 @dataclass
 class TradeOffTable:
     """Trade-off comparison table."""
-    alternatives: list[Alternative]
-    metrics: list[str]  # ["cost", "risk", "complexity", "maintainability"]
-    recommendation: Alternative | None = None
+    alternatives: List[Alternative]
+    metrics: List[str]  # ["cost", "risk", "complexity", "maintainability"]
+    recommendation: Optional[Alternative] = None
 
 
 class TradeOffElicitationEngine:
@@ -64,13 +70,13 @@ class TradeOffElicitationEngine:
 
     def __init__(self):
         """Initialize trade-off engine."""
-        self.alternative_cache: dict[str, list[Alternative]] = {}
+        self.alternative_cache: Dict[str, List[Alternative]] = {}
 
     def generate_alternatives(
         self,
         requirement: str,
-        constraints: list[Constraint] | None = None
-    ) -> list[Alternative]:
+        constraints: Optional[List[Constraint]] = None
+    ) -> List[Alternative]:
         """
         Generate alternative solutions for a requirement.
 
@@ -104,8 +110,8 @@ class TradeOffElicitationEngine:
     def _generate_architectural_alternatives(
         self,
         requirement: str,
-        constraints: list[Constraint] | None = None
-    ) -> list[Alternative]:
+        constraints: Optional[List[Constraint]] = None
+    ) -> List[Alternative]:
         """Generate architectural alternatives."""
         alternatives = []
 
@@ -133,8 +139,8 @@ class TradeOffElicitationEngine:
     def _generate_functional_alternatives(
         self,
         requirement: str,
-        constraints: list[Constraint] | None = None
-    ) -> list[Alternative]:
+        constraints: Optional[List[Constraint]] = None
+    ) -> List[Alternative]:
         """Generate functional alternatives."""
         alternatives = []
 
@@ -162,8 +168,8 @@ class TradeOffElicitationEngine:
     def _generate_implementation_alternatives(
         self,
         requirement: str,
-        constraints: list[Constraint] | None = None
-    ) -> list[Alternative]:
+        constraints: Optional[List[Constraint]] = None
+    ) -> List[Alternative]:
         """Generate implementation alternatives."""
         alternatives = []
 
@@ -191,7 +197,7 @@ class TradeOffElicitationEngine:
     def _calculate_cost(
         self,
         alternative: Alternative,
-        constraints: list[Constraint] | None = None
+        constraints: Optional[List[Constraint]] = None
     ) -> float:
         """Calculate cost score (0.0-1.0, lower is better)."""
         # Base cost based on type
@@ -215,7 +221,7 @@ class TradeOffElicitationEngine:
     def _calculate_risk(
         self,
         alternative: Alternative,
-        constraints: list[Constraint] | None = None
+        constraints: Optional[List[Constraint]] = None
     ) -> float:
         """Calculate risk score (0.0-1.0, lower is better)."""
         # Base risk based on type
@@ -239,7 +245,7 @@ class TradeOffElicitationEngine:
     def _calculate_complexity(
         self,
         alternative: Alternative,
-        constraints: list[Constraint] | None = None
+        constraints: Optional[List[Constraint]] = None
     ) -> float:
         """Calculate complexity score (0.0-1.0, lower is better)."""
         # Base complexity based on type
@@ -261,7 +267,7 @@ class TradeOffElicitationEngine:
     def _calculate_maintainability(
         self,
         alternative: Alternative,
-        constraints: list[Constraint] | None = None
+        constraints: Optional[List[Constraint]] = None
     ) -> float:
         """Calculate maintainability score (0.0-1.0, higher is better)."""
         # Base maintainability (inverse of complexity)
@@ -277,8 +283,8 @@ class TradeOffElicitationEngine:
 
     def generate_tradeoff_table(
         self,
-        alternatives: list[Alternative],
-        metrics: list[str] | None = None
+        alternatives: List[Alternative],
+        metrics: Optional[List[str]] = None
     ) -> TradeOffTable:
         """
         Generate trade-off comparison table.
@@ -316,7 +322,7 @@ class TradeOffElicitationEngine:
             recommendation=best_alternative
         )
 
-    def _get_architectural_pros(self, pattern_id: str) -> list[str]:
+    def _get_architectural_pros(self, pattern_id: str) -> List[str]:
         """Get pros for architectural pattern."""
         pros_map = {
             "monolithic": ["Simple to develop", "Easy to deploy", "Low overhead"],
@@ -326,7 +332,7 @@ class TradeOffElicitationEngine:
         }
         return pros_map.get(pattern_id, [])
 
-    def _get_architectural_cons(self, pattern_id: str) -> list[str]:
+    def _get_architectural_cons(self, pattern_id: str) -> List[str]:
         """Get cons for architectural pattern."""
         cons_map = {
             "monolithic": ["Hard to scale", "Tight coupling", "Single point of failure"],
@@ -336,7 +342,7 @@ class TradeOffElicitationEngine:
         }
         return cons_map.get(pattern_id, [])
 
-    def _get_functional_pros(self, approach_id: str) -> list[str]:
+    def _get_functional_pros(self, approach_id: str) -> List[str]:
         """Get pros for functional approach."""
         pros_map = {
             "simple": ["Easy to understand", "Quick to implement", "Low maintenance"],
@@ -346,7 +352,7 @@ class TradeOffElicitationEngine:
         }
         return pros_map.get(approach_id, [])
 
-    def _get_functional_cons(self, approach_id: str) -> list[str]:
+    def _get_functional_cons(self, approach_id: str) -> List[str]:
         """Get cons for functional approach."""
         cons_map = {
             "simple": ["Limited features", "May need refactoring", "Not optimized"],
@@ -356,7 +362,7 @@ class TradeOffElicitationEngine:
         }
         return cons_map.get(approach_id, [])
 
-    def _get_implementation_pros(self, strategy_id: str) -> list[str]:
+    def _get_implementation_pros(self, strategy_id: str) -> List[str]:
         """Get pros for implementation strategy."""
         pros_map = {
             "iterative": ["Incremental delivery", "Early feedback", "Flexible"],
@@ -366,7 +372,7 @@ class TradeOffElicitationEngine:
         }
         return pros_map.get(strategy_id, [])
 
-    def _get_implementation_cons(self, strategy_id: str) -> list[str]:
+    def _get_implementation_cons(self, strategy_id: str) -> List[str]:
         """Get cons for implementation strategy."""
         cons_map = {
             "iterative": ["Requires discipline", "Integration challenges", "Scope creep risk"],

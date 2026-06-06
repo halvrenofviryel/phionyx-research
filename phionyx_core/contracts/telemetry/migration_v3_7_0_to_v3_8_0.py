@@ -40,12 +40,13 @@ Rationale (patent-claim alignment):
 Founder approval: granted in session_01RW4rjACATaqAHoRNxpCjjg.
 """
 
+from typing import List
 
 SOURCE_VERSION = "3.7.0"
 TARGET_VERSION = "3.8.0"
 
 # Block IDs reordered (moved up) — position changes are data-only.
-REORDERED_BLOCKS: list[str] = [
+REORDERED_BLOCKS: List[str] = [
     "phi_computation",
     "entropy_computation",
     "confidence_fusion",
@@ -53,12 +54,12 @@ REORDERED_BLOCKS: list[str] = [
 ]
 
 # Newly inserted block IDs.
-NEW_BLOCKS: list[str] = [
+NEW_BLOCKS: List[str] = [
     "response_revision_gate",
 ]
 
 # Newly required event types.
-NEW_EVENT_TYPES: list[str] = [
+NEW_EVENT_TYPES: List[str] = [
     "response_revision",
 ]
 

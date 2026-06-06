@@ -13,6 +13,7 @@ decisions are auditable and deterministic.
 from __future__ import annotations
 
 import math
+from typing import Dict, List
 
 # ---------------------------------------------------------------------------
 # Primary metric components
@@ -20,7 +21,7 @@ import math
 
 #: The six required components for the Composite Quality Score.
 #: Order is significant for audit-log readability but not for computation.
-_CQS_REQUIRED_COMPONENTS: list[str] = [
+_CQS_REQUIRED_COMPONENTS: List[str] = [
     "task_completion_accuracy",
     "determinism_consistency",
     "reasoning_chain_validity",
@@ -34,7 +35,7 @@ _CQS_REQUIRED_COMPONENTS: list[str] = [
 # ---------------------------------------------------------------------------
 
 
-def compute_cqs(components: dict[str, float]) -> float:
+def compute_cqs(components: Dict[str, float]) -> float:
     """Compute Composite Quality Score using geometric mean.
 
     Parameters
@@ -71,7 +72,7 @@ def compute_cqs(components: dict[str, float]) -> float:
     For example, an agent cannot compensate for poor determinism by
     inflating trace completeness.
     """
-    values: list[float] = []
+    values: List[float] = []
     for key in _CQS_REQUIRED_COMPONENTS:
         v = components.get(key, 0.0)
         if not (0.0 <= v <= 1.0):
@@ -92,7 +93,7 @@ def compute_cqs(components: dict[str, float]) -> float:
 # ---------------------------------------------------------------------------
 
 
-def check_guardrails(metrics: dict[str, float]) -> list[str]:
+def check_guardrails(metrics: Dict[str, float]) -> List[str]:
     """Check guardrail metrics and return a list of violation descriptions.
 
     Guardrails carry **veto power**: a non-empty violation list blocks
@@ -128,7 +129,7 @@ def check_guardrails(metrics: dict[str, float]) -> list[str]:
     | gold_task_regressions     | >        | 0    (zero regressions on gold tasks)         |
     +---------------------------+----------+-----------------------------------------------+
     """
-    violations: list[str] = []
+    violations: List[str] = []
 
     # --- Governance: zero tolerance -------------------------------------------
     gvr = metrics.get("governance_violation_rate", 0.0)

@@ -12,19 +12,19 @@ Per Echoism Core v1.1:
 
 from __future__ import annotations
 
+from typing import Dict, Any, Optional, Tuple, Literal
 from dataclasses import dataclass
-from typing import Any, Literal
 
 # Import wrapper for backward compatibility
 try:
     from .ethics_enforcement_wrapper import EthicsEnforcement
 except ImportError:
     # Create a minimal stub if wrapper import fails
-    class EthicsEnforcement:  # type: ignore[no-redef]
+    class EthicsEnforcement:
         """Stub EthicsEnforcement class."""
-        def __init__(self, *args: Any, **kwargs: Any) -> None:
+        def __init__(self, *args, **kwargs):
             pass
-        def check_risk(self, *args: Any, **kwargs: Any) -> Any:
+        def check_risk(self, *args, **kwargs):
             raise NotImplementedError("EthicsEnforcement.check_risk not implemented")
 
 __all__ = [
@@ -44,12 +44,12 @@ except (ImportError, ValueError):
         from phionyx_core.state.ethics import EthicsVector
     except ImportError:
         # Fallback: direct import (for standalone execution)
-        import os
         import sys
+        import os
         parent_dir = os.path.dirname(os.path.abspath(__file__))
         if parent_dir not in sys.path:
             sys.path.insert(0, parent_dir)
-        from ethics import EthicsVector  # type: ignore[no-redef]
+        from ethics import EthicsVector
 
 
 @dataclass
@@ -64,10 +64,10 @@ class EthicsPolicyConfig:
     entropy_boost: float = 0.95
     message_style: Literal["pedagogical", "game_context", "professional", "quality_gate"] = "pedagogical"
     damping_curve: Literal["linear", "exponential", "sigmoid"] = "linear"
-    attachment_risk_threshold: float | None = None
-    manipulation_risk_threshold: float | None = None
-    harm_risk_threshold: float | None = None
-    boundary_violation_risk_threshold: float | None = None
+    attachment_risk_threshold: Optional[float] = None
+    manipulation_risk_threshold: Optional[float] = None
+    harm_risk_threshold: Optional[float] = None
+    boundary_violation_risk_threshold: Optional[float] = None
 
     def get_risk_threshold_for_type(self, risk_type: str) -> float:
         """Get threshold for specific risk type."""
@@ -100,8 +100,8 @@ def apply_ethics_enforcement(
     ethics_vector: EthicsVector,
     current_entropy: float,
     base_amplitude: float,
-    config: EthicsEnforcementConfig | None = None
-) -> dict[str, Any]:
+    config: Optional[EthicsEnforcementConfig] = None
+) -> Dict[str, Any]:
     """
     Apply ethics enforcement if any risk exceeds threshold.
 
@@ -213,8 +213,8 @@ def check_ethics_before_response(
     ethics_vector: EthicsVector,
     current_entropy: float,
     base_amplitude: float,
-    config: EthicsEnforcementConfig | None = None
-) -> tuple[bool, dict[str, Any]]:
+    config: Optional[EthicsEnforcementConfig] = None
+) -> Tuple[bool, Dict[str, Any]]:
     """
     Check ethics before response generation (pre-gate).
 
@@ -246,8 +246,8 @@ def apply_ethics_after_response(
     response_text: str,
     current_entropy: float,
     base_amplitude: float,
-    config: EthicsEnforcementConfig | None = None
-) -> dict[str, Any]:
+    config: Optional[EthicsEnforcementConfig] = None
+) -> Dict[str, Any]:
     """
     Apply ethics enforcement after response generation (post-gate).
 
@@ -289,10 +289,10 @@ def apply_ethics_after_response(
 
 
 def apply_forced_damping(
-    state: dict[str, Any],
+    state: Dict[str, Any],
     ethics_vector: EthicsVector,
     policy: EthicsPolicyConfig
-) -> dict[str, Any]:
+) -> Dict[str, Any]:
     """
     Apply forced damping based on policy configuration.
 

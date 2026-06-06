@@ -7,7 +7,7 @@ Enables swapping Policy with different implementations.
 """
 
 from abc import ABC, abstractmethod
-from typing import Any
+from typing import Dict, Any, Optional
 
 
 class PolicyPort(ABC):
@@ -16,10 +16,10 @@ class PolicyPort(ABC):
     @abstractmethod
     async def select_policy(
         self,
-        context_mode: str | None = None,
+        context_mode: Optional[str] = None,
         risk_level: int = 0,
-        user_role: str | None = None
-    ) -> Any | None:
+        user_role: Optional[str] = None
+    ) -> Optional[Any]:
         """
         Select appropriate policy based on context.
 
@@ -33,8 +33,8 @@ class PolicyPort(ABC):
         self,
         content: str,
         policy: Any,
-        physics_state: dict[str, float] | None = None
-    ) -> dict[str, Any]:
+        physics_state: Optional[Dict[str, float]] = None
+    ) -> Dict[str, Any]:
         """
         Evaluate content against policy.
 

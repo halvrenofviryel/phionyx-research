@@ -5,11 +5,10 @@ Thread Safety Utilities
 Utilities for thread-safe operations in multi-tenant environments.
 """
 
-import logging
 import threading
-from collections.abc import Callable
+from typing import TypeVar, Callable, Any
 from functools import wraps
-from typing import Any, TypeVar, cast
+import logging
 
 logger = logging.getLogger(__name__)
 
@@ -76,7 +75,7 @@ class ThreadSafeDict:
     def copy(self) -> dict:
         """Thread-safe copy."""
         with self._lock:
-            return cast(dict, self._dict.copy())
+            return self._dict.copy()
 
     def clear(self) -> None:
         """Thread-safe clear."""
@@ -144,7 +143,7 @@ class ThreadSafeList:
     def copy(self) -> list:
         """Thread-safe copy."""
         with self._lock:
-            return cast(list, self._list.copy())
+            return self._list.copy()
 
 
 def synchronized(func: Callable[..., T]) -> Callable[..., T]:
@@ -157,11 +156,11 @@ def synchronized(func: Callable[..., T]) -> Callable[..., T]:
             # Thread-safe code
             pass
     """
-    func.__lock__ = threading.RLock()  # type: ignore[attr-defined]
+    func.__lock__ = threading.RLock()
 
     @wraps(func)
     def wrapper(*args, **kwargs):
-        with func.__lock__:  # type: ignore[attr-defined]
+        with func.__lock__:
             return func(*args, **kwargs)
 
     return wrapper
@@ -221,5 +220,5 @@ class SessionLocalStorage:
         storage = getattr(self._local, 'storage', None)
         if storage is None:
             return {}
-        return cast(dict, storage.copy())
+        return storage.copy()
 

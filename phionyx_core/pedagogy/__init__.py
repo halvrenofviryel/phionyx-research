@@ -22,6 +22,7 @@ Usage:
 """
 
 import logging
+from typing import Optional
 
 # Use absolute imports when loaded as module, relative when as package
 try:
@@ -29,8 +30,7 @@ try:
     from shaper import LanguageShaper
     from templates import TemplateLibrary
     try:
-        from audit import PedagogyLogger
-        from audit import RiskLevel as AuditRiskLevel
+        from audit import PedagogyLogger, RiskLevel as AuditRiskLevel
     except ImportError:
         AuditRiskLevel = None
         PedagogyLogger = None
@@ -40,8 +40,7 @@ except ImportError:
     from .shaper import LanguageShaper
     from .templates import TemplateLibrary
     try:
-        from .audit import PedagogyLogger
-        from .audit import RiskLevel as AuditRiskLevel
+        from .audit import PedagogyLogger, RiskLevel as AuditRiskLevel
     except ImportError:
         AuditRiskLevel = None
         PedagogyLogger = None
@@ -106,9 +105,9 @@ class PedagogyEngine:
         raw_response: str,
         physics_state: dict,
         force_safe: bool = False,
-        actor_ref: str | None = None,  # SPRINT 5: Replaced user_id with actor_ref (core-neutral)
-        tenant_ref: str | None = None,  # SPRINT 5: Replaced school_id with tenant_ref (core-neutral)
-        class_id: str | None = None
+        actor_ref: Optional[str] = None,  # SPRINT 5: Replaced user_id with actor_ref (core-neutral)
+        tenant_ref: Optional[str] = None,  # SPRINT 5: Replaced school_id with tenant_ref (core-neutral)
+        class_id: Optional[str] = None
     ) -> dict:
         """
         Process raw LLM response through pedagogical pipeline.
@@ -262,5 +261,5 @@ class PedagogyEngine:
         Returns:
             True if intervention is required
         """
-        return bool(self.guardrails.requires_intervention(text))
+        return self.guardrails.requires_intervention(text)
 

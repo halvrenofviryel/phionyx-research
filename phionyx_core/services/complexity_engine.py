@@ -7,12 +7,13 @@ Faz 2.3: Complexity Budget Enforcement - Tam Fonksiyonel
 Gelişmiş complexity measurement ve enforcement servisi.
 """
 
+from typing import List, Optional, Tuple
+from dataclasses import dataclass
+import re
 import ast
 import math
-import re
-from dataclasses import dataclass
 
-from phionyx_core.pipeline.blocks.complexity_budget import ComplexityBudget, ComplexityMetrics
+from phionyx_core.pipeline.blocks.complexity_budget import ComplexityMetrics, ComplexityBudget
 
 
 @dataclass
@@ -39,7 +40,7 @@ class ComplexityBudgetEngine:
     - Entropy integration
     """
 
-    def __init__(self, budget: ComplexityBudget | None = None):
+    def __init__(self, budget: Optional[ComplexityBudget] = None):
         """
         Initialize complexity engine.
 
@@ -47,7 +48,7 @@ class ComplexityBudgetEngine:
             budget: ComplexityBudget configuration (optional)
         """
         self.budget = budget or ComplexityBudget()
-        self.metrics_history: list[ComplexityMetrics] = []
+        self.metrics_history: List[ComplexityMetrics] = []
 
     def measure_complexity_enhanced(self, code: str) -> ComplexityMetrics:
         """
@@ -91,7 +92,7 @@ class ComplexityBudgetEngine:
 
     def _calculate_cyclomatic_complexity_enhanced(self, tree: ast.AST) -> int:
         """Enhanced cyclomatic complexity calculation."""
-        complexity: float = 1  # Base complexity
+        complexity = 1  # Base complexity
 
         for node in ast.walk(tree):
             # Decision points increase complexity
@@ -99,10 +100,9 @@ class ComplexityBudgetEngine:
                 complexity += 1
                 # Check for elif chains
                 if hasattr(node, 'orelse') and node.orelse:
-                    for stmt in node.orelse:
-                        for child in ast.walk(stmt):
-                            if isinstance(child, ast.If):
-                                complexity += 1
+                    for child in ast.walk(node.orelse):
+                        if isinstance(child, ast.If):
+                            complexity += 1
             elif isinstance(node, ast.While):
                 complexity += 1
             elif isinstance(node, ast.For):
@@ -129,7 +129,7 @@ class ComplexityBudgetEngine:
             nonlocal complexity, nesting_level
             current_complexity = 0
 
-            if isinstance(node, ast.If | ast.While | ast.For | ast.Try | ast.With):
+            if isinstance(node, (ast.If, ast.While, ast.For, ast.Try, ast.With)):
                 nesting_level = level
                 current_complexity = nesting_level + 1
                 complexity += current_complexity
@@ -150,7 +150,7 @@ class ComplexityBudgetEngine:
 
         def visit_node(node, depth):
             nonlocal max_depth
-            if isinstance(node, ast.If | ast.While | ast.For | ast.Try | ast.With):
+            if isinstance(node, (ast.If, ast.While, ast.For, ast.Try, ast.With)):
                 current_depth = depth + 1
                 max_depth = max(max_depth, current_depth)
                 for child in ast.iter_child_nodes(node):
@@ -264,8 +264,8 @@ class ComplexityBudgetEngine:
     def check_budget_enhanced(
         self,
         metrics: ComplexityMetrics,
-        budget: ComplexityBudget | None = None
-    ) -> tuple[bool, list[str], list[SimplificationSuggestion]]:
+        budget: Optional[ComplexityBudget] = None
+    ) -> Tuple[bool, List[str], List[SimplificationSuggestion]]:
         """
         Enhanced budget checking with suggestions.
 
@@ -368,14 +368,14 @@ class ComplexityBudgetEngine:
         entropy_boost = complexity_score * 0.2  # Max 0.2 boost
         adjusted_entropy = min(1.0, base_entropy + entropy_boost)
 
-        return float(adjusted_entropy)
+        return adjusted_entropy
 
     def generate_simplification_suggestions(
         self,
         code: str,
         metrics: ComplexityMetrics,
-        budget: ComplexityBudget | None = None
-    ) -> list[SimplificationSuggestion]:
+        budget: Optional[ComplexityBudget] = None
+    ) -> List[SimplificationSuggestion]:
         """
         Generate simplification suggestions based on complexity metrics.
 

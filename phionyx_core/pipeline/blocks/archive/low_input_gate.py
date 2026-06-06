@@ -8,7 +8,7 @@ Gate that checks if user input is too short/low quality and triggers early exit.
 
 import logging
 
-from ...base import BlockContext, BlockResult, PipelineBlock
+from ...base import PipelineBlock, BlockContext, BlockResult
 
 logger = logging.getLogger(__name__)
 

@@ -2,13 +2,12 @@
 Unit tests for Response Templates
 """
 import pytest
-
 from phionyx_core.templates.response_templates import (
-    IntentType,
     ResponseTemplate,
     TemplateManager,
+    IntentType,
     get_template_manager,
-    reset_global_template_manager,
+    reset_global_template_manager
 )
 
 

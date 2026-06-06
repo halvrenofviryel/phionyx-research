@@ -13,10 +13,10 @@ Features:
 """
 
 import logging
+from typing import Dict, Any, Optional, List
 from datetime import datetime
-from typing import Any
 
-from phionyx_core.memory.rag_cache import RAGCache, get_rag_cache
+from phionyx_core.memory.rag_cache import get_rag_cache, RAGCache
 from phionyx_core.physics.semantic_time_decay import SemanticTimeDecayManager
 
 logger = logging.getLogger(__name__)
@@ -35,11 +35,11 @@ class RAGService:
 
     def __init__(
         self,
-        vector_store: Any | None = None,
+        vector_store: Optional[Any] = None,
         max_context_tokens: int = 2000,
         relevance_threshold: float = 0.7,
         semantic_decay_half_life_hours: float = 24.0,
-        rag_cache: RAGCache | None = None,
+        rag_cache: Optional[RAGCache] = None,
         use_semantic_time_decay: bool = True
     ):
         """
@@ -59,7 +59,6 @@ class RAGService:
         self.use_semantic_time_decay = use_semantic_time_decay
 
         # Initialize Semantic Time Decay Manager (Patent Aile 4)
-        self.semantic_decay_manager: SemanticTimeDecayManager | None = None
         if use_semantic_time_decay:
             # Convert hours to seconds for semantic time decay
             half_life_seconds = semantic_decay_half_life_hours * 3600.0
@@ -67,6 +66,8 @@ class RAGService:
                 default_half_life_seconds=half_life_seconds,
                 use_local_time=True
             )
+        else:
+            self.semantic_decay_manager = None
 
         # Initialize RAG cache
         if rag_cache is None:
@@ -81,12 +82,12 @@ class RAGService:
     async def retrieve_context(
         self,
         query: str,
-        intent: str | None = None,
-        actor_ref: str | None = None,
+        intent: Optional[str] = None,
+        actor_ref: Optional[str] = None,
         limit: int = 5,
-        t_local: float | None = None,
-        t_global: float | None = None
-    ) -> dict[str, Any]:
+        t_local: Optional[float] = None,
+        t_global: Optional[float] = None
+    ) -> Dict[str, Any]:
         """
         Retrieve relevant context using RAG.
 
@@ -193,7 +194,7 @@ class RAGService:
     def _optimize_query_for_intent(
         self,
         query: str,
-        intent: str | None = None
+        intent: Optional[str] = None
     ) -> str:
         """
         Optimize query based on intent.
@@ -221,10 +222,10 @@ class RAGService:
 
     def _apply_semantic_decay(
         self,
-        memories: list[dict],
-        t_local: float | None = None,
-        t_global: float | None = None
-    ) -> list[dict]:
+        memories: List[Dict],
+        t_local: Optional[float] = None,
+        t_global: Optional[float] = None
+    ) -> List[Dict]:
         """
         Apply semantic decay to memories (Patent Aile 4).
 
@@ -251,10 +252,10 @@ class RAGService:
 
     def _apply_semantic_time_decay(
         self,
-        memories: list[dict],
+        memories: List[Dict],
         t_local: float,
-        t_global: float | None = None
-    ) -> list[dict]:
+        t_global: Optional[float] = None
+    ) -> List[Dict]:
         """
         Apply semantic time decay to memories (Patent Aile 4).
 
@@ -310,7 +311,7 @@ class RAGService:
 
         return decayed_memories
 
-    def _apply_wall_clock_decay(self, memories: list[dict]) -> list[dict]:
+    def _apply_wall_clock_decay(self, memories: List[Dict]) -> List[Dict]:
         """
         Apply wall-clock time decay to memories (backward compatibility).
 
@@ -373,7 +374,7 @@ class RAGService:
 
     def _build_context_string(
         self,
-        memories: list[dict],
+        memories: List[Dict],
         max_tokens: int
     ) -> tuple[str, int]:
         """

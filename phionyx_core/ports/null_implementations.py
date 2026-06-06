@@ -11,15 +11,15 @@ Key Principle:
 - No errors, just "module not available" behavior
 """
 
-from typing import Any
+from typing import Dict, Any, List, Optional
 
-from .intuition_port import IntuitionPort
-from .memory_port import MemoryPort
-from .meta_port import MetaPort
-from .narrative_port import NarrativePort
-from .pedagogy_port import PedagogyPort
 from .physics_port import PhysicsPort
+from .memory_port import MemoryPort
+from .intuition_port import IntuitionPort
+from .pedagogy_port import PedagogyPort
 from .policy_port import PolicyPort
+from .narrative_port import NarrativePort
+from .meta_port import MetaPort
 
 
 class NullPhysicsEngine(PhysicsPort):
@@ -38,7 +38,7 @@ class NullPhysicsEngine(PhysicsPort):
         w_p: float = 0.5,
         context_mode: str = "DEFAULT",
         entropy_penalty_k: float = 0.5
-    ) -> dict[str, float]:
+    ) -> Dict[str, float]:
         """Calculate phi using direct SDK if available, otherwise return safe defaults."""
         try:
             # Try to use real physics calculation
@@ -90,8 +90,8 @@ class NullMemoryEngine(MemoryPort):
         content: str,
         user_id: str,
         importance: float,
-        metadata: dict[str, Any] | None = None
-    ) -> str | None:
+        metadata: Optional[Dict[str, Any]] = None
+    ) -> Optional[str]:
         """Memory not available - return None."""
         return None
 
@@ -99,8 +99,8 @@ class NullMemoryEngine(MemoryPort):
         self,
         query: str,
         limit: int = 5,
-        user_id: str | None = None
-    ) -> list[dict[str, Any]]:
+        user_id: Optional[str] = None
+    ) -> List[Dict[str, Any]]:
         """Search memories - Null implementation returns empty list."""
         return []
 
@@ -109,7 +109,7 @@ class NullMemoryEngine(MemoryPort):
         query: str,
         user_id: str,
         limit: int = 5
-    ) -> list[dict[str, Any]]:
+    ) -> List[Dict[str, Any]]:
         """No memories available - return empty list."""
         return []
 
@@ -117,7 +117,7 @@ class NullMemoryEngine(MemoryPort):
         self,
         memory_id: str,
         user_id: str
-    ) -> dict[str, Any] | None:
+    ) -> Optional[Dict[str, Any]]:
         return None
 
     def is_connected(self) -> bool:
@@ -132,15 +132,15 @@ class NullIntuitionEngine(IntuitionPort):
         """Null implementation is always "available" (degraded mode)."""
         return True  # Return True so engine can use it (degraded)
 
-    async def extract_concepts(self, text: str) -> list[str]:
+    async def extract_concepts(self, text: str) -> List[str]:
         """No concept extraction - return empty list."""
         return []
 
     async def discover_hidden_context(
         self,
         user_text: str,
-        user_id: str | None = None
-    ) -> dict[str, Any]:
+        user_id: Optional[str] = None
+    ) -> Dict[str, Any]:
         """Null implementation returns empty context."""
         return {
             "intuitive_context": None,
@@ -150,17 +150,17 @@ class NullIntuitionEngine(IntuitionPort):
 
     async def infer_hidden_context(
         self,
-        concepts: list[str],
-        user_id: str | None = None
-    ) -> dict[str, Any] | None:
+        concepts: List[str],
+        user_id: Optional[str] = None
+    ) -> Optional[Dict[str, Any]]:
         """No hidden context inference - return None."""
         return None
 
     async def build_concept_graph(
         self,
-        concepts: list[str],
-        relationships: list[dict[str, Any]] | None = None
-    ) -> dict[str, Any] | None:
+        concepts: List[str],
+        relationships: Optional[List[Dict[str, Any]]] = None
+    ) -> Optional[Dict[str, Any]]:
         return None
 
 
@@ -170,10 +170,10 @@ class NullPedagogyEngine(PedagogyPort):
     async def assess_risk(
         self,
         user_input: str,
-        physics_state: dict[str, float],
-        actor_ref: str | None = None,
-        tenant_ref: str | None = None
-    ) -> dict[str, Any]:
+        physics_state: Dict[str, float],
+        actor_ref: Optional[str] = None,
+        tenant_ref: Optional[str] = None
+    ) -> Dict[str, Any]:
         """Return safe default risk assessment."""
         return {
             "risk_level": 0,  # No risk
@@ -192,8 +192,8 @@ class NullPedagogyEngine(PedagogyPort):
         self,
         risk_type: str,
         language: str = "tr",
-        physics_state: dict[str, float] | None = None
-    ) -> str | None:
+        physics_state: Optional[Dict[str, float]] = None
+    ) -> Optional[str]:
         return None
 
     def get_strictness_level(self) -> str:
@@ -205,18 +205,18 @@ class NullPolicyEngine(PolicyPort):
 
     async def select_policy(
         self,
-        context_mode: str | None = None,
+        context_mode: Optional[str] = None,
         risk_level: int = 0,
-        user_role: str | None = None
-    ) -> Any | None:
+        user_role: Optional[str] = None
+    ) -> Optional[Any]:
         return None
 
     async def evaluate_content(
         self,
         content: str,
         policy: Any,
-        physics_state: dict[str, float] | None = None
-    ) -> dict[str, Any]:
+        physics_state: Optional[Dict[str, float]] = None
+    ) -> Dict[str, Any]:
         return {
             "decision": "allow",
             "blocking_reason": None
@@ -233,10 +233,10 @@ class NullNarrativeEngine(NarrativePort):
         self,
         user_input: str,
         context: str,
-        physics_state: dict[str, float],
+        physics_state: Dict[str, float],
         model_id: str,
         system_prompt: str,
-        temperature: float | None = None
+        temperature: Optional[float] = None
     ) -> str:
         """Return safe default response."""
         return "I'm here to help. Could you tell me more about what you're thinking?"
@@ -244,7 +244,7 @@ class NullNarrativeEngine(NarrativePort):
     def get_mode(self) -> str:
         return "simple"
 
-    async def apply_filters(self, narrative: str, filters: list[str]) -> str:
+    async def apply_filters(self, narrative: str, filters: List[str]) -> str:
         return narrative  # No filtering
 
 
@@ -254,9 +254,9 @@ class NullMetaEngine(MetaPort):
     async def estimate_confidence(
         self,
         user_input: str,
-        context: str | None = None,
-        memory_matches: list[dict[str, Any]] | None = None
-    ) -> dict[str, Any]:
+        context: Optional[str] = None,
+        memory_matches: Optional[List[Dict[str, Any]]] = None
+    ) -> Dict[str, Any]:
         """Return safe default confidence."""
         return {
             "confidence_score": 0.7,  # Moderate confidence

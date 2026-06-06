@@ -7,12 +7,11 @@ Entirely new schema. Represents system action intentions
 Includes sandbox/reversibility metadata for safe execution.
 """
 
-import uuid
-from datetime import datetime, timezone
+from typing import Optional, Dict, Any
 from enum import Enum
-from typing import Any
-
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, Field
+from datetime import datetime, timezone
+import uuid
 
 
 class ActionType(str, Enum):
@@ -76,7 +75,7 @@ class ActionIntent(BaseModel):
         default="action_executor",
         description="Module that will execute this action"
     )
-    target_parameters: dict[str, Any] = Field(
+    target_parameters: Dict[str, Any] = Field(
         default_factory=dict,
         description="Parameters for the target module"
     )
@@ -86,7 +85,7 @@ class ActionIntent(BaseModel):
         default="intelligence_core",
         description="Module that proposed this action"
     )
-    source_goal_id: str | None = Field(
+    source_goal_id: Optional[str] = Field(
         None,
         description="Goal that motivated this action"
     )
@@ -101,17 +100,25 @@ class ActionIntent(BaseModel):
         default=False,
         description="Whether ethics gate approved this action"
     )
-    ethics_decision_id: str | None = Field(
+    ethics_decision_id: Optional[str] = Field(
         None,
         description="Reference to EthicsDecision that cleared this"
     )
 
     # Timestamps
     proposed_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
-    executed_at: datetime | None = None
+    executed_at: Optional[datetime] = None
 
     # Metadata
-    trace_id: str | None = None
-    metadata: dict[str, Any] = Field(default_factory=dict)
+    trace_id: Optional[str] = None
+    metadata: Dict[str, Any] = Field(default_factory=dict)
 
-    model_config = ConfigDict(json_schema_extra={'example': {'action_type': 'respond', 'reversibility': 'fully_reversible', 'sandbox_required': False, 'confidence': 0.85}})
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "action_type": "respond",
+                "reversibility": "fully_reversible",
+                "sandbox_required": False,
+                "confidence": 0.85,
+            }
+        }

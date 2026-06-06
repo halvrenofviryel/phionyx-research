@@ -11,17 +11,17 @@ The NarrativeEngine automatically:
 - Supports RAG context (Memory), GraphRAG (Intuition), and Seasonal context
 """
 
-from .engine import NarrativeConfig, NarrativeEngine
+from .engine import NarrativeEngine, NarrativeConfig
 
 # Lore mapping (moved from core-narrative)
 from .lore_mapping import (
-    ALL_MAPPINGS,
-    InterventionMapping,
-    InterventionType,
     LoreMapping,
+    InterventionMapping,
     RiskLevel,
-    get_intervention_mapping,
+    InterventionType,
     get_lore_mapping,
+    get_intervention_mapping,
+    ALL_MAPPINGS
 )
 
 __all__ = [

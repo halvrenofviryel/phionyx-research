@@ -6,11 +6,10 @@ Extends existing ConfidenceResult with epistemic/aleatoric decomposition,
 ECE calibration, and OOD detection.
 """
 
-from datetime import datetime, timezone
+from typing import Optional, Dict, Any, List
 from enum import Enum
-from typing import Any
-
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, Field
+from datetime import datetime, timezone
 
 
 class UncertaintyType(str, Enum):
@@ -59,31 +58,31 @@ class ConfidencePayload(BaseModel):
     )
 
     # Calibration (v4 §7)
-    ece_score: float | None = Field(
+    ece_score: Optional[float] = Field(
         None, ge=0.0, le=1.0,
         description="Expected Calibration Error"
     )
-    ood_score: float | None = Field(
+    ood_score: Optional[float] = Field(
         None, ge=0.0, le=1.0,
         description="Out-of-Distribution score"
     )
 
     # Meta-cognitive trust (T_meta)
-    t_meta: float | None = Field(
+    t_meta: Optional[float] = Field(
         None, ge=0.0, le=1.0,
         description="T_meta = (1-ECE)*(1-OOD)*(1-|self_report_delta|)"
     )
-    self_report_delta: float | None = Field(
+    self_report_delta: Optional[float] = Field(
         None, ge=0.0, le=1.0,
         description="Discrepancy between self-reported and actual confidence"
     )
 
     # Ensemble data (for decomposition)
-    ensemble_predictions: list[float] | None = Field(
+    ensemble_predictions: Optional[List[float]] = Field(
         None,
         description="Predictions from ensemble members"
     )
-    ensemble_variance: float | None = Field(
+    ensemble_variance: Optional[float] = Field(
         None, ge=0.0,
         description="Variance across ensemble members"
     )
@@ -94,6 +93,14 @@ class ConfidencePayload(BaseModel):
         description="Which estimator produced this payload"
     )
     timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
-    metadata: dict[str, Any] = Field(default_factory=dict)
+    metadata: Dict[str, Any] = Field(default_factory=dict)
 
-    model_config = ConfigDict(json_schema_extra={'example': {'confidence_score': 0.82, 'epistemic_uncertainty': 0.12, 'aleatoric_uncertainty': 0.06, 'dominant_uncertainty': 'epistemic'}})
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "confidence_score": 0.82,
+                "epistemic_uncertainty": 0.12,
+                "aleatoric_uncertainty": 0.06,
+                "dominant_uncertainty": "epistemic",
+            }
+        }

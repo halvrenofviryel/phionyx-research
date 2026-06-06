@@ -7,9 +7,9 @@ Initial safety assessment before CEP evaluation.
 """
 
 import logging
-from typing import Any, Protocol
+from typing import Any, Optional, Protocol
 
-from ...base import BlockContext, BlockResult, PipelineBlock
+from ...base import PipelineBlock, BlockContext, BlockResult
 
 logger = logging.getLogger(__name__)
 
@@ -23,8 +23,8 @@ class SafetyLayerProcessorProtocol(Protocol):
         narrative_response: str,
         cognitive_state: Any,
         context_string: str,
-        cep_flags: Any | None = None,
-        cep_config: Any | None = None
+        cep_flags: Optional[Any] = None,
+        cep_config: Optional[Any] = None
     ) -> tuple[Any, Any]:  # Returns (frame, safety_result)
         """Process safety layer."""
         ...

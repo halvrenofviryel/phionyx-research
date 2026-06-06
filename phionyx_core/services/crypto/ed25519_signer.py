@@ -13,17 +13,18 @@ import hashlib
 import hmac
 import logging
 import os
+from typing import Optional
 
 logger = logging.getLogger(__name__)
 
 # Try to import Ed25519 from cryptography or nacl
 _ED25519_AVAILABLE = False
 try:
-    from cryptography.hazmat.primitives import serialization
     from cryptography.hazmat.primitives.asymmetric.ed25519 import (
         Ed25519PrivateKey,
         Ed25519PublicKey,  # noqa: F401
     )
+    from cryptography.hazmat.primitives import serialization
     _ED25519_AVAILABLE = True
 except ImportError:
     logger.info("cryptography package not available — falling back to HMAC-SHA256")
@@ -37,7 +38,7 @@ class Ed25519Signer:
     Falls back to HMAC-SHA256 if Ed25519 library is not installed.
     """
 
-    def __init__(self, private_key_hex: str | None = None):
+    def __init__(self, private_key_hex: Optional[str] = None):
         """
         Initialize signer.
 
@@ -83,7 +84,7 @@ class Ed25519Signer:
 
         if self._ed25519 and self._private_key:
             signature = self._private_key.sign(data_bytes)
-            return str(signature.hex())
+            return signature.hex()
         else:
             # HMAC-SHA256 fallback
             mac = hmac.new(self._hmac_key, data_bytes, hashlib.sha256)

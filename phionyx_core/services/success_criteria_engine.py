@@ -7,10 +7,10 @@ Faz 2.5: Success Criteria Workflow - Tam Fonksiyonel
 Test-first workflow implementation with success criteria definition and evaluation.
 """
 
-import re
+from typing import List, Dict, Any, Optional, Tuple
 from dataclasses import dataclass
 from enum import Enum
-from typing import Any
+import re
 
 
 class CriteriaType(Enum):
@@ -32,7 +32,7 @@ class SuccessCriterion:
     test_expression: str  # Test code or expression
     expected_result: Any  # Expected result
     priority: str = "medium"  # "low", "medium", "high", "critical"
-    timeout: float | None = None  # Timeout in seconds
+    timeout: Optional[float] = None  # Timeout in seconds
 
 
 @dataclass
@@ -42,8 +42,8 @@ class TestResult:
     passed: bool
     actual_result: Any
     expected_result: Any
-    error_message: str | None = None
-    execution_time: float | None = None
+    error_message: Optional[str] = None
+    execution_time: Optional[float] = None
 
 
 @dataclass
@@ -53,9 +53,9 @@ class EvaluationResult:
     passed_count: int
     failed_count: int
     total_count: int
-    test_results: list[TestResult]
+    test_results: List[TestResult]
     overall_score: float  # 0.0-1.0
-    critical_failures: list[str]  # IDs of critical criteria that failed
+    critical_failures: List[str]  # IDs of critical criteria that failed
 
 
 class SuccessCriteriaEngine:
@@ -71,7 +71,7 @@ class SuccessCriteriaEngine:
     - Workflow orchestration
     """
 
-    def __init__(self, ai_assurance_kit: Any | None = None):
+    def __init__(self, ai_assurance_kit: Optional[Any] = None):
         """
         Initialize success criteria engine.
 
@@ -79,12 +79,12 @@ class SuccessCriteriaEngine:
             ai_assurance_kit: AI Assurance Kit instance (optional)
         """
         self.ai_assurance_kit = ai_assurance_kit
-        self.criteria_registry: dict[str, SuccessCriterion] = {}
-        self.test_results_history: list[TestResult] = []
+        self.criteria_registry: Dict[str, SuccessCriterion] = {}
+        self.test_results_history: List[TestResult] = []
 
     def define_criteria(
         self,
-        criteria: list[SuccessCriterion]
+        criteria: List[SuccessCriterion]
     ) -> None:
         """
         Define success criteria.
@@ -97,8 +97,8 @@ class SuccessCriteriaEngine:
 
     def generate_tests_from_criteria(
         self,
-        criteria: list[SuccessCriterion] | None = None
-    ) -> list[str]:
+        criteria: Optional[List[SuccessCriterion]] = None
+    ) -> List[str]:
         """
         Generate test code from success criteria.
 
@@ -144,9 +144,9 @@ def {test_name}():
 
     def execute_tests(
         self,
-        test_codes: list[str],
-        context: dict[str, Any] | None = None
-    ) -> list[TestResult]:
+        test_codes: List[str],
+        context: Optional[Dict[str, Any]] = None
+    ) -> List[TestResult]:
         """
         Execute test codes.
 
@@ -162,8 +162,6 @@ def {test_name}():
         for test_code in test_codes:
             # Extract criterion ID from test code
             criterion_id = self._extract_criterion_id(test_code)
-            if criterion_id is None:
-                continue
             criterion = self.criteria_registry.get(criterion_id)
 
             if not criterion:
@@ -203,7 +201,7 @@ def {test_name}():
 
         return results
 
-    def _extract_criterion_id(self, test_code: str) -> str | None:
+    def _extract_criterion_id(self, test_code: str) -> Optional[str]:
         """Extract criterion ID from test code."""
         match = re.search(r'test_(\w+)', test_code)
         if match:
@@ -213,8 +211,8 @@ def {test_name}():
     def _execute_test_code(
         self,
         test_code: str,
-        context: dict[str, Any] | None = None
-    ) -> dict[str, Any]:
+        context: Optional[Dict[str, Any]] = None
+    ) -> Dict[str, Any]:
         """
         Execute test code.
 
@@ -238,8 +236,8 @@ def {test_name}():
 
     def evaluate_criteria(
         self,
-        test_results: list[TestResult],
-        criteria: list[SuccessCriterion] | None = None
+        test_results: List[TestResult],
+        criteria: Optional[List[SuccessCriterion]] = None
     ) -> EvaluationResult:
         """
         Evaluate success criteria based on test results.
@@ -285,8 +283,8 @@ def {test_name}():
 
     def integrate_with_ai_assurance_kit(
         self,
-        criteria: list[SuccessCriterion]
-    ) -> dict[str, Any]:
+        criteria: List[SuccessCriterion]
+    ) -> Dict[str, Any]:
         """
         Integrate with AI Assurance Kit.
 
@@ -318,10 +316,10 @@ def {test_name}():
 
     def orchestrate_workflow(
         self,
-        criteria: list[SuccessCriterion],
-        code: str | None = None,
-        context: dict[str, Any] | None = None
-    ) -> tuple[EvaluationResult, list[str]]:
+        criteria: List[SuccessCriterion],
+        code: Optional[str] = None,
+        context: Optional[Dict[str, Any]] = None
+    ) -> Tuple[EvaluationResult, List[str]]:
         """
         Orchestrate the complete success criteria workflow.
 

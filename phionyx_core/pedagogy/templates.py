@@ -10,8 +10,7 @@ Provides a library of hardcoded, clinically approved responses for:
 These templates BYPASS the LLM when physics state hits extremes.
 """
 
-from typing import Any, Literal
-
+from typing import Dict, Literal, Optional
 
 class TemplateLibrary:
     """
@@ -32,7 +31,7 @@ class TemplateLibrary:
         self.templates = self._load_templates()
         self.extreme_state_templates = self._load_extreme_state_templates()
 
-    def _load_templates(self) -> dict[str, dict[str, str]]:
+    def _load_templates(self) -> Dict[str, Dict[str, str]]:
         """Load templates for different risk levels and scenarios."""
         return {
             "en": {
@@ -51,7 +50,7 @@ class TemplateLibrary:
             }
         }
 
-    def _load_extreme_state_templates(self) -> dict[str, dict[str, dict[str, Any]]]:
+    def _load_extreme_state_templates(self) -> Dict[str, Dict[str, Dict[str, str]]]:
         """
         Load hardcoded templates for extreme physics states.
 
@@ -106,9 +105,9 @@ class TemplateLibrary:
 
     def get_extreme_state_template(
         self,
-        physics_state: dict,
-        language: str | None = None
-    ) -> dict[str, str] | None:
+        physics_state: Dict,
+        language: Optional[str] = None
+    ) -> Optional[Dict[str, str]]:
         """
         Get hardcoded template for extreme physics states.
 
@@ -177,7 +176,7 @@ class TemplateLibrary:
 
         return None
 
-    def get_template(self, risk_type: str, language: str | None = None, physics_state: dict | None = None) -> str:
+    def get_template(self, risk_type: str, language: Optional[str] = None, physics_state: Optional[Dict] = None) -> str:
         """
         Get template for a specific risk type.
 
@@ -205,7 +204,7 @@ class TemplateLibrary:
         template_key = risk_template_map.get(risk_type, "default_safe")
         return templates.get(template_key, templates["default_safe"])
 
-    def get_fallback(self, language: str | None = None) -> str:
+    def get_fallback(self, language: Optional[str] = None) -> str:
         """
         Get default safe fallback template.
 

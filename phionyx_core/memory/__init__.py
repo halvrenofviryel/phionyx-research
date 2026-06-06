@@ -10,7 +10,10 @@ Exports:
 - trace: Trace functions for Echo ontology
 """
 
-from . import trace, trace_store, user_profile, vector_store
+from . import vector_store
+from . import user_profile
+from . import trace
+from . import trace_store
 
 __all__ = [
     "vector_store",
@@ -22,27 +25,27 @@ __all__ = [
 ]
 
 # Convenience exports
-from .forgetting import (  # noqa: F401
-    EventForgettingState,
-    ForgettingConfig,
-    ForgettingManager,
-    apply_active_suppression,
-    apply_forgetting_to_entropy,
-    apply_full_erasure,
-    apply_passive_decay,
-    calculate_decay_rate_from_inertia,
-    create_tombstone_reference,
-    restore_suppressed_event,
-)
+from .vector_store import VectorStore  # noqa: F401
+from .user_profile import UserProfile  # noqa: F401
 from .trace import (  # noqa: F401
+    trace_weight,
     aggregate_trace,
     calculate_trace_decay_rate,
-    get_active_trace_events,
-    trace_weight,
+    get_active_trace_events
 )
 from .trace_store import TraceStore  # noqa: F401
-from .user_profile import UserProfile  # noqa: F401
-from .vector_store import VectorStore  # noqa: F401
+from .forgetting import (  # noqa: F401
+    ForgettingConfig,
+    EventForgettingState,
+    apply_passive_decay,
+    apply_active_suppression,
+    restore_suppressed_event,
+    apply_full_erasure,
+    create_tombstone_reference,
+    apply_forgetting_to_entropy,
+    calculate_decay_rate_from_inertia,
+    ForgettingManager,
+)
 
 __version__ = "1.0.0"
 

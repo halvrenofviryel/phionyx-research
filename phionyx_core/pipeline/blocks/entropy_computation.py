@@ -7,9 +7,9 @@ Computes entropy value from user input and response.
 """
 
 import logging
-from typing import Any, Protocol
+from typing import Dict, Any, Optional, Protocol
 
-from ..base import BlockContext, BlockResult, PipelineBlock
+from ..base import PipelineBlock, BlockContext, BlockResult
 
 logger = logging.getLogger(__name__)
 
@@ -19,9 +19,9 @@ class EntropyComputationProtocol(Protocol):
     def compute_entropy(
         self,
         user_input: str,
-        response_text: str | None = None,
-        previous_entropy: float | None = None
-    ) -> dict[str, Any]:
+        response_text: Optional[str] = None,
+        previous_entropy: Optional[float] = None
+    ) -> Dict[str, Any]:
         """Compute entropy value."""
         ...
 
@@ -34,7 +34,7 @@ class EntropyComputationBlock(PipelineBlock):
     This is an always-on block.
     """
 
-    def __init__(self, entropy_computer: EntropyComputationProtocol | None = None):
+    def __init__(self, entropy_computer: Optional[EntropyComputationProtocol] = None):
         """
         Initialize block.
 

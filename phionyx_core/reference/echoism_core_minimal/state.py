@@ -8,6 +8,7 @@ Per Echoism Core v1.1:
 """
 
 from dataclasses import dataclass, field
+from typing import List, Optional
 from datetime import datetime
 
 
@@ -36,19 +37,18 @@ class EchoState2Plus:
     dV: float = 0.0
     t_local: float = 0.0
     t_global: float = 0.0
-    E_tags: list[EventReference] = field(default_factory=list)
+    E_tags: List[EventReference] = field(default_factory=list)
 
     # v1.1 Extended
     I: float = 0.6  # Inertia  # noqa: E741
     R: float = 0.05  # ResonanceScore
     C: float = 0.5  # Coherence
-    D: float | None = None  # Dominance (optional)
+    D: Optional[float] = None  # Dominance (optional)
 
     # Time semantics
     t_now: datetime = field(default_factory=datetime.now)
     turn_index: int = 0
     dt: float = 0.0
-    _last_update: datetime | None = None
 
     @property
     def phi(self) -> float:
@@ -57,7 +57,7 @@ class EchoState2Plus:
         valence_norm = (self.V + 1.0) / 2.0
         return min(1.0, stability * (valence_norm * 0.6 + self.A * 0.4))
 
-    def update_time(self, current_time: datetime | None = None) -> float:
+    def update_time(self, current_time: Optional[datetime] = None) -> float:
         """Update time fields."""
         if current_time is None:
             current_time = datetime.now()

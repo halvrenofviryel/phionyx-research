@@ -7,9 +7,9 @@ Gate that checks entropy/amplitude before CEP evaluation.
 """
 
 import logging
-from typing import Any, Protocol
+from typing import Any, Optional, Protocol
 
-from ..base import BlockContext, BlockResult, PipelineBlock
+from ..base import PipelineBlock, BlockContext, BlockResult
 
 logger = logging.getLogger(__name__)
 
@@ -19,9 +19,9 @@ class EntropyAmplitudeGateProtocol(Protocol):
     def apply_gate(
         self,
         cognitive_state: Any,
-        unified_state: Any | None,
+        unified_state: Optional[Any],
         enhanced_context_string: str
-    ) -> tuple[str, Any | None]:  # Returns (enhanced_context_string, gated_state)
+    ) -> tuple[str, Optional[Any]]:  # Returns (enhanced_context_string, gated_state)
         """Apply entropy/amplitude gate."""
         ...
 
@@ -33,7 +33,7 @@ class EntropyAmplitudePreGateBlock(PipelineBlock):
     Applies entropy/amplitude gate before CEP evaluation.
     """
 
-    def __init__(self, gate: EntropyAmplitudeGateProtocol | None = None):
+    def __init__(self, gate: Optional[EntropyAmplitudeGateProtocol] = None):
         """
         Initialize block.
 
@@ -43,7 +43,7 @@ class EntropyAmplitudePreGateBlock(PipelineBlock):
         super().__init__("entropy_amplitude_pre_gate")
         self.gate = gate
 
-    def should_skip(self, context: BlockContext) -> str | None:
+    def should_skip(self, context: BlockContext) -> Optional[str]:
         """Never skip — inline fallback handles missing gate service."""
         return None
 

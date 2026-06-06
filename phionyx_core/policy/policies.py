@@ -6,8 +6,9 @@ Defines behavioral policies for different contexts (School vs Game).
 Each policy controls temperature, tone, safety strictness, and interaction style.
 """
 
-import logging
 from dataclasses import dataclass
+from typing import Optional
+import logging
 
 logger = logging.getLogger(__name__)
 
@@ -30,8 +31,8 @@ class Policy:
     tone: str
     safety_strictness: int
     interaction_style: str
-    max_tokens: int | None = None
-    system_prompt_modifier: str | None = None
+    max_tokens: Optional[int] = None
+    system_prompt_modifier: Optional[str] = None
 
     def __post_init__(self):
         """Validate policy parameters."""
@@ -117,7 +118,7 @@ class PolicyPresets:
     )
 
     @classmethod
-    def get_preset(cls, preset_name: str) -> Policy | None:
+    def get_preset(cls, preset_name: str) -> Optional[Policy]:
         """
         Get a preset policy by name.
 

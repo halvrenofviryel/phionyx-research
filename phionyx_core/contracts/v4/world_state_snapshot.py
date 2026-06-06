@@ -6,11 +6,10 @@ Composes EchoState2/EchoState2Plus with v4 world model fields.
 AD-1: Composition — EchoState2 is composed as echo_state field.
 """
 
-from datetime import datetime, timezone
+from typing import Optional, Dict, Any, List
 from enum import Enum
-from typing import Any
-
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, Field
+from datetime import datetime, timezone
 
 
 class ArbitrationStatus(str, Enum):
@@ -35,13 +34,13 @@ class WorldStateSnapshot(BaseModel):
         )
     """
     # Composed existing model (serialized EchoState2Plus dict)
-    echo_state: dict[str, Any] = Field(
+    echo_state: Dict[str, Any] = Field(
         ...,
         description="Serialized EchoState2/EchoState2Plus — primary state vector"
     )
 
     # v4 new fields
-    belief_vector: dict[str, float] = Field(
+    belief_vector: Dict[str, float] = Field(
         default_factory=dict,
         description="Probabilistic belief distribution over world hypotheses"
     )
@@ -49,15 +48,15 @@ class WorldStateSnapshot(BaseModel):
         default=ArbitrationStatus.STABLE,
         description="Current arbitration system status"
     )
-    causal_graph: dict[str, Any] | None = Field(
+    causal_graph: Optional[Dict[str, Any]] = Field(
         None,
         description="Causal dependency graph (node→edge structure)"
     )
-    active_goals: list[str] = Field(
+    active_goals: List[str] = Field(
         default_factory=list,
         description="Currently active goal IDs"
     )
-    pending_actions: list[str] = Field(
+    pending_actions: List[str] = Field(
         default_factory=list,
         description="Action intents awaiting execution"
     )
@@ -75,4 +74,11 @@ class WorldStateSnapshot(BaseModel):
         description="Turn index at snapshot time"
     )
 
-    model_config = ConfigDict(json_schema_extra={'example': {'echo_state': {'A': 0.5, 'V': 0.3, 'H': 0.4}, 'belief_vector': {'hypothesis_a': 0.7, 'hypothesis_b': 0.3}, 'arbitration_status': 'stable'}})
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "echo_state": {"A": 0.5, "V": 0.3, "H": 0.4},
+                "belief_vector": {"hypothesis_a": 0.7, "hypothesis_b": 0.3},
+                "arbitration_status": "stable",
+            }
+        }

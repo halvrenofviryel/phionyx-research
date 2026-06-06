@@ -7,9 +7,9 @@ Performs UKF (Unscented Kalman Filter) prediction for state estimation.
 """
 
 import logging
-from typing import Any, Protocol
+from typing import Any, Optional, Protocol
 
-from ..base import BlockContext, BlockResult, PipelineBlock
+from ..base import PipelineBlock, BlockContext, BlockResult
 
 logger = logging.getLogger(__name__)
 
@@ -32,7 +32,7 @@ class UkfPredictBlock(PipelineBlock):
     Performs UKF prediction to estimate next state.
     """
 
-    def __init__(self, predictor: UKFPredictorProtocol | None = None):
+    def __init__(self, predictor: Optional[UKFPredictorProtocol] = None):
         """
         Initialize block.
 
@@ -42,7 +42,7 @@ class UkfPredictBlock(PipelineBlock):
         super().__init__("ukf_predict")
         self.predictor = predictor
 
-    def should_skip(self, context: BlockContext) -> str | None:
+    def should_skip(self, context: BlockContext) -> Optional[str]:
         """Skip if no predictor available."""
         if self.predictor is None:
             return "ukf_predictor_not_available"
@@ -64,10 +64,10 @@ class UkfPredictBlock(PipelineBlock):
             unified_state = metadata.get("unified_state")
             time_delta = metadata.get("time_delta", 1.0)
 
-            if not unified_state or self.predictor is None:
+            if not unified_state:
                 return BlockResult(
                     block_id=self.block_id,
-                    status="ok",  # Skip if no unified state or predictor not configured
+                    status="ok",  # Skip if no unified state
                     data={"predicted_state": None}
                 )
 

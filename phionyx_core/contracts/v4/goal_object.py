@@ -6,12 +6,11 @@ Entirely new schema — no existing Phionyx counterpart.
 Represents system-level goals with legitimacy scoring and priority.
 """
 
-import uuid
-from datetime import datetime, timezone
+from typing import Optional, Dict, Any, List
 from enum import Enum
-from typing import Any
-
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, Field
+from datetime import datetime, timezone
+import uuid
 
 
 class GoalPriority(str, Enum):
@@ -70,44 +69,44 @@ class GoalObject(BaseModel):
         default=0.5, ge=0.0, le=1.0,
         description="User alignment score"
     )
-    legitimacy_weights: dict[str, float] = Field(
+    legitimacy_weights: Dict[str, float] = Field(
         default_factory=lambda: {"alpha": 0.5, "beta": 0.3, "gamma": 0.2},
         description="Weights for L(g) = alpha*safety + beta*system + gamma*user"
     )
 
     # Goal tracking
-    parent_goal_id: str | None = Field(
+    parent_goal_id: Optional[str] = Field(
         None,
         description="Parent goal for hierarchical decomposition"
     )
-    sub_goal_ids: list[str] = Field(
+    sub_goal_ids: List[str] = Field(
         default_factory=list,
         description="Child goal IDs"
     )
-    conflict_with: list[str] = Field(
+    conflict_with: List[str] = Field(
         default_factory=list,
         description="Goal IDs this goal conflicts with"
     )
-    preconditions: list[str] = Field(
+    preconditions: List[str] = Field(
         default_factory=list,
         description="Conditions that must be true for activation"
     )
-    success_criteria: list[str] = Field(
+    success_criteria: List[str] = Field(
         default_factory=list,
         description="Conditions for goal completion"
     )
 
     # Timestamps
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
-    activated_at: datetime | None = None
-    completed_at: datetime | None = None
+    activated_at: Optional[datetime] = None
+    completed_at: Optional[datetime] = None
 
     # Metadata
     source_module: str = Field(
         default="goal_manager",
         description="Module that created this goal"
     )
-    metadata: dict[str, Any] = Field(default_factory=dict)
+    metadata: Dict[str, Any] = Field(default_factory=dict)
 
     def compute_legitimacy(self) -> float:
         """
@@ -122,4 +121,13 @@ class GoalObject(BaseModel):
             + w.get("gamma", 0.2) * self.user_score
         )
 
-    model_config = ConfigDict(json_schema_extra={'example': {'name': 'maintain_safety_bounds', 'priority': 'critical', 'safety_score': 1.0, 'system_score': 0.9, 'user_score': 0.5}})
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "name": "maintain_safety_bounds",
+                "priority": "critical",
+                "safety_score": 1.0,
+                "system_score": 0.9,
+                "user_score": 0.5,
+            }
+        }

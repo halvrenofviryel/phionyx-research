@@ -12,15 +12,15 @@ Per Echoism Core v1.1:
 
 from __future__ import annotations
 
-from typing import Any
+from typing import Dict, Any, Optional
 
 
 def apply_dominance_to_av_modulation(
     A: float,
     V: float,
-    D: float | None,
+    D: Optional[float],
     modulation_strength: float = 0.1
-) -> dict[str, float]:
+) -> Dict[str, float]:
     """
     Apply Dominance (D) to A/V modulation (PAD interpretation).
 
@@ -64,9 +64,9 @@ def apply_dominance_to_av_modulation(
 
 
 def extract_dominance_from_measurement(
-    measurement: dict[str, Any],
-    llm_output: dict[str, Any] | None = None
-) -> float | None:
+    measurement: Dict[str, Any],
+    llm_output: Optional[Dict[str, Any]] = None
+) -> Optional[float]:
     """
     Extract Dominance (D) from measurement mapper output.
 
@@ -101,9 +101,9 @@ def extract_dominance_from_measurement(
 
 
 def get_dominance_default_for_profile(
-    profile_name: str | None = None,
-    profile: dict[str, Any] | None = None
-) -> float | None:
+    profile_name: Optional[str] = None,
+    profile: Optional[Dict[str, Any]] = None
+) -> Optional[float]:
     """
     Get default Dominance (D) value for profile.
 
@@ -139,7 +139,7 @@ def get_dominance_default_for_profile(
 
 def apply_dominance_to_response_amplitude(
     base_amplitude: float,
-    D: float | None,
+    D: Optional[float],
     modulation_factor: float = 0.05
 ) -> float:
     """

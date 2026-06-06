@@ -8,8 +8,9 @@ for narrative generation.
 """
 
 import logging
-import uuid
+from typing import Dict, List, Optional
 from datetime import datetime
+import uuid
 
 logger = logging.getLogger(__name__)
 
@@ -39,9 +40,9 @@ class ChronicleGraphAPI:
         self,
         character_id: str,
         event_type: str,
-        event_payload: dict,
-        concept_id: str | None = None
-    ) -> str | None:
+        event_payload: Dict,
+        concept_id: Optional[str] = None
+    ) -> Optional[str]:
         """
         Add or update an event node in Chronicle Graph.
 
@@ -72,7 +73,7 @@ class ChronicleGraphAPI:
             result = self.client.table("chronicle_events").insert(event_data).execute()
 
             if result.data and len(result.data) > 0:
-                event_id = str(result.data[0]["id"])
+                event_id = result.data[0]["id"]
                 logger.info(f"ChronicleGraph: Created event {event_id} for character {character_id} ({event_type})")
                 return event_id
 
@@ -86,7 +87,7 @@ class ChronicleGraphAPI:
         character_id: str,
         window: int = 10,
         include_relationships: bool = True
-    ) -> dict:
+    ) -> Dict:
         """
         Get relevant subgraph for narrative generation.
 
@@ -148,7 +149,7 @@ class ChronicleGraphAPI:
             if concept_ids and include_relationships:
                 # Fetch concepts and their associations
                 # This integrates Chronicle Graph with GraphEngine concepts
-                for _concept_id in concept_ids:
+                for concept_id in concept_ids:
                     _related = await self.graph_engine.get_related_concepts(
                         concept_name="",  # We'll need concept_id lookup
                         limit=5
@@ -177,7 +178,7 @@ class ChronicleGraphAPI:
 
     def _generate_narrative_summary(
         self,
-        events: list[dict],
+        events: List[Dict],
         character_id: str
     ) -> str:
         """
@@ -215,9 +216,9 @@ class ChronicleGraphAPI:
     async def get_recent_events(
         self,
         character_id: str,
-        event_type: str | None = None,
+        event_type: Optional[str] = None,
         limit: int = 5
-    ) -> list[dict]:
+    ) -> List[Dict]:
         """
         Get recent events for a character, optionally filtered by type.
 

@@ -7,6 +7,7 @@ Each participant's turn_id must be strictly monotonically increasing.
 Violations are detected and reported for audit trail.
 """
 
+from typing import Optional
 from collections import OrderedDict
 from datetime import datetime, timezone
 
@@ -35,7 +36,7 @@ class CausalChainTracker:
 
     def validate_and_record(
         self, participant_id: str, turn_id: int
-    ) -> CausalConsistencyViolation | None:
+    ) -> Optional[CausalConsistencyViolation]:
         """Check turn_id is strictly > last seen for participant, record if valid.
 
         Args:
@@ -66,7 +67,7 @@ class CausalChainTracker:
 
         return None
 
-    def get_last_turn_id(self, participant_id: str) -> int | None:
+    def get_last_turn_id(self, participant_id: str) -> Optional[int]:
         """Get last recorded turn_id for participant."""
         return self._chains.get(participant_id)
 

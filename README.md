@@ -7,7 +7,7 @@ A deterministic AI runtime that maps every model output through 46 evaluation bl
 Beyond governance, Phionyx Core ships a **physics module** that produces deterministic coherence telemetry over a structured state vector — useful for NPC/agent drift detection, session-level coherence tracking, and reproducible runtime evaluation.
 
 > **Where this sits in the Phionyx stack.** This repo is the **engine** — the SDK
-> `phionyx-core` (PyPI, latest **v0.7.2**), the deterministic runtime. It is the
+> `phionyx-core` (PyPI, latest **v0.8.0**), the deterministic runtime. It is the
 > **reference implementation** that scores **L3 (evaluation maturity) + D3 (determinism)**
 > on the vendor-neutral [Phionyx Evaluation Standard](https://github.com/halvrenofviryel/phionyx-evaluation-standard).
 > The SDK is **not** itself claim-governance-rated: the Claim-Governance ladder (CG-L0…CG-L5)
@@ -265,19 +265,19 @@ The Standard defines **three scales**:
 
 **Where each component sits:**
 
-| Scale | Rates | This repo (`phionyx-core`, **engine**, v0.7.2) | Gate (`phionyx-pipeline-mcp`) |
+| Scale | Rates | This repo (`phionyx-core`, **engine**, v0.8.0) | Gate (`phionyx-pipeline-mcp`) |
 |-------|-------|------------------------------------------------|-------------------------------|
 | L0-L3 (eval maturity) | any runtime | **L3** (reference implementation) | — |
 | D0-D3 (determinism) | any runtime | **D3** (reference implementation) | — |
 | CG-L0…CG-L5 (claim-governance) | the self-governance **gate** | not CG-rated (no `require_tool` / continuity logic) | stable **v0.2.0 = CG-L2**; alpha **v0.3.0a1 = CG-L3** (opt-in / default-off, already on PyPI) |
 
-So: **`phionyx-core` is the L3+D3 reference engine; the CG ladder rates the gate `phionyx-pipeline-mcp`, not this engine.** The three artifacts also carry three independent version lines — engine **v0.7.2**, gate **v0.2.0 / v0.3.0a1**, Standard **v0.1.1 / v0.2.0** released + **v0.3 draft** — which must never be cross-attributed.
+So: **`phionyx-core` is the L3+D3 reference engine; the CG ladder rates the gate `phionyx-pipeline-mcp`, not this engine.** The three artifacts also carry three independent version lines — engine **v0.8.0**, gate **v0.2.0 / v0.3.0a1**, Standard **v0.1.1 / v0.2.0** released + **v0.3 draft** — which must never be cross-attributed.
 
 ---
 
 ## Companion packages
 
-Eight PyPI-published companion packages extend the Phionyx runtime into an end-to-end evidence stack for the agentic AI ecosystem. Each carries **its own version line** (do not inherit the engine's v0.7.2). Six are listed below, grouped by where they sit on the [phionyx.ai](https://phionyx.ai) audience pillars; the remaining two ship under the applied-product line.
+Eight PyPI-published companion packages extend the Phionyx runtime into an end-to-end evidence stack for the agentic AI ecosystem. Each carries **its own version line** (do not inherit the engine's v0.8.0). Six are listed below, grouped by where they sit on the [phionyx.ai](https://phionyx.ai) audience pillars; the remaining two ship under the applied-product line.
 
 **MCP integration — surfaces under [Bounded Authority](https://phionyx.ai/bounded-authority).** Trust boundary + self-claim gate for AI coding agents (Claude Code, Cursor, Zed, VS Code, JetBrains — any MCP-capable host):
 
@@ -408,13 +408,13 @@ If you use Phionyx Core in academic work, please cite both the software and the 
   title     = {Phionyx Core SDK},
   year      = {2026},
   publisher = {Phionyx Research},
-  version   = {0.7.2},
+  version   = {0.8.0},
   doi       = {10.5281/zenodo.20027534},
   url       = {https://doi.org/10.5281/zenodo.20027534}
 }
 ```
 
-The DOI above is the **concept DOI** — it always resolves to the latest archived version (v0.7.2 at the time of writing). To pin a specific release, use the version DOI in [`CITATION.cff`](CITATION.cff): v0.3.0 is `10.5281/zenodo.20027535`; v0.4.0 is `10.5281/zenodo.20297990`; releases from v0.5.0 onward (including v0.7.0, v0.7.1, v0.7.2) carry per-version DOIs auto-issued on Zenodo release and also resolve via the concept DOI above.
+The DOI above is the **concept DOI** — it always resolves to the latest archived version (v0.8.0 at the time of writing). To pin a specific release, use the version DOI in [`CITATION.cff`](CITATION.cff): v0.3.0 is `10.5281/zenodo.20027535`; v0.4.0 is `10.5281/zenodo.20297990`; releases from v0.5.0 onward (including the v0.7.x line and v0.8.0) carry per-version DOIs auto-issued on Zenodo release and also resolve via the concept DOI above.
 
 **Architecture paper (companion):**
 

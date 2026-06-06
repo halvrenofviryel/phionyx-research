@@ -7,17 +7,17 @@ Estimates emotion (valence, arousal) from user input using EmotionEstimator.
 """
 
 import logging
-from typing import Any, Protocol
+from typing import Dict, Any, Optional, Protocol
 
+from ..base import PipelineBlock, BlockContext, BlockResult
 from ...memory.emotion_cache import EmotionCache
-from ..base import BlockContext, BlockResult, PipelineBlock
 
 logger = logging.getLogger(__name__)
 
 
 class EmotionEstimatorProtocol(Protocol):
     """Protocol for emotion estimation."""
-    async def estimate(self, text: str) -> dict[str, Any]:
+    async def estimate(self, text: str) -> Dict[str, Any]:
         """Estimate emotion from text."""
         ...
 
@@ -33,8 +33,8 @@ class EmotionEstimationBlock(PipelineBlock):
 
     def __init__(
         self,
-        emotion_estimator: EmotionEstimatorProtocol | None = None,
-        emotion_cache: EmotionCache | None = None
+        emotion_estimator: Optional[EmotionEstimatorProtocol] = None,
+        emotion_cache: Optional[EmotionCache] = None
     ):
         """
         Initialize emotion estimation block.
@@ -49,7 +49,7 @@ class EmotionEstimationBlock(PipelineBlock):
         # This is essential for parallel execution consistency
         self.emotion_cache = emotion_cache or EmotionCache(max_size=10000, enable_metrics=True)
 
-    def should_skip(self, context: BlockContext) -> str | None:
+    def should_skip(self, context: BlockContext) -> Optional[str]:
         """Skip if no estimator available."""
         if self.emotion_estimator is None:
             return "emotion_estimator_not_available"

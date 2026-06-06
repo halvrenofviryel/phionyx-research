@@ -8,7 +8,7 @@ Top-level API block that wraps the entire pipeline execution.
 
 import logging
 
-from ...base import BlockContext, BlockResult, PipelineBlock
+from ...base import PipelineBlock, BlockContext, BlockResult
 
 logger = logging.getLogger(__name__)
 

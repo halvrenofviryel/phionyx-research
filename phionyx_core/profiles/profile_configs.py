@@ -5,13 +5,13 @@ Product Profile Configurations
 Predefined product profiles for different use cases.
 """
 
-from typing import Any
+from typing import Dict, Any
 
 # ============================================================================
 # EDU PROFILE (Kooth / Smoothwall)
 # ============================================================================
 
-EDU_PROFILE: dict[str, Any] = {
+EDU_PROFILE: Dict[str, Any] = {
     "profile": "edu",
     "description": "Educational profile for schools and mental health platforms",
     "modules": {
@@ -45,7 +45,7 @@ EDU_PROFILE: dict[str, Any] = {
 # GAME PROFILE (Inkle / Failbetter)
 # ============================================================================
 
-GAME_PROFILE: dict[str, Any] = {
+GAME_PROFILE: Dict[str, Any] = {
     "profile": "game",
     "description": "Game profile for interactive fiction studios",
     "modules": {
@@ -79,7 +79,7 @@ GAME_PROFILE: dict[str, Any] = {
 # CLINICAL PROFILE (Kooth clinical triage)
 # ============================================================================
 
-CLINICAL_PROFILE: dict[str, Any] = {
+CLINICAL_PROFILE: Dict[str, Any] = {
     "profile": "clinical",
     "description": "Clinical profile for mental health triage",
     "modules": {
@@ -114,7 +114,7 @@ CLINICAL_PROFILE: dict[str, Any] = {
 # HELPER FUNCTIONS
 # ============================================================================
 
-def get_profile_config(profile_name: str) -> dict[str, Any]:
+def get_profile_config(profile_name: str) -> Dict[str, Any]:
     """
     Get profile configuration by name.
 

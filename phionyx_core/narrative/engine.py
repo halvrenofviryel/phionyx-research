@@ -10,10 +10,10 @@ This module provides narrative generation that automatically enforces:
 The App layer should NOT manually add these constraints - the SDK enforces them automatically.
 """
 
-import logging
 import os
+import logging
+from typing import Dict, Optional, Any, TYPE_CHECKING
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, Any, Optional
 
 if TYPE_CHECKING:
     from phionyx_core.contracts.llm_provider import LLMProviderProtocol
@@ -27,10 +27,10 @@ logger = logging.getLogger(__name__)
 class NarrativeConfig:
     """Configuration for NarrativeEngine."""
     # LLM Provider Configuration
-    llm_provider: str | None = None  # "openai", "ollama", "anthropic", etc.
-    llm_model: str | None = None  # Model name (e.g., "gpt-4o", "llama3.1:latest")
-    llm_api_key: str | None = None
-    llm_base_url: str | None = None  # For local models (Ollama)
+    llm_provider: str = None  # "openai", "ollama", "anthropic", etc.
+    llm_model: str = None  # Model name (e.g., "gpt-4o", "llama3.1:latest")
+    llm_api_key: str = None
+    llm_base_url: str = None  # For local models (Ollama)
 
     # Generation Parameters
     temperature: float = 0.7
@@ -72,7 +72,7 @@ class NarrativeEngine:
 
     def __init__(
         self,
-        config: NarrativeConfig | None = None,
+        config: Optional[NarrativeConfig] = None,
         llm_provider: Optional['LLMProviderProtocol'] = None
     ):
         """
@@ -89,22 +89,21 @@ class NarrativeEngine:
 
     def _build_model_string(self) -> str:
         """Build model string for LiteLLM."""
-        model = self.config.llm_model or ""
         if self.config.llm_provider == "ollama":
             # Ollama format: "ollama/llama3.1:latest" or just model if base_url is set
             if self.config.llm_base_url and self.config.llm_base_url != "http://localhost:11434":
-                return model
-            return f"ollama/{model}"
+                return self.config.llm_model
+            return f"ollama/{self.config.llm_model}"
         elif self.config.llm_provider == "openai":
-            return model
+            return self.config.llm_model
         else:
             # Other providers: "provider/model"
-            return f"{self.config.llm_provider}/{model}"
+            return f"{self.config.llm_provider}/{self.config.llm_model}"
 
     def _inject_physics_constraints(
         self,
         system_prompt: str,
-        physics_state: dict[str, float]
+        physics_state: Dict[str, float]
     ) -> str:
         """
         Automatically inject Physics constraints into system prompt.
@@ -175,7 +174,7 @@ class NarrativeEngine:
     def _apply_safety_filters(
         self,
         prompt: str,
-        physics_state: dict[str, float]
+        physics_state: Dict[str, float]
     ) -> str:
         """
         Automatically apply Safety filters (Ethics Engine).
@@ -209,12 +208,12 @@ class NarrativeEngine:
     async def generate(
         self,
         context: str,
-        physics_state: dict[str, float],
-        system_prompt: str | None = None,
-        memory_context: str | None = None,
-        intuitive_context: str | None = None,
-        seasonal_context: str | None = None,
-        user_prompt: str | None = None,
+        physics_state: Dict[str, float],
+        system_prompt: Optional[str] = None,
+        memory_context: Optional[str] = None,
+        intuitive_context: Optional[str] = None,
+        seasonal_context: Optional[str] = None,
+        user_prompt: Optional[str] = None,
         **kwargs
     ) -> str:
         """
@@ -328,7 +327,7 @@ class NarrativeEngine:
         )
         return None
 
-    async def check_model_availability(self) -> dict[str, Any]:
+    async def check_model_availability(self) -> Dict[str, Any]:
         """Check if configured model is available via LLM service."""
         llm_service = self._get_llm_provider()
         if not llm_service or not llm_service.available:

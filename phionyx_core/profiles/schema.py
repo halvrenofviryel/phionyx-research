@@ -6,8 +6,8 @@ Defines the nested structure for high-level personas and low-level technical par
 """
 
 from enum import Enum
-
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from typing import Optional, Dict, List
+from pydantic import BaseModel, Field, field_validator
 
 
 class BaseMode(str, Enum):
@@ -57,15 +57,15 @@ class PhysicsConfig(BaseModel):
     safety_bias: float = Field(0.5, ge=0.0, le=1.0, description="Safety strictness (0=permissive, 1=strict)")
     base_mode: BaseMode = Field(BaseMode.DEFAULT, description="Base context mode")
     # Physics v2.1 Parameters (Circumplex Model) - optional for backward compatibility
-    valence: float | None = Field(None, ge=-1.0, le=1.0, description="Emotional valence from Circumplex (-1 to +1)")
-    arousal: float | None = Field(None, ge=0.0, le=1.0, description="Arousal from Circumplex (0 to 1)")
-    amplitude: float | None = Field(None, ge=0.0, le=10.0, description="Emotional intensity slider (0-10)")
-    entropy: float | None = Field(None, ge=0.0, le=1.0, description="Chaos level (0-1)")
-    stability: float | None = Field(None, ge=0.0, le=1.0, description="Internal resilience (0-1)")
-    gamma: float | None = Field(None, ge=0.0, le=1.0, description="Decay rate (0-1)")
-    w_c: float | None = Field(None, ge=0.0, le=1.0, description="Cognitive weight (0-1)")
-    w_p: float | None = Field(None, ge=0.0, le=1.0, description="Physical weight (0-1)")
-    entropy_penalty_k: float | None = Field(1.0, ge=0.0, le=2.0, description="Entropy penalty coefficient (0-2, default 1.0)")
+    valence: Optional[float] = Field(None, ge=-1.0, le=1.0, description="Emotional valence from Circumplex (-1 to +1)")
+    arousal: Optional[float] = Field(None, ge=0.0, le=1.0, description="Arousal from Circumplex (0 to 1)")
+    amplitude: Optional[float] = Field(None, ge=0.0, le=10.0, description="Emotional intensity slider (0-10)")
+    entropy: Optional[float] = Field(None, ge=0.0, le=1.0, description="Chaos level (0-1)")
+    stability: Optional[float] = Field(None, ge=0.0, le=1.0, description="Internal resilience (0-1)")
+    gamma: Optional[float] = Field(None, ge=0.0, le=1.0, description="Decay rate (0-1)")
+    w_c: Optional[float] = Field(None, ge=0.0, le=1.0, description="Cognitive weight (0-1)")
+    w_p: Optional[float] = Field(None, ge=0.0, le=1.0, description="Physical weight (0-1)")
+    entropy_penalty_k: Optional[float] = Field(1.0, ge=0.0, le=2.0, description="Entropy penalty coefficient (0-2, default 1.0)")
 
     @field_validator('reactivity', 'resilience', 'safety_bias')
     @classmethod
@@ -100,9 +100,13 @@ class GovernanceConfig(BaseModel):
     policy_id: str = Field("default", description="Policy identifier")
     pii_mode: PIIMode = Field(PIIMode.PARTIAL, description="PII scrubbing mode")
     audit_level: AuditLevel = Field(AuditLevel.STANDARD, description="Audit logging level")
-    custom_regex_patterns: list[str] | None = Field(None, description="Custom PII regex patterns")
+    custom_regex_patterns: Optional[List[str]] = Field(None, description="Custom PII regex patterns")
 
-    model_config = ConfigDict(use_enum_values=True)
+    class Config:
+        """Pydantic config."""
+        use_enum_values = True
+
+
 class RoutingConfig(BaseModel):
     """
     LLM routing configuration.
@@ -110,11 +114,15 @@ class RoutingConfig(BaseModel):
     Determines which LLM tier to use for different scenarios.
     """
     llm_tier_strategy: LLMTierStrategy = Field(LLMTierStrategy.BALANCED, description="LLM selection strategy")
-    fallback_model: str | None = Field(None, description="Fallback model if primary fails")
-    max_tokens_per_tier: dict[str, int] | None = Field(None, description="Max tokens per tier")
+    fallback_model: Optional[str] = Field(None, description="Fallback model if primary fails")
+    max_tokens_per_tier: Optional[Dict[str, int]] = Field(None, description="Max tokens per tier")
     enable_graph_rag: bool = Field(False, description="Enable GraphRAG for hidden context discovery (default: OFF, only for Academic/Enterprise/Deep-analysis modes)")
 
-    model_config = ConfigDict(use_enum_values=True)
+    class Config:
+        """Pydantic config."""
+        use_enum_values = True
+
+
 class ExecutionGuardConfig(BaseModel):
     """
     Per-profile ExecutionGuard limits.
@@ -149,7 +157,11 @@ class ExecutionGuardConfig(BaseModel):
         description="Circular-sequence detection window. Guard default: 3.",
     )
 
-    model_config = ConfigDict(use_enum_values=True)
+    class Config:
+        """Pydantic config."""
+        use_enum_values = True
+
+
 class Profile(BaseModel):
     """
     Root profile model containing all module configurations.
@@ -157,23 +169,48 @@ class Profile(BaseModel):
     This is the high-level "Persona" that maps to low-level technical parameters.
     """
     name: str = Field(..., description="Profile identifier (e.g., 'SCHOOL_DEFAULT')")
-    description: str | None = Field(None, description="Human-readable description")
+    description: Optional[str] = Field(None, description="Human-readable description")
 
     # Module configurations
     physics: PhysicsConfig = Field(default_factory=PhysicsConfig, description="Physics module config")
     pedagogy: PedagogyConfig = Field(default_factory=PedagogyConfig, description="Pedagogy module config")
     governance: GovernanceConfig = Field(default_factory=GovernanceConfig, description="Governance module config")
     routing: RoutingConfig = Field(default_factory=RoutingConfig, description="Routing module config")
-    execution_guard: ExecutionGuardConfig | None = Field(
+    execution_guard: Optional[ExecutionGuardConfig] = Field(
         None,
         description="Optional per-profile ExecutionGuard limits. None = hard-coded defaults.",
     )
 
     # Metadata
-    version: str | None = Field("1.0.0", description="Profile version")
-    tags: list[str] | None = Field(None, description="Tags for filtering/searching")
+    version: Optional[str] = Field("1.0.0", description="Profile version")
+    tags: Optional[List[str]] = Field(None, description="Tags for filtering/searching")
 
-    model_config = ConfigDict(
-        use_enum_values=True,
-        json_schema_extra={'example': {'name': 'SCHOOL_DEFAULT', 'description': 'Default school profile: High resilience, low reactivity', 'physics': {'reactivity': 0.2, 'resilience': 0.9, 'safety_bias': 0.8, 'base_mode': 'SCHOOL'}, 'pedagogy': {'vygotsky_level': 0.7, 'scaffolding_aggressiveness': 0.6, 'intervention_threshold': 0.4}, 'governance': {'policy_id': 'school_policy', 'pii_mode': 'FULL', 'audit_level': 'VERBOSE'}, 'routing': {'llm_tier_strategy': 'QUALITY_OPTIMIZED'}}},
-    )
+    class Config:
+        """Pydantic config."""
+        use_enum_values = True
+        json_schema_extra = {
+            "example": {
+                "name": "SCHOOL_DEFAULT",
+                "description": "Default school profile: High resilience, low reactivity",
+                "physics": {
+                    "reactivity": 0.2,
+                    "resilience": 0.9,
+                    "safety_bias": 0.8,
+                    "base_mode": "SCHOOL"
+                },
+                "pedagogy": {
+                    "vygotsky_level": 0.7,
+                    "scaffolding_aggressiveness": 0.6,
+                    "intervention_threshold": 0.4
+                },
+                "governance": {
+                    "policy_id": "school_policy",
+                    "pii_mode": "FULL",
+                    "audit_level": "VERBOSE"
+                },
+                "routing": {
+                    "llm_tier_strategy": "QUALITY_OPTIMIZED"
+                }
+            }
+        }
+

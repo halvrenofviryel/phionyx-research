@@ -16,16 +16,14 @@ State transition rules:
 
 from __future__ import annotations
 
-from collections.abc import Callable
-from typing import Any
-
+from typing import Dict, Any, Optional
 import numpy as np
 
 
 def echoism_process_model(
     x: np.ndarray,
     dt: float,
-    u: dict[str, Any] | None = None
+    u: Optional[Dict[str, Any]] = None
 ) -> np.ndarray:
     """
     Non-linear process model f(x, dt, u) for Echoism Core v1.0.
@@ -168,11 +166,11 @@ def echoism_process_model(
 
 def create_echoism_process_model(
     dt: float,
-    event_features: dict[str, Any] | None = None,
+    event_features: Optional[Dict[str, Any]] = None,
     trace_strength: float = 0.0,
-    task_outcome: str | None = None,
+    task_outcome: Optional[str] = None,
     confidence: float = 0.5
-) -> Callable[..., np.ndarray]:
+) -> callable:
     """
     Create process model function with fixed control inputs.
 
@@ -193,7 +191,7 @@ def create_echoism_process_model(
         "confidence": confidence
     }
 
-    def process_model(x: np.ndarray, control: dict[str, Any] | None = None) -> np.ndarray:
+    def process_model(x: np.ndarray, control: Optional[Dict[str, Any]] = None) -> np.ndarray:
         """
         Process model with pre-configured control inputs.
 
@@ -203,8 +201,7 @@ def create_echoism_process_model(
         control_input = control if control is not None else u
 
         # Extract dt from control or use default
-        dt_raw = control_input.get("dt", dt)
-        dt_value: float = float(dt_raw) if isinstance(dt_raw, int | float) else dt
+        dt_value = control_input.get("dt", dt)
 
         return echoism_process_model(x, dt_value, control_input)
 

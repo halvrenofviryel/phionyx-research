@@ -3,11 +3,11 @@ Human Approval Workflow
 Human-in-the-loop mechanism for circuit breaker OPEN state.
 """
 
-import logging
-from dataclasses import asdict, dataclass, field
-from datetime import datetime
+from typing import Dict, Any, Optional, List
+from dataclasses import dataclass, asdict
 from enum import Enum
-from typing import Any
+from datetime import datetime
+import logging
 
 logger = logging.getLogger(__name__)
 
@@ -26,18 +26,22 @@ class ApprovalRequest:
     request_id: str
     session_id: str
     circuit_state: str
-    drift_report: dict[str, Any]
+    drift_report: Dict[str, Any]
     user_input: str
-    blocked_output: str | None
+    blocked_output: Optional[str]
     created_at: datetime
     expires_at: datetime
     status: ApprovalStatus = ApprovalStatus.PENDING
-    approved_by: str | None = None
-    approved_at: datetime | None = None
-    rejection_reason: str | None = None
-    metadata: dict[str, Any] = field(default_factory=dict)
+    approved_by: Optional[str] = None
+    approved_at: Optional[datetime] = None
+    rejection_reason: Optional[str] = None
+    metadata: Dict[str, Any] = None
 
-    def to_dict(self) -> dict[str, Any]:
+    def __post_init__(self):
+        if self.metadata is None:
+            self.metadata = {}
+
+    def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary."""
         data = asdict(self)
         data["status"] = self.status.value
@@ -79,17 +83,17 @@ class HumanApprovalService:
         self.max_pending = max_pending_requests
 
         # In-memory storage (can be replaced with database)
-        self._requests: dict[str, ApprovalRequest] = {}
-        self._session_requests: dict[str, list[str]] = {}  # session_id -> [request_ids]
+        self._requests: Dict[str, ApprovalRequest] = {}
+        self._session_requests: Dict[str, List[str]] = {}  # session_id -> [request_ids]
 
     def create_approval_request(
         self,
         session_id: str,
         circuit_state: str,
-        drift_report: dict[str, Any],
+        drift_report: Dict[str, Any],
         user_input: str,
-        blocked_output: str | None = None,
-        metadata: dict[str, Any] | None = None
+        blocked_output: Optional[str] = None,
+        metadata: Optional[Dict[str, Any]] = None
     ) -> ApprovalRequest:
         """
         Create approval request.
@@ -144,7 +148,7 @@ class HumanApprovalService:
         logger.info(f"Created approval request: {request_id} for session {session_id}")
         return request
 
-    def get_request(self, request_id: str) -> ApprovalRequest | None:
+    def get_request(self, request_id: str) -> Optional[ApprovalRequest]:
         """Get approval request by ID."""
         request = self._requests.get(request_id)
         if request and request.is_expired() and request.status == ApprovalStatus.PENDING:
@@ -212,8 +216,8 @@ class HumanApprovalService:
 
     def get_pending_requests(
         self,
-        session_id: str | None = None
-    ) -> list[ApprovalRequest]:
+        session_id: Optional[str] = None
+    ) -> List[ApprovalRequest]:
         """
         Get pending requests.
 
@@ -238,7 +242,7 @@ class HumanApprovalService:
     def get_session_requests(
         self,
         session_id: str
-    ) -> list[ApprovalRequest]:
+    ) -> List[ApprovalRequest]:
         """Get all requests for a session."""
         request_ids = self._session_requests.get(session_id, [])
         requests = [self._requests[rid] for rid in request_ids if rid in self._requests]

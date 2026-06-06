@@ -7,8 +7,8 @@ Extracted from API route handler to core layer.
 """
 
 import logging
+from typing import Dict, Any, Optional
 from dataclasses import dataclass
-from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -18,19 +18,19 @@ class PlayCardInput:
     """Input for play card use case."""
     character_id: str
     card_id: str
-    user_input: str | None = None
-    scene_context: str | None = None
-    user_id: str | None = None
+    user_input: Optional[str] = None
+    scene_context: Optional[str] = None
+    user_id: Optional[str] = None
 
 
 @dataclass
 class PlayCardOutput:
     """Output from play card use case."""
-    result: dict[str, Any]
+    result: Dict[str, Any]
     character_name: str
     character_archetype: str
-    background: str | None = None
-    user_age_category: str | None = None
+    background: Optional[str] = None
+    user_age_category: Optional[str] = None
 
 
 class PlayCardUseCase:

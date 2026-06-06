@@ -10,10 +10,11 @@ Per Faz 2.4:
 
 from __future__ import annotations
 
-import json
-import sqlite3
+from typing import List, Optional
 from contextlib import closing
 from datetime import datetime
+import json
+import sqlite3
 from pathlib import Path
 
 # Import EchoEvent if available
@@ -22,7 +23,7 @@ try:
     ECHO_EVENT_AVAILABLE = True
 except ImportError:
     ECHO_EVENT_AVAILABLE = False
-    EchoEvent = None  # type: ignore[assignment,misc]
+    EchoEvent = None
 
 
 class TraceStore:
@@ -37,8 +38,8 @@ class TraceStore:
 
     def __init__(
         self,
-        db_path: str | None = None,
-        jsonl_path: str | None = None,
+        db_path: Optional[str] = None,
+        jsonl_path: Optional[str] = None,
         enable_vector_index: bool = False
     ):
         """
@@ -163,7 +164,7 @@ class TraceStore:
 
         return True
 
-    def get_event(self, event_id: str) -> EchoEvent | None:
+    def get_event(self, event_id: str) -> Optional[EchoEvent]:
         """
         Retrieve event by ID.
 
@@ -212,11 +213,11 @@ class TraceStore:
 
     def get_events_by_tags(
         self,
-        tags: list[str],
-        start_time: datetime | None = None,
-        end_time: datetime | None = None,
+        tags: List[str],
+        start_time: Optional[datetime] = None,
+        end_time: Optional[datetime] = None,
         limit: int = 100
-    ) -> list[EchoEvent]:
+    ) -> List[EchoEvent]:
         """
         Retrieve events by tags.
 
@@ -237,7 +238,7 @@ class TraceStore:
 
             # Build query
             query = "SELECT id, type, timestamp, intensity, tags, payload FROM events WHERE erased = 0"
-            params: list[str | int] = []
+            params = []
 
             # Tag filter (simple LIKE search, can be enhanced with JSON functions)
             if tags:
@@ -308,8 +309,8 @@ class TraceStore:
     def erase_event(
         self,
         event_id: str,
-        reason: str | None = None,
-        user_id: str | None = None
+        reason: Optional[str] = None,
+        user_id: Optional[str] = None
     ) -> bool:
         """
         Permanently erase event (GDPR compliance).

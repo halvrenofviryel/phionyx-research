@@ -25,6 +25,7 @@ Cognitive vs. automation: Infrastructure (threshold-based proposal generation)
 """
 
 import logging
+from typing import Dict, List, Optional
 from dataclasses import dataclass, field
 
 from phionyx_core.contracts.v4.learning_update import (
@@ -48,7 +49,7 @@ class ParameterEvidence:
     parameter_name: str
     surface_file: str
     tier: str
-    experiments: list[dict] = field(default_factory=list)
+    experiments: List[Dict] = field(default_factory=list)
 
     @property
     def keep_count(self) -> int:
@@ -68,25 +69,23 @@ class ParameterEvidence:
         kept = [e for e in self.experiments if e["decision"] == "keep"]
         if not kept:
             return 0.0
-        return float(sum(e["cqs_delta"] for e in kept) / len(kept))
+        return sum(e["cqs_delta"] for e in kept) / len(kept)
 
     @property
-    def best_value(self) -> float | None:
+    def best_value(self) -> Optional[float]:
         """Best proposed value from kept experiments (highest CQS delta)."""
         kept = [e for e in self.experiments if e["decision"] == "keep"]
         if not kept:
             return None
         best = max(kept, key=lambda e: e["cqs_delta"])
-        val = best["proposed_value"]
-        return float(val) if val is not None else None
+        return best["proposed_value"]
 
     @property
-    def current_value(self) -> float | None:
+    def current_value(self) -> Optional[float]:
         """Current value from the most recent experiment."""
         if not self.experiments:
             return None
-        val = self.experiments[-1]["current_value"]
-        return float(val) if val is not None else None
+        return self.experiments[-1]["current_value"]
 
 
 @dataclass
@@ -95,7 +94,7 @@ class OutcomeObserverResult:
     total_observed: int
     parameters_tracked: int
     updates_proposed: int
-    proposed_updates: list[LearningUpdate]
+    proposed_updates: List[LearningUpdate]
 
 
 class OutcomeObserver:
@@ -120,7 +119,7 @@ class OutcomeObserver:
         min_experiments: int = MIN_CONSISTENT_EXPERIMENTS,
         cqs_delta_threshold: float = CQS_DELTA_THRESHOLD,
         max_delta_fraction: float = MAX_DELTA_FRACTION,
-        tier_zone_map: dict[str, str] | None = None,
+        tier_zone_map: Optional[Dict[str, str]] = None,
     ):
         """
         Args:
@@ -138,7 +137,7 @@ class OutcomeObserver:
             "C": "gated",
             "D": "immutable",
         }
-        self._evidence: dict[str, ParameterEvidence] = {}
+        self._evidence: Dict[str, ParameterEvidence] = {}
         self._proposed_params: set = set()
 
     def observe(self, record: ExperimentRecord) -> None:
@@ -168,7 +167,7 @@ class OutcomeObserver:
             "timestamp": record.timestamp,
         })
 
-    def observe_batch(self, records: list[ExperimentRecord]) -> None:
+    def observe_batch(self, records: List[ExperimentRecord]) -> None:
         """Observe multiple experiment records."""
         for record in records:
             self.observe(record)
@@ -187,7 +186,7 @@ class OutcomeObserver:
         Returns:
             OutcomeObserverResult with proposed LearningUpdates.
         """
-        proposals: list[LearningUpdate] = []
+        proposals: List[LearningUpdate] = []
 
         for param_name, evidence in sorted(self._evidence.items()):
             if param_name in self._proposed_params:
@@ -210,11 +209,11 @@ class OutcomeObserver:
             proposed_updates=proposals,
         )
 
-    def get_evidence(self, parameter_name: str) -> ParameterEvidence | None:
+    def get_evidence(self, parameter_name: str) -> Optional[ParameterEvidence]:
         """Get accumulated evidence for a parameter."""
         return self._evidence.get(parameter_name)
 
-    def get_all_evidence(self) -> dict[str, ParameterEvidence]:
+    def get_all_evidence(self) -> Dict[str, ParameterEvidence]:
         """Get all accumulated evidence."""
         return dict(self._evidence)
 
@@ -251,7 +250,7 @@ class OutcomeObserver:
 
         return True
 
-    def _create_update(self, evidence: ParameterEvidence) -> LearningUpdate | None:
+    def _create_update(self, evidence: ParameterEvidence) -> Optional[LearningUpdate]:
         """Create a LearningUpdate from accumulated evidence."""
         current = evidence.current_value
         proposed = evidence.best_value

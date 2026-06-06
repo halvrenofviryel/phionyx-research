@@ -10,47 +10,45 @@ It has NO dependencies on FastAPI, HTTP, or database models.
 
 import logging
 import time
+from typing import Dict, Any, Optional, Protocol, TYPE_CHECKING
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, Any, Optional, Protocol
 
-from ..pipeline.base import BlockContext, BlockResult, PipelineBlock
+from ..pipeline.base import PipelineBlock, BlockContext, BlockResult
 
 if TYPE_CHECKING:
     from ..profiles.schema import ExecutionGuardConfig
 # Import canonical block order
 from phionyx_core.contracts.telemetry import get_canonical_blocks as get_canonical_block_order
-
 from .dependency_validator import DependencyValidator
-from .dynamic_grouping import DynamicGrouping
-from .early_exit_optimizer import EarlyExitOptimizer
-from .execution_guard import ExecutionGuard
-from .parallel_executor import ParallelExecutor
 from .rollback_manager import RollbackManager
+from .parallel_executor import ParallelExecutor
+from .early_exit_optimizer import EarlyExitOptimizer
+from .dynamic_grouping import DynamicGrouping
+from .execution_guard import ExecutionGuard
 
 logger = logging.getLogger(__name__)
 
 # OpenTelemetry integration (optional)
 try:
-    from opentelemetry.trace import Status, StatusCode
-
     from phionyx_core.telemetry import get_tracer, is_opentelemetry_enabled
+    from opentelemetry.trace import Status, StatusCode
     OPENTELEMETRY_AVAILABLE = True
 except ImportError:
     OPENTELEMETRY_AVAILABLE = False
-    get_tracer = None  # type: ignore[assignment]
+    get_tracer = None
     def is_opentelemetry_enabled() -> bool:
         return False
-    Status = None  # type: ignore[assignment,misc]
-    StatusCode = None  # type: ignore[assignment,misc]
+    Status = None
+    StatusCode = None
 
 
 class TelemetryCollectorProtocol(Protocol):
     """Protocol for telemetry collection (to avoid direct dependency)."""
-    def start_block(self, block_id: str, timing_label: str, metadata: dict[str, Any] | None = None) -> None:
+    def start_block(self, block_id: str, timing_label: str, metadata: Optional[Dict[str, Any]] = None) -> None:
         """Start tracking a block."""
         ...
 
-    def end_block(self, block_id: str, status: str = "ok", events: list | None = None) -> None:
+    def end_block(self, block_id: str, status: str = "ok", events: Optional[list] = None) -> None:
         """End tracking a block."""
         ...
 
@@ -64,26 +62,26 @@ class OrchestratorServices:
     This allows the orchestrator to remain in core without bridge dependencies.
     """
     # Processor services
-    processor: Any | None = None  # EngineProcessor
-    response_generator: Any | None = None  # EngineResponseGenerator
+    processor: Optional[Any] = None  # EngineProcessor
+    response_generator: Optional[Any] = None  # EngineResponseGenerator
 
     # Physics/Math services
-    phi_engine: Any | None = None  # PhiEngine
-    entropy_engine: Any | None = None  # EntropyEngine
+    phi_engine: Optional[Any] = None  # PhiEngine
+    entropy_engine: Optional[Any] = None  # EntropyEngine
 
     # Emotion services
-    emotion_estimator: Any | None = None  # EmotionEstimator
-    neurotransmitter: Any | None = None  # NeurotransmitterEngine
+    emotion_estimator: Optional[Any] = None  # EmotionEstimator
+    neurotransmitter: Optional[Any] = None  # NeurotransmitterEngine
 
     # State services
-    state_store: Any | None = None  # StateStore
-    echo_state_store: Any | None = None  # EchoStateStore (legacy)
+    state_store: Optional[Any] = None  # StateStore
+    echo_state_store: Optional[Any] = None  # EchoStateStore (legacy)
 
     # Time management
-    time_managers: dict[str, Any] | None = None  # Dict of TimeManager instances
+    time_managers: Optional[Dict[str, Any]] = None  # Dict of TimeManager instances
 
     # Additional services (can be extended)
-    additional_services: dict[str, Any] | None = None
+    additional_services: Optional[Dict[str, Any]] = None
 
     def __post_init__(self):
         """Initialize default values."""
@@ -109,7 +107,7 @@ class EchoOrchestrator:
     def __init__(
         self,
         services: OrchestratorServices,
-        telemetry_collector: TelemetryCollectorProtocol | None = None,
+        telemetry_collector: Optional[TelemetryCollectorProtocol] = None,
         enable_rollback: bool = True,
         enable_parallel: bool = True,
         enable_execution_guard: bool = True,
@@ -137,7 +135,7 @@ class EchoOrchestrator:
         self.block_order = get_canonical_block_order()
 
         # Block registry (will be populated with block implementations)
-        self.blocks: dict[str, PipelineBlock] = {}
+        self.blocks: Dict[str, PipelineBlock] = {}
 
         # CRITICAL: Execution guard (infinite loop prevention)
         # Multiple protection layers: iteration limit, block execution tracking, timeout, circular sequence detection
@@ -236,7 +234,7 @@ class EchoOrchestrator:
         blob = _json.dumps(payload, sort_keys=True, default=str).encode("utf-8")
         return hashlib.sha256(blob).hexdigest()
 
-    def _build_regeneration_constraints(self, context: "BlockContext") -> dict[str, Any]:
+    def _build_regeneration_constraints(self, context: "BlockContext") -> Dict[str, Any]:
         """Assemble constraint payload written to ``metadata['regeneration_constraints']``."""
         import hashlib
 
@@ -312,7 +310,7 @@ class EchoOrchestrator:
             if retry_result is not None and getattr(retry_result, "data", None):
                 if isinstance(retry_result.data, dict):
                     for k, v in retry_result.data.items():
-                        if isinstance(v, dict | list | tuple | str | int | float | bool | type(None)):
+                        if isinstance(v, (dict, list, tuple, str, int, float, bool, type(None))):
                             metadata[k] = v
                     context.metadata = metadata
 
@@ -321,7 +319,7 @@ class EchoOrchestrator:
     async def execute_pipeline(
         self,
         context: BlockContext
-    ) -> dict[str, Any]:
+    ) -> Dict[str, Any]:
         """
         Execute the full 46-block pipeline (v3.8.0).
 
@@ -366,7 +364,7 @@ class EchoOrchestrator:
             except Exception as e:
                 logger.warning(f"Failed to load state for session {context.session_id}: {e}")
 
-        results: dict[str, Any] = {}
+        results = {}
         current_context = context
         skipped_blocks: set[str] = set()  # Track skipped blocks for propagation
         early_exit_triggered = False  # Track early exit status
@@ -496,7 +494,7 @@ class EchoOrchestrator:
                                 current_context.metadata["physics_state"] = current_physics_state
 
                             # Update entropy value
-                            current_physics_state["entropy"] = float(entropy_value) if entropy_value is not None else 0.0
+                            current_physics_state["entropy"] = float(entropy_value)
 
                         # Handle phi_computation
                         if block_id == "phi_computation" and "phi" in result.data:
@@ -736,7 +734,7 @@ class EchoOrchestrator:
 
                     if isinstance(result.data, dict):
                         # Filter result.data: only merge real values
-                        filtered_data: dict[str, Any] = {}
+                        filtered_data = {}
                         for k, v in result.data.items():
                             if k == "frame":
                                 if isinstance(v, dict):
@@ -748,12 +746,12 @@ class EchoOrchestrator:
                                         filtered_data[k] = {}
                                 continue
                             # Skip non-serializable placeholder objects
-                            if not isinstance(v, dict | list | tuple | str | int | float | bool | type(None)):
+                            if not isinstance(v, (dict, list, tuple, str, int, float, bool, type(None))):
                                 logger.debug(f"Skipping non-serializable object in result.data['{k}'] (type: {type(v).__name__})")
                                 continue
                             if k == "physics_state" and isinstance(v, dict):
                                 filtered_physics_state = {pk: pv for pk, pv in v.items()
-                                                         if isinstance(pv, str | int | float | bool | type(None))}
+                                                         if isinstance(pv, (str, int, float, bool, type(None)))}
                                 filtered_data[k] = filtered_physics_state
                             else:
                                 filtered_data[k] = v
@@ -832,16 +830,12 @@ class EchoOrchestrator:
 
                     # Update amplitude and integrity if available
                     if "amplitude" in result.data:
-                        amp = result.data.get("amplitude")
-                        if amp is not None:
-                            current_context.current_amplitude = float(amp)
-                            current_context.metadata["current_amplitude"] = float(amp)
+                        current_context.current_amplitude = result.data.get("amplitude")
+                        current_context.metadata["current_amplitude"] = result.data.get("amplitude")
 
                     if "integrity" in result.data:
-                        integ = result.data.get("integrity")
-                        if integ is not None:
-                            current_context.current_integrity = float(integ)
-                            current_context.metadata["current_integrity"] = float(integ)
+                        current_context.current_integrity = result.data.get("integrity")
+                        current_context.metadata["current_integrity"] = result.data.get("integrity")
 
                     # Check for early exit trigger
                     if result.data.get("early_exit", False) or result.data.get("early_exit_triggered", False):
@@ -1020,23 +1014,23 @@ class EchoOrchestrator:
         card_title: str = "",
         scene_context: str = "",
         card_result: str = "neutral",
-        scenario_id: str | None = None,
-        scenario_step_id: str | None = None,
-        session_id: str | None = None,
-        participant: Any | None = None,  # Participant abstraction
-        mode: str | None = None,  # Runtime mode (e.g., "toygar_core", "story", "game_scenario")
-        strategy: str | None = None,  # Runtime strategy (e.g., "normal", "stabilize", "comfort")
-        envelope_message_id: str | None = None,  # TurnEnvelope message_id for transcript tracking
-        envelope_turn_id: int | None = None,  # TurnEnvelope turn_id for transcript tracking
-        envelope_user_text_sha256: str | None = None,  # TurnEnvelope user_text_sha256 for integrity
-        capabilities: Any | None = None,  # RunCapabilities
-        capability_deriver: Any | None = None,  # CapabilityDeriverProtocol
+        scenario_id: Optional[str] = None,
+        scenario_step_id: Optional[str] = None,
+        session_id: Optional[str] = None,
+        participant: Optional[Any] = None,  # Participant abstraction
+        mode: Optional[str] = None,  # Runtime mode (e.g., "toygar_core", "story", "game_scenario")
+        strategy: Optional[str] = None,  # Runtime strategy (e.g., "normal", "stabilize", "comfort")
+        envelope_message_id: Optional[str] = None,  # TurnEnvelope message_id for transcript tracking
+        envelope_turn_id: Optional[int] = None,  # TurnEnvelope turn_id for transcript tracking
+        envelope_user_text_sha256: Optional[str] = None,  # TurnEnvelope user_text_sha256 for integrity
+        capabilities: Optional[Any] = None,  # RunCapabilities
+        capability_deriver: Optional[Any] = None,  # CapabilityDeriverProtocol
         current_amplitude: float = 5.0,
         current_entropy: float = 0.5,
         current_integrity: float = 100.0,
-        previous_phi: float | None = None,
+        previous_phi: Optional[float] = None,
         **kwargs
-    ) -> dict[str, Any]:
+    ) -> Dict[str, Any]:
         """
         Main entry point for pipeline execution.
 

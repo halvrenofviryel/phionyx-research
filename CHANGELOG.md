@@ -13,6 +13,52 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.8.0] — 2026-06-06
+
+**Theme: Production Hardening (schema-freeze candidate).**
+
+v0.8.0 hardens the existing runtime rather than adding new product features: real
+axiom enforcement in CI, an adversarial regression corpus, a performance gate, a
+cryptographically consistent signed chain, and a type-modernized source tree. It is a
+schema-freeze **candidate** — not a freeze. The v1.0 freeze is a separate milestone, and
+the docs site, companion-package republish, and external audit are independent workstreams
+that do not gate this package release.
+
+### Added
+
+- **`contracts/interlink/` — cross-runtime envelope module** (`envelope.py`). Houses the
+  interchange envelope schema previously kept outside the package; additive.
+- **`contracts/v4/claim.py` — typed `Claim` lifecycle contract.** Ties a `claim_id` from
+  creation → gate decision → signed record → observed outcome, with an
+  `is_lifecycle_complete()` predicate. Realized through the existing pipeline; no new blocks.
+- **8-axiom CI gate.** The Echoism axiom suite now asserts real invariants in CI (replacing
+  a previously always-passing aggregator).
+- **Adversarial corpus + confusion matrix.** A 30-safe / 30-unsafe input regression set with
+  a published baseline recall, run in CI.
+- **10K-envelope performance benchmark + latency gate.** Sub-millisecond per-envelope
+  verification, wired as a CI regression gate.
+
+### Changed
+
+- **Signed-chain canonicalization → RFC 8785 (JCS).** The signed audit chain now
+  canonicalizes via a byte-identical JCS canonicalizer shared with the evidence-export path,
+  eliminating float (`5.0` vs `5`) and non-ASCII divergence. **Breaking** for chains
+  persisted by earlier versions (they no longer verify); new chains are JCS-consistent. The
+  frozen `audit_record.py` hash domain is unchanged.
+- **Type-modernization sweep** across `phionyx_core/` (PEP 585/604 builtin generics, `X | None`,
+  import ordering). `ruff`- and `mypy`-clean on Python 3.10–3.13. No behavioral change.
+- **Privacy rebuild.** Genericized example/keyword data in `context/` and
+  `narrative/lore_mapping.py` to remove maintainer-personal and domain-specific literals from
+  the published package. No behavioral change.
+
+### Notes
+
+- **Not a schema freeze.** v0.8.0 is a freeze candidate. Version axes (product release, RGE
+  wire schema, V4 contract suite, pipeline contract, AIREP protocol) are intentionally
+  independent and each follow their own bump rules.
+
+---
+
 ## [0.7.0] — 2026-05-27
 
 **Theme: Compliance Evidence Pack.**

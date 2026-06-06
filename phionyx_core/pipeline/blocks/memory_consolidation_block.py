@@ -10,7 +10,7 @@ Position in pipeline: After audit_layer (post-response), end of pipeline.
 
 import logging
 
-from ..base import BlockContext, BlockResult, PipelineBlock
+from ..base import PipelineBlock, BlockContext, BlockResult
 
 logger = logging.getLogger(__name__)
 

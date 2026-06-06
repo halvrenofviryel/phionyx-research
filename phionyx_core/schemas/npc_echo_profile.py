@@ -8,7 +8,8 @@ Integrates Plutchik → Circumplex → Φ Physics pipeline.
 
 from __future__ import annotations
 
-from pydantic import BaseModel, ConfigDict, Field
+from typing import Dict
+from pydantic import BaseModel, Field
 
 
 class NPCEchoProfile(BaseModel):
@@ -62,7 +63,7 @@ class NPCEchoProfile(BaseModel):
     )
 
     # 7 echo domains (weights 0.0 to 1.0)
-    domain_weights: dict[str, float] = Field(
+    domain_weights: Dict[str, float] = Field(
         default_factory=lambda: {
             "physical": 0.3,
             "biological": 0.2,
@@ -93,4 +94,28 @@ class NPCEchoProfile(BaseModel):
         description="High-level echo semantic label (e.g., 'harmony_growth', 'threat_vigilance')"
     )
 
-    model_config = ConfigDict(json_schema_extra={'example': {'npc_id': 'npc_guard_01', 'echo_type': 'threat_vigilance', 'trace_half_life': 0.3, 'delay_tendency': 0.2, 'propagation_radius': 0.4, 'selectivity_threshold': 0.6, 'feedback_sensitivity': 0.5, 'domain_weights': {'physical': 0.4, 'biological': 0.3, 'psychological': 0.7, 'social': 0.8, 'technological': 0.5, 'consciousness': 0.6, 'metaphysical': 0.2}, 'base_valence': -0.7, 'base_arousal': 0.8}})
+    class Config:
+        """Pydantic configuration."""
+        json_schema_extra = {
+            "example": {
+                "npc_id": "npc_guard_01",
+                "echo_type": "threat_vigilance",
+                "trace_half_life": 0.3,
+                "delay_tendency": 0.2,
+                "propagation_radius": 0.4,
+                "selectivity_threshold": 0.6,
+                "feedback_sensitivity": 0.5,
+                "domain_weights": {
+                    "physical": 0.4,
+                    "biological": 0.3,
+                    "psychological": 0.7,
+                    "social": 0.8,
+                    "technological": 0.5,
+                    "consciousness": 0.6,
+                    "metaphysical": 0.2,
+                },
+                "base_valence": -0.7,
+                "base_arousal": 0.8,
+            }
+        }
+
