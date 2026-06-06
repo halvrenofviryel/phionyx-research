@@ -13,6 +13,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.8.1] — 2026-06-06
+
+**Patch — bug fixes.**
+
+### Fixed
+
+- **`EventReference` construction.** `state/state_migration.py` and
+  `state/echo_state_2.py` built `EventReference` with `event_id`/`event_type`/`tags`,
+  but the dataclass fields are `id`/`tag`/`intensity` — which would raise `TypeError`
+  on the legacy state-migration and `add_event_tag` paths. Now constructs with the
+  correct fields.
+- **`VectorStore` None / repository-mode guards.** `store()` now returns `None`
+  gracefully when `metadata` is `None` (was an `AttributeError`); `search_similar()`
+  returns `[]` with a warning when the direct client is unavailable in repository
+  mode (was an `AttributeError` on `None.rpc(...)`).
+
+---
+
 ## [0.8.0] — 2026-06-06
 
 **Theme: Production Hardening (schema-freeze candidate).**
