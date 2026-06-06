@@ -414,23 +414,14 @@ class EchoState2(BaseModel):
         if timestamp is None:
             timestamp = self.t_now
 
-        # Create EventReference (simplified for E_tags)
-        if EVENT_REFERENCE_AVAILABLE:
-            ref = EventReference(  # type: ignore[call-arg]  # FLAGGED: kwargs don't match echo_event.EventReference (id/tag/intensity) — see concerns
-                event_id=f"event_{len(self.E_tags)}",
-                event_type=event_type,
-                intensity=max(0.0, min(1.0, intensity)),
-                tags=[semantic_context] if semantic_context else []
-            )
-            self.E_tags.append(ref)
-        else:
-            # Fallback
-            ref = EventReference(
-                id=f"event_{len(self.E_tags)}",
-                tag=semantic_context or event_type,
-                intensity=max(0.0, min(1.0, intensity))
-            )
-            self.E_tags.append(ref)
+        # Create EventReference (id/tag/intensity per echo_event.EventReference,
+        # which is the bound type whether or not the optional import succeeds).
+        ref = EventReference(
+            id=f"event_{len(self.E_tags)}",
+            tag=semantic_context or event_type,
+            intensity=max(0.0, min(1.0, intensity))
+        )
+        self.E_tags.append(ref)
 
     def update_state(
         self,

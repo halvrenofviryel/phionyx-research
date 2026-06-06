@@ -311,13 +311,16 @@ class VectorStore:
         Returns:
             Memory ID if successful, None otherwise
         """
+        if metadata is None:
+            logger.error("VectorStore.store: metadata is required (must include 'actor_ref' or 'user_id')")
+            return None
         # SPRINT 5: Support both actor_ref and user_id in metadata for backward compatibility during migration
-        actor_ref = metadata.get("actor_ref") or metadata.get("user_id")  # type: ignore[union-attr]  # metadata may be None — see concerns (latent bug, behavior unchanged)
+        actor_ref = metadata.get("actor_ref") or metadata.get("user_id")
         if not actor_ref:
             logger.error("VectorStore.store: metadata must include 'actor_ref' or 'user_id'")
             return None
 
-        importance = metadata.get("importance", 0.5)  # type: ignore[union-attr]  # metadata non-None here (would have crashed above), narrow not provable
+        importance = metadata.get("importance", 0.5)
 
         return await self.add_memory(
             content=content,
@@ -350,6 +353,13 @@ class VectorStore:
         """
         if not self.is_connected():
             return []
+        if self.client is None:
+            # Repository-path mode: direct-client vector RPC is not yet routed through
+            # the repository; degrade gracefully (visible WARN) instead of crashing.
+            logger.warning(
+                "search_similar: vector RPC search not available in repository mode; returning []"
+            )
+            return []
 
         try:
             # Build RPC arguments
@@ -366,7 +376,7 @@ class VectorStore:
                 rpc_args["filter_tags"] = filter_tags
 
             # Use Supabase RPC function for similarity search
-            result = self.client.rpc("match_memories", rpc_args).execute()  # type: ignore[union-attr]  # guarded by is_connected(); mypy can't narrow across method
+            result = self.client.rpc("match_memories", rpc_args).execute()
 
             return cast(List[Dict], result.data) if result.data else []
         except Exception as e:

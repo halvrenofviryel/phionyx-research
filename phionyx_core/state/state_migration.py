@@ -82,11 +82,10 @@ def unified_to_echo_state2(
         # Convert memory tags to event references
         from phionyx_core.state.echo_event import EventReference
         for tag_str in old_state.memory_tags:
-            E_tags.append(EventReference(  # type: ignore[call-arg]  # FLAG: kwargs (event_id/event_type/tags) do not match local EventReference dataclass fields (id/tag/intensity) — likely real bug, see concerns
-                event_id=f"legacy_{len(E_tags)}",
-                event_type="memory",
+            E_tags.append(EventReference(
+                id=f"legacy_{len(E_tags)}",
+                tag=tag_str,
                 intensity=0.5,
-                tags=[tag_str]
             ))
 
     # Create EchoState2 (CANONICAL)
