@@ -212,6 +212,12 @@ class TemporalTracker:
         else:
             state = timeline.current
 
+        # `state` is provably non-None here: the `if at_turn` branch returns
+        # early when no state is found, and the `else` branch reads
+        # `timeline.current`, which is non-None because `timeline.states` was
+        # verified non-empty above. Assert for the type-checker; never fires.
+        assert state is not None
+
         # Apply decay
         turns_elapsed = self._current_turn - state.turn_index
         decay = self.decay_rate * turns_elapsed

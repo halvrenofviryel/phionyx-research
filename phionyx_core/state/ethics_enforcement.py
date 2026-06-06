@@ -20,7 +20,7 @@ try:
     from .ethics_enforcement_wrapper import EthicsEnforcement
 except ImportError:
     # Create a minimal stub if wrapper import fails
-    class EthicsEnforcement:
+    class EthicsEnforcement:  # type: ignore[no-redef]  # import-fallback stub
         """Stub EthicsEnforcement class."""
         def __init__(self, *args, **kwargs):
             pass
@@ -49,7 +49,7 @@ except (ImportError, ValueError):
         parent_dir = os.path.dirname(os.path.abspath(__file__))
         if parent_dir not in sys.path:
             sys.path.insert(0, parent_dir)
-        from ethics import EthicsVector
+        from ethics import EthicsVector  # type: ignore[no-redef]  # import-fallback path
 
 
 @dataclass

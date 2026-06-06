@@ -72,6 +72,7 @@ class UkfPredictBlock(PipelineBlock):
                 )
 
             # Perform UKF prediction
+            assert self.predictor is not None  # guaranteed by should_skip
             predicted_state = self.predictor.predict(
                 unified_state=unified_state,
                 time_delta=time_delta

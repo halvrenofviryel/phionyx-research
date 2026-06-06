@@ -15,13 +15,15 @@ This module orchestrates the full chain.
 
 from __future__ import annotations
 
-from typing import Dict, Any, Optional, List
+from typing import Dict, Any, Optional, List, Callable
 from datetime import datetime
 
 from phionyx_core.state.echo_event import EchoEvent
 from phionyx_core.state.echo_state_2 import EchoState2
 
 # Import trace functions if available
+trace_weight: Optional[Callable[..., float]]
+aggregate_trace: Optional[Callable[..., Dict[str, Any]]]
 try:
     from phionyx_core.memory.trace import trace_weight, aggregate_trace
     TRACE_AVAILABLE = True
@@ -145,7 +147,7 @@ class EchoOntology:
             if now is None:
                 now = self.state.t_now
 
-            return trace_weight(event, now, self.half_life_seconds)
+            return trace_weight(event, now, self.half_life_seconds)  # type: ignore[arg-type]  # FLAGGED: local import at line 127 shadows module-level trace_weight for whole function scope — see concerns
 
     def trace_to_echo(
         self,
@@ -178,6 +180,7 @@ class EchoOntology:
             now = self.state.t_now
 
         # Aggregate trace
+        assert aggregate_trace is not None  # TRACE_AVAILABLE guard above guarantees import succeeded
         trace_result = aggregate_trace(events, now, self.half_life_seconds)
 
         # Generate echo response

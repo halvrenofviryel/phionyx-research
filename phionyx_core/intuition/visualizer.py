@@ -10,11 +10,14 @@ This is crucial for "Visual Proof" in documentation and pitch decks.
 """
 
 import logging
-from typing import List, Dict, Optional, Any
+from typing import List, Dict, Optional, Any, TYPE_CHECKING, cast
 try:
     from supabase import Client
 except ImportError:
-    Client = None
+    Client = None  # type: ignore[assignment,misc]  # optional dep fallback
+
+if TYPE_CHECKING:
+    from postgrest.types import CountMethod
 
 logger = logging.getLogger(__name__)
 
@@ -227,13 +230,13 @@ class GraphVisualizer:
 
         try:
             # Count concepts
-            concepts_res = self.client.table("concepts").select("id", count="exact").eq(
+            concepts_res = self.client.table("concepts").select("id", count=cast("CountMethod", "exact")).eq(
                 "user_id", self.user_id
             ).execute()
             total_concepts = concepts_res.count or 0
 
             # Count associations
-            associations_res = self.client.table("associations").select("id", count="exact").eq(
+            associations_res = self.client.table("associations").select("id", count=cast("CountMethod", "exact")).eq(
                 "user_id", self.user_id
             ).execute()
             total_associations = associations_res.count or 0

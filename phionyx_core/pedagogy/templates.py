@@ -50,7 +50,7 @@ class TemplateLibrary:
             }
         }
 
-    def _load_extreme_state_templates(self) -> Dict[str, Dict[str, Dict[str, str]]]:
+    def _load_extreme_state_templates(self) -> Dict[str, Dict[str, Dict[str, Optional[str]]]]:
         """
         Load hardcoded templates for extreme physics states.
 
@@ -107,7 +107,7 @@ class TemplateLibrary:
         self,
         physics_state: Dict,
         language: Optional[str] = None
-    ) -> Optional[Dict[str, str]]:
+    ) -> Optional[Dict[str, object]]:
         """
         Get hardcoded template for extreme physics states.
 

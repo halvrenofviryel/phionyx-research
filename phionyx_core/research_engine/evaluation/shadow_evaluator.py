@@ -294,7 +294,7 @@ class ShadowEvaluator:
 
     def list_reports(self) -> list[dict[str, Any]]:
         """List all shadow evaluation reports (summary)."""
-        reports = []
+        reports: list[dict[str, Any]] = []
         if not self._reports_dir.exists():
             return reports
         for path in sorted(self._reports_dir.glob("*.json")):

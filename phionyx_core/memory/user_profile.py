@@ -4,15 +4,15 @@ Handles user profiles, characters, game sessions, and game logs.
 """
 
 import logging
-from typing import Dict, List, Optional, TYPE_CHECKING
+from typing import Dict, List, Optional, cast, TYPE_CHECKING
 from datetime import datetime
 try:
     from supabase import create_client, Client
     SUPABASE_AVAILABLE = True
 except ImportError:
     SUPABASE_AVAILABLE = False
-    create_client = None
-    Client = None
+    create_client = None  # type: ignore[assignment]  # fallback when supabase unavailable
+    Client = None  # type: ignore[assignment,misc]  # fallback when supabase unavailable
 import os
 
 if TYPE_CHECKING:
@@ -94,13 +94,14 @@ class UserProfile:
                 "created_at": datetime.now().isoformat()
             }
 
+        assert self.client is not None  # guaranteed by is_connected() check above
         try:
             # Try to get existing profile
             response = self.client.table("profiles").select("*").eq("id", profile_id).execute()
 
             if response.data and len(response.data) > 0:
                 logger.info(f"User found: {profile_id}")
-                return response.data[0]
+                return cast(Dict, response.data[0])
 
             # Create new profile
             new_profile = {
@@ -114,7 +115,7 @@ class UserProfile:
 
             if result.data:
                 logger.info(f"User created: {profile_id}")
-                return result.data[0]
+                return cast(Dict, result.data[0])
 
             return new_profile
         except Exception as e:
@@ -147,6 +148,7 @@ class UserProfile:
         if not self.is_connected():
             return None
 
+        assert self.client is not None  # guaranteed by is_connected() check above
         try:
             character = {
                 "profile_id": user_id,
@@ -164,8 +166,8 @@ class UserProfile:
             result = self.client.table("characters").insert(character).execute()
 
             if result.data:
-                logger.info(f"Character created: {result.data[0]['id']}")
-                return result.data[0]
+                logger.info(f"Character created: {cast(Dict, result.data[0])['id']}")
+                return cast(Dict, result.data[0])
 
             return None
         except Exception as e:
@@ -188,21 +190,22 @@ class UserProfile:
         if not self.is_connected():
             return None
 
+        assert self.client is not None  # guaranteed by is_connected() check above
         try:
             # Try by ID first
             response = self.client.table("characters").select("*").eq("id", character_id).execute()
             if response.data and len(response.data) > 0:
-                return response.data[0]
+                return cast(Dict, response.data[0])
 
             # Try by name
             response = self.client.table("characters").select("*").eq("character_name", character_id).execute()
             if response.data and len(response.data) > 0:
-                return response.data[0]
+                return cast(Dict, response.data[0])
 
             # Try by lore_character_id
             response = self.client.table("characters").select("*").eq("lore_character_id", character_id).execute()
             if response.data and len(response.data) > 0:
-                return response.data[0]
+                return cast(Dict, response.data[0])
 
             return None
         except Exception as e:
@@ -227,10 +230,11 @@ class UserProfile:
         if not self.is_connected():
             return None
 
+        assert self.client is not None  # guaranteed by is_connected() check above
         try:
             response = self.client.table("characters").select("*").eq("character_name", character_name).eq("profile_id", user_id).execute()
             if response.data and len(response.data) > 0:
-                return response.data[0]
+                return cast(Dict, response.data[0])
             return None
         except Exception as e:
             logger.error(f"Failed to get character by name: {e}")
@@ -249,9 +253,10 @@ class UserProfile:
         if not self.is_connected():
             return []
 
+        assert self.client is not None  # guaranteed by is_connected() check above
         try:
             response = self.client.table("characters").select("*").eq("profile_id", user_id).execute()
-            return response.data if response.data else []
+            return cast(List[Dict], response.data) if response.data else []
         except Exception as e:
             logger.error(f"Failed to get user characters: {e}")
             return []
@@ -278,6 +283,7 @@ class UserProfile:
         if not self.is_connected():
             return {"id": f"offline-{character_id}", "turn_count": 0, "character_id": character_id}
 
+        assert self.client is not None  # guaranteed by is_connected() check above
         try:
             # Get character ID if character_id is a name
             character = await self.get_character(character_id)
@@ -287,8 +293,8 @@ class UserProfile:
             response = self.client.table("game_sessions").select("*").eq("character_id", actual_character_id).eq("is_active", True).execute()
 
             if response.data and len(response.data) > 0:
-                logger.info(f"Active session found: {response.data[0]['id']}")
-                return response.data[0]
+                logger.info(f"Active session found: {cast(Dict, response.data[0])['id']}")
+                return cast(Dict, response.data[0])
 
             # Create new session
             session = {
@@ -302,8 +308,8 @@ class UserProfile:
             result = self.client.table("game_sessions").insert(session).execute()
 
             if result.data:
-                logger.info(f"Session started: {result.data[0]['id']}")
-                return result.data[0]
+                logger.info(f"Session started: {cast(Dict, result.data[0])['id']}")
+                return cast(Dict, result.data[0])
 
             return {"id": f"offline-{character_id}", "turn_count": 0, "character_id": actual_character_id}
         except Exception as e:
@@ -326,6 +332,7 @@ class UserProfile:
         if not self.is_connected():
             return None
 
+        assert self.client is not None  # guaranteed by is_connected() check above
         try:
             # Get character ID if character_id is a name
             character = await self.get_character(character_id)
@@ -334,7 +341,7 @@ class UserProfile:
             response = self.client.table("game_sessions").select("*").eq("character_id", actual_character_id).eq("is_active", True).order("started_at", desc=True).limit(1).execute()
 
             if response.data and len(response.data) > 0:
-                return response.data[0]
+                return cast(Dict, response.data[0])
 
             return None
         except Exception as e:
@@ -359,10 +366,11 @@ class UserProfile:
         if not self.is_connected():
             return None
 
+        assert self.client is not None  # guaranteed by is_connected() check above
         try:
             result = self.client.table("game_sessions").update(updates).eq("id", session_id).execute()
             if result.data:
-                return result.data[0]
+                return cast(Dict, result.data[0])
             return None
         except Exception as e:
             logger.error(f"Failed to update session: {e}")
@@ -394,6 +402,7 @@ class UserProfile:
         if not self.is_connected():
             return None
 
+        assert self.client is not None  # guaranteed by is_connected() check above
         try:
             echo = {
                 "session_id": session_id,
@@ -408,8 +417,8 @@ class UserProfile:
             result = self.client.table("echoes").insert(echo).execute()
 
             if result.data:
-                logger.info(f"Echo saved: {result.data[0]['id']}")
-                return result.data[0]["id"]
+                logger.info(f"Echo saved: {cast(Dict, result.data[0])['id']}")
+                return cast(str, cast(Dict, result.data[0])["id"])
 
             return None
         except Exception as e:
@@ -458,6 +467,7 @@ class UserProfile:
         if not self.is_connected():
             return None
 
+        assert self.client is not None  # guaranteed by is_connected() check above
         try:
             # Get actual character UUID if character_id is a name
             character = await self.get_character(character_id)
@@ -482,8 +492,8 @@ class UserProfile:
             result = self.client.table("game_logs").insert(game_log).execute()
 
             if result.data:
-                logger.info(f"Game log saved: {result.data[0]['id']}")
-                return result.data[0]["id"]
+                logger.info(f"Game log saved: {cast(Dict, result.data[0])['id']}")
+                return cast(str, cast(Dict, result.data[0])["id"])
 
             return None
         except Exception as e:

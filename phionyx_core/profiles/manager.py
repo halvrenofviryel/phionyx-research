@@ -6,7 +6,8 @@ Maps high-level profile knobs to low-level technical parameters across all SDK m
 This is the "brain" that distributes settings to all modules.
 """
 
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, Union
+from pathlib import Path
 from dataclasses import dataclass
 import logging
 
@@ -63,14 +64,14 @@ class ProfileManager:
     3. Returns structured params for each module
     """
 
-    def __init__(self, config_dir: Optional[str] = None):
+    def __init__(self, config_dir: Optional[Union[str, Path]] = None):
         """
         Initialize profile manager.
 
         Args:
             config_dir: Optional path to config directory
         """
-        self.loader = ProfileLoader(config_dir)
+        self.loader = ProfileLoader(Path(config_dir) if config_dir is not None else None)
         self._active_profile: Optional[Profile] = None
 
     def load_profile(self, profile_name: str) -> Profile:

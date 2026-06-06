@@ -162,6 +162,9 @@ def {test_name}():
         for test_code in test_codes:
             # Extract criterion ID from test code
             criterion_id = self._extract_criterion_id(test_code)
+            if criterion_id is None:
+                # Skip if no criterion ID could be extracted
+                continue
             criterion = self.criteria_registry.get(criterion_id)
 
             if not criterion:

@@ -13,7 +13,7 @@ Features:
 
 import hashlib
 import time
-from typing import List, Optional, Dict
+from typing import List, Optional, Dict, Any
 from collections import OrderedDict
 import logging
 
@@ -232,7 +232,7 @@ class EmbeddingCache:
 
         return len(expired_keys)
 
-    def get_metrics(self) -> Dict[str, int]:
+    def get_metrics(self) -> Dict[str, float]:
         """
         Get cache metrics.
 
@@ -253,7 +253,7 @@ class EmbeddingCache:
             "max_size": self.max_size
         }
 
-    def get_stats(self) -> Dict[str, any]:
+    def get_stats(self) -> Dict[str, Any]:
         """
         Get detailed cache statistics.
 

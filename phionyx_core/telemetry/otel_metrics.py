@@ -12,7 +12,7 @@ Metrics:
 """
 
 import logging
-from typing import Optional
+from typing import Dict, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -23,6 +23,7 @@ _entropy_gauge = None
 _ethics_blocking_counter = None
 _latency_histogram = None
 _llm_cost_counter = None
+_entropy_values: Dict[str, float] = {}
 
 try:
     from opentelemetry import metrics

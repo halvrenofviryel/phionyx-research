@@ -156,7 +156,7 @@ def synchronized(func: Callable[..., T]) -> Callable[..., T]:
             # Thread-safe code
             pass
     """
-    func.__lock__ = threading.RLock()
+    func.__lock__ = threading.RLock()  # type: ignore[attr-defined]  # dynamic attr on function object
 
     @wraps(func)
     def wrapper(*args, **kwargs):

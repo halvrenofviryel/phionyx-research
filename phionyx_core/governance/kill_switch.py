@@ -53,7 +53,7 @@ class KillSwitchEvent:
     state_before: KillSwitchState
     state_after: KillSwitchState
     reason: str
-    metrics: Dict[str, float]
+    metrics: Dict[str, Any]
     turn_id: Optional[int] = None
 
 
@@ -272,7 +272,7 @@ class KillSwitch:
         self,
         trigger: KillSwitchTrigger,
         reason: str,
-        metrics: Dict[str, float],
+        metrics: Dict[str, Any],
         turn_id: Optional[int] = None,
     ) -> 'KillSwitchResult':
         """Execute kill switch trigger."""
@@ -306,7 +306,7 @@ class KillSwitch:
         state_before: KillSwitchState,
         state_after: KillSwitchState,
         reason: str,
-        metrics: Dict[str, float],
+        metrics: Dict[str, Any],
         turn_id: Optional[int] = None,
     ) -> None:
         """Log kill switch event."""
@@ -346,6 +346,6 @@ class KillSwitchResult:
     triggered: bool
     trigger: Optional[KillSwitchTrigger] = None
     reason: str = ""
-    metrics: Optional[Dict[str, float]] = None
+    metrics: Optional[Dict[str, Any]] = None
     turn_id: Optional[int] = None
     timestamp: Optional[datetime] = None

@@ -7,7 +7,7 @@ Updates time semantics using TimeManager (single source of truth per Echoism Cor
 """
 
 import logging
-from typing import Optional, Protocol
+from typing import Any, Optional, Protocol
 
 from ..base import PipelineBlock, BlockContext, BlockResult
 
@@ -16,6 +16,8 @@ logger = logging.getLogger(__name__)
 
 class TimeManagerProtocol(Protocol):
     """Protocol for TimeManager to avoid direct dependency."""
+    state: Any  # TimeManager internal state (e.g. _is_first_tick)
+
     def advance_turn(self) -> float:
         """Advance turn and return time_delta in seconds."""
         ...

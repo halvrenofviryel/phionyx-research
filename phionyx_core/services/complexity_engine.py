@@ -92,7 +92,7 @@ class ComplexityBudgetEngine:
 
     def _calculate_cyclomatic_complexity_enhanced(self, tree: ast.AST) -> int:
         """Enhanced cyclomatic complexity calculation."""
-        complexity = 1  # Base complexity
+        complexity: float = 1  # Base complexity
 
         for node in ast.walk(tree):
             # Decision points increase complexity
@@ -100,7 +100,7 @@ class ComplexityBudgetEngine:
                 complexity += 1
                 # Check for elif chains
                 if hasattr(node, 'orelse') and node.orelse:
-                    for child in ast.walk(node.orelse):
+                    for child in ast.walk(node.orelse):  # type: ignore[arg-type]  # latent bug: orelse is list[stmt], ast.walk wants AST — see concerns
                         if isinstance(child, ast.If):
                             complexity += 1
             elif isinstance(node, ast.While):

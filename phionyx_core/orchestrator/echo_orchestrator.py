@@ -10,7 +10,7 @@ It has NO dependencies on FastAPI, HTTP, or database models.
 
 import logging
 import time
-from typing import Dict, Any, Optional, Protocol, TYPE_CHECKING
+from typing import Callable, Dict, Any, Optional, Protocol, cast, TYPE_CHECKING
 from dataclasses import dataclass
 
 from ..pipeline.base import PipelineBlock, BlockContext, BlockResult
@@ -35,11 +35,11 @@ try:
     OPENTELEMETRY_AVAILABLE = True
 except ImportError:
     OPENTELEMETRY_AVAILABLE = False
-    get_tracer = None
+    get_tracer: Optional[Callable[..., Any]] = None  # type: ignore[no-redef]
     def is_opentelemetry_enabled() -> bool:
         return False
-    Status = None
-    StatusCode = None
+    Status = None  # type: ignore  # otel fallback; real type when otel installed
+    StatusCode = None  # type: ignore
 
 
 class TelemetryCollectorProtocol(Protocol):
@@ -364,7 +364,7 @@ class EchoOrchestrator:
             except Exception as e:
                 logger.warning(f"Failed to load state for session {context.session_id}: {e}")
 
-        results = {}
+        results: Dict[str, Any] = {}
         current_context = context
         skipped_blocks: set[str] = set()  # Track skipped blocks for propagation
         early_exit_triggered = False  # Track early exit status
@@ -494,7 +494,7 @@ class EchoOrchestrator:
                                 current_context.metadata["physics_state"] = current_physics_state
 
                             # Update entropy value
-                            current_physics_state["entropy"] = float(entropy_value)
+                            current_physics_state["entropy"] = float(entropy_value)  # type: ignore[arg-type]  # entropy_value is Any|None here (outside the is-not-None guard); latent None risk flagged in concerns
 
                         # Handle phi_computation
                         if block_id == "phi_computation" and "phi" in result.data:
@@ -734,7 +734,7 @@ class EchoOrchestrator:
 
                     if isinstance(result.data, dict):
                         # Filter result.data: only merge real values
-                        filtered_data = {}
+                        filtered_data: Dict[str, Any] = {}
                         for k, v in result.data.items():
                             if k == "frame":
                                 if isinstance(v, dict):
@@ -830,11 +830,11 @@ class EchoOrchestrator:
 
                     # Update amplitude and integrity if available
                     if "amplitude" in result.data:
-                        current_context.current_amplitude = result.data.get("amplitude")
+                        current_context.current_amplitude = cast(float, result.data.get("amplitude"))
                         current_context.metadata["current_amplitude"] = result.data.get("amplitude")
 
                     if "integrity" in result.data:
-                        current_context.current_integrity = result.data.get("integrity")
+                        current_context.current_integrity = cast(float, result.data.get("integrity"))
                         current_context.metadata["current_integrity"] = result.data.get("integrity")
 
                     # Check for early exit trigger

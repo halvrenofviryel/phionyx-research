@@ -14,7 +14,7 @@ through the graph: Darkness -> Cave -> Fear (weight: 0.9)
 
 import logging
 import os
-from typing import List, Dict, Optional, Tuple, Any, TYPE_CHECKING
+from typing import List, Dict, Optional, Tuple, Any, TYPE_CHECKING, cast
 from dataclasses import dataclass
 from enum import Enum
 import uuid
@@ -27,8 +27,8 @@ except ImportError:
 try:
     from supabase import create_client, Client
 except ImportError:
-    create_client = None
-    Client = None
+    create_client = None  # type: ignore[assignment]  # optional dep fallback
+    Client = None  # type: ignore[assignment,misc]  # optional dep fallback
 # litellm imports removed - using centralized LLM service instead
 
 if TYPE_CHECKING:
@@ -202,7 +202,7 @@ class GraphEngine:
     async def extract_concepts(
         self,
         text: str,
-        model: str = None
+        model: Optional[str] = None
     ) -> List[Concept]:
         """
         Extract key concepts from user input using centralized LLM service.
@@ -358,7 +358,7 @@ class GraphEngine:
             ).execute()
 
             if result.data:
-                concept_id = result.data
+                concept_id = cast(str, result.data)
                 concept.id = concept_id
 
                 # Log if entity resolution occurred (would need to check if it was a merge)
@@ -743,7 +743,7 @@ class GraphEngine:
                 }
             ).execute()
 
-            return result.data or []
+            return cast(List[Dict], result.data or [])
 
         except Exception as e:
             logger.error(f"GraphEngine: Failed to get related concepts: {e}")
@@ -829,7 +829,7 @@ class GraphEngine:
             result = self.client.table("chronicle_events").insert(event_data).execute()
 
             if result.data and len(result.data) > 0:
-                event_id = result.data[0]["id"]
+                event_id = cast(str, cast(List[Dict], result.data)[0]["id"])
                 logger.info(f"GraphEngine: Created Chronicle event {event_id} for character {character_id} ({event_type})")
                 return event_id
 

@@ -253,7 +253,7 @@ class Guardrails:
         ]
 
         critical_score = max([risk_scores[rt] for rt in critical_risks])
-        critical_type = None
+        critical_type: Optional[RiskType] = None
         for rt in critical_risks:
             if risk_scores[rt] > 0:
                 critical_type = rt
@@ -261,6 +261,9 @@ class Guardrails:
 
         if critical_score > 0:
             # LEVEL 1 (CRITICAL) - Immediate Block
+            # critical_score > 0 guarantees the loop above set critical_type
+            # (some critical risk_scores[rt] > 0), so this assert never fires.
+            assert critical_type is not None
             intervention_message = self._get_intervention_message(critical_type)
             return RiskAssessment(
                 risk_level=RiskLevel.CRITICAL,

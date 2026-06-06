@@ -159,7 +159,7 @@ def calculate_profile_separation(
         avg_similarity = np.mean(similarities)
         psi = 1.0 - avg_similarity  # Mesafe = 1 - Benzerlik
 
-        return max(0.0, min(1.0, psi))
+        return float(max(0.0, min(1.0, psi)))
 
     except Exception as e:
         logger.error(f"Failed to calculate profile separation: {e}")

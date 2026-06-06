@@ -39,7 +39,7 @@ class ErrorAwareSampler:
             logger.warning("OpenTelemetry SDK not available for sampling")
             self.base_sampler = None
 
-    def should_sample(self, trace_id: int, span_name: str = None) -> bool:
+    def should_sample(self, trace_id: int, span_name: Optional[str] = None) -> bool:
         """
         Determine if a trace should be sampled.
 

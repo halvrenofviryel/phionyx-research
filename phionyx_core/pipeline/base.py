@@ -7,7 +7,7 @@ Base class for all pipeline blocks in the 46-block canonical pipeline.
 
 from abc import ABC, abstractmethod
 from typing import Any, ClassVar, Dict, Literal, Optional
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 DeterminismClass = Literal["strict", "seeded", "noisy_sensor"]
 """Determinism classification for a pipeline block.
@@ -78,7 +78,7 @@ class BlockContext:
     pipeline_version: str = "3.0.0"             # "2.5.0" or "3.0.0"
 
     # Additional context (extensible)
-    metadata: Dict[str, Any] = None
+    metadata: Dict[str, Any] = field(default_factory=dict)
 
     def __post_init__(self):
         if self.metadata is None:

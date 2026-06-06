@@ -79,7 +79,7 @@ def compute_w_final(
     conflict = compute_conflict_score(list(module_confidences.values()))
 
     # Find dominant module
-    dominant = max(module_confidences, key=module_confidences.get)
+    dominant = max(module_confidences, key=lambda m: module_confidences[m])
 
     return ArbitrationResult(
         w_final=max(0.0, min(1.0, w_final)),

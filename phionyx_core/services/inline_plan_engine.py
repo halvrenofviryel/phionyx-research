@@ -17,7 +17,7 @@ class PlanStep:
     id: str
     order: int
     description: str
-    dependencies: List[str] = None  # IDs of steps that must complete before this
+    dependencies: Optional[List[str]] = None  # IDs of steps that must complete before this
     estimated_time: Optional[float] = None  # In minutes
     status: str = "pending"  # "pending", "in_progress", "completed", "failed"
 
@@ -160,8 +160,8 @@ class InlinePlanEngine:
             List of steps in execution order
         """
         # Topological sort based on dependencies
-        executed = set()
-        result = []
+        executed: set[str] = set()
+        result: List[PlanStep] = []
 
         while len(result) < len(plan.steps):
             progress = False
@@ -171,7 +171,7 @@ class InlinePlanEngine:
                     continue
 
                 # Check if all dependencies are executed
-                if all(dep in executed for dep in step.dependencies):
+                if all(dep in executed for dep in (step.dependencies or [])):
                     result.append(step)
                     executed.add(step.id)
                     progress = True

@@ -150,7 +150,7 @@ class InterlinkEnvelope:
 
     def to_dict(self) -> Dict[str, Any]:
         """Convert envelope to dictionary"""
-        result = {
+        result: Dict[str, Any] = {
             "header": self.header.to_dict(),
             "payload": self.payload.to_dict(),
         }
@@ -201,7 +201,7 @@ class InterlinkEnvelope:
             Cryptographic signature
         """
         # Create signature payload
-        signature_data = {
+        signature_data: Dict[str, Any] = {
             "header": self.header.to_dict(),
             "payload": self.payload.to_dict(),
         }

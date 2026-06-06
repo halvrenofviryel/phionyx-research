@@ -11,7 +11,7 @@ Multiple layers of protection against infinite loops and runaway execution:
 """
 import logging
 import time
-from typing import Dict, List, Optional, TYPE_CHECKING
+from typing import Any, Dict, List, Optional, TYPE_CHECKING
 from collections import defaultdict
 
 if TYPE_CHECKING:
@@ -262,7 +262,7 @@ class ExecutionGuard:
 
         return False, None
 
-    def get_statistics(self) -> Dict[str, any]:
+    def get_statistics(self) -> Dict[str, Any]:
         """Get execution statistics."""
         return {
             "iteration_count": self.iteration_count,

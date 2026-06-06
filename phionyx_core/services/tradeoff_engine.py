@@ -39,8 +39,8 @@ class Alternative:
     risk_score: float = 0.0  # 0.0-1.0, lower is better
     complexity_score: float = 0.0  # 0.0-1.0, lower is better
     maintainability_score: float = 0.0  # 0.0-1.0, higher is better
-    pros: List[str] = None
-    cons: List[str] = None
+    pros: Optional[List[str]] = None
+    cons: Optional[List[str]] = None
 
     def __post_init__(self):
         if self.pros is None:
@@ -274,9 +274,9 @@ class TradeOffElicitationEngine:
         maintainability = 1.0 - alternative.complexity_score
 
         # Adjust based on pros/cons
-        if len(alternative.pros) > len(alternative.cons):
+        if len(alternative.pros or []) > len(alternative.cons or []):
             maintainability += 0.1
-        elif len(alternative.cons) > len(alternative.pros):
+        elif len(alternative.cons or []) > len(alternative.pros or []):
             maintainability -= 0.1
 
         return max(0.0, min(1.0, maintainability))

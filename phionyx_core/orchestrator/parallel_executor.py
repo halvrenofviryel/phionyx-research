@@ -15,7 +15,7 @@ Features:
 import logging
 import asyncio
 import time
-from typing import Dict, List, Set, Tuple
+from typing import Any, Callable, Dict, List, Optional, Set, Tuple
 from dataclasses import dataclass, field
 from copy import deepcopy
 
@@ -31,11 +31,11 @@ try:
     OPENTELEMETRY_AVAILABLE = True
 except ImportError:
     OPENTELEMETRY_AVAILABLE = False
-    get_tracer = None
+    get_tracer: Optional[Callable[..., Any]] = None  # type: ignore[no-redef]
     def is_opentelemetry_enabled() -> bool:
         return False
-    Status = None
-    StatusCode = None
+    Status = None  # type: ignore  # otel fallback; real type when otel installed
+    StatusCode = None  # type: ignore
 
 
 @dataclass
@@ -368,7 +368,7 @@ class ParallelExecutor:
                     error_count += 1
                     continue
 
-                block_id, result = result_item
+                block_id, result = result_item  # type: ignore[misc]  # gather(return_exceptions=True) may yield bare BaseException (e.g. CancelledError) not caught by Exception guard; see concerns
                 results[block_id] = result
                 if result.is_success():
                     success_count += 1

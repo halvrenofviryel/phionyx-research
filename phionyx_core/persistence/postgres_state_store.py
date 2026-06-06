@@ -61,6 +61,7 @@ class PostgreSQLStateStore:
 
     async def _create_table_if_not_exists(self) -> None:
         """Create echo_states table if it doesn't exist."""
+        assert self.pool is not None  # set by initialize() before this is called
         async with self.pool.acquire() as conn:
             await conn.execute("""
                 CREATE TABLE IF NOT EXISTS echo_states (

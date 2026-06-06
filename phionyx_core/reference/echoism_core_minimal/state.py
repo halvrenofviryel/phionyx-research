@@ -50,6 +50,9 @@ class EchoState2Plus:
     turn_index: int = 0
     dt: float = 0.0
 
+    # Internal lazy cache (excluded from repr/eq to preserve dataclass surface)
+    _last_update: Optional[datetime] = field(default=None, repr=False, compare=False)
+
     @property
     def phi(self) -> float:
         """Derived metric: Phi from A, V, H."""

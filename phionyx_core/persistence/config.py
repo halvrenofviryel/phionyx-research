@@ -35,7 +35,7 @@ async def create_state_store_from_env() -> Optional[Any]:
         logger.info("Creating InMemoryStateStore")
         try:
             from phionyx_core.persistence.in_memory_state_store import InMemoryStateStore
-            store = InMemoryStateStore()
+            store: Any = InMemoryStateStore()
             await store.initialize()
             logger.info("✅ InMemoryStateStore initialized")
             return store

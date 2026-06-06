@@ -22,7 +22,7 @@ class DetectionResult:
     detected_mode: ContextMode
     confidence: float  # 0.0 to 1.0
     switch_required: bool  # True if context should switch
-    detected_keywords: List[str] = None  # Keywords that triggered detection
+    detected_keywords: Optional[List[str]] = None  # Keywords that triggered detection
 
     def __post_init__(self):
         """Initialize default values."""

@@ -14,7 +14,7 @@ Migration utilities for converting between:
 
 from __future__ import annotations
 
-from typing import Optional, Tuple
+from typing import Any, Optional, Tuple
 from datetime import datetime
 
 # Import new state models
@@ -23,7 +23,10 @@ from phionyx_core.state.aux_state import AuxState
 
 # Import old state model (optional, for backward compatibility)
 OLD_STATE_AVAILABLE = False
-UnifiedEchoState = None
+# Annotated as Any: the legacy UnifiedEchoState lives in an optional external
+# package (app.core.echo.unified_state) that is unavailable at type-check time.
+# The placeholder is None at runtime until the optional import below succeeds.
+UnifiedEchoState: Any = None
 
 try:
     from app.core.echo.unified_state import UnifiedEchoState  # type: ignore
@@ -79,7 +82,7 @@ def unified_to_echo_state2(
         # Convert memory tags to event references
         from phionyx_core.state.echo_event import EventReference
         for tag_str in old_state.memory_tags:
-            E_tags.append(EventReference(
+            E_tags.append(EventReference(  # type: ignore[call-arg]  # FLAG: kwargs (event_id/event_type/tags) do not match local EventReference dataclass fields (id/tag/intensity) — likely real bug, see concerns
                 event_id=f"legacy_{len(E_tags)}",
                 event_type="memory",
                 intensity=0.5,

@@ -77,6 +77,7 @@ class InitializeUnifiedStateBlock(PipelineBlock):
             physics_params = metadata.get("physics_params", {})
 
             # Initialize unified state
+            assert self.initializer is not None  # guaranteed by should_skip
             unified_state = self.initializer.initialize_unified_state(
                 frame=frame,
                 time_delta=time_delta,

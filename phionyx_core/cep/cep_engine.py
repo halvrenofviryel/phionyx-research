@@ -8,7 +8,7 @@ Detects self-narrative patterns, trauma language, and echo repetition.
 
 import re
 import logging
-from typing import Optional, Dict, List, Literal
+from typing import Optional, Dict, List, Literal, Any
 from difflib import SequenceMatcher
 
 from .cep_types import CEPMetrics, CEPFlags, CEPResult
@@ -506,11 +506,11 @@ class ConsciousEchoProofEngine:
                 for text in texts:
                     words = text.lower().split()
                     word_freq = {word: words.count(word) for word in word_list}
-                    embedding = [word_freq.get(word, 0) for word in word_list]
+                    embedding: List[float] = [word_freq.get(word, 0) for word in word_list]
                     # Normalize
                     norm = np.linalg.norm(embedding)
                     if norm > 0:
-                        embedding = [x / norm for x in embedding]
+                        embedding = [float(x / norm) for x in embedding]
                     embeddings.append(embedding)
 
                 return embeddings
@@ -594,7 +594,7 @@ class ConsciousEchoProofEngine:
             return 0.0
 
         # Find all pattern matches with their positions
-        matches = []
+        matches: List[Dict[str, Any]] = []
         for pattern in self.mirror_self_patterns:
             pattern_matches = re.finditer(pattern, text_lower, re.IGNORECASE)
             for match in pattern_matches:
@@ -622,8 +622,8 @@ class ConsciousEchoProofEngine:
             r'aslında\s+şöyleyim|kendimi\s+analiz|kendimi\s+yorumluyorum'
         ]
 
-        for match in matches:
-            match_text = match['text']
+        for m in matches:
+            match_text = m['text']
             # Check if it's a strong pattern
             is_strong = any(re.search(sp, match_text, re.IGNORECASE) for sp in strong_patterns)
             if is_strong:
@@ -640,12 +640,12 @@ class ConsciousEchoProofEngine:
 
         for sentence in sentences:
             sentence_lower = sentence.lower()
-            for match in matches:
-                if match['start'] < len(sentence_lower):
+            for m in matches:
+                if m['start'] < len(sentence_lower):
                     # Check if this match is in this sentence
-                    sentence_start = raw_text[:match['start']].rfind('.')
-                    sentence_end = raw_text.find('.', match['end'])
-                    if sentence_start < match['start'] < sentence_end:
+                    sentence_start = raw_text[:m['start']].rfind('.')
+                    sentence_end = raw_text.find('.', m['end'])
+                    if sentence_start < m['start'] < sentence_end:
                         sentences_with_patterns += 1
                         break
 

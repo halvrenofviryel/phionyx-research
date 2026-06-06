@@ -119,14 +119,14 @@ class KarpathyPipelineOrchestrator:
             self._add_to_evidence_chain("assumption_challenges", assumption_challenges)
 
         # 3. Inconsistency Detection
-        inconsistencies = []
+        inconsistencies: List[Any] = []
         coherence_metrics = None
         if code:
             inconsistencies, coherence_metrics = self.inconsistency_engine.detect_inconsistencies(
                 code=code,
                 plan=context.metadata.get("plan") if context.metadata else None,
                 tests=context.metadata.get("tests") if context.metadata else None,
-                requirements=requirements
+                requirements=requirements  # type: ignore[arg-type]  # cross-engine type conflict: detect_inconsistencies wants List[str], evaluate_push_back wants List[Dict]; see concerns
             )
             self._add_to_evidence_chain("inconsistencies", inconsistencies)
             self._add_to_audit_trail("inconsistency_detection", {"count": len(inconsistencies)})

@@ -29,7 +29,7 @@ class ClarificationRequest:
     question: str
     context: str
     priority: str = "medium"  # "low", "medium", "high", "critical"
-    suggested_options: List[str] = None
+    suggested_options: Optional[List[str]] = None
 
     def __post_init__(self):
         if self.suggested_options is None:

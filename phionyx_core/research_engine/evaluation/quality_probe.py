@@ -659,7 +659,7 @@ class QualityProbe:
         total = 3
         try:
             from phionyx_core.pipeline.blocks.outcome_feedback import OutcomeFeedbackBlock
-            _blk = OutcomeFeedbackBlock()
+            _blk: Any = OutcomeFeedbackBlock()
             # OutcomeFeedbackBlock with no DI services should have skip behavior
             skip_count += 1
         except Exception:

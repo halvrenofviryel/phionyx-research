@@ -321,7 +321,7 @@ class SelfModel:
             Dict mapping capability name → new confidence value
         """
         if not hasattr(self, '_outcome_history'):
-            self._outcome_history: Dict[str, List[bool]] = {}
+            self._outcome_history = {}
 
         if not hasattr(self, '_outcome_confidences'):
             self._outcome_confidences: Dict[str, float] = {}

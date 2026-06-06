@@ -3,7 +3,7 @@ Behavioral Drift Detection Block
 Pipeline-integrated drift detection for Silent Failure Firewall.
 """
 
-from typing import Optional
+from typing import Dict, Optional, cast
 import logging
 
 from ..base import PipelineBlock, BlockContext, BlockResult
@@ -152,7 +152,7 @@ class BehavioralDriftDetectionBlock(PipelineBlock):
             # 3. Detect drift
             drift_report = await self.drift_detector.detect_drift(
                 current_output=current_output,
-                current_metrics=current_metrics,
+                current_metrics=cast(Dict[str, float], current_metrics),
                 ethics_vector=ethics_vector,
                 session_id=session_id,
                 agent_id=getattr(context, 'agent_id', None)

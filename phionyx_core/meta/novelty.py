@@ -120,8 +120,8 @@ def compute_transfer_potential(
         )
 
     transfer = sum(domain_scores.values()) / len(domain_scores)
-    best = max(domain_scores, key=domain_scores.get)
-    worst = min(domain_scores, key=domain_scores.get)
+    best = max(domain_scores, key=lambda d: domain_scores[d])
+    worst = min(domain_scores, key=lambda d: domain_scores[d])
 
     return TransferResult(
         transfer_potential=max(0.0, min(1.0, transfer)),

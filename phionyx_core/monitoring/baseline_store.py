@@ -117,10 +117,10 @@ class BaselineStore:
         version: str,
         session_id: Optional[str] = None,
         agent_id: Optional[str] = None,
-        reference_outputs: List[str] = None,
-        reference_metrics: Dict[str, float] = None,
-        physics_state: Dict[str, float] = None,
-        metadata: Dict[str, Any] = None
+        reference_outputs: Optional[List[str]] = None,
+        reference_metrics: Optional[Dict[str, float]] = None,
+        physics_state: Optional[Dict[str, float]] = None,
+        metadata: Optional[Dict[str, Any]] = None
     ) -> BaselineSnapshot:
         """
         Create and store baseline snapshot.

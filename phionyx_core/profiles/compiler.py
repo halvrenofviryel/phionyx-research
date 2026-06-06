@@ -47,7 +47,7 @@ class ProfileCompiler:
         Returns:
             Compiled profile dictionary with pre-calculated parameters
         """
-        compiled = {
+        compiled: Dict[str, Any] = {
             "name": profile.name,
             "version": profile.version or "1.0.0",
             "compiled_at": None,  # Will be set by caller
@@ -181,7 +181,7 @@ def compile_profiles(profile_dir: Optional[Path] = None):
     from .loader import ProfileLoader
 
     loader = ProfileLoader(profile_dir)
-    profiles = loader.load_all_profiles()
+    profiles = loader.load_all_profiles()  # type: ignore[attr-defined]  # FLAGGED: ProfileLoader has no load_all_profiles method (runtime bug, see concerns)
 
     compiler = ProfileCompiler()
     compiler.compile_all_profiles(profiles)
@@ -193,6 +193,7 @@ if __name__ == "__main__":
     # CLI entry point
     import sys
 
+    profile_dir: Optional[Path]
     if len(sys.argv) > 1:
         profile_dir = Path(sys.argv[1])
     else:

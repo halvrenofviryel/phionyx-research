@@ -74,6 +74,7 @@ from .echo_orchestrator import OrchestratorServices
 logger = logging.getLogger(__name__)
 
 # Import EmotionCache here to avoid circular imports
+_EmotionCacheClass: Optional[type] = None
 try:
     from phionyx_core.memory.emotion_cache import EmotionCache as _EmotionCacheClass
     _EMOTION_CACHE_AVAILABLE = True
@@ -103,7 +104,7 @@ def create_all_blocks(
     Returns:
         Dictionary mapping block_id to block instance
     """
-    blocks = {}
+    blocks: Dict[str, Any] = {}
 
     # Get time manager for participant
     time_manager = None
@@ -523,7 +524,9 @@ def create_all_blocks(
                 )
 
         blocks["narrative_layer"] = NarrativeLayerBlock(
-            processor=NarrativeLayerProcessorAdapter(services.processor)
+            # adapter forwards via **kwargs; mypy can't structurally match the
+            # Protocol's keyword-or-positional params (same as ResponseBuilderAdapter).
+            processor=NarrativeLayerProcessorAdapter(services.processor)  # type: ignore[arg-type]
         )
     else:
         # Fallback: block skips via should_skip() when processor=None
@@ -772,7 +775,7 @@ def create_all_blocks(
         blocks["neurotransmitter_memory_growth"] = NeurotransmitterMemoryGrowthBlock(
             growth_updater=NeurotransmitterMemoryGrowthAdapter(
                 services.neurotransmitter,
-                services.additional_services.get("growth_tracker")
+                (services.additional_services or {}).get("growth_tracker")
             )
         )
 
@@ -856,10 +859,16 @@ def create_all_blocks(
     if services.response_generator:
         logger.debug("[BLOCK_FACTORY] Creating response_build block with ResponseGenerator")
         class ResponseBuilderAdapter:
-            def __init__(self, response_generator):
+            def __init__(self, response_generator: Any) -> None:
                 self.response_generator = response_generator
 
-            def build_response(self, frame, narrative_response, physics_state, **kwargs):
+            def build_response(
+                self,
+                frame: Any,
+                narrative_response: str,
+                physics_state: Dict[str, Any],
+                **kwargs: Any,
+            ) -> Dict[str, Any]:
                 return self.response_generator.build_response(
                     frame=frame,
                     narrative_response=narrative_response,
@@ -868,7 +877,7 @@ def create_all_blocks(
                 )
 
         blocks["response_build"] = ResponseBuildBlock(
-            builder=ResponseBuilderAdapter(services.response_generator)
+            builder=ResponseBuilderAdapter(services.response_generator)  # type: ignore[arg-type]  # adapter forwards protocol kwargs via **kwargs; structurally compatible at runtime
         )
         logger.debug("[BLOCK_FACTORY] response_build block created with ResponseGenerator")
     else:

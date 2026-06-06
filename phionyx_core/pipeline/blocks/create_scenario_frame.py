@@ -67,6 +67,7 @@ class CreateScenarioFrameBlock(PipelineBlock):
             physics_params = context.metadata.get("physics_params", {}) if context.metadata else {}
 
             # Create scenario frame
+            assert self.frame_creator is not None  # guaranteed by should_skip
             frame = self.frame_creator.create_scenario_frame(
                 user_input=context.user_input,
                 card_type=context.card_type,

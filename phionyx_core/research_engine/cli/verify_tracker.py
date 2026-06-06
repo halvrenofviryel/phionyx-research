@@ -230,8 +230,8 @@ def compute_summary(surfaces: list[dict], tracker_text: str) -> dict:
     total_experimented = total_optimized + experimented
 
     # CQS slot distribution for Tier A only
-    cqs_distribution = Counter()
-    cqs_optimized = Counter()
+    cqs_distribution: Counter[str] = Counter()
+    cqs_optimized: Counter[str] = Counter()
     for name, slot in cqs_slots.items():
         status = statuses.get(name, "COVERED")
         # Only count Tier A params
@@ -314,7 +314,7 @@ def _parse_candidates(tracker_text: str) -> list[dict]:
 
     Row: | Pri | Parameter | File | CQS Slot | Readiness | Sensitivity | Risk | Est. Exps | Rationale |
     """
-    candidates = []
+    candidates: list[dict] = []
     # Find the candidates section
     section = re.search(
         r"## Next Best Candidates.*?\n(.*?)(?=\n---|\n## |\Z)",
@@ -357,7 +357,7 @@ def _parse_campaign_policy(tracker_text: str) -> dict:
     Row: | Policy | Slots | Action |
     Returns: {slot: {priority, rationale}} for each slot mentioned.
     """
-    policy = {}
+    policy: dict[str, dict[str, str]] = {}
     section = re.search(
         r"### Slot-Level Campaign Policy.*?\n(.*?)(?=\n---|\n## |\Z)",
         tracker_text,
@@ -392,7 +392,7 @@ def _parse_module_summary(tracker_text: str) -> dict:
 
     Row: | Module | Source Files | Tunables | RE-Experimented | RE-Optimized | Pre-Existing | Gold | ... |
     """
-    modules = {}
+    modules: dict[str, dict[str, int]] = {}
     section = re.search(
         r"## Module Summary.*?\n(.*?)(?=\n---|\n## |\Z)",
         tracker_text,
@@ -430,7 +430,7 @@ def _parse_lineage(tracker_text: str) -> list[dict]:
 
     Row: | # | Parameter | Experiments | KEEP | Delta CQS | Baseline Date | Gold Date | Note |
     """
-    lineage = []
+    lineage: list[dict] = []
     section = re.search(
         r"### RE-Optimized Parameters.*?\n(.*?)(?=\n###|\n---|\n## |\Z)",
         tracker_text,
@@ -725,9 +725,9 @@ def build_json_report() -> dict:
 
 # ── Verify ──
 
-def extract_tracker_summary(tracker_text: str) -> dict[str, str]:
+def extract_tracker_summary(tracker_text: str) -> dict[str, int]:
     """Extract claimed values from the tracker Summary table."""
-    claimed = {}
+    claimed: dict[str, int] = {}
     # Pattern: | **label** | value | note |
     for m in re.finditer(
         r"^\|\s*\*?\*?([^|*]+?)\*?\*?\s*\|\s*(\d+)\s*\|",

@@ -43,7 +43,7 @@ except ImportError:
     EVENT_REFERENCE_AVAILABLE = False
     # Fallback EventReference definition
     @dataclass
-    class EventReference:
+    class EventReference:  # type: ignore[no-redef]  # import-fallback stub
         id: str
         tag: str
         intensity: float
@@ -416,7 +416,7 @@ class EchoState2(BaseModel):
 
         # Create EventReference (simplified for E_tags)
         if EVENT_REFERENCE_AVAILABLE:
-            ref = EventReference(
+            ref = EventReference(  # type: ignore[call-arg]  # FLAGGED: kwargs don't match echo_event.EventReference (id/tag/intensity) — see concerns
                 event_id=f"event_{len(self.E_tags)}",
                 event_type=event_type,
                 intensity=max(0.0, min(1.0, intensity)),

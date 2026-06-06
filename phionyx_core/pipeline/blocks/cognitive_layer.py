@@ -82,6 +82,7 @@ class CognitiveLayerBlock(PipelineBlock):
             physics_params = context.metadata.get("physics_params", {}) if context.metadata else {}
 
             # Process cognitive layer
+            assert self.processor is not None  # guaranteed by should_skip
             updated_frame = await self.processor.process_cognitive_layer(
                 frame=frame,
                 user_input=context.user_input,

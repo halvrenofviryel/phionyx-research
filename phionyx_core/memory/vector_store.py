@@ -5,7 +5,7 @@ Vector Store - RAG Operations
 Semantic memory storage and retrieval using Supabase pgvector.
 """
 
-from typing import List, Dict, Optional, TYPE_CHECKING
+from typing import List, Dict, Optional, TYPE_CHECKING, Any, cast
 import os
 import logging
 try:
@@ -13,8 +13,8 @@ try:
     SUPABASE_AVAILABLE = True
 except ImportError:
     SUPABASE_AVAILABLE = False
-    create_client = None
-    Client = None
+    create_client = None  # type: ignore[assignment]  # optional-import fallback sentinel
+    Client = None  # type: ignore[assignment,misc]  # optional-import fallback sentinel
 
 # litellm imports removed - using centralized LLM service instead
 
@@ -258,7 +258,7 @@ class VectorStore:
             # Store metadata as JSONB
             # Note: Database column is still "user_id" for backward compatibility with existing data
             # SPRINT 5: We pass actor_ref but store it in user_id column (migration can happen later)
-            insert_data = {
+            insert_data: Dict[str, Any] = {
                 "user_id": actor_ref,  # SPRINT 5: Store actor_ref in user_id column (DB migration later)
                 "actor_ref": actor_ref,  # Also include actor_ref for future migration
                 "content": content,
@@ -286,7 +286,7 @@ class VectorStore:
             result = self.client.table("memories").insert(insert_data).execute()
 
             if result.data:
-                memory_id = result.data[0]["id"]
+                memory_id = cast(str, cast(List[Dict[str, Any]], result.data)[0]["id"])
                 logger.info(f"Memory saved: {memory_id}")
                 return memory_id
             return None
@@ -312,12 +312,12 @@ class VectorStore:
             Memory ID if successful, None otherwise
         """
         # SPRINT 5: Support both actor_ref and user_id in metadata for backward compatibility during migration
-        actor_ref = metadata.get("actor_ref") or metadata.get("user_id")
+        actor_ref = metadata.get("actor_ref") or metadata.get("user_id")  # type: ignore[union-attr]  # metadata may be None — see concerns (latent bug, behavior unchanged)
         if not actor_ref:
             logger.error("VectorStore.store: metadata must include 'actor_ref' or 'user_id'")
             return None
 
-        importance = metadata.get("importance", 0.5)
+        importance = metadata.get("importance", 0.5)  # type: ignore[union-attr]  # metadata non-None here (would have crashed above), narrow not provable
 
         return await self.add_memory(
             content=content,
@@ -366,9 +366,9 @@ class VectorStore:
                 rpc_args["filter_tags"] = filter_tags
 
             # Use Supabase RPC function for similarity search
-            result = self.client.rpc("match_memories", rpc_args).execute()
+            result = self.client.rpc("match_memories", rpc_args).execute()  # type: ignore[union-attr]  # guarded by is_connected(); mypy can't narrow across method
 
-            return result.data if result.data else []
+            return cast(List[Dict], result.data) if result.data else []
         except Exception as e:
             logger.error(f"Failed to search memories: {e}")
             return []
@@ -435,7 +435,7 @@ class VectorStore:
                                     continue
                             else:
                                 # Fallback: Direct Supabase client (backward compatible)
-                                full_memory = self.client.table("memories").select("*").eq("id", memory_id).execute()
+                                full_memory = self.client.table("memories").select("*").eq("id", memory_id).execute()  # type: ignore[union-attr]  # guarded by is_connected(); repository is None in this branch so client is non-None
                                 if full_memory.data:
                                     memory_metadata = full_memory.data[0].get("metadata", {})
                                 else:

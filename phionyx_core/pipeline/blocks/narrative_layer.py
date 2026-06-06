@@ -11,7 +11,7 @@ from typing import Dict, Any, Optional, Protocol
 
 from ..base import PipelineBlock, BlockContext, BlockResult
 from phionyx_core.templates import get_template_manager
-from phionyx_core.templates.response_templates import IntentType
+from phionyx_core.templates.response_templates import IntentType, TemplateManager
 
 logger = logging.getLogger(__name__)
 
@@ -28,7 +28,8 @@ class NarrativeLayerProcessorProtocol(Protocol):
         enhanced_context_string: str,
         system_prompt: Optional[str] = None,
         physics_state: Optional[Dict[str, Any]] = None,
-        selected_intent: Optional[Dict[str, Any]] = None
+        selected_intent: Optional[Dict[str, Any]] = None,
+        conversation_history: Optional[Any] = None
     ) -> tuple[Any, str, Any]:  # Returns (frame, narrative_text, narrative_result)
         """Process narrative layer."""
         ...
@@ -56,6 +57,7 @@ class NarrativeLayerBlock(PipelineBlock):
         super().__init__("narrative_layer", claim_refs=self.CLAIM_REFS)
         self.processor = processor
         self.enable_templates = enable_templates
+        self.template_manager: Optional[TemplateManager]
         if enable_templates:
             self.template_manager = get_template_manager()
         else:
@@ -234,6 +236,7 @@ class NarrativeLayerBlock(PipelineBlock):
                             logger.debug(f"Template check skipped: {e}")
 
             # Normal LLM processing (no template match)
+            assert self.processor is not None  # guaranteed by should_skip
             updated_frame, narrative_text, narrative_result = await self.processor.process_narrative_layer(
                 frame=frame,
                 user_input=context.user_input,

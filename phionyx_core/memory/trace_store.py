@@ -10,7 +10,7 @@ Per Faz 2.4:
 
 from __future__ import annotations
 
-from typing import List, Optional
+from typing import List, Optional, Any
 from contextlib import closing
 from datetime import datetime
 import json
@@ -23,7 +23,7 @@ try:
     ECHO_EVENT_AVAILABLE = True
 except ImportError:
     ECHO_EVENT_AVAILABLE = False
-    EchoEvent = None
+    EchoEvent = None  # type: ignore[assignment,misc]  # optional-import fallback sentinel
 
 
 class TraceStore:
@@ -238,7 +238,7 @@ class TraceStore:
 
             # Build query
             query = "SELECT id, type, timestamp, intensity, tags, payload FROM events WHERE erased = 0"
-            params = []
+            params: List[Any] = []
 
             # Tag filter (simple LIKE search, can be enhanced with JSON functions)
             if tags:

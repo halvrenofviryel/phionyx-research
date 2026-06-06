@@ -24,8 +24,8 @@ class IntentBasedGroupConfig:
     """Configuration for intent-based parallel groups."""
     intent: str
     parallel_groups: List[List[str]]  # List of block groups that can run in parallel
-    skip_blocks: Set[str] = None  # Blocks to skip for this intent
-    preserve_blocks: Set[str] = None  # Blocks that must always run
+    skip_blocks: Optional[Set[str]] = None  # Blocks to skip for this intent
+    preserve_blocks: Optional[Set[str]] = None  # Blocks that must always run
 
     def __post_init__(self):
         """Initialize default sets."""
@@ -209,6 +209,8 @@ class DynamicGrouping:
         if not config:
             return set()
 
+        # __post_init__ guarantees skip_blocks is a set (never None) after construction
+        assert config.skip_blocks is not None
         return config.skip_blocks.copy()
 
     def should_preserve_block(
@@ -233,5 +235,7 @@ class DynamicGrouping:
         if not config:
             return False
 
+        # __post_init__ guarantees preserve_blocks is a set (never None) after construction
+        assert config.preserve_blocks is not None
         return block_id in config.preserve_blocks
 

@@ -62,7 +62,7 @@ class RAGService:
         if use_semantic_time_decay:
             # Convert hours to seconds for semantic time decay
             half_life_seconds = semantic_decay_half_life_hours * 3600.0
-            self.semantic_decay_manager = SemanticTimeDecayManager(
+            self.semantic_decay_manager: Optional[SemanticTimeDecayManager] = SemanticTimeDecayManager(
                 default_half_life_seconds=half_life_seconds,
                 use_local_time=True
             )

@@ -454,13 +454,13 @@ class MeasurementMapper:
             from pydantic import BaseModel
             from datetime import datetime
 
-            class EvidenceSpan(BaseModel):
+            class EvidenceSpan(BaseModel):  # type: ignore[no-redef]  # import-fallback stub
                 text: str
                 start: int
                 end: int
                 tag: str
 
-            class MeasurementPacket(BaseModel):
+            class MeasurementPacket(BaseModel):  # type: ignore[no-redef]  # import-fallback stub
                 A: float
                 V: float
                 D: Optional[float] = None

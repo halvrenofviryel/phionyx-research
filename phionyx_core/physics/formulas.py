@@ -16,7 +16,7 @@ Formulas (v2.0 - Hybrid State Model):
 """
 
 import math
-from typing import List, Dict, Optional, TYPE_CHECKING
+from typing import Any, List, Dict, Optional, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from .types import NPCPhysicsParams, PhiComponents
@@ -733,7 +733,7 @@ def calculate_phi_v2(
     valence: float = 0.0,
     arousal: float = 1.0,
     entropy_penalty_k: float = entropy_penalty_k,
-) -> Dict[str, float]:
+) -> Dict[str, Any]:
     """
     Calculate Total Echo Quality (Φ) using Hybrid Resonance Model v2.0 (backward compatible).
 

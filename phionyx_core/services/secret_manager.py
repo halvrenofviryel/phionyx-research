@@ -8,7 +8,7 @@ Abstracts secret access for all modules.
 
 import os
 import logging
-from typing import Optional, Dict
+from typing import Optional, Dict, Any
 
 logger = logging.getLogger(__name__)
 
@@ -40,7 +40,7 @@ class SecretManager:
         self._vault_url = vault_url or os.environ.get("VAULT_ADDR")
         self._vault_token = vault_token or os.environ.get("VAULT_TOKEN")
         self._vault_mount = vault_mount
-        self._vault_client = None
+        self._vault_client: Optional[Any] = None
         self._cache: Dict[str, str] = {}
 
         if self._vault_url and self._vault_token:

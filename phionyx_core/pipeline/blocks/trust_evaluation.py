@@ -10,6 +10,7 @@ Position in pipeline: After cognitive_layer, before narrative_layer.
 """
 
 import logging
+from typing import Any
 
 from ..base import PipelineBlock, BlockContext, BlockResult
 
@@ -72,7 +73,7 @@ class TrustEvaluationBlock(PipelineBlock):
                 entropy = context.current_entropy if context.current_entropy is not None else 0.5
                 # Ethics risk lowers trust
                 ethics_result = metadata.get("ethics_result", {})
-                max_risk = 0.0
+                max_risk: Any = 0.0
                 if isinstance(ethics_result, dict):
                     max_risk = ethics_result.get("risk_level", ethics_result.get("harm_risk", 0.0))
                 elif hasattr(ethics_result, "risk_level"):

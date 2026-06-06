@@ -16,7 +16,7 @@ State transition rules:
 
 from __future__ import annotations
 
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, Callable, cast
 import numpy as np
 
 
@@ -170,7 +170,7 @@ def create_echoism_process_model(
     trace_strength: float = 0.0,
     task_outcome: Optional[str] = None,
     confidence: float = 0.5
-) -> callable:
+) -> Callable[..., np.ndarray]:
     """
     Create process model function with fixed control inputs.
 
@@ -201,7 +201,7 @@ def create_echoism_process_model(
         control_input = control if control is not None else u
 
         # Extract dt from control or use default
-        dt_value = control_input.get("dt", dt)
+        dt_value = cast(float, control_input.get("dt", dt))
 
         return echoism_process_model(x, dt_value, control_input)
 

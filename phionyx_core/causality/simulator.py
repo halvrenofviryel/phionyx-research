@@ -29,7 +29,7 @@ class SimulationStep:
     step_index: int
     interventions: Dict[str, float]  # variable → forced value
     state_before: Dict[str, Optional[float]]
-    state_after: Dict[str, float]
+    state_after: Dict[str, Optional[float]]
     effects: List[Dict[str, Any]]  # Simplified InterventionEffect dicts
     delta_summary: Dict[str, float]  # variable → total delta
 
@@ -196,9 +196,9 @@ class CausalSimulator:
             ))
 
             # Update graph node values for next step
-            for nid, val in current_state.items():
-                if nid in self.graph.nodes and val is not None:
-                    self.graph.nodes[nid].current_value = val
+            for nid, node_val in current_state.items():
+                if nid in self.graph.nodes and node_val is not None:
+                    self.graph.nodes[nid].current_value = node_val
 
         # Assess risk on final state
         risk = self._assess_risk(current_state)
@@ -237,7 +237,7 @@ class CausalSimulator:
         result_a = self.simulate_step(action_a)
         result_b = self.simulate_step(action_b)
 
-        comparison = {
+        comparison: Dict[str, Any] = {
             "action_a": {
                 "interventions": action_a,
                 "affected": result_a.total_variables_affected,

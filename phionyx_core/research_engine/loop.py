@@ -123,7 +123,7 @@ def run_session(
     baseline_store = BaselineStore(config.data_dir)
     git = GitManager()
     snapshots = ConfigSnapshot(config.data_dir)
-    runner = BenchmarkRunner(timeout=config.session.benchmark_timeout_seconds)
+    runner = BenchmarkRunner(timeout=config.session.benchmark_timeout_seconds)  # type: ignore[arg-type]  # config field is float; runner forwards to subprocess.run which accepts float
 
     # Log session start
     audit.log_session_start(session_id, {
@@ -175,7 +175,7 @@ def run_session(
             return {"error": "Baseline CQS zero", "session_id": session_id}
 
     # Session tracking
-    results = {
+    results: dict[str, Any] = {
         "session_id": session_id,
         "start_time": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "experiments": [],
