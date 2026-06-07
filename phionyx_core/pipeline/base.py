@@ -123,7 +123,7 @@ class PipelineBlock(ABC):
 
     # Default determinism class. Subclasses that call an LLM, read the wall
     # clock, or consume entropy should override this. See ``DeterminismClass``
-    # docstring and ``docs/arxiv/DETERMINISM_MATRIX.md``.
+    # docstring and ``docs/determinism/DETERMINISM_MATRIX.md``.
     determinism: ClassVar[DeterminismClass] = "strict"
 
     def __init__(self, block_id: str, claim_refs: tuple = ()):
