@@ -33,6 +33,13 @@ REPO_ROOT = Path(__file__).resolve().parent.parent.parent
 TELEMETRY_DIR = REPO_ROOT / "data" / "mcp_telemetry"
 OUT_DIR = REPO_ROOT / "docs" / "strategic"
 
+# Feed data-format version, aligned to the PUBLIC release this case-study feed
+# ships under: PyPI phionyx-core 0.7.2 == phionyx-research release v0.7.2. Bump in
+# lock-step with each public release. This is the public-release axis and is
+# intentionally decoupled from the in-repo package version (VERSION / pyproject,
+# currently 0.2.1, which is bumped only at publish time).
+FEED_SCHEMA_VERSION = "v0.7.2"
+
 GATE_TOOLS = {"phionyx_verify_claim", "phionyx_response_gate"}
 ALL_TOOLS = {
     "phionyx_verify_claim",
@@ -344,6 +351,9 @@ def render_json_feed(
     total_commits = sum(commits.values())
     total_gate_calls = sum(c for day, counter in tool_counts.items() for tool, c in counter.items() if tool in GATE_TOOLS)
     total_all_calls = sum(c for day, counter in tool_counts.items() for tool, c in counter.items() if tool in ALL_TOOLS)
+    # Exclude not-instrumented days (no MCP telemetry) from the denominator: their
+    # commits could not have gate coverage, so counting them would read "not
+    # measured" as "0% compliance." Per-day coverage is null on such days.
     _instrumented_days = {
         d for d in (set(tool_counts) | set(commits))
         if sum(tool_counts.get(d, Counter()).get(t, 0) for t in ALL_TOOLS) > 0
@@ -362,6 +372,7 @@ def render_json_feed(
         c = commits.get(d, 0)
         gc = sum(tool_counts.get(d, Counter()).get(t, 0) for t in GATE_TOOLS)
         ac = sum(tool_counts.get(d, Counter()).get(t, 0) for t in ALL_TOOLS)
+        # null = not instrumented (no MCP telemetry that day) OR no commits — never a misleading 0%
         cov = (gc / (c * 2) * 100) if (c > 0 and ac > 0) else None
         per_day.append({
             "date": d.isoformat(),
@@ -422,9 +433,9 @@ def render_json_feed(
         "since_iso": since.strftime("%Y-%m-%dT%H:%M:%SZ"),
         "headline": {
             "total_commits": total_commits,
+            "instrumented_commits": instrumented_commits,
             "total_gate_calls": total_gate_calls,
             "total_all_calls": total_all_calls,
-            "instrumented_commits": instrumented_commits,
             "expected_gate_calls": expected_gate_calls,
             "coverage_percent": round(coverage_percent, 2) if coverage_percent is not None else None,
             "coverage_basis": "instrumented_days_only",
@@ -437,7 +448,7 @@ def render_json_feed(
             f"python3 case-studies/agentic-development-2026-05/scripts/"
             f"runtime_evidence_self_audit.py --days {window_days}"
         ),
-        "schema_version": "v1.1",
+        "schema_version": FEED_SCHEMA_VERSION,
         "disclaimer": (
             "Public read-only feed. Per-day counts derive from local telemetry "
             "+ git log of the private dev monorepo. Numbers are aggregate; no "

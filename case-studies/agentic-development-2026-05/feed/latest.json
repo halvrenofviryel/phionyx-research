@@ -1,23 +1,23 @@
 {
-  "generated_at_iso": "2026-06-07T08:04:35Z",
+  "generated_at_iso": "2026-06-07T20:07:35Z",
   "window_days": 30,
-  "since_iso": "2026-05-08T11:04:35Z",
+  "since_iso": "2026-05-08T23:07:35Z",
   "headline": {
-    "total_commits": 383,
-    "instrumented_commits": 251,
-    "total_gate_calls": 145,
-    "total_all_calls": 202,
-    "expected_gate_calls": 502,
-    "coverage_percent": 28.88,
+    "total_commits": 407,
+    "instrumented_commits": 282,
+    "total_gate_calls": 180,
+    "total_all_calls": 273,
+    "expected_gate_calls": 564,
+    "coverage_percent": 31.91,
     "coverage_basis": "instrumented_days_only"
   },
   "directives": {
-    "n/a": 16,
-    "pass": 167,
+    "n/a": 48,
+    "pass": 205,
     "checkpoint": 8,
     "reject": 2,
-    "auto_attest": 880,
-    "regenerate": 2,
+    "auto_attest": 1095,
+    "regenerate": 3,
     "require_tool": 1,
     "rewrite": 6,
     "ok": 1
@@ -25,17 +25,17 @@
   "per_day": [
     {
       "date": "2026-06-07",
-      "commits": 5,
-      "gate_calls": 8,
-      "all_calls": 11,
-      "coverage_percent": 80.0
+      "commits": 36,
+      "gate_calls": 45,
+      "all_calls": 84,
+      "coverage_percent": 62.5
     },
     {
       "date": "2026-06-06",
       "commits": 20,
-      "gate_calls": 18,
-      "all_calls": 22,
-      "coverage_percent": 45.0
+      "gate_calls": 16,
+      "all_calls": 20,
+      "coverage_percent": 40.0
     },
     {
       "date": "2026-06-05",
@@ -214,31 +214,31 @@
     },
     {
       "date": "2026-05-08",
-      "commits": 8,
+      "commits": 1,
       "gate_calls": 0,
       "all_calls": 0,
       "coverage_percent": null
     }
   ],
-  "session_count": 67,
+  "session_count": 73,
   "source": "github.com/halvrenofviryel/phionyx-research",
   "reproduce": "python3 case-studies/agentic-development-2026-05/scripts/runtime_evidence_self_audit.py --days 30",
   "schema_version": "v0.7.2",
   "disclaimer": "Public read-only feed. Per-day counts derive from local telemetry + git log of the private dev monorepo. Numbers are aggregate; no claim content, file paths, or credentials surface.",
   "faithfulness": {
-    "n": 0,
-    "mean": null,
-    "low": 0
+    "n": 32,
+    "mean": 0.488,
+    "low": 10
   },
   "signed_chain": {
-    "envelopes": 59,
+    "envelopes": 106,
     "traces": 2,
     "live": true
   },
   "lifecycle": {
-    "n_governed_claims": 145,
-    "n_signed_records": 59,
-    "n_real_outcome_labels": 8,
+    "n_governed_claims": 180,
+    "n_signed_records": 106,
+    "n_real_outcome_labels": 12,
     "note": "Aggregate funnel — different scopes, do not divide. Per-claim lifecycle-completion (signed record AND a real observed outcome) is ~0 today because real outcomes accumulate forward; never fabricated."
   }
 }
