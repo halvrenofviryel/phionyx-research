@@ -132,7 +132,7 @@ profiles:
 # 5. Configure base_mode, reactivity, resilience, and safety based on your needs
 #
 # For detailed information on:
-# - Physics parameters: See arXiv paper Section 4
-# - Profile configuration: See Phionyx Evaluation Standard v0.1
+# - Physics parameters: See ARCHITECTURE.md and the physics contracts
+# - Profile configuration: See the AI Runtime Evidence Protocol (AIREP)
 # - Behavioral assessment: See technical book "Phionyx System: Deterministic AI, Observability, and Assurance"
 

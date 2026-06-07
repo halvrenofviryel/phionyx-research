@@ -50,7 +50,7 @@ The single mandatory v0.2 change vs v0.1: this string MUST be `phionyx.governed_
 }
 ```
 
-`state_vector` is the eight-axis governance state (per Paper 1). `time_delta = 0.1` flags this as the first turn in the trace. `safety` carries the input-safety-gate verdict; `reason` is NULL when admitted, a string when blocked (e.g. `"blocked patterns: ['ignore previous instructions']"`).
+`state_vector` is the eight-axis governance state. `time_delta = 0.1` flags this as the first turn in the trace. `safety` carries the input-safety-gate verdict; `reason` is NULL when admitted, a string when blocked (e.g. `"blocked patterns: ['ignore previous instructions']"`).
 
 ```json
 "path": [

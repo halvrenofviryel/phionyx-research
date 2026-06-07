@@ -52,5 +52,6 @@ canonical example and validator. The schema enforces that every row MUST cite
 a Phionyx mechanism, MUST have at least one piece of reviewer-reproducible
 evidence, and MUST state the deployer's residual responsibility — even when
 coverage is `Full`. This is the stable row format other projects can adopt to
-produce their own evidence pages from the same data; Paper 2 (the evidence-
-protocol methodology paper) builds on this surface.
+produce their own evidence pages from the same data; it sits alongside the
+[AI Runtime Evidence Protocol (AIREP)](https://github.com/halvrenofviryel/ai-runtime-evidence-protocol),
+the experimental open format for per-decision evidence receipts that Phionyx emits.

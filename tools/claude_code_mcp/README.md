@@ -1,6 +1,6 @@
 # Phionyx Claude Code substrate
 
-The runtime-evidence harness scripts that bind Claude Code's lifecycle events to the Phionyx pipeline-MCP gate. Subject of [`docs/arxiv/paper_03_runtime_evidence_case_study/`](../../docs/arxiv/paper_03_runtime_evidence_case_study/) (Paper 03 §4.4–§4.5).
+The runtime-evidence harness scripts that bind Claude Code's lifecycle events to the Phionyx pipeline-MCP gate.
 
 ## What's here
 
@@ -22,6 +22,6 @@ python3 -m pytest tools/claude_code_mcp/tests/ -q
 
 ## Wire the hooks into a Claude Code project
 
-Add to `.claude/settings.json`. The full inventory (15 hooks + the `diff-reviewer` subagent) is described in [`docs/arxiv/paper_03_runtime_evidence_case_study/paper.md`](../../docs/arxiv/paper_03_runtime_evidence_case_study/paper.md) §4.4 Table 1.
+Add to `.claude/settings.json`. The full inventory is 15 lifecycle hooks plus the `diff-reviewer` subagent.
 
 Skill files at [`.claude/skills/`](../../.claude/skills/) and the subagent prompt at [`.claude/agents/diff-reviewer.md`](../../.claude/agents/diff-reviewer.md) document the on-demand layer above the hooks.

@@ -42,6 +42,5 @@ Each script ends with a `=== Verdict ===` block summarising what was blocked, by
 ## Cross-references
 
 - Compliance mappings: [`docs/mappings/`](../../docs/mappings/)
-- Architecture paper: arXiv submission (in moderation)
 - Evidence Matrix: <https://phionyx.ai/evidence>
 - Side-by-side harness: [`examples/before_after/with_phionyx_vs_without.py`](../before_after/with_phionyx_vs_without.py)

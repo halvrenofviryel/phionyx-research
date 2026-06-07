@@ -128,8 +128,8 @@ To use these templates:
 5. Configure modules based on your feature needs
 
 For detailed information on:
-- Physics parameters: See arXiv paper Section 4
-- Profile modules: See Phionyx Evaluation Standard v0.1
+- Physics parameters: See ARCHITECTURE.md and the physics contracts
+- Profile modules: See the AI Runtime Evidence Protocol (AIREP)
 - Behavioral assessment: See technical book "Phionyx System: Deterministic AI, Observability, and Assurance"
 """
 

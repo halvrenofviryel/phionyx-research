@@ -77,7 +77,7 @@ Every function entry below follows the same structure:
 - `phionyx_core/contracts/v4/capability_profile.py` — typed contract.
 - `pipeline/blocks/knowledge_boundary.py`, `pipeline/blocks/input_safety_gate.py` — code.
 - `tests/core/test_knowledge_boundary*.py`, `tests/core/test_input_safety*.py`.
-- Architecture paper, Section 3 (system architecture and pipeline) — narrative context document.
+- In-repo architecture documentation (README, `ARCHITECTURE.md`) — narrative context.
 
 **Deployer responsibility (gap).** MAP outcomes such as *third-party impact assessment*, *stakeholder mapping*, *socio-technical context analysis*, and *intended-use vs. foreseeable-misuse documentation* are deployment-context-specific. Phionyx provides the technical surface (capability profile, epistemic boundary) but cannot describe the deployer's domain, user population, or societal context. The deployer must produce an intended-use statement, a stakeholder map, and a documented impact assessment for the specific deployment.
 
@@ -164,5 +164,5 @@ unzip -l phionyx_reproducibility_pack_v0.3.0.zip
 
 - OWASP Agentic AI Threats v1.0 mapping — `docs/mappings/owasp-agentic-ai-2025.md`
 - EU AI Act Articles 9–15 mapping — `docs/mappings/eu-ai-act.md`
-- Architecture paper — arXiv submission (in moderation)
+- In-repo architecture documentation (README, `ARCHITECTURE.md`)
 - Evidence Matrix — <https://phionyx.ai/evidence>

@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://phionyx.ai/schemas/compliance_mapping_row.schema.json",
   "title": "Phionyx compliance-mapping row (v0.1)",
-  "description": "Schema for one row of an evidence mapping between an external framework requirement (OWASP Agentic AI, EU AI Act, NIST AI RMF, ISO/IEC 42001, …) and a Phionyx Core artifact. Used by docs/mappings/*.md and consumable by Paper 2's evaluation protocol.",
+  "description": "Schema for one row of an evidence mapping between an external framework requirement (OWASP Agentic AI, EU AI Act, NIST AI RMF, ISO/IEC 42001, …) and a Phionyx Core artifact. Used by docs/mappings/*.md and consumable by the Phionyx evidence-protocol tooling.",
   "type": "object",
   "additionalProperties": false,
   "required": [

@@ -7,12 +7,13 @@ A deterministic AI runtime that maps every model output through 46 evaluation bl
 Beyond governance, Phionyx Core ships a **physics module** that produces deterministic coherence telemetry over a structured state vector — useful for NPC/agent drift detection, session-level coherence tracking, and reproducible runtime evaluation.
 
 > **Where this sits in the Phionyx stack.** This repo is the **engine** — the SDK
-> `phionyx-core` (PyPI, latest **v0.8.0**), the deterministic runtime. It is the
-> **reference implementation** that scores **L3 (evaluation maturity) + D3 (determinism)**
-> on the vendor-neutral [Phionyx Evaluation Standard](https://github.com/halvrenofviryel/phionyx-evaluation-standard).
-> The SDK is **not** itself claim-governance-rated: the Claim-Governance ladder (CG-L0…CG-L5)
-> rates the separate **gate** `phionyx-pipeline-mcp`, not this engine. See
-> [Evaluation Standard](#evaluation-standard) for the three scales and where each component sits.
+> `phionyx-core` (PyPI, latest **v0.8.1**), the deterministic runtime. Every governed
+> turn it runs can be emitted as an **[AI Runtime Evidence Protocol (AIREP)](https://github.com/halvrenofviryel/ai-runtime-evidence-protocol)**
+> record: one signed, hash-chained, offline-checkable evidence receipt per AI runtime
+> decision. AIREP is an experimental, vendor-neutral open format; the Phionyx **Reasoned
+> Governance Envelope (RGE)** is its reference producer (an AIREP profile). See
+> [Runtime evidence format (AIREP)](#runtime-evidence-format-airep) for what a record
+> contains and how anyone can verify one.
 
 [![CI](https://github.com/halvrenofviryel/phionyx-research/actions/workflows/ci.yml/badge.svg)](https://github.com/halvrenofviryel/phionyx-research/actions/workflows/ci.yml)
 [![PyPI](https://img.shields.io/pypi/v/phionyx-core.svg)](https://pypi.org/project/phionyx-core/)
@@ -123,7 +124,7 @@ runtime governance. To keep claims aligned with evidence, here is what we
 **do not** assert:
 
 - **Phionyx does not make LLMs deterministic.** Model output stays probabilistic. Phionyx makes the *governance path* — gates, state, audit — deterministic.
-- **Phionyx is not a certification authority.** The [Phionyx Evaluation Standard](https://github.com/halvrenofviryel/phionyx-evaluation-standard) (released axes in v0.1.1 / v0.2.0) is an *open evaluation profile*, not an accredited certification scheme.
+- **Phionyx is not a certification authority.** The [AI Runtime Evidence Protocol (AIREP)](https://github.com/halvrenofviryel/ai-runtime-evidence-protocol) that Phionyx emits records for is an *experimental, proposed open format* for per-decision evidence — not a ratified standard and not an accredited certification scheme.
 - **Phionyx does not replace NIST AI RMF, ISO/IEC 42001, or the EU AI Act.** It is a runtime layer designed to *produce evidence* that maps onto those frameworks; it does not implement them on your behalf.
 - **Current benchmarks are controlled reference benchmarks**, not third-party audits. Reproducible from this repo, but not yet independently validated.
 - **Production-readiness is scoped to the demos in `examples/`**. The runtime is research-grade until pilot deployments and an external review land.
@@ -170,9 +171,9 @@ separate 5-layer governance stack in which the self-governance gate
 - Phi-decay for memory relevance
 
 > Engine Layer 2 here is the SDK's *pre-response* / ethics governance (EthicsVector,
-> amplitude damping, kill switch). It is **not** the same as the *claim*-governance the
-> CG-L0…CG-L5 ladder rates — that ("I fixed / I tested / this changed" verification against
-> git-diff truth) lives in the separate gate `phionyx-pipeline-mcp`.
+> amplitude damping, kill switch). It is **not** the same as *claim*-governance — the
+> "I fixed / I tested / this changed" verification against git-diff truth — which lives
+> in the separate gate `phionyx-pipeline-mcp`.
 
 ---
 
@@ -252,37 +253,29 @@ to trust prose: the pack itself is the evidence.
 
 ---
 
-## Evaluation Standard
+## Runtime evidence format (AIREP)
 
-Phionyx systems are evaluated against the vendor-neutral
-[Phionyx Evaluation Standard](https://github.com/halvrenofviryel/phionyx-evaluation-standard).
-The Standard defines **three scales**:
+The records Phionyx emits follow the **[AI Runtime Evidence Protocol (AIREP)](https://github.com/halvrenofviryel/ai-runtime-evidence-protocol)** — an experimental, vendor-neutral open format for a per-decision **AI decision receipt**: one signed, hash-chained, offline-checkable record per AI runtime decision, readable by anyone and tied to no vendor.
 
-- **Determinism Grading (D0-D3)** — non-deterministic to fully deterministic. *Released* (v0.1.1 / v0.2.0).
-- **Evaluation Levels (L0-L3)** — unmeasured to governance-grade. *Released* (v0.1.1 / v0.2.0).
-- **Claim-Governance ladder (CG-L0…CG-L5)** — how rigorously a runtime verifies its *own* "I fixed / I tested / this changed" claims against ground truth. This is the Standard's **v0.3 layer and is currently a DRAFT** (no v0.3 tag/release yet).
-- **Composite Quality Score (CQS)** — multi-dimensional behavioral quality metric.
+Each record carries a fixed set of groups — `subject`, `input`, `claim`, `output`, `evidence`, `directive`, `scope`, `integrity` (plus optional profiles). It is canonicalized with RFC 8785 (JCS) JSON so two independent verifiers (one in Python, one in Node) can confirm the same bytes hash to the same value. AIREP defines three conformance classes — **Core**, **Verified**, **Trusted** — describing how much of a record a producer fills in and signs.
 
-**Where each component sits:**
+**Where Phionyx sits:** the Phionyx **Reasoned Governance Envelope (RGE)** is AIREP's **reference producer** — the first system that emits AIREP records, and it matures by conforming to the format. RGE is a Phionyx *profile* of AIREP, not the format itself.
 
-| Scale | Rates | This repo (`phionyx-core`, **engine**, v0.8.0) | Gate (`phionyx-pipeline-mcp`) |
-|-------|-------|------------------------------------------------|-------------------------------|
-| L0-L3 (eval maturity) | any runtime | **L3** (reference implementation) | — |
-| D0-D3 (determinism) | any runtime | **D3** (reference implementation) | — |
-| CG-L0…CG-L5 (claim-governance) | the self-governance **gate** | not CG-rated (no `require_tool` / continuity logic) | stable **v0.2.0 = CG-L2**; alpha **v0.3.0a1 = CG-L3** (opt-in / default-off, already on PyPI) |
+AIREP is **experimental — a *proposed* open format, not a ratified standard**, with one reference implementation today. The format (`phionyx-core` engine, the RGE producer, and AIREP itself) carries **independent version lines** — engine **v0.8.1**, AIREP **v0.1 (Experimental)** — which must never be cross-attributed.
 
-So: **`phionyx-core` is the L3+D3 reference engine; the CG ladder rates the gate `phionyx-pipeline-mcp`, not this engine.** The three artifacts also carry three independent version lines — engine **v0.8.0**, gate **v0.2.0 / v0.3.0a1**, Standard **v0.1.1 / v0.2.0** released + **v0.3 draft** — which must never be cross-attributed.
+- Spec: CC-BY-4.0 · Reference code: Apache-2.0
+- DOI: concept [10.5281/zenodo.20475136](https://doi.org/10.5281/zenodo.20475136) · v0.1 [10.5281/zenodo.20475137](https://doi.org/10.5281/zenodo.20475137)
 
 ---
 
 ## Companion packages
 
-Eight PyPI-published companion packages extend the Phionyx runtime into an end-to-end evidence stack for the agentic AI ecosystem. Each carries **its own version line** (do not inherit the engine's v0.8.0). Six are listed below, grouped by where they sit on the [phionyx.ai](https://phionyx.ai) audience pillars; the remaining two ship under the applied-product line.
+Eight PyPI-published companion packages extend the Phionyx runtime into an end-to-end evidence stack for the agentic AI ecosystem. Each carries **its own version line** (do not inherit the engine's v0.8.1). Six are listed below, grouped by where they sit on the [phionyx.ai](https://phionyx.ai) audience pillars; the remaining two ship under the applied-product line.
 
 **MCP integration — surfaces under [Bounded Authority](https://phionyx.ai/bounded-authority).** Trust boundary + self-claim gate for AI coding agents (Claude Code, Cursor, Zed, VS Code, JetBrains — any MCP-capable host):
 
 - **[`phionyx-mcp-server`](https://github.com/halvrenofviryel/phionyx-mcp-server)** (v0.1.0) — *outward-facing MCP trust boundary.* Hashes tool descriptors at first observation, detects post-approval drift, signs every third-party tool call as a Reasoned Governance Envelope (RGE v0.2), and maintains a tamper-evident hash chain. Threat surface aligned with arXiv:2512.06556 (Jamshidi et al.) — tool poisoning, shadowing, rug pulls.
-- **[`phionyx-pipeline-mcp`](https://github.com/halvrenofviryel/phionyx-pipeline-mcp)** (stable v0.2.0 = CG-L2; alpha v0.3.0a1 = CG-L3) — *the self-governance gate.* Self-governance gate over the agent's own *"I fixed this / I tested that / this code path changed"* declarations. Three-stage verification: LLM declaration → `git diff` truth → deterministic physics gate (a 9-block composition from the 46-block runtime). Returns a directive: `pass | regenerate | reject`. **This is the component the Claim-Governance ladder rates** (it is the third layer of the 5-layer governance stack), not the engine.
+- **[`phionyx-pipeline-mcp`](https://github.com/halvrenofviryel/phionyx-pipeline-mcp)** — *the self-governance gate.* Self-governance gate over the agent's own *"I fixed this / I tested that / this code path changed"* declarations. Three-stage verification: LLM declaration → `git diff` truth → deterministic physics gate (a 9-block composition from the 46-block runtime). Returns a directive: `pass | regenerate | reject`. It is the third layer of the 5-layer governance stack, distinct from the engine.
 
 **Evidence export — surfaces under [Reviewer Evidence](https://phionyx.ai/evidence).** Bridges that turn runs in third-party frameworks into reviewer-runnable Phionyx envelopes:
 
@@ -294,7 +287,7 @@ Eight PyPI-published companion packages extend the Phionyx runtime into an end-t
 
 - **[`phionyx-eval`](https://pypi.org/project/phionyx-eval/)** (v0.1.0a1) — evaluation runner that emits a `phionyx.judgment_envelope.v1` (`JudgmentEnvelope`), distinct from the agent adapters' `AgentMessageEnvelope`.
 
-The eighth companion is **`phionyx-compliance`** (v0.1.1) — evidence-mapping helpers; see the [Compliance mappings](#compliance-mappings) section.
+The eighth companion is **`phionyx-compliance`** (v0.1.0a1) — evidence-mapping helpers; see the [Compliance mappings](#compliance-mappings) section.
 
 When the two MCP servers are installed and registered with the same Claude Code host, they share a single `trace_id` per session (via `PHIONYX_TRACE_ID` env var with `~/.phionyx/active_trace` file fallback). One Claude Code conversation = one trace = end-to-end view of every third-party MCP tool call AND every agent self-claim gate decision. The Inspect bridge and the framework adapters consume envelopes off-host; they don't need to share the live trace.
 
@@ -324,7 +317,7 @@ Phionyx applies its own runtime-evidence protocol reflexively to its own develop
 
 ## Compliance mappings
 
-Phionyx publishes **evidence mappings** — not certifications — connecting runtime artifacts to industry threat models and risk frameworks (helpers packaged as `phionyx-compliance` v0.1.1 on PyPI):
+Phionyx publishes **evidence mappings** — not certifications — connecting runtime artifacts to industry threat models and risk frameworks (helpers packaged as `phionyx-compliance` v0.1.0a1 on PyPI):
 
 - [`docs/mappings/owasp-agentic-ai-2025.md`](docs/mappings/owasp-agentic-ai-2025.md) — OWASP Agentic AI Threats v1.0 (15 categories, 1 Full / 10 Partial / 4 Gap)
 - [`docs/mappings/eu-ai-act.md`](docs/mappings/eu-ai-act.md) — EU AI Act Articles 9–15 high-risk obligations (1 Full / 5 Partial / 1 Gap, with explicit deployer-responsibility per article)
@@ -360,9 +353,9 @@ A commercial license is available for use cases where AGPL-3.0 copyleft is not s
 - **Research website:** [phionyx.ai](https://phionyx.ai)
 - **Posts (Deterministic AI Engineering series):** [phionyx.ai/research/posts](https://phionyx.ai/research/posts)
 - **Substack (read direct):** [phionyxresearch.substack.com](https://phionyxresearch.substack.com)
-- **Evaluation Standard (vendor-neutral spec):** [phionyx-evaluation-standard](https://github.com/halvrenofviryel/phionyx-evaluation-standard) — L0-L3 / D0-D3 (released v0.1.1 / v0.2.0) + CG-L0…CG-L5 (v0.3 draft); JSON Schema for governance evidence rows + worked examples
+- **Runtime evidence format (AIREP):** [ai-runtime-evidence-protocol](https://github.com/halvrenofviryel/ai-runtime-evidence-protocol) (v0.1, Experimental) — vendor-neutral open format for a per-decision AI decision receipt; signed, hash-chained, offline-checkable records with two independent verifiers (Python + Node). The Phionyx RGE is its reference producer.
 - **MCP outward layer:** [phionyx-mcp-server](https://github.com/halvrenofviryel/phionyx-mcp-server) (v0.1.0) — MCP trust boundary governance (descriptor hash, signed RGE v0.2 envelope, audit chain)
-- **Self-governance gate (CG-rated):** [phionyx-pipeline-mcp](https://github.com/halvrenofviryel/phionyx-pipeline-mcp) (v0.2.0 = CG-L2; alpha v0.3.0a1 = CG-L3) — self-governance gate over the agent's own "fixed / tested / changed" claims
+- **Self-governance gate:** [phionyx-pipeline-mcp](https://github.com/halvrenofviryel/phionyx-pipeline-mcp) — self-governance gate over the agent's own "fixed / tested / changed" claims
 - **Inspect AI bridge:** [phionyx-eval-inspect](https://github.com/halvrenofviryel/phionyx-eval-inspect) (v0.1.0) — RGE envelope chain → Inspect `.eval` log; viewable with `inspect view`
 - **LangChain / LangGraph adapters:** [phionyx-langchain-langgraph](https://github.com/halvrenofviryel/phionyx-langchain-langgraph) (v0.1.0a1) — chain / tool / LLM events + supervisor handoff → signed envelopes
 - **OpenAI Agents tracing bridge:** [phionyx-openai-agents](https://github.com/halvrenofviryel/phionyx-openai-agents) (v0.1.0a1) — Trace + Span → signed envelopes
@@ -391,14 +384,13 @@ Other channels:
 
 - **Website:** [phionyx.ai](https://phionyx.ai)
 - **Author / ORCID:** [0009-0002-3718-4010](https://orcid.org/0009-0002-3718-4010)
-- **arXiv Paper 1 (Architecture):** Submission in moderation (cs.AI primary, cs.SE secondary) — ID will be added when announced
-- **arXiv Paper 2 (Evidence Protocol):** Paused, gated on Paper 1 ID + repo alignment
+- **Runtime evidence format:** [AI Runtime Evidence Protocol (AIREP)](https://github.com/halvrenofviryel/ai-runtime-evidence-protocol) — v0.1, Experimental
 
 ---
 
 ## Citation
 
-If you use Phionyx Core in academic work, please cite both the software and the architecture paper.
+If you use Phionyx Core in academic work, please cite the software via its archived release.
 
 **Software (this repository):**
 
@@ -408,24 +400,12 @@ If you use Phionyx Core in academic work, please cite both the software and the 
   title     = {Phionyx Core SDK},
   year      = {2026},
   publisher = {Phionyx Research},
-  version   = {0.8.0},
+  version   = {0.8.1},
   doi       = {10.5281/zenodo.20027534},
   url       = {https://doi.org/10.5281/zenodo.20027534}
 }
 ```
 
-The DOI above is the **concept DOI** — it always resolves to the latest archived version (v0.8.0 at the time of writing). To pin a specific release, use the version DOI in [`CITATION.cff`](CITATION.cff): v0.3.0 is `10.5281/zenodo.20027535`; v0.4.0 is `10.5281/zenodo.20297990`; releases from v0.5.0 onward (including the v0.7.x line and v0.8.0) carry per-version DOIs auto-issued on Zenodo release and also resolve via the concept DOI above.
-
-**Architecture paper (companion):**
-
-```bibtex
-@techreport{abak2026phionyx,
-  author      = {Abak, Ali Toygar},
-  title       = {Phionyx: A Deterministic AI Runtime Architecture with Structured State Management and Pre-Response Governance},
-  institution = {Phionyx Research},
-  year        = {2026},
-  url         = {https://github.com/halvrenofviryel/phionyx-research}
-}
-```
+The DOI above is the **concept DOI** — it always resolves to the latest archived version (v0.8.1 at the time of writing). To pin a specific release, use the version DOI in [`CITATION.cff`](CITATION.cff): v0.3.0 is `10.5281/zenodo.20027535`; v0.4.0 is `10.5281/zenodo.20297990`; releases from v0.5.0 onward (including the v0.7.x line and v0.8.x) carry per-version DOIs auto-issued on Zenodo release and also resolve via the concept DOI above.
 
 A machine-readable [`CITATION.cff`](CITATION.cff) is provided for GitHub's “Cite this repository” widget; both the concept and version DOIs are registered there.

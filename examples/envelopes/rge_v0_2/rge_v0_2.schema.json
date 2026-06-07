@@ -286,7 +286,7 @@
           "required": ["name"],
           "description": "v0.7.0 W2.2 (F8). Optional corpus metadata, more semantic than `store_id`. Captures which named knowledge base + version was queried. NULL when only `store_id` is meaningful.",
           "properties": {
-            "name": {"type": "string", "description": "Human-readable corpus name (e.g. `phionyx-evaluation-standard`, `eu-ai-act-regulation-text`)."},
+            "name": {"type": "string", "description": "Human-readable corpus name (e.g. `ai-runtime-evidence-protocol`, `eu-ai-act-regulation-text`)."},
             "version": {"type": ["string", "null"], "description": "Optional corpus version identifier (semver, content hash, snapshot timestamp). NULL when corpus is rolling/unversioned."},
             "language": {"type": ["string", "null"], "description": "Optional BCP-47 language tag of the corpus contents (e.g. `en`, `tr`, `de-DE`). NULL when multilingual or unspecified."}
           }
