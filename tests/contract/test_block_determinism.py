@@ -9,7 +9,7 @@ in sync with the code.
 Related:
 - Plan: ``docs/PHIONYX_KOD_UYGULAMA_PLANI_2026_04_16.md`` PR #2 (K7)
 - Base class: ``phionyx_core/pipeline/base.py::PipelineBlock.determinism``
-- Matrix doc: ``docs/arxiv/DETERMINISM_MATRIX.md``
+- Matrix doc: ``docs/determinism/DETERMINISM_MATRIX.md``
 """
 
 from __future__ import annotations
