@@ -171,6 +171,7 @@ def render_report(
     total_directives: Counter = Counter()
     rows: list[tuple[str, ...]] = []
 
+    instrumented_commits = 0
     for d in all_days:
         tc = tool_counts.get(d, Counter())
         gate = sum(tc[t] for t in GATE_TOOLS)
@@ -181,17 +182,25 @@ def render_report(
         total_commits += c
         for k, v in directives.get(d, Counter()).items():
             total_directives[k] += v
-        ratio_expected = c * 2  # 1 verify_claim + 1 response_gate per commit per CLAUDE.md
-        coverage = (gate / ratio_expected * 100) if ratio_expected else 0.0
+        # A day with zero MCP telemetry was NOT instrumented — gate coverage is
+        # undefined ("—"), not 0%. Showing 0% there reads "not measured" as "0%
+        # compliance"; such commits are excluded from the coverage denominator.
+        if all_tools == 0:
+            coverage_cell = "    — "
+        else:
+            instrumented_commits += c
+            ratio_expected = c * 2  # 1 verify_claim + 1 response_gate per commit
+            coverage = (gate / ratio_expected * 100) if ratio_expected else 0.0
+            coverage_cell = f"{coverage:5.1f}%"
         rows.append((
             d.isoformat(),
             str(c),
             str(gate),
             str(all_tools),
-            f"{coverage:5.1f}%",
+            coverage_cell,
         ))
 
-    grand_expected = total_commits * 2
+    grand_expected = instrumented_commits * 2
     grand_coverage = (total_gate_calls / grand_expected * 100) if grand_expected else 0.0
 
     # Author-filtered (attested-only) parallel metric, in the author-filtered pass.
@@ -218,11 +227,15 @@ def render_report(
         "",
         "## Headline",
         "",
-        f"- **{total_commits}** commits in window",
+        f"- **{total_commits}** commits in window (**{instrumented_commits}** on instrumented days)",
         f"- **{total_gate_calls}** gate calls ({', '.join(sorted(GATE_TOOLS))})",
         f"- **{total_all_calls}** pipeline-mcp calls total (all 6 tools)",
-        f"- Expected gate calls per CLAUDE.md: **{grand_expected}** (= {total_commits} commits × 2)",
-        f"- **Coverage: {grand_coverage:.1f}%**",
+        f"- Expected gate calls per CLAUDE.md: **{grand_expected}** (= {instrumented_commits} instrumented commits × 2)",
+        f"- **Coverage (instrumented days only): {grand_coverage:.1f}%**",
+        "",
+        "> Days with **no MCP telemetry** are *not instrumented* (shown as `—`) and are",
+        "> excluded from the denominator — counting them would read \"not measured\" as",
+        "> \"0% compliance.\" Coverage is over the commits the gate could actually have run on.",
         "",
     ]
     if commits_attested is not None:
@@ -267,9 +280,10 @@ def render_report(
         "",
         "## Honest reading",
         "",
-        f"This window covers {len(sessions)} MCP sessions. The advisory CLAUDE.md rule",
-        "would have required at least 2 gate calls per commit; actual coverage is",
-        f"**{grand_coverage:.1f}%**. The pattern is consistent across days: pipeline-mcp",
+        f"This window covers {len(sessions)} MCP sessions. Over the {instrumented_commits} commits",
+        "made on instrumented days, the advisory CLAUDE.md rule would have required at",
+        f"least 2 gate calls per commit; actual coverage is **{grand_coverage:.1f}%**. (Days with",
+        "no telemetry are excluded as not-instrumented.) The pattern is consistent: pipeline-mcp",
         "is installed, configured, and active, but Claude (this assistant) does not",
         "invoke it on most commits. This is the *stochastic input generation* gap",
         "CLAUDE.md itself names — only Claude Code hooks bind invocation deterministically.",
@@ -330,8 +344,13 @@ def render_json_feed(
     total_commits = sum(commits.values())
     total_gate_calls = sum(c for day, counter in tool_counts.items() for tool, c in counter.items() if tool in GATE_TOOLS)
     total_all_calls = sum(c for day, counter in tool_counts.items() for tool, c in counter.items() if tool in ALL_TOOLS)
-    expected_gate_calls = total_commits * 2
-    coverage_percent = (total_gate_calls / expected_gate_calls * 100) if expected_gate_calls else 0.0
+    _instrumented_days = {
+        d for d in (set(tool_counts) | set(commits))
+        if sum(tool_counts.get(d, Counter()).get(t, 0) for t in ALL_TOOLS) > 0
+    }
+    instrumented_commits = sum(commits.get(d, 0) for d in _instrumented_days)
+    expected_gate_calls = instrumented_commits * 2
+    coverage_percent = (total_gate_calls / expected_gate_calls * 100) if expected_gate_calls else None
 
     directives_total: Counter = Counter()
     for day_directives in directives.values():
@@ -343,7 +362,7 @@ def render_json_feed(
         c = commits.get(d, 0)
         gc = sum(tool_counts.get(d, Counter()).get(t, 0) for t in GATE_TOOLS)
         ac = sum(tool_counts.get(d, Counter()).get(t, 0) for t in ALL_TOOLS)
-        cov = (gc / (c * 2) * 100) if c > 0 else None
+        cov = (gc / (c * 2) * 100) if (c > 0 and ac > 0) else None
         per_day.append({
             "date": d.isoformat(),
             "commits": c,
@@ -405,8 +424,10 @@ def render_json_feed(
             "total_commits": total_commits,
             "total_gate_calls": total_gate_calls,
             "total_all_calls": total_all_calls,
+            "instrumented_commits": instrumented_commits,
             "expected_gate_calls": expected_gate_calls,
-            "coverage_percent": round(coverage_percent, 2),
+            "coverage_percent": round(coverage_percent, 2) if coverage_percent is not None else None,
+            "coverage_basis": "instrumented_days_only",
         },
         "directives": dict(directives_total),
         "per_day": per_day,
