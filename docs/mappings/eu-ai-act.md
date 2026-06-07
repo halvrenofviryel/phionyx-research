@@ -19,7 +19,7 @@ This document maps each of the seven high-risk AI obligations in Articles 9–15
 |---------|-------|----------|------------------------------|
 | 9 | Risk management system | Partial | `kill_switch`, `behavioral_drift_detection`, `ethics_pre_response`, audit-recorded risk decisions |
 | 10 | Data and data governance | **Gap** | Phionyx is a runtime layer, not training-time data governance |
-| 11 | Technical documentation | Partial | Architecture paper (arXiv), README, CITATION.cff, CHANGELOG, Evidence Matrix |
+| 11 | Technical documentation | Partial | Architecture docs in-repo, README, CITATION.cff, CHANGELOG, Evidence Matrix |
 | 12 | Record-keeping | **Full** | `audit_layer` (Ed25519 hash chain), `AuditRecord` v4 schema |
 | 13 | Transparency / deployer information | Partial | README "Scope of Claims" + "Known Limitations" + Evidence Matrix at `/evidence` |
 | 14 | Human oversight | Partial | `human_in_the_loop` queue, `kill_switch` (operator trigger), `deliberative_ethics` |
@@ -73,7 +73,7 @@ Every article entry below follows the same structure:
 **Coverage.** **Gap (out of scope by architecture).**
 
 **What Phionyx does instead.**
-- Treats the LLM as a noisy sensor — explicitly *not* trusting the model as a source of truth (architecture paper Section 4.2). This is a *containment* posture, not a data-governance posture.
+- Treats the LLM as a noisy sensor — explicitly *not* trusting the model as a source of truth (Echoism Axiom 1; see the README and `phionyx_core/contracts/invariants/`). This is a *containment* posture, not a data-governance posture.
 - The Non-Persistence Doctrine prevents derived metrics (Φ, R) from feeding back into any future training corpus, which a deployer could use as evidence under GDPR data-minimisation, but is **not** a substitute for Article 10 obligations on the upstream training set.
 
 **Deployer responsibility (gap).** Article 10 obligations apply to whoever trains, fine-tunes, or curates the model. If the deployer uses a third-party LLM (GPT-4, Claude, Llama, etc.), the Article 10 evidence chain follows that vendor's data-governance practices, not Phionyx's. This boundary is intentional and correct.
@@ -85,7 +85,7 @@ Every article entry below follows the same structure:
 **Article text (paraphrase).** *The technical documentation of a high-risk AI system shall be drawn up before that system is placed on the market and shall be kept up-to-date. The technical documentation shall be drawn up in such a way to demonstrate that the high-risk AI system complies with the requirements set out in this Section… (general description, detailed system description, monitoring, performance metrics, etc.)*
 
 **Phionyx mechanism.**
-- The architecture paper (arXiv preprint, 27 pages, 4 figures, 5 tables) describes design choices, the 46-block pipeline, state-evolution equations, safety/governance layer, memory model, and known limitations.
+- The in-repo architecture documentation (README, [`ARCHITECTURE.md`](../../ARCHITECTURE.md), the contracts under `phionyx_core/contracts/`) describes design choices, the 46-block pipeline, state-evolution equations, safety/governance layer, memory model, and known limitations.
 - README, CITATION.cff, CHANGELOG document the public surface, version history, and citation chain.
 - The Evidence Matrix at [`/evidence`](https://phionyx.ai/evidence) lists every load-bearing claim with its evidence status.
 - The reproducibility pack (`reproducibility_pack_v0.3.0.zip`) attaches to every release with JUnit XML, coverage, determinism hashes, audit-chain example, governed-response envelope, and OTel sample trace.
@@ -95,7 +95,6 @@ Every article entry below follows the same structure:
 
 **Evidence.**
 - `https://github.com/halvrenofviryel/phionyx-research`
-- arXiv preprint (in moderation at submission time of this mapping)
 - `https://doi.org/10.5281/zenodo.20027534` (concept DOI, latest archived version)
 
 **Deployer responsibility (gap).** Article 11 documentation is *deployment-specific*: it must describe the system "as placed on the market". The deployer combines Phionyx's substrate documentation with their own deployment configuration, prompt design, tool inventory, and intended-purpose statement. Phionyx documents the runtime; the deployer documents the system.
@@ -132,7 +131,7 @@ Every article entry below follows the same structure:
 - README "Known limitations" — six implementation-grounded limitation rows (controlled benchmarks, no third-party audit, no production deployment claims, LLM quality not guaranteed, compliance is evidence not legal cert, Φ/entropy experimental).
 - Evidence Matrix at `/evidence` — 19+ load-bearing claims with explicit Public/Beta/Planned/Pending status per row, plus per-public-row Expected runtime / Expected result / Tested on / Last verified.
 - `governed_response.schema.json` (Draft 2020-12 JSON Schema) — every field of the runtime envelope is documented with its constraints and meaning.
-- Architecture paper provides the formal technical description.
+- The in-repo architecture documentation provides the formal technical description.
 
 **Coverage.** Partial.
 

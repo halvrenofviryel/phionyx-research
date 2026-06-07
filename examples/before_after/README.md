@@ -1,6 +1,6 @@
 # Before / After: with vs. without Phionyx
 
-`with_phionyx_vs_without.py` is the case-study harness referenced from the Phionyx Evidence Matrix and from Paper 2 (the evidence-protocol methodology paper). It runs the same set of representative prompts through two paths:
+`with_phionyx_vs_without.py` is the case-study harness referenced from the Phionyx Evidence Matrix. It runs the same set of representative prompts through two paths:
 
 | Path | Gates | Audit |
 |------|-------|-------|

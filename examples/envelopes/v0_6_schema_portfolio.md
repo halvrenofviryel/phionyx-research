@@ -127,4 +127,4 @@ Cryptographic verification of the `signature` field requires the producer's sign
 - [RGE v0.2 RFC](./rge_v0_2/rge_v0_2.md) — Schema 1.
 - [subagent_chain v0.1 RFC](./subagent_chain_v0_1/subagent_chain_v0_1.md) — Schema 2.
 - [ADR-0007 — Multi-Agent Envelope Chain](../../docs/adr/0007-multi-agent-envelope-chain.md) — design decisions.
-- [Phionyx Evaluation Standard v0.2.0](https://github.com/halvrenofviryel/phionyx-evaluation-standard) — assessment signal taxonomy referenced by the `phionyx-eval` rubric library.
+- [AI Runtime Evidence Protocol (AIREP)](https://github.com/halvrenofviryel/ai-runtime-evidence-protocol) — the experimental, vendor-neutral open format for per-decision evidence receipts that Phionyx emits; the Phionyx RGE is its reference producer.

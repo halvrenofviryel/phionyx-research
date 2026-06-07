@@ -147,7 +147,7 @@ Every threat below follows the same structure:
 - `tests/core/test_response_revision_gate*.py`
 - Reproducibility pack: `governed_response_example.json` includes `t_meta`, `confidence_score`, and revision_directive fields.
 
-**What's still missing.** CEP detects pattern-level distortion in the *output text*; it does not score factual accuracy of claims. A coherent, well-structured falsehood passes CEP unless the LLM also produces one of the four distortion patterns. This is documented in the paper (Section 7.2) and the Evidence Matrix (Φ-as-experimental row).
+**What's still missing.** CEP detects pattern-level distortion in the *output text*; it does not score factual accuracy of claims. A coherent, well-structured falsehood passes CEP unless the LLM also produces one of the four distortion patterns. This is documented in the README "Known limitations" and the Evidence Matrix (Φ-as-experimental row).
 
 ---
 
@@ -188,7 +188,7 @@ Every threat below follows the same structure:
 - `tests/core/test_behavioral_drift*.py`
 - Audit chain example shows an ETHICS_CRITICAL kill-switch trigger from `ethics_max_risk = 0.99`.
 
-**What's still missing.** Deceptive alignment in the LLM's *internal* representation cannot be detected from outputs alone. Phionyx detects *behavioural* misalignment (what the agent does over time) — not latent intent. This is the same fundamental limitation every output-monitoring system has; it is documented in the paper's "Limitations" section.
+**What's still missing.** Deceptive alignment in the LLM's *internal* representation cannot be detected from outputs alone. Phionyx detects *behavioural* misalignment (what the agent does over time) — not latent intent. This is the same fundamental limitation every output-monitoring system has; it is documented in the README "Known limitations".
 
 ---
 
@@ -302,7 +302,7 @@ Every threat below follows the same structure:
 **Coverage.** **Gap (single-instance scope).** Phionyx v0.3.0 is documented and tested only in single-instance deployments. The architecture has been designed with multi-agent containment in mind (participant-scoped state, typed envelopes, audit chains), but multi-agent reputation, peer-attestation, and quarantine flows are future work.
 
 **What we do say honestly:**
-- The arXiv paper conclusion explicitly scopes claims to single-instance.
+- The in-repo documentation explicitly scopes claims to single-instance.
 - The Evidence Matrix marks all multi-agent integration claims as **planned**.
 - The roadmap (`docs/strategic/MASTER_PLAN_2026_05.md`) lists "Multi-tenant production deployment" as out-of-scope for v0.3.x.
 

@@ -11,7 +11,7 @@
         "timestamp_utc": "2026-05-25T10:00:00Z"
       },
       "input": {
-        "user_text": "What evidence formats does the Phionyx Evaluation Standard v0.2.0 require for governance claims?",
+        "user_text": "What evidence formats does the AI Runtime Evidence Protocol (AIREP) v0.1 require for governance claims?",
         "state_vector": {
           "valence": 0.0,
           "arousal": 0.5,

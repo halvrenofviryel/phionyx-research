@@ -1,13 +1,13 @@
 """
-arXiv Paper Claims Benchmark
-=============================
+Performance Claims Benchmark
+============================
 
-Purpose: Provide empirical evidence for performance claims in the Echoism paper.
+Purpose: Provide empirical evidence for the Echoism performance claims.
 
 Claims under verification:
 1. Storage efficiency: "up to 40% improvement vs LRU/FIFO baseline"
 2. CPU overhead: "35% reduction vs post-hoc filtering baseline"
-3. Pipeline latency: actual measurement (paper claims ~151.8ms)
+3. Pipeline latency: actual measurement (target ~151.8ms)
 4. Determinism: "N runs, zero variance" (same input → same physics output)
 
 All benchmarks run WITHOUT external LLM calls — they measure pipeline

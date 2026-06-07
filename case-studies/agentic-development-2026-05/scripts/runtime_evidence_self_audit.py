@@ -106,7 +106,7 @@ def per_day_commits(since: datetime, sha_filter: set[str] | None = None) -> dict
         since: window start datetime.
         sha_filter: optional set of short SHAs (first 7 hex chars). When
             provided, only commits whose short SHA is in the set are
-            counted. Used by Paper 03 §10 "author-filtered denominator":
+            counted. This is the "author-filtered denominator":
             excludes founder direct commits and other harness-bypass
             traffic that auto_attest_commit.py never recorded.
     """
@@ -194,7 +194,7 @@ def render_report(
     grand_expected = total_commits * 2
     grand_coverage = (total_gate_calls / grand_expected * 100) if grand_expected else 0.0
 
-    # Author-filtered (attested-only) parallel metric, per Paper 03 §10.
+    # Author-filtered (attested-only) parallel metric, in the author-filtered pass.
     attested_total = sum(commits_attested.values()) if commits_attested else 0
     attested_expected = attested_total * 2
     attested_coverage = (
@@ -227,7 +227,7 @@ def render_report(
     ]
     if commits_attested is not None:
         lines += [
-            "### Coverage — author-filtered (Paper 03 §10)",
+            "### Coverage — author-filtered",
             "",
             "Restricts the denominator to commits the `auto_attest_commit.py` hook",
             "actually recorded. Excludes founder direct commits, wrapper-script",
@@ -449,7 +449,7 @@ def main() -> None:
         help=(
             "Add a parallel coverage metric using only commits the "
             "auto_attest_commit.py hook recorded (excludes founder direct "
-            "commits and other harness-bypass traffic). See Paper 03 §10."
+            "commits and other harness-bypass traffic). See the author-filtered methodology note."
         ),
     )
     args = parser.parse_args()

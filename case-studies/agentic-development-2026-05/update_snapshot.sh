@@ -37,9 +37,11 @@ DATE=$(date +%Y-%m-%d)
 cp "/tmp/audit_${DATE}.md" "$SNAPS_DIR/audit_${DATE}.md"
 cp "/tmp/scenarios_${DATE}.md" "$SNAPS_DIR/scenarios_${DATE}.md"
 
-if command -v python3 >/dev/null && python3 -c "import matplotlib" 2>/dev/null; then
-  python3 "$PRIVATE_ROOT/docs/arxiv/paper_03_runtime_evidence_case_study/figures/render_figures.py" --figure 4
-  cp "$PRIVATE_ROOT/docs/arxiv/paper_03_runtime_evidence_case_study/figures/fig4_coverage_timeline.png" \
+# Optional: regenerate the coverage figure. Set PHIONYX_FIGURE_DIR to the
+# directory in your dev clone holding render_figures.py + the rendered PNG.
+if [[ -n "${PHIONYX_FIGURE_DIR:-}" ]] && command -v python3 >/dev/null && python3 -c "import matplotlib" 2>/dev/null; then
+  python3 "$PHIONYX_FIGURE_DIR/render_figures.py" --figure 4
+  cp "$PHIONYX_FIGURE_DIR/fig4_coverage_timeline.png" \
     "$CASE_DIR/figures/coverage_timeline.png"
 fi
 

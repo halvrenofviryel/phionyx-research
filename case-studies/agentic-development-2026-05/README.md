@@ -2,8 +2,6 @@
 
 > **What this is:** the public-safe data behind Phionyx's *agentic development* case study — measurements of how often Claude (an AI coding agent) actually invokes the runtime-evidence gates while writing the Phionyx codebase itself.
 >
-> **What this is NOT:** the manuscript. The full case-study paper is still being prepared; this directory contains the underlying data + the deterministic measurement scripts so any reviewer can re-run the same numbers at any pinned commit.
->
 > **Consumer-facing landing:** [phionyx.ai/agentic-development](https://phionyx.ai/agentic-development) — read this first if you arrived here without context.
 
 ---
@@ -63,11 +61,11 @@ It does claim:
 
 ## Source repository
 
-This case study is a snapshot from the private Phionyx development monorepo (`halvrenofviryel/Viryel`). The manuscript that wraps these numbers in a full narrative is `docs/arxiv/paper_03_runtime_evidence_case_study/paper.md` in that monorepo — still being prepared. When the manuscript is publication-ready, it will appear on [phionyx.ai/research](https://phionyx.ai/research) with a link from this README.
+This case study is a snapshot from the private Phionyx development monorepo (`halvrenofviryel/Viryel`).
 
 ## Citation
 
-Until the manuscript is published, cite this case study by repository path + commit SHA:
+Cite this case study by repository path + commit SHA:
 
 ```
 Abak, A. T. (2026). Phionyx Research — Agentic Development Case Study (2026-05).

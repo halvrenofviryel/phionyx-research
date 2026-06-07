@@ -63,19 +63,19 @@ Contact **founder@phionyx.ai** for commercial licensing inquiries.
 
 ---
 
-## Standard Reference
+## Runtime Evidence Format
 
-This implementation serves as the **primary reference implementation** of the **Phionyx Evaluation Standard v0.1**.
+The Phionyx **Reasoned Governance Envelope (RGE)** in this implementation is the **reference producer** of the **[AI Runtime Evidence Protocol (AIREP)](https://github.com/halvrenofviryel/ai-runtime-evidence-protocol)** — an experimental, vendor-neutral open format for per-decision AI evidence receipts. AIREP is a *proposed* open format, not a ratified standard.
 
-- **Standard compliance measurement**: Available under AGPL-3.0
-- **Standard enforcement and certification**: May require commercial licensing
+- **Producing and verifying AIREP records**: Available under AGPL-3.0
+- **Commercial integration support**: May require commercial licensing
 
 ---
 
 ## Questions?
 
 - **Open Source License**: See LICENSE file (AGPL-3.0)
-- **Patent Information**: See arXiv paper and UKIPO patent applications
+- **Patent Information**: See the UKIPO patent applications listed above
 - **Commercial Licensing**: founder@phionyx.ai
 
 ---

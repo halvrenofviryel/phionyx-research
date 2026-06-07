@@ -186,7 +186,7 @@ If you are a deployer asked *"where is your evidence for [Article X / Function Y
 - Side-by-side harness (with vs without Phionyx governance): [`examples/before_after/`](../../examples/before_after/)
 - Standards mappings: [`docs/mappings/`](../mappings/)
 - Mapping JSON Schema: [`docs/mappings/schema/`](../mappings/schema/)
-- Architecture paper: arXiv submission pending (cs.AI primary, cs.SE secondary; Zenodo concept DOI [10.5281/zenodo.20027534](https://doi.org/10.5281/zenodo.20027534))
+- Archived software release: Zenodo concept DOI [10.5281/zenodo.20027534](https://doi.org/10.5281/zenodo.20027534)
 
 ---
 

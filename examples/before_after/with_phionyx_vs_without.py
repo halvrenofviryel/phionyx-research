@@ -12,7 +12,7 @@ The output is a side-by-side diff of:
   - whether a harmful response was released
   - whether an audit record exists
 
-This is the case-study harness that Paper 2 cites: same input, two
+This is the case-study harness behind the Evidence Matrix: same input, two
 control paths, observable difference. The only thing changing between
 A and B is the governance layer.
 

@@ -14,7 +14,7 @@
 
 ## 1. Motivation
 
-The Phionyx governance wrapper (Paper 2 §4.3) emits a per-turn envelope that records (a) the runtime decision, (b) the pipeline-block path taken, (c) numeric coherence metrics, and (d) a hash-chained integrity record. We refer to this as the **Reasoned Governance Envelope (RGE)**. v0.1 was implicit in the wrapper implementation; this RFC fixes it as a versioned schema and extends it for four 2026 trends:
+The Phionyx governance wrapper emits a per-turn envelope that records (a) the runtime decision, (b) the pipeline-block path taken, (c) numeric coherence metrics, and (d) a hash-chained integrity record. We refer to this as the **Reasoned Governance Envelope (RGE)** — the Phionyx reference producer of the [AI Runtime Evidence Protocol (AIREP)](https://github.com/halvrenofviryel/ai-runtime-evidence-protocol). v0.1 was implicit in the wrapper implementation; this RFC fixes it as a versioned schema and extends it for four 2026 trends:
 
 1. **MCP trust boundaries.** The MCP specification ([2025-11-25](https://modelcontextprotocol.io/specification/2025-11-25)) explicitly defers protocol-level security to implementors: *"MCP itself cannot enforce these security principles at the protocol level, implementors SHOULD..."*. Recent literature (arXiv:[2512.06556](https://arxiv.org/abs/2512.06556), Jamshidi et al., "Securing the Model Context Protocol") describes a three-class threat taxonomy: tool poisoning, shadowing, and rug pulls. RGE v0.2 reserves an `mcp_tool_audit` block (8 capabilities) so an MCP host using Phionyx can attest descriptor integrity, change detection, scope, I/O hashes, approval, anomaly, and chain verification per call.
 2. **RAG evidence chains.** Retrieval-augmented generation systems admit, cite, contradict, or reject candidate documents. Existing audit logs record retrieval scores; RGE v0.2 reserves a `retrieval` block that records the **operational role chain** (retrieved → admitted → cited → contradicted → rejected → signed) with per-document signed evidence pointers.
@@ -132,7 +132,7 @@ The launch wrapper uses HMAC signatures (`demo-hmac:<hex>`) for transparency; pr
 
 ### 3.1 Break compatibility and ship v1.0
 
-Discarded. v0.1 has already shipped in `docs/strategic/launch_drafts/governance_wrapper_demo/wrapper.py` and is referenced in Paper 2 §4.3. A breaking v1.0 would invalidate paper claims without proportionate benefit. v0.2's strictly-additive extension preserves the v0.1 surface and lets each v0.2 block adopt independently.
+Discarded. v0.1 has already shipped in `docs/strategic/launch_drafts/governance_wrapper_demo/wrapper.py` and is depended on by existing producers. A breaking v1.0 would invalidate those without proportionate benefit. v0.2's strictly-additive extension preserves the v0.1 surface and lets each v0.2 block adopt independently.
 
 ### 3.2 Separate schemas per concern (MCP-envelope.schema.json, RAG-envelope.schema.json, ...)
 
@@ -225,7 +225,7 @@ Q1/Q2/Q3 closed 2026-05-19 with founder approval. No further open questions bloc
 - Jamshidi et al., "Securing the Model Context Protocol" — arXiv:2512.06556
 - OpenTelemetry GenAI Semantic Conventions — https://opentelemetry.io/docs/specs/semconv/gen-ai/ (Status: Development as of 2026-05-19)
 - Inspect AI — https://inspect.aisi.org.uk (UK AISI + Meridian Labs; standard at UK/US/EU/JP/KR AISIs)
-- Phionyx Paper 2 §4.3 — Governed Response Envelope (Paper 1 + Paper 2 series)
+- AI Runtime Evidence Protocol (AIREP) — https://github.com/halvrenofviryel/ai-runtime-evidence-protocol (RGE is its reference producer)
 - RFC 8785 — JSON Canonicalization Scheme
 
 ---

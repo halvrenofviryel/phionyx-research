@@ -32,7 +32,7 @@ OK: example_row.json validates against compliance_mapping_row.schema.json
 
 ## Why this exists
 
-Paper 2 (the evidence-protocol methodology paper) argues that runtime-governance evaluations should produce *reproducible software evidence*, not just policy documentation. To make that argument concrete, the protocol needs a stable row format that other projects can adopt. This schema is that stable row format. A LangGraph- or AutoGen-based governance layer can write a JSON file conforming to this schema and produce its own `/evidence`-style page from the same data.
+Phionyx's evidence-protocol thesis is that runtime-governance evaluations should produce *reproducible software evidence*, not just policy documentation. To make that concrete, the protocol needs a stable row format that other projects can adopt. This schema is that stable row format. A LangGraph- or AutoGen-based governance layer can write a JSON file conforming to this schema and produce its own `/evidence`-style page from the same data.
 
 ## Required fields, at a glance
 
