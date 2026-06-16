@@ -41,6 +41,8 @@ Most AI frameworks let the LLM decide. Phionyx doesn't. Every LLM response passe
 
 The substrate is demonstrable in seconds **without an LLM, server, or API key** — see the [demo table](#try-it-in-30-seconds) below.
 
+> 🛡️ **New — [Control-hardening demo](#control-hardening-demo):** run the same adversarial scenario suite against the agent-governance control plane under three postures (ungoverned · governed · sandboxed) and watch what holds, what fails closed, and what stays a documented gap. Cooperative-grade governance with a capability boundary — limits shown, not hidden.
+
 > 📖 **The project explained as a series:** [Deterministic AI Engineering on Substack](https://phionyxresearch.substack.com) — essays on the design choices behind this repo.
 >
 > 🧭 **Where this fits on [phionyx.ai](https://phionyx.ai):** the core runtime sits behind the [**Bounded Authority**](https://phionyx.ai/bounded-authority) entry (safety-first AI providers); the NPC drift reference trace under [`examples/physics/`](https://github.com/halvrenofviryel/phionyx-research/blob/main/examples/physics/npc_drift_demo.py) sits behind [**Narrative Coherence**](https://phionyx.ai/narrative-coherence); the [`tests/`](tests/), [`docs/mappings/`](docs/mappings/), and Zenodo deposits sit behind [**Reviewer Evidence**](https://phionyx.ai/evidence).
@@ -319,7 +321,7 @@ Phionyx applies its own runtime-evidence protocol reflexively to its own develop
 
 ## Control-hardening demo
 
-A runnable, adversarial self-test of the agent-governance control plane: the **same seven attempts** (forge telemetry, edit a gate hook, `--no-verify` bypass, obfuscated/opaque external effects, write to the control plane, natural-language false claim) run under three postures — **ungoverned**, **governed (direct launch)**, and **governed + sandboxed** — so you can see exactly what each layer changes, and what it does not.
+A runnable, adversarial self-test of the agent-governance control plane: the **same scenario suite** (forge telemetry, edit a gate hook, `--no-verify` bypass, quote-obfuscated / opaque external effects, write to the control plane, natural-language false claim) run under three postures — **ungoverned**, **governed (direct launch)**, and **governed + sandboxed** — so you can see exactly what each layer changes, and what it does not.
 
 ```bash
 tools/offagent/demo/run_demo.sh            # ungoverned vs governed (no sudo)

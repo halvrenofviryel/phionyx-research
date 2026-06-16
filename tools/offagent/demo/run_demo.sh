@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Phionyx control-hardening demo (Phase 5). Shows the SAME seven adversarial attempts
+# Phionyx control-hardening demo (Phase 5). Shows the SAME adversarial scenario suite
 # under three postures, side by side:
 #
 #   1. UNGOVERNED  — no control plane: every exploit succeeds.
