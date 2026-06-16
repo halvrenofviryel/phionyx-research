@@ -37,7 +37,9 @@ Or one command end-to-end (fresh venv → install → smoke flow):
 bash <(curl -sSL https://raw.githubusercontent.com/halvrenofviryel/phionyx-research/main/scripts/demo.sh)
 ```
 
-Most AI frameworks let the LLM decide. Phionyx doesn't. Every LLM response passes through a 46-block deterministic pipeline with safety gates, ethics checks, and physics-based state tracking — before it reaches the user.
+Most AI frameworks let the LLM decide. Phionyx doesn't. Every LLM response passes through a 46-block deterministic pipeline with safety gates, ethics checks, and structured state tracking — before it reaches the user.
+
+Concretely, a governed action carries **policy + a state transition + an abstain / block / rewrite decision + a replayable evidence record** in one inspectable trace. This sits **alongside** the emerging agent-governance tooling — signed action receipts, agent audit / replay, enterprise control planes — not against it; the contribution is that combination, plus a runnable demo that governs *its own* development the same way.
 
 The substrate is demonstrable in seconds **without an LLM, server, or API key** — see the [demo table](#try-it-in-30-seconds) below.
 
