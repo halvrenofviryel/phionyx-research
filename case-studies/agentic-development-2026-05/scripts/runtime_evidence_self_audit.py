@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Runtime evidence self-audit — measure my own pipeline-mcp consistency
-across the last N days. Produces docs/strategic/runtime_evidence_self_audit_<DATE>.md.
+across the last N days. Produces reports/runtime_evidence_self_audit_<DATE>.md.
 
 Per manifesto v1.1 §2: "Governance must be executable at runtime." This
 script measures whether Phionyx's own AI-session governance has been
@@ -31,7 +31,7 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent.parent
 TELEMETRY_DIR = REPO_ROOT / "data" / "mcp_telemetry"
-OUT_DIR = REPO_ROOT / "docs" / "strategic"
+OUT_DIR = REPO_ROOT / "reports"
 
 # Feed data-format version, aligned to the PUBLIC release this case-study feed
 # ships under: PyPI phionyx-core 0.7.2 == phionyx-research release v0.7.2. Bump in

@@ -1,0 +1,20 @@
+# Scoped AppArmor profile: allow ONLY /usr/bin/bwrap to create unprivileged user
+# namespaces, while the host-wide hardening
+# (kernel.apparmor_restrict_unprivileged_userns=1) stays in force for every other
+# binary. This is the least-privilege way to unblock the off-agent sandbox on
+# Ubuntu 24.04 — it does NOT globally disable the restriction.
+#
+# Install:
+#   sudo cp tools/offagent/apparmor-bwrap /etc/apparmor.d/bwrap
+#   sudo apparmor_parser -r /etc/apparmor.d/bwrap
+# Verify:
+#   aa-status | grep bwrap
+# Remove:
+#   sudo rm /etc/apparmor.d/bwrap && sudo systemctl reload apparmor
+abi <abi/4.0>,
+include <tunables/global>
+
+profile bwrap /usr/bin/bwrap flags=(unconfined) {
+  userns,
+  include if exists <local/bwrap>
+}

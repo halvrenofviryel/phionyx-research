@@ -207,7 +207,7 @@ When a producer is participating in a multi-agent flow, the v0.1 `subagent_chain
 - **HearthOS adapter envelopes (W4.1).** Bounded-authority pattern reference. Cross-package, ships with v0.7.0 release at W4.
 - **Cross-runtime export.** v0.6.0 W3 shipped import-only (Langfuse / LangSmith → Phionyx). v0.7.x candidate: Phionyx → Langfuse / LangSmith export.
 - **OpenAI Agents `subagent_chain` integration.** Schema 4 does not yet carry the block; demand-driven add in v0.8.0 or later.
-- **EU AI Act Article 12 template** (`phionyx-compliance`). Listed as candidate input in the 2026-05-26 Deloitte alignment audit; founder-paced per individual W block per `docs/strategic/PHIONYX_DELOITTE_ALIGNMENT_2026_05_26.md`.
+- **EU AI Act Article 12 template** (`phionyx-compliance`). Candidate input; founder-paced per individual decision.
 
 ## 9. Verification surface for third-party reviewers (unchanged from v0.6.0)
 

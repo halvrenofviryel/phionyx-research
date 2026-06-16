@@ -9,7 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-(nothing yet)
+### Added
+- **Control-hardening demo** (`tools/offagent/`) — a runnable, adversarial self-test of the
+  agent-governance control plane (`tools/offagent/demo/run_demo.sh`): the same seven attempts
+  under ungoverned / governed / governed+sandboxed postures, with an honest HELD / KNOWN_GAP
+  map. Ships the runnable control-plane subset (fail-closed commit + self-modification gates,
+  signed human override, ground-truth sandbox probe, T4 external-effect broker) plus the
+  bubblewrap off-agent sandbox scripts. Cooperative-grade governance + capability boundary —
+  not "containment"; documented limits included. Dev-harness mechanism, not a packaged release.
 
 ---
 
@@ -188,7 +195,7 @@ v0.5.0 is an **ecosystem milestone release**. The `phionyx-core` public API surf
 
 ### Release notes
 
-Full milestone release notes (with plan-vs-actual variance breakdown and v0.6.0 preview) live in the Viryel monorepo at `docs/releases/v0.5.0_RELEASE_NOTES.md`.
+Full milestone release notes (with plan-vs-actual variance breakdown and v0.6.0 preview) are maintained in the private development monorepo.
 
 ---
 
@@ -324,7 +331,7 @@ prose in this repo.
 
 ### Documentation
 
-- `docs/strategic/MASTER_PLAN_2026_05.md` (v2.0) — twelve-week roadmap
+- Internal roadmap (v2.0) — twelve-week plan
   from "self-asserted claims" to "independently validated artifact",
   revised after three rounds of external review. Reproducibility Pack
   is the centre, not a side dish.

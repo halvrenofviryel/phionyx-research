@@ -244,7 +244,7 @@ A chain verifier walks envelopes in order, recomputes each envelope's hash from 
 
 ## 4. Producing v0.2 envelopes
 
-The launch wrapper (`docs/strategic/launch_drafts/governance_wrapper_demo/wrapper.py`) currently emits v0.1 envelopes. To produce a v0.2 envelope:
+The launch wrapper (an earlier prototype) currently emits v0.1 envelopes. To produce a v0.2 envelope:
 
 1. Change the wrapper's `inner["schema"]` from `"phionyx.governed_response_envelope.v0_1"` to `"phionyx.governed_response_envelope.v0_2"`.
 2. (Optional) Populate v0.2 blocks where the producer has data.

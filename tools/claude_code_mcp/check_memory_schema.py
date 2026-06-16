@@ -34,9 +34,13 @@ from memory_schema import validate_directory, DirectoryReport  # noqa: E402
 
 def _default_memory_dir() -> Path:
     home = Path.home()
-    # Match the actual on-disk pattern: ~/.claude/projects/-mnt-data-claude-phionyx/memory/
-    project_root_slug = "-mnt-data-claude-phionyx"
-    return home / ".claude" / "projects" / project_root_slug / "memory"
+    # Derive this project's memory dir from the project root (Claude Code sets
+    # CLAUDE_PROJECT_DIR). On-disk convention: ~/.claude/projects/<slug>/memory where
+    # <slug> is the absolute project path with "/" replaced by "-". Derived, not
+    # hardcoded, so it is portable and exposes no local path.
+    project = Path(os.environ.get("CLAUDE_PROJECT_DIR") or os.getcwd()).resolve()
+    slug = str(project).replace("/", "-")
+    return home / ".claude" / "projects" / slug / "memory"
 
 
 def _render(report: DirectoryReport, strict: bool) -> int:

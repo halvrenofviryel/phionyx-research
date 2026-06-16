@@ -92,13 +92,13 @@ class TestKillSwitchManual:
     def test_reset_enters_cooldown(self):
         ks = KillSwitch()
         ks.manual_trigger()
-        assert ks.reset("toygar")
+        assert ks.reset("reviewer")
         assert ks.state == KillSwitchState.COOLDOWN
         assert ks.is_armed  # cooldown counts as armed
 
     def test_cannot_reset_if_not_triggered(self):
         ks = KillSwitch()
-        assert not ks.reset("toygar")
+        assert not ks.reset("reviewer")
 
 
 class TestKillSwitchDisarm:

@@ -144,10 +144,10 @@ Every function entry below follows the same structure:
 Every claim above can be verified by an external reviewer with two operations:
 
 ```bash
-git clone https://github.com/halvrenofviryel/Viryel.git
-cd Viryel
+git clone https://github.com/halvrenofviryel/phionyx-research.git
+cd phionyx-research
 pip install -e .
-pytest tests/core/ tests/contract/ tests/behavioral_eval/ -q
+pytest tests/core/ tests/contract/ -q
 ```
 
 The audit-chain example is in the reproducibility pack:

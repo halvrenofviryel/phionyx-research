@@ -317,6 +317,21 @@ Phionyx applies its own runtime-evidence protocol reflexively to its own develop
 
 ---
 
+## Control-hardening demo
+
+A runnable, adversarial self-test of the agent-governance control plane: the **same seven attempts** (forge telemetry, edit a gate hook, `--no-verify` bypass, obfuscated/opaque external effects, write to the control plane, natural-language false claim) run under three postures — **ungoverned**, **governed (direct launch)**, and **governed + sandboxed** — so you can see exactly what each layer changes, and what it does not.
+
+```bash
+tools/offagent/demo/run_demo.sh            # ungoverned vs governed (no sudo)
+tools/offagent/demo/run_demo.sh --sandbox  # also the sandboxed posture (bwrap)
+```
+
+It performs no destructive action and makes no external effect — each "attempt" is the exact tool-call payload fed to the real gate, and the demo records the verdict. Typical result: every attempt succeeds ungoverned; the fail-closed gates hold the gated actions when governed; and one filesystem-level bypass that slips through on a direct launch is blocked under the sandbox (read-only bind → `EROFS`).
+
+**Honest by construction.** This is **cooperative-grade governance with a capability boundary**, not "containment": obfuscation that decodes in-process and natural-language deception are shown as documented limits, and signing-key custody is real only under the sandbox launcher. See [`tools/offagent/demo/README.md`](tools/offagent/demo/README.md) for the full posture table and scope.
+
+---
+
 ## Compliance mappings
 
 Phionyx publishes **evidence mappings** — not certifications — connecting runtime artifacts to industry threat models and risk frameworks (helpers packaged as `phionyx-compliance` v0.1.1 on PyPI):

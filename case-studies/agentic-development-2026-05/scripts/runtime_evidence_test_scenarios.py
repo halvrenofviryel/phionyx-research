@@ -21,7 +21,7 @@ itself, so it is reproducible at any time.
 
 Usage:
     python3 scripts/active/runtime_evidence_test_scenarios.py
-        [--out PATH]   # default: docs/strategic/test_scenarios_<DATE>.md
+        [--out PATH]   # default: reports/test_scenarios_<DATE>.md
         [--quiet]      # suppress per-scenario stdout
 
 Exit codes:
@@ -44,7 +44,7 @@ from typing import Callable
 
 REPO_ROOT = Path(__file__).resolve().parent.parent.parent
 HOOKS_DIR = REPO_ROOT / "tools" / "claude_code_mcp"
-OUT_DIR = REPO_ROOT / "docs" / "strategic"
+OUT_DIR = REPO_ROOT / "reports"
 
 
 # ── Test scaffolding ────────────────────────────────────────────────

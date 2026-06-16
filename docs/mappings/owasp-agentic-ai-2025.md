@@ -304,7 +304,7 @@ Every threat below follows the same structure:
 **What we do say honestly:**
 - The in-repo documentation explicitly scopes claims to single-instance.
 - The Evidence Matrix marks all multi-agent integration claims as **planned**.
-- The roadmap (`docs/strategic/MASTER_PLAN_2026_05.md`) lists "Multi-tenant production deployment" as out-of-scope for v0.3.x.
+- The internal roadmap lists "Multi-tenant production deployment" as out-of-scope for v0.3.x.
 
 ---
 

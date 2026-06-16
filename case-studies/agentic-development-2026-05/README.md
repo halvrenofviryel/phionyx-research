@@ -61,7 +61,7 @@ It does claim:
 
 ## Source repository
 
-This case study is a snapshot from the private Phionyx development monorepo (`halvrenofviryel/Viryel`).
+This case study is a snapshot from the private Phionyx development monorepo.
 
 ## Citation
 

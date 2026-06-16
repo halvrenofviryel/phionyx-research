@@ -1,7 +1,7 @@
 # Reasoned Governance Envelope (RGE) v0.2 — Specification
 
 > **Status:** Draft RFC (2026-05-19). Reviewer pass 2 approved scope; founder approval pending W1 kickoff merge.
-> **Predecessor:** `phionyx.governed_response_envelope.v0_1` (de-facto schema implicit in `docs/strategic/launch_drafts/governance_wrapper_demo/wrapper.py`, ~2026-05-08).
+> **Predecessor:** `phionyx.governed_response_envelope.v0_1` (de-facto schema implicit in an early launch-wrapper prototype, ~2026-05-08).
 > **Scope:** Per-turn signed evidence envelope for governed AI runtime decisions. Backward-compatible extension of v0.1.
 > **Author:** Phionyx Research (`founder@phionyx.ai`, ORCID `0009-0002-3718-4010`).
 > **License:** AGPL-3.0-or-later (schema), CC-BY-4.0 (this RFC document).
@@ -132,7 +132,7 @@ The launch wrapper uses HMAC signatures (`demo-hmac:<hex>`) for transparency; pr
 
 ### 3.1 Break compatibility and ship v1.0
 
-Discarded. v0.1 has already shipped in `docs/strategic/launch_drafts/governance_wrapper_demo/wrapper.py` and is depended on by existing producers. A breaking v1.0 would invalidate those without proportionate benefit. v0.2's strictly-additive extension preserves the v0.1 surface and lets each v0.2 block adopt independently.
+Discarded. v0.1 has already shipped in an earlier launch-wrapper prototype and is depended on by existing producers. A breaking v1.0 would invalidate those without proportionate benefit. v0.2's strictly-additive extension preserves the v0.1 surface and lets each v0.2 block adopt independently.
 
 ### 3.2 Separate schemas per concern (MCP-envelope.schema.json, RAG-envelope.schema.json, ...)
 

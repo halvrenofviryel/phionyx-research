@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 # update_snapshot.sh — refresh the case-study snapshots from a working
-# Phionyx development clone (halvrenofviryel/Viryel — private). Reads the
+# Phionyx development clone (the private development monorepo). Reads the
 # audit + scenario scripts in the parent repo and copies their latest
 # outputs into snapshots/.
 #
 # Usage:
-#   PHIONYX_PRIVATE_ROOT=/path/to/Viryel ./update_snapshot.sh
+#   PHIONYX_PRIVATE_ROOT=/path/to/monorepo ./update_snapshot.sh
 #
 # Pre-condition: $PHIONYX_PRIVATE_ROOT must be a checked-out Phionyx
 # development monorepo with `data/mcp_telemetry/` and the audit scripts

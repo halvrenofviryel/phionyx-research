@@ -32,8 +32,8 @@ memory must be updated in the same turn.
 - [ ] Conditional phrasing ("if surfaced externally") avoided when artefact IS
       external?
 
-Full rule + the 2026-05-26 incident that codified it:
-`/home/toygar/.claude/projects/-mnt-data-claude-phionyx/memory/feedback_verify_state_before_asserting.md`.
+Full rule + the 2026-05-26 incident that codified it are kept in the project's
+local memory store (`feedback_verify_state_before_asserting.md`).
 
 A pre-`Edit|Write` hook (`tools/claude_code_mcp/check_state_claim_grounding.py`)
 sniffs new content for the trigger phrases and warns if no matching grounding

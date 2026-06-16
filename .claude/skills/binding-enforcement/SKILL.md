@@ -7,7 +7,7 @@ description: Claude Code hook configuration that binds Phionyx self-governance t
 
 The hooks below are wired into `.claude/settings.json` (committed) to close
 the *stochastic input generation* gap originally measured at **7.5%
-coverage** (`docs/strategic/runtime_evidence_self_audit_2026-05-25.md`).
+coverage** (in the internal development history).
 Coverage was expanded 2026-05-26 to all major Claude Code lifecycle events
 so runtime-evidence aspires to 100% activity visibility. v0.7.2 adds
 PostToolUse language-tool feedback + Stop test runner + a fresh-context

@@ -124,9 +124,9 @@ class HumanReviewQueue:
             ethics_max_risk=0.87,
         )
         # Later, human reviews:
-        queue.approve(item.review_id, reviewed_by="toygar", notes="Safe to proceed")
+        queue.approve(item.review_id, reviewed_by="reviewer", notes="Safe to proceed")
         # Or:
-        queue.deny(item.review_id, reviewed_by="toygar", notes="Block this action")
+        queue.deny(item.review_id, reviewed_by="reviewer", notes="Block this action")
     """
 
     def __init__(self, config: Optional[HITLConfig] = None):

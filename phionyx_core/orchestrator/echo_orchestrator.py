@@ -1018,7 +1018,7 @@ class EchoOrchestrator:
         scenario_step_id: Optional[str] = None,
         session_id: Optional[str] = None,
         participant: Optional[Any] = None,  # Participant abstraction
-        mode: Optional[str] = None,  # Runtime mode (e.g., "toygar_core", "story", "game_scenario")
+        mode: Optional[str] = None,  # Runtime mode (e.g., "operator_core", "story", "game_scenario")
         strategy: Optional[str] = None,  # Runtime strategy (e.g., "normal", "stabilize", "comfort")
         envelope_message_id: Optional[str] = None,  # TurnEnvelope message_id for transcript tracking
         envelope_turn_id: Optional[int] = None,  # TurnEnvelope turn_id for transcript tracking

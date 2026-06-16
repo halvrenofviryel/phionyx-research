@@ -52,7 +52,7 @@ class BlockContext:
 
     # Participant & Runtime
     participant: Optional[Any] = None  # Participant abstraction
-    mode: Optional[str] = None  # Runtime mode (e.g., "toygar_core", "story", "game_scenario")
+    mode: Optional[str] = None  # Runtime mode (e.g., "operator_core", "story", "game_scenario")
     strategy: Optional[str] = None  # Runtime strategy (e.g., "normal", "stabilize", "comfort")
 
     # Envelope tracking

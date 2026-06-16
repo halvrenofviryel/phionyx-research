@@ -88,26 +88,26 @@ class TestReview:
 
     def test_approve(self, queue):
         item = queue.submit_for_review("test", "reason")
-        result = queue.approve(item.review_id, reviewed_by="toygar", notes="OK")
+        result = queue.approve(item.review_id, reviewed_by="reviewer", notes="OK")
         assert result is not None
         assert result.status == ReviewStatus.APPROVED.value
-        assert result.reviewed_by == "toygar"
+        assert result.reviewed_by == "reviewer"
         assert queue.pending_count == 0
 
     def test_deny(self, queue):
         item = queue.submit_for_review("test", "reason")
-        result = queue.deny(item.review_id, reviewed_by="toygar", notes="Not safe")
+        result = queue.deny(item.review_id, reviewed_by="reviewer", notes="Not safe")
         assert result is not None
         assert result.status == ReviewStatus.DENIED.value
 
     def test_cannot_review_twice(self, queue):
         item = queue.submit_for_review("test", "reason")
-        queue.approve(item.review_id, reviewed_by="toygar")
-        result = queue.approve(item.review_id, reviewed_by="toygar")
+        queue.approve(item.review_id, reviewed_by="reviewer")
+        result = queue.approve(item.review_id, reviewed_by="reviewer")
         assert result is None  # Already reviewed
 
     def test_review_nonexistent_returns_none(self, queue):
-        result = queue.approve("nonexistent-id", reviewed_by="toygar")
+        result = queue.approve("nonexistent-id", reviewed_by="reviewer")
         assert result is None
 
 
@@ -146,7 +146,7 @@ class TestPersistence:
         config = HITLConfig(storage_path=tmp_queue_path)
         q1 = HumanReviewQueue(config=config)
         item = q1.submit_for_review("test", "reason")
-        q1.approve(item.review_id, reviewed_by="toygar")
+        q1.approve(item.review_id, reviewed_by="reviewer")
 
         q2 = HumanReviewQueue(config=config)
         archived = q2.get_item(item.review_id)
@@ -160,7 +160,7 @@ class TestHelpers:
     def test_is_approved(self, queue):
         item = queue.submit_for_review("test", "reason")
         assert not queue.is_approved(item.review_id)
-        queue.approve(item.review_id, reviewed_by="toygar")
+        queue.approve(item.review_id, reviewed_by="reviewer")
         assert queue.is_approved(item.review_id)
 
     def test_get_pending_sorted_by_priority(self, queue):
