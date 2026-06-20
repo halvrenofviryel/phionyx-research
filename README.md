@@ -7,7 +7,7 @@ A deterministic AI runtime that maps every model output through 46 evaluation bl
 Beyond governance, Phionyx Core ships a **physics module** that produces deterministic coherence telemetry over a structured state vector — useful for NPC/agent drift detection, session-level coherence tracking, and reproducible runtime evaluation.
 
 > **Where this sits in the Phionyx stack.** This repo is the **engine** — the SDK
-> `phionyx-core` (PyPI, latest **v0.8.1**), the deterministic runtime. Every governed
+> `phionyx-core` (PyPI, latest **v0.9.0**), the deterministic runtime. Every governed
 > turn it runs can be emitted as an **[AI Runtime Evidence Protocol (AIREP)](https://github.com/halvrenofviryel/ai-runtime-evidence-protocol)**
 > record: one signed, hash-chained, offline-checkable evidence receipt per AI runtime
 > decision. AIREP is an experimental, vendor-neutral open format; the Phionyx **Reasoned
@@ -168,6 +168,7 @@ separate 5-layer governance stack in which the self-governance gate
 - Deliberative ethics engine (4-framework reasoning)
 - Human-in-the-loop queue with priority and expiry
 - Ed25519-signed audit trail with hash chains
+- **Evidence schemas (v0.9.0)** — additive `contracts/v4`: forensics-lite decision receipt, agent SLA metrics, evidence identifier (`phionyx:trace:…`), learning-decision & group-execution records, novelty clearance, and abstention
 
 **Engine Layer 3 — Semantic Time Memory**
 - Impact-weighted cache eviction (+24% vs LRU, +72% vs FIFO)
@@ -267,7 +268,7 @@ Each record carries a fixed set of groups — `subject`, `input`, `claim`, `outp
 
 **Where Phionyx sits:** the Phionyx **Reasoned Governance Envelope (RGE)** is AIREP's **reference producer** — the first system that emits AIREP records, and it matures by conforming to the format. RGE is a Phionyx *profile* of AIREP, not the format itself.
 
-AIREP is **experimental — a *proposed* open format, not a ratified standard**, with one reference implementation today. The format (`phionyx-core` engine, the RGE producer, and AIREP itself) carries **independent version lines** — engine **v0.8.1**, AIREP **v0.1 (Experimental)** — which must never be cross-attributed.
+AIREP is **experimental — a *proposed* open format, not a ratified standard**, with one reference implementation today. The format (`phionyx-core` engine, the RGE producer, and AIREP itself) carries **independent version lines** — engine **v0.9.0**, AIREP **v0.1 (Experimental)** — which must never be cross-attributed.
 
 - Spec: CC-BY-4.0 · Reference code: Apache-2.0
 - DOI: concept [10.5281/zenodo.20475136](https://doi.org/10.5281/zenodo.20475136) · v0.1 [10.5281/zenodo.20475137](https://doi.org/10.5281/zenodo.20475137)
@@ -276,7 +277,7 @@ AIREP is **experimental — a *proposed* open format, not a ratified standard**,
 
 ## Companion packages
 
-Eight PyPI-published companion packages extend the Phionyx runtime into an end-to-end evidence stack for the agentic AI ecosystem. Each carries **its own version line** (do not inherit the engine's v0.8.1). Seven are described below, grouped by where they sit on the [phionyx.ai](https://phionyx.ai) audience pillars; the eighth — **[`phionyx-letta`](https://pypi.org/project/phionyx-letta/)** (v0.1.0a1), a Letta adapter that emits a signed envelope per memory mutation — ships under the applied-product line.
+Eight PyPI-published companion packages extend the Phionyx runtime into an end-to-end evidence stack for the agentic AI ecosystem. Each carries **its own version line** (do not inherit the engine's v0.9.0). Seven are described below, grouped by where they sit on the [phionyx.ai](https://phionyx.ai) audience pillars; the eighth — **[`phionyx-letta`](https://pypi.org/project/phionyx-letta/)** (v0.1.0a1), a Letta adapter that emits a signed envelope per memory mutation — ships under the applied-product line.
 
 **MCP integration — surfaces under [Bounded Authority](https://phionyx.ai/bounded-authority).** Trust boundary + self-claim gate for AI coding agents (Claude Code, Cursor, Zed, VS Code, JetBrains — any MCP-capable host):
 
@@ -413,7 +414,7 @@ If you use Phionyx Core in academic work, please cite the software via its archi
   title     = {Phionyx Core SDK},
   year      = {2026},
   publisher = {Phionyx Research},
-  version   = {0.8.1},
+  version   = {0.9.0},
   doi       = {10.5281/zenodo.20027534},
   url       = {https://doi.org/10.5281/zenodo.20027534}
 }
