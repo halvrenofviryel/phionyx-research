@@ -19,6 +19,12 @@ from .pedagogy_port import PedagogyPort
 from .policy_port import PolicyPort
 from .narrative_port import NarrativePort
 from .meta_port import MetaPort
+from .ood_scorer_port import OodScorerPort, OodSignal
+from .learning_record_port import (
+    LearningRecordPort,
+    InMemoryLearningRecordPort,
+    NullLearningRecordPort,
+)
 
 # NOTE: product-specific inspection adapters live in the product layer, not core.
 # Per Echoism Core v1.0: domain-specific ingest ports are product-specific, not part of core SDK
@@ -31,5 +37,10 @@ __all__ = [
     "PolicyPort",
     "NarrativePort",
     "MetaPort",
+    "OodScorerPort",
+    "OodSignal",
+    "LearningRecordPort",
+    "InMemoryLearningRecordPort",
+    "NullLearningRecordPort",
 ]
 

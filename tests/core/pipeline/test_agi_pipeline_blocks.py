@@ -549,14 +549,31 @@ class TestDeliberativeEthicsGateBlock:
         assert result.data["final_verdict"] == "DENY"
 
     async def test_error_handling(self):
+        """Credibility-floor fix (value study §9 P0, 2026-06-07): an ethics-scorer
+        exception is now an auditable gate_unavailable event, not a silent
+        status=error fail-open. Default mode proceeds-but-flags; fail_closed defers."""
         from phionyx_core.pipeline.blocks.deliberative_ethics_gate import DeliberativeEthicsGateBlock
         mock_ethics = MagicMock()
         mock_ethics.deliberate.side_effect = RuntimeError("test error")
-        block = DeliberativeEthicsGateBlock(deliberative_ethics=mock_ethics)
         ctx = make_context()
         ctx.metadata = {"ethics_result": {"harm_risk": 0.9}}
-        result = await block.execute(ctx)
-        assert result.status == "error"
+
+        # Default (backward-compatible) mode: proceeds, but the failure is recorded.
+        result = await DeliberativeEthicsGateBlock(deliberative_ethics=mock_ethics).execute(ctx)
+        assert result.status == "ok"
+        assert result.data["gate_unavailable"] is True
+        assert result.data["early_exit"] is False
+        assert result.data["decision"] == "passed_unverified"
+
+        # Fail-closed (Safety Gate Profile): defers the elevated-risk turn to a human.
+        ctx2 = make_context()
+        ctx2.metadata = {"ethics_result": {"harm_risk": 0.9}}
+        result2 = await DeliberativeEthicsGateBlock(
+            deliberative_ethics=mock_ethics, fail_closed=True
+        ).execute(ctx2)
+        assert result2.data["final_verdict"] == "DEFER_TO_HUMAN"
+        assert result2.data["early_exit"] is True
+        assert result2.data["gate_unavailable"] is True
 
 
 # ─── Causal Discovery Integration (v3.6.0) ────────────────────────

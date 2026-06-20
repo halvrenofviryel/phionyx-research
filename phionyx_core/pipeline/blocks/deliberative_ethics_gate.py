@@ -25,13 +25,22 @@ class DeliberativeEthicsGateBlock(PipelineBlock):
     Low consensus triggers DEFER_TO_HUMAN.
     """
 
-    def __init__(self, deliberative_ethics=None):
+    def __init__(self, deliberative_ethics=None, fail_closed: bool = False):
         """
         Args:
             deliberative_ethics: DeliberativeEthics instance (injected via DI)
+            fail_closed: When True, an exception in the ethics scorer DEFERS the turn
+                to a human (early exit) instead of returning ``status="error"`` and
+                letting the pipeline proceed unverified. High-risk profiles (Safety
+                Gate Profile) MUST set this True. When False (default,
+                backward-compatible), the turn proceeds — but the failure is ALWAYS
+                recorded as an auditable ``gate_unavailable`` event so a fail-open is
+                never silent. Founder-directed credibility-floor fix
+                (value study §9 P0, 2026-06-07).
         """
         super().__init__("deliberative_ethics_gate")
         self._ethics = deliberative_ethics
+        self.fail_closed = fail_closed
 
     async def execute(self, context: BlockContext) -> BlockResult:
         try:
@@ -159,10 +168,30 @@ class DeliberativeEthicsGateBlock(PipelineBlock):
 
         except Exception as e:
             logger.error(f"Deliberative ethics error: {e}", exc_info=True)
+            # Was status="error" + silent proceed (fail-open). Now an auditable
+            # gate_unavailable event. Under fail_closed, DEFER the turn to a human
+            # rather than let an elevated-risk turn proceed with no ethics check.
+            data = {
+                "deliberation_run": False,
+                "gate_unavailable": True,
+                "enforced": self.fail_closed,
+                "error": str(e),
+                "final_verdict": "DEFER_TO_HUMAN" if self.fail_closed else "ERROR_UNVERIFIED",
+                "defer_to_human": self.fail_closed,
+                "early_exit": self.fail_closed,
+                "decision": "deferred_to_human" if self.fail_closed else "passed_unverified",
+                "reason": f"ethics_scorer_exception:{type(e).__name__}",
+            }
+            if context.metadata is not None:
+                context.metadata["_agi_deliberative_ethics"] = {
+                    "deliberation_run": False,
+                    "final_verdict": data["final_verdict"],
+                    "gate_unavailable": True,
+                }
             return BlockResult(
                 block_id=self.block_id,
-                status="error",
-                data={"error": str(e)}
+                status="ok",
+                data=data,
             )
 
     def get_dependencies(self) -> list:

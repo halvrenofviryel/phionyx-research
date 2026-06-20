@@ -20,6 +20,30 @@ from .pedagogy_port import PedagogyPort
 from .policy_port import PolicyPort
 from .narrative_port import NarrativePort
 from .meta_port import MetaPort
+from .ood_scorer_port import OodScorerPort, OodSignal
+
+
+class NullOodScorer(OodScorerPort):
+    """Null implementation of the OOD Scorer Port.
+
+    Always reports in-distribution (neutral). Used when the abstention/OOD
+    concern is excluded from a runtime profile — the knowledge-boundary gate
+    then always sees a fully-within signal and never abstains on OOD grounds.
+    """
+
+    async def score(
+        self,
+        query_text: str,
+        *,
+        query_embedding=None,
+        relevance_scores=None,
+    ) -> OodSignal:
+        return OodSignal(
+            ood_score=0.0,
+            graph_relevance=1.0,
+            novelty_score=0.0,
+            source="null",
+        )
 
 
 class NullPhysicsEngine(PhysicsPort):

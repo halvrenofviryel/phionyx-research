@@ -34,6 +34,12 @@ class LearningGateBlock(PipelineBlock):
 
     def __init__(self, gate_service: Optional[LearningGateServiceProtocol] = None):
         super().__init__("learning_gate")
+        if gate_service is None:
+            # Contract v1.0 §7 / §9.3: a decision must NEVER be made without an audit
+            # trail. Default to the real service (which records every decision) rather
+            # than a silent ad-hoc fallback that decided without emitting a record.
+            from ...services.learning_gate_service import LearningGateService
+            gate_service = LearningGateService()
         self.gate_service = gate_service
 
     def should_skip(self, context: BlockContext) -> Optional[str]:
@@ -53,31 +59,11 @@ class LearningGateBlock(PipelineBlock):
                     data={"updates_processed": 0, "updates_approved": 0},
                 )
 
-            approved_count = 0
-            rejected_count = 0
-
-            if self.gate_service:
-                evaluated = await self.gate_service.evaluate_updates(pending_updates)
-                approved = [u for u in evaluated if getattr(u, "gate_decision", "") == "approved"]
-                approved_count = await self.gate_service.apply_approved(approved)
-                rejected_count = len(evaluated) - len(approved)
-            else:
-                # Default: approve adaptive, reject immutable, defer gated
-                from ...contracts.v4.learning_update import LearningUpdate, LearningGateDecision
-
-                for update in pending_updates:
-                    if isinstance(update, LearningUpdate):
-                        if update.boundary_zone == "immutable":
-                            update.gate_decision = LearningGateDecision.REJECTED
-                            update.gate_reason = "Immutable boundary zone"
-                            rejected_count += 1
-                        elif update.boundary_zone == "gated":
-                            update.gate_decision = LearningGateDecision.PENDING
-                            update.gate_reason = "Requires human approval"
-                        else:
-                            update.gate_decision = LearningGateDecision.APPROVED
-                            update.gate_reason = "Adaptive zone — auto-approved"
-                            approved_count += 1
+            # Single path: the service evaluates AND records every decision (§7).
+            evaluated = await self.gate_service.evaluate_updates(pending_updates)
+            approved = [u for u in evaluated if getattr(u, "gate_decision", "") == "approved"]
+            approved_count = await self.gate_service.apply_approved(approved)
+            rejected_count = len(evaluated) - len(approved)
 
             context.v4_learning_updates = pending_updates
 
@@ -91,11 +77,20 @@ class LearningGateBlock(PipelineBlock):
                 },
             )
         except Exception as e:
-            logger.error(f"Learning gate failed: {e}", exc_info=True)
+            # Fail-CLOSED: a governance gate must never report success on failure.
+            # Nothing is approved/applied (updates_approved=0) and the block signals
+            # an error rather than masking it as "ok" (the prior behaviour).
+            logger.error(f"Learning gate failed (fail-closed): {e}", exc_info=True)
             return BlockResult(
                 block_id=self.block_id,
-                status="ok",
-                data={"updates_processed": 0, "error": str(e)},
+                status="error",
+                error=e,  # surface the exception so the orchestrator telemetry records it
+                data={
+                    "updates_processed": 0,
+                    "updates_approved": 0,
+                    "error": str(e),
+                    "fail_closed": True,
+                },
             )
 
     def get_dependencies(self) -> list[str]:

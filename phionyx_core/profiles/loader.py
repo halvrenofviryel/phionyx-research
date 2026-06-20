@@ -15,6 +15,75 @@ from .schema import Profile, PhysicsConfig, PedagogyConfig, GovernanceConfig, Ro
 logger = logging.getLogger(__name__)
 
 
+# Built-in module-configuration profiles. These make the loader work WITHOUT an
+# external config/profiles.yaml (which is not shipped in the monorepo), so
+# load_profile() actually resolves for the products + legacy personas. An external
+# config/profiles.yaml, if present, is merged over (overrides) these.
+# These are the module-config LAYER (pedagogy/governance/physics/routing) that sits
+# UNDER a deployment runtime_profile (which blocks run) — see runtime_profiles.py.
+_BUILTIN_PROFILES: Dict[str, Dict[str, Any]] = {
+    # ── Products ──
+    "trace_school_rpg": {
+        "name": "trace_school_rpg",
+        "description": "Trace School RPG — minor-safe, safeguarding-first, GDPR-strict.",
+        "physics": {"base_mode": "SCHOOL", "reactivity": 0.4, "resilience": 0.9, "safety_bias": 0.95},
+        "pedagogy": {"scaffolding_aggressiveness": 0.7, "intervention_threshold": 0.4},
+        "governance": {"policy_id": "edu_safeguarding", "pii_mode": "FULL", "audit_level": "VERBOSE"},
+        "routing": {"enable_graph_rag": False, "llm_tier_strategy": "BALANCED"},
+        "tags": ["school", "safeguarding", "minor"],
+    },
+    "npc_studio": {
+        "name": "npc_studio",
+        "description": "NPC Studio — affect-aware NPC behaviour orchestration, lore-safe.",
+        "physics": {"base_mode": "NPC_ENGINE", "reactivity": 0.6, "resilience": 0.7, "safety_bias": 0.6},
+        "pedagogy": {"scaffolding_aggressiveness": 0.2, "intervention_threshold": 0.3},
+        "governance": {"policy_id": "game_lore", "pii_mode": "PARTIAL", "audit_level": "STANDARD"},
+        "routing": {"enable_graph_rag": True, "llm_tier_strategy": "QUALITY_OPTIMIZED"},
+        "tags": ["game", "npc", "behaviour"],
+    },
+    "scenario_generator": {
+        "name": "scenario_generator",
+        "description": "Scenario Generator — canon/version provenance for AI-assisted writing.",
+        "physics": {"base_mode": "GAME", "reactivity": 0.5, "resilience": 0.6, "safety_bias": 0.5},
+        "governance": {"policy_id": "content_canon", "pii_mode": "PARTIAL", "audit_level": "STANDARD"},
+        "routing": {"enable_graph_rag": True, "llm_tier_strategy": "QUALITY_OPTIMIZED"},
+        "tags": ["writing", "canon", "provenance"],
+    },
+    # ── Legacy personas (kept; map to the same module shape) ──
+    "edu": {
+        "name": "edu", "description": "Educational profile (legacy alias of trace_school_rpg shape).",
+        "physics": {"base_mode": "SCHOOL", "safety_bias": 0.9},
+        "governance": {"policy_id": "edu", "pii_mode": "FULL", "audit_level": "VERBOSE"},
+        "routing": {"enable_graph_rag": False}, "tags": ["edu", "legacy"],
+    },
+    "game": {
+        "name": "game", "description": "Game profile (legacy).",
+        "physics": {"base_mode": "GAME", "safety_bias": 0.5},
+        "governance": {"policy_id": "game", "pii_mode": "PARTIAL", "audit_level": "STANDARD"},
+        "routing": {"enable_graph_rag": True}, "tags": ["game", "legacy"],
+    },
+    "clinical": {
+        "name": "clinical", "description": "Clinical / therapy profile (legacy).",
+        "physics": {"base_mode": "THERAPY", "safety_bias": 0.95, "resilience": 0.9},
+        "governance": {"policy_id": "clinical", "pii_mode": "FULL", "audit_level": "VERBOSE"},
+        "routing": {"enable_graph_rag": False}, "tags": ["clinical", "legacy"],
+    },
+    "hearthos": {
+        "name": "hearthos",
+        "description": "HearthOS — bounded-authority household assistant; system proposes, the responsible adult decides.",
+        "physics": {"base_mode": "THERAPY", "reactivity": 0.4, "resilience": 0.9, "safety_bias": 0.95},
+        "pedagogy": {"scaffolding_aggressiveness": 0.3, "intervention_threshold": 0.4},
+        "governance": {"policy_id": "household_bounded_authority", "pii_mode": "FULL", "audit_level": "VERBOSE"},
+        "routing": {"enable_graph_rag": False, "llm_tier_strategy": "BALANCED"},
+        "tags": ["household", "bounded_authority", "family"],
+    },
+    "sdk_default": {
+        "name": "sdk_default", "description": "Neutral default profile for SDK examples.",
+        "tags": ["default"],
+    },
+}
+
+
 class ProfileLoader:
     """
     Loads and merges profiles from YAML files.
@@ -62,7 +131,7 @@ class ProfileLoader:
             with open(physics_file, 'r', encoding='utf-8') as f:
                 defaults['physics'] = yaml.safe_load(f) or {}
         else:
-            logger.warning(f"Physics defaults not found: {physics_file}")
+            logger.debug(f"Physics defaults not found: {physics_file}; using schema defaults")
             defaults['physics'] = {}
 
         # Load pedagogy defaults
@@ -71,7 +140,7 @@ class ProfileLoader:
             with open(pedagogy_file, 'r', encoding='utf-8') as f:
                 defaults['pedagogy'] = yaml.safe_load(f) or {}
         else:
-            logger.warning(f"Pedagogy defaults not found: {pedagogy_file}")
+            logger.debug(f"Pedagogy defaults not found: {pedagogy_file}; using schema defaults")
             defaults['pedagogy'] = {}
 
         # Load governance defaults
@@ -80,7 +149,7 @@ class ProfileLoader:
             with open(governance_file, 'r', encoding='utf-8') as f:
                 defaults['governance'] = yaml.safe_load(f) or {}
         else:
-            logger.warning(f"Governance defaults not found: {governance_file}")
+            logger.debug(f"Governance defaults not found: {governance_file}; using schema defaults")
             defaults['governance'] = {}
 
         self._defaults_cache = defaults
@@ -114,11 +183,13 @@ class ProfileLoader:
         Returns:
             Dict mapping profile name to profile data
         """
+        # Start from the built-in profiles so the loader works without an external
+        # config/profiles.yaml. An external file, if present, overrides built-ins.
+        profiles: Dict[str, Dict[str, Any]] = {k: dict(v) for k, v in _BUILTIN_PROFILES.items()}
+
         if not self.profiles_file.exists():
-            raise FileNotFoundError(
-                f"Profiles file not found: {self.profiles_file}\n"
-                f"Please create profiles.yaml with profile definitions."
-            )
+            logger.debug(f"No external profiles.yaml at {self.profiles_file}; using built-ins.")
+            return profiles
 
         with open(self.profiles_file, 'r', encoding='utf-8') as f:
             data = yaml.safe_load(f)
@@ -126,7 +197,6 @@ class ProfileLoader:
         if not isinstance(data, dict) or 'profiles' not in data:
             raise ValueError("Invalid profiles.yaml format. Expected 'profiles' key.")
 
-        profiles = {}
         for profile_data in data['profiles']:
             name = profile_data.get('name')
             if not name:

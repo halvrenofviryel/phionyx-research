@@ -23,6 +23,12 @@ from .learning_update import LearningUpdate, LearningGateDecision
 from .discovery_candidate import DiscoveryCandidate
 from .error_payload import ErrorPayload, ErrorSeverity
 from .claim import Claim, ClaimType, LifecycleStage, lifecycle_completion
+from .evidence import EvidenceIdentifier, EVIDENCE_ID_PATTERN
+from .sla_metrics import AgentSlaMetrics, MetricSource, METRIC_SOURCES
+from .decision_receipt import DecisionReceipt
+from .learning_decision_record import LearningDecisionRecord
+from .group_execution_record import GroupExecutionRecord, GroupActionNode, AuthorityTier
+from .novelty_clearance import NoveltyClearance, ClearanceDecision
 
 __all__ = [
     # Schemas
@@ -40,6 +46,12 @@ __all__ = [
     "DiscoveryCandidate",
     "ErrorPayload", "ErrorSeverity",
     "Claim", "ClaimType", "LifecycleStage", "lifecycle_completion",
+    "EvidenceIdentifier", "EVIDENCE_ID_PATTERN",
+    "AgentSlaMetrics", "MetricSource", "METRIC_SOURCES",
+    "DecisionReceipt",
+    "LearningDecisionRecord",
+    "GroupExecutionRecord", "GroupActionNode", "AuthorityTier",
+    "NoveltyClearance", "ClearanceDecision",
 ]
 
 V4_SCHEMA_VERSION = "4.0.0"

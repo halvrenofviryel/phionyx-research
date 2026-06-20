@@ -8,6 +8,7 @@ Contract v3.8.0.
 """
 
 import logging
+import os
 from typing import Dict, Any, Optional
 
 from ..pipeline.blocks import (
@@ -371,9 +372,13 @@ def create_all_blocks(
 
         safety_processor = SafetyLayerProcessorAdapter(services.processor)
 
+    # Safety Gate Profile sets PHIONYX_SAFETY_FAIL_CLOSED=1 → an unavailable/crashing
+    # safety scorer BLOCKS instead of passing through (credibility-floor, value study §9 P0).
+    _gates_fail_closed = os.environ.get("PHIONYX_SAFETY_FAIL_CLOSED", "").lower() in ("1", "true", "yes")
     blocks["input_safety_gate"] = InputSafetyGateBlock(
         processor=safety_processor,
-        min_input_length=3
+        min_input_length=3,
+        fail_closed=_gates_fail_closed,
     )
 
     # DEPRECATED: low_input_gate (kept for backward compatibility during migration)
@@ -1145,8 +1150,43 @@ def create_all_blocks(
         knowledge_boundary = KnowledgeBoundaryDetector()
     except ImportError:
         knowledge_boundary = None
+
+    # D-pillar: a REAL OOD/coverage producer + opt-in fail-closed abstention.
+    # Default = HeuristicOodScorer (deterministic retrieval-coverage; the FNR-1.00
+    # fix). When a frozen reference corpus is configured via
+    # PHIONYX_OOD_REFERENCE_CORPUS, use the embedding-backed scorer (replay-pinned
+    # to model_id+corpus_version), which degrades to the heuristic whenever the
+    # provider/corpus/embedding is unavailable.
+    from phionyx_core.ports.ood_scorer_port import OodScorerPort
+    ood_scorer: OodScorerPort | None = None
+    try:
+        from phionyx_core.meta.ood_scorer import (
+            HeuristicOodScorer,
+            EmbeddingOodScorer,
+            load_reference_corpus,
+        )
+        ood_scorer = HeuristicOodScorer()
+        _ood_corpus_path = os.environ.get("PHIONYX_OOD_REFERENCE_CORPUS", "").strip()
+        if _ood_corpus_path:
+            _ood_corpus = load_reference_corpus(_ood_corpus_path)
+            if _ood_corpus is not None and not _ood_corpus.is_empty:
+                ood_scorer = EmbeddingOodScorer(
+                    llm_provider=llm_provider,
+                    reference_corpus=_ood_corpus,
+                    fallback=HeuristicOodScorer(),
+                )
+    except ImportError:
+        ood_scorer = None
+
+    # Enforcement is OPT-IN, default-OFF (backward-compatible advisory behaviour).
+    _abstain_fail_closed = os.environ.get(
+        "PHIONYX_ABSTAIN_FAIL_CLOSED", ""
+    ).lower() in ("1", "true", "yes")
+
     blocks["knowledge_boundary_check"] = KnowledgeBoundaryCheckBlock(
-        knowledge_boundary=knowledge_boundary
+        knowledge_boundary=knowledge_boundary,
+        ood_scorer=ood_scorer,
+        fail_closed=_abstain_fail_closed,
     )
 
     try:
@@ -1239,7 +1279,8 @@ def create_all_blocks(
     except ImportError:
         deliberative_ethics = None
     blocks["deliberative_ethics_gate"] = DeliberativeEthicsGateBlock(
-        deliberative_ethics=deliberative_ethics
+        deliberative_ethics=deliberative_ethics,
+        fail_closed=os.environ.get("PHIONYX_SAFETY_FAIL_CLOSED", "").lower() in ("1", "true", "yes"),
     )
 
     # ── Feedback Loop Block (v3.6.0) ─────────────────────────────────

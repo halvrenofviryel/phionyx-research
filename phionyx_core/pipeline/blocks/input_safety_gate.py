@@ -50,7 +50,8 @@ class InputSafetyGateBlock(PipelineBlock):
     def __init__(
         self,
         processor: Optional[SafetyLayerProcessorProtocol] = None,
-        min_input_length: int = 3
+        min_input_length: int = 3,
+        fail_closed: bool = False,
     ):
         """
         Initialize block.
@@ -58,10 +59,54 @@ class InputSafetyGateBlock(PipelineBlock):
         Args:
             processor: Safety layer processor (optional, safety check skipped if not provided)
             min_input_length: Minimum input length to pass gate (default: 3)
+            fail_closed: When True, a missing/crashing safety processor BLOCKS the
+                turn (early exit) instead of passing it through unverified. High-risk
+                deployment profiles (Safety Gate Profile) MUST set this True. When
+                False (default, backward-compatible), an unavailable scorer passes the
+                input through — but the event is ALWAYS recorded as an auditable
+                ``gate_unavailable`` signal so a fail-open is never silent.
+                Founder-directed credibility-floor fix (value study §9 P0, 2026-06-07).
         """
         super().__init__("input_safety_gate")
         self.processor = processor
         self.min_input_length = min_input_length
+        self.fail_closed = fail_closed
+
+    def _unavailable(self, reason: str, *, input_length: int = 0) -> BlockResult:
+        """Emit an auditable 'safety scorer unavailable' result.
+
+        fail_closed=True  → block the turn (early_exit), enforced decision.
+        fail_closed=False → pass through UNVERIFIED, but flag it so the audit
+        chain records that the gate could not actually verify this input.
+        """
+        data = {
+            "gate_triggered": self.fail_closed,
+            "gate_type": "safety_unavailable",
+            "early_exit": self.fail_closed,
+            "gate_unavailable": True,
+            "enforced": self.fail_closed,
+            "decision": "blocked" if self.fail_closed else "passed_unverified",
+            "is_blocked": self.fail_closed,
+            "safety_check_passed": False,
+            "input_validation_passed": True,
+            "input_length": input_length,
+            "reason": reason,
+        }
+        if self.fail_closed:
+            data["clarifying_question"] = (
+                "I can't process this safely right now because the safety check is "
+                "unavailable. Please try again shortly."
+            )
+            logger.error(
+                f"[INPUT_SAFETY_GATE] safety scorer unavailable ({reason}); "
+                f"BLOCKED (fail-closed)"
+            )
+        else:
+            logger.warning(
+                f"[INPUT_SAFETY_GATE] safety scorer unavailable ({reason}); "
+                f"passed UNVERIFIED (fail-open) — recorded as gate_unavailable"
+            )
+        return BlockResult(block_id=self.block_id, status="ok", data=data)
 
     async def execute(self, context: BlockContext) -> BlockResult:
         """
@@ -137,9 +182,9 @@ class InputSafetyGateBlock(PipelineBlock):
                                 cep_config=None
                             )
                         else:
-                            logger.warning("Processor has neither process_safety_layer nor process_safety method")
-                            safety_result = None
-                            updated_frame = frame
+                            return self._unavailable(
+                                "processor_no_method", input_length=input_length
+                            )
 
                         # Check if blocked by safety
                         is_blocked = getattr(safety_result, 'is_blocked', False) if safety_result else False
@@ -185,34 +230,26 @@ class InputSafetyGateBlock(PipelineBlock):
                             }
                         )
                     except Exception as e:
-                        logger.warning(f"Safety check failed, allowing input through: {e}")
-                        # Fail-open: allow input through if safety check fails
+                        # Was fail-open; now an auditable gate_unavailable event
+                        # (blocks under fail_closed).
+                        return self._unavailable(
+                            f"safety_check_exception:{type(e).__name__}",
+                            input_length=input_length,
+                        )
                 else:
-                    logger.debug("Frame not found, skipping safety check")
+                    return self._unavailable("no_frame", input_length=input_length)
+            else:
+                # No safety processor wired at all — the gate cannot verify the input.
+                return self._unavailable(
+                    "no_safety_processor", input_length=input_length
+                )
 
-            # Both checks passed - gate passed
-            return BlockResult(
-                block_id=self.block_id,
-                status="ok",
-                data={
-                    "gate_triggered": False,
-                    "early_exit": False,
-                    "input_length": input_length,
-                    "input_validation_passed": True,
-                    "safety_check_passed": self.processor is not None,
-                    "is_blocked": False  # Explicitly set is_blocked to False
-                }
-            )
+            # Defensive fallback (all branches above return); treat as unverified.
+            return self._unavailable("unreached_fallthrough", input_length=input_length)
         except Exception as e:
             logger.error(f"Input safety gate check failed: {e}", exc_info=True)
-            # Fail-open: allow input through if gate check fails
-            return BlockResult(
-                block_id=self.block_id,
-                status="ok",
-                data={
-                    "gate_triggered": False,
-                    "early_exit": False,
-                    "error": str(e)
-                }
+            # Was fail-open; now an auditable gate_unavailable event (blocks under fail_closed).
+            return self._unavailable(
+                f"gate_exception:{type(e).__name__}", input_length=len(context.user_input or "")
             )
 

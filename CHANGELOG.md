@@ -9,9 +9,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+---
+
+## [0.9.0] — 2026-06-20
+
+**Theme: Evidence interchange + learning-gate governance.**
+
+v0.9.0 adds a batch of additive `contracts/v4/` evidence and governance schemas (no
+schema-version bump; `V4_SCHEMA_VERSION` stays `4.0.0`) plus a runnable control-hardening
+demo. The new schemas are data-minimised and computation-free in core; producers and
+aggregators live in the companion tooling.
+
 ### Added
+- **F20 — Evidence identifier** (`contracts/v4/evidence.py`): `EvidenceIdentifier`, a
+  canonical ID `phionyx:trace:<date>:sha256:<hex>` binding a decision to the signed chain.
+- **F19 — Agent SLA metrics schema** (`contracts/v4/sla_metrics.py`): `AgentSlaMetrics` +
+  `MetricSource` — a schema (not a contract); six Optional metrics (null ≠ zero).
+- **F18 — Forensics-lite decision receipt** (`contracts/v4/decision_receipt.py`):
+  `DecisionReceipt`, data-minimised (no raw user/output text); query CLI in the companion.
+- **VLDR — Learning decision record** (`contracts/v4/learning_decision_record.py` +
+  `ports/learning_record_port.py`): records a learning-gate decision (§6/§7 compliance).
+- **GER — Group execution record** (`contracts/v4/group_execution_record.py`): multi-agent
+  group-execution lineage.
+- **Novelty clearance** (`contracts/v4/novelty_clearance.py`): adversarial-governance
+  hardening — a clearance record for novel / unseen actions.
+- **Abstention record** (`contracts/v4/abstention_record.py`) + **OOD scorers**
+  (`meta/ood_scorer.py`, `ports/ood_scorer_port.py`): the knowledge-boundary abstention
+  signal — recording when the runtime declines rather than answers.
 - **Control-hardening demo** (`tools/offagent/`) — a runnable, adversarial self-test of the
-  agent-governance control plane (`tools/offagent/demo/run_demo.sh`): the same seven attempts
+  agent-governance control plane (`tools/offagent/demo/run_demo.sh`): the same scenario suite
   under ungoverned / governed / governed+sandboxed postures, with an honest HELD / KNOWN_GAP
   map. Ships the runnable control-plane subset (fail-closed commit + self-modification gates,
   signed human override, ground-truth sandbox probe, T4 external-effect broker) plus the

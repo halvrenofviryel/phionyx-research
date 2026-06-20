@@ -32,92 +32,40 @@ Public API is organized into the following namespaces:
 - ``phionyx_core.cep``         -- Conscious Echo Proof engine, guards, config
 """
 
-__version__ = "0.8.1"
-
-# ---------------------------------------------------------------------------
-# Official companion packages (added in v0.5.0)
-# ---------------------------------------------------------------------------
-# Discoverable list of the official Phionyx ecosystem packages on PyPI.
-# Each entry is (pypi_name, github_repo, what_it_does). Surfaced so
-# downstream users can enumerate the ecosystem from inside phionyx_core
-# without hardcoding a list elsewhere.
-__companions__ = {
-    "phionyx-mcp-server": (
-        "halvrenofviryel/phionyx-mcp-server",
-        "MCP trust boundary — descriptor signing, signed envelopes, "
-        "audit chain over third-party MCP tool calls.",
-    ),
-    "phionyx-pipeline-mcp": (
-        "halvrenofviryel/phionyx-pipeline-mcp",
-        "Agent self-claim gate — verifies what the agent says it did "
-        "against the repository's actual diff.",
-    ),
-    "phionyx-eval-inspect": (
-        "halvrenofviryel/phionyx-eval-inspect",
-        "Inspect AI bridge — Phionyx runtime evidence exported into "
-        "Inspect eval logs.",
-    ),
-    "phionyx-langchain-langgraph": (
-        "halvrenofviryel/phionyx-langchain-langgraph",
-        "LangChain + LangGraph adapters — every chain / tool / LLM event "
-        "and every supervisor handoff becomes a signed envelope.",
-    ),
-    "phionyx-openai-agents": (
-        "halvrenofviryel/phionyx-openai-agents",
-        "OpenAI Agents SDK tracing bridge — every Trace and Span becomes "
-        "a signed envelope.",
-    ),
-}
+__version__ = "0.9.0"
 
 # ---------------------------------------------------------------------------
 # Pipeline (always available -- no external deps)
 # ---------------------------------------------------------------------------
-# ---------------------------------------------------------------------------
-# CEP (Conscious Echo Proof) -- synthetic psychopathology prevention
-# ---------------------------------------------------------------------------
-from .cep import (
-    CEPConfig,
-    CEPFlags,
-    CEPMetrics,
-    CEPResult,
-    CEPThresholds,
-    ConsciousEchoProofEngine,
-    EchoSelfThresholdGuard,
-    load_cep_config,
-)
+from .pipeline.base import PipelineBlock, BlockContext, BlockResult
 
 # ---------------------------------------------------------------------------
-# Contracts
+# Physics types (pydantic models -- core dependency)
 # ---------------------------------------------------------------------------
-from .contracts.telemetry import get_canonical_blocks
-
-# ---------------------------------------------------------------------------
-# Orchestrator
-# ---------------------------------------------------------------------------
-from .orchestrator.echo_orchestrator import EchoOrchestrator, OrchestratorServices
-
-# ---------------------------------------------------------------------------
-# Physics dynamics (entropy, stability, complexity)
-# ---------------------------------------------------------------------------
-from .physics.dynamics import (
-    calculate_complexity,
-    calculate_dynamic_entropy,
-    update_stability,
-)
+from .physics.types import PhysicsInput, PhysicsOutput, PhysicsState, PhiComponents
 
 # ---------------------------------------------------------------------------
 # Physics formulas (pure math -- no external deps)
 # ---------------------------------------------------------------------------
 from .physics.formulas import (
+    calculate_phi_v2,
+    calculate_phi_v2_1,
+    calculate_phi_cognitive,
+    calculate_phi_physical,
+    calculate_resonance_force,
     calculate_echo_energy,
     calculate_entropy_shannon,
     calculate_momentum,
-    calculate_phi_cognitive,
-    calculate_phi_physical,
-    calculate_phi_v2,
-    calculate_phi_v2_1,
-    calculate_resonance_force,
     classify_resonance,
+)
+
+# ---------------------------------------------------------------------------
+# Physics dynamics (entropy, stability, complexity)
+# ---------------------------------------------------------------------------
+from .physics.dynamics import (
+    calculate_dynamic_entropy,
+    update_stability,
+    calculate_complexity,
 )
 
 # ---------------------------------------------------------------------------
@@ -126,26 +74,44 @@ from .physics.formulas import (
 from .physics.tuner import PhysicsParams, ProfileTuner
 
 # ---------------------------------------------------------------------------
-# Physics types (pydantic models -- core dependency)
+# State
 # ---------------------------------------------------------------------------
-from .physics.types import PhiComponents, PhysicsInput, PhysicsOutput, PhysicsState
-from .pipeline.base import BlockContext, BlockResult, PipelineBlock
+from .state.echo_state_2 import EchoState2, EchoState2Plus
+
+# ---------------------------------------------------------------------------
+# Orchestrator
+# ---------------------------------------------------------------------------
+from .orchestrator.echo_orchestrator import EchoOrchestrator, OrchestratorServices
 
 # ---------------------------------------------------------------------------
 # Profiles
 # ---------------------------------------------------------------------------
 from .profiles import (
-    Profile,
     ProfileLoader,
     ProfileManager,
-    get_active_profile,
+    Profile,
     get_global_manager,
+    get_active_profile,
 )
 
 # ---------------------------------------------------------------------------
-# State
+# Contracts
 # ---------------------------------------------------------------------------
-from .state.echo_state_2 import EchoState2, EchoState2Plus
+from .contracts.telemetry import get_canonical_blocks
+
+# ---------------------------------------------------------------------------
+# CEP (Conscious Echo Proof) -- synthetic psychopathology prevention
+# ---------------------------------------------------------------------------
+from .cep import (
+    ConsciousEchoProofEngine,
+    EchoSelfThresholdGuard,
+    CEPConfig,
+    load_cep_config,
+    CEPResult,
+    CEPMetrics,
+    CEPThresholds,
+    CEPFlags,
+)
 
 # ---------------------------------------------------------------------------
 # __all__ -- explicit public API surface
@@ -153,7 +119,6 @@ from .state.echo_state_2 import EchoState2, EchoState2Plus
 __all__ = [
     # Version
     "__version__",
-    "__companions__",
 
     # Pipeline
     "PipelineBlock",

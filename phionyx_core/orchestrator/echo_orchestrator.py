@@ -9,6 +9,7 @@ It has NO dependencies on FastAPI, HTTP, or database models.
 """
 
 import logging
+import os
 import time
 from typing import Callable, Dict, Any, Optional, Protocol, cast, TYPE_CHECKING
 from dataclasses import dataclass
@@ -175,6 +176,35 @@ class EchoOrchestrator:
 
         # Rollback manager
         self.rollback_manager = RollbackManager(enabled=enable_rollback)
+
+        # Runtime deployment profile (portfolio redesign, 2026-06-07).
+        # PHIONYX_RUNTIME_PROFILE=<name[,name...]> selects which canonical blocks run;
+        # the rest are POLICY-BYPASSED with an audit trail at execution (blocks are
+        # never deleted — Architecture Invariant). Unset → None → all blocks run
+        # (default, zero behavior change). The safety/record floor + always-on blocks
+        # are never bypassable.
+        self._runtime_profile_name, self._runtime_profile_active_blocks = (
+            self._resolve_runtime_profile()
+        )
+
+    @staticmethod
+    def _resolve_runtime_profile():
+        """Resolve PHIONYX_RUNTIME_PROFILE → (name, frozenset[active_block_ids]) or (None, None)."""
+        raw = os.environ.get("PHIONYX_RUNTIME_PROFILE", "").strip()
+        if not raw:
+            return None, None
+        try:
+            from phionyx_core.profiles.runtime_profiles import compose
+            names = tuple(n.strip() for n in raw.split(",") if n.strip())
+            active = set(compose(*names))
+        except Exception as e:  # unknown profile / import issue → fail safe (run all)
+            logger.warning(f"runtime profile {raw!r} unresolved ({e}); running all blocks")
+            return None, None
+        # Never bypass the safety/record floor or the always-on blocks.
+        active |= {"kill_switch_gate", "input_safety_gate", "audit_layer",
+                   "response_build", "phi_computation", "entropy_computation"}
+        logger.info(f"Runtime profile {raw!r} active: {len(active)} blocks (rest policy-bypassed)")
+        return raw, frozenset(active)
 
     def register_block(self, block: PipelineBlock) -> None:
         """
@@ -600,6 +630,14 @@ class EchoOrchestrator:
                 intent_skip_blocks = self.dynamic_grouping.get_blocks_to_skip_for_intent(intent)
                 if block_id in intent_skip_blocks and not is_always_on:
                     skip_reason = f"Intent-based skip: {intent}"
+
+            # Runtime-profile bypass: a deployment profile names the ACTIVE blocks;
+            # any other block is policy-bypassed with an audit trail (never deleted).
+            # Floor/always-on blocks are in the active set, so never bypassed here.
+            if (not skip_reason and not is_always_on
+                    and self._runtime_profile_active_blocks is not None
+                    and block_id not in self._runtime_profile_active_blocks):
+                skip_reason = f"profile_bypass:{self._runtime_profile_name}"
 
             if not skip_reason:
                 skip_reason = block.should_skip(current_context)

@@ -7,6 +7,7 @@ Implements Learning Gate Contract v1.0: zone registry, evidence validation, roll
 Port-adapter pattern (AD-2).
 """
 
+import hashlib
 import logging
 from pathlib import Path
 from typing import Dict, List, Optional
@@ -15,6 +16,11 @@ from datetime import datetime, timezone
 import yaml
 
 from ..contracts.v4.learning_update import LearningUpdate, LearningGateDecision
+from ..contracts.v4.learning_decision_record import LearningDecisionRecord
+from ..ports.learning_record_port import (
+    LearningRecordPort,
+    InMemoryLearningRecordPort,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -79,11 +85,16 @@ class LearningGateService:
         self,
         max_delta_fraction: float = MAX_DELTA_FRACTION,
         surfaces_path: Optional[Path] = None,
+        record_port: Optional[LearningRecordPort] = None,
     ):
         self.max_delta_fraction = max_delta_fraction
         self._approval_queue: List[LearningUpdate] = []
         self._applied_updates: Dict[str, LearningUpdate] = {}  # update_id -> update
         self._zone_registry: Dict[str, str] = _load_surface_registry(surfaces_path)
+        # Contract v1.0 §7: every decision produces an audit record. Default to a
+        # deterministic in-core hash chain; the bridge/MCP RGE adapter can inject a
+        # signed-envelope sink (Core cannot import the envelope store).
+        self.record_port: LearningRecordPort = record_port or InMemoryLearningRecordPort()
 
     def get_boundary_zone(self, param_name: str) -> str:
         """Resolve boundary zone for a parameter from surfaces.yaml tier mapping.
@@ -106,7 +117,54 @@ class LearningGateService:
                 update.boundary_zone = resolved_zone
 
             self._evaluate_single(update)
+            # Contract v1.0 §7: record EVERY decision (approved/rejected/pending).
+            self._emit_decision_record(update)
         return updates
+
+    @staticmethod
+    def _value_hash(value: object) -> str:
+        """sha256 over the FULL repr of a value (so truncated previews can't collide)."""
+        return "sha256:" + hashlib.sha256(repr(value).encode("utf-8")).hexdigest()
+
+    def _mean_cqs_delta(self, update: LearningUpdate) -> Optional[float]:
+        """Mean measured ΔCQS across evidence entries, or None if unavailable."""
+        deltas = [
+            float(e["cqs_delta"])
+            for e in update.evidence
+            if e.get("cqs_delta") is not None
+        ]
+        return sum(deltas) / len(deltas) if deltas else None
+
+    def _emit_decision_record(
+        self,
+        update: LearningUpdate,
+        *,
+        rollback: bool = False,
+        restored: bool = False,
+    ) -> str:
+        """Build a data-minimised LearningDecisionRecord and emit it to the sink.
+
+        Returns the new chain head hash (empty string for a null sink).
+        """
+        decision = update.gate_decision
+        record = LearningDecisionRecord(
+            update_id=update.update_id,
+            target_parameter=update.target_parameter,
+            boundary_zone=update.boundary_zone,
+            gate_decision=getattr(decision, "value", str(decision)),
+            gate_reason=update.gate_reason,
+            evidence_count=len(update.evidence),
+            cqs_delta=self._mean_cqs_delta(update),
+            original_value_repr=repr(update.current_value)[:128],
+            proposed_value_repr=repr(update.proposed_value)[:128],
+            original_value_hash=self._value_hash(update.current_value),
+            proposed_value_hash=self._value_hash(update.proposed_value),
+            rollback=rollback,
+            restored=restored,
+            restored_value_repr=repr(update.current_value)[:128] if restored else None,
+            timestamp_utc=datetime.now(timezone.utc).isoformat(),
+        )
+        return self.record_port.emit(record)
 
     def _evaluate_single(self, update: LearningUpdate) -> None:
         """Evaluate a single learning update against zone rules."""
@@ -225,15 +283,23 @@ class LearningGateService:
             logger.warning("Rollback failed: update %s was never applied", update_id)
             return False
 
-        # Record rollback
+        # Contract v1.0 §6.5: restore the original value + write an audit record.
+        # The gate is the authority for the restore decision; it records the
+        # value to re-apply (current_value = the pre-change original). The
+        # parameter store consumer (PRE) re-applies metadata["restored_value"],
+        # consistent with apply_approved not writing the param store directly.
         update.gate_decision = LearningGateDecision.REJECTED
-        update.gate_reason = f"Rolled back: original value {update.current_value} restored"
+        update.gate_reason = f"Rolled back: original value {update.current_value!r} restored"
         update.rolled_back_at = datetime.now(timezone.utc)
         update.metadata["rollback"] = True
         update.metadata["rollback_reason"] = "manual_or_auto_rollback"
+        update.metadata["restored_value"] = update.current_value
 
         # Remove from applied tracking
         del self._applied_updates[update_id]
+
+        # §6.5 + §7: emit the rollback audit record into the chain.
+        self._emit_decision_record(update, rollback=True, restored=True)
 
         logger.info(
             "Rollback applied: %s -> %s (original: %s)",
