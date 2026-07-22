@@ -372,6 +372,7 @@ A commercial license is available for use cases where AGPL-3.0 copyleft is not s
 
 ## Documentation & Research
 
+- **Architecture paper (arXiv):** [Phionyx: A Deterministic AI Runtime Architecture with Structured State Management and Pre-Response Governance](https://arxiv.org/abs/2607.18246) — arXiv:2607.18246 (cs.AI), DOI [10.48550/arXiv.2607.18246](https://doi.org/10.48550/arXiv.2607.18246). LLM output as a noisy sensor measurement; deterministic evaluation kernel; pre-response governance; semantic-time memory.
 - **Research website:** [phionyx.ai](https://phionyx.ai)
 - **Posts (Deterministic AI Engineering series):** [phionyx.ai/research/posts](https://phionyx.ai/research/posts)
 - **Substack (read direct):** [phionyxresearch.substack.com](https://phionyxresearch.substack.com)
@@ -405,6 +406,21 @@ Other channels:
 ## Citation
 
 If you use Phionyx Core in academic work, please cite the software via its archived release.
+
+**Paper (architecture):**
+
+```bibtex
+@misc{abak2026phionyxarch,
+  author        = {Abak, Ali Toygar},
+  title         = {Phionyx: A Deterministic AI Runtime Architecture with Structured State Management and Pre-Response Governance},
+  year          = {2026},
+  eprint        = {2607.18246},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.AI},
+  doi           = {10.48550/arXiv.2607.18246},
+  url           = {https://arxiv.org/abs/2607.18246}
+}
+```
 
 **Software (this repository):**
 
