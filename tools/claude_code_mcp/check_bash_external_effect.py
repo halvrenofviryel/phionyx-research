@@ -75,6 +75,11 @@ _T4_HARD_DENY = (
 # the escape to any existing file; same fix as M1 #5).
 _PLAIN_SENTINEL = Path("~/.phionyx/external_effect_ok").expanduser()
 
+# The cooperative sentinel has no TTL of its own (unlike the signed override, which expires).
+# Past this age it is still honoured — refusing would brick the only escape known to work while
+# the signed path's cross-boundary delivery gap is open — but it is reported as degraded.
+_SENTINEL_MAX_AGE_H = 12.0
+
 # The legacy "sensitive command" set — what the old shell prefilter matched. Now that the
 # hook runs on EVERY Bash command, this decides whether a NON-T4 command still gets the
 # (fail-open) recency/ethics treatment; everything else is allowed silently and fast.
@@ -134,19 +139,112 @@ def _external_effect_escape() -> tuple[bool, str]:
         pass
     try:
         if _PLAIN_SENTINEL.exists():
-            return True, "plain-sentinel: " + _PLAIN_SENTINEL.read_text(encoding="utf-8", errors="replace").strip()[:160]
+            reason = _PLAIN_SENTINEL.read_text(encoding="utf-8", errors="replace").strip()[:160]
+            return True, _sentinel_marker() + "plain-sentinel: " + reason
     except Exception:
         return False, ""
     return False, ""
 
 
-def _attest_t4(kind: str, cls: str, cmd_head: str, why: str = "") -> None:
+def _safe_warn(message: str) -> None:
+    """stderr is a REPORTING path; it must never change a verdict. A closed or broken
+    stderr previously propagated out of the escape handler and turned an approval into a
+    denial, telling the operator to create a sentinel that already existed."""
     try:
-        from _telemetry import append_attestation
-        append_attestation({"tool": kind, "kind": kind, "t4_class": cls,
-                            "hook": "check_bash_external_effect", "cmd": cmd_head, "approval_reason": why})
+        sys.stderr.write(message)
     except Exception:
         pass
+
+
+def _sentinel_marker() -> str:
+    """Describe EVERY use of the agent-writable escape. Never raises.
+
+    The sentinel is AGENT-WRITABLE: the controlled party can author its own escape. We do
+    NOT refuse it. The signed override has an unresolved cross-boundary delivery gap (a
+    signed, valid token issued off-agent did not surface at the path this hook reads), so
+    refusing would remove the only escape known to work, i.e. brick the session. Instead
+    every use is made NON-SILENT. The governing principle: the availability of a control
+    path is not evidence that it delivered, and a control event that leaves no trace is
+    indistinguishable from one that never happened. Prohibiting the path outright is a
+    separate, larger change and is deliberately not attempted here.
+
+    The marker is emitted on EVERY plain-sentinel approval, not only on anomalies. A
+    self-authored escape is fresh and, on a non-sandboxed session, produces no anomaly at
+    all — flagging only anomalies would leave the primary threat case silent, which is the
+    condition this exists to remove.
+
+    HONEST RESIDUAL: freshness is derived from the sentinel's own mtime, which the candidate
+    system can reset with `touch` — a command neither the T4 denylist nor the sensitive-command
+    set classifies, so it is allowed silently and leaves no attestation. The age fields below
+    are therefore a hygiene signal against a forgotten sentinel, NOT a control against a
+    deliberate one. Closing that needs an off-agent record of first use (an authority the
+    controlled party cannot write), which this hook does not have.
+    """
+    notes: list[str] = []
+
+    try:
+        import sandbox_probe
+        intact, sb_reasons = sandbox_probe.sandbox_intact()
+        if intact:
+            notes.append("sandbox-intact")
+        else:
+            notes.append("sandbox-not-intact(" + "; ".join(sb_reasons)[:120] + ")")
+    except Exception:
+        notes.append("sandbox-state-unknown")
+
+    try:
+        import time
+        age_h = (time.time() - _PLAIN_SENTINEL.stat().st_mtime) / 3600.0
+        if age_h < -0.25:  # beyond plausible clock skew: an anomaly, not "fresh"
+            notes.append(f"future-mtime-{abs(age_h):.0f}h")
+        elif age_h > _SENTINEL_MAX_AGE_H:
+            notes.append(f"stale-{age_h:.0f}h")
+        else:
+            notes.append(f"age-{max(age_h, 0.0):.0f}h")
+    except Exception:
+        notes.append("age-unknown")
+
+    marker = "AGENT-WRITABLE-ESCAPE[" + ",".join(notes) + "] "
+    _safe_warn(
+        f"hook WARN: T4 escape approved via the AGENT-WRITABLE sentinel {_PLAIN_SENTINEL} "
+        f"[{','.join(notes)}]. The signed override is the intended control; this path is "
+        "one the controlled party can author. Remove the sentinel when the authorised "
+        "operation is done.\n"
+    )
+    return marker
+
+
+def _attest_t4(kind: str, cls: str, cmd_head: str, why: str = "") -> None:
+    """Record a T4 verdict. `append_attestation` returns False (silently) when there is no
+    MCP telemetry session file — precisely the condition under which an escape approval and
+    its markers would otherwise be recorded NOWHERE. "SHALL be detectable" cannot depend on
+    a store that may be absent, so an unwritten attestation falls back to an append-only
+    file and says so on stderr."""
+    record = {"tool": kind, "kind": kind, "t4_class": cls,
+              "hook": "check_bash_external_effect", "cmd": cmd_head, "approval_reason": why}
+    written = False
+    try:
+        from _telemetry import append_attestation
+        written = bool(append_attestation(record))
+    except Exception:
+        written = False
+    if written:
+        return
+    try:
+        import json as _json
+        import time as _time
+        from _telemetry import TELEMETRY_DIR
+        TELEMETRY_DIR.mkdir(parents=True, exist_ok=True)
+        record["ts"] = _time.time()
+        record["fallback"] = "no-telemetry-session"
+        with (TELEMETRY_DIR / "_unattested.jsonl").open("a", encoding="utf-8") as fh:
+            fh.write(_json.dumps(record, ensure_ascii=False) + "\n")
+    except Exception:
+        pass
+    _safe_warn(
+        f"hook WARN: T4 verdict '{kind}' could not be written to session telemetry; "
+        "recorded to _unattested.jsonl instead.\n"
+    )
 
 
 def _ethics_advisory(cmd: str) -> None:
