@@ -259,7 +259,16 @@ def record_enforcement_acknowledgement(scope: str) -> None:
 
 def delivery_audit() -> list[dict]:
     """Compare the two sides. Returns one entry per instruction the issuer recorded that
-    no enforcement point ever acknowledged — the condition that is otherwise silent."""
+    no enforcement point ever acknowledged — the condition that is otherwise silent.
+
+    KNOWN LIMIT, measured on the first real run (2026-07-26): "unacknowledged" is not the
+    same as "undelivered". An override signed in advance and never demanded by any gate
+    produces exactly the same evidence as one that never arrived, so this returns
+    unaccounted-for instructions, NOT proven delivery failures. On that first run all 7
+    findings were false in this sense. Separating the cases requires the enforcement point
+    to record that it DEMANDED an instruction (hit a hard-deny and went looking), which it
+    does not do yet; until then read the output as a worklist, not a verdict.
+    """
     issued: dict[str, dict] = {}
     acked: set[str] = set()
     try:
@@ -299,9 +308,15 @@ def _main(argv: list[str]) -> int:
               "by an enforcement point")
         for g in gaps:
             print(f"  {g['instruction_id']}  issued={g['issued_at']}  path={g['resolved_path_issuer']}")
-        print("\nAn issued instruction with no enforcement-point record did not reach the "
-              "component that enforces it, or that component never recorded reading it. "
-              "Both are delivery failures; neither is 'no instruction was sent'.")
+        print("\nAn issued instruction with no enforcement-point record has THREE possible "
+              "explanations, and this audit cannot tell them apart:\n"
+              "  1. it did not reach the component that enforces it   (delivery failure)\n"
+              "  2. it arrived but that component never recorded it   (evidence failure)\n"
+              "  3. no enforcement point ever needed it               (NOT a failure)\n"
+              "Case 3 is the common one: an override signed in advance and never demanded "
+              "looks identical to one that never arrived. Treat this list as 'unaccounted "
+              "for', not as proven non-delivery. Separating them needs the enforcement "
+              "point to record that it DEMANDED an instruction, which it does not do yet.")
         return 3
     if "--sign" in argv:
         def _opt(name: str, default: str | None = None) -> str | None:
@@ -352,8 +367,16 @@ def _selftest() -> int:
     import tempfile
     d = Path(tempfile.mkdtemp())
     os.environ["PHIONYX_KEY_DIR"] = str(d / "keys")
-    global OVERRIDE_FILE, _TRUSTED_PUB
+    global OVERRIDE_FILE, _TRUSTED_PUB, DELIVERY_LOG
     OVERRIDE_FILE = d / "control_override.signed.json"
+    # DELIVERY_LOG must move too. The selftest signs six times — two of them SUPPOSED to
+    # fail (wrong key, tamper) — and sign_override records every one. Left pointing at the
+    # real log, a diagnostic run injects synthetic delivery_failed records into production
+    # evidence, where they are indistinguishable from real ones and --delivery-audit
+    # reports them as genuine findings. An instrument must not write to the record it
+    # measures. Found by running --delivery-audit on the real log: 6 of 7 findings were
+    # this, and the 7th was an override that was simply never needed.
+    DELIVERY_LOG = d / "control_delivery.jsonl"
     import control_state
     importlib.reload(control_state)  # pick up the temp PHIONYX_KEY_DIR
     control_state.ensure_keypair()

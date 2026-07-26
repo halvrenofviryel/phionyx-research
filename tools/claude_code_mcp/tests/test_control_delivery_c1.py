@@ -131,6 +131,25 @@ def test_delivery_audit_is_clean_when_nothing_was_issued(tmp_path):
     assert "no unacknowledged" in proc.stdout
 
 
+def test_selftest_does_not_write_to_the_production_delivery_log(tmp_path):
+    """An instrument must not write to the record it measures.
+
+    The selftest signs six times, two of them SUPPOSED to fail (wrong key, tamper).
+    It redirects OVERRIDE_FILE to a temp dir but originally left DELIVERY_LOG pointing
+    at the real one, so every diagnostic run injected synthetic delivery_failed records
+    into production evidence — indistinguishable from real ones, and duly reported by
+    --delivery-audit as findings. Caught by running the audit on the real log: 6 of 7
+    findings were this.
+    """
+    proc = _run(tmp_path, [])           # no args -> selftest
+    assert proc.returncode == 0, proc.stderr
+    assert "SELFTEST OK" in proc.stdout
+    log = tmp_path / ".phionyx" / "state" / "control_delivery.jsonl"
+    assert not log.exists(), (
+        f"selftest wrote {len(_events(tmp_path))} record(s) to the production delivery log"
+    )
+
+
 def test_evidence_recording_never_breaks_signing(tmp_path, monkeypatch):
     """Evidence must not become a new way to fail."""
     sys.path.insert(0, str(CCM))
