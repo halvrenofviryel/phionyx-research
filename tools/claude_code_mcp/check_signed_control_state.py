@@ -87,7 +87,15 @@ def _signed_override(scope: str) -> tuple[bool, dict | None]:
     cooperative-dev fallback (agent-writable — honest residual until off-agent custody)."""
     try:
         import control_override
-        return control_override.verify_override(scope)
+        ok, claims = control_override.verify_override(scope)
+        if ok:
+            # C1 — enforcement-point half of the control_delivery pair. Without this, a
+            # token that was genuinely demanded and consumed HERE looks, in the delivery
+            # log, exactly like one that never arrived. Measured 2026-07-26: the
+            # mechanism shipped wired at one of three consuming gates, and both overrides
+            # actually used that day went through unwired ones.
+            control_override.record_enforcement_acknowledgement(scope)
+        return ok, claims
     except Exception:
         return False, None
 

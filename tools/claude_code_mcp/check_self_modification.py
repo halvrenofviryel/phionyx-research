@@ -111,6 +111,11 @@ def _approved() -> tuple[bool, str]:
         import control_override
         ok, claims = control_override.verify_override("control_plane_edit")
         if ok:
+            # C1 — enforcement-point half of the control_delivery pair (see the same
+            # call in check_bash_external_effect and check_signed_control_state). An
+            # override consumed here without this record is indistinguishable, in the
+            # delivery log, from one that never arrived.
+            control_override.record_enforcement_acknowledgement("control_plane_edit")
             return True, "signed-override: " + str((claims or {}).get("reason", ""))[:160]
     except Exception:
         pass

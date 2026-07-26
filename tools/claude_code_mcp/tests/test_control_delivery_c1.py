@@ -150,6 +150,33 @@ def test_selftest_does_not_write_to_the_production_delivery_log(tmp_path):
     )
 
 
+def test_every_gate_that_consumes_an_override_also_records_it():
+    """Existence is not coverage.
+
+    C1 shipped with the enforcement half wired at ONE of three gates that consume
+    verify_override. Both overrides actually used on the day it shipped went through
+    unwired gates, so each looked — in the delivery log — exactly like an instruction
+    that never arrived. Wiring one call site and watching its test go green proves the
+    mechanism works; it never proves the mechanism is installed everywhere it must be.
+
+    So this test asserts the RULE rather than the three call sites known today: any hook
+    that consumes a signed override must record that it did. A gate added next month is
+    covered without anyone remembering to extend this file.
+    """
+    offenders = []
+    for path in sorted(CCM.glob("*.py")):
+        if path.name == "control_override.py":
+            continue  # defines both sides; not an enforcement point
+        src = path.read_text(encoding="utf-8", errors="replace")
+        if "verify_override" in src and "record_enforcement_acknowledgement" not in src:
+            offenders.append(path.name)
+    assert not offenders, (
+        "these gates consume a signed override without recording the enforcement side, "
+        "so a consumed override is indistinguishable from an undelivered one: "
+        + ", ".join(offenders)
+    )
+
+
 def test_evidence_recording_never_breaks_signing(tmp_path, monkeypatch):
     """Evidence must not become a new way to fail."""
     sys.path.insert(0, str(CCM))
