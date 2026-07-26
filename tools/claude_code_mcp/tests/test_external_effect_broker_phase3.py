@@ -13,8 +13,10 @@ of strict mode, which is the point.
 from __future__ import annotations
 
 import json
+import os
 import subprocess
 import sys
+import time
 from pathlib import Path
 
 CCM = Path(__file__).resolve().parents[1]
@@ -59,6 +61,26 @@ def _run(home: Path, cmd: str) -> dict:
 
 def _blocked(home: Path, cmd: str) -> bool:
     return _run(home, cmd).get("decision") == "block"
+
+
+def _run_raw(home: Path, cmd: str):
+    """Like _run but hands back the process so stderr (the degradation warnings) is visible."""
+    return subprocess.run(
+        [sys.executable, str(HOOK)],
+        input=json.dumps({"tool_name": "Bash", "tool_input": {"command": cmd}}),
+        capture_output=True, text=True, env=_env(home), timeout=30,
+    )
+
+
+def _write_sentinel(home: Path, age_hours: float = 0.0) -> Path:
+    d = home / ".phionyx"
+    d.mkdir(parents=True, exist_ok=True)
+    p = d / "external_effect_ok"
+    p.write_text("dev session")
+    if age_hours:
+        ts = time.time() - age_hours * 3600
+        os.utime(p, (ts, ts))
+    return p
 
 
 # ---- T4 hard-deny classes (no escape) → block --------------------------------
@@ -174,3 +196,117 @@ def test_pip_install_not_t4_denied(tmp_path):
 def test_readonly_not_denied(tmp_path):
     assert not _blocked(tmp_path, "ls -la")
     assert not _blocked(tmp_path, "grep -r foo .")
+
+
+# ---- P4: EVERY use of the agent-writable escape must be reported ---------------
+# The sentinel is authored on a path the candidate system can write. We keep honouring it
+# (the signed override has an open cross-boundary delivery gap; refusing would brick the
+# only escape known to work), but no use of it may pass silently: the availability of a
+# control path is not evidence that it delivered. Prohibiting the path outright is a
+# separate, larger change and is deliberately not attempted here.
+#
+# The first diff-review of this change found that flagging only ANOMALIES left the primary
+# threat case (agent writes a fresh sentinel, session not provably sandboxed) emitting
+# nothing at all. These tests pin the marker to EVERY approval, not just odd ones.
+
+def _load_hook_module(name: str):
+    import importlib.util as iu
+    sys.path.insert(0, str(CCM))
+    spec = iu.spec_from_file_location(name, HOOK)
+    mod = iu.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def _isolate(mod, monkeypatch, sentinel: Path):
+    """Pin the module off the developer's real $HOME: a live signed override there would
+    short-circuit the sentinel path and silently pass these tests for the wrong reason."""
+    monkeypatch.setattr(mod, "_PLAIN_SENTINEL", sentinel)
+    import control_override
+    monkeypatch.setattr(control_override, "verify_override", lambda scope: (False, {}))
+
+
+def test_fresh_self_authored_sentinel_is_still_reported(tmp_path, monkeypatch):
+    """THE threat case: agent writes its own sentinel, no anomaly present. Must not be silent."""
+    mod = _load_hook_module("_cb_p4_threat")
+    _isolate(mod, monkeypatch, _write_sentinel(tmp_path, age_hours=0))
+    import sandbox_probe
+    monkeypatch.setattr(sandbox_probe, "sandbox_intact", lambda: (False, ["control plane writable: x"]))
+    ok, why = mod._external_effect_escape()
+    assert ok is True
+    assert "AGENT-WRITABLE-ESCAPE[" in why, why
+    assert "sandbox-not-intact" in why, why
+
+
+def test_sandbox_intact_is_named_in_the_marker(tmp_path, monkeypatch):
+    mod = _load_hook_module("_cb_p4_intact")
+    _isolate(mod, monkeypatch, _write_sentinel(tmp_path, age_hours=0))
+    import sandbox_probe
+    monkeypatch.setattr(sandbox_probe, "sandbox_intact", lambda: (True, []))
+    ok, why = mod._external_effect_escape()
+    assert ok is True and "sandbox-intact" in why, why
+
+
+def test_stale_sentinel_is_named(tmp_path, monkeypatch):
+    mod = _load_hook_module("_cb_p4_stale")
+    _isolate(mod, monkeypatch, _write_sentinel(tmp_path, age_hours=48))
+    ok, why = mod._external_effect_escape()
+    assert ok is True and "stale-48h" in why, why
+
+
+def test_future_mtime_is_an_anomaly_not_freshness(tmp_path, monkeypatch):
+    """A future mtime produced a negative age that read as fresh — flag it instead."""
+    mod = _load_hook_module("_cb_p4_future")
+    _isolate(mod, monkeypatch, _write_sentinel(tmp_path, age_hours=-48))
+    ok, why = mod._external_effect_escape()
+    assert ok is True and "future-mtime" in why, why
+
+
+def test_unreadable_age_reads_as_unknown_not_fresh(tmp_path, monkeypatch):
+    mod = _load_hook_module("_cb_p4_ageunknown")
+    p = _write_sentinel(tmp_path, age_hours=0)
+
+    class _NoStat(type(p)):
+        def stat(self, *a, **k):
+            raise OSError("boom")
+
+        def exists(self):
+            return True
+
+        def read_text(self, **k):
+            return "x"
+
+    _isolate(mod, monkeypatch, _NoStat(p))
+    ok, why = mod._external_effect_escape()
+    assert ok is True and "age-unknown" in why, why
+
+
+def test_broken_stderr_cannot_flip_approval_to_denial(tmp_path, monkeypatch):
+    """Reporting is not adjudication: a closed stderr must not turn an approval into a block."""
+    mod = _load_hook_module("_cb_p4_stderr")
+    _isolate(mod, monkeypatch, _write_sentinel(tmp_path, age_hours=0))
+
+    class _Broken:
+        def write(self, *_a, **_k):
+            raise OSError("stderr closed")
+
+    monkeypatch.setattr(mod.sys, "stderr", _Broken())
+    ok, _why = mod._external_effect_escape()
+    assert ok is True
+
+
+def test_reporting_layer_did_not_loosen_default_deny(tmp_path):
+    """No sentinel, no override -> still denied."""
+    assert _blocked(tmp_path, "npm publish")
+
+
+def test_unattested_fallback_when_no_telemetry_session(tmp_path, monkeypatch):
+    """'SHALL be detectable' cannot depend on a store that may be absent."""
+    mod = _load_hook_module("_cb_p4_fallback")
+    import _telemetry
+    monkeypatch.setattr(_telemetry, "TELEMETRY_DIR", tmp_path / "telem")
+    monkeypatch.setattr(_telemetry, "append_attestation", lambda rec: False)
+    mod._attest_t4("external_effect_approved", "publish", "cmd-head", "AGENT-WRITABLE-ESCAPE[x] ")
+    fb = tmp_path / "telem" / "_unattested.jsonl"
+    assert fb.exists(), "verdict recorded nowhere"
+    assert "AGENT-WRITABLE-ESCAPE" in fb.read_text()
