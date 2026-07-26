@@ -119,7 +119,34 @@ def sign_override(scope: str, reason: str, ttl_sec: int = DEFAULT_TTL_SEC) -> di
 # instruction_id: an issuer record with no matching enforcement-point record is the
 # detectable failure. Never raises — evidence must not become a new way to fail.
 
+# The two sides are written to two paths on opposite sides of the sandbox boundary, so the
+# trust level is carried by the FILESYSTEM rather than by a field somebody can forget to set.
+# Measured 2026-07-26 inside a real run-agent.sh sandbox:
+#
+#   ~/.phionyx/state/        read-only  -> off-agent; the controlled system cannot write here
+#   ~/.phionyx/ and below    writable   -> the controlled system CAN write here
+#
+# The enforcement point runs INSIDE the sandbox, so it IS the controlled system. Anything it
+# writes about its own compliance is corroboration, never proof: an agent that can write the
+# file can forge the entry. Keeping it on a separate, agent-writable path states that without
+# relying on anyone remembering to.
+#
+# This also fixes a real defect. Both sides previously wrote to the state dir, which is
+# read-only in the sandbox, so the enforcement write raised OSError, was swallowed by the
+# fail-open contract, and every consumed override then read as a delivery failure while the
+# tooling looked healthy. Measured: host log 28 -> 28 lines, no warning, for a full day.
 DELIVERY_LOG = Path("~/.phionyx/state/control_delivery.jsonl").expanduser()
+ENFORCEMENT_LOG = Path("~/.phionyx/enforcement/control_delivery.jsonl").expanduser()
+
+
+def _warn(message: str) -> None:
+    """Report without ever changing an outcome. Evidence recording is fail-open by
+    contract — but SILENT fail-open is what hid the sandbox blindness for a day, so a
+    swallowed evidence failure must still be audible."""
+    try:
+        sys.stderr.write(message if message.endswith("\n") else message + "\n")
+    except Exception:
+        pass
 
 
 def _instruction_hash(record: dict) -> str:
@@ -143,17 +170,29 @@ def _mount_identity(path: Path) -> str:
         return ""
 
 
-def record_delivery_observation(**fields) -> None:
-    """Append one control_delivery observation. Fail-open by contract."""
+def record_delivery_observation(log: Path | None = None, **fields) -> None:
+    """Append one control_delivery observation. Fail-open by contract, but never silent.
+
+    `log` selects the side: DELIVERY_LOG for the issuer, ENFORCEMENT_LOG for the
+    enforcement point. Defaults to the issuer log.
+    """
+    target = log or DELIVERY_LOG
     try:
         import datetime
         fields.setdefault("observed_at",
                           datetime.datetime.now(datetime.timezone.utc).isoformat())
-        DELIVERY_LOG.parent.mkdir(parents=True, exist_ok=True)
-        with DELIVERY_LOG.open("a", encoding="utf-8") as fh:
+        target.parent.mkdir(parents=True, exist_ok=True)
+        with target.open("a", encoding="utf-8") as fh:
             fh.write(json.dumps(fields, ensure_ascii=False) + "\n")
-    except Exception:
-        pass
+    except Exception as exc:
+        # Swallowed so evidence can never break signing — and reported, because an
+        # unwritable evidence path that says nothing is indistinguishable from an
+        # evidence path that had nothing to say.
+        _warn(f"control_override WARN: could not record a delivery observation at "
+              f"{_resolved(target)} ({type(exc).__name__}: {exc}). The control action "
+              f"still proceeded; the EVIDENCE for it is missing, so treat a later "
+              f"'never acknowledged' finding for this instruction as unexplained rather "
+              f"than as proven non-delivery.")
 
 
 def _attest_delivery(record: dict, scope: str) -> tuple[str, dict]:
@@ -182,6 +221,8 @@ def _attest_delivery(record: dict, scope: str) -> tuple[str, dict]:
             instruction_id=instruction_id, instruction_hash=ihash, phase="delivered",
             observed_by="issuer", channel="signed-file-override", boundary="mount",
             resolved_path=resolved, mount_identity=_mount_identity(OVERRIDE_FILE),
+            authority={"issuer_id": "ed25519:pinned",
+                       "writable_by_controlled_system": False},
         )
         return instruction_id, {"readback": "ok", "resolved_path": resolved,
                                 "note": "readable from the issuer side only; the "
@@ -244,6 +285,7 @@ def record_enforcement_acknowledgement(scope: str) -> None:
         record = json.loads(OVERRIDE_FILE.read_text())
         core = {k: record[k] for k in ("alg", "payload_b64", "sig_b64") if k in record}
         record_delivery_observation(
+            log=ENFORCEMENT_LOG,
             instruction_id=record.get("instruction_id") or
             ("ovr-" + _instruction_hash(core).split(":", 1)[1][:16]),
             instruction_hash=_instruction_hash(core),
@@ -252,9 +294,14 @@ def record_enforcement_acknowledgement(scope: str) -> None:
             resolved_path=_resolved(OVERRIDE_FILE),
             mount_identity=_mount_identity(OVERRIDE_FILE),
             scope=scope,
+            # The enforcement point runs inside the sandbox, so it is the party the
+            # instruction constrains. It can write this file, therefore it could forge
+            # this entry. Recorded as corroboration, not proof — and the record says so.
+            authority={"writable_by_controlled_system": True},
         )
-    except Exception:
-        pass
+    except Exception as exc:
+        _warn(f"control_override WARN: enforcement acknowledgement not recorded "
+              f"({type(exc).__name__}: {exc}); the override was still honoured.")
 
 
 def delivery_audit() -> list[dict]:
@@ -271,8 +318,18 @@ def delivery_audit() -> list[dict]:
     """
     issued: dict[str, dict] = {}
     acked: set[str] = set()
-    try:
-        for line in DELIVERY_LOG.read_text(encoding="utf-8").splitlines():
+
+    # Read BOTH sides. They sit on opposite sides of the sandbox boundary on purpose: the
+    # issuer log is out of the agent's reach and the enforcement log is agent-writable. An
+    # entry in the second is corroboration from the constrained party, never proof.
+    for log in (DELIVERY_LOG, ENFORCEMENT_LOG):
+        try:
+            lines = log.read_text(encoding="utf-8").splitlines()
+        except FileNotFoundError:
+            continue
+        except Exception:
+            continue
+        for line in lines:
             if not line.strip():
                 continue
             try:
@@ -286,10 +343,6 @@ def delivery_audit() -> list[dict]:
                 issued.setdefault(iid, r)
             elif r.get("observed_by") == "enforcement_point":
                 acked.add(iid)
-    except FileNotFoundError:
-        return []
-    except Exception:
-        return []
     return [{"instruction_id": iid,
              "issued_at": r.get("observed_at"),
              "resolved_path_issuer": r.get("resolved_path"),
@@ -367,7 +420,7 @@ def _selftest() -> int:
     import tempfile
     d = Path(tempfile.mkdtemp())
     os.environ["PHIONYX_KEY_DIR"] = str(d / "keys")
-    global OVERRIDE_FILE, _TRUSTED_PUB, DELIVERY_LOG
+    global OVERRIDE_FILE, _TRUSTED_PUB, DELIVERY_LOG, ENFORCEMENT_LOG
     OVERRIDE_FILE = d / "control_override.signed.json"
     # DELIVERY_LOG must move too. The selftest signs six times — two of them SUPPOSED to
     # fail (wrong key, tamper) — and sign_override records every one. Left pointing at the
@@ -377,6 +430,7 @@ def _selftest() -> int:
     # measures. Found by running --delivery-audit on the real log: 6 of 7 findings were
     # this, and the 7th was an override that was simply never needed.
     DELIVERY_LOG = d / "control_delivery.jsonl"
+    ENFORCEMENT_LOG = d / "control_delivery.enforcement.jsonl"
     import control_state
     importlib.reload(control_state)  # pick up the temp PHIONYX_KEY_DIR
     control_state.ensure_keypair()

@@ -51,11 +51,19 @@ def _run(home: Path, args: list[str]):
                           capture_output=True, text=True, env=_env(home), timeout=30)
 
 
-def _events(home: Path) -> list[dict]:
-    log = home / ".phionyx" / "state" / "control_delivery.jsonl"
+def _events(home: Path, enforcement: bool = False) -> list[dict]:
+    """Issuer records by default; the enforcement side lives on the other side of the
+    sandbox boundary and therefore in a different file."""
+    log = (home / ".phionyx" / "enforcement" / "control_delivery.jsonl") if enforcement \
+        else (home / ".phionyx" / "state" / "control_delivery.jsonl")
     if not log.exists():
         return []
     return [json.loads(x) for x in log.read_text(encoding="utf-8").splitlines() if x.strip()]
+
+
+def _all_events(home: Path) -> list[dict]:
+    """Both sides, the way delivery_audit() reads them."""
+    return _events(home) + _events(home, enforcement=True)
 
 
 def _ack(home: Path) -> None:
@@ -106,17 +114,18 @@ def test_acknowledgement_closes_the_gap(tmp_path):
     proc = _run(tmp_path, ["--delivery-audit"])
     assert proc.returncode == 0, proc.stdout
     assert "no unacknowledged" in proc.stdout
-    phases = [(e["phase"], e["observed_by"]) for e in _events(tmp_path)]
+    phases = [(e["phase"], e["observed_by"]) for e in _all_events(tmp_path)]
     assert ("acknowledged", "enforcement_point") in phases
 
 
 def test_both_sides_agree_on_the_instruction_identity(tmp_path):
     """Correlation is by instruction_id AND hash; two sides reporting different hashes
-    have not seen the same instruction."""
+    have not seen the same instruction. The sides now live in separate files, so this
+    also pins that splitting them did not break the join."""
     _provision(tmp_path)
     _run(tmp_path, ["--sign", "--scope", "external_effect", "--reason", "t", "--ttl", "300"])
     _ack(tmp_path)
-    ev = _events(tmp_path)
+    ev = _all_events(tmp_path)
     issuer = [e for e in ev if e["observed_by"] == "issuer"]
     gate = [e for e in ev if e["observed_by"] == "enforcement_point"]
     assert issuer and gate
@@ -175,6 +184,77 @@ def test_every_gate_that_consumes_an_override_also_records_it():
         "so a consumed override is indistinguishable from an undelivered one: "
         + ", ".join(offenders)
     )
+
+
+def test_the_two_sides_are_separated_by_path_not_by_a_field(tmp_path):
+    """Phase 0. The enforcement point runs INSIDE the sandbox, where ~/.phionyx/state is
+    bound read-only. Writing its acknowledgement there raised OSError, the fail-open
+    contract swallowed it silently, and every consumed override then read as a delivery
+    failure while the tooling looked healthy. Measured 2026-07-26: host log 28 -> 28
+    lines after an in-sandbox acknowledgement, no warning.
+
+    The fix separates the sides by PATH:
+
+      ~/.phionyx/state/       read-only in-sandbox  -> issuer, off-agent, trusted
+      ~/.phionyx/enforcement/ writable in-sandbox   -> enforcement, agent-writable
+
+    so the trust level is a property of the filesystem rather than of a field somebody
+    can forget to set. An agent that can write the second file can forge its entries —
+    which is exactly why it must not share a file with the first.
+    """
+    sys.path.insert(0, str(CCM))
+    import control_override as co
+    assert co.ENFORCEMENT_LOG != co.DELIVERY_LOG
+    assert "state" not in co.ENFORCEMENT_LOG.parts, (
+        "the enforcement log must not sit under the read-only state dir — that is the "
+        "defect this test exists for"
+    )
+
+
+def test_enforcement_records_declare_they_are_agent_writable(tmp_path):
+    """An acknowledgement written by the constrained party is corroboration, not proof,
+    and the record must not let a reader forget it."""
+    _provision(tmp_path)
+    _run(tmp_path, ["--sign", "--scope", "external_effect", "--reason", "t", "--ttl", "300"])
+    _ack(tmp_path)
+    gate = [e for e in _events(tmp_path, enforcement=True)
+            if e.get("observed_by") == "enforcement_point"]
+    assert gate, "no enforcement-side record was written"
+    assert gate[-1]["authority"]["writable_by_controlled_system"] is True
+
+
+def test_issuer_records_declare_they_are_not_agent_writable(tmp_path):
+    _provision(tmp_path)
+    _run(tmp_path, ["--sign", "--scope", "external_effect", "--reason", "t", "--ttl", "300"])
+    issuer = [e for e in _events(tmp_path) if e.get("observed_by") == "issuer"]
+    assert issuer
+    assert all(e["authority"]["writable_by_controlled_system"] is False
+               for e in issuer if "authority" in e)
+
+
+def test_a_silent_evidence_failure_is_not_acceptable(tmp_path, capfd, monkeypatch):
+    """Fail-open stays — evidence must never break signing. But it must be AUDIBLE.
+    A silent evidence failure is what hid the sandbox blindness for a full day."""
+    sys.path.insert(0, str(CCM))
+    import control_override as co
+    co.record_delivery_observation(log=Path("/proc/cannot/write/here.jsonl"),
+                                   instruction_id="x", phase="acknowledged",
+                                   observed_by="enforcement_point")  # must not raise
+    assert "WARN" in capfd.readouterr().err, (
+        "an unwritable evidence path must say so; silence is indistinguishable from "
+        "having had nothing to record"
+    )
+
+
+def test_audit_correlates_across_the_two_logs(tmp_path):
+    """The whole point of splitting the files is that the audit still joins them."""
+    _provision(tmp_path)
+    _run(tmp_path, ["--sign", "--scope", "external_effect", "--reason", "t", "--ttl", "300"])
+    assert _run(tmp_path, ["--delivery-audit"]).returncode == 3
+    _ack(tmp_path)
+    proc = _run(tmp_path, ["--delivery-audit"])
+    assert proc.returncode == 0, proc.stdout
+    assert "no unacknowledged" in proc.stdout
 
 
 def test_evidence_recording_never_breaks_signing(tmp_path, monkeypatch):
