@@ -93,7 +93,115 @@ def sign_override(scope: str, reason: str, ttl_sec: int = DEFAULT_TTL_SEC) -> di
     tmp = OVERRIDE_FILE.with_suffix(".tmp")
     tmp.write_text(json.dumps(record))
     tmp.replace(OVERRIDE_FILE)
+
+    # C1 — a successful WRITE is not delivery. Until now this function returned as soon
+    # as the rename succeeded, so the signer could report a valid token while the
+    # enforcement point saw nothing: exactly the failure recorded on 2026-06-17, where a
+    # correctly signed off-agent token never surfaced at the path the gate reads and
+    # nothing could tell that apart from an instruction never issued.
+    #
+    # So: re-resolve the destination the way the VERIFIER resolves it, read it back, and
+    # run the real verification. Then record the outcome as a control_delivery
+    # observation from the issuer's side.
+    #
+    # HONEST LIMIT: this proves readability *from here*. It cannot prove the artifact is
+    # visible across a mount, namespace or container boundary — the enforcement point has
+    # to say that from its own side. The pair of records is the evidence; neither half is.
+    instruction_id, delivery = _attest_delivery(record, scope)
+    record["instruction_id"] = instruction_id
+    record["delivery"] = delivery
     return record
+
+
+# --------------------------------------------------------------- C1: delivery evidence
+# One control instruction, observed from one side. Mirrors the AIREP `control_delivery`
+# profile so the issuer's and the enforcement point's observations can be compared by
+# instruction_id: an issuer record with no matching enforcement-point record is the
+# detectable failure. Never raises — evidence must not become a new way to fail.
+
+DELIVERY_LOG = Path("~/.phionyx/state/control_delivery.jsonl").expanduser()
+
+
+def _instruction_hash(record: dict) -> str:
+    import hashlib
+    canon = json.dumps(record, sort_keys=True, separators=(",", ":")).encode()
+    return "sha256:" + hashlib.sha256(canon).hexdigest()
+
+
+def _resolved(path: Path) -> str:
+    try:
+        return str(path.resolve())
+    except Exception:
+        return str(path)
+
+
+def _mount_identity(path: Path) -> str:
+    try:
+        st = path.stat()
+        return f"dev={st.st_dev}:ino={st.st_ino}"
+    except Exception:
+        return ""
+
+
+def record_delivery_observation(**fields) -> None:
+    """Append one control_delivery observation. Fail-open by contract."""
+    try:
+        import datetime
+        fields.setdefault("observed_at",
+                          datetime.datetime.now(datetime.timezone.utc).isoformat())
+        DELIVERY_LOG.parent.mkdir(parents=True, exist_ok=True)
+        with DELIVERY_LOG.open("a", encoding="utf-8") as fh:
+            fh.write(json.dumps(fields, ensure_ascii=False) + "\n")
+    except Exception:
+        pass
+
+
+def _attest_delivery(record: dict, scope: str) -> tuple[str, dict]:
+    """Issuer-side readback. Returns (instruction_id, delivery-summary)."""
+    ihash = _instruction_hash(record)
+    instruction_id = "ovr-" + ihash.split(":", 1)[1][:16]
+    resolved = _resolved(OVERRIDE_FILE)
+
+    record_delivery_observation(
+        instruction_id=instruction_id, instruction_hash=ihash, phase="issued",
+        observed_by="issuer", channel="signed-file-override", boundary="mount",
+        resolved_path=resolved,
+        authority={"issuer_id": "ed25519:pinned", "writable_by_controlled_system": False},
+    )
+
+    # Read back through the verifier's own code path, not a private copy of it.
+    ok, _claims = verify_override(scope)
+    visible = False
+    try:
+        visible = OVERRIDE_FILE.exists()
+    except Exception:
+        pass
+
+    if ok:
+        record_delivery_observation(
+            instruction_id=instruction_id, instruction_hash=ihash, phase="delivered",
+            observed_by="issuer", channel="signed-file-override", boundary="mount",
+            resolved_path=resolved, mount_identity=_mount_identity(OVERRIDE_FILE),
+        )
+        return instruction_id, {"readback": "ok", "resolved_path": resolved,
+                                "note": "readable from the issuer side only; the "
+                                        "enforcement point must confirm separately"}
+
+    reason = ("absent at resolved_path" if not visible
+              else "present but failed verification at resolved_path")
+    record_delivery_observation(
+        instruction_id=instruction_id, instruction_hash=ihash, phase="delivery_failed",
+        observed_by="issuer", channel="signed-file-override", boundary="mount",
+        resolved_path=resolved,
+        failure={"reason": reason, "root_cause_isolated": False},
+    )
+    sys.stderr.write(
+        f"control_override WARN: token written but readback FAILED at {resolved} "
+        f"({reason}). The signature is valid; delivery is not established. Do not treat "
+        "this as an authorised override until the enforcement point confirms it.\n"
+    )
+    return instruction_id, {"readback": "failed", "resolved_path": resolved,
+                            "reason": reason}
 
 
 # ----------------------------------------------------------------------------- gate
@@ -123,8 +231,78 @@ def verify_override(scope: str) -> tuple[bool, dict | None]:
         return False, None
 
 
+def record_enforcement_acknowledgement(scope: str) -> None:
+    """ENFORCEMENT-POINT side. Call this when a gate has read a token and ACTED on it.
+
+    Only the success case is recorded. A gate that finds no token is the ordinary case —
+    almost every check runs with no override present — so a miss carries no information
+    and logging it would drown the signal. The detection works the other way round: an
+    issuer record with no matching enforcement-point acknowledgement for the same
+    instruction_id is the delivery failure. See delivery_audit().
+    """
+    try:
+        record = json.loads(OVERRIDE_FILE.read_text())
+        core = {k: record[k] for k in ("alg", "payload_b64", "sig_b64") if k in record}
+        record_delivery_observation(
+            instruction_id=record.get("instruction_id") or
+            ("ovr-" + _instruction_hash(core).split(":", 1)[1][:16]),
+            instruction_hash=_instruction_hash(core),
+            phase="acknowledged", observed_by="enforcement_point",
+            channel="signed-file-override", boundary="mount",
+            resolved_path=_resolved(OVERRIDE_FILE),
+            mount_identity=_mount_identity(OVERRIDE_FILE),
+            scope=scope,
+        )
+    except Exception:
+        pass
+
+
+def delivery_audit() -> list[dict]:
+    """Compare the two sides. Returns one entry per instruction the issuer recorded that
+    no enforcement point ever acknowledged — the condition that is otherwise silent."""
+    issued: dict[str, dict] = {}
+    acked: set[str] = set()
+    try:
+        for line in DELIVERY_LOG.read_text(encoding="utf-8").splitlines():
+            if not line.strip():
+                continue
+            try:
+                r = json.loads(line)
+            except Exception:
+                continue
+            iid = r.get("instruction_id")
+            if not iid:
+                continue
+            if r.get("observed_by") == "issuer" and r.get("phase") in ("issued", "delivered"):
+                issued.setdefault(iid, r)
+            elif r.get("observed_by") == "enforcement_point":
+                acked.add(iid)
+    except FileNotFoundError:
+        return []
+    except Exception:
+        return []
+    return [{"instruction_id": iid,
+             "issued_at": r.get("observed_at"),
+             "resolved_path_issuer": r.get("resolved_path"),
+             "finding": "issued but never acknowledged by an enforcement point"}
+            for iid, r in issued.items() if iid not in acked]
+
+
 # ----------------------------------------------------------------------------- cli
 def _main(argv: list[str]) -> int:
+    if "--delivery-audit" in argv:
+        gaps = delivery_audit()
+        if not gaps:
+            print("delivery audit: no unacknowledged instructions")
+            return 0
+        print(f"delivery audit: {len(gaps)} instruction(s) issued but NEVER acknowledged "
+              "by an enforcement point")
+        for g in gaps:
+            print(f"  {g['instruction_id']}  issued={g['issued_at']}  path={g['resolved_path_issuer']}")
+        print("\nAn issued instruction with no enforcement-point record did not reach the "
+              "component that enforces it, or that component never recorded reading it. "
+              "Both are delivery failures; neither is 'no instruction was sent'.")
+        return 3
     if "--sign" in argv:
         def _opt(name: str, default: str | None = None) -> str | None:
             return argv[argv.index(name) + 1] if name in argv else default

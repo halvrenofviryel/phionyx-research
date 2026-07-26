@@ -134,6 +134,10 @@ def _external_effect_escape() -> tuple[bool, str]:
         import control_override
         ok, claims = control_override.verify_override("external_effect")
         if ok:
+            # C1 — enforcement-point half of the control_delivery pair. The issuer records
+            # that an instruction was sent; this records that it arrived and was acted on.
+            # Comparing the two is what makes a non-arrival detectable instead of silent.
+            control_override.record_enforcement_acknowledgement("external_effect")
             return True, "signed-override: " + str((claims or {}).get("reason", ""))[:160]
     except Exception:
         pass
