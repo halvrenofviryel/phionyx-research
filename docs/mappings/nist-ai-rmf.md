@@ -20,9 +20,9 @@ This document maps the four core functions of the NIST AI RMF — **GOVERN, MAP,
 | **GOVERN** | Policies, accountability, risk-management culture | Partial | `RBAC`, `CapabilityProfile`, audit-recorded decisions, ADR documents |
 | **MAP** | Context, categorisation, impact assessment | Partial | `CapabilityProfile` declares allowed actions; epistemic-boundary block flags out-of-context inputs |
 | **MEASURE** | Identifying, tracking, and analysing risks | Partial | Φ/R/coherence telemetry, drift detection, behavioural-eval suite, confidence fusion |
-| **MANAGE** | Prioritising, responding to, recovering from risks | **Full (runtime layer)** | `kill_switch`, `HITL`, `ethics_pre_response`, `ethics_post_response`, audit trail |
+| **MANAGE** | Prioritising, responding to, recovering from risks | Partial (runtime layer) | See the MANAGE correction. `kill_switch`, `HITL` and the ethics gates exist and act; the audit-trail citation did not resolve, and a gate whose evaluation raises currently records `status="ok"`. |
 
-**Score:** 1 Full · 3 Partial · 0 Gap (within the runtime perimeter).
+**Score:** 0 Full · 4 Partial · 0 Gap (within the runtime perimeter).
 
 The MANAGE function is the closest fit: Phionyx is in essence a runtime risk-management substrate — its job is to detect, contain, and audit cognitive-risk events on a per-turn basis. The Partial rows reflect the fact that GOVERN, MAP, and MEASURE are *organisational* functions whose AI RMF outcomes can only be partially discharged by any single technical artifact.
 
@@ -115,17 +115,44 @@ Every function entry below follows the same structure:
 **Phionyx mechanism.**
 - `phionyx_core/governance/kill_switch.py` — fail-closed runtime kill switch with four documented triggers (ethics_max_risk, t_meta_below_threshold, consecutive_drift, manual). This *is* the runtime risk-response mechanism.
 - `phionyx_core/governance/human_in_the_loop.py` — priority-ordered HITL queue with expiry and reviewer-handoff records; sustained-risk turns can be escalated to a human reviewer rather than refused outright.
-- `pipeline/blocks/ethics_pre_response.py` (block 18), `pipeline/blocks/ethics_post_response.py` — pre- and post-generation ethical risk gates; both must pass before a response is released.
-- `pipeline/blocks/revision_gate.py` (block 41) — final response-eligibility gate; a turn that fails any prior gate is revised or refused.
-- `pipeline/blocks/audit_layer.py` (block 44) — every risk decision is recorded with Ed25519 signature in the AuditRecord chain. This is the recovery / forensic record.
+- `pipeline/blocks/ethics_pre_response.py` (block **17**), `pipeline/blocks/ethics_post_response.py` — pre- and post-generation ethical risk gates; both must pass before a response is released.
+- `pipeline/blocks/response_revision_gate.py` (block 41) — final response-eligibility gate; a turn that fails any prior gate is revised or refused. *(Path corrected 2026-08-02: this document previously named `revision_gate.py`, which does not exist.)*
+- `pipeline/blocks/audit_layer.py` (block 44) — computes an integrity score. *(Corrected 2026-08-02: this row previously read "every risk decision is recorded with Ed25519 signature in the AuditRecord chain". The file contains no occurrence of `AuditRecord`, Ed25519, signing or hash chaining. The signed chain that exists is written by `phionyx-mcp-server` at the MCP tool boundary, and `AuditRecord` v4 specifies one for the pipeline that is not constructed.)*
 
-**Coverage.** **Full** — *within the runtime perimeter*. The four AI RMF MANAGE outcomes (prioritise, respond, document, monitor) all map cleanly to native Phionyx mechanisms at the per-turn level.
+> ### Correction — 2026-08-02
+>
+> This function was rated **Full (within the runtime perimeter)**. Three
+> problems, each checked against the named files on 2026-08-02:
+>
+> 1. **The audit-trail citation did not resolve.** Block 44 records nothing —
+>    the same defect corrected in the ISO/IEC 42001, EU AI Act and OWASP T8
+>    mappings on the same day. "Document" is one of the four MANAGE outcomes,
+>    and it was the one standing on a false citation.
+> 2. **Two file references were wrong.** `revision_gate.py` does not exist (the
+>    file is `response_revision_gate.py`), and `ethics_pre_response` is block
+>    17, not 18. Both corrected above.
+> 3. **The gates cited can fail silently.** `kill_switch_gate`,
+>    `ethics_pre_response` and `ethics_post_response` each return
+>    `status="ok"` from their exception handler, and pipeline telemetry reads
+>    `is_success()`. A gate whose evaluation raises is therefore currently
+>    indistinguishable, in the record, from one that ran and cleared the turn.
+>    That is a recording defect rather than an absence of the mechanism — the
+>    kill switch does fire, the HITL queue does hold — but a **Full** rating for
+>    *respond and document* cannot rest on gates whose failures are not visible.
+>    Remediation is planned and scoped; see the pipeline alignment work in the
+>    Phionyx repository.
+>
+> Rated **Partial** until the recording defect is closed and the audit chain the
+> pipeline specifies is actually written.
+
+**Coverage.** **Partial** — *within the runtime perimeter*. The four AI RMF MANAGE outcomes (prioritise, respond, document, monitor) all map cleanly to native Phionyx mechanisms at the per-turn level.
 
 **Evidence.**
 - `phionyx_core/governance/kill_switch.py`, `phionyx_core/governance/human_in_the_loop.py`.
 - `pipeline/blocks/ethics_pre_response.py`, `pipeline/blocks/ethics_post_response.py`, `pipeline/blocks/revision_gate.py`, `pipeline/blocks/audit_layer.py`.
 - `tests/core/test_kill_switch*.py`, `tests/core/test_hitl*.py`, `tests/core/test_ethics*.py`.
-- Reproducibility pack `audit_chain_example.json` shows a real risk-response sequence (ETHICS_CRITICAL → kill_switch → audit record).
+- `tests/core/test_kill_switch*.py`, `tests/core/test_hitl*.py`, `tests/core/test_ethics*.py` — *(corrected 2026-08-02: no `tests/core` directory carries these; kill-switch and ethics tests exist elsewhere in the tree, and no `test_hitl*` file was found. The paths above are withdrawn pending an accurate list.)*
+- A reproducibility pack `audit_chain_example.json` was cited and does not exist. Withdrawn.
 
 **Deployer responsibility (gap).** AI RMF MANAGE also has *organisational* outcomes that no runtime can produce: incident-response procedures, stakeholder-communication plans, periodic risk-treatment reviews, and post-incident learning loops. Phionyx produces the per-turn risk-response evidence that feeds those organisational processes; the deployer must define the human-side response chain (who is paged when kill_switch fires, what the disclosure threshold is, how lessons are captured).
 
