@@ -20,14 +20,41 @@ This document maps each of the seven high-risk AI obligations in Articles 9–15
 | 9 | Risk management system | Partial | `kill_switch`, `behavioral_drift_detection`, `ethics_pre_response`, audit-recorded risk decisions |
 | 10 | Data and data governance | **Gap** | Phionyx is a runtime layer, not training-time data governance |
 | 11 | Technical documentation | Partial | Architecture docs in-repo, README, CITATION.cff, CHANGELOG, Evidence Matrix |
-| 12 | Record-keeping | **Full** | `audit_layer` (Ed25519 hash chain), `AuditRecord` v4 schema |
+| 12 | Record-keeping | Partial | See the correction note below. `AuditRecord` v4 (`contracts/v4/audit_record.py`) **specifies** Ed25519 signing and `previous_hash` → `current_hash` chaining; `phionyx-mcp-server` **writes** signed hash-chained envelopes at the MCP tool boundary. Canonical block 44 `audit_layer` does neither. |
 | 13 | Transparency / deployer information | Partial | README "Scope of Claims" + "Known Limitations" + Evidence Matrix at `/evidence` |
 | 14 | Human oversight | Partial | `human_in_the_loop` queue, `kill_switch` (operator trigger), `deliberative_ethics` |
 | 15 | Accuracy, robustness, cybersecurity | Partial | Determinism, mypy/ruff strict, pip-audit clean, security-hardened workflows |
 
-**Score:** 1 Full · 5 Partial · 1 Gap.
+**Score:** 0 Full · 6 Partial · 1 Gap.
 
-The single Full row is **Article 12 (Record-keeping)** — the regulatory text and the `AuditRecord` v4 contract align almost line-by-line. The single Gap is **Article 10 (Data governance)** — that obligation lives at training time, upstream of any runtime; Phionyx does not change it. Every Partial row identifies the specific deployer responsibility that must complement Phionyx's contribution.
+**Article 12 (Record-keeping)** was rated Full until 2026-08-02; see the
+correction below. The regulatory text and the `AuditRecord` v4 *contract* do
+align closely — but a contract that specifies a chain is not a runtime that
+writes one, and the row cited a block that does neither.
+
+> ### Correction — 2026-08-02
+>
+> The Article 12 row read **Full** and cited "`audit_layer` (Ed25519 hash
+> chain), `AuditRecord` v4 schema". Checked on 2026-08-02:
+> `phionyx_core/pipeline/blocks/audit_layer.py` contains **no** occurrence of
+> Ed25519, signing, hash chaining or `AuditRecord`. With no processor injected
+> it computes a heuristic integrity score and returns it as block data. It
+> writes no record.
+>
+> `AuditRecord` v4 does specify the signing and chaining, and
+> `phionyx-mcp-server` writes such envelopes at the tool boundary — but neither
+> is canonical block 44, and a specification is not an implementation. Rated
+> **Partial**, with the citation naming what exists.
+>
+> The identical citation appeared in the ISO/IEC 42001 mapping and was corrected
+> the same day. Both are release blocker 3 of the Measurement Axioms publication
+> plan: *"a compliance mapping rating a control Full on citations that resolve
+> to nothing"* — recorded in the 2026-08-01 self-audit, and an instance of
+> exactly what that doctrine names.
+>
+> A reader who relied on this row for an Article 12 conformity claim should
+> re-read it. The check that produced this correction is `grep` against the
+> named file, which anyone can repeat. The single Gap is **Article 10 (Data governance)** — that obligation lives at training time, upstream of any runtime; Phionyx does not change it. Every Partial row identifies the specific deployer responsibility that must complement Phionyx's contribution.
 
 ---
 
