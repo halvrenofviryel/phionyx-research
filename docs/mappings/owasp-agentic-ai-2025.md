@@ -24,7 +24,7 @@ This document maps each of the 15 OWASP Agentic AI threat categories to the Phio
 | T5 | Cascading Hallucination Attacks | Partial | `cep_evaluation` (CEP), `confidence_fusion`, `response_revision_gate` |
 | T6 | Intent Breaking & Goal Manipulation | Partial | `intent_classification`, `goal_decomposition`, `goal_evaluation` |
 | T7 | Misaligned & Deceptive Behaviours | Partial | `deliberative_ethics`, `ethics_pre_response`, `behavioral_drift_detection` |
-| T8 | Repudiation & Untraceability | **Full** | `audit_layer` (Ed25519 hash chain), `AuditRecord` v4 contract |
+| T8 | Repudiation & Untraceability | Partial | See the T8 correction. `AuditRecord` v4 **specifies** Ed25519 signing and hash chaining; `phionyx-mcp-server` **writes** signed hash-chained envelopes at the MCP tool boundary. Canonical block 44 `audit_layer` does neither. |
 | T9 | Identity Spoofing & Impersonation | Partial | Participant-scoped state, `cognitive_envelope` |
 | T10 | Overwhelming Human-in-the-Loop | Partial | `governance/human_in_the_loop` (priority + expiry) |
 | T11 | Unexpected RCE & Code Attacks | **Gap** | Out of scope — addressed by deployment infrastructure |
@@ -33,7 +33,7 @@ This document maps each of the 15 OWASP Agentic AI threat categories to the Phio
 | T14 | Human Attacks on Multi-Agent Systems | **Gap** | Single-instance scope only |
 | T15 | Human Manipulation | Partial | `cep_evaluation`, `ethics_post_response` |
 
-**Score:** 1 Full · 10 Partial · 4 Gap. The four gaps are honest: three of them require multi-agent or distributed-deployment work that v0.3.0 has not done, and the fourth (T11) is intentionally outside the runtime's scope.
+**Score:** 0 Full · 11 Partial · 4 Gap. The four gaps are honest: three of them require multi-agent or distributed-deployment work that v0.3.0 has not done, and the fourth (T11) is intentionally outside the runtime's scope.
 
 ---
 
@@ -196,17 +196,49 @@ Every threat below follows the same structure:
 
 **OWASP description.** After-the-fact, neither the agent nor any observer can prove which inputs led to which actions, or detect tampering.
 
-**Phionyx mechanism.**
-- `pipeline/blocks/audit_layer.py` (block 44) — every turn produces an `AuditRecord` with prev/link hash chain. Records are append-only by design.
-- `phionyx_core/contracts/v4/audit_record.py` — Ed25519 signature on each record; any post-hoc edit invalidates the chain.
-- Append-only contract: no API path mutates a recorded `AuditRecord`. This is enforced by both the schema (`model_config = ConfigDict(frozen=True)`) and the policy doc.
+> ### Correction — 2026-08-02
+>
+> Every claim in the previous version of this section was checked on 2026-08-02.
+> Three of them do not resolve, and one quoted a line of code that does not
+> exist. They are reproduced here rather than deleted, because a reader who
+> relied on them is entitled to know exactly what was withdrawn.
+>
+> | Previous claim | What the check found |
+> |---|---|
+> | "`audit_layer.py` (block 44) — every turn produces an `AuditRecord` with prev/link hash chain" | `phionyx_core/pipeline/blocks/audit_layer.py` contains **no** occurrence of `AuditRecord`, Ed25519, signing or hash chaining. With no processor injected it computes a heuristic integrity score from response length and the presence of a physics state, and returns it as block data. It writes no record. |
+> | "enforced by the schema (`model_config = ConfigDict(frozen=True)`)" | `contracts/v4/audit_record.py` declares `class Config:` carrying only `json_schema_extra`. There is no `frozen` setting and no `model_config` line. The quoted snippet was not in the file. |
+> | `tests/core/test_audit_record*.py`, `tests/core/test_audit_layer*.py`, `tests/contract/test_audit_chain_integrity.py` | None of these paths exist. |
+> | Reproducibility pack `audit_chain_example.json` | Not found. |
+>
+> This is the row the Measurement Axioms self-audit (2026-08-01) recorded as *"a
+> compliance mapping rating a control Full on citations that resolve to
+> nothing"*. It is the fullest instance of it: a Full rating standing on a
+> mechanism claim, an enforcement claim and four evidence citations, none of
+> which survived a `grep`.
 
-**Coverage.** **Full** for in-scope claims (single-instance, append-only chain over the deterministic pipeline).
+**Phionyx mechanism.** *(Corrected 2026-08-02 — each item below was checked
+against the named file on that date.)*
+- `phionyx_core/contracts/v4/audit_record.py` — **specifies** an Ed25519
+  signature over `record_hash` and `previous_hash` → `current_hash` chaining,
+  with a `verify_chain_link` method. This is a contract, not a runtime: the
+  class is constructed nowhere else in `phionyx_core`.
+- `phionyx-mcp-server` — **writes** signed, hash-chained envelopes, at the MCP
+  tool boundary rather than in the pipeline. That is the chain that exists and
+  can be verified today.
+- `phionyx_core/pipeline/blocks/audit_layer.py` (block 44) — computes an
+  integrity score. It is named `audit_layer` and it is not the audit chain.
+
+**Coverage.** **Partial.** Repudiation resistance exists at the MCP tool
+boundary and is specified for the pipeline. It is not demonstrated *by the
+pipeline*, and the difference is what this correction is about.
 
 **Evidence.**
-- `tests/core/test_audit_record*.py`, `tests/core/test_audit_layer*.py`
-- `tests/contract/test_audit_chain_integrity.py`
-- Reproducibility pack: `audit_chain_example.json` — verifiable hash chain over a real KillSwitch event sequence.
+- `phionyx_core/contracts/v4/audit_record.py` — the specification.
+- `tests/contract/test_audit_record_claim_refs.py` — the audit-record test that
+  does exist in this repository.
+- `phionyx-mcp-server`'s own chain tests, in that package.
+- A reproducibility pack for the pipeline chain does not exist. When one is
+  produced it belongs here; until then this row does not cite one.
 
 **What's still missing.** "Full" here means "the named OWASP threat surface is closed under the documented threat model". If an attacker has root on the host running Phionyx, they can replace the binary that produces the chain — Phionyx assumes a trusted process. Distributed, multi-host audit consensus is future work.
 
