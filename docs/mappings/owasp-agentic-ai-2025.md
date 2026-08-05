@@ -33,7 +33,7 @@ This document maps each of the 15 OWASP Agentic AI threat categories to the Phio
 | T14 | Human Attacks on Multi-Agent Systems | **Gap** | Single-instance scope only |
 | T15 | Human Manipulation | Partial | `cep_evaluation`, `ethics_post_response` |
 
-**Score:** 0 Full · 11 Partial · 4 Gap. The four gaps are honest: three of them require multi-agent or distributed-deployment work that v0.3.0 has not done, and the fourth (T11) is intentionally outside the runtime's scope.
+**Score:** 0 Full · 12 Partial · 3 Gap (row-counted against the table above, 2026-08-05 — the previous aggregate line said 11/4 and never matched its own table; an aggregate nobody recounts is exactly the failure class this repository documents). The three gaps are honest: T13 and T14 require multi-agent work that v0.3.0 has not done, and T11 is intentionally outside the runtime's scope.
 
 ---
 

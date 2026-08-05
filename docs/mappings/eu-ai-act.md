@@ -133,19 +133,19 @@ Every article entry below follows the same structure:
 **Article text (paraphrase).** *High-risk AI systems shall technically allow for the automatic recording of events ('logs') over the lifetime of the system. The logging capabilities shall enable the recording of events relevant for: identifying situations that may result in the AI system presenting a risk… for any subsequent monitoring of the operation of the high-risk AI system… The logs shall be kept for a period appropriate to the intended purpose of the high-risk AI system…*
 
 **Phionyx mechanism.**
-- `pipeline/blocks/audit_layer.py` (block 44 of the canonical pipeline) — every turn produces an `AuditRecord` with Ed25519 signature and prev/link hash chain.
+- `contracts/v4/audit_record.py` **specifies** the Ed25519-signed, prev/link hash-chained record; the signed envelope chain actually written today lives in `phionyx-mcp-server`, at the MCP tool boundary. Canonical block 44 `audit_layer` computes an integrity score and writes no record (see the correction note above).
 - `phionyx_core/contracts/v4/audit_record.py` — Pydantic-frozen, append-only schema. Required fields: `turn_id`, `participant_id`, `timestamp_utc`, `pipeline_contract_version`, `gate_decisions`, `risk_decision`, `kill_switch_state`, `prev_hash`, `link_hash`, `signature`.
 - The contract test `tests/contract/test_audit_chain_integrity.py` enforces append-only semantics and hash-chain continuity.
 - Retention is a deployment-configuration parameter; the architecture imposes no upper bound on chain length.
 
-**Coverage.** **Full** (within the documented threat model).
+**Coverage.** Partial — see the correction note of 2026-08-02 above: the record-keeping *contract* is specified and the signed chain is written at the MCP boundary; canonical Core production is under alignment.
 
 **Evidence.**
 - `phionyx_core/contracts/v4/audit_record.py` — schema reads almost exactly like the Article 12 obligation list.
 - `tests/contract/test_audit_chain_integrity.py` — proves hash-chain integrity over a real KillSwitch event sequence.
 - Reproducibility pack: `audit_chain_example.json` — verifiable hash chain over 4 evaluations including an ETHICS_CRITICAL trigger.
 
-**Deployer responsibility (gap).** "Full" here means "the technical record-keeping requirement is structurally satisfied". The deployer must still: (a) define the *retention period* "appropriate to the intended purpose" — Phionyx does not auto-decide this, (b) provide secure storage and access control for the chain, (c) ensure operational logging covers both the substrate AND deployer-specific events not seen by Phionyx (e.g., admin user actions on the bridge layer).
+**Deployer responsibility (gap).** "Partial" reflects that the record-keeping *contract* is structurally specified while canonical runtime production is under alignment. The deployer must still: (a) define the *retention period* "appropriate to the intended purpose" — Phionyx does not auto-decide this, (b) provide secure storage and access control for the chain, (c) ensure operational logging covers both the substrate AND deployer-specific events not seen by Phionyx (e.g., admin user actions on the bridge layer).
 
 ---
 
