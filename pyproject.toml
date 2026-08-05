@@ -121,6 +121,17 @@ include = ["phionyx_core*", "phionyx_bridge*", "phionyx_agents*", "benchmarks*",
 [tool.setuptools.package-data]
 "*" = ["*.json", "*.md", "*.yaml", "*.yml"]
 
+# --- ruff configuration ----------------------------------------------------
+# Explicit lint contract. Without this section ruff applies its own defaults,
+# and those defaults WIDEN across ruff releases: the unpinned CI ruff moved to
+# 0.16 and started enforcing rule families (UP*, I001, EXE002, BLE001, ...)
+# this codebase never adopted -- 4k+ findings appeared overnight with zero
+# code changes (2026-08-05). The selection below is the rule set the tree has
+# always been lint-clean under; widening it is a deliberate decision, not a
+# side effect of a linter release.
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F"]
+
 # --- mypy configuration ---------------------------------------------------
 # Wave 6 (2026-05-02) locked phionyx_core/ at zero mypy errors with all
 # optional-dependency type stubs available locally. CI cannot install
