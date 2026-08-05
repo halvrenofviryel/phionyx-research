@@ -11,6 +11,13 @@ from typing import Dict, Any, Optional, Protocol
 
 from ..base import PipelineBlock, BlockContext, BlockResult
 
+from ..outcome import (
+    BlockOutcome,
+    BlockRunStatus,
+    errored,
+    not_measured,
+)
+
 logger = logging.getLogger(__name__)
 
 
@@ -110,10 +117,22 @@ class PhiComputationBlock(PipelineBlock):
             if not physics_state:
                 physics_state = {}
 
-            physics_state["entropy"] = physics_state.get("entropy", context.current_entropy or 0.5)
+            # entropy and stability are REQUIRED parameters of
+            # calculate_phi_cognitive — checked, they carry no defaults —
+            # so there is nothing to fall back to. `context.current_entropy
+            # or 0.5` reinstated the midpoint that entropy_computation was
+            # changed to stop publishing, one block later, and the 0.8 sat
+            # under a comment reading "Default from formulas" that is not
+            # true of the formula.
+            #
+            # valence keeps its 0.0: that IS the formula's own default.
+            # arousal keeps 0.5 and is not a formula input at all.
+            if physics_state.get("entropy") is None:
+                carried = context.current_entropy
+                if carried is not None:
+                    physics_state["entropy"] = carried
             physics_state["valence"] = valence
             physics_state["arousal"] = arousal
-            physics_state["stability"] = physics_state.get("stability", 0.8)  # Default from formulas
 
             # Get previous_phi from context
             previous_phi = context.previous_phi
@@ -131,34 +150,98 @@ class PhiComputationBlock(PipelineBlock):
                 # Fallback: use real calculate_phi_cognitive formula
                 # (block_factory normally injects a phi_computer, but this
                 # provides defense-in-depth for direct instantiation)
-                try:
-                    from phionyx_core.physics.formulas import calculate_phi_cognitive
-                    entropy = float(physics_state.get("entropy", 0.5))
-                    stability = float(physics_state.get("stability", 0.8))
-                    phi_val = calculate_phi_cognitive(
-                        entropy=entropy,
-                        stability=stability,
-                        valence=float(valence),
-                    )
+                # Two substitutions used to live here and both published a
+                # phi that read as measured:
+                #
+                #   entropy 0.5 and stability 0.8 when absent, fed to the real
+                #   formula and labelled `calculate_phi_cognitive_inline` —
+                #   the same two constants removed from entropy_computation
+                #   and the CEP evaluation;
+                #
+                #   a `(1 - entropy) * 0.8` heuristic when the formula raised,
+                #   computed from that same substituted entropy.
+                #
+                # Together they meant the `computed_phi is None` branch below
+                # could never be taken: every path guaranteed a phi. A
+                # NOT_MEASURED record that no producer can reach is the shape
+                # OD-19 names. Now the inputs are required and a failure
+                # publishes nothing.
+                entropy = physics_state.get("entropy")
+                stability = physics_state.get("stability")
+                absent = [name for name, value in
+                          (("entropy", entropy), ("stability", stability))
+                          if value is None]
+                if absent or entropy is None or stability is None:
                     phi_result = {
-                        "phi": phi_val,
-                        "components": {
-                            "entropy": entropy,
-                            "stability": stability,
-                            "valence": valence,
-                            "source": "calculate_phi_cognitive_inline",
+                        "components": {"source": "inputs_absent"},
+                        "unmeasured_inputs": absent,
+                    }
+                else:
+                    measured_entropy = float(entropy)
+                    measured_stability = float(stability)
+                    try:
+                        from phionyx_core.physics.formulas import calculate_phi_cognitive
+                        phi_val = calculate_phi_cognitive(
+                            entropy=measured_entropy,
+                            stability=measured_stability,
+                            valence=float(valence),
+                        )
+                        phi_result = {
+                            "phi": phi_val,
+                            "components": {
+                                "entropy": measured_entropy,
+                                "stability": measured_stability,
+                                "valence": valence,
+                                "source": "calculate_phi_cognitive_inline",
+                            }
                         }
-                    }
-                except Exception as fallback_err:
-                    logger.warning(f"calculate_phi_cognitive failed: {fallback_err}")
-                    entropy = float(physics_state.get("entropy", 0.5))
-                    phi_result = {
-                        "phi": max(0.05, min(1.0, (1.0 - entropy) * 0.8)),
-                        "components": {"entropy": entropy, "source": "heuristic_fallback"}
-                    }
+                    except Exception as fallback_err:
+                        logger.warning(
+                            "calculate_phi_cognitive failed: %s", fallback_err)
+                        phi_result = {
+                            "components": {"source": "formula_raised",
+                                           "error": type(fallback_err).__name__},
+                        }
 
-            # Update context with computed phi
-            computed_phi = phi_result.get("phi", 0.5)
+            # `phi_result` without a phi used to read as 0.5 — the midpoint,
+            # and the value confidence_fusion also defaults to. An engine that
+            # returned no phi measured no phi, so nothing is published and
+            # `previous_phi` is left alone rather than seeded with a midpoint
+            # that the next turn would treat as last turn's measurement.
+            computed_phi = phi_result.get("phi")
+            if computed_phi is None:
+                # Name what was missing. "returned a result carrying no phi"
+                # was true of every case and told a reader nothing about
+                # which: an absent input, a formula that raised, or an engine
+                # that simply omitted the key.
+                unmeasured = phi_result.get("unmeasured_inputs")
+                source = (phi_result.get("components") or {}).get("source")
+                if unmeasured:
+                    reason = (f"phi needs {', '.join(unmeasured)} and the turn "
+                              "carried neither a measured value nor a computer")
+                elif source == "formula_raised":
+                    reason = ("calculate_phi_cognitive raised; the heuristic "
+                              "that used to stand in here was computed from a "
+                              "substituted entropy")
+                else:
+                    reason = "the phi engine returned a result carrying no phi"
+                _outcome = BlockOutcome(
+                    block_id=self.block_id,
+                    legacy_control_status="ok",
+                    block_run_status=BlockRunStatus.COMPLETED,
+                    measurement=not_measured(reason, cause="input_absent"),
+                    operating_mode="degraded",
+                )
+                return BlockResult(
+                    block_id=self.block_id,
+                    status="ok",
+                    data={
+                        "phi_components": phi_result.get("components", {}),
+                        "phi_result": phi_result,
+                        "block_outcome": _outcome.to_record_fields(),
+                    }
+                )
+
             context.previous_phi = computed_phi
             if context.metadata is None:
                 context.metadata = {}
@@ -176,13 +259,34 @@ class PhiComputationBlock(PipelineBlock):
         except Exception as e:
             logger.error(f"Phi computation failed: {e}", exc_info=True)
             # Fail-open: return default phi
+            # Control channel unchanged — this block stays fail-open so the
+            # pipeline still completes, and the `return BlockResult(...)`
+            # shape is kept so the inventory sweep can still see it. What
+            # changes is the record: block_run_status FAILED, measurement
+            # ERROR, operating_mode degraded — a crash here can no longer
+            # read as a clean measurement.
+            _outcome = BlockOutcome(
+                block_id=self.block_id,
+                legacy_control_status="ok",
+                block_run_status=BlockRunStatus.FAILED,
+                measurement=errored(
+                    "phi computation raised",
+                    inputs_present=True,
+                    exception=type(e).__name__,
+                ),
+                operating_mode="degraded",
+            )
             return BlockResult(
                 block_id=self.block_id,
                 status="ok",  # Don't fail pipeline on phi computation error
-                data={
-                    "phi": 0.5,
+                # No `phi`. It used to be 0.5 — the midpoint of the range,
+                # published from a crash, and the same value confidence_fusion
+                # defaults to. audit_layer already treats a missing phi as its
+                # own case (audit_layer.py:127), so absence is a signal this
+                # pipeline supports and a fabricated midpoint destroyed it.
+                data={**({
                     "phi_components": {},
                     "error": str(e)
-                }
+                }), "block_outcome": _outcome.to_record_fields()}
             )
 

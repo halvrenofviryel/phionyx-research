@@ -11,6 +11,12 @@ from typing import Dict, Any, Optional, Protocol
 
 from ..base import PipelineBlock, BlockContext, BlockResult
 
+from ..outcome import (
+    BlockOutcome,
+    BlockRunStatus,
+    errored,
+)
+
 logger = logging.getLogger(__name__)
 
 
@@ -97,12 +103,34 @@ class UnifiedStateUpdateEscBlock(PipelineBlock):
             logger.error(f"Unified state update failed: {e}", exc_info=True)
             # Fail-open: return original unified_state
             metadata = context.metadata or {}
+            # Control channel unchanged — this block stays fail-open so the
+            # pipeline still completes, and the `return BlockResult(...)`
+            # shape is kept so the inventory sweep can still see it. What
+            # changes is the record: block_run_status FAILED, measurement
+            # ERROR, operating_mode degraded — a crash here can no longer
+            # read as a clean measurement.
+            _outcome = BlockOutcome(
+                block_id=self.block_id,
+                legacy_control_status="ok",
+                block_run_status=BlockRunStatus.FAILED,
+                measurement=errored(
+                    "unified state update raised; the state returned is the one that came in",
+                    inputs_present=True,
+                    exception=type(e).__name__,
+                ),
+                operating_mode="degraded",
+            )
             return BlockResult(
                 block_id=self.block_id,
                 status="ok",
-                data={
-                    "unified_state": metadata.get("unified_state"),
+                # No `unified_state`. It used to republish the state that
+                # came in, under this block's own result key, so an updated
+                # state and an un-updated one shared a field. Safe to omit,
+                # measured not assumed: every consumer reads
+                # `metadata["unified_state"]`, not this block's result. The
+                # state carries forward because nothing overwrites it.
+                data={**({
                     "error": str(e)
-                }
+                }), "block_outcome": _outcome.to_record_fields()}
             )
 

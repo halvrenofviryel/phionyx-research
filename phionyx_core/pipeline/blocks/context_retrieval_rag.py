@@ -19,6 +19,12 @@ from typing import Any, Optional
 from ..base import PipelineBlock, BlockContext, BlockResult
 from phionyx_core.services.rag_service import RAGService
 
+from ..outcome import (
+    BlockOutcome,
+    BlockRunStatus,
+    errored,
+)
+
 logger = logging.getLogger(__name__)
 
 
@@ -140,24 +146,48 @@ class ContextRetrievalRagBlock(PipelineBlock):
         except Exception as e:
             logger.error(f"Context retrieval RAG failed: {e}", exc_info=True)
             # Fallback: empty context
+            # No fabricated result set. `context_string: ""` with
+            # `memories: []` and `token_count: 0` describes a retrieval that
+            # ran and found nothing — which is a real and different outcome
+            # from a retrieval that crashed. `method` says `not_retrieved`
+            # rather than `fallback`, because a fallback is a value and this
+            # is the absence of one.
             fallback_result = {
-                "context_string": "",
-                "memories": [],
-                "token_count": 0,
-                "relevance_scores": [],
-                "method": "fallback",
+                "method": "not_retrieved",
+                "measurement_status": "ERROR",
                 "error": str(e)
             }
 
-            # Store fallback context in metadata
             if context.metadata is None:
                 context.metadata = {}
-            context.metadata["enhanced_context_string"] = ""
+            # `enhanced_context_string` is NOT overwritten with "".
+            # entropy_amplitude_pre_gate.py:91 reads this key and supplies its
+            # own "" default, so leaving it absent gives that gate the same
+            # string it would have used — while an empty string written here
+            # would have been indistinguishable from a context that was
+            # retrieved and turned out to be empty.
             context.metadata["rag_result"] = fallback_result
 
+            # Control channel unchanged — this block stays fail-open so the
+            # pipeline still completes, and the `return BlockResult(...)`
+            # shape is kept so the inventory sweep can still see it. What
+            # changes is the record: block_run_status FAILED, measurement
+            # ERROR, operating_mode degraded — a crash here can no longer
+            # read as a clean measurement.
+            _outcome = BlockOutcome(
+                block_id=self.block_id,
+                legacy_control_status="ok",
+                block_run_status=BlockRunStatus.FAILED,
+                measurement=errored(
+                    "context retrieval raised; no context was retrieved, so there is no search result to report",
+                    inputs_present=True,
+                    exception=type(e).__name__,
+                ),
+                operating_mode="degraded",
+            )
             return BlockResult(
                 block_id=self.block_id,
                 status="ok",
-                data=fallback_result
+                data={**(fallback_result), "block_outcome": _outcome.to_record_fields()}
             )
 

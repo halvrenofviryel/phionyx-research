@@ -14,6 +14,13 @@ from typing import Dict, Any
 
 from ..base import PipelineBlock, BlockContext, BlockResult
 
+from ..outcome import (
+    BlockOutcome,
+    BlockRunStatus,
+    errored,
+    not_measured,
+)
+
 logger = logging.getLogger(__name__)
 
 
@@ -29,13 +36,31 @@ class KillSwitchGateBlock(PipelineBlock):
     If any condition triggers, the pipeline is halted.
     """
 
-    def __init__(self, kill_switch=None):
+    def __init__(self, kill_switch=None, fail_closed: bool = False):
         """
         Args:
             kill_switch: KillSwitch instance (injected via DI)
+            fail_closed: When True, running with no kill switch instance TRIGGERS
+                (early exit) instead of letting the turn proceed unguarded. When
+                False (default, backward-compatible), the turn proceeds — but the
+                absence is ALWAYS recorded as an auditable ``gate_unavailable``
+                event, so an unguarded turn is never silent.
+
+                This mirrors ``DeliberativeEthicsGateBlock``, whose exception path
+                was given the same treatment by the founder-directed
+                credibility-floor fix (value study §9 P0, 2026-06-07). The block
+                previously returned ``status="skipped"`` with a reason nobody
+                read: canonical block 1, the system's emergency stop, degraded to
+                a no-op that reported as "did not run" rather than as "ran and
+                could not guard" (OD, T1 gate review 2026-08-02).
+
+                `block_factory` passes True on its ImportError fallback, because
+                a KillSwitch that cannot be imported is a broken installation
+                rather than a deliberate configuration.
         """
         super().__init__("kill_switch_gate")
         self._kill_switch = kill_switch
+        self.fail_closed = fail_closed
 
     async def execute(self, context: BlockContext) -> BlockResult:
         """
@@ -44,10 +69,46 @@ class KillSwitchGateBlock(PipelineBlock):
         Reads metrics from previous pipeline blocks via context.metadata.
         """
         if self._kill_switch is None:
+            # `status="ok"`: the block ran to completion and produced a
+            # decision. What it measured is in `data` — the two are separate
+            # axes, and reporting "skipped" here said the block had not run
+            # when in fact it had run and found itself unable to guard.
+            logger.critical(
+                "[KILL_SWITCH_GATE] gate_unavailable: no kill switch instance "
+                "configured (fail_closed=%s). This turn is %s.",
+                self.fail_closed,
+                "blocked" if self.fail_closed else "proceeding UNGUARDED",
+            )
+            unavailable = BlockOutcome(
+                block_id=self.block_id,
+                legacy_control_status="ok",
+                block_run_status=BlockRunStatus.COMPLETED,
+                measurement=not_measured(
+                    "no kill switch instance configured — nothing was "
+                    "evaluated",
+                    cause="input_absent"),
+                operating_mode="degraded",
+            )
             return BlockResult(
                 block_id=self.block_id,
-                status="skipped",
-                data={"reason": "No kill switch instance configured"}
+                status="ok",
+                data={
+                    "block_outcome": unavailable.to_record_fields(),
+                    "kill_switch_triggered": self.fail_closed,
+                    "early_exit": self.fail_closed,
+                    "gate_unavailable": True,
+                    "enforced": self.fail_closed,
+                    "trigger": "gate_unavailable" if self.fail_closed else None,
+                    "reason": "No kill switch instance configured",
+                    "decision": (
+                        "blocked_gate_unavailable" if self.fail_closed
+                        else "proceeded_unguarded"
+                    ),
+                    **({"shutdown_message": (
+                        "System safety check is unavailable. "
+                        "Session paused for review."
+                    )} if self.fail_closed else {}),
+                }
             )
 
         try:
@@ -106,10 +167,21 @@ class KillSwitchGateBlock(PipelineBlock):
             logger.error(f"Kill switch gate error: {e}", exc_info=True)
             # Fail-closed: treat evaluation error as trigger
             if self._kill_switch and self._kill_switch.config.fail_closed:
+                failed = BlockOutcome(
+                    block_id=self.block_id,
+                    legacy_control_status="ok",
+                    block_run_status=BlockRunStatus.FAILED,
+                    measurement=errored(
+                        "kill switch evaluation raised; the trigger below is "
+                        "the fail-closed posture, not a measured condition",
+                        inputs_present=True, exception=type(e).__name__),
+                    operating_mode="degraded",
+                )
                 return BlockResult(
                     block_id=self.block_id,
                     status="ok",
                     data={
+                        "block_outcome": failed.to_record_fields(),
                         "kill_switch_triggered": True,
                         "early_exit": True,
                         "trigger": "evaluation_error",

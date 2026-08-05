@@ -196,7 +196,10 @@ class EchoState2(BaseModel):
         """
         # Import physics formulas
         try:
-            from phionyx_core.physics.formulas import calculate_phi_v2
+            from phionyx_core.physics.formulas import (
+                calculate_phi_v2_1,
+                get_context_weights,
+            )
 
             # Convert state to physics params
             amplitude = self.A * AMPLITUDE_SCALE_FACTOR  # Scale A to amplitude range
@@ -205,13 +208,29 @@ class EchoState2(BaseModel):
             # Use state.dt as SINGLE SOURCE OF TRUTH for time_delta
             time_delta = max(0.1, self.dt) if self.dt > 0 else 1.0  # Minimum 0.1s
 
-            phi_result = calculate_phi_v2(
+            # `calculate_phi_v2_1`, not `calculate_phi_v2`. This property's
+            # docstring has always said "via Physics 2.1 formulas" and
+            # "phi = f(A, V, H, dt)", and the call did neither: v2 is labelled
+            # "v2.0 (Legacy)" in formulas.py and this call passed no valence, so
+            # V — one of the four inputs the docstring names — never reached the
+            # formula. Measured 2026-08-02: with matched arguments the two
+            # functions return byte-identical values, so this is an interface
+            # change, not a formula change. What does move phi is that v2_1 has
+            # no permissive defaults — its `entropy_penalty_k` is 1.15 where the
+            # module-level default v2 fell back to is 0.0, which switched the
+            # entropy term off entirely.
+            weights = get_context_weights("DEFAULT")  # Can be overridden
+            phi_result = calculate_phi_v2_1(
+                valence=self.V,
+                arousal=self.A,  # AMPLITUDE_SCALE_FACTOR is documented as the
+                                 # arousal-to-amplitude factor, so A is arousal
                 amplitude=amplitude,
                 time_delta=time_delta,  # From state.dt (SINGLE SOURCE OF TRUTH)
-                entropy=self.H,
+                gamma=0.15,  # Default recovery rate
                 stability=stability,
-                context_mode="DEFAULT",  # Can be overridden
-                gamma=0.15  # Default recovery rate
+                entropy=self.H,
+                w_c=weights["wc"],
+                w_p=weights["wp"],
             )
 
             return phi_result.get("phi", 0.5)

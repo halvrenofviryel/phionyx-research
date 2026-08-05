@@ -12,6 +12,12 @@ from typing import Dict, Any, Optional, Protocol
 from ..base import PipelineBlock, BlockContext, BlockResult
 from ...memory.emotion_cache import EmotionCache
 
+from ..outcome import (
+    BlockOutcome,
+    BlockRunStatus,
+    errored,
+)
+
 logger = logging.getLogger(__name__)
 
 
@@ -110,10 +116,18 @@ class EmotionEstimationBlock(PipelineBlock):
             # Estimate emotion from user input
             estimation_result = await self.emotion_estimator.estimate(context.user_input)
 
-            # Use estimated values, fallback to EchoState2 defaults if missing
+            # An estimator that returned no valence or arousal estimated
+            # neither. The schema defaults are still used so downstream has a
+            # state to work from, but `unknown` is forced True rather than
+            # taken from the result — it used to default to False, so a
+            # result carrying nothing was reported as a confident neutral
+            # reading, and phi_computation reads this valence
+            # (phi_computation.py:102) to compute a phi it then publishes.
             valence = estimation_result.get("valence", default_valence)
             arousal = estimation_result.get("arousal", default_arousal)
-            unknown = estimation_result.get("unknown", False)
+            values_present = ("valence" in estimation_result
+                              and "arousal" in estimation_result)
+            unknown = estimation_result.get("unknown", False) or not values_present
 
             # CRITICAL: Cache the result for determinism (same input → same output)
             # This ensures parallel execution produces consistent results
@@ -138,19 +152,41 @@ class EmotionEstimationBlock(PipelineBlock):
             fallback_valence = 0.0  # EchoState2 default V (from schema)
             fallback_arousal = 0.5  # EchoState2 default A (from schema)
 
-            # CRITICAL: Cache the fallback values for determinism (same input → same output)
-            # This ensures parallel execution produces consistent results
-            self.emotion_cache.set(context.user_input, fallback_valence, fallback_arousal)
+            # The crash path is deliberately NOT cached. Caching exists so an
+            # identical input yields an identical measurement; caching a crash
+            # makes a transient fault permanent for that input, and the next
+            # turn would read the fabricated pair back without the estimator
+            # ever being asked again. Determinism of a path that measured
+            # nothing is not a property worth preserving. The cache has no
+            # reader outside this block, so nothing downstream depends on the
+            # entry existing.
 
+            # Control channel unchanged — this block stays fail-open so the
+            # pipeline still completes, and the `return BlockResult(...)`
+            # shape is kept so the inventory sweep can still see it. What
+            # changes is the record: block_run_status FAILED, measurement
+            # ERROR, operating_mode degraded — a crash here can no longer
+            # read as a clean measurement.
+            _outcome = BlockOutcome(
+                block_id=self.block_id,
+                legacy_control_status="ok",
+                block_run_status=BlockRunStatus.FAILED,
+                measurement=errored(
+                    "emotion estimation raised; valence and arousal are EchoState2 schema defaults, not an estimate",
+                    inputs_present=True,
+                    exception=type(e).__name__,
+                ),
+                operating_mode="degraded",
+            )
             return BlockResult(
                 block_id=self.block_id,
                 status="ok",  # Don't fail pipeline on emotion estimation error
-                data={
+                data={**({
                     "valence": fallback_valence,
                     "arousal": fallback_arousal,
                     "unknown": True,
                     "error": str(e),
                     "source": "echo_state_schema_defaults"
-                }
+                }), "block_outcome": _outcome.to_record_fields()}
             )
 

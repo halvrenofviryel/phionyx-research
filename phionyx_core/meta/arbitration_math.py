@@ -4,7 +4,7 @@ Arbitration Math — v4 §7 Formulas
 
 Implements 6 core arbitration formulas:
 1. W_final (Confidence Fusion)
-2. Arbitration Conflict Score (Herfindahl)
+2. Arbitration Conflict Score (widest pairwise disagreement)
 3. Goal Legitimacy L(g)
 4. Goal Utility U(g)
 5. T_meta (Meta-cognitive Trust)
@@ -75,7 +75,7 @@ def compute_w_final(
 
     w_final = weighted_sum / weight_total if weight_total > 0 else 0.5
 
-    # Compute conflict score (Herfindahl-based)
+    # Compute conflict score (widest pairwise disagreement)
     conflict = compute_conflict_score(list(module_confidences.values()))
 
     # Find dominant module
@@ -92,12 +92,28 @@ def compute_w_final(
 
 def compute_conflict_score(confidences: List[float]) -> float:
     """
-    Arbitration Conflict Score using Herfindahl index.
+    Arbitration Conflict Score — the widest disagreement between two modules.
 
-    conflict = 1 - HHI, where HHI = Σ(s_i²), s_i = c_i / Σ(c_j)
+    conflict = max(c_i) - min(c_i), over confidences clamped to [0, 1].
 
-    High conflict (near 1.0) means modules disagree strongly.
-    Low conflict (near 0.0) means one module dominates.
+    High conflict (near 1.0) means modules disagree strongly. Low conflict
+    (near 0.0) means they agree. Fewer than two modules cannot disagree, so the
+    score is 0.0.
+
+    **Changed 2026-08-02.** This computed ``1 - HHI`` over normalised shares,
+    which is a *dispersion* index and runs opposite to its own name at the
+    extremes:
+
+        0.9, 0.9, 0.9  (perfect accord)      1 - HHI = 0.667
+        0.95, 0.05     (sharp disagreement)  1 - HHI = 0.095
+
+    For N equal modules it is ``1 - 1/N``, so it tracked how many modules
+    reported rather than whether they disagreed, and every consumer reads it as
+    disagreement: ``is_conflicted`` is ``conflict > 0.5``,
+    ``arbitration_resolve`` arbitrates above 0.5, and ``response_revision_gate``
+    rewrites at 0.60 and rejects at 0.85. Three agreeing modules cleared all
+    three. The index itself was sound; what it measured was not what its callers
+    asked it.
 
     Args:
         confidences: List of confidence scores from different modules
@@ -108,18 +124,8 @@ def compute_conflict_score(confidences: List[float]) -> float:
     if not confidences or len(confidences) < 2:
         return 0.0
 
-    total = sum(abs(c) for c in confidences)
-    if total == 0:
-        return 0.0
-
-    # Normalized shares
-    shares = [abs(c) / total for c in confidences]
-
-    # Herfindahl-Hirschman Index
-    hhi = sum(s * s for s in shares)
-
-    # Conflict = 1 - HHI (higher = more disagreement)
-    return max(0.0, min(1.0, 1.0 - hhi))
+    bounded = [max(0.0, min(1.0, c)) for c in confidences]
+    return max(bounded) - min(bounded)
 
 
 def compute_goal_legitimacy(

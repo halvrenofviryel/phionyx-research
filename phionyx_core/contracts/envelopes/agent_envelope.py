@@ -63,6 +63,28 @@ class AgentMessageEnvelope(BaseModel):
     )
     metadata: Dict[str, Any] = Field(default_factory=dict, description="Additional metadata")
 
+    @validator('trace_id')
+    def validate_trace_id(cls, v):
+        """
+        Validate trace_id is non-empty.
+
+        The field has been described as "MANDATORY for AI↔AI" since it was
+        introduced, but the requirement was never enforced: Pydantic accepted
+        `trace_id=""` and every consumer downstream inherited a record that
+        could not be correlated. ADR-0006 makes trace_id the single identifier
+        that links the two MCPs' outputs, so that a reviewer can answer "which
+        gate decisions and which envelopes belong to the same turn?". An empty
+        trace_id reproduces exactly the condition that ADR describes as the
+        problem — records that exist but cannot be tied together.
+
+        Behaviour tightening, recorded as one: envelopes that previously
+        constructed with an empty trace_id now raise. No caller in this
+        repository produced one.
+        """
+        if not v or not v.strip():
+            raise ValueError("trace_id must be non-empty (MANDATORY for AI-to-AI)")
+        return v
+
     @validator('message_id')
     def validate_message_id(cls, v):
         """Validate message_id is a valid UUID."""

@@ -14,8 +14,25 @@ MAX_ENTROPY = 1.0
 # Default decay rate (γ)
 DEFAULT_GAMMA = 0.15
 
-# Default self-frequency (f_self) for coherence calculations
-DEFAULT_F_SELF = 0.95
+# Default self-frequency (f_self) for coherence calculations.
+#
+# Reverted to 0.5 on 2026-08-02. It became 0.95 in commit 323e1ff9, whose
+# subject is "exp: DEFAULT_F_SELF: 0.5 -> 0.95" and which cites Experiment-ID
+# exp-20260323-062220-constants-008. That id appears in none of
+# data/research_engine/audit/audit.jsonl (670 events covering the period, 301
+# experiment completions, of which 299 were reverted and 2 kept),
+# experiments.jsonl, or promotion_registry.json — whose single entry is a
+# different experiment. No physics_baseline*.json records f_self either, so the
+# "physics changes need a baseline update" rule never covered this constant.
+#
+# The value was therefore live without a recorded basis, and two tests in
+# tests/benchmarks/test_physics_sensitivity.py had been failing since it
+# changed. Reverting makes them pass without touching them, which is the
+# outcome where the instrument and the value agree.
+#
+# `research_engine/mutation/surfaces.yaml` mirrors this file and is updated
+# alongside it; the two must not disagree.
+DEFAULT_F_SELF = 0.5
 
 # Universe resistance constant (Φ_universe)
 PHI_UNIVERSE = 5.0

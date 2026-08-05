@@ -14,8 +14,11 @@ from typing import List, Optional, Any
 from contextlib import closing
 from datetime import datetime
 import json
+import logging
 import sqlite3
 from pathlib import Path
+
+logger = logging.getLogger(__name__)
 
 # Import EchoEvent if available
 try:
@@ -115,11 +118,27 @@ class TraceStore:
         """
         Store event in trace store.
 
+        `INSERT OR REPLACE`, so storing an id that already exists overwrites
+        it. Two columns are exempt from that overwrite:
+
+        - **erased** — a store against an erased id is refused and returns
+          False. This used to write a literal 0, so re-storing an event
+          brought it and its payload back through the normal read path while
+          `erasure_audit_log` still recorded the erasure; the two records of
+          the same fact disagreed and nothing reported it (OD-9). A tombstone
+          is final: there is deliberately no un-erase, and writing new
+          personal data under an erased id is refused rather than hidden.
+        - **suppressed** — carried over from the existing row. An Article 18
+          restriction is lifted by `mark_suppressed(id, suppressed=False)`
+          and by nothing else.
+
         Args:
             event: EchoEvent instance
 
         Returns:
-            True if successful
+            True if stored. False if the id is erased and the store was
+            refused — callers that treat this method as an update path must
+            check it.
         """
         if not ECHO_EVENT_AVAILABLE:
             raise ImportError("EchoEvent not available")
@@ -127,6 +146,18 @@ class TraceStore:
         # Store in SQLite
         with closing(sqlite3.connect(self.db_path)) as conn:
             cursor = conn.cursor()
+            cursor.execute(
+                "SELECT suppressed, erased FROM events WHERE id = ?",
+                (event.id,)
+            )
+            existing = cursor.fetchone()
+            if existing is not None and existing[1]:
+                logger.warning(
+                    "store_event refused: event %s was erased; a tombstone is "
+                    "not an update target", event.id
+                )
+                return False
+            suppressed_flag = existing[0] if existing is not None else 0
             try:
                 cursor.execute("""
                     INSERT OR REPLACE INTO events (
@@ -140,8 +171,8 @@ class TraceStore:
                     event.intensity,
                     json.dumps(event.tags),
                     json.dumps(event.payload),
-                    0,  # suppressed
-                    0,  # erased
+                    suppressed_flag,  # preserved: mark_suppressed owns this
+                    0,  # erased: an erased id never reaches here (refused above)
                     datetime.now().isoformat()
                 ))
                 conn.commit()

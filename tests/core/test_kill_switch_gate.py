@@ -26,10 +26,33 @@ class TestKillSwitchGateBlock:
     """Pipeline block tests."""
 
     @pytest.mark.asyncio
-    async def test_no_kill_switch_skips(self):
-        block = KillSwitchGateBlock(kill_switch=None)
-        result = await block.execute(_make_context())
-        assert result.status == "skipped"
+    async def test_no_kill_switch_is_an_auditable_event_not_a_skip(self):
+        """Rewritten 2026-08-02 (T1 gate review, founder-approved).
+
+        This asserted `status == "skipped"`. "Skipped" means the block did not
+        run; here it ran and found it had nothing to guard with — canonical
+        block 1, the emergency stop, reporting as absent rather than as
+        unavailable. The sibling gate, DeliberativeEthicsGateBlock, was given
+        the same handling by the founder-directed credibility-floor fix.
+        """
+        result = await KillSwitchGateBlock(kill_switch=None).execute(
+            _make_context())
+
+        assert result.status == "ok"
+        assert result.data["gate_unavailable"] is True
+        assert result.data["kill_switch_triggered"] is False
+        assert result.data["decision"] == "proceeded_unguarded"
+
+    @pytest.mark.asyncio
+    async def test_no_kill_switch_blocks_when_fail_closed(self):
+        """The posture block_factory uses when KillSwitch cannot be imported."""
+        result = await KillSwitchGateBlock(
+            kill_switch=None, fail_closed=True).execute(_make_context())
+
+        assert result.data["kill_switch_triggered"] is True
+        assert result.data["early_exit"] is True
+        assert result.data["decision"] == "blocked_gate_unavailable"
+        assert "shutdown_message" in result.data
 
     @pytest.mark.asyncio
     async def test_safe_metrics_pass(self):

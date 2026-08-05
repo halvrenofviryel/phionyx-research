@@ -25,6 +25,8 @@ from typing import Optional, List, Dict, Any
 
 from pydantic import BaseModel, Field
 
+from .principal import Principal
+
 
 class DecisionReceipt(BaseModel):
     """One governed decision, read back from the signed evidence chain (data-minimised).
@@ -52,6 +54,15 @@ class DecisionReceipt(BaseModel):
     evidence_link_kinds: List[str] = Field(
         default_factory=list,
         description="KINDS of evidence linked (retrieval/tool_call/memory/policy/...), NOT raw refs")
+
+    # on whose authority (AARM R6) — and how much that answer is worth
+    principal: "Principal | None" = Field(
+        None,
+        description=(
+            "On whose authority the decision was taken, carrying `established_by`. "
+            "None means the record did not answer the question — which is different "
+            "from answering it weakly, and both are different from answering it well."
+        ))
 
     # trust-boundary + integrity flags
     descriptor_change_detected: Optional[bool] = Field(

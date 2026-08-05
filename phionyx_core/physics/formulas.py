@@ -16,6 +16,7 @@ Formulas (v2.0 - Hybrid State Model):
 """
 
 import math
+import warnings
 from typing import Any, List, Dict, Optional, TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -735,10 +736,34 @@ def calculate_phi_v2(
     entropy_penalty_k: float = entropy_penalty_k,
 ) -> Dict[str, Any]:
     """
-    Calculate Total Echo Quality (Φ) using Hybrid Resonance Model v2.0 (backward compatible).
+    Calculate Total Echo Quality (Φ) using Hybrid Resonance Model v2.0.
 
-    v2.0 (Legacy): Uses context_mode for weights, no Circumplex integration
-    v2.1: Use calculate_phi_v2_1() for Circumplex-integrated version
+    .. deprecated:: 2026-08-02
+        Use :func:`calculate_phi_v2_1`. This function has had no production
+        caller since ``echo_state_2``, ``physics_integration`` and
+        ``wasm_ready`` were migrated; it is retained for external callers and
+        for the claim tests that exercise the v2.0 thresholds.
+
+    **The two are numerically identical given matched arguments** — measured
+    across six cases with the same valence, arousal, weights and
+    ``entropy_penalty_k``, the difference is 0.0000. What differs is the
+    interface, and every difference is a default that stands in for a value
+    the caller has:
+
+    ===================  ==========================  =====================
+    input                v2.0                        v2.1
+    ===================  ==========================  =====================
+    ``valence``          optional, defaults to 0.0   required
+    ``arousal``          optional, defaults to 1.0   required
+    weights              derived from context_mode   explicit w_c / w_p
+    ``entropy_penalty_k``module default 0.0          1.15
+    ===================  ==========================  =====================
+
+    ``entropy_penalty_k = 0.0`` makes the cognitive term's entropy factor
+    exactly ``1``, so entropy has no effect at all unless a caller supplies the
+    coefficient. Callers that relied on these defaults were computing phi at
+    maximum arousal with the entropy penalty switched off; migrating
+    ``EchoState2.phi`` moved it by an average of 45%.
 
     Formula: Φ_total = (w_c * Φ_c) + (w_p * Φ_p)
 
@@ -780,6 +805,13 @@ def calculate_phi_v2(
         >>> assert result["weight_cognitive"] == 0.75
     """
     # 1. Get weights
+    warnings.warn(
+        "calculate_phi_v2 is deprecated; use calculate_phi_v2_1, which takes "
+        "valence, arousal and explicit weights rather than defaulting them.",
+        DeprecationWarning,
+        stacklevel=2,
+    )
+
     weights = get_context_weights(context_mode)
     wc, wp = weights["wc"], weights["wp"]
 

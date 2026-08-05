@@ -13,7 +13,31 @@ import re
 import ast
 import math
 
-from phionyx_core.pipeline.blocks.complexity_budget import ComplexityMetrics, ComplexityBudget
+@dataclass
+class ComplexityMetrics:
+    """Complexity metrics data structure.
+
+    Relocated here for the same reason as Inconsistency in inconsistency_engine:
+    the block that held it was one of the three deleted by 709a0b04, and the
+    service outlived it.
+    """
+
+    cyclomatic_complexity: int = 0
+    cognitive_complexity: int = 0
+    nesting_depth: int = 0
+    function_length: int = 0
+    class_complexity: int = 0
+
+
+@dataclass
+class ComplexityBudget:
+    """Complexity budget configuration."""
+
+    max_cyclomatic: int = 10
+    max_cognitive: int = 15
+    max_nesting: int = 4
+    max_function_length: int = 50
+    max_class_complexity: int = 20
 
 
 @dataclass
@@ -83,7 +107,11 @@ class ComplexityBudgetEngine:
         except SyntaxError:
             # Fallback to pattern-based estimation
             metrics.cyclomatic_complexity = self._estimate_cyclomatic_complexity_enhanced(code)
-            metrics.cognitive_complexity = metrics.cyclomatic_complexity * 1.2  # Approximation
+            # Rounded, not truncated: the field is declared int and every other
+            # path assigns one, so the fraction this multiplication produces was
+            # never storable here. Truncating would bias the fallback estimate
+            # low against the integer budget it is compared with.
+            metrics.cognitive_complexity = round(metrics.cyclomatic_complexity * 1.2)
             metrics.nesting_depth = self._estimate_nesting_depth_enhanced(code)
             metrics.function_length = self._estimate_function_length_enhanced(code)
             metrics.class_complexity = self._estimate_class_complexity_enhanced(code)

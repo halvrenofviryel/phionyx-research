@@ -11,6 +11,12 @@ from typing import Dict, Any, Optional, Protocol
 
 from ..base import PipelineBlock, BlockContext, BlockResult
 
+from ..outcome import (
+    BlockOutcome,
+    BlockRunStatus,
+    errored,
+)
+
 logger = logging.getLogger(__name__)
 
 
@@ -147,12 +153,39 @@ class StateUpdatePhysicsBlock(PipelineBlock):
             logger.error(f"Physics state update failed: {e}", exc_info=True)
             # Fail-open: return original physics_state
             metadata = context.metadata or {}
+            # Control channel unchanged — this block stays fail-open so the
+            # pipeline still completes, and the `return BlockResult(...)`
+            # shape is kept so the inventory sweep can still see it. What
+            # changes is the record: block_run_status FAILED, measurement
+            # ERROR, operating_mode degraded — a crash here can no longer
+            # read as a clean measurement.
+            _outcome = BlockOutcome(
+                block_id=self.block_id,
+                legacy_control_status="ok",
+                block_run_status=BlockRunStatus.FAILED,
+                measurement=errored(
+                    "physics state update raised; the state returned is the one that came in",
+                    inputs_present=True,
+                    exception=type(e).__name__,
+                ),
+                operating_mode="degraded",
+            )
             return BlockResult(
                 block_id=self.block_id,
                 status="ok",
-                data={
-                    "physics_state": metadata.get("physics_state", {}),
+                # No `physics_state`. It used to republish
+                # `metadata.get("physics_state", {})` — the state that came
+                # in, under this block's own result key, so an un-updated
+                # state and an updated one shared a field. The `{}` default
+                # was worse: an absent state read as an empty one.
+                #
+                # Safe to omit, checked rather than assumed: all seven
+                # consumers read `metadata["physics_state"]`, not this block's
+                # result data. The state carries forward because nothing
+                # overwrites it; what stops is this block reporting a state it
+                # did not update.
+                data={**({
                     "error": str(e)
-                }
+                }), "block_outcome": _outcome.to_record_fields()}
             )
 

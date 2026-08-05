@@ -11,6 +11,12 @@ from typing import Dict, Any, Optional, Protocol
 
 from ..base import PipelineBlock, BlockContext, BlockResult
 
+from ..outcome import (
+    BlockOutcome,
+    BlockRunStatus,
+    errored,
+)
+
 logger = logging.getLogger(__name__)
 
 
@@ -173,15 +179,21 @@ class ResponseBuildBlock(PipelineBlock):
             if not narrative_response:
                 narrative_response = "I'm processing your request. Please wait a moment."
 
-            # Ensure phi is in physics_state
+            # phi, where one was measured. This used to substitute 0.5 under
+            # `phi_source: 'fallback'` — labelled, which is better than the
+            # crash path was, and still a midpoint published in the same field
+            # as a measurement. phi_computation (canonical 37) now omits the
+            # key when its engine measured nothing, and audit_layer.py:127
+            # already branches on `physics_state.get("phi") is None`, so
+            # absence is a signal this pipeline carries. Substituting a value
+            # here would put it back one block later.
             if 'phi' not in physics_state:
                 unified_state = metadata.get("unified_state")
                 if unified_state and hasattr(unified_state, 'phi'):
                     physics_state['phi'] = unified_state.phi
                     physics_state['phi_source'] = 'unified_state'
                 else:
-                    physics_state['phi'] = 0.5  # Safe default
-                    physics_state['phi_source'] = 'fallback'
+                    physics_state['phi_source'] = 'not_measured'
 
             # Build response
             response = self.builder.build_response(
@@ -215,16 +227,40 @@ class ResponseBuildBlock(PipelineBlock):
         except Exception as e:
             logger.error(f"Response building failed: {e}", exc_info=True)
             # Fail-open: return minimal response
+            # Control channel unchanged — this block stays fail-open so the
+            # pipeline still completes, and the `return BlockResult(...)`
+            # shape is kept so the inventory sweep can still see it. What
+            # changes is the record: block_run_status FAILED, measurement
+            # ERROR, operating_mode degraded — a crash here can no longer
+            # read as a clean measurement.
+            _outcome = BlockOutcome(
+                block_id=self.block_id,
+                legacy_control_status="ok",
+                block_run_status=BlockRunStatus.FAILED,
+                measurement=errored(
+                    "response building raised; the narrative is a holding message",
+                    inputs_present=True,
+                    exception=type(e).__name__,
+                ),
+                operating_mode="degraded",
+            )
             return BlockResult(
                 block_id=self.block_id,
                 status="ok",
-                data={
+                data={**({
                     "response": {
                         "narrative": "I'm processing your request. Please wait a moment.",
-                        "physics": {"phi": 0.5, "entropy": 0.5},
+                        # No `physics`. It used to be {"phi": 0.5,
+                        # "entropy": 0.5} — two midpoints, unlabelled, inside
+                        # the payload that reaches the client. The narrative
+                        # fallback is legitimate: the user needs an answer.
+                        # Fabricated telemetry beside it is not, and this is
+                        # the last block before the response leaves the
+                        # pipeline, so nothing downstream would correct it.
+                        "physics_measured": False,
                         "error": str(e)
                     },
                     "error": str(e)
-                }
+                }), "block_outcome": _outcome.to_record_fields()}
             )
 

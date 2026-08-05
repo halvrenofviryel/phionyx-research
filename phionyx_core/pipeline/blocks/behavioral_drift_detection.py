@@ -7,6 +7,16 @@ from typing import Dict, Optional, cast
 import logging
 
 from ..base import PipelineBlock, BlockContext, BlockResult
+from ..outcome import (
+    BlockOutcome,
+    BlockRunStatus,
+    Observation,
+    RecoveryAction,
+    errored,
+    measured_fail,
+    measured_pass,
+    not_measured,
+)
 from ...monitoring.behavioral_drift import (
     BehavioralDriftDetector,
 )
@@ -193,9 +203,21 @@ class BehavioralDriftDetectionBlock(PipelineBlock):
                     )
 
             # 5. Update context metadata with drift information
-            metadata["drift_detection"] = "completed"
+            # A report built without a baseline carries drift_score 0.0,
+            # recommendation "allow" and semantic_similarity 1.0 — a perfectly
+            # clean result produced by the branch whose own comment says
+            # "cannot detect drift" (monitoring/behavioral_drift.py:103-115).
+            # Its one honest field is `confidence`, which that branch sets to
+            # 0.0. Since `response_revision_gate` now reads `drift_score`, a
+            # zero-confidence score must not be published as a measurement:
+            # the gate would record the criterion as checked and clean on every
+            # turn that had nothing to compare against.
+            drift_measured = drift_report.confidence > 0.0
+
+            metadata["drift_detection"] = "completed" if drift_measured else "no_baseline"
             metadata["drift_detected"] = drift_report.drift_detected
-            metadata["drift_score"] = drift_report.drift_score
+            if drift_measured:
+                metadata["drift_score"] = drift_report.drift_score
             metadata["drift_types"] = [dt.value for dt in drift_report.drift_type]
             metadata["degraded_metrics"] = drift_report.degraded_metrics
             metadata["recommendation"] = drift_report.recommendation
@@ -219,15 +241,33 @@ class BehavioralDriftDetectionBlock(PipelineBlock):
                 # Throttle: reduce amplitude
                 context.current_amplitude = (context.current_amplitude or 1.0) * 0.7  # 30% reduction
 
-            return BlockResult(
+            if drift_measured:
+                measurement = (
+                    measured_fail(
+                        f"drift {drift_report.drift_score:.3f} above the "
+                        f"{self.drift_detector.drift_threshold} threshold: "
+                        + ", ".join(dt.value for dt in drift_report.drift_type),
+                        items_checked=1, drift_score=drift_report.drift_score)
+                    if drift_report.drift_detected
+                    else measured_pass(1, drift_score=drift_report.drift_score,
+                                       confidence=drift_report.confidence))
+            else:
+                measurement = not_measured(
+                    "no behavioural baseline for this session — the detector "
+                    "returned a zero-confidence report",
+                    cause="input_absent")
+            outcome = BlockOutcome(
                 block_id=self.block_id,
-                status="ok",
-                data={
+                legacy_control_status="ok",
+                block_run_status=BlockRunStatus.COMPLETED,
+                measurement=measurement,
+            )
+            data = {
                     "drift_detected": drift_report.drift_detected,
-                    "drift_score": drift_report.drift_score,
                     "drift_types": [dt.value for dt in drift_report.drift_type],
                     "degraded_metrics": drift_report.degraded_metrics,
                     "recommendation": drift_report.recommendation,
+                    "block_outcome": outcome.to_record_fields(),
                     "drift_report": {
                         "drift_score": drift_report.drift_score,
                         "drift_types": [dt.value for dt in drift_report.drift_type],
@@ -237,16 +277,37 @@ class BehavioralDriftDetectionBlock(PipelineBlock):
                         "physics_drift": drift_report.physics_drift,
                         "confidence": drift_report.confidence,
                     }
-                }
+            }
+            if drift_measured:
+                # Only a score the detector had a baseline for is published
+                # under the key `response_revision_gate` reads.
+                data["drift_score"] = drift_report.drift_score
+            return BlockResult(
+                block_id=self.block_id,
+                status="ok",
+                data=data,
             )
 
         except Exception as e:
             logger.error(f"Error in behavioral drift detection: {e}", exc_info=True)
-            # On error, allow execution but log warning
+            # `error` and not a quiet `ok`: this block already failed loudly and
+            # that is left alone. What is added is the record — and no
+            # `drift_score`, so a crash here cannot read as a clean turn.
+            outcome = BlockOutcome(
+                block_id=self.block_id,
+                legacy_control_status="error",
+                block_run_status=BlockRunStatus.FAILED,
+                measurement=errored(
+                    f"drift detection raised {type(e).__name__}: {e}"),
+                recovery_action=RecoveryAction.FALLBACK,
+                observation=Observation.RECORDED,
+                operating_mode="degraded",
+            )
             return BlockResult(
                 block_id=self.block_id,
                 status="error",
                 error=e,
-                data={"drift_detected": False, "error_fallback": True}
+                data={"drift_detected": False, "error_fallback": True,
+                      "block_outcome": outcome.to_record_fields()}
             )
 

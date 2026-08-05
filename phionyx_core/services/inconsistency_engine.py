@@ -12,7 +12,24 @@ from dataclasses import dataclass
 import re
 import ast
 
-from phionyx_core.pipeline.blocks.inconsistency_detection import Inconsistency
+@dataclass
+class Inconsistency:
+    """Inconsistency data structure.
+
+    Previously lived in ``pipeline/blocks/inconsistency_detection.py``, which was
+    deleted outright by 709a0b04 when the pipeline was reduced to the 46 v3.8.0
+    canonical blocks. Eleven legacy blocks were archived and re-exported so their
+    importers kept working; three were deleted, and this plain dataclass went with
+    one of them. The block is gone and stays gone — the data type it happened to
+    contain lives here now, with the service that actually uses it.
+    """
+
+    type: str  # "code_plan", "code_test", "plan_requirement", "state"
+    description: str
+    severity: str  # "low", "medium", "high", "critical"
+    code_reference: str | None = None
+    resolution_suggestion: str | None = None
+    evidence: list[str] | None = None
 
 
 @dataclass

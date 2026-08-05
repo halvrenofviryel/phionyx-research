@@ -18,7 +18,11 @@ from phionyx_core.pipeline.blocks.cep_evaluation import CepEvaluationBlock
 def mock_evaluator():
     """Mock CEP evaluator that returns test flags/config."""
     evaluator = MagicMock()
-    evaluator.evaluate = MagicMock(return_value=(
+    # AsyncMock, because the protocol is async and the only real implementation
+    # awaits the processor. A sync mock here matched the old declaration and so
+    # never exercised the call the block actually makes — which is why the
+    # unpack-a-coroutine defect survived in a suite that passed.
+    evaluator.evaluate = AsyncMock(return_value=(
         {"is_self_narrative_blocked": False},  # cep_flags
         {"mode": "universal"},  # cep_config
     ))
@@ -82,3 +86,62 @@ class TestCEPEvaluationBlock:
 
         assert result.status == "ok"
         assert result.data["cep_flags"] is None
+
+
+class TestAFailedEvaluationIsNotReportedAsOne:
+    """The block returned status="ok" when its evaluator raised.
+
+    A CEP evaluation that never ran was then indistinguishable from one that ran
+    and found nothing — the substitution the Measurement Axioms name, inside a
+    canonical block of the pipeline they were written about. Found by mypy 2.x,
+    which sees that the adapter is async and the call site did not await it.
+    """
+
+    @pytest.mark.asyncio
+    async def test_a_raising_evaluator_is_recorded_as_skipped(self) -> None:
+        evaluator = MagicMock()
+        evaluator.evaluate = AsyncMock(side_effect=RuntimeError("evaluator down"))
+        block = CepEvaluationBlock(evaluator=evaluator)
+        context = BlockContext(user_input="t", card_type="", card_title="",
+                               scene_context="", card_result="",
+                               metadata={"frame": object()})
+
+        result = await block.execute(context)
+
+        assert result.status == "skipped", (
+            "an evaluation that raised must not be reported as one that passed")
+        assert result.is_success() is False
+        assert "RuntimeError" in (result.skip_reason or "")
+        assert result.data["cep_flags"] is None
+
+    @pytest.mark.asyncio
+    async def test_it_stays_fail_open(self) -> None:
+        """`error` would attempt a rollback in the orchestrator; `skipped` does
+        not. The decision being made is to stop claiming a pass, not to convert
+        this block from fail-open to fail-closed."""
+        evaluator = MagicMock()
+        evaluator.evaluate = AsyncMock(side_effect=RuntimeError("down"))
+        block = CepEvaluationBlock(evaluator=evaluator)
+        context = BlockContext(user_input="t", card_type="", card_title="",
+                               scene_context="", card_result="",
+                               metadata={"frame": object()})
+
+        result = await block.execute(context)
+
+        assert result.is_error() is False
+        assert result.is_skipped() is True
+
+    @pytest.mark.asyncio
+    async def test_a_sync_evaluator_no_longer_silently_passes(self) -> None:
+        """The shape the old suite used: a sync mock matched the old protocol
+        and never exercised the awaited call the block makes."""
+        evaluator = MagicMock()
+        evaluator.evaluate = MagicMock(return_value=({"a": 1}, {"b": 2}))
+        block = CepEvaluationBlock(evaluator=evaluator)
+        context = BlockContext(user_input="t", card_type="", card_title="",
+                               scene_context="", card_result="",
+                               metadata={"frame": object()})
+
+        result = await block.execute(context)
+
+        assert result.status == "skipped"

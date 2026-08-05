@@ -10,11 +10,37 @@ Fuses confidence estimates from multiple modules using W_final.
 """
 
 import logging
-from typing import Optional
+from typing import Any, Optional
 
 from ..base import PipelineBlock, BlockContext, BlockResult
+from ..outcome import (
+    BlockOutcome,
+    BlockRunStatus,
+    Observation,
+    RecoveryAction,
+    errored,
+    measured_pass,
+    not_measured,
+)
 
 logger = logging.getLogger(__name__)
+
+
+def _number(source: Any, *names: str) -> Optional[float]:
+    """The first of `names` carrying a number, or ``None``.
+
+    ``None`` and not a default: this block fuses the signals that reported, and
+    a placeholder standing in for a silent module shifts the fused value.
+    Booleans are excluded — ``isinstance(True, int)`` is True in Python, and a
+    flag where a score belongs is malformed input, not a score of 1.0.
+    """
+    for name in names:
+        value = (source.get(name) if isinstance(source, dict)
+                 else getattr(source, name, None))
+        if isinstance(value, bool) or not isinstance(value, (int, float)):
+            continue
+        return float(value)
+    return None
 
 
 class ConfidenceFusionBlock(PipelineBlock):
@@ -100,25 +126,55 @@ class ConfidenceFusionBlock(PipelineBlock):
             from ...contracts.v4.confidence_payload import ConfidencePayload, UncertaintyType
             from ...meta.arbitration_math import compute_w_final
 
-            # Gather confidence signals from various modules
+            # Gather confidence signals from various modules. A module that did
+            # not report is *not* fused: the previous code read a missing
+            # ConfidenceEstimator score as 0.5 and a missing ethics risk as 0.0
+            # (so `ethics_safety` was 1.0 on every turn, whether or not ethics
+            # ran). Those placeholders moved the fused value, and downstream —
+            # since `response_revision_gate` now reads `w_final` — they would
+            # move a directive.
             module_confidences = {}
 
-            # From ConfidenceEstimator
-            conf_result = metadata.get("confidence_result")
-            if conf_result:
-                score = conf_result.get("confidence_score", 0.5) if isinstance(conf_result, dict) else getattr(conf_result, "confidence_score", 0.5)
+            score = _number(metadata.get("confidence_result"), "confidence_score",
+                            "confidence")
+            if score is not None:
                 module_confidences["confidence_estimator"] = score
 
             # From physics state (phi-based)
             physics_state = metadata.get("physics_state", {})
-            phi = physics_state.get("phi")
+            phi = _number(physics_state, "phi")
             if phi is not None:
                 module_confidences["physics_phi"] = min(1.0, phi)
 
-            # From ethics (inverse risk)
-            ethics_result = metadata.get("ethics_result", {})
-            max_risk = ethics_result.get("max_risk_score", 0.0) if isinstance(ethics_result, dict) else 0.0
-            module_confidences["ethics_safety"] = 1.0 - max_risk
+            # From ethics (inverse risk). The risk field's name depends on the
+            # injected ethics processor and is not fixed anywhere in this
+            # repository, so the known names are tried and the signal is used
+            # only when one of them carries a number.
+            risk = _number(metadata.get("ethics_result"),
+                           "max_risk_score", "risk_score", "harm_risk")
+            if risk is not None:
+                module_confidences["ethics_safety"] = 1.0 - risk
+
+            if not module_confidences:
+                # `compute_w_final({})` returns 0.5 — a neutral that is
+                # indistinguishable from a measured 0.5 and sits exactly on the
+                # revision gate's rewrite threshold. Nothing is fused and no
+                # `w_final` is written; every consumer already guards on it
+                # being absent.
+                outcome = BlockOutcome(
+                    block_id=self.block_id,
+                    legacy_control_status="ok",
+                    block_run_status=BlockRunStatus.COMPLETED,
+                    measurement=not_measured(
+                        "no module reported a confidence signal",
+                        cause="input_absent"),
+                )
+                return BlockResult(
+                    block_id=self.block_id,
+                    status="ok",
+                    data={"modules_fused": 0,
+                          "block_outcome": outcome.to_record_fields()},
+                )
 
             # Fuse
             arb_result = compute_w_final(module_confidences)
@@ -133,10 +189,27 @@ class ConfidenceFusionBlock(PipelineBlock):
                 source_estimator="confidence_fusion_v4",
             )
 
+            # `arbitration_resolve` reads the conflict score off this payload's
+            # metadata. It was never populated, so that block read 0.0 on every
+            # turn — the second break in the chain from here to the revision
+            # gate. Repair 2, second half; unblocked once
+            # `compute_conflict_score` was corrected to measure disagreement.
+            payload.metadata["conflict_score"] = arb_result.conflict_score
+            payload.metadata["is_conflicted"] = arb_result.is_conflicted
+            payload.metadata["modules_fused"] = len(module_confidences)
+
             context.v4_confidence = payload
             # Propagate w_final to metadata
             context.metadata["w_final"] = arb_result.w_final
 
+            outcome = BlockOutcome(
+                block_id=self.block_id,
+                legacy_control_status="ok",
+                block_run_status=BlockRunStatus.COMPLETED,
+                measurement=measured_pass(len(module_confidences),
+                                          w_final=arb_result.w_final,
+                                          modules=",".join(sorted(module_confidences))),
+            )
             return BlockResult(
                 block_id=self.block_id,
                 status="ok",
@@ -145,14 +218,33 @@ class ConfidenceFusionBlock(PipelineBlock):
                     "conflict_score": arb_result.conflict_score,
                     "modules_fused": len(module_confidences),
                     "is_conflicted": arb_result.is_conflicted,
+                    "block_outcome": outcome.to_record_fields(),
                 },
             )
         except Exception as e:
             logger.error(f"Confidence fusion v4 failed: {e}", exc_info=True)
+            # `w_final: 0.5` was written here. It is the value `compute_w_final`
+            # also returns for "nothing to fuse", it is indistinguishable from a
+            # measured 0.5, and it sits exactly on the revision gate's rewrite
+            # threshold — so a crash in this block would have prefixed every
+            # response once the gate started reading it. No value is written.
+            outcome = BlockOutcome(
+                block_id=self.block_id,
+                legacy_control_status="skipped",
+                block_run_status=BlockRunStatus.FAILED,
+                measurement=errored(
+                    f"confidence fusion raised {type(e).__name__}: {e}"),
+                recovery_action=RecoveryAction.FALLBACK,
+                observation=Observation.RECORDED,
+                operating_mode="degraded",
+            )
             return BlockResult(
                 block_id=self.block_id,
-                status="ok",
-                data={"w_final": 0.5, "error": str(e)},
+                status="skipped",
+                skip_reason=f"confidence fusion raised {type(e).__name__}",
+                error=e,
+                data={"error": str(e),
+                      "block_outcome": outcome.to_record_fields()},
             )
 
     def get_dependencies(self) -> list[str]:

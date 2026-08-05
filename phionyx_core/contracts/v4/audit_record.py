@@ -8,6 +8,8 @@ hash chain for immutability, and structured audit trail.
 
 from typing import Optional, Dict, Any, List
 from pydantic import BaseModel, Field
+
+from .principal import Principal
 from datetime import datetime, timezone
 import uuid
 import hashlib
@@ -64,6 +66,14 @@ class AuditRecord(BaseModel):
     actor: str = Field(
         default="system",
         description="Actor that caused this event"
+    )
+    principal: Optional["Principal"] = Field(
+        None,
+        description=(
+            "On whose authority the event occurred, and HOW that identity was established. "
+            "`actor` says who; this says how much the 'who' is worth. Optional so that records "
+            "written before it existed remain hash-stable — see compute_hash."
+        )
     )
     action: str = Field(
         default="",
@@ -139,6 +149,13 @@ class AuditRecord(BaseModel):
             "output_hash": self.output_hash,
             "timestamp": self.timestamp.isoformat(),
         }
+        # Included ONLY when present. A record written without a principal hashes
+        # exactly as it did before this field existed, so no existing chain moves.
+        # A record written WITH one puts it inside the hash domain, which is the
+        # difference between carrying an identity and binding one: mutate the
+        # principal and the hash changes, so the signature no longer verifies.
+        if self.principal is not None:
+            content["principal"] = self.principal.hash_content()
         content_bytes = json.dumps(content, sort_keys=True).encode("utf-8")
         return hashlib.sha256(content_bytes).hexdigest()
 

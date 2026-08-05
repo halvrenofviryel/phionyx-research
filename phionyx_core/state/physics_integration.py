@@ -61,18 +61,30 @@ def calculate_phi_v2_with_state(
     Returns:
         Phi calculation result
     """
-    from phionyx_core.physics.formulas import calculate_phi_v2
+    from phionyx_core.physics.formulas import (
+        calculate_phi_v2_1,
+        get_context_weights,
+    )
 
     # Use state.dt as SINGLE SOURCE OF TRUTH
     time_delta = get_time_delta_from_state(echo_state2=echo_state2)
 
-    return calculate_phi_v2(
+    # v2_1 rather than v2: see the note in EchoState2.phi. `context_mode` is
+    # kept in this function's signature and resolved to explicit weights here,
+    # because v2_1 takes no context mode and no defaults — every input is
+    # stated. The state's own valence and arousal now reach the formula; the
+    # v2 call passed neither.
+    weights = get_context_weights(context_mode)
+    return calculate_phi_v2_1(
+        valence=echo_state2.V,
+        arousal=echo_state2.A,
         amplitude=amplitude,
         time_delta=time_delta,  # From state.dt
-        entropy=echo_state2.H,
+        gamma=gamma,
         stability=stability,
-        context_mode=context_mode,
-        gamma=gamma
+        entropy=echo_state2.H,
+        w_c=weights["wc"],
+        w_p=weights["wp"],
     )
 
 

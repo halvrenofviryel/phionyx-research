@@ -132,10 +132,23 @@ class ConsciousEchoProofEngine:
         unified_state: Optional[Dict[str, float]] = None,
         conversation_history: Optional[List[str]] = None,
         npc_role: Optional[str] = None,
-        profile_name: Optional[str] = None
     ) -> CEPResult:
         """
         Evaluate response against CEP criteria.
+
+        OD-18, 2026-08-04: this used to accept `profile_name`, documented as
+        an "optional profile name override", and never read it — the body uses
+        `self.config` throughout, fixed at construction by
+        `load_cep_config(profile_name)`. A caller passing "clinical" would
+        believe it had selected stricter thresholds and would get whatever the
+        engine was built with. `config/cep_profiles/` does not exist in this
+        repo either, so there was nothing to select.
+
+        Removed rather than wired: wiring the argument to a real source would
+        still select nothing while there are no profile files, and it would
+        then *look* connected. If per-call profiles are wanted, the YAML files
+        and the engine support arrive together. The construction-time path
+        (`load_cep_config`, used by `engine_processor.py:102`) is untouched.
 
         Args:
             raw_text: Raw response text to evaluate
@@ -144,7 +157,6 @@ class ConsciousEchoProofEngine:
             unified_state: Optional unified state dictionary from UKF
             conversation_history: Optional list of previous conversation turns
             npc_role: Optional NPC role context
-            profile_name: Optional profile name override
 
         Returns:
             CEPResult with metrics, flags, and optional sanitized text

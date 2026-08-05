@@ -458,19 +458,72 @@ def create_all_blocks(
             def __init__(self, processor):
                 self.processor = processor
 
-            async def evaluate(self, frame, user_input, narrative_response, cognitive_state):
-                # Note: processor.evaluate_cep_and_update_safety has different signature
+            async def evaluate(self, frame, user_input, narrative_response,
+                               cognitive_state, physics_state=None,
+                               unified_state=None, current_integrity=None,
+                               time_delta=None):
+                """OD-16, 2026-08-03, completed the same day.
+
+                This used to pass six hardcoded placeholders into a safety
+                evaluation — physics_state={}, unified_state=None,
+                time_delta=1.0, current_integrity=100.0,
+                character_archetype="shadow", profile_name="edu" — each under
+                a comment saying "Will be set from context". Nothing set them.
+                The evaluator's verdict was real for inputs it was not asked
+                about, and current_integrity=100.0 told a safety check the
+                system was at full integrity unconditionally.
+
+                The first pass grounded three (physics_state, unified_state,
+                current_integrity) and left the other three, on the stated
+                grounds that no context field carried them. **That was right
+                for two and wrong for one**, which is why the remainder was
+                traced rather than closed:
+
+                - `time_delta` **does** have a source. `time_update_sot`
+                  (canonical 2) writes `context.metadata["time_delta"]`, and
+                  cep_evaluation is canonical 19, so it is there by the time
+                  this runs. It reaches `temporal_delay` in the CEP metrics
+                  via `cep_engine.py:268`, whose own default when the value is
+                  absent is **0.0** — so the hardcoded 1.0 did not even match
+                  the engine it fed. Now threaded.
+
+                - `character_archetype` has no context field, and the value
+                  forced here was worse than none: it reaches `npc_role`, and
+                  `cep_engine.py:825` renders it into text the **user reads**
+                  after a trauma-content sanitization — "Shadow is navigating
+                  a difficult moment." Passing "" takes the engine's own
+                  fallback, "this character", which is what an unknown
+                  archetype actually is.
+
+                - `profile_name` is **not consumed at all**.
+                  `CEPEngine.evaluate_response` accepts the parameter and its
+                  body never reads it (the config is fixed at construction).
+                  Passing "edu" selected nothing; `config/cep_profiles/` does
+                  not exist in this repo. Dropped, and the dead parameter is
+                  filed separately as OD-18 — a safety-profile override that
+                  is accepted and silently ignored is a bigger problem than
+                  the value that was being passed to it.
+                """
                 result = await self.processor.evaluate_cep_and_update_safety(
                     frame=frame,
                     user_input=user_input,
                     narrative_raw_text=narrative_response,
                     cognitive_state=cognitive_state,
-                    physics_state={},  # Will be set from context
-                    unified_state=None,  # Will be set from context
-                    time_delta=1.0,  # Will be set from context
-                    current_integrity=100.0,  # Will be set from context
-                    character_archetype="shadow",  # Will be set from context
-                    profile_name="edu"  # Will be set from context
+                    physics_state=physics_state if physics_state is not None else {},
+                    unified_state=unified_state,
+                    current_integrity=(
+                        current_integrity if current_integrity is not None
+                        else 100.0
+                    ),
+                    # 0.0 when the turn has no time_delta: it is the CEP
+                    # engine's own default for absent temporal information,
+                    # not a number invented here.
+                    time_delta=time_delta if time_delta is not None else 0.0,
+                    # No context field. "" falls through to the engine's
+                    # "this character" rather than naming an archetype the
+                    # turn never established.
+                    character_archetype="",
+                    # profile_name deliberately not passed — see OD-18.
                 )
                 # Extract cep_flags and cep_config from result
                 frame, safe_text, cep_result, cep_metrics, cep_flags = result
@@ -762,27 +815,29 @@ def create_all_blocks(
     else:
         blocks["entropy_amplitude_post_gate"] = EntropyAmplitudePostGateBlock(gate=None)
 
-    # 25. neurotransmitter_memory_growth - Needs neurotransmitter
-    if services.neurotransmitter:
-        class NeurotransmitterMemoryGrowthAdapter:
-            def __init__(self, neurotransmitter, growth_tracker=None):
-                self.neurotransmitter = neurotransmitter
-                self.growth_tracker = growth_tracker
-
-            def update_growth(self, user_input, narrative_response, physics_state):
-                # Update neurotransmitter and growth tracker
-                # This is a simplified adapter - actual implementation may differ
-                return {
-                    "neurotransmitter_updated": True,
-                    "growth_metrics": {}
-                }
-
-        blocks["neurotransmitter_memory_growth"] = NeurotransmitterMemoryGrowthBlock(
-            growth_updater=NeurotransmitterMemoryGrowthAdapter(
-                services.neurotransmitter,
-                (services.additional_services or {}).get("growth_tracker")
-            )
-        )
+    # 25. neurotransmitter_memory_growth
+    #
+    # OD-15, 2026-08-03. An inline adapter used to be wired here whose
+    # `update_growth` ignored all three of its parameters, ignored the
+    # neurotransmitter and growth_tracker it was constructed with, and
+    # returned a hardcoded `{"neurotransmitter_updated": True,
+    # "growth_metrics": {}}` under its own comment calling itself "a
+    # simplified adapter".
+    #
+    # The block was honest — it published what its collaborator returned. The
+    # collaborator asserted an update it never performed, and
+    # echo_orchestrator merges block data into metadata, so the claim
+    # travelled. `neurotransmitter_updated` has no reader anywhere, which
+    # makes it the purest form of the thing: a claim nobody consumes and
+    # anybody could cite.
+    #
+    # No adapter is wired now. The block records NOT_MEASURED /
+    # `not_executed` for a missing updater, which is exactly true: no growth
+    # updater is implemented. `services.neurotransmitter` remains available
+    # for whoever implements one.
+    blocks["neurotransmitter_memory_growth"] = NeurotransmitterMemoryGrowthBlock(
+        growth_updater=None
+    )
 
     # 26. audit_layer - Needs processor
     if services.processor:
@@ -983,10 +1038,20 @@ def create_all_blocks(
                         },
                         telemetry_summaries={}
                     )
-                    return {"phi": phi_value if isinstance(phi_value, (int, float)) else 0.5, "components": {}}
+                    # A non-numeric return measured nothing. 0.5 here was the
+                    # midpoint four other blocks also default to, so an engine
+                    # that answered nothing was indistinguishable from one
+                    # that answered "middle".
+                    if isinstance(phi_value, (int, float)) and not isinstance(phi_value, bool):
+                        return {"phi": phi_value, "components": {}}
+                    return {"components": {"source": "engine_returned_non_numeric",
+                                           "type": type(phi_value).__name__}}
 
-                # Final fallback
-                return {"phi": previous_phi or 0.5, "components": {}}
+                # Final fallback. This published `previous_phi or 0.5` — last
+                # turn's phi presented as this turn's measurement, and a
+                # midpoint when there was no last turn. previous_phi remains a
+                # legitimate INPUT to the formula above; it is not an output.
+                return {"components": {"source": "no_engine_interface_matched"}}
 
         blocks["phi_computation"] = PhiComputationBlock(
             phi_computer=PhiComputationAdapter(services.phi_engine)
@@ -1000,11 +1065,25 @@ def create_all_blocks(
                     physics_state = {}
                 if not isinstance(physics_state, dict):
                     physics_state = {}
+                # Same repair as phi_computation.py: the inputs are required
+                # rather than substituted. entropy 0.5 / stability 0.8 /
+                # valence 0.0 fed the real formula and the result was labelled
+                # `calculate_phi_cognitive`, so a phi computed from three
+                # invented numbers was indistinguishable from a measured one.
+                entropy = physics_state.get("entropy")
+                stability = physics_state.get("stability")
+                valence = physics_state.get("valence")
+                absent = [n for n, v in (("entropy", entropy),
+                                         ("stability", stability),
+                                         ("valence", valence)) if v is None]
+                if absent:
+                    return {"components": {"source": "inputs_absent"},
+                            "unmeasured_inputs": absent}
                 try:
                     from phionyx_core.physics.formulas import calculate_phi_cognitive
-                    entropy = float(physics_state.get("entropy", 0.5))
-                    stability = float(physics_state.get("stability", 0.8))
-                    valence = float(physics_state.get("valence", 0.0))
+                    entropy = float(entropy)
+                    stability = float(stability)
+                    valence = float(valence)
                     phi = calculate_phi_cognitive(
                         entropy=entropy,
                         stability=stability,
@@ -1020,9 +1099,11 @@ def create_all_blocks(
                         }
                     }
                 except Exception as e:
-                    logger.warning(f"calculate_phi_cognitive failed, using entropy*0.8: {e}")
-                    entropy = float(physics_state.get("entropy", 0.5))
-                    return {"phi": entropy * 0.8, "components": {"entropy": entropy, "source": "heuristic_fallback"}}
+                    logger.warning("calculate_phi_cognitive failed: %s", e)
+                    # `entropy * 0.8` was a number with the shape of a
+                    # measurement and no measurement behind it.
+                    return {"components": {"source": "formula_raised",
+                                           "error": type(e).__name__}}
 
         blocks["phi_computation"] = PhiComputationBlock(
             phi_computer=PhiComputerFallbackAdapter()
@@ -1092,7 +1173,19 @@ def create_all_blocks(
         kill_switch = KillSwitch()
         blocks["kill_switch_gate"] = KillSwitchGateBlock(kill_switch=kill_switch)
     except ImportError:
-        blocks["kill_switch_gate"] = KillSwitchGateBlock(kill_switch=None)
+        # A KillSwitch that cannot be imported is a broken installation, not a
+        # deliberate configuration — so this fallback fails CLOSED. The block
+        # used to be built with kill_switch=None and report "skipped", which
+        # turned canonical block 1 into a silent no-op (T1 gate review
+        # 2026-08-02). A caller who genuinely wants an unguarded pipeline
+        # constructs KillSwitchGateBlock(kill_switch=None) directly, which keeps
+        # the lenient default and still emits the auditable event.
+        logger.critical(
+            "[BLOCK_FACTORY] KillSwitch could not be imported; kill_switch_gate "
+            "is built fail-closed and will block every turn until this is fixed."
+        )
+        blocks["kill_switch_gate"] = KillSwitchGateBlock(
+            kill_switch=None, fail_closed=True)
 
     # Perceptual Frame Emit (no DI needed)
     blocks["perceptual_frame_emit"] = PerceptualFrameEmitBlock()

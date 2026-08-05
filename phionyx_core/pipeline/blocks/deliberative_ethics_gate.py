@@ -13,6 +13,12 @@ import logging
 
 from ..base import PipelineBlock, BlockContext, BlockResult
 
+from ..outcome import (
+    BlockOutcome,
+    BlockRunStatus,
+    errored,
+)
+
 logger = logging.getLogger(__name__)
 
 
@@ -171,7 +177,18 @@ class DeliberativeEthicsGateBlock(PipelineBlock):
             # Was status="error" + silent proceed (fail-open). Now an auditable
             # gate_unavailable event. Under fail_closed, DEFER the turn to a human
             # rather than let an elevated-risk turn proceed with no ethics check.
+            _outcome = BlockOutcome(
+                block_id=self.block_id,
+                legacy_control_status="ok",
+                block_run_status=BlockRunStatus.FAILED,
+                measurement=errored(
+                    "ethics scorer raised; the verdict below is the "
+                    "fail-closed posture, not a deliberation result",
+                    inputs_present=True, exception=type(e).__name__),
+                operating_mode="degraded",
+            )
             data = {
+                "block_outcome": _outcome.to_record_fields(),
                 "deliberation_run": False,
                 "gate_unavailable": True,
                 "enforced": self.fail_closed,

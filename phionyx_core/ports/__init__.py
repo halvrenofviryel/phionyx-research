@@ -25,6 +25,7 @@ from .learning_record_port import (
     InMemoryLearningRecordPort,
     NullLearningRecordPort,
 )
+from .capability_port import CapabilityPort, NullCapabilityPort
 
 # NOTE: product-specific inspection adapters live in the product layer, not core.
 # Per Echoism Core v1.0: domain-specific ingest ports are product-specific, not part of core SDK
@@ -42,5 +43,7 @@ __all__ = [
     "LearningRecordPort",
     "InMemoryLearningRecordPort",
     "NullLearningRecordPort",
+    "CapabilityPort",
+    "NullCapabilityPort",
 ]
 

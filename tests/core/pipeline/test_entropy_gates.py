@@ -158,7 +158,14 @@ async def test_post_gate_high_entropy_high_coherence_passes():
 
 @pytest.mark.asyncio
 async def test_post_gate_empty_physics_state():
-    """Empty physics_state → pass."""
+    """Empty physics_state → the gate does not fire, and does not claim a pass.
+
+    This asserted ``gate_action == "pass"`` until 2026-08-02. There was nothing
+    to compare against either threshold, so "pass" was a verdict the block had
+    not reached — the shape the P-4 migration removes. The *behaviour* is
+    unchanged and still asserted below: the turn is not flagged and the block
+    reports success, so the pipeline continues.
+    """
     block = EntropyAmplitudePostGateBlock(gate=None)
     ctx = BlockContext(
         user_input="test",
@@ -170,7 +177,10 @@ async def test_post_gate_empty_physics_state():
         metadata={"physics_state": {}},
     )
     result = await block.execute(ctx)
-    assert result.data["gate_action"] == "pass"
+    assert result.data["gate_action"] == "not_measured"
+    assert result.is_success()
+    assert ctx.metadata.get("entropy_gate_warning") is None
+    assert result.data["block_outcome"]["measurement_status"] == "NOT_MEASURED"
 
 
 @pytest.mark.asyncio

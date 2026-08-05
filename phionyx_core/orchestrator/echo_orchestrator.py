@@ -11,10 +11,11 @@ It has NO dependencies on FastAPI, HTTP, or database models.
 import logging
 import os
 import time
-from typing import Callable, Dict, Any, Optional, Protocol, cast, TYPE_CHECKING
+from typing import Callable, Dict, Any, Optional, Protocol, TYPE_CHECKING
 from dataclasses import dataclass
 
 from ..pipeline.base import PipelineBlock, BlockContext, BlockResult
+from ..pipeline.outcome import BlockOutcome, BlockRunStatus, not_measured
 
 if TYPE_CHECKING:
     from ..profiles.schema import ExecutionGuardConfig
@@ -243,6 +244,133 @@ class EchoOrchestrator:
     #: Hard cap on regenerate retries per turn. Axiom 6 determinism +
     #: prevents retry storms.
     _REGEN_MAX_ATTEMPTS = 1
+
+    @staticmethod
+    def _coerce_numeric(value: Any, label: str, mode: str) -> Optional[float]:
+        """float(value) or None, logged. `is not None` does not mean numeric.
+
+        An unguarded float() in the parallel path took the whole pipeline down
+        on an input the sequential path — which did not convert at all —
+        survived. A run's success depended on the execution mode.
+        """
+        if value is None:
+            return None
+        try:
+            return float(value)
+        except (TypeError, ValueError):
+            logger.debug("[%s] %s published a non-numeric value (%s); "
+                         "leaving the carried one", mode, label,
+                         type(value).__name__)
+            return None
+
+    def _apply_post_block_state_updates(
+        self,
+        context: "BlockContext",
+        block_id: str,
+        result: Any,
+        mode: str,
+    ) -> None:
+        """Fold one block's result into the turn state. OD-22.
+
+        The parallel and sequential loops each carried their own copy of this,
+        and the copies had drifted in three ways — measured 2026-08-04, all
+        three found only because a Mock crashed one path and not the other:
+
+        1. **Type coercion.** Parallel wrote `float(phi)` and
+           `float(entropy)`; sequential wrote whatever the block published.
+           So `context.previous_phi`, annotated `Optional[float]` in
+           `pipeline/base.py:51`, held a float in one mode and the engine's
+           raw type in the other.
+        2. **amplitude and integrity.** Handled ONLY in the sequential loop.
+           In parallel mode `context.current_integrity` never moved off its
+           initial value — and that is the value threaded into the CEP safety
+           evaluation (OD-16), so a safety check read a stale integrity in
+           one execution mode.
+        3. **coherence_qa redaction.** Handled only in the sequential loop.
+           It is dead in both today: the block is in no canonical order and
+           lives in `blocks/archive/` (OD-2). Kept here so that when OD-2 is
+           decided the redaction reaches both paths rather than one.
+
+        Merging them is the fix rather than patching the copies to agree,
+        because two copies that agree today drift again. CLAUDE.md invariant 5
+        is that identical inputs give a reproducible path; two loops writing
+        different state is that invariant, and the founder approved closing
+        it on 2026-08-04.
+        """
+        if not isinstance(result.data, dict):
+            return
+        if context.metadata is None:
+            context.metadata = {}
+
+        def physics_state() -> Dict[str, Any]:
+            state = context.metadata.get("physics_state")
+            if not isinstance(state, dict):
+                state = {}
+                context.metadata["physics_state"] = state
+            return state
+
+        if block_id == "entropy_computation" and "entropy" in result.data:
+            entropy = self._coerce_numeric(
+                result.data.get("entropy"), "entropy_computation", mode)
+            if entropy is not None:
+                context.current_entropy = entropy
+                context.metadata["current_entropy"] = entropy
+                physics_state()["entropy"] = entropy
+
+        if block_id == "phi_computation" and "phi" in result.data:
+            phi = self._coerce_numeric(
+                result.data.get("phi"), "phi_computation", mode)
+            if phi is not None:
+                context.previous_phi = phi
+                context.metadata["previous_phi"] = phi
+
+        if block_id == "emotion_estimation":
+            valence = self._coerce_numeric(
+                result.data.get("valence"), "emotion_estimation.valence", mode)
+            arousal = self._coerce_numeric(
+                result.data.get("arousal"), "emotion_estimation.arousal", mode)
+            if valence is not None or arousal is not None:
+                state = physics_state()
+                if valence is not None:
+                    state["valence"] = valence
+                if arousal is not None:
+                    state["arousal"] = arousal
+
+                # EchoState2 V/A. The `isinstance(..., type)` guard was in the
+                # parallel copy only and is kept: it rejects the CLASS being
+                # passed where an instance was meant.
+                unified_state = context.metadata.get("unified_state")
+                if unified_state and not isinstance(unified_state, type):
+                    try:
+                        if valence is not None and hasattr(unified_state, 'V'):
+                            unified_state.V = valence
+                        if arousal is not None and hasattr(unified_state, 'A'):
+                            unified_state.A = arousal
+                    except (AttributeError, ValueError, TypeError) as exc:
+                        logger.debug(
+                            "[%s] Could not update unified_state V/A: %s",
+                            mode, exc)
+
+        # Dead until OD-2 is decided — coherence_qa is in no canonical order.
+        if block_id == "coherence_qa":
+            qa = result.data.get("qa_result")
+            if isinstance(qa, dict) and qa.get("leak_detected"):
+                redacted = qa.get("redacted_text")
+                if redacted:
+                    context.metadata["narrative_text"] = redacted
+                    logger.info(
+                        "[%s] Coherence QA: leak detected, applied redaction "
+                        "(score=%s, violations=%s)", mode,
+                        qa.get("coherence_score", "N/A"),
+                        qa.get("violation_count", 0))
+
+        for key, attribute in (("amplitude", "current_amplitude"),
+                               ("integrity", "current_integrity")):
+            if key in result.data:
+                value = self._coerce_numeric(result.data.get(key), key, mode)
+                if value is not None:
+                    setattr(context, attribute, value)
+                    context.metadata[attribute] = value
 
     def _compute_retry_seed(self, context: "BlockContext") -> str:
         """Deterministic retry seed: SHA-256 of turn-id + state snapshot.
@@ -507,64 +635,9 @@ class EchoOrchestrator:
                         if current_context.metadata is None:
                             current_context.metadata = {}
 
-                        # Handle entropy_computation
-                        if block_id == "entropy_computation" and "entropy" in result.data:
-                            entropy_value = result.data.get("entropy")
-                            if entropy_value is not None:
-                                current_context.current_entropy = float(entropy_value)
-                                current_context.metadata["current_entropy"] = float(entropy_value)
-                                logger.debug(f"[Parallel] Updated current_entropy: {entropy_value}")
-
-                            # Update physics_state with entropy
-                            # CRITICAL: Ensure physics_state is a dictionary, not a Mock object
-                            # Get current physics_state safely
-                            current_physics_state = current_context.metadata.get("physics_state")
-                            if not isinstance(current_physics_state, dict):
-                                current_physics_state = {}
-                                current_context.metadata["physics_state"] = current_physics_state
-
-                            # Update entropy value
-                            current_physics_state["entropy"] = float(entropy_value)  # type: ignore[arg-type]  # entropy_value is Any|None here (outside the is-not-None guard); latent None risk flagged in concerns
-
-                        # Handle phi_computation
-                        if block_id == "phi_computation" and "phi" in result.data:
-                            phi_value = result.data.get("phi")
-                            if phi_value is not None:
-                                current_context.previous_phi = float(phi_value)
-                                current_context.metadata["previous_phi"] = float(phi_value)
-                                logger.debug(f"[Parallel] Updated previous_phi: {phi_value}")
-
-                        # Handle emotion_estimation
-                        if block_id == "emotion_estimation":
-                            valence = result.data.get("valence")
-                            arousal = result.data.get("arousal")
-                            if valence is not None or arousal is not None:
-                                # CRITICAL: Ensure physics_state is a dictionary, not a Mock object
-                                # Get current physics_state safely
-                                current_physics_state = current_context.metadata.get("physics_state")
-                                if not isinstance(current_physics_state, dict):
-                                    current_physics_state = {}
-                                    current_context.metadata["physics_state"] = current_physics_state
-
-                                if valence is not None:
-                                    current_physics_state["valence"] = float(valence)
-                                    logger.debug(f"[Parallel] Updated physics_state.valence: {valence}")
-                                if arousal is not None:
-                                    current_physics_state["arousal"] = float(arousal)
-                                    logger.debug(f"[Parallel] Updated physics_state.arousal: {arousal}")
-
-                                # CRITICAL: Also update unified_state (EchoState2) if available
-                                unified_state = current_context.metadata.get("unified_state")
-                                if unified_state and not isinstance(unified_state, type):
-                                    try:
-                                        if valence is not None and hasattr(unified_state, 'V'):
-                                            unified_state.V = float(valence)
-                                            logger.debug(f"[Parallel] Updated unified_state.V (EchoState2): {valence}")
-                                        if arousal is not None and hasattr(unified_state, 'A'):
-                                            unified_state.A = float(arousal)
-                                            logger.debug(f"[Parallel] Updated unified_state.A (EchoState2): {arousal}")
-                                    except (AttributeError, ValueError, TypeError) as e:
-                                        logger.debug(f"[Parallel] Could not update unified_state V/A: {e}")
+                        # OD-22: both execution loops call the same folder now.
+                        self._apply_post_block_state_updates(
+                            current_context, block_id, result, mode="Parallel")
 
                     # Mark blocks as executed
                     executed_blocks.update(group.block_ids)
@@ -657,10 +730,38 @@ class EchoOrchestrator:
                 if self.telemetry_collector:
                     self.telemetry_collector.start_block(block_id, block_id)
                     self.telemetry_collector.end_block(block_id, status="skipped")
+                # OD-21. A skip carried a CONTROL-channel reason and nothing
+                # on the measurement channel, so the record said the block did
+                # not run and never said what went unmeasured. That is the
+                # two-channel separation this migration is about, applied to
+                # the one path it had not reached.
+                #
+                # This is also the answer to neurotransmitter_memory_growth,
+                # which has no growth updater to call. The block is NOT
+                # retired: CLAUDE.md is explicit that blocks are never
+                # deleted, only policy-bypassed with an audit trail, and the
+                # canonical count is load-bearing outside this repo — the
+                # patent claim map and the arXiv paper both cite 46, and the
+                # website already draws the right distinction ("phionyx-core
+                # DEFINES a canonical 46-block pipeline... you do not have to
+                # deploy all 46 blocks"). The contract keeps its 46. What
+                # changes is that a block which did not run now says so on the
+                # channel a reader of the record consults.
+                _skip_outcome = BlockOutcome(
+                    block_id=block_id,
+                    legacy_control_status="skipped",
+                    block_run_status=BlockRunStatus.NOT_STARTED,
+                    measurement=not_measured(
+                        f"the block did not run: {skip_reason}",
+                        cause="input_absent",
+                    ),
+                    operating_mode="degraded",
+                )
                 results[block_id] = BlockResult(
                     block_id=block_id,
                     status="skipped",
-                    skip_reason=skip_reason
+                    skip_reason=skip_reason,
+                    data={"block_outcome": _skip_outcome.to_record_fields()},
                 )
                 skipped_blocks.add(block_id)
                 logger.info(f"Block {block_id} skipped: {skip_reason}. block_index={block_index}")
@@ -798,82 +899,9 @@ class EchoOrchestrator:
                         # If result.data is not a dict, skip it
                         logger.warning(f"result.data is not a dictionary (type: {type(result.data)}), skipping metadata update")
 
-                    # Update physics values in context (if computed by physics blocks)
-                    if block_id == "entropy_computation" and "entropy" in result.data:
-                        entropy_value = result.data.get("entropy")
-                        if entropy_value is not None:
-                            current_context.current_entropy = entropy_value
-                            current_context.metadata["current_entropy"] = entropy_value
-                            logger.debug(f"Updated current_entropy: {entropy_value}")
-
-                            # Update physics_state with entropy
-                            # CRITICAL: Ensure physics_state is a dictionary, not a Mock object
-                            current_physics_state = current_context.metadata.get("physics_state")
-                            if not isinstance(current_physics_state, dict):
-                                current_physics_state = {}
-                                current_context.metadata["physics_state"] = current_physics_state
-                            current_physics_state["entropy"] = float(entropy_value)
-
-                    if block_id == "emotion_estimation" and ("valence" in result.data or "arousal" in result.data):
-                        # CRITICAL: Write emotion_estimation results to physics_state
-                        # This ensures phi_computation can use valence/arousal from emotion_estimation
-                        # CRITICAL: Ensure physics_state is a dictionary, not a Mock object
-                        current_physics_state = current_context.metadata.get("physics_state")
-                        if not isinstance(current_physics_state, dict):
-                            current_physics_state = {}
-                            current_context.metadata["physics_state"] = current_physics_state
-
-                        valence = result.data.get("valence")
-                        arousal = result.data.get("arousal")
-                        if valence is not None:
-                            current_physics_state["valence"] = float(valence)
-                            logger.debug(f"Updated physics_state.valence: {valence}")
-                        if arousal is not None:
-                            current_physics_state["arousal"] = float(arousal)
-                            logger.debug(f"Updated physics_state.arousal: {arousal}")
-
-                        # CRITICAL: Also update unified_state (EchoState2) if available
-                        # This ensures EchoState2.V and EchoState2.A are updated with emotion_estimation results
-                        unified_state = current_context.metadata.get("unified_state")
-                        if unified_state:
-                            try:
-                                if valence is not None and hasattr(unified_state, 'V'):
-                                    unified_state.V = float(valence)
-                                    logger.debug(f"Updated unified_state.V (EchoState2): {valence}")
-                                if arousal is not None and hasattr(unified_state, 'A'):
-                                    unified_state.A = float(arousal)
-                                    logger.debug(f"Updated unified_state.A (EchoState2): {arousal}")
-                            except (AttributeError, ValueError, TypeError) as e:
-                                logger.debug(f"Could not update unified_state V/A: {e}")
-
-                    if block_id == "phi_computation" and "phi" in result.data:
-                        phi_value = result.data.get("phi")
-                        if phi_value is not None:
-                            current_context.previous_phi = phi_value
-                            current_context.metadata["previous_phi"] = phi_value
-                            logger.debug(f"Updated previous_phi: {phi_value}")
-
-                    # Coherence enforcement: apply redaction if state leak detected
-                    if block_id == "coherence_qa" and isinstance(result.data, dict):
-                        qa = result.data.get("qa_result")
-                        if qa and isinstance(qa, dict) and qa.get("leak_detected"):
-                            redacted = qa.get("redacted_text")
-                            if redacted:
-                                current_context.metadata["narrative_text"] = redacted
-                                logger.info(
-                                    "Coherence QA: leak detected, applied redaction "
-                                    f"(score={qa.get('coherence_score', 'N/A')}, "
-                                    f"violations={qa.get('violation_count', 0)})"
-                                )
-
-                    # Update amplitude and integrity if available
-                    if "amplitude" in result.data:
-                        current_context.current_amplitude = cast(float, result.data.get("amplitude"))
-                        current_context.metadata["current_amplitude"] = result.data.get("amplitude")
-
-                    if "integrity" in result.data:
-                        current_context.current_integrity = cast(float, result.data.get("integrity"))
-                        current_context.metadata["current_integrity"] = result.data.get("integrity")
+                    # OD-22: both execution loops call the same folder now.
+                    self._apply_post_block_state_updates(
+                        current_context, block_id, result, mode="Sequential")
 
                     # Check for early exit trigger
                     if result.data.get("early_exit", False) or result.data.get("early_exit_triggered", False):
