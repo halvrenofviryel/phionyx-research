@@ -157,7 +157,7 @@ def calculate_profile_separation(
 
         # Ortalama benzerlik ne kadar düşükse, ayrım o kadar yüksek
         avg_similarity = np.mean(similarities)
-        psi = 1.0 - avg_similarity  # Mesafe = 1 - Benzerlik
+        psi = 1.0 - float(avg_similarity)  # Mesafe = 1 - Benzerlik
 
         return float(max(0.0, min(1.0, psi)))
 
