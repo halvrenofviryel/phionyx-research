@@ -143,6 +143,7 @@ select = ["E4", "E7", "E9", "F"]
 # installed.
 [tool.mypy]
 python_version = "3.10"
+mypy_path = "typings"
 # numpy >= 2.5 ships PEP 695 `type` statements in its stubs; with the
 # python_version pin above, mypy rejects that SYNTAX inside numpy's own
 # .pyi on the 3.12/3.13 CI runners (2026-08-05). Skip following numpy —
@@ -255,6 +256,3 @@ bench = [
     "jsonpath-ng (>=1.7.0,<2.0.0)"
 ]
 
-[[tool.mypy.overrides]]
-module = "numpy.*"
-follow_imports = "skip"
