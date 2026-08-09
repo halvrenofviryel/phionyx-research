@@ -2,16 +2,17 @@
 
 **Phionyx treats LLM output as a noisy sensor measurement, not as truth.**
 
-A deterministic AI runtime that maps every model output through 46 evaluation blocks before allowing it to affect system behavior. Signed audit trails, replayable decisions, and reviewer-runnable governance evidence — not better prompts, a control system around an unreliable sensor.
+A deterministic AI runtime that routes model output through its governance pipeline — built on a canonical 46-block contract (v3.8.0) — before allowing it to affect system behavior. Signed audit trails, replayable decisions, and reviewer-runnable governance evidence — not better prompts, a control system around an unreliable sensor.
 
 Beyond governance, Phionyx Core ships a **physics module** that produces deterministic coherence telemetry over a structured state vector — useful for NPC/agent drift detection, session-level coherence tracking, and reproducible runtime evaluation.
 
 > **Where this sits in the Phionyx stack.** This repo is the **engine** — the SDK
 > `phionyx-core` (PyPI, latest **v0.9.0**), the deterministic runtime. Every governed
-> turn it runs can be emitted as an **[AI Runtime Evidence Protocol (AIREP)](https://github.com/halvrenofviryel/ai-runtime-evidence-protocol)**
-> record: one signed, hash-chained, offline-checkable evidence receipt per AI runtime
-> decision. AIREP is an experimental, vendor-neutral open format; the Phionyx **Reasoned
-> Governance Envelope (RGE)** is its reference producer (an AIREP profile). See
+> turn it runs is recorded as a signed, hash-chained, offline-checkable **Reasoned
+> Governance Envelope (RGE)** — one evidence receipt per AI runtime decision. RGE is a
+> Phionyx profile developed alongside the **[AI Runtime Evidence Protocol (AIREP)](https://github.com/halvrenofviryel/ai-runtime-evidence-protocol)**,
+> an experimental, vendor-neutral open format; a released conformant projection into AIREP
+> is not yet implemented. See
 > [Runtime evidence format (AIREP)](#runtime-evidence-format-airep) for what a record
 > contains and how anyone can verify one.
 
@@ -37,7 +38,7 @@ Or one command end-to-end (fresh venv → install → smoke flow):
 bash <(curl -sSL https://raw.githubusercontent.com/halvrenofviryel/phionyx-research/main/scripts/demo.sh)
 ```
 
-Most AI frameworks let the LLM decide. Phionyx doesn't. Every LLM response passes through a 46-block deterministic pipeline with safety gates, ethics checks, and structured state tracking — before it reaches the user.
+Most AI frameworks let the LLM decide. Phionyx doesn't. Phionyx routes every response through its governance pipeline — safety gates, ethics checks, and structured state tracking — built on a canonical 46-block contract (v3.8.0), before it reaches the user.
 
 Concretely, a governed action carries **policy + a state transition + an abstain / block / rewrite decision + a replayable evidence record** in one inspectable trace. This sits **alongside** the emerging agent-governance tooling — signed action receipts, agent audit / replay, enterprise control planes — not against it; the contribution is that combination, plus a runnable demo that governs *its own* development the same way.
 
@@ -123,12 +124,12 @@ See [`examples/fastapi/`](examples/fastapi/) for an HTTP endpoint wrapper.
 
 ## Scope: what Phionyx is, and is not
 
-Phionyx is an **early, working reference implementation** for deterministic
+Phionyx is an **early, working implementation under alignment** for deterministic
 runtime governance. To keep claims aligned with evidence, here is what we
 **do not** assert:
 
 - **Phionyx does not make LLMs deterministic.** Model output stays probabilistic. Phionyx makes the *governance path* — gates, state, audit — deterministic.
-- **Phionyx is not a certification authority.** The [AI Runtime Evidence Protocol (AIREP)](https://github.com/halvrenofviryel/ai-runtime-evidence-protocol) that Phionyx emits records for is an *experimental, proposed open format* for per-decision evidence — not a ratified standard and not an accredited certification scheme.
+- **Phionyx is not a certification authority.** The [AI Runtime Evidence Protocol (AIREP)](https://github.com/halvrenofviryel/ai-runtime-evidence-protocol) that Phionyx produces evidence envelopes alongside is an *experimental, proposed open format* for per-decision evidence — not a ratified standard and not an accredited certification scheme.
 - **Phionyx does not replace NIST AI RMF, ISO/IEC 42001, or the EU AI Act.** It is a runtime layer designed to *produce evidence* that maps onto those frameworks; it does not implement them on your behalf.
 - **Current benchmarks are controlled reference benchmarks**, not third-party audits. Reproducible from this repo, but not yet independently validated.
 - **Production-readiness is scoped to the demos in `examples/`**. The runtime is research-grade until pilot deployments and an external review land.
@@ -167,7 +168,7 @@ separate 5-layer governance stack in which the self-governance gate
 - Kill switch with 4 triggers (fail-closed)
 - Deliberative ethics engine (4-framework reasoning)
 - Human-in-the-loop queue with priority and expiry
-- Ed25519-signed audit trail with hash chains
+- Signed audit trail with hash chains (Ed25519-capable signer)
 - **Evidence schemas (v0.9.0)** — additive `contracts/v4`: forensics-lite decision receipt, agent SLA metrics, evidence identifier (`phionyx:trace:…`), learning-decision & group-execution records, novelty clearance, and abstention
 
 **Engine Layer 3 — Semantic Time Memory**
@@ -262,13 +263,13 @@ to trust prose: the pack itself is the evidence.
 
 ## Runtime evidence format (AIREP)
 
-The records Phionyx emits follow the **[AI Runtime Evidence Protocol (AIREP)](https://github.com/halvrenofviryel/ai-runtime-evidence-protocol)** — an experimental, vendor-neutral open format for a per-decision **AI decision receipt**: one signed, hash-chained, offline-checkable record per AI runtime decision, readable by anyone and tied to no vendor.
+The records Phionyx emits are **Reasoned Governance Envelopes (RGE)** — a Phionyx profile developed alongside the **[AI Runtime Evidence Protocol (AIREP)](https://github.com/halvrenofviryel/ai-runtime-evidence-protocol)**, an experimental, vendor-neutral open format for a per-decision **AI decision receipt**: one signed, hash-chained, offline-checkable record per AI runtime decision, readable by anyone and tied to no vendor. A released conformant projection from RGE into AIREP is not yet implemented.
 
 Each record carries a fixed set of groups — `subject`, `input`, `claim`, `output`, `evidence`, `directive`, `scope`, `integrity` (plus optional profiles). It is canonicalized with RFC 8785 (JCS) JSON so two independent verifiers (one in Python, one in Node) can confirm the same bytes hash to the same value. AIREP defines three conformance classes — **Core**, **Verified**, **Trusted** — describing how much of a record a producer fills in and signs.
 
-**Where Phionyx sits:** the Phionyx **Reasoned Governance Envelope (RGE)** is AIREP's **reference producer** — the first system that emits AIREP records, and it matures by conforming to the format. RGE is a Phionyx *profile* of AIREP, not the format itself.
+**Where Phionyx sits:** the Phionyx **Reasoned Governance Envelope (RGE)** is developed alongside AIREP and matures by conforming toward the format. RGE is a Phionyx *profile* of AIREP, not the format itself; a released conformant projection from RGE into AIREP is not yet implemented.
 
-AIREP is **experimental — a *proposed* open format, not a ratified standard**, with one reference implementation today. The format (`phionyx-core` engine, the RGE producer, and AIREP itself) carries **independent version lines** — engine **v0.9.0**, AIREP **v0.1 (Experimental)** — which must never be cross-attributed.
+AIREP is **experimental — a *proposed* open format, not a ratified standard**, with no conformant producer yet. The format (`phionyx-core` engine, the RGE producer, and AIREP itself) carries **independent version lines** — engine **v0.9.0**, AIREP **v0.1 (Experimental)** — which must never be cross-attributed.
 
 - Spec: CC-BY-4.0 · Reference code: Apache-2.0
 - DOI: concept [10.5281/zenodo.20475136](https://doi.org/10.5281/zenodo.20475136) · v0.1 [10.5281/zenodo.20475137](https://doi.org/10.5281/zenodo.20475137)
@@ -277,7 +278,7 @@ AIREP is **experimental — a *proposed* open format, not a ratified standard**,
 
 ## Companion packages
 
-Eight PyPI-published companion packages extend the Phionyx runtime into an end-to-end evidence stack for the agentic AI ecosystem. Each carries **its own version line** (do not inherit the engine's v0.9.0). Seven are described below, grouped by where they sit on the [phionyx.ai](https://phionyx.ai) audience pillars; the eighth — **[`phionyx-letta`](https://pypi.org/project/phionyx-letta/)** (v0.1.0a1), a Letta adapter that emits a signed envelope per memory mutation — ships under the applied-product line.
+Eight PyPI-published companion packages extend the Phionyx runtime into an evidence stack across the agentic AI ecosystem. Each carries **its own version line** (do not inherit the engine's v0.9.0). Seven are described below, grouped by where they sit on the [phionyx.ai](https://phionyx.ai) audience pillars; the eighth — **[`phionyx-letta`](https://pypi.org/project/phionyx-letta/)** (v0.1.0a1), a Letta adapter that emits a signed envelope per memory mutation — ships under the applied-product line.
 
 **MCP integration — surfaces under [Bounded Authority](https://phionyx.ai/bounded-authority).** Trust boundary + self-claim gate for AI coding agents (Claude Code, Cursor, Zed, VS Code, JetBrains — any MCP-capable host):
 
@@ -296,7 +297,7 @@ Eight PyPI-published companion packages extend the Phionyx runtime into an end-t
 
 Also on the evidence side: **`phionyx-compliance`** (v0.1.1) — evidence-mapping helpers; see the [Compliance mappings](#compliance-mappings) section.
 
-When the two MCP servers are installed and registered with the same Claude Code host, they share a single `trace_id` per session (via `PHIONYX_TRACE_ID` env var with `~/.phionyx/active_trace` file fallback). One Claude Code conversation = one trace = end-to-end view of every third-party MCP tool call AND every agent self-claim gate decision. The Inspect bridge and the framework adapters consume envelopes off-host; they don't need to share the live trace.
+When the two MCP servers are installed and registered with the same Claude Code host, they share a single `trace_id` per session (via `PHIONYX_TRACE_ID` env var with `~/.phionyx/active_trace` file fallback). One Claude Code conversation = one trace = a joined view of the third-party MCP tool calls and agent self-claim gate decisions recorded in that session. The Inspect bridge and the framework adapters consume envelopes off-host; they don't need to share the live trace.
 
 ```bash
 # MCP governance for live coding sessions:
@@ -376,7 +377,7 @@ A commercial license is available for use cases where AGPL-3.0 copyleft is not s
 - **Research website:** [phionyx.ai](https://phionyx.ai)
 - **Posts (Deterministic AI Engineering series):** [phionyx.ai/research/posts](https://phionyx.ai/research/posts)
 - **Substack (read direct):** [phionyxresearch.substack.com](https://phionyxresearch.substack.com)
-- **Runtime evidence format (AIREP):** [ai-runtime-evidence-protocol](https://github.com/halvrenofviryel/ai-runtime-evidence-protocol) (v0.1, Experimental) — vendor-neutral open format for a per-decision AI decision receipt; signed, hash-chained, offline-checkable records with two independent verifiers (Python + Node). The Phionyx RGE is its reference producer.
+- **Runtime evidence format (AIREP):** [ai-runtime-evidence-protocol](https://github.com/halvrenofviryel/ai-runtime-evidence-protocol) (v0.1, Experimental) — vendor-neutral open format for a per-decision AI decision receipt; signed, hash-chained, offline-checkable records with two independent verifiers (Python + Node). The Phionyx RGE is a profile developed alongside it; a released conformant projection is not yet implemented.
 - **MCP outward layer:** [phionyx-mcp-server](https://github.com/halvrenofviryel/phionyx-mcp-server) (v0.2.0) — MCP trust boundary governance (descriptor hash, signed RGE v0.2 envelope, audit chain)
 - **Self-governance gate:** [phionyx-pipeline-mcp](https://github.com/halvrenofviryel/phionyx-pipeline-mcp) — self-governance gate over the agent's own "fixed / tested / changed" claims
 - **Inspect AI bridge:** [phionyx-eval-inspect](https://github.com/halvrenofviryel/phionyx-eval-inspect) (v0.1.0) — RGE envelope chain → Inspect `.eval` log; viewable with `inspect view`
