@@ -11,6 +11,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.9.1] — 2026-08-10
+
+**Theme: claim-accuracy documentation patch (no functional core change).**
+
+Withdraws the "reference producer"/"reference implementation" framing and narrows
+AIREP / Ed25519 / end-to-end / per-run "every 46 blocks" wording in the README to the
+recorded evidence level (assurance-boundary alignment). No code, schema, or behavior
+change; `V4_SCHEMA_VERSION` unchanged.
+
+---
+
 ## [0.9.0] — 2026-06-20
 
 **Theme: Evidence interchange + learning-gate governance.**

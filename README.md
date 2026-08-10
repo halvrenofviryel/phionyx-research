@@ -7,7 +7,7 @@ A deterministic AI runtime that routes model output through its governance pipel
 Beyond governance, Phionyx Core ships a **physics module** that produces deterministic coherence telemetry over a structured state vector — useful for NPC/agent drift detection, session-level coherence tracking, and reproducible runtime evaluation.
 
 > **Where this sits in the Phionyx stack.** This repo is the **engine** — the SDK
-> `phionyx-core` (PyPI, latest **v0.9.0**), the deterministic runtime. Every governed
+> `phionyx-core` (PyPI, latest **v0.9.1**), the deterministic runtime. Every governed
 > turn it runs is recorded as a signed, hash-chained, offline-checkable **Reasoned
 > Governance Envelope (RGE)** — one evidence receipt per AI runtime decision. RGE is a
 > Phionyx profile developed alongside the **[AI Runtime Evidence Protocol (AIREP)](https://github.com/halvrenofviryel/ai-runtime-evidence-protocol)**,
