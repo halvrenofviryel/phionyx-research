@@ -76,7 +76,7 @@ embeds its outputs.
 | # | Demo | Shows | Run time | API key |
 |---|------|-------|----------|---------|
 | 01 | [Determinism and Physics](examples/notebooks/01_determinism_and_physics.ipynb) | `EchoState2`, `calculate_phi_v2_1`, 1000-run determinism proof, valence × arousal Φ heatmap, side-by-side with a noisy alternative | ~30 s | No |
-| 02 | [Kill Switch in Action](examples/notebooks/02_kill_switch_in_action.ipynb) | `KillSwitch` with 4 triggers + NaN fail-closed guard, tamper-evident event log | ~5 s | No |
+| 02 | [Kill Switch in Action](examples/notebooks/02_kill_switch_in_action.ipynb) | `KillSwitch` with 4 triggers + NaN fail-closed guard, hash-chained event log | ~5 s | No |
 | 03 | [Pipeline Blocks and Audit](examples/notebooks/03_pipeline_blocks_and_audit.ipynb) | Canonical 46-block pipeline (v3.8.0), custom `PipelineBlock` subclass, 100-run determinism | ~5 s | No |
 | 04 | [FastAPI wrapper](examples/fastapi/) | HTTP `/govern` endpoint over the governance pipeline | <1 min | No |
 
@@ -265,7 +265,7 @@ to trust prose: the pack itself is the evidence.
 
 The records Phionyx emits are **Reasoned Governance Envelopes (RGE)** — a Phionyx profile developed alongside the **[AI Runtime Evidence Protocol (AIREP)](https://github.com/halvrenofviryel/ai-runtime-evidence-protocol)**, an experimental, vendor-neutral open format for a per-decision **AI decision receipt**: one signed, hash-chained, offline-checkable record per AI runtime decision, readable by anyone and tied to no vendor. A released conformant projection from RGE into AIREP is not yet implemented.
 
-Each record carries a fixed set of groups — `subject`, `input`, `claim`, `output`, `evidence`, `directive`, `scope`, `integrity` (plus optional profiles). It is canonicalized with RFC 8785 (JCS) JSON so two independent verifiers (one in Python, one in Node) can confirm the same bytes hash to the same value. AIREP defines three conformance classes — **Core**, **Verified**, **Trusted** — describing how much of a record a producer fills in and signs.
+Each record carries a fixed set of groups — `subject`, `input`, `claim`, `output`, `evidence`, `directive`, `scope`, `integrity` (plus optional profiles). It is canonicalized with RFC 8785 (JCS) JSON so two cross-language first-party verifier implementations (one in Python, one in Node) can confirm the same bytes hash to the same value. AIREP defines three conformance classes — **Core**, **Verified**, **Trusted** — describing how much of a record a producer fills in and signs.
 
 **Where Phionyx sits:** the Phionyx **Reasoned Governance Envelope (RGE)** is developed alongside AIREP and matures by conforming toward the format. RGE is a Phionyx *profile* of AIREP, not the format itself; a released conformant projection from RGE into AIREP is not yet implemented.
 
@@ -278,24 +278,24 @@ AIREP is **experimental — a *proposed* open format, not a ratified standard**,
 
 ## Companion packages
 
-Eight PyPI-published companion packages extend the Phionyx runtime into an evidence stack across the agentic AI ecosystem. Each carries **its own version line** (do not inherit the engine's v0.9.0). Seven are described below, grouped by where they sit on the [phionyx.ai](https://phionyx.ai) audience pillars; the eighth — **[`phionyx-letta`](https://pypi.org/project/phionyx-letta/)** (v0.1.0a1), a Letta adapter that emits a signed envelope per memory mutation — ships under the applied-product line.
+Eight PyPI-published companion packages extend the Phionyx runtime into an evidence stack across the agentic AI ecosystem. Each carries **its own version line** (do not inherit the engine's version). Seven are described below, grouped by where they sit on the [phionyx.ai](https://phionyx.ai) audience pillars; the eighth — **[`phionyx-letta`](https://pypi.org/project/phionyx-letta/)**, a Letta adapter that emits a signed envelope per memory mutation — ships under the applied-product line.
 
 **MCP integration — surfaces under [Bounded Authority](https://phionyx.ai/bounded-authority).** Trust boundary + self-claim gate for AI coding agents (Claude Code, Cursor, Zed, VS Code, JetBrains — any MCP-capable host):
 
-- **[`phionyx-mcp-server`](https://github.com/halvrenofviryel/phionyx-mcp-server)** (v0.2.0) — *outward-facing MCP trust boundary.* Hashes tool descriptors at first observation, detects post-approval drift, signs every third-party tool call as a Reasoned Governance Envelope (RGE v0.2), and maintains a tamper-evident hash chain. Threat surface aligned with arXiv:2512.06556 (Jamshidi et al.) — tool poisoning, shadowing, rug pulls.
-- **[`phionyx-pipeline-mcp`](https://github.com/halvrenofviryel/phionyx-pipeline-mcp)** (v0.3.0a1) — *the self-governance gate.* Self-governance gate over the agent's own *"I fixed this / I tested that / this code path changed"* declarations. Three-stage verification: LLM declaration → `git diff` truth → deterministic physics gate (a 9-block composition from the 46-block runtime). Returns a directive: `pass | regenerate | reject`. It is the third layer of the 5-layer governance stack, distinct from the engine.
+- **[`phionyx-mcp-server`](https://github.com/halvrenofviryel/phionyx-mcp-server)** — *outward-facing MCP trust boundary.* Hashes tool descriptors at first observation, detects post-approval drift, signs every third-party tool call as a Reasoned Governance Envelope (RGE v0.2), and maintains a hash-chained hash chain. Threat surface aligned with arXiv:2512.06556 (Jamshidi et al.) — tool poisoning, shadowing, rug pulls.
+- **[`phionyx-pipeline-mcp`](https://github.com/halvrenofviryel/phionyx-pipeline-mcp)** — *the self-governance gate.* Self-governance gate over the agent's own *"I fixed this / I tested that / this code path changed"* declarations. Three-stage verification: LLM declaration → `git diff` truth → deterministic physics gate (a 9-block composition from the 46-block runtime). Returns a directive: `pass | regenerate | reject`. It is the third layer of the 5-layer governance stack, distinct from the engine.
 
 **Evidence export — surfaces under [Reviewer Evidence](https://phionyx.ai/evidence).** Bridges that turn runs in third-party frameworks into reviewer-runnable Phionyx envelopes:
 
-- **[`phionyx-eval-inspect`](https://github.com/halvrenofviryel/phionyx-eval-inspect)** (v0.1.0) — *Inspect AI bridge.* Convert a Phionyx envelope chain into an [Inspect AI](https://github.com/UKGovernmentBEIS/inspect_ai) `.eval` log so Phionyx-governed runs are natively viewable in Inspect's tooling. Interop-only; no endorsement or partnership claim.
-- **[`phionyx-langchain-langgraph`](https://github.com/halvrenofviryel/phionyx-langchain-langgraph)** (v0.1.0a1) — *LangChain + LangGraph adapters.* Every chain / tool / LLM event + supervisor handoff becomes a signed, hash-chained envelope. Includes a `PhionyxLangGraphSupervisor` for the multi-agent ingestion pattern.
-- **[`phionyx-openai-agents`](https://github.com/halvrenofviryel/phionyx-openai-agents)** (v0.1.0a1) — *OpenAI Agents SDK tracing bridge.* Every Trace and Span becomes a signed, hash-chained envelope.
+- **[`phionyx-eval-inspect`](https://github.com/halvrenofviryel/phionyx-eval-inspect)** — *Inspect AI bridge.* Convert a Phionyx envelope chain into an [Inspect AI](https://github.com/UKGovernmentBEIS/inspect_ai) `.eval` log so Phionyx-governed runs are natively viewable in Inspect's tooling. Interop-only; no endorsement or partnership claim.
+- **[`phionyx-langchain-langgraph`](https://github.com/halvrenofviryel/phionyx-langchain-langgraph)** — *LangChain + LangGraph adapters.* Every chain / tool / LLM event + supervisor handoff becomes a signed, hash-chained envelope. Includes a `PhionyxLangGraphSupervisor` for the multi-agent ingestion pattern.
+- **[`phionyx-openai-agents`](https://github.com/halvrenofviryel/phionyx-openai-agents)** — *OpenAI Agents SDK tracing bridge.* Every Trace and Span becomes a signed, hash-chained envelope.
 
 **Evaluation-runner bridge:**
 
-- **[`phionyx-eval`](https://pypi.org/project/phionyx-eval/)** (v0.1.0a1) — evaluation runner that emits a `phionyx.judgment_envelope.v1` (`JudgmentEnvelope`), distinct from the agent adapters' `AgentMessageEnvelope`.
+- **[`phionyx-eval`](https://pypi.org/project/phionyx-eval/)** — evaluation runner that emits a `phionyx.judgment_envelope.v1` (`JudgmentEnvelope`), distinct from the agent adapters' `AgentMessageEnvelope`.
 
-Also on the evidence side: **`phionyx-compliance`** (v0.1.1) — evidence-mapping helpers; see the [Compliance mappings](#compliance-mappings) section.
+Also on the evidence side: **`phionyx-compliance`** — evidence-mapping helpers; see the [Compliance mappings](#compliance-mappings) section.
 
 When the two MCP servers are installed and registered with the same Claude Code host, they share a single `trace_id` per session (via `PHIONYX_TRACE_ID` env var with `~/.phionyx/active_trace` file fallback). One Claude Code conversation = one trace = a joined view of the third-party MCP tool calls and agent self-claim gate decisions recorded in that session. The Inspect bridge and the framework adapters consume envelopes off-host; they don't need to share the live trace.
 
@@ -307,8 +307,8 @@ pip install phionyx-pipeline-mcp[mcp-server-integration]
 pip install phionyx-eval-inspect
 
 # Framework adapters (each its own version line):
-pip install phionyx-langchain-langgraph   # v0.1.0a1
-pip install phionyx-openai-agents         # v0.1.0a1
+pip install phionyx-langchain-langgraph
+pip install phionyx-openai-agents
 ```
 
 Each repo documents its own integration contract; the trace coordination module is **read-only across the package boundary** — no cross-package write coupling.
@@ -340,7 +340,7 @@ It performs no destructive action and makes no external effect — each "attempt
 
 ## Compliance mappings
 
-Phionyx publishes **evidence mappings** — not certifications — connecting runtime artifacts to industry threat models and risk frameworks (helpers packaged as `phionyx-compliance` v0.1.1 on PyPI):
+Phionyx publishes **evidence mappings** — not certifications — connecting runtime artifacts to industry threat models and risk frameworks (helpers packaged as `phionyx-compliance` on PyPI):
 
 - [`docs/mappings/owasp-agentic-ai-2025.md`](docs/mappings/owasp-agentic-ai-2025.md) — OWASP Agentic AI Threats v1.0 (15 categories, 1 Full / 10 Partial / 4 Gap)
 - [`docs/mappings/eu-ai-act.md`](docs/mappings/eu-ai-act.md) — EU AI Act Articles 9–15 high-risk obligations (1 Full / 5 Partial / 1 Gap, with explicit deployer-responsibility per article)
@@ -377,12 +377,12 @@ A commercial license is available for use cases where AGPL-3.0 copyleft is not s
 - **Research website:** [phionyx.ai](https://phionyx.ai)
 - **Posts (Deterministic AI Engineering series):** [phionyx.ai/research/posts](https://phionyx.ai/research/posts)
 - **Substack (read direct):** [phionyxresearch.substack.com](https://phionyxresearch.substack.com)
-- **Runtime evidence format (AIREP):** [ai-runtime-evidence-protocol](https://github.com/halvrenofviryel/ai-runtime-evidence-protocol) (v0.1, Experimental) — vendor-neutral open format for a per-decision AI decision receipt; signed, hash-chained, offline-checkable records with two independent verifiers (Python + Node). The Phionyx RGE is a profile developed alongside it; a released conformant projection is not yet implemented.
-- **MCP outward layer:** [phionyx-mcp-server](https://github.com/halvrenofviryel/phionyx-mcp-server) (v0.2.0) — MCP trust boundary governance (descriptor hash, signed RGE v0.2 envelope, audit chain)
+- **Runtime evidence format (AIREP):** [ai-runtime-evidence-protocol](https://github.com/halvrenofviryel/ai-runtime-evidence-protocol) (v0.1, Experimental) — vendor-neutral open format for a per-decision AI decision receipt; signed, hash-chained, offline-checkable records with two cross-language first-party verifier implementations (Python + Node). The Phionyx RGE is a profile developed alongside it; a released conformant projection is not yet implemented.
+- **MCP outward layer:** [phionyx-mcp-server](https://github.com/halvrenofviryel/phionyx-mcp-server) — MCP trust boundary governance (descriptor hash, signed RGE v0.2 envelope, audit chain)
 - **Self-governance gate:** [phionyx-pipeline-mcp](https://github.com/halvrenofviryel/phionyx-pipeline-mcp) — self-governance gate over the agent's own "fixed / tested / changed" claims
-- **Inspect AI bridge:** [phionyx-eval-inspect](https://github.com/halvrenofviryel/phionyx-eval-inspect) (v0.1.0) — RGE envelope chain → Inspect `.eval` log; viewable with `inspect view`
-- **LangChain / LangGraph adapters:** [phionyx-langchain-langgraph](https://github.com/halvrenofviryel/phionyx-langchain-langgraph) (v0.1.0a1) — chain / tool / LLM events + supervisor handoff → signed envelopes
-- **OpenAI Agents tracing bridge:** [phionyx-openai-agents](https://github.com/halvrenofviryel/phionyx-openai-agents) (v0.1.0a1) — Trace + Span → signed envelopes
+- **Inspect AI bridge:** [phionyx-eval-inspect](https://github.com/halvrenofviryel/phionyx-eval-inspect) — RGE envelope chain → Inspect `.eval` log; viewable with `inspect view`
+- **LangChain / LangGraph adapters:** [phionyx-langchain-langgraph](https://github.com/halvrenofviryel/phionyx-langchain-langgraph) — chain / tool / LLM events + supervisor handoff → signed envelopes
+- **OpenAI Agents tracing bridge:** [phionyx-openai-agents](https://github.com/halvrenofviryel/phionyx-openai-agents) — Trace + Span → hash-chained envelopes (optional signing)
 
 ### Stay updated
 

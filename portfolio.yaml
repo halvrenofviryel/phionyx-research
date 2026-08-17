@@ -1,0 +1,161 @@
+# Public claim registry — single source of truth for portfolio-wide claim language.
+#
+# Purpose (2026-08-17 portfolio claim audit): READMEs written at different times drifted
+# in what "signed", "replayable", "independent" and the AIREP relationship mean. This
+# registry pins the flags; tools/claim_lint.py enforces them against every registered
+# artefact's live README (CI: push + weekly cron). A claim may only strengthen here —
+# by a reviewed commit that flips the flag WITH evidence — never in prose first.
+#
+# Field semantics
+#   role                one line: what the artefact is
+#   status              implemented_experimental | proposed_format | published_normative |
+#                       ontology_artifact | reference_application | conformance_pack | archived
+#   release_source      where the current release lives (pypi:<name> | github-release | none)
+#                       (no version numbers here — that is what drifted; linter enforces
+#                        "a README states only its own version" instead)
+#   signing_default     optional | none  (nothing in the portfolio signs by default today)
+#   external_validation false until a named third party independently reproduces a result
+#   airep_relationship  self | developed_toward | none   ("profile_of"/"conformant" would be
+#                       new values requiring a released, verified projection — none exists)
+#   replay_semantics    verification_replay (re-verify stored records) |
+#                       decision_replay (re-run deterministic gate on recorded inputs) |
+#                       execution_replay (re-execute external interactions) | none
+#   readme              raw README URL the linter fetches (main branch)
+#   allowed_exceptions  substrings exempted from rules, each with a reason — keep rare
+
+defaults:
+  signing_default: optional
+  external_validation: false
+  airep_relationship: developed_toward
+  replay_semantics: [verification_replay]
+
+artifacts:
+  phionyx-research:
+    role: deterministic runtime governance engine (phionyx-core)
+    status: implemented_experimental
+    release_source: pypi:phionyx-core
+    replay_semantics: [verification_replay, decision_replay]
+    readme: local:README.md
+
+  ai-runtime-evidence-protocol:
+    role: AIREP — proposed neutral per-decision runtime-evidence format
+    status: proposed_format
+    release_source: github-release
+    airep_relationship: self
+    spec_versions: ["v0.1"]   # the format identifier — not a release pin when cited by siblings
+    readme: https://raw.githubusercontent.com/halvrenofviryel/ai-runtime-evidence-protocol/main/README.md
+
+  measurement-axioms:
+    role: normative measurement doctrine + verdict algebra + self-audit
+    status: published_normative
+    release_source: github-release
+    airep_relationship: none
+    replay_semantics: [verification_replay]
+    readme: https://raw.githubusercontent.com/halvrenofviryel/measurement-axioms/main/README.md
+
+  resonatus-ontology:
+    role: OWL 2 DL ontology + SHACL profile for persistent causal trace processes
+    status: ontology_artifact
+    release_source: github-release
+    airep_relationship: none
+    replay_semantics: none
+    readme: https://raw.githubusercontent.com/halvrenofviryel/resonatus-ontology/main/README.md
+
+  phionyx-conformance:
+    role: executable conformance scenarios against our own released tooling
+    status: conformance_pack
+    release_source: none
+    airep_relationship: developed_toward
+    allowed_exceptions:
+      - text: "phionyx-mcp-server==0.2.1"
+        reason: the measured artifact is wheel-pinned BY DESIGN — the pin is the method
+      - text: "`phionyx-mcp-server` 0.2.1 in-process (pinned wheel"
+        reason: same measurement pin, prose form
+      - text: "a recorded version is tamper-evident"
+        reason: S4-A4 measured property — hash-bound version, silent substitution fails verification
+    readme: https://raw.githubusercontent.com/halvrenofviryel/phionyx-conformance/main/README.md
+
+  phionyx-mcp-server:
+    role: MCP trust boundary — descriptor hash pinning + evidence chain
+    status: implemented_experimental
+    release_source: pypi:phionyx-mcp-server
+    readme: https://raw.githubusercontent.com/halvrenofviryel/phionyx-mcp-server/main/README.md
+
+  phionyx-pipeline-mcp:
+    role: self-claim gate — agent claims vs git-diff truth
+    status: implemented_experimental
+    release_source: pypi:phionyx-pipeline-mcp
+    replay_semantics: [verification_replay, decision_replay]
+    readme: https://raw.githubusercontent.com/halvrenofviryel/phionyx-pipeline-mcp/main/README.md
+
+  phionyx-eval:
+    role: LLM-as-judge primitive + importer tooling
+    status: implemented_experimental
+    release_source: pypi:phionyx-eval
+    allowed_exceptions:
+      - text: "phionyx-core >= 0.5.0"
+        reason: declared dependency floor from pyproject — package metadata, not narrative drift
+    readme: https://raw.githubusercontent.com/halvrenofviryel/phionyx-eval/main/README.md
+
+  phionyx-eval-inspect:
+    role: Inspect AI bridge — runtime evidence into .eval logs
+    status: implemented_experimental
+    release_source: pypi:phionyx-eval-inspect
+    readme: https://raw.githubusercontent.com/halvrenofviryel/phionyx-eval-inspect/main/README.md
+
+  phionyx-langchain-langgraph:
+    role: LangChain/LangGraph adapter
+    status: implemented_experimental
+    release_source: pypi:phionyx-langchain-langgraph
+    allowed_exceptions:
+      - text: "`phionyx-core` v0.6.0"
+        reason: historical delivery milestone (v0.6.0 multi-agent envelope schema) — a dated fact, not a current-version claim
+    readme: https://raw.githubusercontent.com/halvrenofviryel/phionyx-langchain-langgraph/main/README.md
+
+  phionyx-openai-agents:
+    role: OpenAI Agents SDK tracing bridge
+    status: implemented_experimental
+    release_source: pypi:phionyx-openai-agents
+    readme: https://raw.githubusercontent.com/halvrenofviryel/phionyx-openai-agents/main/README.md
+
+  phionyx-letta:
+    role: Letta memory-mutation recording primitives (no auto-instrumentation)
+    status: implemented_experimental
+    release_source: pypi:phionyx-letta
+    allowed_exceptions:
+      - text: "match `phionyx-mcp-server` (v0.2.0) `audit_chain.verify_chain`"
+        reason: measured byte-for-byte equivalence pinned to the version it was measured against
+    readme: https://raw.githubusercontent.com/halvrenofviryel/phionyx-letta/main/README.md
+
+  phionyx-compliance:
+    role: compliance report drafts from runtime evidence (not a certifier)
+    status: implemented_experimental
+    release_source: pypi:phionyx-compliance
+    allowed_exceptions:
+      - text: "dependency pin to `phionyx-core` (v0.8.x line)"
+        reason: historical scaffold milestone describing the actual dependency pin at that time
+    readme: https://raw.githubusercontent.com/halvrenofviryel/phionyx-compliance/main/README.md
+
+  hearthos:
+    role: bounded-authority household AI reference application
+    status: reference_application
+    release_source: none
+    airep_relationship: none
+    replay_semantics: [verification_replay]
+    readme: https://raw.githubusercontent.com/halvrenofviryel/hearthos/main/README.md
+
+  halvrenofviryel:
+    role: profile — research portfolio index
+    status: implemented_experimental
+    release_source: none
+    airep_relationship: developed_toward
+    replay_semantics: [verification_replay, decision_replay]
+    readme: https://raw.githubusercontent.com/halvrenofviryel/halvrenofviryel/main/README.md
+
+  phionyx-evaluation-standard:
+    role: ARCHIVED historical evaluation-standard draft
+    status: archived
+    release_source: none
+    airep_relationship: none
+    replay_semantics: none
+    readme: https://raw.githubusercontent.com/halvrenofviryel/phionyx-evaluation-standard/main/README.md
