@@ -2,7 +2,7 @@
 
 **Phionyx treats LLM output as a noisy sensor measurement, not as truth.**
 
-A deterministic AI runtime that routes model output through its governance pipeline — built on a canonical 46-block contract (v3.8.0) — before allowing it to affect system behavior. Signed audit trails, replayable decisions, and reviewer-runnable governance evidence — not better prompts, a control system around an unreliable sensor.
+A deterministic AI runtime implementing **runtime governance for AI agents**: model output is routed through a governance pipeline — built on a canonical 46-block contract (v3.8.0) — before it is allowed to affect system behavior. Signed audit trails, replayable decisions, and reviewer-runnable governance evidence — not better prompts, a control system around an unreliable sensor.
 
 Beyond governance, Phionyx Core ships a **physics module** that produces deterministic coherence telemetry over a structured state vector — useful for NPC/agent drift detection, session-level coherence tracking, and reproducible runtime evaluation.
 
