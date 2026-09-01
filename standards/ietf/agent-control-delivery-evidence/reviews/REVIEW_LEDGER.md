@@ -302,11 +302,11 @@ one-paragraph endorsement of the seam already tracked as T-1 and W-1).
 | **Reviewer** | Emek Can Dogru (Cedulon / Conarium) |
 | **Source** | <https://mailarchive.ietf.org/arch/msg/scitt/rZvUFar7Zmy2u6OD5MFwA0kFMgg/> |
 | **Affected `-00` sections** | 6.1 (`EXPLICIT_FAILURE`), 6.3 |
-| **Finding** | A Cedulon receipt that positively did not settle stays in the issuer population and receives no class, so nothing separates a window holding one refused spend from a window holding none. The reviewer **explicitly declines** to claim this belongs in `EXPLICIT_FAILURE`: §6.1 wants a positive, attributable failure observation scoped to an identified attempt and boundary, and an issuer-side aborted receipt is an issuer statement, not a receiver-side delivery observation. "What is certain is only that the count is missing, whichever class it belongs in." |
+| **Finding** | A Cedulon receipt that positively did not settle stays in the issuer population and receives no class, so nothing separates a window holding one refused spend from a window holding none. The reviewer **explicitly declines** to claim this belongs in `EXPLICIT_FAILURE`, reasoning that §6.1 wants a positive, attributable failure observation scoped to an identified attempt and boundary while his own artifact is an issuer-side statement rather than a receiver-side delivery observation. "What is certain is only that the count is missing, whichever class it belongs in." |
 | **Evidence / example** | Reproduced in the verification run — probe `PART 4` case (c): `audit: balanced`, no findings, "the receipt is in the issuer population and appears in no class count." |
 | **Author response on public record** | **None.** Message postdates the author's last reply. |
 | **Disposition** | `OPEN / NEEDS DESIGN` |
-| **Open questions** | How an issuer-side positive non-occurrence relates to `EXPLICIT_FAILURE`, whose scope is a receiver-side delivery observation. **This work area does not label the aborted receipt `EXPLICIT_FAILURE` on the reviewer's behalf.** |
+| **Open questions** | Whether an issuer-side aborted receipt satisfies the `EXPLICIT_FAILURE` requirements is unresolved. §6.1 requires a positive, attributable failure observation scoped to an identified attempt and boundary; it does not itself restrict `EXPLICIT_FAILURE` to receiver-side observations. The reviewer's narrower reading is his own scoping of his own artifact, not a statement about what `-00` requires. **This work area does not label the aborted receipt `EXPLICIT_FAILURE` on the reviewer's behalf, and equally does not read a receiver-side-only restriction into §6.1.** |
 | **Expected `-01` impact** | Undetermined. |
 | **Status** | `OPEN` |
 

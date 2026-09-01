@@ -131,12 +131,15 @@ not of any particular wording.
       vocabulary yet**. **No enum is adopted here.** In particular, do **not**
       invent `FULLY_SUPPORTED` / `CONDITIONALLY_SUPPORTED` / `NOT_SUPPORTED`
       unless a later design decision explicitly adopts them. *(E-3)*
-- [ ] **F2 — Aborted / refused-operation classification.** How an issuer-side
-      positive non-occurrence relates to `EXPLICIT_FAILURE`, whose §6.1 scope is
-      a positive, attributable failure observation for an identified attempt and
-      boundary. The reviewer explicitly declined to claim it is
-      `EXPLICIT_FAILURE`; this work area does not decide it on his behalf.
-      Unresolved. *(E-6)*
+- [ ] **F2 — Aborted / refused-operation classification.** Whether an
+      issuer-side aborted receipt satisfies the `EXPLICIT_FAILURE` requirements
+      is unresolved. §6.1 requires a positive, attributable failure observation
+      scoped to an identified attempt and boundary; it does not itself restrict
+      `EXPLICIT_FAILURE` to receiver-side observations. The reviewer explicitly
+      declined to claim his artifact is `EXPLICIT_FAILURE`, scoping it as an
+      issuer-side statement; that is his reading of his own case, not a
+      constraint `-00` states. This work area decides neither question on his
+      behalf. *(E-6)*
 - [ ] **F3 — Expressing a "verifiable reference that resolves to a closed target
       set"** format-neutrally, without importing a resolution mechanism. *(I-2)*
 - [ ] **F4 — What counts as *verifiably bound*** target identity when the target

@@ -44,8 +44,21 @@ pinned commit and are not vendored** into this repository. Only the URL, the
 commit, and the independently checked byte/line counts and SHA-256 digest are
 recorded, in `external-evidence/CEDULON_POPULATION_PROBE.md`.
 
-No licence for Cedulon's code is stated or assumed here. Anyone wishing to use
-that code must obtain its terms from the Cedulon project.
+At pinned commit `0a3fa04`, the Cedulon repository contains a root
+**Apache License 2.0** `LICENSE` file. The probe is referenced rather than
+vendored here. This work area does not relicense the probe or assert terms
+beyond those stated by the upstream repository.
+
+Verified 2026-09-01 from two independent sources:
+<https://raw.githubusercontent.com/dogrucanemek-alt/cedulon/0a3fa04/LICENSE>
+(10 848 bytes, SHA-256 `578ddb1a35574604e675c6155ed356ad75b909bae380dcb6d3239081626b2bd8`,
+opening "Apache License / Version 2.0, January 2004"), and the npm registry
+metadata for `@cedulon/audit@0.8.0`, which declares `"license": "Apache-2.0"`.
+No `LICENSE.md`, `LICENSE.txt`, `COPYING`, or `NOTICE` exists at that commit's
+root (all HTTP 404).
+
+Anyone wishing to use that code should obtain its terms from the upstream
+repository directly.
 
 Cedulon is an **adjacent-domain worked example**. It is not an implementation of
 `draft-abak-agent-control-delivery-evidence`, and this directory must not
@@ -68,10 +81,10 @@ stated the following provenance rule on the public list
   the currently published AEB revision is `-05`. A derivative case, or current
   related-work text, may point to the current AEB revision.
 
-That rule is binding on how this directory handles the fixture. No licence for
-the fixture is stated by the contributor and none is invented here; the fixture
-is retained under the contributor's stated attribution-and-provenance
-conditions.
+That provenance rule is adopted as the handling rule for this work area. No
+licence for the fixture is stated by the contributor and none is invented here;
+the fixture is retained under the contributor's stated
+attribution-and-provenance conditions.
 
 ### Derivative fixtures
 

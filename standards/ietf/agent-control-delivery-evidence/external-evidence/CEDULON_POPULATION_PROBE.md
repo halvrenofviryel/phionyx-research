@@ -40,6 +40,7 @@ already left, back to whether a signed receipt exists for it.
 | Byte count | **24 005** |
 | Line endings | LF only; **0** CR bytes |
 | SHA-256 | `031f84fda2054b1427a510baa45f880d379ea60dced408a4a74028da12b1fceb` |
+| Upstream licence | **Apache License 2.0** — root `LICENSE` at commit `0a3fa04`; `@cedulon/audit@0.8.0` npm metadata declares `"license": "Apache-2.0"`. Referenced, not vendored; not relicensed here. |
 
 ### Identity verification (performed here, 2026-09-01)
 
@@ -172,14 +173,20 @@ and receives no class, so nothing separates a window holding one refused spend
 from a window holding none.
 
 The contributor **explicitly declines to claim** that this belongs in
-`EXPLICIT_FAILURE`: Section 6.1 wants a positive, attributable failure
-observation scoped to an identified attempt and boundary, and Cedulon's is an
-issuer-side statement rather than a receiver-side delivery observation. What is
-certain, in his words, is only that the count is missing, whichever class it
-belongs in.
+`EXPLICIT_FAILURE`. His stated reasoning is that Section 6.1 wants a positive,
+attributable failure observation scoped to an identified attempt and boundary,
+while Cedulon's is an issuer-side statement rather than a receiver-side delivery
+observation. What is certain, in his words, is only that the count is missing,
+whichever class it belongs in.
+
+Note that this is his scoping of his own artifact, not a statement about what
+`-00` requires: Section 6.1 as published requires a positive, attributable
+failure observation applying to an identified attempt and boundary, and does
+**not** itself restrict `EXPLICIT_FAILURE` to receiver-side observations.
 
 **Classification remains unresolved. This work area does not label it
-`EXPLICIT_FAILURE` on his behalf.**
+`EXPLICIT_FAILURE` on his behalf, and does not read a receiver-side-only
+restriction into Section 6.1 either.**
 
 ### 5. The five measured rows
 
