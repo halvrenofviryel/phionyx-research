@@ -1,0 +1,161 @@
+{
+  "@version": "agent-control-delivery-conformance-fixture.v1",
+  "fixture_id": "freeze-after-provider-entry-with-multiple-required-targets",
+  "status": "proposed-format-neutral-fixture",
+  "contributor": {
+    "name": "Iman Schrock",
+    "organization": "EMILIA Protocol",
+    "contact": "team@emiliaprotocol.ai"
+  },
+  "related_work": [
+    "draft-schrock-action-evidence-boundary-04",
+    "draft-schrock-ep-revocation-statement-01",
+    "draft-schrock-ep-outcome-binding-00"
+  ],
+  "purpose": "Test that a freeze applied at one required enforcement target does not prove complete delivery, global enforcement, or reversal of an operation that crossed provider entry before the freeze took effect.",
+  "profile": {
+    "instruction_digest_algorithm": "sha-256",
+    "instruction_canonicalization": "UTF-8 bytes of canonical_instruction_json",
+    "required_target_population": {
+      "set_id": "targets:checkout-egress:v7",
+      "closed_for_this_fixture": true,
+      "enumeration_completeness_independently_proven": false,
+      "members": [
+        {
+          "target_id": "EP-A",
+          "boundary": "checkout/provider-entry"
+        },
+        {
+          "target_id": "EP-B",
+          "boundary": "alternate-dispatch/provider-entry"
+        }
+      ]
+    },
+    "observation_window": {
+      "start": "2026-08-31T20:00:00Z",
+      "end": "2026-08-31T20:00:20Z",
+      "reconciliation_cutoff": "2026-08-31T20:00:20Z"
+    }
+  },
+  "instruction": {
+    "instruction_id": "ctrl-freeze-42",
+    "canonical_instruction_json": "{\"control\":\"freeze\",\"control_epoch\":42,\"subject\":\"agent:checkout\",\"target_set_ref\":\"targets:checkout-egress:v7\"}",
+    "instruction_digest": "sha-256:c62aa6d627fe5e6da1ca82790061d4c37bed9d844e219dc6c145bd77fe7e95c4",
+    "control_epoch": 42,
+    "subject": "agent:checkout",
+    "required_target_set_ref": "targets:checkout-egress:v7"
+  },
+  "issuer_observation": {
+    "event": "dispatched",
+    "boundary": "governor/transport",
+    "observer": "governor.example",
+    "observed_at": "2026-08-31T20:00:10Z",
+    "instruction_id": "ctrl-freeze-42",
+    "instruction_digest": "sha-256:c62aa6d627fe5e6da1ca82790061d4c37bed9d844e219dc6c145bd77fe7e95c4",
+    "required_target_set_ref": "targets:checkout-egress:v7"
+  },
+  "receiver_records": [
+    {
+      "target_id": "EP-A",
+      "boundary": "checkout/provider-entry",
+      "event": "received-and-matched",
+      "observer": "ep-a.example",
+      "observed_at": "2026-08-31T20:00:12Z",
+      "instruction_id": "ctrl-freeze-42",
+      "instruction_digest": "sha-256:c62aa6d627fe5e6da1ca82790061d4c37bed9d844e219dc6c145bd77fe7e95c4",
+      "verification_result": "matched"
+    }
+  ],
+  "enforcement_records": [
+    {
+      "target_id": "EP-A",
+      "boundary": "checkout/provider-entry",
+      "result": "APPLIED",
+      "observer": "ep-a.example",
+      "observed_at": "2026-08-31T20:00:12.100Z",
+      "local_semantics": "Refuse new admissions for agent:checkout with control_epoch less than or equal to 42. Do not relabel, release, or reverse operations that crossed provider entry before application."
+    }
+  ],
+  "operations": [
+    {
+      "operation_id": "O1",
+      "action_digest": "sha-256:ac2db690e3fc20f288b61063ab1490ea1f4f5d193011defed418166a674735e1",
+      "target_id": "EP-A",
+      "provider_entry_at": "2026-08-31T20:00:11Z",
+      "relation_to_freeze": "crossed-provider-entry-before-EP-A-applied-freeze",
+      "state_at_cutoff": "CONSUMED_OR_IN_FLIGHT",
+      "external_effect_result": "UNKNOWN",
+      "required_treatment": "retain for authenticated outcome reconciliation; do not report blocked, reversed, or proved-no-effect"
+    },
+    {
+      "operation_id": "O2",
+      "action_digest": "sha-256:ee0c0f18fb6b39f092feeb2dfd6db50c2c1085701a20a798176ce72fa37e4791",
+      "target_id": "EP-A",
+      "admission_attempt_at": "2026-08-31T20:00:13Z",
+      "relation_to_freeze": "attempted-after-EP-A-applied-freeze",
+      "admission_result": "REFUSED_BY_FREEZE_EPOCH_42",
+      "provider_entry_occurred": false
+    }
+  ],
+  "control_effect_observations": [
+    {
+      "target_id": "EP-A",
+      "predicate": "O2 did not cross checkout/provider-entry during the observation window",
+      "observer": "ep-a-audit.example",
+      "observer_relationship": "declared-independent-for-fixture",
+      "method": "provider-entry admission log reconciliation",
+      "window": {
+        "start": "2026-08-31T20:00:12.100Z",
+        "end": "2026-08-31T20:00:20Z"
+      },
+      "result": true,
+      "scope": "EP-A and O2 only"
+    }
+  ],
+  "expected_reconciliation": {
+    "instruction_target_obligations": [
+      {
+        "instruction_id": "ctrl-freeze-42",
+        "target_id": "EP-A",
+        "delivery": "CONFIRMED",
+        "enforcement": "APPLIED",
+        "control_effect": "OBSERVED_FOR_SCOPED_PREDICATE"
+      },
+      {
+        "instruction_id": "ctrl-freeze-42",
+        "target_id": "EP-B",
+        "delivery": "UNCONFIRMED",
+        "enforcement": "UNKNOWN",
+        "control_effect": "UNKNOWN"
+      }
+    ],
+    "target_obligation_conservation": {
+      "expected": 2,
+      "confirmed": 1,
+      "explicit_failure": 0,
+      "unconfirmed": 1,
+      "substitution": 0,
+      "conflict": 0,
+      "invalid": 0,
+      "indeterminate": 0,
+      "sum": 2
+    },
+    "parent_instruction": {
+      "fully_confirmed": false,
+      "complete_delivery_claim_permitted": false,
+      "pass_claim_permitted": false,
+      "reason": "One of two required instruction-target obligations is UNCONFIRMED."
+    },
+    "operation_outcomes": {
+      "O1": "INDETERMINATE_PENDING_AUTHENTICATED_RECONCILIATION",
+      "O2": "BLOCKED_BEFORE_PROVIDER_ENTRY_AT_EP-A"
+    }
+  },
+  "required_non_claims": [
+    "EP-A receipt does not establish EP-B receipt.",
+    "EP-A APPLIED does not establish complete control mediation.",
+    "The scoped O2 observation does not establish that every dispatch path was closed.",
+    "Applying the freeze after O1 crossed provider entry does not retroactively relabel O1 as blocked or prove that O1 produced no external effect.",
+    "The fixture's declared target set does not independently prove that the deployment enumerated every possible enforcement path."
+  ]
+}
