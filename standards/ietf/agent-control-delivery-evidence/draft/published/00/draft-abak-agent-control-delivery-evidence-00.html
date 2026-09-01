@@ -1,0 +1,2896 @@
+<!DOCTYPE html>
+<html lang="en" class="Internet-Draft">
+<head>
+<meta charset="utf-8">
+<meta content="Common,Latin" name="scripts">
+<meta content="initial-scale=1.0" name="viewport">
+<title>Evidence Requirements for Agent Control Delivery and Outcome Reconciliation</title>
+<meta content="Ali Toygar Abak" name="author">
+<meta content="
+       Agent systems can issue stop, suspend, revoke, constrain, cancel, or
+      override instructions across system and administrative boundaries.  A
+      record that such a control was decided or dispatched does not establish
+      that the intended enforcement point received or applied it.  Conversely,
+      the absence of an acknowledgement does not, by itself, establish
+      non-delivery. 
+       This document defines format-independent evidence requirements for
+      preserving that distinction.  It separates issuer-side emission,
+      receiver-side observation, enforcement outcome, and observation of the
+      resulting control effect.  It also defines negative-observation rules,
+      per-instruction reconciliation states, and bounded-population accounting
+      so that missing, malformed, conflicting, and unmatched records remain
+      visible. 
+       This document does not define a receipt format, wire protocol,
+      authorization system, policy language, transparency service, or audit
+      regime. 
+    " name="description">
+<meta content="xml2rfc 3.34.0" name="generator">
+<meta content="agent" name="keyword">
+<meta content="control" name="keyword">
+<meta content="delivery" name="keyword">
+<meta content="evidence" name="keyword">
+<meta content="reconciliation" name="keyword">
+<meta content="draft-abak-agent-control-delivery-evidence-00" name="ietf.draft">
+<!-- Generator version information:
+  xml2rfc 3.34.0
+    Python 3.12.14
+    ConfigArgParse 1.7.5
+    google-i18n-address 3.1.1
+    intervaltree 3.2.1
+    Jinja2 3.1.6
+    lxml 6.1.2
+    natsort 8.4.0
+    platformdirs 4.11.5
+    pycountry 26.2.16
+    PyYAML 6.0.3
+    requests 2.34.2
+    wcwidth 0.8.2
+    weasyprint 69.0
+-->
+<link href="draft-abak-agent-control-delivery-evidence-00.xml" rel="alternate" type="application/rfc+xml">
+<link href="#copyright" rel="license">
+<style type="text/css">/*
+
+  NOTE: Changes at the bottom of this file overrides some earlier settings.
+
+  Once the style has stabilized and has been adopted as an official RFC style,
+  this can be consolidated so that style settings occur only in one place, but
+  for now the contents of this file consists first of the initial CSS work as
+  provided to the RFC Formatter (xml2rfc) work, followed by itemized and
+  commented changes found necessary during the development of the v3
+  formatters.
+
+*/
+
+/* fonts */
+@import url('https://static.ietf.org/fonts/noto-sans/import.css'); /* Sans-serif */
+@import url('https://static.ietf.org/fonts/noto-serif/import.css'); /* Serif (print) */
+@import url('https://static.ietf.org/fonts/roboto-mono/import.css'); /* Monospace */
+
+:root {
+  --font-sans: 'Noto Sans', Arial, Helvetica, sans-serif;
+  --font-serif: 'Noto Serif', 'Times', 'Times New Roman', serif;
+  --font-mono: 'Roboto Mono', Courier, 'Courier New', monospace;
+}
+
+@viewport {
+  zoom: 1.0;
+}
+@-ms-viewport {
+  width: extend-to-zoom;
+  zoom: 1.0;
+}
+/* general and mobile first */
+html {
+}
+body {
+  max-width: 90%;
+  margin: 1.5em auto;
+  color: #222;
+  background-color: #fff;
+  font-size: 14px;
+  font-family: var(--font-sans);
+  line-height: 1.6;
+  scroll-behavior: smooth;
+  overflow-wrap: break-word;
+}
+.ears {
+  display: none;
+}
+
+/* headings */
+#title, h1, h2, h3, h4, h5, h6 {
+  margin: 1em 0 0.5em;
+  font-weight: bold;
+  line-height: 1.3;
+}
+#title {
+  clear: both;
+  border-bottom: 1px solid #ddd;
+  margin: 0 0 0.5em 0;
+  padding: 1em 0 0.5em;
+}
+.author {
+  padding-bottom: 4px;
+}
+h1 {
+  font-size: 26px;
+  margin: 1em 0;
+}
+h2 {
+  font-size: 22px;
+  margin-top: -20px;  /* provide offset for in-page anchors */
+  padding-top: 33px;
+}
+h3 {
+  font-size: 18px;
+  margin-top: -36px;  /* provide offset for in-page anchors */
+  padding-top: 42px;
+}
+h4 {
+  font-size: 16px;
+  margin-top: -36px;  /* provide offset for in-page anchors */
+  padding-top: 42px;
+}
+h5, h6 {
+  font-size: 14px;
+}
+#n-copyright-notice {
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 1em;
+  margin-bottom: 1em;
+}
+/* general structure */
+p {
+  padding: 0;
+  margin: 0 0 1em 0;
+  text-align: left;
+}
+div, span {
+  position: relative;
+}
+div {
+  margin: 0;
+}
+.alignRight.art-text {
+  background-color: #f9f9f9;
+  border: 1px solid #eee;
+  border-radius: 3px;
+  padding: 1em 1em 0;
+  margin-bottom: 1.5em;
+}
+.alignRight.art-text pre {
+  padding: 0;
+}
+.alignRight {
+  margin: 1em 0;
+}
+.alignRight > *:first-child {
+  border: none;
+  margin: 0;
+  float: right;
+  clear: both;
+}
+.alignRight > *:nth-child(2) {
+  clear: both;
+  display: block;
+  border: none;
+}
+svg {
+  display: block;
+}
+@media print {
+  svg {
+    max-height: 850px;
+    max-width: 660px;
+  }
+}
+svg[font-family~="serif" i], svg [font-family~="serif" i] {
+  font-family: var(--font-serif);
+}
+svg[font-family~="sans-serif" i], svg [font-family~="sans-serif" i] {
+  font-family: var(--font-sans);
+}
+svg[font-family~="monospace" i], svg [font-family~="monospace" i] {
+  font-family: var(--font-mono);
+}
+.alignCenter.art-text {
+  background-color: #f9f9f9;
+  border: 1px solid #eee;
+  border-radius: 3px;
+  padding: 1em 1em 0;
+  margin-bottom: 1.5em;
+}
+.alignCenter.art-text pre {
+  padding: 0;
+}
+.alignCenter {
+  margin: 1em 0;
+}
+.alignCenter > *:first-child {
+  display: table;
+  border: none;
+  margin: 0 auto;
+}
+
+/* lists */
+ol, ul {
+  padding: 0;
+  margin: 0 0 1em 2em;
+}
+ol ol, ul ul, ol ul, ul ol {
+  margin-left: 1em;
+}
+li {
+  margin: 0 0 0.25em 0;
+}
+.ulCompact li {
+  margin: 0;
+}
+ul.empty, .ulEmpty {
+  list-style-type: none;
+}
+ul.empty li, .ulEmpty li {
+  margin-top: 0.5em;
+}
+ul.ulBare, li.ulBare {
+  margin-left: 0em !important;
+}
+ul.compact, .ulCompact,
+ol.compact, .olCompact {
+  line-height: 100%;
+  margin: 0 0 0 2em;
+}
+
+/* definition lists */
+dl {
+}
+dl > dt {
+  float: left;
+  margin-right: 1em;
+}
+/* 
+dl.nohang > dt {
+  float: none;
+}
+*/
+dl > dd {
+  margin-bottom: .8em;
+  min-height: 1.3em;
+}
+dl.compact > dd, .dlCompact > dd {
+  margin-bottom: 0em;
+}
+dl > dd > dl {
+  margin-top: 0.5em;
+  margin-bottom: 0em;
+}
+
+/* links */
+a {
+  text-decoration: none;
+}
+a[href] {
+  color: #22e; /* Arlen: WCAG 2019 */
+}
+a[href]:hover {
+  background-color: #f2f2f2;
+}
+figcaption a[href],
+a[href].selfRef {
+  color: #222;
+}
+/* XXX probably not this:
+a.selfRef:hover {
+  background-color: transparent;
+  cursor: default;
+} */
+
+/* Figures */
+tt, code, pre {
+  background-color: #f9f9f9;
+  font-family: var(--font-mono);
+}
+pre {
+  border: 1px solid #eee;
+  margin: 0;
+  padding: 1em;
+}
+img {
+  max-width: 100%;
+}
+figure {
+  margin: 0;
+}
+figure blockquote {
+  margin: 0.8em 0.4em 0.4em;
+}
+figcaption {
+  font-style: italic;
+  margin: 0 0 1em 0;
+}
+@media screen {
+  pre {
+    overflow-x: auto;
+    max-width: 100%;
+    max-width: calc(100% - 22px);
+  }
+}
+
+/* aside, blockquote */
+aside, blockquote {
+  margin-left: 0;
+  padding: 1.2em 2em;
+}
+blockquote {
+  background-color: #f9f9f9;
+  color: #111; /* Arlen: WCAG 2019 */
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  margin: 1em 0;
+}
+blockquote > *:last-child {
+  margin-bottom: 0;
+}
+cite {
+  display: block;
+  text-align: right;
+  font-style: italic;
+}
+.xref {
+  overflow-wrap: normal;
+}
+
+/* tables */
+table {
+  width: 100%;
+  margin: 0 0 1em;
+  border-collapse: collapse;
+  border: 1px solid #eee;
+}
+th, td {
+  text-align: left;
+  vertical-align: top;
+  padding: 0.5em 0.75em;
+}
+th {
+  text-align: left;
+  background-color: #e9e9e9;
+}
+tr:nth-child(2n+1) > td {
+  background-color: #f5f5f5;
+}
+table caption {
+  font-style: italic;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+}
+table p {
+  /* XXX to avoid bottom margin on table row signifiers. If paragraphs should
+     be allowed within tables more generally, it would be far better to select on a class. */
+  margin: 0;
+}
+
+/* pilcrow */
+a.pilcrow {
+  color: #666; /* Arlen: AHDJ 2019 */
+  text-decoration: none;
+  visibility: hidden;
+  user-select: none;
+  -ms-user-select: none;
+  -o-user-select:none;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+@media screen {
+  aside:hover > a.pilcrow,
+  p:hover > a.pilcrow,
+  blockquote:hover > a.pilcrow,
+  div:hover > a.pilcrow,
+  li:hover > a.pilcrow,
+  pre:hover > a.pilcrow {
+    visibility: visible;
+  }
+  a.pilcrow:hover {
+    background-color: transparent;
+  }
+}
+
+/* misc */
+hr {
+  border: 0;
+  border-top: 1px solid #eee;
+}
+.bcp14 {
+  font-variant: small-caps;
+}
+
+.role {
+  font-variant: all-small-caps;
+}
+
+/* info block */
+#identifiers {
+  margin: 0;
+  font-size: 0.9em;
+}
+#identifiers dt {
+  width: 3em;
+  clear: left;
+}
+#identifiers dd {
+  float: left;
+  margin-bottom: 0;
+}
+/* Fix PDF info block run off issue */
+@media print {
+  #identifiers dd {
+    max-width: 100%;
+  }
+}
+#identifiers .authors .author {
+  display: inline-block;
+  margin-right: 1.5em;
+}
+#identifiers .authors .org {
+  font-style: italic;
+}
+
+/* The prepared/rendered info at the very bottom of the page */
+.docInfo {
+  color: #666; /* Arlen: WCAG 2019 */
+  font-size: 0.9em;
+  font-style: italic;
+  margin-top: 2em;
+}
+.docInfo .prepared {
+  float: left;
+}
+.docInfo .prepared {
+  float: right;
+}
+
+/* table of contents */
+#toc  {
+  padding: 0.75em 0 2em 0;
+  margin-bottom: 1em;
+}
+nav.toc ul {
+  margin: 0 0.5em 0 0;
+  padding: 0;
+  list-style: none;
+}
+nav.toc li {
+  line-height: 1.3em;
+  margin: 0.75em 0;
+  padding-left: 1.2em;
+  text-indent: -1.2em;
+}
+/* references */
+.references dt {
+  text-align: right;
+  font-weight: bold;
+  min-width: 7em;
+}
+.references dd {
+  margin-left: 8em;
+  overflow: auto;
+}
+
+.refInstance {
+  margin-bottom: 1.25em;
+}
+
+.refSubseries {
+  margin-bottom: 1.25em;
+}
+
+.references .ascii {
+  margin-bottom: 0.25em;
+}
+
+/* index */
+.index ul {
+  margin: 0 0 0 1em;
+  padding: 0;
+  list-style: none;
+}
+.index ul ul {
+  margin: 0;
+}
+.index li {
+  margin: 0;
+  text-indent: -2em;
+  padding-left: 2em;
+  padding-bottom: 5px;
+}
+.indexIndex {
+  margin: 0.5em 0 1em;
+}
+.index a {
+  font-weight: 700;
+}
+/* make the index two-column on all but the smallest screens */
+@media (min-width: 600px) {
+  .index ul {
+    -moz-column-count: 2;
+    -moz-column-gap: 20px;
+  }
+  .index ul ul {
+    -moz-column-count: 1;
+    -moz-column-gap: 0;
+  }
+}
+
+/* authors */
+address.vcard {
+  font-style: normal;
+  margin: 1em 0;
+}
+
+address.vcard .nameRole {
+  font-weight: 700;
+  margin-left: 0;
+}
+address.vcard .label {
+  font-family: var(--font-sans);
+  margin: 0.5em 0;
+}
+address.vcard .type {
+  display: none;
+}
+.alternative-contact {
+  margin: 1.5em 0 1em;
+}
+hr.addr {
+  border-top: 1px dashed;
+  margin: 0;
+  color: #ddd;
+  max-width: calc(100% - 16px);
+}
+
+/* temporary notes */
+.rfcEditorRemove::before {
+  position: absolute;
+  top: 0.2em;
+  right: 0.2em;
+  padding: 0.2em;
+  content: "The RFC Editor will remove this note";
+  color: #9e2a00; /* Arlen: WCAG 2019 */
+  background-color: #ffd; /* Arlen: WCAG 2019 */
+}
+.rfcEditorRemove {
+  position: relative;
+  padding-top: 1.8em;
+  background-color: #ffd; /* Arlen: WCAG 2019 */
+  border-radius: 3px;
+}
+.cref {
+  background-color: #ffd; /* Arlen: WCAG 2019 */
+  padding: 2px 4px;
+}
+.crefSource {
+  font-style: italic;
+}
+/* alternative layout for smaller screens */
+@media screen and (max-width: 1023px) {
+  body {
+    padding-top: 2em;
+  }
+  #title {
+    padding: 1em 0;
+  }
+  h1 {
+    font-size: 24px;
+  }
+  h2 {
+    font-size: 20px;
+    margin-top: -18px;  /* provide offset for in-page anchors */
+    padding-top: 38px;
+  }
+  #identifiers dd {
+    max-width: 60%;
+  }
+  #toc {
+    position: fixed;
+    z-index: 2;
+    top: 0;
+    right: 0;
+    padding: 0;
+    margin: 0;
+    background-color: inherit;
+    border-bottom: 1px solid #ccc;
+  }
+  #toc h2 {
+    margin: -1px 0 0 0;
+    padding: 4px 0 4px 6px;
+    padding-right: 1em;
+    min-width: 190px;
+    font-size: 1.1em;
+    text-align: right;
+    background-color: #444;
+    color: white;
+    cursor: pointer;
+  }
+  #toc h2::before { /* css hamburger */
+    float: right;
+    position: relative;
+    width: 1em;
+    height: 1px;
+    left: -164px;
+    margin: 6px 0 0 0;
+    background: white none repeat scroll 0 0;
+    box-shadow: 0 4px 0 0 white, 0 8px 0 0 white;
+    content: "";
+  }
+  #toc nav {
+    display: none;
+    padding: 0.5em 1em 1em;
+    overflow: auto;
+    height: calc(100vh - 48px);
+    border-left: 1px solid #ddd;
+  }
+}
+
+/* alternative layout for wide screens */
+@media screen and (min-width: 1024px) {
+  body {
+    max-width: 724px;
+    margin: 42px auto;
+    padding-left: 1.5em;
+    padding-right: 29em;
+  }
+  #toc {
+    position: fixed;
+    top: 42px;
+    right: 42px;
+    width: 25%;
+    margin: 0;
+    padding: 0 1em;
+    z-index: 1;
+  }
+  #toc h2 {
+    border-top: none;
+    border-bottom: 1px solid #ddd;
+    font-size: 1em;
+    font-weight: normal;
+    margin: 0;
+    padding: 0.25em 1em 1em 0;
+  }
+  #toc nav {
+    display: block;
+    height: calc(90vh - 84px);
+    bottom: 0;
+    padding: 0.5em 0 0;
+    overflow: auto;
+  }
+  img { /* future proofing */
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+/* pagination */
+@media print {
+  body {
+    width: 100%;
+  }
+  p {
+    orphans: 3;
+    widows: 3;
+  }
+  #n-copyright-notice {
+    border-bottom: none;
+  }
+  #toc, #n-introduction {
+    page-break-before: always;
+  }
+  #toc {
+    border-top: none;
+    padding-top: 0;
+  }
+  figure, pre {
+    page-break-inside: avoid;
+  }
+  figure {
+    overflow: scroll;
+  }
+  .breakable pre {
+    break-inside: auto;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid;
+  }
+  h2+*, h3+*, h4+*, h5+*, h6+* {
+    page-break-before: avoid;
+  }
+  pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-size: 10pt;
+  }
+  table {
+    border: 1px solid #ddd;
+  }
+  td {
+    border-top: 1px solid #ddd;
+  }
+}
+
+/* This is commented out here, as the string-set: doesn't
+   pass W3C validation currently */
+/*
+.ears thead .left {
+  string-set: ears-top-left content();
+}
+
+.ears thead .center {
+  string-set: ears-top-center content();
+}
+
+.ears thead .right {
+  string-set: ears-top-right content();
+}
+
+.ears tfoot .left {
+  string-set: ears-bottom-left content();
+}
+
+.ears tfoot .center {
+  string-set: ears-bottom-center content();
+}
+
+.ears tfoot .right {
+  string-set: ears-bottom-right content();
+}
+*/
+
+@page :first {
+  padding-top: 0;
+  @top-left {
+    content: normal;
+    border: none;
+  }
+  @top-center {
+    content: normal;
+    border: none;
+  }
+  @top-right {
+    content: normal;
+    border: none;
+  }
+}
+
+@page {
+  size: A4;
+  margin-bottom: 45mm;
+  padding-top: 20px;
+  /* The following is commented out here, but set appropriately by in code, as
+     the content depends on the document */
+  /*
+  @top-left {
+    content: 'Internet-Draft';
+    vertical-align: bottom;
+    border-bottom: solid 1px #ccc;
+  }
+  @top-left {
+    content: string(ears-top-left);
+    vertical-align: bottom;
+    border-bottom: solid 1px #ccc;
+  }
+  @top-center {
+    content: string(ears-top-center);
+    vertical-align: bottom;
+    border-bottom: solid 1px #ccc;
+  }
+  @top-right {
+    content: string(ears-top-right);
+    vertical-align: bottom;
+    border-bottom: solid 1px #ccc;
+  }
+  @bottom-left {
+    content: string(ears-bottom-left);
+    vertical-align: top;
+    border-top: solid 1px #ccc;
+  }
+  @bottom-center {
+    content: string(ears-bottom-center);
+    vertical-align: top;
+    border-top: solid 1px #ccc;
+  }
+  @bottom-right {
+      content: '[Page ' counter(page) ']';
+      vertical-align: top;
+      border-top: solid 1px #ccc;
+  }
+  */
+
+}
+
+/* Changes introduced to fix issues found during implementation */
+/* Make sure links are clickable even if overlapped by following H* */
+a {
+  z-index: 2;
+}
+/* Separate body from document info even without intervening H1 */
+section {
+  clear: both;
+}
+
+
+/* Top align author divs, to avoid names without organization dropping level with org names */
+.author {
+  vertical-align: top;
+}
+
+/* Leave room in document info to show Internet-Draft on one line */
+#identifiers dt {
+  width: 8em;
+}
+
+/* Don't waste quite as much whitespace between label and value in doc info */
+#identifiers dd {
+  margin-left: 1em;
+}
+
+/* Give floating toc a background color (needed when it's a div inside section */
+#toc {
+  background-color: white;
+}
+
+/* Make the collapsed ToC header render white on gray also when it's a link */
+@media screen and (max-width: 1023px) {
+  #toc h2 a,
+  #toc h2 a:link,
+  #toc h2 a:focus,
+  #toc h2 a:hover,
+  #toc a.toplink,
+  #toc a.toplink:hover {
+    color: white;
+    background-color: #444;
+    text-decoration: none;
+  }
+}
+
+/* Give the bottom of the ToC some whitespace */
+@media screen and (min-width: 1024px) {
+  #toc {
+    padding: 0 0 1em 1em;
+  }
+}
+
+/* Style section numbers with more space between number and title */
+.section-number {
+  padding-right: 0.5em;
+}
+
+/* prevent monospace from becoming overly large */
+tt, code, pre {
+  font-size: 95%;
+}
+
+/* Fix the height/width aspect for ascii art*/
+.sourcecode pre,
+.art-text pre {
+  line-height: 1.12;
+}
+
+
+/* Add styling for a link in the ToC that points to the top of the document */
+a.toplink {
+  float: right;
+  margin-right: 0.5em;
+}
+
+/* Fix the dl styling to match the RFC 7992 attributes */
+dl > dt,
+dl.dlParallel > dt {
+  float: left;
+  margin-right: 1em;
+}
+dl.dlNewline > dt {
+  float: none;
+}
+
+/* Provide styling for table cell text alignment */
+table td.text-left,
+table th.text-left {
+  text-align: left;
+}
+table td.text-center,
+table th.text-center {
+  text-align: center;
+}
+table td.text-right,
+table th.text-right {
+  text-align: right;
+}
+
+/* Make the alternative author contact information look less like just another
+   author, and group it closer with the primary author contact information */
+.alternative-contact {
+  margin: 0.5em 0 0.25em 0;
+}
+address .non-ascii {
+  margin: 0 0 0 2em;
+}
+
+/* With it being possible to set tables with alignment
+  left, center, and right, { width: 100%; } does not make sense */
+table {
+  width: auto;
+}
+
+/* Avoid reference text that sits in a block with very wide left margin,
+   because of a long floating dt label.*/
+.references dd {
+  overflow: visible;
+}
+
+/* Control caption placement */
+caption {
+  caption-side: bottom;
+}
+
+/* Limit the width of the author address vcard, so names in right-to-left
+   script don't end up on the other side of the page. */
+
+address.vcard {
+  max-width: 30em;
+  margin-right: auto;
+}
+
+/* For address alignment dependent on LTR or RTL scripts */
+address div.left {
+  text-align: left;
+}
+address div.right {
+  text-align: right;
+}
+
+/* Provide table alignment support.  We can't use the alignX classes above
+   since they do unwanted things with caption and other styling. */
+table.right {
+ margin-left: auto;
+ margin-right: 0;
+}
+table.center {
+ margin-left: auto;
+ margin-right: auto;
+}
+table.left {
+ margin-left: 0;
+ margin-right: auto;
+}
+
+/* Give the table caption label the same styling as the figcaption */
+caption a[href] {
+  color: #222;
+}
+
+@media print {
+  .toplink {
+    display: none;
+  }
+
+  /* avoid overwriting the top border line with the ToC header */
+  #toc {
+    padding-top: 1px;
+  }
+
+  /* Avoid page breaks inside dl and author address entries */
+  .vcard {
+    page-break-inside: avoid;
+  }
+
+}
+/* Tweak the bcp14 keyword presentation */
+.bcp14 {
+  font-variant: small-caps;
+  font-weight: bold;
+  font-size: 0.9em;
+}
+/* Tweak the invisible space above H* in order not to overlay links in text above */
+ h2 {
+  margin-top: -18px;  /* provide offset for in-page anchors */
+  padding-top: 31px;
+ }
+ h3 {
+  margin-top: -18px;  /* provide offset for in-page anchors */
+  padding-top: 24px;
+ }
+ h4 {
+  margin-top: -18px;  /* provide offset for in-page anchors */
+  padding-top: 24px;
+ }
+/* Float artwork pilcrow to the right */
+@media screen {
+  .artwork a.pilcrow {
+    display: block;
+    line-height: 0.7;
+    margin-top: 0.15em;
+  }
+}
+/* Make pilcrows on dd visible */
+@media screen {
+  dd:hover > a.pilcrow {
+    visibility: visible;
+  }
+}
+/* Make the placement of figcaption match that of a table's caption
+   by removing the figure's added bottom margin */
+.alignLeft.art-text,
+.alignCenter.art-text,
+.alignRight.art-text {
+   margin-bottom: 0;
+}
+.alignLeft,
+.alignCenter,
+.alignRight {
+  margin: 1em 0 0 0;
+}
+/* In print, the pilcrow won't show on hover, so prevent it from taking up space,
+   possibly even requiring a new line */
+@media print {
+  a.pilcrow {
+    display: none;
+  }
+}
+/* Styling for the external metadata */
+div#external-metadata {
+  background-color: #eee;
+  padding: 0.5em;
+  margin-bottom: 0.5em;
+  display: none;
+}
+div#internal-metadata {
+  padding: 0.5em;                       /* to match the external-metadata padding */
+}
+/* Styling for title RFC Number */
+h1#rfcnum {
+  clear: both;
+  margin: 0 0 -1em;
+  padding: 1em 0 0 0;
+}
+/* Make .olPercent look the same as <ol><li> */
+dl.olPercent > dd {
+  margin-bottom: 0.25em;
+  min-height: initial;
+}
+/* Give aside some styling to set it apart */
+aside {
+  border-left: 1px solid #ddd;
+  margin: 1em 0 1em 2em;
+  padding: 0.2em 2em;
+}
+aside > dl,
+aside > ol,
+aside > ul,
+aside > table,
+aside > p {
+  margin-bottom: 0.5em;
+}
+/* Additional page break settings */
+@media print {
+  figcaption, table caption {
+    page-break-before: avoid;
+  }
+}
+/* Font size adjustments for print */
+@media print {
+  body  { font-size: 10pt;      line-height: normal; max-width: 96%; }
+  h1    { font-size: 1.72em;    padding-top: 1.5em; } /* 1*1.2*1.2*1.2 */
+  h2    { font-size: 1.44em;    padding-top: 1.5em; } /* 1*1.2*1.2 */
+  h3    { font-size: 1.2em;     padding-top: 1.5em; } /* 1*1.2 */
+  h4    { font-size: 1em;       padding-top: 1.5em; }
+  h5, h6 { font-size: 1em;      margin: initial; padding: 0.5em 0 0.3em; }
+}
+/* Sourcecode margin in print, when there's no pilcrow */
+@media print {
+  .artwork,
+  .artwork > pre,
+  .sourcecode {
+    margin-bottom: 1em;
+  }
+}
+/* Avoid narrow tables forcing too narrow table captions, which may render badly */
+table {
+  min-width: 20em;
+}
+/* ol type a */
+ol.type-a { list-style-type: lower-alpha; }
+ol.type-A { list-style-type: upper-alpha; }
+ol.type-i { list-style-type: lower-roman; }
+ol.type-I { list-style-type: upper-roman; }
+/* Apply the print table and row borders in general, on request from the RPC,
+and increase the contrast between border and odd row background slightly */
+table {
+  border: 1px solid #ddd;
+}
+td {
+  border-top: 1px solid #ddd;
+}
+tr {
+  break-inside: avoid;
+}
+tr:nth-child(2n+1) > td {
+  background-color: #f8f8f8;
+}
+/* Use style rules to govern display of the TOC. */
+@media screen and (max-width: 1023px) {
+  #toc nav { display: none; }
+  #toc.active nav { display: block; }
+}
+/* Add support for keepWithNext */
+.keepWithNext {
+  break-after: avoid-page;
+  break-after: avoid-page;
+}
+/* Add support for keepWithPrevious */
+.keepWithPrevious {
+  break-before: avoid-page;
+}
+/* Change the approach to avoiding breaks inside artwork etc. */
+figure, pre, table, .artwork, .sourcecode  {
+  break-before: auto;
+  break-after: auto;
+}
+/* Avoid breaks between <dt> and <dd> */
+dl {
+  break-before: auto;
+  break-inside: auto;
+}
+dt {
+  break-before: auto;
+  break-after: avoid-page;
+}
+dd {
+  break-before: avoid-page;
+  break-after: auto;
+  orphans: 3;
+  widows: 3
+}
+span.break, dd.break {
+  margin-bottom: 0;
+  min-height: 0;
+  break-before: auto;
+  break-inside: auto;
+  break-after: auto;
+}
+/* Undo break-before ToC */
+@media print {
+  #toc {
+    break-before: auto;
+  }
+}
+/* Text in compact lists should not get extra bottom margin space,
+   since that would makes the list not compact */
+ul.compact p, .ulCompact p,
+ol.compact p, .olCompact p {
+ margin: 0;
+}
+/* But the list as a whole needs the extra space at the end */
+section ul.compact,
+section .ulCompact,
+section ol.compact,
+section .olCompact {
+  margin-bottom: 1em;                    /* same as p not within ul.compact etc. */
+}
+/* The tt and code background above interferes with for instance table cell
+   backgrounds.  Changed to something a bit more selective. */
+tt, code {
+  background-color: transparent;
+}
+p tt, p code, li tt, li code, dt tt, dt code {
+  background-color: #f8f8f8;
+}
+/* Tweak the pre margin -- 0px doesn't come out well */
+pre {
+   margin-top: 0.5px;
+}
+/* Tweak the compact list text */
+ul.compact, .ulCompact,
+ol.compact, .olCompact,
+dl.compact, .dlCompact {
+  line-height: normal;
+}
+/* Don't add top margin for nested lists */
+li > ul, li > ol, li > dl,
+dd > ul, dd > ol, dd > dl,
+dl > dd > dl {
+  margin-top: initial;
+}
+/* Elements that should not be rendered on the same line as a <dt> */
+/* This should match the element list in writer.text.TextWriter.render_dl() */
+dd > div.artwork:first-child,
+dd > aside:first-child,
+dd > blockquote:first-child,
+dd > figure:first-child,
+dd > ol:first-child,
+dd > div.sourcecode:first-child,
+dd > table:first-child,
+dd > ul:first-child {
+  clear: left;
+}
+/* fix for weird browser behaviour when <dd/> is empty */
+dt+dd:empty::before{
+  content: "\00a0";
+}
+/* Make paragraph spacing inside <li> smaller than in body text, to fit better within the list */
+li > p {
+  margin-bottom: 0.5em
+}
+/* Don't let p margin spill out from inside list items */
+li > p:last-of-type:only-child {
+  margin-bottom: 0;
+}
+</style>
+<link href="rfc-local.css" rel="stylesheet" type="text/css">
+<script type="application/javascript">async function addMetadata(){try{const e=document.styleSheets[0].cssRules;for(let t=0;t<e.length;t++)if(/#identifiers/.exec(e[t].selectorText)){const a=e[t].cssText.replace("#identifiers","#external-updates");document.styleSheets[0].insertRule(a,document.styleSheets[0].cssRules.length)}}catch(e){console.log(e)}const e=document.getElementById("external-metadata");if(e)try{var t,a="",o=function(e){const t=document.getElementsByTagName("meta");for(let a=0;a<t.length;a++)if(t[a].getAttribute("name")===e)return t[a].getAttribute("content");return""}("rfc.number");if(o){t="https://www.rfc-editor.org/rfc/rfc"+o+".json";try{const e=await fetch(t);a=await e.json()}catch(e){t=document.URL.indexOf("html")>=0?document.URL.replace(/html$/,"json"):document.URL+".json";const o=await fetch(t);a=await o.json()}}if(!a)return;e.style.display="block";const s="",d="https://datatracker.ietf.org/doc",n="https://datatracker.ietf.org/ipr/search",c="https://www.rfc-editor.org/info",l=a.doc_id.toLowerCase(),i=a.doc_id.slice(0,3).toLowerCase(),f=a.doc_id.slice(3).replace(/^0+/,""),u={status:"Status",obsoletes:"Obsoletes",obsoleted_by:"Obsoleted By",updates:"Updates",updated_by:"Updated By",see_also:"See Also",errata_url:"Errata"};let h="<dl style='overflow:hidden' id='external-updates'>";["status","obsoletes","obsoleted_by","updates","updated_by","see_also","errata_url"].forEach(e=>{if("status"==e){a[e]=a[e].toLowerCase();var t=a[e].split(" "),o=t.length,w="",p=1;for(let e=0;e<o;e++)p<o?w=w+r(t[e])+" ":w+=r(t[e]),p++;a[e]=w}else if("obsoletes"==e||"obsoleted_by"==e||"updates"==e||"updated_by"==e){var g,m="",b=1;g=a[e].length;for(let t=0;t<g;t++)a[e][t]&&(a[e][t]=String(a[e][t]).toLowerCase(),m=b<g?m+"<a href='"+s+"/rfc/".concat(a[e][t])+"'>"+a[e][t].slice(3)+"</a>, ":m+"<a href='"+s+"/rfc/".concat(a[e][t])+"'>"+a[e][t].slice(3)+"</a>",b++);a[e]=m}else if("see_also"==e){var y,L="",C=1;y=a[e].length;for(let t=0;t<y;t++)if(a[e][t]){a[e][t]=String(a[e][t]);var _=a[e][t].slice(0,3),v=a[e][t].slice(3).replace(/^0+/,"");L=C<y?"RFC"!=_?L+"<a href='"+s+"/info/"+_.toLowerCase().concat(v.toLowerCase())+"'>"+_+" "+v+"</a>, ":L+"<a href='"+s+"/info/"+_.toLowerCase().concat(v.toLowerCase())+"'>"+v+"</a>, ":"RFC"!=_?L+"<a href='"+s+"/info/"+_.toLowerCase().concat(v.toLowerCase())+"'>"+_+" "+v+"</a>":L+"<a href='"+s+"/info/"+_.toLowerCase().concat(v.toLowerCase())+"'>"+v+"</a>",C++}a[e]=L}else if("errata_url"==e){var R="";R=a[e]?R+"<a href='"+a[e]+"'>Errata exist</a> | <a href='"+d+"/"+l+"'>Datatracker</a>| <a href='"+n+"/?"+i+"="+f+"&submit="+i+"'>IPR</a> | <a href='"+c+"/"+l+"'>Info page</a>":"<a href='"+d+"/"+l+"'>Datatracker</a> | <a href='"+n+"/?"+i+"="+f+"&submit="+i+"'>IPR</a> | <a href='"+c+"/"+l+"'>Info page</a>",a[e]=R}""!=a[e]?"Errata"==u[e]?h+=`<dt>More info:</dt><dd>${a[e]}</dd>`:h+=`<dt>${u[e]}:</dt><dd>${a[e]}</dd>`:"Errata"==u[e]&&(h+=`<dt>More info:</dt><dd>${a[e]}</dd>`)}),h+="</dl>",e.innerHTML=h}catch(e){console.log(e)}else console.log("Could not locate metadata <div> element");function r(e){return e.charAt(0).toUpperCase()+e.slice(1)}}window.removeEventListener("load",addMetadata),window.addEventListener("load",addMetadata);</script>
+</head>
+<body class="xml2rfc">
+<table class="ears">
+<thead><tr>
+<td class="left">Internet-Draft</td>
+<td class="center">Agent Control Delivery Evidence</td>
+<td class="right">August 2026</td>
+</tr></thead>
+<tfoot><tr>
+<td class="left">Abak</td>
+<td class="center">Expires 3 March 2027</td>
+<td class="right">[Page]</td>
+</tr></tfoot>
+</table>
+<div id="external-metadata" class="document-information"></div>
+<div id="internal-metadata" class="document-information">
+<dl id="identifiers">
+<dt class="label-workgroup">Workgroup:</dt>
+<dd class="workgroup">Internet Engineering Task Force</dd>
+<dt class="label-internet-draft">Internet-Draft:</dt>
+<dd class="internet-draft">draft-abak-agent-control-delivery-evidence-00</dd>
+<dt class="label-published">Published:</dt>
+<dd class="published">
+<time datetime="2026-08-30" class="published">30 August 2026</time>
+    </dd>
+<dt class="label-intended-status">Intended Status:</dt>
+<dd class="intended-status">Informational</dd>
+<dt class="label-expires">Expires:</dt>
+<dd class="expires"><time datetime="2027-03-03">3 March 2027</time></dd>
+<dt class="label-authors">Author:</dt>
+<dd class="authors">
+<div class="author">
+      <div class="author-name">A. T. Abak</div>
+<div class="org">Independent Researcher</div>
+</div>
+</dd>
+</dl>
+</div>
+<h1 id="title">Evidence Requirements for Agent Control Delivery and Outcome Reconciliation</h1>
+<section id="section-abstract">
+      <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
+<p id="section-abstract-1">Agent systems can issue stop, suspend, revoke, constrain, cancel, or
+      override instructions across system and administrative boundaries.  A
+      record that such a control was decided or dispatched does not establish
+      that the intended enforcement point received or applied it.  Conversely,
+      the absence of an acknowledgement does not, by itself, establish
+      non-delivery.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+<p id="section-abstract-2">This document defines format-independent evidence requirements for
+      preserving that distinction.  It separates issuer-side emission,
+      receiver-side observation, enforcement outcome, and observation of the
+      resulting control effect.  It also defines negative-observation rules,
+      per-instruction reconciliation states, and bounded-population accounting
+      so that missing, malformed, conflicting, and unmatched records remain
+      visible.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
+<p id="section-abstract-3">This document does not define a receipt format, wire protocol,
+      authorization system, policy language, transparency service, or audit
+      regime.<a href="#section-abstract-3" class="pilcrow">¶</a></p>
+</section>
+<div id="status-of-memo">
+<section id="section-boilerplate.1">
+        <h2 id="name-status-of-this-memo">
+<a href="#name-status-of-this-memo" class="section-name selfRef">Status of This Memo</a>
+        </h2>
+<p id="section-boilerplate.1-1">
+        This Internet-Draft is submitted in full conformance with the
+        provisions of BCP 78 and BCP 79.<a href="#section-boilerplate.1-1" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-2">
+        Internet-Drafts are working documents of the Internet Engineering Task
+        Force (IETF). Note that other groups may also distribute working
+        documents as Internet-Drafts. The list of current Internet-Drafts is
+        at <span><a href="https://datatracker.ietf.org/drafts/current/">https://datatracker.ietf.org/drafts/current/</a></span>.<a href="#section-boilerplate.1-2" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-3">
+        Internet-Drafts are draft documents valid for a maximum of six months
+        and may be updated, replaced, or obsoleted by other documents at any
+        time. It is inappropriate to use Internet-Drafts as reference
+        material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-4">
+        This Internet-Draft will expire on 3 March 2027.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="copyright">
+<section id="section-boilerplate.2">
+        <h2 id="name-copyright-notice">
+<a href="#name-copyright-notice" class="section-name selfRef">Copyright Notice</a>
+        </h2>
+<p id="section-boilerplate.2-1">
+            Copyright (c) 2026 IETF Trust and the persons identified as the
+            document authors. All rights reserved.<a href="#section-boilerplate.2-1" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.2-2">
+            This document is subject to BCP 78 and the IETF Trust's Legal
+            Provisions Relating to IETF Documents
+            (<span><a href="https://trustee.ietf.org/license-info">https://trustee.ietf.org/license-info</a></span>) in effect on the date of
+            publication of this document. Please review these documents
+            carefully, as they describe your rights and restrictions with
+            respect to this document. Code Components extracted from this
+            document must include Revised BSD License text as described in
+            Section 4.e of the Trust Legal Provisions and are provided without
+            warranty as described in the Revised BSD License.<a href="#section-boilerplate.2-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="toc">
+<section id="section-toc.1">
+        <a href="#" onclick="scroll(0,0)" class="toplink">▲</a><h2 id="name-table-of-contents">
+<a href="#name-table-of-contents" class="section-name selfRef">Table of Contents</a>
+        </h2>
+<nav class="toc"><ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1">
+            <p id="section-toc.1-1.1.1" class="keepWithNext"><a href="#section-1" class="auto internal xref">1</a>.  <a href="#name-introduction" class="internal xref">Introduction</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.1">
+                <p id="section-toc.1-1.1.2.1.1" class="keepWithNext"><a href="#section-1.1" class="auto internal xref">1.1</a>.  <a href="#name-scope-and-non-goals" class="internal xref">Scope and Non-Goals</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.2">
+                <p id="section-toc.1-1.1.2.2.1" class="keepWithNext"><a href="#section-1.2" class="auto internal xref">1.2</a>.  <a href="#name-requirements-language" class="internal xref">Requirements Language</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2">
+            <p id="section-toc.1-1.2.1"><a href="#section-2" class="auto internal xref">2</a>.  <a href="#name-terminology" class="internal xref">Terminology</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3">
+            <p id="section-toc.1-1.3.1"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-problem-statement-and-failu" class="internal xref">Problem Statement and Failure Model</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4">
+            <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-logical-evidence-model" class="internal xref">Logical Evidence Model</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.1">
+                <p id="section-toc.1-1.4.2.1.1"><a href="#section-4.1" class="auto internal xref">4.1</a>.  <a href="#name-issuer-side-emission" class="internal xref">Issuer-Side Emission</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.2">
+                <p id="section-toc.1-1.4.2.2.1"><a href="#section-4.2" class="auto internal xref">4.2</a>.  <a href="#name-receiver-side-observation" class="internal xref">Receiver-Side Observation</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.3">
+                <p id="section-toc.1-1.4.2.3.1"><a href="#section-4.3" class="auto internal xref">4.3</a>.  <a href="#name-enforcement-outcome" class="internal xref">Enforcement Outcome</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.4">
+                <p id="section-toc.1-1.4.2.4.1"><a href="#section-4.4" class="auto internal xref">4.4</a>.  <a href="#name-control-effect-observation" class="internal xref">Control-Effect Observation</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5">
+            <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-evidence-preservation-requi" class="internal xref">Evidence Preservation Requirements</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1">
+                <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="auto internal xref">5.1</a>.  <a href="#name-r-cd-1-stable-instruction-i" class="internal xref">R-CD-1: Stable Instruction Identity</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.2">
+                <p id="section-toc.1-1.5.2.2.1"><a href="#section-5.2" class="auto internal xref">5.2</a>.  <a href="#name-r-cd-2-content-binding" class="internal xref">R-CD-2: Content Binding</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.3">
+                <p id="section-toc.1-1.5.2.3.1"><a href="#section-5.3" class="auto internal xref">5.3</a>.  <a href="#name-r-cd-3-boundary-attribution" class="internal xref">R-CD-3: Boundary Attribution</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.4">
+                <p id="section-toc.1-1.5.2.4.1"><a href="#section-5.4" class="auto internal xref">5.4</a>.  <a href="#name-r-cd-4-issuer-side-emission" class="internal xref">R-CD-4: Issuer-Side Emission</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.5">
+                <p id="section-toc.1-1.5.2.5.1"><a href="#section-5.5" class="auto internal xref">5.5</a>.  <a href="#name-r-cd-5-receiver-side-observ" class="internal xref">R-CD-5: Receiver-Side Observation</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.6">
+                <p id="section-toc.1-1.5.2.6.1"><a href="#section-5.6" class="auto internal xref">5.6</a>.  <a href="#name-r-cd-6-separate-enforcement" class="internal xref">R-CD-6: Separate Enforcement Outcome</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.7">
+                <p id="section-toc.1-1.5.2.7.1"><a href="#section-5.7" class="auto internal xref">5.7</a>.  <a href="#name-r-cd-7-separate-control-eff" class="internal xref">R-CD-7: Separate Control-Effect Observation</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.8">
+                <p id="section-toc.1-1.5.2.8.1"><a href="#section-5.8" class="auto internal xref">5.8</a>.  <a href="#name-r-cd-8-negative-observation" class="internal xref">R-CD-8: Negative Observations</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.9">
+                <p id="section-toc.1-1.5.2.9.1"><a href="#section-5.9" class="auto internal xref">5.9</a>.  <a href="#name-r-cd-9-time-and-ordering" class="internal xref">R-CD-9: Time and Ordering</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.10">
+                <p id="section-toc.1-1.5.2.10.1"><a href="#section-5.10" class="auto internal xref">5.10</a>. <a href="#name-r-cd-10-total-reconciliatio" class="internal xref">R-CD-10: Total Reconciliation</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.11">
+                <p id="section-toc.1-1.5.2.11.1"><a href="#section-5.11" class="auto internal xref">5.11</a>. <a href="#name-r-cd-11-bounded-population-" class="internal xref">R-CD-11: Bounded-Population Accounting</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.12">
+                <p id="section-toc.1-1.5.2.12.1"><a href="#section-5.12" class="auto internal xref">5.12</a>. <a href="#name-r-cd-12-resolution-failure" class="internal xref">R-CD-12: Resolution Failure</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.13">
+                <p id="section-toc.1-1.5.2.13.1"><a href="#section-5.13" class="auto internal xref">5.13</a>. <a href="#name-r-cd-13-scope-and-non-claim" class="internal xref">R-CD-13: Scope and Non-Claims</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.14">
+                <p id="section-toc.1-1.5.2.14.1"><a href="#section-5.14" class="auto internal xref">5.14</a>. <a href="#name-r-cd-14-consumption-and-fai" class="internal xref">R-CD-14: Consumption and Fail-Safe Handling</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
+            <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-reconciliation-model" class="internal xref">Reconciliation Model</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.1">
+                <p id="section-toc.1-1.6.2.1.1"><a href="#section-6.1" class="auto internal xref">6.1</a>.  <a href="#name-per-instruction-delivery-di" class="internal xref">Per-Instruction Delivery Dispositions</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.2">
+                <p id="section-toc.1-1.6.2.2.1"><a href="#section-6.2" class="auto internal xref">6.2</a>.  <a href="#name-minimum-reconciliation-proc" class="internal xref">Minimum Reconciliation Procedure</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.3">
+                <p id="section-toc.1-1.6.2.3.1"><a href="#section-6.3" class="auto internal xref">6.3</a>.  <a href="#name-population-conservation" class="internal xref">Population Conservation</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.4">
+                <p id="section-toc.1-1.6.2.4.1"><a href="#section-6.4" class="auto internal xref">6.4</a>.  <a href="#name-aggregate-results" class="internal xref">Aggregate Results</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
+            <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-protocol-attachment-points" class="internal xref">Protocol Attachment Points</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8">
+            <p id="section-toc.1-1.8.1"><a href="#section-8" class="auto internal xref">8</a>.  <a href="#name-composition-with-existing-m" class="internal xref">Composition with Existing Mechanisms</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.1">
+                <p id="section-toc.1-1.8.2.1.1"><a href="#section-8.1" class="auto internal xref">8.1</a>.  <a href="#name-native-verification-first" class="internal xref">Native Verification First</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.2">
+                <p id="section-toc.1-1.8.2.2.1"><a href="#section-8.2" class="auto internal xref">8.2</a>.  <a href="#name-scitt-composition" class="internal xref">SCITT Composition</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.3">
+                <p id="section-toc.1-1.8.2.3.1"><a href="#section-8.3" class="auto internal xref">8.3</a>.  <a href="#name-telemetry-and-trace-composi" class="internal xref">Telemetry and Trace Composition</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9">
+            <p id="section-toc.1-1.9.1"><a href="#section-9" class="auto internal xref">9</a>.  <a href="#name-operational-considerations" class="internal xref">Operational Considerations</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.1">
+                <p id="section-toc.1-1.9.2.1.1"><a href="#section-9.1" class="auto internal xref">9.1</a>.  <a href="#name-deadlines-retries-and-late-" class="internal xref">Deadlines, Retries, and Late Evidence</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.2">
+                <p id="section-toc.1-1.9.2.2.1"><a href="#section-9.2" class="auto internal xref">9.2</a>.  <a href="#name-durability-and-acknowledgem" class="internal xref">Durability and Acknowledgement Point</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.3">
+                <p id="section-toc.1-1.9.2.3.1"><a href="#section-9.3" class="auto internal xref">9.3</a>.  <a href="#name-multiple-enforcement-paths" class="internal xref">Multiple Enforcement Paths</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10">
+            <p id="section-toc.1-1.10.1"><a href="#section-10" class="auto internal xref">10</a>. <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.1">
+                <p id="section-toc.1-1.10.2.1.1"><a href="#section-10.1" class="auto internal xref">10.1</a>.  <a href="#name-substitution-replay-and-ide" class="internal xref">Substitution, Replay, and Identifier Reuse</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.2">
+                <p id="section-toc.1-1.10.2.2.1"><a href="#section-10.2" class="auto internal xref">10.2</a>.  <a href="#name-observer-and-key-compromise" class="internal xref">Observer and Key Compromise</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.3">
+                <p id="section-toc.1-1.10.2.3.1"><a href="#section-10.3" class="auto internal xref">10.3</a>.  <a href="#name-evidence-suppression-and-se" class="internal xref">Evidence Suppression and Selective Population</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.4">
+                <p id="section-toc.1-1.10.2.4.1"><a href="#section-10.4" class="auto internal xref">10.4</a>.  <a href="#name-availability-and-fail-safe-" class="internal xref">Availability and Fail-Safe Policy</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10.2.5">
+                <p id="section-toc.1-1.10.2.5.1"><a href="#section-10.5" class="auto internal xref">10.5</a>.  <a href="#name-semantic-and-physical-world" class="internal xref">Semantic and Physical-World Gaps</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11">
+            <p id="section-toc.1-1.11.1"><a href="#section-11" class="auto internal xref">11</a>. <a href="#name-privacy-considerations" class="internal xref">Privacy Considerations</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12">
+            <p id="section-toc.1-1.12.1"><a href="#section-12" class="auto internal xref">12</a>. <a href="#name-implementation-status" class="internal xref">Implementation Status</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13">
+            <p id="section-toc.1-1.13.1"><a href="#section-13" class="auto internal xref">13</a>. <a href="#name-relationship-to-adjacent-wo" class="internal xref">Relationship to Adjacent Work</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.14">
+            <p id="section-toc.1-1.14.1"><a href="#section-14" class="auto internal xref">14</a>. <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.15">
+            <p id="section-toc.1-1.15.1"><a href="#section-15" class="auto internal xref">15</a>. <a href="#name-acknowledgements" class="internal xref">Acknowledgements</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.16">
+            <p id="section-toc.1-1.16.1"><a href="#section-16" class="auto internal xref">16</a>. <a href="#name-normative-references" class="internal xref">Normative References</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.17">
+            <p id="section-toc.1-1.17.1"><a href="#section-17" class="auto internal xref">17</a>. <a href="#name-informative-references" class="internal xref">Informative References</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.18">
+            <p id="section-toc.1-1.18.1"><a href="#appendix-A" class="auto internal xref"></a><a href="#name-illustrative-logical-record" class="internal xref">Illustrative Logical Record Set</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.19">
+            <p id="section-toc.1-1.19.1"><a href="#appendix-B" class="auto internal xref"></a><a href="#name-minimum-conformance-cases" class="internal xref">Minimum Conformance Cases</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.20">
+            <p id="section-toc.1-1.20.1"><a href="#appendix-C" class="auto internal xref"></a><a href="#name-authors-address" class="internal xref">Author's Address</a></p>
+</li>
+        </ul>
+</nav>
+</section>
+</div>
+<div id="intro">
+<section id="section-1">
+      <h2 id="name-introduction">
+<a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
+      </h2>
+<p id="section-1-1">Agent communication and execution systems increasingly carry control
+      instructions that are expected to constrain a live runtime.  Examples
+      include stopping a task, suspending a delegated operation, revoking an
+      outstanding grant, cancelling a tool request, forcing a handoff, or
+      replacing a permissive policy with a restrictive one.<a href="#section-1-1" class="pilcrow">¶</a></p>
+<p id="section-1-2">These controls frequently cross more than one boundary.  A policy
+      component may decide that an activity must stop.  An issuer may serialize
+      and dispatch the corresponding instruction.  A broker, gateway, sidecar,
+      or operating-system channel may transport it.  An enforcement point may
+      receive and verify it.  The enforcement point may then apply, refuse, or
+      fail to apply it.  Finally, an observer may or may not see the intended
+      control effect.<a href="#section-1-2" class="pilcrow">¶</a></p>
+<p id="section-1-3">Collapsing those events into a single label such as "sent",
+      "delivered", "enforced", or "stopped" creates an interoperability and
+      security problem.  Two implementations can emit syntactically valid
+      records while reaching incompatible conclusions about the same control.
+      A downstream evidence or audit layer cannot reconstruct a boundary fact
+      that was never preserved by either side of that boundary.<a href="#section-1-3" class="pilcrow">¶</a></p>
+<p id="section-1-4">This document therefore specifies the minimum logical facts and
+      reconciliation behavior needed to preserve control delivery and outcome
+      uncertainty.  The requirements are independent of any particular
+      serialization, transport, signature scheme, evidence envelope, or
+      transparency system.<a href="#section-1-4" class="pilcrow">¶</a></p>
+<div id="scope">
+<section id="section-1.1">
+        <h3 id="name-scope-and-non-goals">
+<a href="#section-1.1" class="section-number selfRef">1.1. </a><a href="#name-scope-and-non-goals" class="section-name selfRef">Scope and Non-Goals</a>
+        </h3>
+<p id="section-1.1-1">This document applies when a governance-relevant control instruction
+        crosses a system, process, privilege, trust, or administrative boundary
+        on its way to an enforcement point.  It covers:<a href="#section-1.1-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-1.1-2.1">
+            <p id="section-1.1-2.1.1">binding issuer-side and receiver-side observations to the same
+          control instruction;<a href="#section-1.1-2.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-1.1-2.2">
+            <p id="section-1.1-2.2.1">distinguishing receipt, enforcement outcome, and observed
+          control effect;<a href="#section-1.1-2.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-1.1-2.3">
+            <p id="section-1.1-2.3.1">preserving positive failures and bounded negative
+          observations;<a href="#section-1.1-2.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-1.1-2.4">
+            <p id="section-1.1-2.4.1">reconciling missing, malformed, duplicated, substituted,
+          orphaned, and conflicting evidence; and<a href="#section-1.1-2.4.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-1.1-2.5">
+            <p id="section-1.1-2.5.1">stating the scope and limitations of any resulting claim.<a href="#section-1.1-2.5.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<p id="section-1.1-3">This document does not:<a href="#section-1.1-3" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-1.1-4.1">
+            <p id="section-1.1-4.1.1">define a new receipt, token, log-entry, or evidence-envelope
+          format;<a href="#section-1.1-4.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-1.1-4.2">
+            <p id="section-1.1-4.2.1">define how an agent is authenticated or authorized;<a href="#section-1.1-4.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-1.1-4.3">
+            <p id="section-1.1-4.3.1">decide whether a control instruction is correct, lawful, safe,
+          or consistent with policy;<a href="#section-1.1-4.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-1.1-4.4">
+            <p id="section-1.1-4.4.1">define the semantics of stop, suspend, cancel, revoke, override,
+          or any other control verb;<a href="#section-1.1-4.4.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-1.1-4.5">
+            <p id="section-1.1-4.5.1">prove the truth of producer assertions, complete mediation, or
+          physical-world effect;<a href="#section-1.1-4.5.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-1.1-4.6">
+            <p id="section-1.1-4.6.1">require public disclosure of prompts, model reasoning, personal
+          data, proprietary policy, or protected content; or<a href="#section-1.1-4.6.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-1.1-4.7">
+            <p id="section-1.1-4.7.1">standardize accountability, auditing, retention, or regulatory
+          compliance.<a href="#section-1.1-4.7.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<p id="section-1.1-5">A protocol or profile can adopt the requirements in this document
+        while using its existing identifiers, errors, acknowledgements,
+        signatures, telemetry, or external evidence format.<a href="#section-1.1-5" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="requirements-language">
+<section id="section-1.2">
+        <h3 id="name-requirements-language">
+<a href="#section-1.2" class="section-number selfRef">1.2. </a><a href="#name-requirements-language" class="section-name selfRef">Requirements Language</a>
+        </h3>
+<p id="section-1.2-1">The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL
+        NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED",
+        "MAY", and "OPTIONAL" in this document are to be interpreted as
+        described in BCP 14 <span>[<a href="#RFC2119" class="cite xref">RFC2119</a>]</span> <span>[<a href="#RFC8174" class="cite xref">RFC8174</a>]</span>
+        when, and only when, they appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">¶</a></p>
+<p id="section-1.2-2">This document is Informational.  The requirement terms make the
+        evidence contract testable by protocol authors and implementers; they
+        do not define an on-wire protocol by themselves.<a href="#section-1.2-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="terminology">
+<section id="section-2">
+      <h2 id="name-terminology">
+<a href="#section-2" class="section-number selfRef">2. </a><a href="#name-terminology" class="section-name selfRef">Terminology</a>
+      </h2>
+<span class="break"></span><dl class="dlNewline" id="section-2-1">
+        <dt id="section-2-1.1">Agent Runtime</dt>
+        <dd style="margin-left: 1.5em" id="section-2-1.2">
+          <p id="section-2-1.2.1">A software environment that plans, mediates, dispatches, or
+        executes actions on behalf of an agent or an agentic application.<a href="#section-2-1.2.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+<dt id="section-2-1.3">Control Instruction</dt>
+        <dd style="margin-left: 1.5em" id="section-2-1.4">
+          <p id="section-2-1.4.1">A direction intended to restrict, interrupt, replace, or
+        otherwise govern current or future runtime behavior.  Examples include
+        stop, suspend, cancel, revoke, constrain, quarantine, handoff, and
+        override.  A control instruction is distinct from the business or tool
+        action being governed.<a href="#section-2-1.4.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+<dt id="section-2-1.5">Issuer</dt>
+        <dd style="margin-left: 1.5em" id="section-2-1.6">
+          <p id="section-2-1.6.1">The component that emits a control instruction toward an
+        enforcement point.  The issuer need not be the policy decision point
+        that caused the instruction to be created.<a href="#section-2-1.6.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+<dt id="section-2-1.7">Enforcement Point</dt>
+        <dd style="margin-left: 1.5em" id="section-2-1.8">
+          <p id="section-2-1.8.1">The component that can apply or refuse the control at the
+        relevant runtime or effect path.<a href="#section-2-1.8.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+<dt id="section-2-1.9">Control Boundary</dt>
+        <dd style="margin-left: 1.5em" id="section-2-1.10">
+          <p id="section-2-1.10.1">The declared system, process, privilege, trust, or administrative
+        boundary between the issuer-side observation and the receiver-side
+        observation.<a href="#section-2-1.10.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+<dt id="section-2-1.11">Observation Record</dt>
+        <dd style="margin-left: 1.5em" id="section-2-1.12">
+          <p id="section-2-1.12.1">An attributable statement that a specified observer saw a
+        specified event at a specified boundary and time.  An observation
+        record is an assertion whose integrity and trust basis require separate
+        evaluation.<a href="#section-2-1.12.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+<dt id="section-2-1.13">Receiver Observation</dt>
+        <dd style="margin-left: 1.5em" id="section-2-1.14">
+          <p id="section-2-1.14.1">An observation made at, or cryptographically bound to, the
+        intended enforcement point after the point has read and matched the
+        control instruction.  Acceptance by an upstream transport intermediary
+        is not a receiver observation unless a profile explicitly establishes
+        equivalent endpoint semantics.<a href="#section-2-1.14.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+<dt id="section-2-1.15">Enforcement Outcome</dt>
+        <dd style="margin-left: 1.5em" id="section-2-1.16">
+          <p id="section-2-1.16.1">The enforcement point's attributable result after processing the
+        instruction, such as APPLIED, REFUSED, NO_EFFECT, or UNKNOWN.<a href="#section-2-1.16.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+<dt id="section-2-1.17">Control Effect</dt>
+        <dd style="margin-left: 1.5em" id="section-2-1.18">
+          <p id="section-2-1.18.1">The change in governed runtime state that the control instruction
+        was intended to cause, such as a task entering a stopped state.  This
+        term does not mean the consequential business effect of the action that
+        the agent was attempting to perform.<a href="#section-2-1.18.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+<dt id="section-2-1.19">Negative Observation</dt>
+        <dd style="margin-left: 1.5em" id="section-2-1.20">
+          <p id="section-2-1.20.1">A positive record of a bounded condition such as a deadline
+        passing without a matching acknowledgement, a transport rejecting an
+        attempt, or a referenced counterpart remaining unavailable at a stated
+        reconciliation cutoff.  It is not a bare absence of data.<a href="#section-2-1.20.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+<dt id="section-2-1.21">Reconciler</dt>
+        <dd style="margin-left: 1.5em" id="section-2-1.22">
+          <p id="section-2-1.22.1">A component that correlates observations and reports a scoped
+        verdict without silently converting uncertainty into success or
+        failure.<a href="#section-2-1.22.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+<dt id="section-2-1.23">Bounded Population</dt>
+        <dd style="margin-left: 1.5em" id="section-2-1.24">
+          <p id="section-2-1.24.1">A closed, reproducible set of instructions or records selected by
+        a declared inclusion rule, observation window, and reconciliation
+        cutoff.<a href="#section-2-1.24.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+<dt id="section-2-1.25">Independent Observer</dt>
+        <dd style="margin-left: 1.5em" id="section-2-1.26">
+          <p id="section-2-1.26.1">An observer whose authority and write path are not controlled by
+        the party or component whose assertion it is intended to corroborate.
+        Administrative, key, process, and storage separation are relevant to
+        this determination.<a href="#section-2-1.26.1" class="pilcrow">¶</a></p>
+</dd>
+      <dd class="break"></dd>
+</dl>
+</section>
+</div>
+<div id="problem">
+<section id="section-3">
+      <h2 id="name-problem-statement-and-failu">
+<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-problem-statement-and-failu" class="section-name selfRef">Problem Statement and Failure Model</a>
+      </h2>
+<p id="section-3-1">For a given control instruction, the following facts are distinct:<a href="#section-3-1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-3-2">
+        <li id="section-3-2.1">
+          <p id="section-3-2.1.1">a governance or policy decision was made;<a href="#section-3-2.1.1" class="pilcrow">¶</a></p>
+</li>
+        <li id="section-3-2.2">
+          <p id="section-3-2.2.1">a control instruction was constructed and emitted;<a href="#section-3-2.2.1" class="pilcrow">¶</a></p>
+</li>
+        <li id="section-3-2.3">
+          <p id="section-3-2.3.1">the instruction crossed the last issuer-controlled boundary;<a href="#section-3-2.3.1" class="pilcrow">¶</a></p>
+</li>
+        <li id="section-3-2.4">
+          <p id="section-3-2.4.1">the intended enforcement point received and matched it;<a href="#section-3-2.4.1" class="pilcrow">¶</a></p>
+</li>
+        <li id="section-3-2.5">
+          <p id="section-3-2.5.1">the enforcement point applied or refused it; and<a href="#section-3-2.5.1" class="pilcrow">¶</a></p>
+</li>
+        <li id="section-3-2.6">
+          <p id="section-3-2.6.1">the intended control effect was observed.<a href="#section-3-2.6.1" class="pilcrow">¶</a></p>
+</li>
+      </ol>
+<p id="section-3-3">Evidence for one item does not, without an explicitly specified and
+      verified binding, establish a later item.  In particular, a decision
+      record does not establish dispatch; dispatch does not establish receipt;
+      receipt does not establish enforcement; and enforcement does not
+      establish an observed control effect.<a href="#section-3-3" class="pilcrow">¶</a></p>
+<p id="section-3-4">The reverse inference is also unsafe.  Missing receiver evidence can
+      result from non-delivery, delayed delivery, delayed evidence export, a
+      failed observer, retention loss, clock disagreement, identifier mismatch,
+      or evidence suppression.  A receiver cannot report a control it never
+      received.  An issuer cannot, from silence alone, prove what happened
+      inside the receiver's boundary.<a href="#section-3-4" class="pilcrow">¶</a></p>
+<p id="section-3-5">The failure model includes at least:<a href="#section-3-5" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-3-6.1">
+          <p id="section-3-6.1.1">transport rejection, loss, reordering, duplication, and retry;<a href="#section-3-6.1.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-3-6.2">
+          <p id="section-3-6.2.1">identifier collision or reuse;<a href="#section-3-6.2.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-3-6.3">
+          <p id="section-3-6.3.1">the same identifier carrying a different instruction digest;<a href="#section-3-6.3.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-3-6.4">
+          <p id="section-3-6.4.1">a receiver record with no issuer-side counterpart;<a href="#section-3-6.4.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-3-6.5">
+          <p id="section-3-6.5.1">malformed or unverifiable records;<a href="#section-3-6.5.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-3-6.6">
+          <p id="section-3-6.6.1">conflicting observations from the same or different observers;<a href="#section-3-6.6.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-3-6.7">
+          <p id="section-3-6.7.1">partial observer or evidence-store failure;<a href="#section-3-6.7.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-3-6.8">
+          <p id="section-3-6.8.1">clock skew and unsupported ordering claims;<a href="#section-3-6.8.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-3-6.9">
+          <p id="section-3-6.9.1">an enforcement point acknowledging receipt before persistence or
+        processing;<a href="#section-3-6.9.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-3-6.10">
+          <p id="section-3-6.10.1">successful processing that produces no observable control
+        effect; and<a href="#section-3-6.10.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-3-6.11">
+          <p id="section-3-6.11.1">compromise of an issuer, receiver, observer, verifier, or signing
+        key.<a href="#section-3-6.11.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
+<p id="section-3-7">The requirements below do not eliminate those failures.  They make the
+      distinctions and residual uncertainty interoperably visible.<a href="#section-3-7" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="model">
+<section id="section-4">
+      <h2 id="name-logical-evidence-model">
+<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-logical-evidence-model" class="section-name selfRef">Logical Evidence Model</a>
+      </h2>
+<p id="section-4-1">An implementation MAY carry the required facts in one artifact, in
+      several artifacts, in protocol fields, in telemetry, or through external
+      references.  Regardless of packaging, a consumer needs to distinguish
+      the following logical observations.<a href="#section-4-1" class="pilcrow">¶</a></p>
+<div id="issuer-observation">
+<section id="section-4.1">
+        <h3 id="name-issuer-side-emission">
+<a href="#section-4.1" class="section-number selfRef">4.1. </a><a href="#name-issuer-side-emission" class="section-name selfRef">Issuer-Side Emission</a>
+        </h3>
+<p id="section-4.1-1">The issuer-side observation records that a particular instruction
+        crossed a declared issuer boundary.  It binds a stable instruction
+        identifier to a digest of the exact governed instruction or declared
+        projection, identifies the target enforcement point or resolution
+        input, and attributes the observation to the issuer-side observer.<a href="#section-4.1-1" class="pilcrow">¶</a></p>
+<p id="section-4.1-2">Creation of an in-memory object, enqueueing inside the issuer's own
+        process, or a policy decision that has not reached the declared boundary
+        does not satisfy this observation.<a href="#section-4.1-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="receiver-observation">
+<section id="section-4.2">
+        <h3 id="name-receiver-side-observation">
+<a href="#section-4.2" class="section-number selfRef">4.2. </a><a href="#name-receiver-side-observation" class="section-name selfRef">Receiver-Side Observation</a>
+        </h3>
+<p id="section-4.2-1">The receiver-side observation records that the intended enforcement
+        point, or an endpoint-bound observer acting for it, read an instruction
+        with the same stable identifier and digest.  The record identifies the
+        receiving boundary and the verification or matching result.<a href="#section-4.2-1" class="pilcrow">¶</a></p>
+<p id="section-4.2-2">A transport-level "accepted" or "queued" response is evidence about
+        that transport boundary.  It MUST NOT be labeled as enforcement-point
+        receipt unless the applicable profile defines the endpoint binding,
+        delivery semantics, persistence point, and failure behavior that make
+        the equivalence valid.<a href="#section-4.2-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="enforcement-observation">
+<section id="section-4.3">
+        <h3 id="name-enforcement-outcome">
+<a href="#section-4.3" class="section-number selfRef">4.3. </a><a href="#name-enforcement-outcome" class="section-name selfRef">Enforcement Outcome</a>
+        </h3>
+<p id="section-4.3-1">The enforcement outcome reports what the enforcement point did after
+        receiving and evaluating the instruction.  At minimum, a profile that
+        reports enforcement MUST be able to distinguish:<a href="#section-4.3-1" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlNewline" id="section-4.3-2">
+          <dt id="section-4.3-2.1">APPLIED</dt>
+          <dd style="margin-left: 1.5em" id="section-4.3-2.2">
+            <p id="section-4.3-2.2.1">The enforcement point reports that it applied the specified
+          control under the declared local semantics.<a href="#section-4.3-2.2.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-4.3-2.3">REFUSED</dt>
+          <dd style="margin-left: 1.5em" id="section-4.3-2.4">
+            <p id="section-4.3-2.4.1">The enforcement point reports that it intentionally did not
+          apply the control, with a scoped reason or reason class where
+          disclosure policy permits.<a href="#section-4.3-2.4.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-4.3-2.5">NO_EFFECT</dt>
+          <dd style="margin-left: 1.5em" id="section-4.3-2.6">
+            <p id="section-4.3-2.6.1">The enforcement point processed the control but reports that it
+          caused no change under the declared predicate and observation
+          window.<a href="#section-4.3-2.6.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-4.3-2.7">UNKNOWN</dt>
+          <dd style="margin-left: 1.5em" id="section-4.3-2.8">
+            <p id="section-4.3-2.8.1">The enforcement point cannot determine or support one of the
+          preceding outcomes.<a href="#section-4.3-2.8.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+</dl>
+<p id="section-4.3-3">APPLIED is an attributable enforcement assertion.  It is not, by
+        itself, independent observation of the resulting runtime state.<a href="#section-4.3-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="effect-observation">
+<section id="section-4.4">
+        <h3 id="name-control-effect-observation">
+<a href="#section-4.4" class="section-number selfRef">4.4. </a><a href="#name-control-effect-observation" class="section-name selfRef">Control-Effect Observation</a>
+        </h3>
+<p id="section-4.4-1">A control-effect observation records a scoped predicate over the
+        governed runtime state, such as "task X was no longer dispatching tool
+        calls during window W".  It identifies the observer, observation
+        method, target, predicate, window, and result.<a href="#section-4.4-1" class="pilcrow">¶</a></p>
+<p id="section-4.4-2">Where independent corroboration is claimed, the observer MUST be
+        independent of both the issuer and the enforcement point under the
+        stated trust model.  An implementation MUST NOT infer independence from
+        a different process name, service label, or signing key alone.<a href="#section-4.4-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="requirements">
+<section id="section-5">
+      <h2 id="name-evidence-preservation-requi">
+<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-evidence-preservation-requi" class="section-name selfRef">Evidence Preservation Requirements</a>
+      </h2>
+<div id="r-cd-1">
+<section id="section-5.1">
+        <h3 id="name-r-cd-1-stable-instruction-i">
+<a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-r-cd-1-stable-instruction-i" class="section-name selfRef">R-CD-1: Stable Instruction Identity</a>
+        </h3>
+<p id="section-5.1-1">Each control instruction crossing a control boundary MUST have an
+        identifier that remains stable across issuer, transport, receiver,
+        enforcement, and reconciliation observations.  The identifier's
+        uniqueness scope and reuse rules MUST be defined.  A decision, task,
+        session, action, or delegation reference MAY also be carried, but it
+        MUST NOT replace the instruction identifier unless the protocol defines
+        identical uniqueness and lifecycle semantics.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="r-cd-2">
+<section id="section-5.2">
+        <h3 id="name-r-cd-2-content-binding">
+<a href="#section-5.2" class="section-number selfRef">5.2. </a><a href="#name-r-cd-2-content-binding" class="section-name selfRef">R-CD-2: Content Binding</a>
+        </h3>
+<p id="section-5.2-1">Every observation used to correlate a control instruction MUST bind
+        the instruction identifier to a digest of either the exact instruction
+        or a declared canonical projection of it.  The projection, digest
+        algorithm, canonicalization rule, and domain-separation rule, if any,
+        MUST be identified by the applicable protocol or profile.<a href="#section-5.2-1" class="pilcrow">¶</a></p>
+<p id="section-5.2-2">A digest match establishes byte or projection correspondence under
+        the named algorithm.  It does not establish semantic equivalence,
+        correctness, authority, or truth.<a href="#section-5.2-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="r-cd-3">
+<section id="section-5.3">
+        <h3 id="name-r-cd-3-boundary-attribution">
+<a href="#section-5.3" class="section-number selfRef">5.3. </a><a href="#name-r-cd-3-boundary-attribution" class="section-name selfRef">R-CD-3: Boundary Attribution</a>
+        </h3>
+<p id="section-5.3-1">Each observation MUST identify the observer, the boundary side
+        observed, and the event being asserted.  The evidence profile MUST
+        state how the observer identity and its authority are verified.  If the
+        producer is able to rewrite the purported corroborating record, the
+        record MUST NOT be described as independent evidence.<a href="#section-5.3-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="r-cd-4">
+<section id="section-5.4">
+        <h3 id="name-r-cd-4-issuer-side-emission">
+<a href="#section-5.4" class="section-number selfRef">5.4. </a><a href="#name-r-cd-4-issuer-side-emission" class="section-name selfRef">R-CD-4: Issuer-Side Emission</a>
+        </h3>
+<p id="section-5.4-1">When an implementation claims that a control was dispatched, it MUST
+        emit or preserve an issuer-side observation at the last declared
+        issuer-controlled boundary.  The observation MUST include the stable
+        identifier, content binding, target or resolution input, observed time,
+        and boundary description.<a href="#section-5.4-1" class="pilcrow">¶</a></p>
+<p id="section-5.4-2">If emission fails before that boundary, the implementation MUST NOT
+        report the instruction as dispatched.  It SHOULD record the failed
+        emission attempt as a positive failure event.<a href="#section-5.4-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="r-cd-5">
+<section id="section-5.5">
+        <h3 id="name-r-cd-5-receiver-side-observ">
+<a href="#section-5.5" class="section-number selfRef">5.5. </a><a href="#name-r-cd-5-receiver-side-observ" class="section-name selfRef">R-CD-5: Receiver-Side Observation</a>
+        </h3>
+<p id="section-5.5-1">An implementation MUST NOT report delivery to the enforcement point
+        unless it has a matching receiver-side observation or a receipt whose
+        endpoint semantics satisfy <a href="#receiver-observation" class="auto internal xref">Section 4.2</a>.  The
+        observation MUST carry the stable identifier, content binding, receiver
+        identity, observed time, and verification result.<a href="#section-5.5-1" class="pilcrow">¶</a></p>
+<p id="section-5.5-2">A receiver MUST NOT acknowledge a digest or instruction identifier
+        it did not read and match.  If verification or content matching fails,
+        the receiver SHOULD preserve a scoped failure observation rather than
+        emitting a successful acknowledgement.<a href="#section-5.5-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="r-cd-6">
+<section id="section-5.6">
+        <h3 id="name-r-cd-6-separate-enforcement">
+<a href="#section-5.6" class="section-number selfRef">5.6. </a><a href="#name-r-cd-6-separate-enforcement" class="section-name selfRef">R-CD-6: Separate Enforcement Outcome</a>
+        </h3>
+<p id="section-5.6-1">Receipt and enforcement MUST be represented as separate facts.  An
+        implementation that reports an enforcement result MUST distinguish at
+        least APPLIED, REFUSED, NO_EFFECT, and UNKNOWN, or define a lossless
+        mapping from its native states to those meanings.  Missing enforcement
+        evidence MUST NOT default to APPLIED.<a href="#section-5.6-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="r-cd-7">
+<section id="section-5.7">
+        <h3 id="name-r-cd-7-separate-control-eff">
+<a href="#section-5.7" class="section-number selfRef">5.7. </a><a href="#name-r-cd-7-separate-control-eff" class="section-name selfRef">R-CD-7: Separate Control-Effect Observation</a>
+        </h3>
+<p id="section-5.7-1">An observed control effect MUST be represented separately from both
+        delivery and enforcement.  The observation MUST name its predicate,
+        target, method, observer relationship, start and end conditions, and
+        result.  A claim that no effect occurred MUST be bounded by an
+        observation window and predicate; silence alone MUST NOT be reported as
+        NO_EFFECT.<a href="#section-5.7-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="r-cd-8">
+<section id="section-5.8">
+        <h3 id="name-r-cd-8-negative-observation">
+<a href="#section-5.8" class="section-number selfRef">5.8. </a><a href="#name-r-cd-8-negative-observation" class="section-name selfRef">R-CD-8: Negative Observations</a>
+        </h3>
+<p id="section-5.8-1">A negative observation MUST record what was positively observed,
+        from which boundary, and as of which cutoff.  Profiles SHOULD support at
+        least the following conceptual conditions where applicable:<a href="#section-5.8-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-5.8-2.1">
+            <p id="section-5.8-2.1.1">deadline elapsed without a matching acknowledgement;<a href="#section-5.8-2.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-5.8-2.2">
+            <p id="section-5.8-2.2.1">counterpart missing at the reconciliation cutoff;<a href="#section-5.8-2.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-5.8-2.3">
+            <p id="section-5.8-2.3.1">transport rejected the identified attempt;<a href="#section-5.8-2.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-5.8-2.4">
+            <p id="section-5.8-2.4.1">verification or content matching failed; and<a href="#section-5.8-2.4.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-5.8-2.5">
+            <p id="section-5.8-2.5.1">outcome remained undetermined after the declared deadline.<a href="#section-5.8-2.5.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<p id="section-5.8-3">The absence of an observation record is not a negative observation.
+        A deadline-elapsed record establishes the reconciler's bounded view; it
+        does not prove that the receiver never received the instruction.<a href="#section-5.8-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="r-cd-9">
+<section id="section-5.9">
+        <h3 id="name-r-cd-9-time-and-ordering">
+<a href="#section-5.9" class="section-number selfRef">5.9. </a><a href="#name-r-cd-9-time-and-ordering" class="section-name selfRef">R-CD-9: Time and Ordering</a>
+        </h3>
+<p id="section-5.9-1">Each timed observation MUST identify its time value and the relevant
+        clock or trust basis.  A profile that reports cross-observer latency or
+        precedence MUST state how clock synchronization, trusted timestamping,
+        causal linkage, or another ordering mechanism supports that claim.<a href="#section-5.9-1" class="pilcrow">¶</a></p>
+<p id="section-5.9-2">Matching identifiers and digests establish correspondence.  They do
+        not, by themselves, establish that one observation preceded another.
+        Unsupported ordering claims MUST be omitted or reported as
+        indeterminate.<a href="#section-5.9-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="r-cd-10">
+<section id="section-5.10">
+        <h3 id="name-r-cd-10-total-reconciliatio">
+<a href="#section-5.10" class="section-number selfRef">5.10. </a><a href="#name-r-cd-10-total-reconciliatio" class="section-name selfRef">R-CD-10: Total Reconciliation</a>
+        </h3>
+<p id="section-5.10-1">A reconciler MUST produce a deterministic disposition for every
+        instruction and every input record presented under a declared profile.
+        Malformed, unverifiable, duplicate, conflicting, and unmatched records
+        MUST NOT be silently discarded.  A reconciler MUST NOT produce a
+        successful delivery verdict solely because no failure record exists.<a href="#section-5.10-1" class="pilcrow">¶</a></p>
+<p id="section-5.10-2">The minimum per-instruction delivery dispositions are defined in
+        <a href="#reconciliation-states" class="auto internal xref">Section 6.1</a>.  A profile MAY add more specific
+        states, provided that it defines a lossless mapping to the minimum set
+        and does not weaken UNCONFIRMED, INVALID, CONFLICT, or INDETERMINATE into
+        success.<a href="#section-5.10-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="r-cd-11">
+<section id="section-5.11">
+        <h3 id="name-r-cd-11-bounded-population-">
+<a href="#section-5.11" class="section-number selfRef">5.11. </a><a href="#name-r-cd-11-bounded-population-" class="section-name selfRef">R-CD-11: Bounded-Population Accounting</a>
+        </h3>
+<p id="section-5.11-1">An implementation claiming completeness over a set of controls MUST
+        declare a reproducible inclusion rule, observation window,
+        reconciliation cutoff, and expected issuer-instruction count.  Each
+        expected instruction MUST appear in exactly one per-instruction
+        disposition.  Each receiver-side input record MUST also be accounted
+        for as matched, orphaned, duplicated, or invalid.<a href="#section-5.11-1" class="pilcrow">¶</a></p>
+<p id="section-5.11-2">If the implementation cannot define a closed population, it MUST NOT
+        claim complete delivery, complete failure detection, or complete
+        reconciliation.  It MAY report per-record results with an explicit open
+        population scope.<a href="#section-5.11-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="r-cd-12">
+<section id="section-5.12">
+        <h3 id="name-r-cd-12-resolution-failure">
+<a href="#section-5.12" class="section-number selfRef">5.12. </a><a href="#name-r-cd-12-resolution-failure" class="section-name selfRef">R-CD-12: Resolution Failure</a>
+        </h3>
+<p id="section-5.12-1">If a control instruction refers to an external decision, policy,
+        action, task, target, key, or evidence binding, the applicable protocol
+        or profile MUST define behavior when that reference cannot be resolved,
+        is stale, resolves ambiguously, or resolves to inconsistent content.
+        Unresolved or ambiguous bindings MUST NOT be treated as verified
+        delivery or successful enforcement.<a href="#section-5.12-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="r-cd-13">
+<section id="section-5.13">
+        <h3 id="name-r-cd-13-scope-and-non-claim">
+<a href="#section-5.13" class="section-number selfRef">5.13. </a><a href="#name-r-cd-13-scope-and-non-claim" class="section-name selfRef">R-CD-13: Scope and Non-Claims</a>
+        </h3>
+<p id="section-5.13-1">Evidence producers and reconcilers MUST state what each result covers
+        and what it does not cover.  At minimum, integrity, attribution,
+        delivery, enforcement, observed control effect, ordering, completeness,
+        and independent corroboration MUST NOT be implied unless each is
+        separately supported under the declared trust model.<a href="#section-5.13-1" class="pilcrow">¶</a></p>
+<p id="section-5.13-2">A signature establishes only the properties supported by the verified
+        key binding and signature input.  A transparency receipt establishes
+        only the registration or inclusion properties supplied by the relevant
+        transparency service.  Neither establishes the truth of a producer's
+        event assertion by itself.<a href="#section-5.13-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="r-cd-14">
+<section id="section-5.14">
+        <h3 id="name-r-cd-14-consumption-and-fai">
+<a href="#section-5.14" class="section-number selfRef">5.14. </a><a href="#name-r-cd-14-consumption-and-fai" class="section-name selfRef">R-CD-14: Consumption and Fail-Safe Handling</a>
+        </h3>
+<p id="section-5.14-1">An unacknowledged or unresolved safety-relevant control instruction
+        MUST NOT be consumed as delivered.  A relying system SHOULD expose
+        UNCONFIRMED, CONFLICT, INVALID, and INDETERMINATE results to operational
+        policy and SHOULD define a fail-safe, retry, escalation, or human
+        notification behavior appropriate to the controlled risk.<a href="#section-5.14-1" class="pilcrow">¶</a></p>
+<p id="section-5.14-2">This document does not select the operational response.  It requires
+        that uncertainty remain distinguishable at the point where that local
+        response is chosen.<a href="#section-5.14-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="reconciliation">
+<section id="section-6">
+      <h2 id="name-reconciliation-model">
+<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-reconciliation-model" class="section-name selfRef">Reconciliation Model</a>
+      </h2>
+<div id="reconciliation-states">
+<section id="section-6.1">
+        <h3 id="name-per-instruction-delivery-di">
+<a href="#section-6.1" class="section-number selfRef">6.1. </a><a href="#name-per-instruction-delivery-di" class="section-name selfRef">Per-Instruction Delivery Dispositions</a>
+        </h3>
+<p id="section-6.1-1">A conforming reconciliation profile MUST preserve at least the
+        following meanings:<a href="#section-6.1-1" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlNewline" id="section-6.1-2">
+          <dt id="section-6.1-2.1">CONFIRMED</dt>
+          <dd style="margin-left: 1.5em" id="section-6.1-2.2">
+            <p id="section-6.1-2.2.1">A receiver-side observation matches the issuer-side instruction
+          identifier and content binding under the declared verification
+          rules.<a href="#section-6.1-2.2.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-6.1-2.3">EXPLICIT_FAILURE</dt>
+          <dd style="margin-left: 1.5em" id="section-6.1-2.4">
+            <p id="section-6.1-2.4.1">A positive, attributable failure observation applies to the
+          identified attempt and boundary.  The result MUST state its scope and
+          MUST NOT be generalized to every possible delivery path.<a href="#section-6.1-2.4.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-6.1-2.5">UNCONFIRMED</dt>
+          <dd style="margin-left: 1.5em" id="section-6.1-2.6">
+            <p id="section-6.1-2.6.1">An issuer-side instruction exists, but no matching receiver-side
+          observation is available at the reconciliation cutoff.<a href="#section-6.1-2.6.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-6.1-2.7">SUBSTITUTION</dt>
+          <dd style="margin-left: 1.5em" id="section-6.1-2.8">
+            <p id="section-6.1-2.8.1">Issuer-side and receiver-side records use the same instruction
+          identifier but different content bindings.<a href="#section-6.1-2.8.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-6.1-2.9">CONFLICT</dt>
+          <dd style="margin-left: 1.5em" id="section-6.1-2.10">
+            <p id="section-6.1-2.10.1">Two or more otherwise applicable records make incompatible
+          assertions that the profile cannot deterministically resolve.<a href="#section-6.1-2.10.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-6.1-2.11">INVALID</dt>
+          <dd style="margin-left: 1.5em" id="section-6.1-2.12">
+            <p id="section-6.1-2.12.1">The instruction or a required record is malformed, fails native
+          verification, or lacks a required binding.<a href="#section-6.1-2.12.1" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-6.1-2.13">INDETERMINATE</dt>
+          <dd style="margin-left: 1.5em" id="section-6.1-2.14">
+            <p id="section-6.1-2.14.1">The available inputs do not support a stronger disposition for a
+          reason other than ordinary absence of a receiver observation.<a href="#section-6.1-2.14.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+</dl>
+<p id="section-6.1-3">Receiver-side records that have no issuer-side instruction in the
+        declared issuer population are ORPHAN records.  Duplicate and invalid
+        receiver records are counted separately for record accounting.  ORPHAN
+        is not an instruction disposition because there is no corresponding
+        expected issuer instruction.<a href="#section-6.1-3" class="pilcrow">¶</a></p>
+<p id="section-6.1-4">The delivery disposition is independent of the enforcement outcome
+        and the control-effect result.  For example, an instruction can have
+        delivery CONFIRMED, enforcement APPLIED, and control effect UNKNOWN.<a href="#section-6.1-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="reconciliation-algorithm">
+<section id="section-6.2">
+        <h3 id="name-minimum-reconciliation-proc">
+<a href="#section-6.2" class="section-number selfRef">6.2. </a><a href="#name-minimum-reconciliation-proc" class="section-name selfRef">Minimum Reconciliation Procedure</a>
+        </h3>
+<p id="section-6.2-1">For a declared bounded population, a reconciler:<a href="#section-6.2-1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-6.2-2">
+          <li id="section-6.2-2.1">
+            <p id="section-6.2-2.1.1">freezes the profile revision, trust inputs, inclusion rule,
+          observation window, and reconciliation cutoff;<a href="#section-6.2-2.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li id="section-6.2-2.2">
+            <p id="section-6.2-2.2.1">parses every input record and retains invalid inputs in an error
+          population;<a href="#section-6.2-2.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li id="section-6.2-2.3">
+            <p id="section-6.2-2.3.1">performs each artifact's native integrity, identity, freshness,
+          and authorization checks before consuming its claims;<a href="#section-6.2-2.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li id="section-6.2-2.4">
+            <p id="section-6.2-2.4.1">groups valid records by stable instruction identifier without
+          assuming that identifier equality implies content equality;<a href="#section-6.2-2.4.1" class="pilcrow">¶</a></p>
+</li>
+          <li id="section-6.2-2.5">
+            <p id="section-6.2-2.5.1">compares content bindings and boundary roles;<a href="#section-6.2-2.5.1" class="pilcrow">¶</a></p>
+</li>
+          <li id="section-6.2-2.6">
+            <p id="section-6.2-2.6.1">assigns exactly one delivery disposition to every expected
+          issuer instruction;<a href="#section-6.2-2.6.1" class="pilcrow">¶</a></p>
+</li>
+          <li id="section-6.2-2.7">
+            <p id="section-6.2-2.7.1">accounts separately for every receiver record as matched,
+          orphaned, duplicated, or invalid;<a href="#section-6.2-2.7.1" class="pilcrow">¶</a></p>
+</li>
+          <li id="section-6.2-2.8">
+            <p id="section-6.2-2.8.1">reports enforcement and control-effect results as separate
+          dimensions; and<a href="#section-6.2-2.8.1" class="pilcrow">¶</a></p>
+</li>
+          <li id="section-6.2-2.9">
+            <p id="section-6.2-2.9.1">emits counts, exclusions, and limitations sufficient for a third
+          party to repeat the same structural verdict.<a href="#section-6.2-2.9.1" class="pilcrow">¶</a></p>
+</li>
+        </ol>
+<p id="section-6.2-3">Profile-specific conflict resolution MAY select among duplicate or
+        superseding records, but the discarded alternatives and the selection
+        rule MUST remain reviewable.<a href="#section-6.2-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="population-conservation">
+<section id="section-6.3">
+        <h3 id="name-population-conservation">
+<a href="#section-6.3" class="section-number selfRef">6.3. </a><a href="#name-population-conservation" class="section-name selfRef">Population Conservation</a>
+        </h3>
+<p id="section-6.3-1">Let I be the bounded set of expected issuer instructions.  A
+        reconciliation report that claims complete instruction accounting MUST
+        satisfy:<a href="#section-6.3-1" class="pilcrow">¶</a></p>
+<div class="alignCenter art-text artwork" id="section-6.3-2">
+<pre>
+|I| = Nconfirmed + Nexplicit_failure + Nunconfirmed
+    + Nsubstitution + Nconflict + Ninvalid + Nindeterminate
+</pre><a href="#section-6.3-2" class="pilcrow">¶</a>
+</div>
+<p id="section-6.3-3">Let R be the bounded set of receiver-side input records.  Complete
+        receiver-record accounting MUST separately satisfy:<a href="#section-6.3-3" class="pilcrow">¶</a></p>
+<div class="alignCenter art-text artwork" id="section-6.3-4">
+<pre>
+|R| = Nmatched + Norphan + Nduplicate + Ninvalid_receiver
+</pre><a href="#section-6.3-4" class="pilcrow">¶</a>
+</div>
+<p id="section-6.3-5">The equations describe accounting classes, not wire values or IANA
+        registries.  Profiles MAY subdivide a class, but the sum of its
+        subdivisions MUST preserve the parent count.  Records excluded before
+        population construction MUST be reported with the exclusion rule and
+        count; otherwise the completeness claim is not reproducible.<a href="#section-6.3-5" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="global-results">
+<section id="section-6.4">
+        <h3 id="name-aggregate-results">
+<a href="#section-6.4" class="section-number selfRef">6.4. </a><a href="#name-aggregate-results" class="section-name selfRef">Aggregate Results</a>
+        </h3>
+<p id="section-6.4-1">A profile MAY define aggregate results such as PASS, FAIL, or
+        INCONCLUSIVE.  If it does:<a href="#section-6.4-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-6.4-2.1">
+            <p id="section-6.4-2.1.1">PASS MUST require every expected instruction to meet the
+          profile's successful per-instruction conditions;<a href="#section-6.4-2.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-6.4-2.2">
+            <p id="section-6.4-2.2.1">FAIL MUST identify at least one positive failing condition and
+          MUST NOT be inferred solely from missing evidence;<a href="#section-6.4-2.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-6.4-2.3">
+            <p id="section-6.4-2.3.1">UNCONFIRMED, CONFLICT, INVALID, or INDETERMINATE input MUST
+          prevent PASS unless the profile explicitly excludes that input before
+          population construction; and<a href="#section-6.4-2.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-6.4-2.4">
+            <p id="section-6.4-2.4.1">the report MUST publish the complete class counts rather than
+          only the aggregate label.<a href="#section-6.4-2.4.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+</section>
+</div>
+</section>
+</div>
+<div id="protocol-attachment">
+<section id="section-7">
+      <h2 id="name-protocol-attachment-points">
+<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-protocol-attachment-points" class="section-name selfRef">Protocol Attachment Points</a>
+      </h2>
+<p id="section-7-1">A protocol need not carry an audit receipt to preserve the facts needed
+      by an external evidence layer.  When a governance-relevant transition
+      crosses a protocol or administrative boundary, the protocol or its
+      implementation profile SHOULD provide attachment points for:<a href="#section-7-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-7-2.1">
+          <p id="section-7-2.1.1">a stable control-instruction identifier and, where available, a
+        stable reference to the upstream decision, action, task, or session;<a href="#section-7-2.1.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-7-2.2">
+          <p id="section-7-2.2.1">a digest of the exact governed instruction or declared action
+        projection;<a href="#section-7-2.2.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-7-2.3">
+          <p id="section-7-2.3.1">the issuer and intended enforcement-point identities or
+        resolution inputs;<a href="#section-7-2.3.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-7-2.4">
+          <p id="section-7-2.4.1">an attributable outcome that preserves deny, defer, reject,
+        timeout, unresolved, and indeterminate states;<a href="#section-7-2.4.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-7-2.5">
+          <p id="section-7-2.5.1">a way to distinguish transport acceptance from enforcement-point
+        receipt;<a href="#section-7-2.5.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-7-2.6">
+          <p id="section-7-2.6.1">an explicit rule for stale, missing, ambiguous, or inconsistent
+        external references; and<a href="#section-7-2.6.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-7-2.7">
+          <p id="section-7-2.7.1">a stable reference through which an external evidence system can
+        bind additional observations without changing the protocol's native
+        message format.<a href="#section-7-2.7.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
+<p id="section-7-3">These attachment points can be realized as native fields, structured
+      errors, acknowledgements, protocol events, or references.  This document
+      does not require that evidence artifacts be transferred inline.<a href="#section-7-3" class="pilcrow">¶</a></p>
+<p id="section-7-4">In agent communication requirements work, accountability and auditing
+      can remain out of scope while these preservation properties remain in
+      scope.  The distinction is that this document does not ask the protocol to
+      define what an auditor concludes.  It asks the protocol boundary not to
+      erase the identifiers, bindings, outcomes, and failure semantics that any
+      downstream verifier would need.<a href="#section-7-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="composition">
+<section id="section-8">
+      <h2 id="name-composition-with-existing-m">
+<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-composition-with-existing-m" class="section-name selfRef">Composition with Existing Mechanisms</a>
+      </h2>
+<div id="native-verification">
+<section id="section-8.1">
+        <h3 id="name-native-verification-first">
+<a href="#section-8.1" class="section-number selfRef">8.1. </a><a href="#name-native-verification-first" class="section-name selfRef">Native Verification First</a>
+        </h3>
+<p id="section-8.1-1">Each credential, signature, attestation, authorization result,
+        transport acknowledgement, telemetry record, and transparency receipt
+        retains its native semantics and verifier.  A reconciler MUST perform or
+        consume the result of the native verification before treating the
+        artifact as evidence for a control-delivery claim.<a href="#section-8.1-1" class="pilcrow">¶</a></p>
+<p id="section-8.1-2">A self-declared algorithm, key identifier, role, or observer label
+        MUST NOT drive trust without an externally configured or otherwise
+        verified binding.  Composition MUST NOT strengthen the weakest input
+        beyond its verified meaning.<a href="#section-8.1-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="scitt-composition">
+<section id="section-8.2">
+        <h3 id="name-scitt-composition">
+<a href="#section-8.2" class="section-number selfRef">8.2. </a><a href="#name-scitt-composition" class="section-name selfRef">SCITT Composition</a>
+        </h3>
+<p id="section-8.2-1"><span>[<a href="#RFC9943" class="cite xref">RFC9943</a>]</span> defines signed statements and receipts for
+        registration in a transparency service.  A control observation or
+        reconciliation report can be carried as, or referenced by, a SCITT
+        Signed Statement.  A SCITT receipt can then provide evidence of the
+        registration properties defined by that service.<a href="#section-8.2-1" class="pilcrow">¶</a></p>
+<p id="section-8.2-2">SCITT registration does not, by itself, prove that a control was
+        delivered, enforced, correctly observed, or true.  Those meanings still
+        depend on the observation boundary, native verification, content
+        binding, and reconciliation rules defined here and in the applicable
+        profile.<a href="#section-8.2-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="telemetry-composition">
+<section id="section-8.3">
+        <h3 id="name-telemetry-and-trace-composi">
+<a href="#section-8.3" class="section-number selfRef">8.3. </a><a href="#name-telemetry-and-trace-composi" class="section-name selfRef">Telemetry and Trace Composition</a>
+        </h3>
+<p id="section-8.3-1">Telemetry systems can carry timestamps, trace identifiers, and
+        correlated events.  A trace identifier can help locate related records,
+        but trace membership alone does not establish instruction-content
+        equality, authority, endpoint receipt, ordering across untrusted clocks,
+        or independence.  Profiles using telemetry MUST state which required
+        bindings are native, derived, or absent.<a href="#section-8.3-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="operational">
+<section id="section-9">
+      <h2 id="name-operational-considerations">
+<a href="#section-9" class="section-number selfRef">9. </a><a href="#name-operational-considerations" class="section-name selfRef">Operational Considerations</a>
+      </h2>
+<div id="deadlines">
+<section id="section-9.1">
+        <h3 id="name-deadlines-retries-and-late-">
+<a href="#section-9.1" class="section-number selfRef">9.1. </a><a href="#name-deadlines-retries-and-late-" class="section-name selfRef">Deadlines, Retries, and Late Evidence</a>
+        </h3>
+<p id="section-9.1-1">Deployments SHOULD define acknowledgement and reconciliation
+        deadlines based on the controlled risk and transport characteristics.
+        The deadline source, start event, units, and clock basis need to be
+        explicit.  A late receiver observation can change UNCONFIRMED to
+        CONFIRMED in a later reconciliation run, but the earlier report and its
+        cutoff SHOULD remain available.<a href="#section-9.1-1" class="pilcrow">¶</a></p>
+<p id="section-9.1-2">Retries SHOULD reuse or relate identifiers according to a declared
+        rule.  Reusing one identifier for different instruction content creates
+        SUBSTITUTION, not a retry.  Creating a new identifier for every retry
+        without a common attempt-group reference can hide repeated delivery
+        failures.<a href="#section-9.1-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="durability">
+<section id="section-9.2">
+        <h3 id="name-durability-and-acknowledgem">
+<a href="#section-9.2" class="section-number selfRef">9.2. </a><a href="#name-durability-and-acknowledgem" class="section-name selfRef">Durability and Acknowledgement Point</a>
+        </h3>
+<p id="section-9.2-1">A profile SHOULD state whether receiver acknowledgement occurs after
+        parsing, verification, durable persistence, admission to an enforcement
+        queue, or completed enforcement.  Implementations MUST NOT use the same
+        acknowledgement value for several of those points unless the profile
+        defines the combined semantics and residual failure window.<a href="#section-9.2-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="multi-path">
+<section id="section-9.3">
+        <h3 id="name-multiple-enforcement-paths">
+<a href="#section-9.3" class="section-number selfRef">9.3. </a><a href="#name-multiple-enforcement-paths" class="section-name selfRef">Multiple Enforcement Paths</a>
+        </h3>
+<p id="section-9.3-1">A control can be ineffective even when one enforcement point applies
+        it if an alternate path remains open.  A deployment claiming complete
+        control mediation SHOULD enumerate the paths within scope and identify
+        the enforcement point for each path.  This document does not prove that
+        the enumeration is complete.<a href="#section-9.3-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="security">
+<section id="section-10">
+      <h2 id="name-security-considerations">
+<a href="#section-10" class="section-number selfRef">10. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
+      </h2>
+<p id="section-10-1">The evidence described here is security-relevant because it can drive
+      escalation, incident response, or claims that an agent was stopped.  An
+      attacker can target the instruction, the delivery path, the observer, the
+      evidence store, the verifier, or the reconciliation population.<a href="#section-10-1" class="pilcrow">¶</a></p>
+<div id="substitution-replay">
+<section id="section-10.1">
+        <h3 id="name-substitution-replay-and-ide">
+<a href="#section-10.1" class="section-number selfRef">10.1. </a><a href="#name-substitution-replay-and-ide" class="section-name selfRef">Substitution, Replay, and Identifier Reuse</a>
+        </h3>
+<p id="section-10.1-1">An attacker can reuse an instruction identifier with weaker content,
+        replay an old acknowledgement, or correlate a receiver record to the
+        wrong attempt.  Stable identifiers, content digests, freshness rules,
+        target binding, and attempt-group semantics mitigate these attacks.
+        Digest algorithms and canonicalization rules need downgrade-resistant
+        selection.<a href="#section-10.1-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="observer-compromise">
+<section id="section-10.2">
+        <h3 id="name-observer-and-key-compromise">
+<a href="#section-10.2" class="section-number selfRef">10.2. </a><a href="#name-observer-and-key-compromise" class="section-name selfRef">Observer and Key Compromise</a>
+        </h3>
+<p id="section-10.2-1">A valid signature proves control of a signing key over the signed
+        bytes; it does not prove that the observer actually saw the asserted
+        event.  Key-to-observer binding, protected key use, process and storage
+        separation, attestation where appropriate, and independent observation
+        can improve confidence.  None should be overstated as ground truth.<a href="#section-10.2-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="suppression">
+<section id="section-10.3">
+        <h3 id="name-evidence-suppression-and-se">
+<a href="#section-10.3" class="section-number selfRef">10.3. </a><a href="#name-evidence-suppression-and-se" class="section-name selfRef">Evidence Suppression and Selective Population</a>
+        </h3>
+<p id="section-10.3-1">A producer can suppress failed controls or choose a favorable subset
+        after the fact.  Bounded-population construction, entry-emission rules,
+        append-only or transparency mechanisms, and independent counters can
+        make suppression more detectable.  An open population cannot support a
+        completeness claim.<a href="#section-10.3-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="availability">
+<section id="section-10.4">
+        <h3 id="name-availability-and-fail-safe-">
+<a href="#section-10.4" class="section-number selfRef">10.4. </a><a href="#name-availability-and-fail-safe-" class="section-name selfRef">Availability and Fail-Safe Policy</a>
+        </h3>
+<p id="section-10.4-1">An attacker can withhold acknowledgements or evidence to force
+        fail-safe shutdowns, or flood a reconciler with orphan and invalid
+        records.  Implementations need resource limits, authenticated inputs,
+        replay control, rate limiting, and a local policy that balances safety
+        and availability.  The evidence layer MUST preserve the uncertain state
+        even when local policy chooses to continue operation.<a href="#section-10.4-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="semantic-gap">
+<section id="section-10.5">
+        <h3 id="name-semantic-and-physical-world">
+<a href="#section-10.5" class="section-number selfRef">10.5. </a><a href="#name-semantic-and-physical-world" class="section-name selfRef">Semantic and Physical-World Gaps</a>
+        </h3>
+<p id="section-10.5-1">Matching digests do not prove that two implementations assign the
+        same meaning to a control verb.  An enforcement assertion does not prove
+        a physical-world outcome.  Profiles need versioned control semantics and
+        scoped effect predicates.  High-consequence deployments require
+        domain-specific validation beyond this document.<a href="#section-10.5-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="privacy">
+<section id="section-11">
+      <h2 id="name-privacy-considerations">
+<a href="#section-11" class="section-number selfRef">11. </a><a href="#name-privacy-considerations" class="section-name selfRef">Privacy Considerations</a>
+      </h2>
+<p id="section-11-1">Control evidence can reveal agent identities, user relationships,
+      incident timing, policy decisions, operational topology, and sensitive
+      task state.  Stable identifiers can enable correlation across services
+      and observation windows.<a href="#section-11-1" class="pilcrow">¶</a></p>
+<p id="section-11-2">Implementations SHOULD minimize payloads, use scoped or pseudonymous
+      identifiers where possible, separate identity resolution from routine
+      evidence exchange, apply access controls and retention limits, and support
+      selective disclosure.  Raw prompts, chain-of-thought, model context,
+      personal data, and proprietary policy SHOULD NOT be included by default.<a href="#section-11-2" class="pilcrow">¶</a></p>
+<p id="section-11-3">Publishing a digest instead of content reduces direct disclosure but
+      does not eliminate it.  Digests of low-entropy or enumerable values can be
+      guessed.  Profiles SHOULD use commitments, nonces, or access-controlled
+      references where dictionary attacks are relevant.<a href="#section-11-3" class="pilcrow">¶</a></p>
+<p id="section-11-4">Independent observation increases corroboration but can also increase
+      data replication and linkability.  The independence requirement is scoped
+      to claims that explicitly need independent corroboration; it is not a
+      requirement to disclose every event to an additional party.<a href="#section-11-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="implementation-status">
+<section id="section-12">
+      <h2 id="name-implementation-status">
+<a href="#section-12" class="section-number selfRef">12. </a><a href="#name-implementation-status" class="section-name selfRef">Implementation Status</a>
+      </h2>
+<p id="section-12-1">This section is to be removed before publishing as an RFC.<a href="#section-12-1" class="pilcrow">¶</a></p>
+<p id="section-12-2">This section records implementation experience available as of 30
+      August 2026 and is intended to be removed before publication as an RFC.<a href="#section-12-2" class="pilcrow">¶</a></p>
+<p id="section-12-3">The AI Runtime Evidence Protocol (AIREP) <span>[<a href="#AIREP-REPO" class="cite xref">AIREP-REPO</a>]</span>
+      is one experimental implementation source for the distinctions in this
+      document.  AIREP v0.1 remains its recommended implementation target.  Its
+      control-delivery profile records issuer, enforcement-point, and witness
+      observations and includes a total reconciler.  At repository commit
+      617fa1a1903f1fd10c8e157a95592950aebcfde9, the reference runner reproduced
+      the expected verdict and per-instruction status for all 12 committed
+      control-delivery reconciliation bundles.<a href="#section-12-3" class="pilcrow">¶</a></p>
+<p id="section-12-4">AIREP v0.2.0-alpha.1 <span>[<a href="#AIREP-V02" class="cite xref">AIREP-V02</a>]</span> is an experimental
+      prerelease.  It separates Decision Receipts, Control Evidence, Execution
+      Evidence, and Effect Evidence and correlates them through explicit
+      identifiers and digests.  Its released artifacts include five JSON Schema
+      files -- four artifact-family schemas and one shared definitions schema --
+      a 117-fixture two-engine schema-validation corpus, and two separately
+      authored first-party class verifiers exercised against a 60-case corpus
+      with 15 process probes.  It has no producer implementation, no independent
+      third-party producer or audit, and no stable-release claim.  It does not
+      supersede v0.1.<a href="#section-12-4" class="pilcrow">¶</a></p>
+<p id="section-12-5">The AIREP artifacts do not establish a deployed end-to-end delivery or
+      control-effect claim.  They are cited as implementation and test-vector
+      input, not as evidence of broad adoption or IETF consensus.  The protocol
+      design and its evaluation are described in <span>[<a href="#AIREP-PAPER" class="cite xref">AIREP-PAPER</a>]</span>.<a href="#section-12-5" class="pilcrow">¶</a></p>
+<p id="section-12-6">Additional independently implemented producers, consumers, and
+      interoperation results are sought, particularly for paired issuer-side
+      and enforcement-point-side evidence across real administrative
+      boundaries.<a href="#section-12-6" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="related-work">
+<section id="section-13">
+      <h2 id="name-relationship-to-adjacent-wo">
+<a href="#section-13" class="section-number selfRef">13. </a><a href="#name-relationship-to-adjacent-wo" class="section-name selfRef">Relationship to Adjacent Work</a>
+      </h2>
+<p id="section-13-1">The agent communication use-case and requirements work
+      <span>[<a href="#I-D.agentic-ai-usecases-requirements" class="cite xref">I-D.agentic-ai-usecases-requirements</a>]</span> treats
+      accountability and auditing as separate work.  This document is
+      compatible with that boundary: it defines only the minimum facts that
+      need to survive protocol transitions so an external evidence layer can
+      later bind them.<a href="#section-13-1" class="pilcrow">¶</a></p>
+<p id="section-13-2">The auditing architecture in
+      <span>[<a href="#I-D.kuehlewind-audit-architecture" class="cite xref">I-D.kuehlewind-audit-architecture</a>]</span> links user intent,
+      delegation, authorization, execution, and distributed audit records
+      across agent-driven interactions.  This document addresses a narrower
+      lifecycle within that architecture: evidence that a governance control
+      was emitted, observed at the intended enforcement point, processed, and
+      reflected in governed runtime state.  It can therefore serve as a
+      specialized control-delivery requirements input without replacing the
+      broader audit-context and record architecture.<a href="#section-13-2" class="pilcrow">¶</a></p>
+<p id="section-13-3"><span>[<a href="#I-D.bu-agentproto-security-principal-binding" class="cite xref">I-D.bu-agentproto-security-principal-binding</a>]</span> separates
+      claims, carriers, verifiers, bindings, failure behavior, and accepted
+      results for agent protocols.  The requirements here specialize that
+      discipline for the control-delivery lifecycle and its two boundary
+      sides.<a href="#section-13-3" class="pilcrow">¶</a></p>
+<p id="section-13-4">Signed decision records <span>[<a href="#I-D.bradleyb-audit-decision-records" class="cite xref">I-D.bradleyb-audit-decision-records</a>]</span>
+      preserve authorization decisions, including denials and non-occurring
+      actions, and distinguish correspondence from precedence.  A decision
+      record can be an upstream reference for this document.  It does not by
+      itself establish that a resulting control instruction reached an
+      enforcement point.<a href="#section-13-4" class="pilcrow">¶</a></p>
+<p id="section-13-5">The Action Evidence Boundary
+      <span>[<a href="#I-D.schrock-action-evidence-boundary" class="cite xref">I-D.schrock-action-evidence-boundary</a>]</span> defines an
+      executor-side processing model for consequential agent effects, including
+      action correlation, local authorization, atomic consumption, invocation,
+      effect outcomes, and reconciliation.  This document addresses a different
+      direction and object: a governance control such as stop or revoke moving
+      toward the component that constrains the runtime.  The "control effect"
+      here is the governed runtime state, not the consequential business effect
+      of the protected action.<a href="#section-13-5" class="pilcrow">¶</a></p>
+<p id="section-13-6">Execution-finality work
+      <span>[<a href="#I-D.das-agentic-execution-finality" class="cite xref">I-D.das-agentic-execution-finality</a>]</span> distinguishes model
+      tool selection from authorized execution at a dispatch-time gate.  A stop
+      or revoke control can target such a gate.  The present document asks how
+      delivery and enforcement of that control are evidenced, rather than how
+      the underlying tool action is authorized.<a href="#section-13-6" class="pilcrow">¶</a></p>
+<p id="section-13-7">The SCITT AI-agent receipt profile
+      <span>[<a href="#I-D.noa-scitt-ai-agent-receipt" class="cite xref">I-D.noa-scitt-ai-agent-receipt</a>]</span> defines how an action
+      receipt can be registered using SCITT.  This document is format-neutral
+      and can supply control-delivery statement semantics for a SCITT-based
+      profile without changing SCITT's registration semantics.<a href="#section-13-7" class="pilcrow">¶</a></p>
+<p id="section-13-8">The OWASP Agentic AI Threats and Mitigations project
+      <span>[<a href="#OWASP-APTS" class="cite xref">OWASP-APTS</a>]</span> includes a human-oversight requirement that an
+      unacknowledged kill instruction not be treated as delivered.  The
+      requirements and negative-observation rules in this document generalize
+      that implementation concern into a protocol-independent evidence
+      contract.<a href="#section-13-8" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="iana">
+<section id="section-14">
+      <h2 id="name-iana-considerations">
+<a href="#section-14" class="section-number selfRef">14. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
+      </h2>
+<p id="section-14-1">This document has no IANA actions.<a href="#section-14-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="acknowledgements">
+<section id="section-15">
+      <h2 id="name-acknowledgements">
+<a href="#section-15" class="section-number selfRef">15. </a><a href="#name-acknowledgements" class="section-name selfRef">Acknowledgements</a>
+      </h2>
+<p id="section-15-1">The author thanks participants in the agent2agent, agentproto, and
+      SCITT communities whose discussions helped sharpen the distinction among
+      decision, delivery, enforcement, and effect.  Specific names and review
+      contributions will be added with permission in a later revision.<a href="#section-15-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<section id="section-16">
+      <h2 id="name-normative-references">
+<a href="#section-16" class="section-number selfRef">16. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
+      </h2>
+<dl class="references">
+<dt id="RFC2119">[RFC2119]</dt>
+      <dd>
+<span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc2119">https://www.rfc-editor.org/info/rfc2119</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8174">[RFC8174]</dt>
+    <dd>
+<span class="refAuthor">Leiba, B.</span>, <span class="refTitle">"Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 8174</span>, <span class="seriesInfo">DOI 10.17487/RFC8174</span>, <time datetime="2017-05" class="refDate">May 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8174">https://www.rfc-editor.org/info/rfc8174</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+</dl>
+</section>
+<section id="section-17">
+      <h2 id="name-informative-references">
+<a href="#section-17" class="section-number selfRef">17. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
+      </h2>
+<dl class="references">
+<dt id="AIREP-PAPER">[AIREP-PAPER]</dt>
+      <dd>
+<span class="refAuthor">Abak, A. T.</span>, <span class="refTitle">"AIREP: A Protocol for Per-Decision Evidence in AI Runtime Governance"</span>, <span class="seriesInfo">arXiv 2608.21363</span>, <time datetime="2026-08" class="refDate">August 2026</time>, <span>&lt;<a href="https://arxiv.org/abs/2608.21363">https://arxiv.org/abs/2608.21363</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="AIREP-REPO">[AIREP-REPO]</dt>
+      <dd>
+<span class="refAuthor">Abak, A. T.</span>, <span class="refTitle">"AI Runtime Evidence Protocol (AIREP): Repository Snapshot"</span>, <span class="refContent">Commit 617fa1a1903f1fd10c8e157a95592950aebcfde9</span>, <time datetime="2026-08-27" class="refDate">27 August 2026</time>, <span>&lt;<a href="https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/tree/617fa1a1903f1fd10c8e157a95592950aebcfde9">https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/tree/617fa1a1903f1fd10c8e157a95592950aebcfde9</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="AIREP-V02">[AIREP-V02]</dt>
+      <dd>
+<span class="refAuthor">Abak, A. T.</span>, <span class="refTitle">"AI Runtime Evidence Protocol v0.2.0-alpha.1"</span>, <span class="seriesInfo">DOI 10.5281/zenodo.22101986</span>, <time datetime="2026-08-25" class="refDate">25 August 2026</time>, <span>&lt;<a href="https://doi.org/10.5281/zenodo.22101986">https://doi.org/10.5281/zenodo.22101986</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="I-D.agentic-ai-usecases-requirements">[I-D.agentic-ai-usecases-requirements]</dt>
+      <dd>
+<span class="refAuthor">Reddy.K, T.</span>, <span class="refAuthor">Sarker, Z.</span>, and <span class="refAuthor">K. Yao</span>, <span class="refTitle">"Agentic AI Use Cases and Requirements"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-agentic-ai-usecases-requirements-02</span>, <time datetime="2026-08-26" class="refDate">26 August 2026</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/draft-agentic-ai-usecases-requirements/">https://datatracker.ietf.org/doc/draft-agentic-ai-usecases-requirements/</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="I-D.bradleyb-audit-decision-records">[I-D.bradleyb-audit-decision-records]</dt>
+      <dd>
+<span class="refAuthor">B, B.</span>, <span class="refTitle">"Signed Decision Records for Agent Authorization: Disclosures, Entry Emission, and Ordering Evidence"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-bradleyb-audit-decision-records-00</span>, <time datetime="2026-08-13" class="refDate">13 August 2026</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/draft-bradleyb-audit-decision-records/">https://datatracker.ietf.org/doc/draft-bradleyb-audit-decision-records/</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="I-D.bu-agentproto-security-principal-binding">[I-D.bu-agentproto-security-principal-binding]</dt>
+      <dd>
+<span class="refAuthor">Bu, S.</span>, <span class="refTitle">"Security Principal and Verifier Binding for Agent Communication Protocols"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-bu-agentproto-security-principal-binding-06</span>, <time datetime="2026-08-17" class="refDate">17 August 2026</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/draft-bu-agentproto-security-principal-binding/">https://datatracker.ietf.org/doc/draft-bu-agentproto-security-principal-binding/</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="I-D.das-agentic-execution-finality">[I-D.das-agentic-execution-finality]</dt>
+      <dd>
+<span class="refAuthor">Das, S.</span>, <span class="refTitle">"Tool Selection Is Not Execution: Finality for Agentic Tool Dispatch"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-das-agentic-execution-finality-01</span>, <time datetime="2026-08-27" class="refDate">27 August 2026</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/draft-das-agentic-execution-finality/">https://datatracker.ietf.org/doc/draft-das-agentic-execution-finality/</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="I-D.kuehlewind-audit-architecture">[I-D.kuehlewind-audit-architecture]</dt>
+      <dd>
+<span class="refAuthor">Kuehlewind, M.</span> and <span class="refAuthor">H. Birkholz</span>, <span class="refTitle">"An Architecture for Auditing AI Agent Delegation and Interactions"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-kuehlewind-audit-architecture-00</span>, <time datetime="2026-05-18" class="refDate">18 May 2026</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/draft-kuehlewind-audit-architecture/">https://datatracker.ietf.org/doc/draft-kuehlewind-audit-architecture/</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="I-D.noa-scitt-ai-agent-receipt">[I-D.noa-scitt-ai-agent-receipt]</dt>
+      <dd>
+<span class="refAuthor">Toraman, T.</span>, <span class="refTitle">"A SCITT Profile for AI-Agent Action Receipts"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-noa-scitt-ai-agent-receipt-01</span>, <time datetime="2026-08-15" class="refDate">15 August 2026</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/draft-noa-scitt-ai-agent-receipt/">https://datatracker.ietf.org/doc/draft-noa-scitt-ai-agent-receipt/</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="I-D.schrock-action-evidence-boundary">[I-D.schrock-action-evidence-boundary]</dt>
+      <dd>
+<span class="refAuthor">Schrock, I.</span>, <span class="refTitle">"The Action Evidence Boundary for Consequential Agent Effects"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-schrock-action-evidence-boundary-04</span>, <time datetime="2026-08-16" class="refDate">16 August 2026</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/draft-schrock-action-evidence-boundary/">https://datatracker.ietf.org/doc/draft-schrock-action-evidence-boundary/</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="OWASP-APTS">[OWASP-APTS]</dt>
+      <dd>
+<span class="refAuthor">OWASP Foundation</span>, <span class="refTitle">"Agentic AI - Threats and Mitigations: Human Oversight"</span>, <span class="refContent">Repository snapshot at commit 2b210945361bac207f37a21440d0f34c05c07ad9</span>, <time datetime="2026" class="refDate">2026</time>, <span>&lt;<a href="https://github.com/OWASP/APTS/blob/2b210945361bac207f37a21440d0f34c05c07ad9/standard/3_Human_Oversight/README.md">https://github.com/OWASP/APTS/blob/2b210945361bac207f37a21440d0f34c05c07ad9/standard/3_Human_Oversight/README.md</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9943">[RFC9943]</dt>
+    <dd>
+<span class="refAuthor">Birkholz, H.</span>, <span class="refAuthor">Delignat-Lavaud, A.</span>, <span class="refAuthor">Fournet, C.</span>, <span class="refAuthor">Deshpande, Y.</span>, and <span class="refAuthor">S. Lasker</span>, <span class="refTitle">"An Architecture for Trustworthy and Transparent Digital Supply Chains"</span>, <span class="seriesInfo">RFC 9943</span>, <span class="seriesInfo">DOI 10.17487/RFC9943</span>, <time datetime="2026-06" class="refDate">June 2026</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc9943">https://www.rfc-editor.org/info/rfc9943</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+</dl>
+</section>
+<div id="appendix-logical-record">
+<section id="appendix-A">
+      <h2 id="name-illustrative-logical-record">
+<a href="#name-illustrative-logical-record" class="section-name selfRef">Illustrative Logical Record Set</a>
+      </h2>
+<p id="appendix-A-1">The following example is deliberately not a wire format.  Field names
+      are descriptive placeholders.  Equivalent facts can be carried in native
+      protocol messages and external evidence artifacts.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-application/json art-text artwork" id="appendix-A-2">
+<pre>
+{
+  "instruction_id": "ctrl-7f3a",
+  "instruction_digest": "sha-256:&lt;digest&gt;",
+  "decision_ref": "decision-1042",
+  "issuer_observation": {
+    "boundary": "governor/transport",
+    "event": "dispatched",
+    "observer": "governor.example",
+    "observed_at": "2026-08-27T10:00:00Z"
+  },
+  "receiver_observation": {
+    "boundary": "runtime/enforcement-point",
+    "event": "received-and-matched",
+    "observer": "ep.example",
+    "observed_at": "2026-08-27T10:00:00.120Z"
+  },
+  "enforcement_outcome": {
+    "result": "APPLIED",
+    "observer": "ep.example"
+  },
+  "control_effect": {
+    "predicate": "task no longer dispatches tool calls",
+    "observer_relationship": "independent",
+    "result": "UNKNOWN"
+  },
+  "scope": {
+    "covers": [
+      "issuer emission",
+      "receiver receipt",
+      "EP assertion"
+    ],
+    "does_not_cover": [
+      "independent effect",
+      "policy correctness"
+    ]
+  }
+}
+</pre><a href="#appendix-A-2" class="pilcrow">¶</a>
+</div>
+<p id="appendix-A-3">The example can support delivery CONFIRMED and enforcement APPLIED.  It
+      cannot support an independently observed control effect because that
+      result is UNKNOWN.<a href="#appendix-A-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="appendix-tests">
+<section id="appendix-B">
+      <h2 id="name-minimum-conformance-cases">
+<a href="#name-minimum-conformance-cases" class="section-name selfRef">Minimum Conformance Cases</a>
+      </h2>
+<p id="appendix-B-1">A profile claiming conformance to the reconciliation requirements
+      SHOULD publish machine-readable test vectors for at least:<a href="#appendix-B-1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="appendix-B-2">
+        <li id="appendix-B-2.1">
+          <p id="appendix-B-2.1.1">matching issuer and receiver records: CONFIRMED;<a href="#appendix-B-2.1.1" class="pilcrow">¶</a></p>
+</li>
+        <li id="appendix-B-2.2">
+          <p id="appendix-B-2.2.1">issuer record only at cutoff: UNCONFIRMED;<a href="#appendix-B-2.2.1" class="pilcrow">¶</a></p>
+</li>
+        <li id="appendix-B-2.3">
+          <p id="appendix-B-2.3.1">same identifier and different digest: SUBSTITUTION;<a href="#appendix-B-2.3.1" class="pilcrow">¶</a></p>
+</li>
+        <li id="appendix-B-2.4">
+          <p id="appendix-B-2.4.1">receiver record only: ORPHAN record accounting;<a href="#appendix-B-2.4.1" class="pilcrow">¶</a></p>
+</li>
+        <li id="appendix-B-2.5">
+          <p id="appendix-B-2.5.1">positive transport rejection: scoped EXPLICIT_FAILURE;<a href="#appendix-B-2.5.1" class="pilcrow">¶</a></p>
+</li>
+        <li id="appendix-B-2.6">
+          <p id="appendix-B-2.6.1">malformed issuer record: INVALID, retained in counts;<a href="#appendix-B-2.6.1" class="pilcrow">¶</a></p>
+</li>
+        <li id="appendix-B-2.7">
+          <p id="appendix-B-2.7.1">malformed receiver record: invalid receiver-record accounting;<a href="#appendix-B-2.7.1" class="pilcrow">¶</a></p>
+</li>
+        <li id="appendix-B-2.8">
+          <p id="appendix-B-2.8.1">duplicate matching receiver records: one match plus duplicate
+        accounting under the profile's rule;<a href="#appendix-B-2.8.1" class="pilcrow">¶</a></p>
+</li>
+        <li id="appendix-B-2.9">
+          <p id="appendix-B-2.9.1">conflicting valid observations: CONFLICT;<a href="#appendix-B-2.9.1" class="pilcrow">¶</a></p>
+</li>
+        <li id="appendix-B-2.10">
+          <p id="appendix-B-2.10.1">missing acknowledgement without a negative-observation record:
+        UNCONFIRMED, not EXPLICIT_FAILURE;<a href="#appendix-B-2.10.1" class="pilcrow">¶</a></p>
+</li>
+        <li id="appendix-B-2.11">
+          <p id="appendix-B-2.11.1">deadline-elapsed negative observation followed by late matching
+        receipt: versioned reconciliation results preserving both cutoffs;<a href="#appendix-B-2.11.1" class="pilcrow">¶</a></p>
+</li>
+        <li id="appendix-B-2.12">
+          <p id="appendix-B-2.12.1">delivery CONFIRMED with enforcement UNKNOWN;<a href="#appendix-B-2.12.1" class="pilcrow">¶</a></p>
+</li>
+        <li id="appendix-B-2.13">
+          <p id="appendix-B-2.13.1">enforcement APPLIED with control effect UNKNOWN;<a href="#appendix-B-2.13.1" class="pilcrow">¶</a></p>
+</li>
+        <li id="appendix-B-2.14">
+          <p id="appendix-B-2.14.1">self-declared observer role without verified binding: no
+        independence claim;<a href="#appendix-B-2.14.1" class="pilcrow">¶</a></p>
+</li>
+        <li id="appendix-B-2.15">
+          <p id="appendix-B-2.15.1">unresolvable external binding: INDETERMINATE or INVALID according
+        to the declared profile, never CONFIRMED; and<a href="#appendix-B-2.15.1" class="pilcrow">¶</a></p>
+</li>
+        <li id="appendix-B-2.16">
+          <p id="appendix-B-2.16.1">a bounded population whose category counts fail conservation:
+        aggregate result rejected or INCONCLUSIVE.<a href="#appendix-B-2.16.1" class="pilcrow">¶</a></p>
+</li>
+      </ol>
+</section>
+</div>
+<div id="authors-addresses">
+<section id="appendix-C">
+      <h2 id="name-authors-address">
+<a href="#name-authors-address" class="section-name selfRef">Author's Address</a>
+      </h2>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Ali Toygar Abak</span></div>
+<div dir="auto" class="left"><span class="org">Independent Researcher</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:founder@phionyx.ai" class="email">founder@phionyx.ai</a>
+</div>
+<div class="url">
+<span>URI:</span>
+<a href="https://phionyx.ai" class="url">https://phionyx.ai</a>
+</div>
+</address>
+</section>
+</div>
+<script>const toc = document.getElementById("toc");
+toc.querySelector("h2").addEventListener("click", e => {
+  toc.classList.toggle("active");
+});
+toc.querySelector("nav").addEventListener("click", e => {
+  toc.classList.remove("active");
+});
+</script>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a3458e5d9863dcb5',t:'MTc4ODI3OTE0Mg=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
