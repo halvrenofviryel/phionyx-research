@@ -33,8 +33,13 @@ Verified directly from the `-00` XML/TXT:
 
 ## 2. Public SCITT mailing-list thread
 
-Subject line for all fifteen messages:
-`[SCITT] (Re:) New I-D: Evidence Requirements for Agent Control Delivery and Outcome Reconciliation (draft-abak-agent-control-delivery-evidence-00)`
+Subject lines. Two literal forms occur, one per message; no message contains the
+parenthesised `(Re:)` form used as shorthand elsewhere:
+
+- message A (the announcement):
+  `[SCITT] New I-D: Evidence Requirements for Agent Control Delivery and Outcome Reconciliation (draft-abak-agent-control-delivery-evidence-00)`
+- messages B–O (all replies):
+  `[SCITT] Re: New I-D: Evidence Requirements for Agent Control Delivery and Outcome Reconciliation (draft-abak-agent-control-delivery-evidence-00)`
 
 | Ref | Type | Author | Date (as sent) | Purpose | URL |
 |---|---|---|---|---|---|
@@ -59,8 +64,8 @@ Subject line for all fifteen messages:
 The public SCITT archive was searched on 2026-09-01
 (<https://mailarchive.ietf.org/arch/browse/scitt/?q=agent-control-delivery-evidence>).
 The search returned 24 message URLs. Each was fetched and its `Subject:` header
-inspected. **Fifteen** carry the exact subject above — the fifteen listed as
-A–O. The other nine belong to two different threads and are recorded here only
+inspected. **Fifteen** carry one of the two subject forms above — the fifteen
+listed as A–O. The other nine belong to two different threads and are recorded here only
 so the completeness check is reproducible; they were not treated as review of
 this draft:
 
@@ -136,4 +141,4 @@ the text "[RFC9943] defines signed statements and receipts for registration in a
 transparency service." RFC 9942 is a different document (COSE Receipts). The
 reviewer's RFC number therefore does not match the citation in `-00`, and no
 normative or related-work change has been made on the strength of the reviewer's
-number. See `reviews/REVIEW_LEDGER.md` item **W-1**.
+number. See `reviews/REVIEW_LEDGER.md` item **W-4**.

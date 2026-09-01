@@ -32,7 +32,7 @@ published revision. `-01` has not been submitted.
 |---|---|
 | **Reviewer** | Iman Schrock (EMILIA Protocol) |
 | **Source** | <https://mailarchive.ietf.org/arch/msg/scitt/nmX5kiPFudYFDhKIHuno-0hLD8U/> |
-| **Affected `-00` sections** | 5.6 (R-CD-4), 5.7 (R-CD-5), 6.1, 6.3, 9.3 |
+| **Affected `-00` sections** | 5.4 (R-CD-4), 5.5 (R-CD-5), 6.1, 6.3, 9.3 |
 | **Finding** | R-CD-4 requires a target or resolution input and R-CD-5 a receiver identity, but no normative step binds the resolved target to that receiver, and no accounting unit prevents **one** receiver observation from satisfying a control that resolves to **several** required enforcement paths. |
 | **Evidence / example** | `ctrl-1` resolves to `EP-A` and `EP-B`. `EP-A` reads and applies it. `EP-B` produces no receiver observation and remains able to dispatch. Under §6.1 `ctrl-1` can be `CONFIRMED`; the §6.3 issuer population still conserves; §9.3 says the control may nevertheless be ineffective. Reviewer's phrase: "existential evidence for a universal delivery claim". |
 | **Author response on public record** | <https://mailarchive.ietf.org/arch/msg/scitt/kW9z4Btvou0I568hk4-5NlH17G8/> — "I agree that the target-multiplicity case exposes a real gap in -00" and "your description — existential evidence accidentally satisfying a universal delivery claim — captures the problem precisely". |
@@ -66,7 +66,7 @@ published revision. `-01` has not been submitted.
 |---|---|
 | **Reviewer** | Iman Schrock (EMILIA Protocol) |
 | **Source** | <https://mailarchive.ietf.org/arch/msg/scitt/nmX5kiPFudYFDhKIHuno-0hLD8U/> |
-| **Affected `-00` sections** | 5.6 (R-CD-4), 5.7 (R-CD-5), 6.1 |
+| **Affected `-00` sections** | 5.4 (R-CD-4), 5.5 (R-CD-5), 6.1 |
 | **Finding** | R-CD-4 and R-CD-5 should require **exact agreement** between the resolved target and the receiver identity and boundary, "so the right instruction at the wrong enforcement point cannot confirm delivery". |
 | **Evidence / example** | Implicit in the multi-target case: today a matching instruction identifier plus content binding is enough for `CONFIRMED`, regardless of which enforcement point observed it. |
 | **Author response on public record** | <https://mailarchive.ietf.org/arch/msg/scitt/kW9z4Btvou0I568hk4-5NlH17G8/> — "a receiver observation can satisfy only the target identity and boundary to which it is verifiably bound". |
@@ -233,7 +233,7 @@ one-paragraph endorsement of the seam already tracked as T-1 and W-1).
 |---|---|
 | **Reviewer** | Emek Can Dogru (Cedulon / Conarium) |
 | **Source** | <https://mailarchive.ietf.org/arch/msg/scitt/0DEnFwL01UQXxsO954NhgevgNGk/> |
-| **Affected `-00` sections** | 5.13 (R-CD-11), 6.3, 9.3, 10.3 — **applied**, not amended |
+| **Affected `-00` sections** | 5.11 (R-CD-11), 6.3, 9.3, 10.3 — **applied**, not amended |
 | **Finding** | Applying the `-00` bounded-population rule to a **shipped** reconciler in an adjacent domain caught a real defect **in that reconciler**. Cedulon had guarded one axis of the population (a verifier stating no period gets a conditional guarantee) since `-05`, but never carried the rule to the other two axes: a verifier stating neither the account nor the rail still received an unconditional "balanced". An account able to settle on a second rail therefore has a settlement path no presented extract covers — "existential evidence reported as though it were universal, in the money domain rather than the control-delivery one". |
 | **Evidence / example** | Reviewer's own account/rail example; a working Cedulon `-07` would close it with two requirements. `-06` remains what is posted and does not contain them. The reviewer notes that enumerating the rails an account can settle on stays the deployment's statement, and that he does not claim the enumeration can be proven complete — the same limit `-00` §9.3 states. |
 | **Author response on public record** | <https://mailarchive.ietf.org/arch/msg/scitt/_R-gOpqjmM0fdOWKUvCR3RVJFqw/> — "applying the bounded-population rule to a shipped reconciler in another domain exposed a real scope defect"; "a very useful concrete demonstration of why a bounded population has to be defined independently of the favorable evidence later presented to the reconciler." |
@@ -250,7 +250,7 @@ one-paragraph endorsement of the seam already tracked as T-1 and W-1).
 |---|---|
 | **Reviewer** | Emek Can Dogru (Cedulon / Conarium) |
 | **Source** | <https://mailarchive.ietf.org/arch/msg/scitt/0DEnFwL01UQXxsO954NhgevgNGk/>; restated with a count in <https://mailarchive.ietf.org/arch/msg/scitt/rZvUFar7Zmy2u6OD5MFwA0kFMgg/> |
-| **Affected `-00` sections** | 6.4, 8.1, 5.15 (R-CD-13) |
+| **Affected `-00` sections** | 6.4, 8.1, 5.13 (R-CD-13) |
 | **Finding** | Offered explicitly "as a question rather than as a proposed requirement". Where nothing failed but the inputs that would attribute the evidence were never supplied (no externally configured observer binding, no declared window): `FAIL` is wrong because §6.4 requires a positive failing condition; `PASS` says more than the evidence does; `INCONCLUSIVE` is available but loses that the run **was** fully reconciled. Those are two different facts about the same run and one label makes them one. Cedulon carries it as a second axis — balanced or not, and separately unconditional or conditional — which must appear wherever the verdict appears, including the passing path. In the follow-up message, 26 of 49 exported finding codes carry no disposition on their own and instead report whether the declared population or the evidence stands at all. |
 | **Evidence / example** | Measured by the pinned probe: `26 not-a-disposition` codes across four sub-kinds (`evidence-authenticity` 14, `population-not-established` 6, `terms-layer` 2, `transparency-layer` 4). |
 | **Author response on public record** | <https://mailarchive.ietf.org/arch/msg/scitt/_R-gOpqjmM0fdOWKUvCR3RVJFqw/> — agrees a single aggregate axis can collapse two facts; "For -01 I therefore want to explore keeping the structural reconciliation result separate from an orthogonal claim/evidence qualification. **I do not want to freeze the vocabulary yet** — I want to compare your -06/-07 treatment and the other review comments first — but I think the distinction itself is important." |
