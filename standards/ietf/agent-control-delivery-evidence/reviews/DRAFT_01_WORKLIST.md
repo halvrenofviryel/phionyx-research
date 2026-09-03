@@ -319,12 +319,17 @@ does **not** ship a vector set, and this work area has published none.
       request is intended to extend to being named personally in the
       Acknowledgements section, as distinct from fixture attribution. No public
       message in `../SOURCES.md` records permission in those terms.
-      **Author decision, 2026-09-03:** ask rather than infer. The contributor's
-      public message both requested EMILIA Protocol attribution and offered to
-      review a `-01` treatment when ready, so the permission question is put
-      directly in the same `-01` review request — naming him in the
-      acknowledgements for the contributed fixture, and inviting him to say if
-      he would prefer different attribution.
+      **Author decision, 2026-09-03: non-blocking.** Ask rather than infer. The
+      contributor's public message both requested EMILIA Protocol attribution
+      and offered to review a `-01` treatment when ready, so the permission
+      question is put directly in the same `-01` review request — naming him in
+      the acknowledgements for the contributed fixture, and inviting him to say
+      if he would prefer different attribution.
+      **Fallback if no confirmation arrives before submission:** remove the
+      personal acknowledgement and keep the fixture ID, digest, source
+      provenance, and EMILIA Protocol attribution, all of which the public
+      contribution record independently requires. Because the author can settle
+      this alone in either direction, it does not gate submission.
 
 ## F. Still-open design questions
 
@@ -374,6 +379,9 @@ author's own public statement did.
       mapping permitted, rather than as frozen wire vocabulary. That closes the
       distance between the author's earlier "I do not want to freeze the
       vocabulary yet" and the candidate's design, on the record and in public.
+      **Classification: PRE-SUBMISSION REVIEW REQUIRED.** Not a defect and not a
+      doubt about the model — a review round to be completed, and its outcome
+      recorded, before `-01` goes to the Datatracker.
 - [ ] **F2 — Aborted / refused-operation classification.** *(still open — the
       candidate does not decide it.)* Whether an
       issuer-side aborted receipt satisfies the `EXPLICIT_FAILURE` requirements
@@ -483,24 +491,37 @@ whether the candidate holds to it.
 ## Open items to settle before `-01` goes to the Datatracker
 
 Reviewed by the author on **2026-09-03**. One item is closed, two are downgraded
-to non-blocking, and the remaining work is to sync the public record before
-submission.
+to non-blocking, one requires a review round before submission, and one is
+housekeeping that can be settled either way.
 
-### Blocking — needs a public-record response
+Two different things are tracked below and they are deliberately not merged:
 
-- **F1 — structural result × claim support.** The author's decision is to
-  **keep** the model. It is not blocking because it is doubted; it is blocking
-  because the public record still shows "I do not want to freeze the vocabulary
-  yet" and the candidate now carries a three-value conceptual floor. Resolution
-  is to request review of this axis from the reviewer who raised E-3, stating
-  that the labels are a conceptual interoperability floor with lossless mapping
-  permitted, not frozen wire vocabulary. See **F1**.
-- **E3 — Acknowledgements permission.** The contributor's public message asked
-  that the fixture ID and EMILIA Protocol attribution be preserved and offered
-  to review a `-01` treatment when ready. The candidate names him in that exact
-  context. Because `-00` §15 nevertheless promised that names would be added
-  *with permission*, this is not assumed. Resolution is to ask directly in the
-  same review request rather than to infer consent. See **E3**.
+- what the **candidate text** still needs before it is submitted to the
+  Datatracker; and
+- the **review workflow this work area has chosen** for PR #100, which is a
+  local process decision, not a property of the draft.
+
+### Pre-submission review required
+
+- **F1 — structural result × Claim Support.** The candidate adopts a
+  three-meaning conceptual Claim Support interoperability floor while permitting
+  alternative vocabulary through lossless mapping. This is an author-candidate
+  design decision that advances beyond the author's last public wording. Seek
+  focused review before Datatracker submission and record the resulting
+  disposition. The model itself is not in doubt — the author's decision is to
+  keep it — and if no response arrives, the author may proceed after a
+  reasonable wait on a recorded author disposition. What is not acceptable is
+  submitting while the public record still reads as declining to settle this.
+
+### Attribution confirmation pending — non-blocking
+
+- **E3 — personal acknowledgement wording.** Ask Iman Schrock whether the
+  personal acknowledgement wording is acceptable. If confirmation is not
+  obtained before submission, remove the personal acknowledgement while
+  preserving the fixture ID, digest, source provenance, and EMILIA Protocol
+  attribution required by the public contribution record. This is an attribution
+  courtesy question, not a technical or semantic one: it is resolvable by the
+  author alone in either direction and therefore does not gate submission.
 
 ### Closed
 
@@ -533,3 +554,42 @@ submission.
   public reply and have received no public response. Candidate text addressing
   them is the author acting alone. This does not block submission; it bounds
   what may be claimed about them.
+
+---
+
+## Pre-submission gates
+
+Submission readiness for `-01`. These are gates this work area has chosen; none
+of them is an IETF requirement, and none of them is a defect in the candidate.
+
+- [ ] Focused Claim Support review requested from Emek Can Dogru (F1).
+- [ ] Multi-target / freeze-race / provenance review requested from Iman Schrock.
+- [ ] Personal acknowledgement wording confirmed by Iman, or removed before
+      submission.
+- [ ] Targeted review responses dispositioned in this work area.
+- [ ] Candidate revalidated after any resulting edits.
+
+Gates one, two, and four are **submission readiness**: they exist so `-01` goes
+to the Datatracker with the two axes it newly depends on having been put in
+front of the people who raised them. Gate three is **housekeeping** with two
+acceptable outcomes — confirmation, or removal of the personal name with the
+required fixture attribution preserved. Gate five applies only if a review
+response produces an edit; the mechanical checks are cheap and are re-run rather
+than assumed.
+
+### Merge gate vs submission gate
+
+These are separate, and neither implies the other.
+
+- **PR #100 merge gate.** This work area has chosen not to merge PR #100 until
+  the Iman and Emek review responses are in, so that any resulting correction
+  lands in the same integration rather than as a follow-up. That is a **local
+  review-workflow decision**. It is not a statement that the candidate is
+  defective, incomplete, or blocked on a technical finding.
+- **Datatracker submission gate.** Submission is gated on **F1** only, in the
+  narrow sense described above: the public record needs to reflect the author's
+  current position before `-01` is posted.
+
+A reader should not infer from an unmerged PR that `-01` has an unresolved
+technical problem, and should not infer from a merged PR that `-01` is ready for
+submission.
