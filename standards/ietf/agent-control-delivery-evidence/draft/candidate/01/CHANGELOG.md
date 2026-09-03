@@ -444,7 +444,7 @@ That is the principal semantic difference between `-00` and `-01`.
 
 - Current `-01` candidate (after the 4 September 2026 review refinements):
   - `draft-abak-agent-control-delivery-evidence-01`
-  - XML SHA-256: `aaa7a23b87d64590562ba04501dc97fb053fecc6a3e64ba73ab1d94edd88ba0b`
+  - XML SHA-256: `11884630dcb89082d88f838051e19b4736b4908c67cca2f65725ac3ed46501a7`
   - the changelog digest is recorded in `SHA256SUMS.txt` beside this file
   - **not yet reviewed by either reviewer**
 
@@ -475,7 +475,7 @@ The changes below were applied **afterwards** and produce a **new candidate
 digest**:
 
 ```
-XML SHA-256 aaa7a23b87d64590562ba04501dc97fb053fecc6a3e64ba73ab1d94edd88ba0b
+XML SHA-256 11884630dcb89082d88f838051e19b4736b4908c67cca2f65725ac3ed46501a7
 ```
 
 **Neither reviewer has reviewed the updated bytes.** Nothing here is
@@ -598,6 +598,21 @@ applicable enforcement.
 
 The existing requirement that reversal, compensation, or remedy needs its own
 separate evidence is retained unchanged.
+
+**Problem Statement alignment.** The Problem Statement carried an older sentence
+saying that a later `APPLIED` control result "does not relabel that earlier
+**operation** as blocked". After the §9.4 correction that object is too broad: an
+operation admitted before activation can still be refused at a later
+provider-entry boundary, so the protected object is the earlier **boundary
+transition**, not the operation as a whole. The paragraph now states that a later
+`APPLIED` result does not retroactively relabel a boundary transition that
+occurred before the control took effect, that an operation which crossed one
+earlier boundary can nevertheless remain subject to a later applicable
+enforcement boundary, and that evidence of a later refusal neither rewrites the
+earlier transition nor by itself proves that a prior external effect was
+reversed. The requirement that the operation's outcome needs its own
+authenticated reconciliation is retained. This removes a tension between the
+Problem Statement and §9.4; it introduces no new requirement.
 
 #### C-22 — Additional conformance cases (26 → 30)
 

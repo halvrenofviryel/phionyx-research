@@ -14,7 +14,7 @@ record.
   | Candidate state | XML SHA-256 | Reviewed by |
   |---|---|---|
   | Initial focused-review candidate | `da64a03846e03f3868aa2fa54682c87d338a4dedcbc1dc4b5642cdfea79a81c6` | Emek Can Dogru; Iman Schrock |
-  | Current candidate (this revision pass) | `aaa7a23b87d64590562ba04501dc97fb053fecc6a3e64ba73ab1d94edd88ba0b` | **not yet reviewed by either reviewer** |
+  | Current candidate (this revision pass) | `11884630dcb89082d88f838051e19b4736b4908c67cca2f65725ac3ed46501a7` | **not yet reviewed by either reviewer** |
 
   Both reviewers assessed the initial digest. **Neither has reviewed the updated
   bytes**, and nothing in this file may be read as saying they have. The
@@ -550,6 +550,13 @@ has reviewed**.
       admitted or in-flight operation is **not** automatically exempt from later
       applicable enforcement. The existing requirement that reversal,
       compensation, or remedy needs its own evidence is retained.
+      **Follow-on consistency fix (2026-09-04):** the Problem Statement still
+      said a later `APPLIED` result "does not relabel that earlier **operation**
+      as blocked". That object is too broad once admission and provider entry are
+      distinguished, so it now reads as the earlier **boundary transition**, with
+      an explicit statement that an operation which crossed one earlier boundary
+      can still be subject to a later applicable enforcement boundary. No new
+      requirement; the introduction and §9.4 now say the same thing.
 - [x] **G12 — Fixture and provenance verified by the contributor.** *(I-10)*
       → **No model change.** Fixture preserved, per-target binding and parent
       rule fit the EP-A / EP-B case, structural closure stays separate from

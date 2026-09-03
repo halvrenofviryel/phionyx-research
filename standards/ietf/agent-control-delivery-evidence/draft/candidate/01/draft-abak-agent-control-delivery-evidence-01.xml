@@ -265,12 +265,14 @@ retention loss, clock disagreement, identifier mismatch, target-resolution
 failure, or evidence suppression. A receiver cannot report a control it never
 received. An issuer cannot, from silence alone, prove what happened inside the
 receiver's boundary.</t>
-      <t>Control activation is also not retroactive. If an operation crossed a relevant
-admission, provider-entry, or other profile-defined effect boundary before a
-freeze or revocation control took effect, a later APPLIED control result does
-not relabel that earlier operation as blocked and does not prove that any
-external effect was reversed. That operation's outcome requires its own
-authenticated reconciliation.</t>
+      <t>Control activation is also not retroactive. A later APPLIED control result does
+not retroactively relabel a boundary transition that occurred before the control
+took effect. An operation that crossed one earlier admission, provider-entry, or
+other profile-defined effect boundary can nevertheless remain subject to a later
+applicable enforcement boundary. Evidence of a later refusal does not rewrite the
+earlier transition and does not by itself prove that any prior external effect was
+reversed. That operation's outcome requires its own authenticated
+reconciliation.</t>
       <t>The failure model includes at least:</t>
       <ul>
         <li>
