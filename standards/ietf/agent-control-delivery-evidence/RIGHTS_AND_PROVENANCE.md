@@ -30,6 +30,9 @@ Do not modify the files under `draft/published/00/`. If a future revision is
 published, add it under a new `draft/published/<NN>/` directory rather than
 editing the existing one.
 
+`draft/published/` holds **only** revisions actually published by the IETF. An
+author revision that has not been submitted does not go there — see section 7.
+
 ## 2. Third-party material generally
 
 Third-party material referenced or stored here **retains its own provenance and
@@ -110,5 +113,39 @@ author's own public response says so.
 
 ## 6. What is not here
 
-No private correspondence, no unpublished draft text, and no third-party source
-code is stored in this directory.
+No private correspondence and no third-party source code is stored in this
+directory. Unpublished draft text is limited to the author's own candidate
+revisions under `draft/candidate/`, covered by section 7; no third party's
+unpublished draft text is stored here.
+
+## 7. Unpublished author candidate revisions
+
+`draft/candidate/<NN>/` holds the author's own **unpublished** candidate text for
+a future revision, together with its changelog and checksums. As of this writing
+that is `draft/candidate/01/`, the 3 September 2026 candidate for `-01`.
+
+This material has a different position from everything in section 1:
+
+- It is the **author's own work**, not an IETF-published artifact. It has not
+  been submitted to the Datatracker, has no Internet-Draft status, and must not
+  be cited as a published, submitted, or adopted revision.
+- It carries the usual Internet-Draft boilerplate (`ipr="trust200902"`) because
+  it is drafted for eventual submission. The BCP 78 / IETF Trust Legal
+  Provisions position described in section 1 attaches to a revision **on
+  publication**, not by virtue of being stored here.
+- Storing it here does not relicense it under this repository's general software
+  licence, for the same reason given in section 1.
+- It is **candidate text, not a record of consensus.** Text the author has
+  written into a candidate is an author design decision. It is not evidence that
+  a reviewer agreed, that a review item is closed, or that any working group has
+  adopted anything. `reviews/DRAFT_01_WORKLIST.md` keeps reviewer findings,
+  author design decisions, and consensus separate, and records which is which.
+- Third-party material summarized or referenced by a candidate keeps the
+  provenance and attribution rules in sections 2 to 5. In particular, the
+  candidate's summary of the contributed fixture preserves the contributor's
+  `fixture_id` and SHA-256 and credits EMILIA Protocol, as section 4 requires.
+
+If and when a candidate is actually published by the IETF, the published
+artifacts are added under `draft/published/<NN>/` as section 1 requires. The
+candidate directory is not moved, renamed, or retrospectively described as
+published.
