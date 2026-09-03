@@ -15,10 +15,10 @@
 | Model | Primarily one instruction ↔ one intended enforcement point | One instruction ↔ one or more required enforcement targets |
 | Reconciliation unit | Instruction | Instruction-target **Delivery Obligation** |
 | Normative requirements | R-CD-1 through R-CD-14 | R-CD-1 through R-CD-16 |
-| Minimum conformance cases | 16 | 26 |
+| Minimum conformance cases | 16 | 30 |
 | Published/source status | Published individual Internet-Draft | Current candidate; not yet represented by this changelog as an IETF or WG consensus document |
 | `-00` XML SHA-256 | `8ed78f9428ee9a9f0d13526fee04055fef8d16809996ac2932c7907cdfc4d3da` | — |
-| `-01` candidate XML SHA-256 | — | `da64a03846e03f3868aa2fa54682c87d338a4dedcbc1dc4b5642cdfea79a81c6` |
+| `-01` candidate XML SHA-256 | — | see §9 — the candidate was revised on 4 September 2026 and its digest changed |
 
 The central architectural change is that `-00` treated a control instruction as the primary reconciliation object. `-01` makes the **instruction-target obligation** the load-bearing unit whenever a control must reach more than one enforcement target. This prevents evidence from one target from being generalized to another target or to the parent instruction as a whole.
 
@@ -288,7 +288,7 @@ The broader audit-architecture reference carried by `-00` is no longer used as a
 
 ---
 
-### C-13 — Minimum conformance cases expand from 16 to 26
+### C-13 — Minimum conformance cases expand from 16 to 30
 
 The original `-00` cases remain conceptually represented, but the vocabulary is updated from instructions to obligations where required.
 
@@ -303,7 +303,11 @@ New `-01` cases directly exercise:
 7. freeze applied after O1 crossed provider entry and before O2;
 8. fixture-closed target population without independently verified enumeration completeness;
 9. intermediary mapping `DEFER` to generic `FAILURE` without a lossless mapping;
-10. stable instruction identifier surviving an intermediary while the governed content changes.
+10. stable instruction identifier surviving an intermediary while the governed content changes;
+11. an issuer instruction resolving to an empty Required Target Set (added 4 September 2026);
+12. a structural aggregate result exposed without its claim scope and Claim Support qualification, for a passing and a failing result alike (added 4 September 2026);
+13. many-to-one diagnostics reduced to one primary disposition (added 4 September 2026);
+14. `FAIL` asserted while the authenticated comparison population was never established (added 4 September 2026).
 
 **Rationale:** The new normative distinctions are not useful unless an implementation can be tested against the failure modes they were introduced to prevent.
 
@@ -432,10 +436,17 @@ That is the principal semantic difference between `-00` and `-01`.
   - archived work-area copy:  
     `https://github.com/halvrenofviryel/phionyx-research/tree/main/standards/ietf/agent-control-delivery-evidence/draft/published/00`
 
-- Current `-01` candidate:
+- `-01` candidate as reviewed in the focused pre-submission round:
   - `draft-abak-agent-control-delivery-evidence-01`
   - document date: 3 September 2026
   - XML SHA-256: `da64a03846e03f3868aa2fa54682c87d338a4dedcbc1dc4b5642cdfea79a81c6`
+  - reviewed by Emek Can Dogru and Iman Schrock
+
+- Current `-01` candidate (after the 4 September 2026 review refinements):
+  - `draft-abak-agent-control-delivery-evidence-01`
+  - XML SHA-256: `aaa7a23b87d64590562ba04501dc97fb053fecc6a3e64ba73ab1d94edd88ba0b`
+  - the changelog digest is recorded in `SHA256SUMS.txt` beside this file
+  - **not yet reviewed by either reviewer**
 
 - Current implementation/evaluation pins referenced by `-01` include:
   - AIREP snapshot: `a3973ce3b6ad984635867a2bb52d83c472e5c0cb`
@@ -444,3 +455,222 @@ That is the principal semantic difference between `-00` and `-01`.
   - EMILIA contributed fixture SHA-256: `2d8faa1b64b8a73fd0bf81b21889bbf726cbfb324af099b700499627af84203a`
   - Cedulon population-probe pin: `0a3fa04`
 
+---
+
+## 9. Review refinements after the initial `-01` candidate
+
+**Dated 4 September 2026.** This subsection records changes made to the `-01`
+candidate **after** the focused pre-submission review round, in response to
+public reviewer findings from **Emek Can Dogru** and **Iman Schrock**.
+
+### 9.1 What was reviewed, and what was not
+
+Both reviewers assessed the candidate at
+
+```
+XML SHA-256 da64a03846e03f3868aa2fa54682c87d338a4dedcbc1dc4b5642cdfea79a81c6
+```
+
+The changes below were applied **afterwards** and produce a **new candidate
+digest**:
+
+```
+XML SHA-256 aaa7a23b87d64590562ba04501dc97fb053fecc6a3e64ba73ab1d94edd88ba0b
+```
+
+**Neither reviewer has reviewed the updated bytes.** Nothing here is
+IETF consensus, a working-group position, an adoption action, a Datatracker
+submission, or a new Internet-Draft revision number. The document remains
+`draft-abak-agent-control-delivery-evidence-01`; this is a revision of the
+author's candidate, not of the published draft series.
+
+Review dispositions are tracked in `../../../reviews/REVIEW_LEDGER.md`
+(entries `E-8` … `E-15`, `I-7` … `I-12`) and
+`../../../reviews/DRAFT_01_WORKLIST.md` (section **G**).
+
+### 9.2 Changes
+
+| ID | Change | Origin |
+|---|---|---|
+| C-16 | Structural result and Claim Support must be **co-exposed** | E-9 |
+| C-17 | **Empty Required Target Set** accounting | E-10, supported by I-11 |
+| C-18 | Instruction-level `\|I\|` accounting alongside obligation `\|O\|` | E-10 |
+| C-19 | R-CD-10 reduction rule `SHOULD` → **`MUST`** | E-11 |
+| C-20 | Diagnostic-visibility correction (non-selected diagnostics) | E-12 |
+| C-21 | Admission vs provider-entry non-retroactivity clarification | I-9 |
+| C-22 | Four additional minimum conformance cases (26 → 30) | E-9, E-10, E-12, E-13 |
+| C-23 | Acknowledgement permissions recorded and names added | E-15, I-12 |
+
+#### C-16 — Structural result / Claim Support co-rendering
+
+`-01` already required Claim Support to be preserved separately from the
+structural result, but did not require the qualification to **accompany every
+representation** in which the structural result is exposed, so a bare result
+could escape through another rendering.
+
+`claim-qualification` now requires that wherever a structural aggregate result is
+rendered, returned, exported, or otherwise exposed to a relying party, the
+corresponding **claim scope and claim-support qualification MUST be exposed in
+the same result context**, and that a profile MUST NOT expose a bare structural
+result consumable as the complete result. The rule applies to `PASS`, `FAIL`, and
+`INCONCLUSIVE` alike — it is deliberately **not** limited to `PASS`. R-CD-13
+points at the rule and keeps its existing prohibition on an unqualified
+end-to-end `PASS` unchanged. **No wire field layout is mandated:** "same result
+context" is the requirement, satisfiable by native fields, a nested object, a
+structured error, a protocol event, or a resolvable reference.
+
+#### C-17 / C-18 — Empty Required Target Set and instruction-level accounting
+
+If `T_i` resolved to zero members, instruction `i` contributed no Delivery
+Obligation to `O` and could disappear from the conservation equation entirely.
+
+R-CD-11 now requires every instruction in the bounded issuer population to remain
+accounted for during target-set construction. Where the Required Target Set is
+empty, the instruction MUST remain in the report, the report MUST state that it
+contributed zero Delivery Obligations, and the report MUST state the rule or
+condition that produced the empty set. An instruction MUST NOT disappear from
+reconciliation solely because no tuple was added to `O`.
+
+`population-conservation` adds, alongside the retained obligation equation:
+
+```text
+|I| = Ninstructions_with_obligations + Nzero_obligation_instructions
+```
+
+and requires `|I|` to be published together with `|O|`, with counts
+sufficient to distinguish instructions contributing one or more Delivery
+Obligations from instructions contributing zero. The seven-class obligation
+equation is unchanged:
+
+```text
+|O| = Nconfirmed + Nexplicit_failure + Nunconfirmed
+    + Nsubstitution + Nconflict + Ninvalid + Nindeterminate
+```
+
+A profile **MUST define whether an empty Required Target Set is a valid terminal
+resolution**. Where it is, the instruction is still accounted for as a
+zero-obligation instruction; where it is not, the empty set MUST prevent
+structural `PASS` for the affected instruction and any parent or aggregate scope
+depending on it.
+
+Deliberately **not** done: no synthetic enforcement target is invented, no
+synthetic Delivery Obligation is created, the per-obligation disposition set is
+not overloaded with a fake target, and an empty target set is **not**
+automatically classified `EXPLICIT_FAILURE`.
+
+#### C-19 / C-20 — R-CD-10 diagnostic reduction
+
+The reduction rule for many-to-one diagnostics is raised from `SHOULD` to
+**`MUST` be deterministic and reviewable**, because the minimum reconciliation
+procedure already requires a third party to be able to repeat the structural
+verdict.
+
+The paragraph's earlier cross-reference — making non-selected diagnostics
+"subject to the population and input-record accounting rules in R-CD-11" — is
+**removed**. R-CD-11 accounts for Delivery Obligations and receiver-side input
+records, not for layered diagnostics of a single record. In its place, R-CD-10
+now requires that **all applicable diagnostics, including diagnostics not
+selected as the primary disposition-driving diagnostic, remain visible in the
+report or in an explicitly linked diagnostic collection.**
+
+The document continues to state that it **does not prescribe a universal
+precedence ordering** among profile-specific diagnostics. **No adjacent
+implementation's precedence ordering is adopted**, and no adjacent
+implementation's finding codes appear in the draft.
+
+#### C-21 — Admission vs provider entry
+
+The previous §9.4 text treated "admission or provider-entry boundary" as
+effectively interchangeable. They are not.
+
+The section now states that every boundary crossing is a historical fact, that a
+reconciler MUST NOT retroactively relabel a boundary transition that occurred
+before control activation, and that **only a boundary crossing that actually
+occurred before activation** is protected from retroactive relabelling. Local
+admission and provider entry are named as distinct, non-interchangeable
+boundaries: where an operation was admitted before activation but had **not** yet
+crossed a later provider-entry or other enforcement boundary, a subsequently
+applied control **MAY** still prevent that later transition under the applicable
+local semantics; the report **MUST** preserve the earlier admission fact and
+**MUST** separately preserve the later refusal or blocked transition; and an
+admitted or in-flight operation is **not automatically exempt** from later
+applicable enforcement.
+
+The existing requirement that reversal, compensation, or remedy needs its own
+separate evidence is retained unchanged.
+
+#### C-22 — Additional conformance cases (26 → 30)
+
+The existing 26 cases are unchanged. Four are added:
+
+- **27** — an issuer instruction resolving to an empty Required Target Set: it
+  stays accounted for, contributes zero Delivery Obligations, is reported with
+  the rule that produced the empty set, `|I|` accounting still balances, the
+  instruction does not disappear, and structural `PASS` depends on whether the
+  profile explicitly permits zero-target as a valid terminal resolution.
+- **28** — a structural aggregate result exposed without its claim scope and
+  Claim Support qualification: a non-conformant representation that cannot be
+  consumed as the complete result, exercised for a `PASS` and for a `FAIL`.
+- **29** — several applicable diagnostics reduced to one primary disposition: a
+  deterministic published reduction rule, exactly one primary disposition, all
+  non-selected applicable diagnostics still visible or explicitly linked, and no
+  profile-specific precedence ordering required by this document.
+- **30** — `FAIL` asserted because a receipt or issuer-side object is unmatched
+  while the authenticated comparison population was never presented or
+  established: missing population evidence alone does not satisfy the positive
+  failing condition a structural `FAIL` requires, and the result stays
+  `INCONCLUSIVE` or otherwise qualified. This case **tests the existing
+  FAIL-from-absence rule**; it adds no new disposition.
+
+The rule that `FAIL` "MUST identify at least one positive failing condition and
+MUST NOT be inferred solely from missing evidence" is **retained and not
+weakened**. A reviewer's no-extract measurement is treated as evaluation evidence
+that the rule is load-bearing.
+
+#### C-23 — Acknowledgements
+
+Both named reviewers granted permission.
+
+- **Iman Schrock of EMILIA Protocol** — target multiplicity, the required-target
+  and freeze-race fixture, in-flight operation semantics, and provenance review.
+- **Emek Can Dogru** — bounded-population review, the structural-result / Claim
+  Support separation, diagnostic-reduction review, and the empty-target
+  accounting observation. Permission was given for the name; no organizational
+  affiliation was requested and none is asserted.
+
+No other reviewer is named: no acknowledgement permission is recorded for anyone
+else. The non-endorsement statement is retained and strengthened — being named
+records a review contribution only and implies no endorsement by any named
+individual, organization, or working group.
+
+### 9.3 Implementation and evaluation status hygiene
+
+The pinned Cedulon population probe — commit `0a3fa04`, SHA-256
+`031f84fda2054b1427a510baa45f880d379ea60dced408a4a74028da12b1fceb` — remains
+**historical pinned evidence and was not edited, repinned, or rewritten.**
+
+A reviewer reported that Cedulon 0.12.0 now exports an additional finding code,
+`settlement-comparison-skipped`, so the probe's mapping is **known stale relative
+to 0.12.0**. That staleness is recorded in the ledger and worklist; it is **not**
+corruption of the historical measurement, and this work area does **not** claim
+the old probe covers current Cedulon 0.12.0.
+
+**No reproduction of the reviewer's new 0.8.0 / 0.12.0 measurements was performed
+in this pass.** They are recorded as reviewer-reported public evidence only. The
+draft's Implementation Status now says so explicitly and contains **no claim of
+independent reproduction by the author**.
+
+### 9.4 What did not change
+
+- The document remains `draft-abak-agent-control-delivery-evidence-01`, with
+  `docName` and `seriesInfo` unchanged.
+- R-CD-1 … R-CD-16 remain, each exactly once; no requirement was added or
+  removed.
+- The `FAIL`-from-absence rule, the seven per-obligation dispositions, the
+  receiver-record equation, R-CD-13's unqualified-`PASS` prohibition, and the
+  reversal/compensation evidence rule are all unchanged.
+- The contributed fixture and its digest
+  `2d8faa1b64b8a73fd0bf81b21889bbf726cbfb324af099b700499627af84203a` are
+  untouched, and `draft/published/00/` is byte-identical.
+- No Datatracker submission, working-group adoption, or IETF consensus is claimed
+  or has occurred.

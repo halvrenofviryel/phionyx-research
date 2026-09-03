@@ -8,6 +8,18 @@ record.
 - **A repository candidate `-01` now exists.** It is stored at
   `../draft/candidate/01/` and dated 3 September 2026. This worklist is
   reconciled against that candidate's actual text.
+- **The candidate has been revised once since the focused review round**
+  (2026-09-04). Candidate provenance:
+
+  | Candidate state | XML SHA-256 | Reviewed by |
+  |---|---|---|
+  | Initial focused-review candidate | `da64a03846e03f3868aa2fa54682c87d338a4dedcbc1dc4b5642cdfea79a81c6` | Emek Can Dogru; Iman Schrock |
+  | Current candidate (this revision pass) | `aaa7a23b87d64590562ba04501dc97fb053fecc6a3e64ba73ab1d94edd88ba0b` | **not yet reviewed by either reviewer** |
+
+  Both reviewers assessed the initial digest. **Neither has reviewed the updated
+  bytes**, and nothing in this file may be read as saying they have. The
+  document remains `draft-abak-agent-control-delivery-evidence-01`; this is a
+  candidate revision, not a new Internet-Draft revision number.
 - **The candidate is not an IETF-submitted revision.** It has not been posted to
   the Datatracker. The published baseline of this document remains `-00`.
 - **The worklist remains a traceability/review record**, not a specification and
@@ -138,14 +150,19 @@ not of any particular wording.
       layered diagnostics of a single record, which is different.
       **Do not adopt Cedulon's precedence ordering as a generic rule and do not
       write normative text for it.** *(E-4 — no public author response yet)*
-      → Implemented as a non-normative SHOULD: R-CD-10 final paragraph says a
-      reduction rule "SHOULD be deterministic and reviewable", keeps non-selected
-      inputs subject to the R-CD-11 accounting rules, and states that "this
-      document does not prescribe a universal precedence ordering among
-      profile-specific diagnostics". The constraint is honoured — Cedulon's
-      ordering is **not** adopted. **Author-candidate disposition:** E-4 still has
-      no public author response, so this is the author acting on a reviewer
-      suggestion, not an agreed outcome.
+      → **Implemented, and strengthened on 2026-09-04 after focused review.**
+      R-CD-10's final paragraph now says the reduction rule **MUST** be
+      deterministic and reviewable (E-11), and requires **all applicable
+      diagnostics, including those not selected as the primary
+      disposition-driving diagnostic, to remain visible in the report or in an
+      explicitly linked diagnostic collection** (E-12). The earlier
+      cross-reference making non-selected diagnostics subject to R-CD-11 was
+      removed: R-CD-11 accounts for Delivery Obligations and receiver-side input
+      records, not for layered diagnostics of one record, and the reviewer
+      identified that hook as a category error. The document still states that it
+      "does not prescribe a universal precedence ordering among profile-specific
+      diagnostics", and **Cedulon's ordering is still not adopted**. Conformance
+      case 29 exercises the rule.
 - [x] **B2 — Composition wording for SCITT.** Possible clarifying wording that
       the evidence-stage semantics stay format-neutral and compose with existing
       SCITT Signed Statements and profile bindings rather than introducing
@@ -169,8 +186,9 @@ not of any particular wording.
 
 ## C. Conformance / test-vector changes
 
-The candidate's "Minimum Conformance Cases" appendix lists **26** cases, up from
-sixteen in `-00`. Case numbers below refer to that appendix. Note that these are
+The candidate's "Minimum Conformance Cases" appendix lists **30** cases, up from
+sixteen in `-00` and from 26 in the initial `-01` candidate. Case numbers below
+refer to that appendix. Note that these are
 cases a conforming profile *SHOULD publish test vectors for* — the candidate
 does **not** ship a vector set, and this work area has published none.
 
@@ -302,7 +320,7 @@ does **not** ship a vector set, and this work area has published none.
       scoped to "implementation *and evaluation* experience" in its own first
       sentence. If a reviewer raises the placement, the entries move to a
       separate *Evaluation Experience* subheading; no pre-review churn.
-- [~] **E3 — Acknowledgements.** `-00` §15 says specific names and review
+- [x] **E3 — Acknowledgements.** `-00` §15 says specific names and review
       contributions will be added with permission in a later revision. Reviewers
       on the public record: Iman Schrock, Tiago Pinto, Walter Hawkins, Emek Can
       Dogru. Permission is required before naming anyone.
@@ -315,21 +333,22 @@ does **not** ship a vector set, and this work area has published none.
       names can be added with permission in a later revision" plus the explicit
       non-claim that "these acknowledgements do not imply endorsement of this
       document".
-      **To confirm before submission:** whether the contributor's attribution
-      request is intended to extend to being named personally in the
-      Acknowledgements section, as distinct from fixture attribution. No public
-      message in `../SOURCES.md` records permission in those terms.
-      **Author decision, 2026-09-03: non-blocking.** Ask rather than infer. The
-      contributor's public message both requested EMILIA Protocol attribution
-      and offered to review a `-01` treatment when ready, so the permission
-      question is put directly in the same `-01` review request — naming him in
-      the acknowledgements for the contributed fixture, and inviting him to say
-      if he would prefer different attribution.
-      **Fallback if no confirmation arrives before submission:** remove the
-      personal acknowledgement and keep the fixture ID, digest, source
-      provenance, and EMILIA Protocol attribution, all of which the public
-      contribution record independently requires. Because the author can settle
-      this alone in either direction, it does not gate submission.
+      **Resolved 2026-09-04 — both permissions are now recorded.**
+      Iman Schrock confirmed the personal acknowledgement in the form
+      "Iman Schrock, EMILIA Protocol" (ledger **I-12**), so the earlier fallback
+      of removing the personal name before submission is no longer needed.
+      Emek Can Dogru granted permission explicitly — "you may name me"
+      (ledger **E-15**) — and is now named for bounded-population review, the
+      structural-result / Claim Support separation, diagnostic-reduction review,
+      and the empty-target accounting observation. Permission was given for the
+      name only; **no organizational affiliation was requested for him and none
+      is asserted**. Tiago Pinto and Walter Hawkins are still **not** named: no
+      acknowledgement permission is recorded for either, and they remain within
+      the collective thanks. The candidate retains "Specific additional names can
+      be added with permission in a later revision" and an explicit
+      non-endorsement statement, now stating that being named records a review
+      contribution only and implies no endorsement by any named individual,
+      organization, or working group.
 
 ## F. Still-open design questions
 
@@ -379,9 +398,16 @@ author's own public statement did.
       mapping permitted, rather than as frozen wire vocabulary. That closes the
       distance between the author's earlier "I do not want to freeze the
       vocabulary yet" and the candidate's design, on the record and in public.
-      **Classification: PRE-SUBMISSION REVIEW REQUIRED.** Not a defect and not a
-      doubt about the model — a review round to be completed, and its outcome
-      recorded, before `-01` goes to the Datatracker.
+      **Classification (superseded): PRE-SUBMISSION REVIEW REQUIRED.**
+      **Closed 2026-09-04. The review round was carried out and its outcome is
+      recorded at ledger E-8.** The reviewer's focused review of the separation
+      reports that "the distinction survives, and the case I could not place in
+      -00 now has a place". The three names are retained as a **conceptual
+      interoperability floor** with lossless mapping permitted, not as a wire
+      enum, which is exactly the framing the review was asked to assess.
+      **F1 is no longer pending**, and the "action: sync the public record" above
+      is discharged by that review round. What the review does **not** establish
+      is consensus, adoption, or agreement by anyone other than the reviewer.
 - [ ] **F2 — Aborted / refused-operation classification.** *(still open — the
       candidate does not decide it.)* Whether an
       issuer-side aborted receipt satisfies the `EXPLICIT_FAILURE` requirements
@@ -442,6 +468,101 @@ author's own public statement did.
 
 ---
 
+## G. Focused pre-submission review round (2026-09-04)
+
+Both reviewers assessed the candidate at XML SHA-256
+`da64a03846e03f3868aa2fa54682c87d338a4dedcbc1dc4b5642cdfea79a81c6`. These are
+**public reviewer findings plus this work area's dispositions of them**. They are
+not IETF consensus, not a working-group position, and not an adoption signal. The
+dispositions below produced a **new candidate digest**, which **neither reviewer
+has reviewed**.
+
+### Emek Can Dogru
+
+- [x] **G1 — Structural Result × Claim Support: focused review completed.** *(E-8)*
+      → No change required. `FULLY_SUPPORTED` / `CONDITIONALLY_SUPPORTED` /
+      `NOT_SUPPORTED` are retained as conceptual interoperability meanings with
+      lossless mapping permitted for profile vocabulary. **F1 is closed.**
+- [x] **G2 — Structural result and Claim Support must be co-exposed.** *(E-9)*
+      → Implemented in `claim-qualification`: wherever a structural aggregate
+      result is rendered, returned, exported, or otherwise exposed, the claim
+      scope and claim-support qualification MUST be exposed **in the same result
+      context**, for `PASS`, `FAIL`, and `INCONCLUSIVE` alike; a profile MUST NOT
+      expose a bare structural result consumable as the complete result. R-CD-13
+      points at the rule and keeps its existing unqualified-`PASS` prohibition.
+      **No wire field layout is mandated** — "same result context", not literal
+      sibling fields. Conformance case 28.
+- [x] **G3 — Empty Required Target Set accounting.** *(E-10; supported by I-11)*
+      → Implemented in R-CD-11 and `population-conservation`. Every instruction
+      in `I` stays accounted for through target-set construction; a zero-target
+      instruction stays in the report with its zero-obligation count and the rule
+      that produced the empty set; `|I|` is published alongside `|O|`; the
+      instruction-level equation
+      `|I| = Ninstructions_with_obligations + Nzero_obligation_instructions` is
+      added and the seven-class `|O|` equation is retained unchanged. A profile
+      MUST declare whether an empty set is a valid terminal resolution; where it
+      is not, the empty set prevents structural `PASS` for the affected scope.
+      **No synthetic target and no synthetic disposition** was introduced, and an
+      empty set is **not** automatically `EXPLICIT_FAILURE`. Conformance case 27.
+- [x] **G4 — R-CD-10 reduction rule: `SHOULD` → `MUST`.** *(E-11)*
+      → Implemented. See **B1**.
+- [x] **G5 — Non-selected diagnostics are not R-CD-11 population members.** *(E-12)*
+      → Implemented. The R-CD-11 cross-reference is removed and replaced with a
+      direct visibility requirement. See **B1**. Conformance case 29.
+- [x] **G6 — FAIL-from-absence.** *(E-13)*
+      → **No normative change.** The rule that `FAIL` "MUST identify at least one
+      positive failing condition and MUST NOT be inferred solely from missing
+      evidence" is **retained verbatim and not weakened**. The reviewer's
+      no-extract measurement is recorded as evaluation evidence that the existing
+      rule is load-bearing. The only change is conformance coverage: case 30,
+      which states in the case text that it exercises the existing rule rather
+      than adding a disposition.
+- [x] **G7 — Cedulon mapping drift.** *(E-14)*
+      → **Recorded, no repin.** Cedulon 0.12.0 exports an additional finding
+      code, `settlement-comparison-skipped`, which the pinned probe's mapping
+      does not cover, so **that mapping is known stale relative to 0.12.0**. The
+      pinned probe — commit `0a3fa04`, SHA-256
+      `031f84fda2054b1427a510baa45f880d379ea60dced408a4a74028da12b1fceb` — was
+      **not** edited, repinned, or rewritten, and this work area does **not**
+      claim it covers current Cedulon 0.12.0. Staleness relative to a later
+      upstream release is **not** corruption of the historical measurement.
+      **No reproduction of the reviewer's 0.8.0 / 0.12.0 measurements was
+      performed in this pass**, so they are recorded as reviewer-reported public
+      evidence only, and the candidate says so explicitly rather than claiming
+      independent reproduction.
+- [x] **G8 — Acknowledgement permission recorded.** *(E-15)* → See **E3**.
+
+### Iman Schrock
+
+- [x] **G9 — Multi-target model and parent aggregation: focused review
+      completed, no additional blocker.** *(I-7)* → No change.
+- [x] **G10 — Closure vs enumeration: focused review completed, no additional
+      blocker.** *(I-8)* → No change; the distinction is kept as it stands.
+- [x] **G11 — §9.4 admission vs provider entry.** *(I-9)*
+      → Implemented in `control-activation`. Every boundary crossing is a
+      historical fact and only a crossing that **actually occurred** before
+      activation is protected from retroactive relabelling. Local admission and
+      provider entry are named as distinct, non-interchangeable boundaries: an
+      operation admitted before activation but not yet past a later
+      provider-entry or other enforcement boundary **MAY** still be refused
+      there, the report **MUST** preserve the earlier admission fact and
+      separately preserve the later refusal or blocked transition, and an
+      admitted or in-flight operation is **not** automatically exempt from later
+      applicable enforcement. The existing requirement that reversal,
+      compensation, or remedy needs its own evidence is retained.
+- [x] **G12 — Fixture and provenance verified by the contributor.** *(I-10)*
+      → **No model change.** Fixture preserved, per-target binding and parent
+      rule fit the EP-A / EP-B case, structural closure stays separate from
+      verified enumeration, `O1` stays unresolved, `O2` establishes only a scoped
+      EP-A refusal, the attachment remains byte-for-byte archived at SHA-256
+      `2d8faa1b64b8a73fd0bf81b21889bbf726cbfb324af099b700499627af84203a`, and the
+      AEB `-04` pin and derivative-provenance rule are intact.
+- [x] **G13 — Empty-target: supporting review of E-10.** *(I-11)*
+      → Recorded as independent support for **G3**, not as a second finding.
+- [x] **G14 — Acknowledgement permission confirmed.** *(I-12)* → See **E3**.
+
+---
+
 ## Explicit non-goals for `-01`
 
 These constraints were set before the candidate existed. Each is followed by
@@ -454,9 +575,12 @@ whether the candidate holds to it.
   `scitt-composition` states that no new SCITT receipt format is required.
 - Do **not** adopt Cedulon's finding-code precedence ordering as a generic
   standard rule, and do **not** write normative text for it.
-  — **Held.** R-CD-10 states a `SHOULD`-level deterministic-and-reviewable
-  expectation and explicitly declines to prescribe a universal precedence
-  ordering.
+  — **Held.** As of 2026-09-04 R-CD-10 states a `MUST`-level
+  deterministic-and-reviewable requirement and requires non-selected applicable
+  diagnostics to stay visible or explicitly linked, while still explicitly
+  declining to prescribe a universal precedence ordering. The strengthening is
+  about *reviewability*, not about importing an ordering: no Cedulon finding
+  code and no Cedulon precedence rule appears in the candidate.
 - Do **not** invent `FULLY_SUPPORTED` / `CONDITIONALLY_SUPPORTED` /
   `NOT_SUPPORTED` (or any equivalent enum) unless a later, explicit design
   decision adopts them.
@@ -490,9 +614,12 @@ whether the candidate holds to it.
 
 ## Open items to settle before `-01` goes to the Datatracker
 
-Reviewed by the author on **2026-09-03**. One item is closed, two are downgraded
-to non-blocking, one requires a review round before submission, and one is
-housekeeping that can be settled either way.
+Reviewed by the author on **2026-09-03**, and again on **2026-09-04** after the
+focused review round. As of 2026-09-04 the review round that gated submission has
+been carried out, the acknowledgement question is settled by explicit permission
+from both named reviewers, and no item below still blocks submission. Submission
+has nonetheless **not** been made: this pass dispositions review findings and
+does not post anything to the Datatracker.
 
 Two different things are tracked below and they are deliberately not merged:
 
@@ -501,27 +628,26 @@ Two different things are tracked below and they are deliberately not merged:
 - the **review workflow this work area has chosen** for PR #100, which is a
   local process decision, not a property of the draft.
 
-### Pre-submission review required
+### Pre-submission review required — DISCHARGED 2026-09-04
 
-- **F1 — structural result × Claim Support.** The candidate adopts a
-  three-meaning conceptual Claim Support interoperability floor while permitting
-  alternative vocabulary through lossless mapping. This is an author-candidate
-  design decision that advances beyond the author's last public wording. Seek
-  focused review before Datatracker submission and record the resulting
-  disposition. The model itself is not in doubt — the author's decision is to
-  keep it — and if no response arrives, the author may proceed after a
-  reasonable wait on a recorded author disposition. What is not acceptable is
-  submitting while the public record still reads as declining to settle this.
+- **F1 — structural result × Claim Support.** ~~Seek focused review before
+  Datatracker submission and record the resulting disposition.~~ **Done.** The
+  focused review was carried out; the reviewer reports that the distinction
+  survives and that the case he could not place in `-00` now has a place
+  (ledger **E-8**). The three meanings stay a conceptual interoperability floor
+  with lossless mapping permitted, not a wire enum. **F1 no longer pending.**
+  The review outcome is a reviewer's assessment, not consensus or adoption.
 
-### Attribution confirmation pending — non-blocking
+### Attribution confirmation — SETTLED 2026-09-04
 
-- **E3 — personal acknowledgement wording.** Ask Iman Schrock whether the
-  personal acknowledgement wording is acceptable. If confirmation is not
-  obtained before submission, remove the personal acknowledgement while
-  preserving the fixture ID, digest, source provenance, and EMILIA Protocol
-  attribution required by the public contribution record. This is an attribution
-  courtesy question, not a technical or semantic one: it is resolvable by the
-  author alone in either direction and therefore does not gate submission.
+- **E3 — personal acknowledgement wording.** ~~Ask Iman Schrock whether the
+  personal acknowledgement wording is acceptable.~~ **Confirmed** for
+  "Iman Schrock, EMILIA Protocol" (ledger **I-12**), so the removal fallback is
+  not needed. **Emek Can Dogru separately granted permission to be named**
+  (ledger **E-15**) and is now acknowledged for bounded-population review, the
+  structural-result / Claim Support separation, diagnostic-reduction review, and
+  the empty-target accounting observation — name only, no affiliation asserted.
+  Tiago Pinto and Walter Hawkins remain unnamed: no permission is recorded.
 
 ### Closed
 
@@ -553,7 +679,16 @@ Two different things are tracked below and they are deliberately not merged:
 - **E-4, E-5, E-6, E-7** — these reviewer messages postdate the author's last
   public reply and have received no public response. Candidate text addressing
   them is the author acting alone. This does not block submission; it bounds
-  what may be claimed about them.
+  what may be claimed about them. **E-4 is superseded** by the focused review
+  round (ledger **E-11**, **E-12**), which restates the same reduction-and-
+  visibility point directly; **E-5**, **E-6**, and **E-7** are unaffected and
+  keep their existing dispositions. **E-6 / F2 remains open** — nothing in this
+  round decides the aborted/refused-operation classification.
+- **The focused review round itself is not consensus.** Reviewer findings and
+  this work area's dispositions of them are two different things and are kept
+  apart in section **G** and in the ledger. No working group has adopted
+  anything, no IETF consensus exists for any item in this file, and neither
+  reviewer has seen the candidate bytes produced by these dispositions.
 
 ---
 
@@ -562,12 +697,27 @@ Two different things are tracked below and they are deliberately not merged:
 Submission readiness for `-01`. These are gates this work area has chosen; none
 of them is an IETF requirement, and none of them is a defect in the candidate.
 
-- [ ] Focused Claim Support review requested from Emek Can Dogru (F1).
-- [ ] Multi-target / freeze-race / provenance review requested from Iman Schrock.
-- [ ] Personal acknowledgement wording confirmed by Iman, or removed before
-      submission.
-- [ ] Targeted review responses dispositioned in this work area.
+- [x] Focused Claim Support review requested from Emek Can Dogru (F1).
+      **COMPLETE** — carried out; outcome at ledger **E-8**; F1 closed.
+- [x] Multi-target / freeze-race / provenance review requested from Iman Schrock.
+      **COMPLETE** — carried out; outcomes at ledger **I-7**, **I-8**, **I-9**,
+      **I-10**, **I-11**.
+- [x] Personal acknowledgement wording confirmed by Iman, or removed before
+      submission. **COMPLETE** — confirmed (ledger **I-12**); the removal
+      fallback is not needed. Emek's permission is separately recorded
+      (ledger **E-15**).
+- [x] Targeted review responses dispositioned in this work area.
+      **COMPLETE** as of 2026-09-04 — see section **G** and ledger entries
+      **E-8** … **E-15**, **I-7** … **I-12**.
 - [ ] Candidate revalidated after any resulting edits.
+      **INCOMPLETE.** Mechanical checks were re-run over the updated candidate in
+      this pass (XML well-formedness; `docName` and `seriesInfo` still `-01`;
+      R-CD-1 … R-CD-16 each present exactly once; anchors unique; every `xref`
+      resolves; every reference cited; the four population equations present and
+      mutually consistent; `xml2rfc` 3.34.0 TXT + HTML render, exit 0, with only
+      the two pre-existing over-72-character reference-URL warnings). This gate
+      stays open because **`idnits` was not available in this environment and was
+      NOT RUN**, and it is not ticked on a partial check.
 
 Gates one, two, and four are **submission readiness**: they exist so `-01` goes
 to the Datatracker with the two axes it newly depends on having been put in
@@ -581,14 +731,19 @@ than assumed.
 
 These are separate, and neither implies the other.
 
-- **PR #100 merge gate.** This work area has chosen not to merge PR #100 until
-  the Iman and Emek review responses are in, so that any resulting correction
-  lands in the same integration rather than as a follow-up. That is a **local
+- **PR #100 merge gate.** This work area chose not to merge PR #100 until the
+  Iman and Emek review responses were in, so that any resulting correction landed
+  in the same integration rather than as a follow-up. **Both responses are now in
+  and dispositioned (2026-09-04), and the resulting corrections are in the same
+  branch.** PR #100 remains **open and unmerged**; merging is a separate decision
+  and is not taken by the review-disposition pass. That is a **local
   review-workflow decision**. It is not a statement that the candidate is
   defective, incomplete, or blocked on a technical finding.
-- **Datatracker submission gate.** Submission is gated on **F1** only, in the
-  narrow sense described above: the public record needs to reflect the author's
-  current position before `-01` is posted.
+- **Datatracker submission gate.** Submission was gated on **F1** only, in the
+  narrow sense described above. **F1 is closed** (ledger **E-8**), so that gate
+  is discharged. **No Datatracker submission has been made**, and this pass makes
+  none: it is a drafting and review-disposition pass, not a submission, an
+  adoption action, or a consensus claim.
 
 A reader should not infer from an unmerged PR that `-01` has an unresolved
 technical problem, and should not infer from a merged PR that `-01` is ready for

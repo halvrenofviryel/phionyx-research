@@ -534,11 +534,11 @@ receiver evidence that happens to be present. Otherwise omitted targets or
 suppressed failures can disappear before reconciliation begins.</t>
         <t>The minimum per-obligation delivery dispositions are defined in <xref target="reconciliation-states"/>. A profile MAY add more specific states, provided that it defines a lossless mapping to the minimum set and does not weaken UNCONFIRMED, INVALID, CONFLICT, or INDETERMINATE into success.</t>
         <t>If several applicable observations or diagnostics are reduced to one primary
-per-obligation disposition, the reduction rule SHOULD be deterministic and
-reviewable. Inputs not selected as the primary diagnostic remain subject to the
-population and input-record accounting rules in <xref target="r-cd-11"/>. This
-document does not prescribe a universal precedence ordering among profile-specific
-diagnostics.</t>
+per-obligation disposition, the reduction rule MUST be deterministic and
+reviewable. All applicable diagnostics, including diagnostics not selected as the
+primary disposition-driving diagnostic, MUST remain visible in the report or in an
+explicitly linked diagnostic collection. This document does not prescribe a
+universal precedence ordering among profile-specific diagnostics.</t>
       </section>
       <section anchor="r-cd-11">
         <name>R-CD-11: Bounded-Population Accounting</name>
@@ -549,6 +549,27 @@ expected population counts. Each expected Delivery Obligation MUST appear in
 exactly one per-obligation disposition. Each receiver-side input record MUST
 also be accounted for as matched, orphaned, duplicated, conflicting where the
 profile uses a separate record class, or invalid.</t>
+        <t>Every instruction in the bounded issuer population MUST remain accounted for
+during target-set construction, including an instruction whose target resolution
+succeeds and yields an empty Required Target Set. Where the Required Target Set
+for an instruction is empty, the instruction MUST remain in the report, the report
+MUST state that the instruction contributed zero Delivery Obligations, and the
+report MUST state the rule or condition under which target resolution produced the
+empty set. An instruction MUST NOT disappear from reconciliation solely because no
+Delivery Obligation tuple was added for it. The report MUST publish |I| alongside
+|O| and MUST publish counts sufficient to distinguish instructions that
+contributed one or more Delivery Obligations from instructions that contributed
+zero, as required by <xref target="population-conservation"/>.</t>
+        <t>A profile MUST define whether an empty Required Target Set is a valid terminal
+resolution. Where the profile declared that semantics before reconciliation, an
+empty set is a legitimate terminal resolution and the instruction is still
+accounted for as a zero-obligation instruction. Where the profile does not permit
+it, an empty Required Target Set MUST prevent a structural PASS for the affected
+instruction and for any parent or aggregate scope that depends on it. An empty
+Required Target Set MUST NOT be recorded by inventing a synthetic enforcement
+target or a synthetic Delivery Obligation, and MUST NOT be classified as
+EXPLICIT_FAILURE unless a positive, attributable failing condition applies under
+<xref target="reconciliation-states"/>.</t>
         <t>If the implementation cannot define a closed Required Target Set for an
 instruction, it MUST NOT claim complete delivery for that instruction over an
 unspecified target population. It MAY report per-record or per-known-target
@@ -574,7 +595,7 @@ it does not cover. At minimum, integrity, attribution, delivery, enforcement,
 observed control effect, ordering, population closure, complete mediation, and
 independent corroboration MUST NOT be implied unless each is separately
 supported under the declared trust model.</t>
-        <t>Where an aggregate result is used to support a relying-party claim, the report MUST identify the claim scope and MUST expose the claim-support qualification defined in <xref target="claim-qualification"/>. A structural PASS MUST NOT be rendered or consumed as an unqualified end-to-end success statement when attribution, target-set coverage, ordering, independence, or another claim predicate remains only declared, unverified, or indeterminate.</t>
+        <t>Where an aggregate result is used to support a relying-party claim, the report MUST identify the claim scope and MUST expose the claim-support qualification defined in <xref target="claim-qualification"/>. A structural PASS MUST NOT be rendered or consumed as an unqualified end-to-end success statement when attribution, target-set coverage, ordering, independence, or another claim predicate remains only declared, unverified, or indeterminate. The co-exposure rule in <xref target="claim-qualification"/> applies to every representation in which a structural aggregate result is exposed, not only to the representation in which that result was first derived.</t>
         <t>Evidence that a governance-relevant distinction was preserved at one boundary
 MUST NOT, by itself, be consumed as evidence that the distinction survived
 unchanged through later intermediaries to the relying party. Likewise,
@@ -754,6 +775,20 @@ profile. Let O be the resulting set of Delivery Obligations:</t>
         <t>A reconciliation report that claims complete obligation accounting MUST satisfy:</t>
         <artwork align="center">|O| = Nconfirmed + Nexplicit_failure + Nunconfirmed
     + Nsubstitution + Nconflict + Ninvalid + Nindeterminate</artwork>
+        <t>T_i MAY be empty when the declared target-resolution rule terminates with no
+required enforcement target for instruction i. Such an instruction contributes no
+Delivery Obligation to O, so obligation accounting alone cannot demonstrate that
+it was considered. A report that claims complete accounting MUST therefore also
+publish |I| and MUST satisfy the separate instruction-level conservation
+equation:</t>
+        <artwork align="center">|I| = Ninstructions_with_obligations + Nzero_obligation_instructions</artwork>
+        <t>Ninstructions_with_obligations counts the instructions in I whose Required Target
+Set has at least one member. Nzero_obligation_instructions counts the instructions
+in I whose target resolution terminated with zero members. Each zero-obligation
+instruction MUST be reported individually with the rule or condition that produced
+the empty set, as required by <xref target="r-cd-11"/>. The two equations are
+independent: |I| accounts for issuer instructions and |O| accounts for Delivery
+Obligations, and neither substitutes for the other.</t>
         <t>Let R be the bounded set of receiver-side input records. Complete receiver-record accounting MUST separately satisfy:</t>
         <artwork align="center">|R| = Nmatched + Norphan + Nduplicate + Ninvalid_receiver</artwork>
         <t>Profiles MAY retain additional record-side classes, including a distinct conflict
@@ -802,6 +837,16 @@ into a bare PASS.</t>
 claim scope, including the target set or population, relevant boundaries,
 observation window or cutoff, and the fact being claimed. The report MUST then
 preserve a claim-support qualification separate from the structural result.</t>
+        <t>Wherever a structural aggregate result is rendered, returned, exported, or
+otherwise exposed to a relying party, the corresponding claim scope and
+claim-support qualification MUST be exposed in the same result context. This
+applies to PASS, FAIL, and INCONCLUSIVE alike. A profile MUST NOT expose a bare
+structural result that can be consumed as the complete result without that
+qualification. The requirement constrains what accompanies the result, not the
+field layout of any particular serialization: native fields, a nested object, a
+structured error, a protocol event, or a resolvable reference can satisfy it,
+provided that a consumer of that result context cannot obtain the structural
+result without also obtaining its claim scope and claim-support qualification.</t>
         <t>A profile MAY use different vocabulary, but it MUST define a lossless mapping to
 at least the following conceptual meanings:</t>
         <dl newline="true" spacing="normal">
@@ -959,12 +1004,24 @@ itself, prove that the enumeration is complete.</t>
 SHOULD define the local effective boundary and the relationship between the
 control and operations that were already admitted, consumed, dispatched, or in
 flight when the control took effect.</t>
-        <t>A reconciler MUST NOT retroactively relabel an operation as blocked merely
-because a later control was APPLIED. If the operation crossed the relevant
-profile-defined admission or provider-entry boundary before control activation,
-its outcome remains a separate lifecycle fact. Missing authenticated outcome
-evidence for that operation MUST remain unresolved or indeterminate according to
-the applicable outcome profile.</t>
+        <t>Every boundary crossing is a historical fact. A reconciler MUST NOT retroactively
+relabel a boundary transition that occurred before control activation, and MUST
+NOT relabel an operation as blocked merely because a later control was APPLIED.
+Only a boundary crossing that actually occurred before activation is protected
+from retroactive relabelling.</t>
+        <t>Local admission and provider entry are distinct boundaries and are not
+interchangeable. If an operation was admitted before control activation but had
+not yet crossed a later provider-entry or other enforcement boundary, a
+subsequently applied control MAY still prevent that later transition under the
+applicable local semantics. The report MUST preserve the earlier admission fact
+and MUST separately preserve the later refusal or blocked transition. An operation
+that was admitted, or that is in flight, is therefore not automatically exempt
+from a later applicable enforcement boundary: non-retroactivity protects the
+record of what already happened, not the operation's remaining transitions.</t>
+        <t>Where the operation did cross the relevant profile-defined boundary before control
+activation, its outcome at that boundary remains a separate lifecycle fact.
+Missing authenticated outcome evidence for that operation MUST remain unresolved
+or indeterminate according to the applicable outcome profile.</t>
         <t>Similarly, a later control-effect observation that a subsequent operation was
 blocked does not prove that an earlier operation produced no external effect or
 that a prior effect was reversed. A reversal, compensation, or remedy requires
@@ -1048,7 +1105,7 @@ do not require disclosure of every event or internal topology to every party.</t
     </section>
     <section anchor="implementation-status" removeInRFC="true">
       <name>Implementation Status</name>
-      <t>This section records implementation and evaluation experience available as of 3 September 2026 and is intended to be removed before publication as an RFC. The entries below are deliberately scoped to the requirement or failure mode they exercise. Adjacent interoperability results that do not implement this document are not promoted into implementation claims.</t><t>The AI Runtime Evidence Protocol (AIREP) <xref target="AIREP-REPO"/> is an experimental, author-side source for several distinctions in this document. Its v0.1 control-delivery profile records issuer, enforcement-point, and witness observations and includes a total reconciler that does not treat issuer-side emission alone as receiver-side delivery. This is useful implementation input, but AIREP is not the conformance authority for this document and its broader interoperability evidence is not used here as proof of this draft. In particular, the public AIREP external-evidence record <xref target="AIREP-EXTERNAL-EVIDENCE"/> contains a v0.1.2 external-producer result and a separate v0.2 external consumer/verifier result; because they target different frozen versions, those results are explicitly non-additive and are not a producer-to-consumer interoperability result for any one AIREP version.</t><t>A separate author-side runtime probe in phionyx-research <xref target="PHIONYX-CONTROL-DELIVERY"/> records issuer-side and enforcement-point observations on opposite filesystem trust sides and correlates them by instruction identifier and instruction hash. The enforcement-side record explicitly declares that it is writable by the controlled system and is therefore corroboration, not proof. Its delivery audit also states that an issued instruction with no acknowledgement is unaccounted for, not proven undelivered, because delivery failure, evidence-recording failure, and a never-demanded override are not yet distinguishable. The associated tests pin identity/hash correlation, separate-side recording, coverage of every override-consuming gate, and non-silent evidence-write failure. This is partial author-side implementation experience; it does not establish independent implementation, complete mediation, or observed control effect.</t><t>The historical standalone Agent Control Delivery Evidence Reconciliation (ACDER) probe <xref target="ACDER-REF"/> implements an earlier instruction-target obligation model with seven fixtures. It is retained as a pinned author-side research artifact. It does not implement the full claim-support and intermediary semantic-preservation model in this revision, is not on current AIREP main, and is not an independent implementation of this document.</t><t>A proposed format-neutral fixture contributed by Iman Schrock of EMILIA Protocol on the SCITT mailing list <xref target="SCHROCK-FIXTURE-MSG"/> combines target multiplicity with a control-activation race. Its fixture identifier is freeze-after-provider-entry-with-multiple-required-targets and its SHA-256 is 2d8faa1b64b8a73fd0bf81b21889bbf726cbfb324af099b700499627af84203a. If that fixture is used unchanged, its identifier and digest are preserved. An adapted derivative receives a new fixture identifier and records the source fixture identifier and digest as provenance <xref target="SCHROCK-FIXTURE-PROVENANCE"/>. The contributed fixture is test input, not an implementation of this document; its historical related-work pin is not silently rewritten when current related-work references advance.</t><t>Cross-domain review and a pinned population probe against Cedulon <xref target="DOGRU-POPULATION-PROBE"/> informed the bounded-population and claim-qualification rules. The probe exposed a reporting-scope defect in the adjacent implementation rather than a defect in this document. Current Cedulon <xref target="I-D.dogru-cedulon"/> binds returned audit results to an account, rail, and window and conditions stronger claims on its declared scope and trust predicates. Cedulon remains adjacent-domain evaluation evidence, not an implementation of this document.</t><t>The AIREP artifacts, the phionyx-research runtime probe, the historical ACDER probe, the contributed EMILIA fixture, and the Cedulon probe retain distinct provenance and claim boundaries. They are not merged into a self-validating conformance suite for this document. Additional independent implementations are sought, particularly for per-target obligation reconciliation, claim-support qualification, and semantic preservation through intermediaries.</t></section>
+      <t>This section records implementation and evaluation experience available as of 3 September 2026 and is intended to be removed before publication as an RFC. The entries below are deliberately scoped to the requirement or failure mode they exercise. Adjacent interoperability results that do not implement this document are not promoted into implementation claims.</t><t>The AI Runtime Evidence Protocol (AIREP) <xref target="AIREP-REPO"/> is an experimental, author-side source for several distinctions in this document. Its v0.1 control-delivery profile records issuer, enforcement-point, and witness observations and includes a total reconciler that does not treat issuer-side emission alone as receiver-side delivery. This is useful implementation input, but AIREP is not the conformance authority for this document and its broader interoperability evidence is not used here as proof of this draft. In particular, the public AIREP external-evidence record <xref target="AIREP-EXTERNAL-EVIDENCE"/> contains a v0.1.2 external-producer result and a separate v0.2 external consumer/verifier result; because they target different frozen versions, those results are explicitly non-additive and are not a producer-to-consumer interoperability result for any one AIREP version.</t><t>A separate author-side runtime probe in phionyx-research <xref target="PHIONYX-CONTROL-DELIVERY"/> records issuer-side and enforcement-point observations on opposite filesystem trust sides and correlates them by instruction identifier and instruction hash. The enforcement-side record explicitly declares that it is writable by the controlled system and is therefore corroboration, not proof. Its delivery audit also states that an issued instruction with no acknowledgement is unaccounted for, not proven undelivered, because delivery failure, evidence-recording failure, and a never-demanded override are not yet distinguishable. The associated tests pin identity/hash correlation, separate-side recording, coverage of every override-consuming gate, and non-silent evidence-write failure. This is partial author-side implementation experience; it does not establish independent implementation, complete mediation, or observed control effect.</t><t>The historical standalone Agent Control Delivery Evidence Reconciliation (ACDER) probe <xref target="ACDER-REF"/> implements an earlier instruction-target obligation model with seven fixtures. It is retained as a pinned author-side research artifact. It does not implement the full claim-support and intermediary semantic-preservation model in this revision, is not on current AIREP main, and is not an independent implementation of this document.</t><t>A proposed format-neutral fixture contributed by Iman Schrock of EMILIA Protocol on the SCITT mailing list <xref target="SCHROCK-FIXTURE-MSG"/> combines target multiplicity with a control-activation race. Its fixture identifier is freeze-after-provider-entry-with-multiple-required-targets and its SHA-256 is 2d8faa1b64b8a73fd0bf81b21889bbf726cbfb324af099b700499627af84203a. If that fixture is used unchanged, its identifier and digest are preserved. An adapted derivative receives a new fixture identifier and records the source fixture identifier and digest as provenance <xref target="SCHROCK-FIXTURE-PROVENANCE"/>. The contributed fixture is test input, not an implementation of this document; its historical related-work pin is not silently rewritten when current related-work references advance.</t><t>Cross-domain review and a pinned population probe against Cedulon <xref target="DOGRU-POPULATION-PROBE"/> informed the bounded-population and claim-qualification rules. The probe exposed a reporting-scope defect in the adjacent implementation rather than a defect in this document. That probe remains pinned to the artifact and package versions it was executed against; later reviewer-reported measurements against a newer Cedulon release are reviewer-reported public evidence that the author has not independently reproduced, and the pinned probe has not been repinned to them. Current Cedulon <xref target="I-D.dogru-cedulon"/> binds returned audit results to an account, rail, and window and conditions stronger claims on its declared scope and trust predicates. Cedulon remains adjacent-domain evaluation evidence, not an implementation of this document.</t><t>The AIREP artifacts, the phionyx-research runtime probe, the historical ACDER probe, the contributed EMILIA fixture, and the Cedulon probe retain distinct provenance and claim boundaries. They are not merged into a self-validating conformance suite for this document. Additional independent implementations are sought, particularly for per-target obligation reconciliation, claim-support qualification, and semantic preservation through intermediaries.</t></section>
     <section anchor="related-work">
       <name>Relationship to Adjacent Work</name>
       <t>The agent communication use-case and requirements work <xref target="I-D.agentic-ai-usecases-requirements"/> treats accountability and auditing as separate work. This document is compatible with that boundary: it defines only the minimum facts and distinctions that need to survive protocol transitions so an external evidence layer can later bind them. AgentProto mailing-list discussion on a minimal preservation requirement <xref target="AGENTPROTO-PRESERVATION"/> and its path-preservation follow-up <xref target="AGENTPROTO-PRESERVATION-PATH"/> sharpen that distinction without creating a receipt format or audit regime.</t>
@@ -1077,16 +1134,16 @@ do not require disclosure of every event or internal topology to every party.</t
           <t>Added R-CD-15 to distinguish a population that is closed for structural reconciliation from evidence that the target enumeration is complete for a stronger complete-mediation claim.</t>
         </li>
         <li>
-          <t>Replaced per-instruction population conservation with obligation-level conservation while retaining separate receiver-record accounting.</t>
+          <t>Replaced per-instruction population conservation with obligation-level conservation while retaining separate receiver-record accounting, and added instruction-level accounting so an instruction whose Required Target Set resolves to zero members remains reported and conserved rather than disappearing from reconciliation.</t>
         </li>
         <li>
           <t>Added parent-instruction aggregation rules: a parent can be fully confirmed within its declared target set only when every required obligation is CONFIRMED.</t>
         </li>
         <li>
-          <t>Split structural aggregate results from claim-support qualification, defining FULLY_SUPPORTED, CONDITIONALLY_SUPPORTED, and NOT_SUPPORTED conceptual meanings.</t>
+          <t>Split structural aggregate results from claim-support qualification, defining FULLY_SUPPORTED, CONDITIONALLY_SUPPORTED, and NOT_SUPPORTED conceptual meanings, and required the claim scope and claim-support qualification to be exposed in the same result context as any exposed structural aggregate result.</t>
         </li>
         <li>
-          <t>Added control-activation rules preventing a later APPLIED freeze or revocation from retroactively relabelling an operation that was already admitted, consumed, or in flight.</t>
+          <t>Added control-activation rules preventing a later APPLIED freeze or revocation from retroactively relabelling a boundary transition that occurred before activation, while distinguishing local admission from a later provider-entry or other enforcement boundary that a subsequently applied control may still refuse.</t>
         </li>
         <li>
           <t>Clarified that SCITT Signed Statements and profile bindings can carry or reference these facts without introducing a new receipt format.</t>
@@ -1095,7 +1152,7 @@ do not require disclosure of every event or internal topology to every party.</t
           <t>Added R-CD-16 and protocol-attachment guidance for semantic preservation through intermediaries, including the non-claim that preservation at an originating boundary does not establish that the distinction survived intact to the eventual reader.</t>
         </li>
         <li>
-          <t>Added deterministic/reviewable reduction guidance for many-to-one diagnostics without defining a universal precedence order.</t>
+          <t>Required many-to-one diagnostic reduction to be deterministic and reviewable, required non-selected applicable diagnostics to remain visible or explicitly linked, and declined to define a universal precedence order.</t>
         </li>
         <li>
           <t>Clarified implementation and evaluation status so author-side probes, contributed fixtures, adjacent-domain evaluations, and unrelated cross-version interoperability results retain separate claim boundaries.</t></li>
@@ -1105,7 +1162,7 @@ do not require disclosure of every event or internal topology to every party.</t
         <li>
           <t>Updated implementation/test-vector status with the current AIREP control-delivery source, the phionyx-research author-side runtime probe, the historical ACDER probe, and provenance-preserving treatment of the contributed EMILIA Protocol fixture; broader AIREP cross-version interoperability remains explicitly non-additive.</t></li>
         <li>
-          <t>Expanded the minimum conformance cases for target multiplicity, target-set coverage qualification, structural-result/claim-support separation, and in-flight races.</t>
+          <t>Expanded the minimum conformance cases for target multiplicity, target-set coverage qualification, structural-result/claim-support separation, in-flight races, empty required-target populations, bare aggregate results exposed without their qualification, many-to-one diagnostic reduction, and failure asserted from absent population evidence.</t>
         </li>
       </ul>
     </section>
@@ -1121,13 +1178,20 @@ delivery, enforcement, and effect.</t>
       <t>The author thanks Iman Schrock of EMILIA Protocol for contributing the proposed
 freeze-after-provider-entry-with-multiple-required-targets fixture, requesting
 that the fixture ID and EMILIA Protocol attribution be preserved, and reviewing
-target multiplicity and in-flight operation semantics. The author also thanks
-SCITT participants who provided public review on bounded populations, qualified
-claims, adjacent-work composition, SCITT carriage, and implementation-reporting
-boundaries, as well as AgentProto participants whose public discussion sharpened
-the protocol-preservation and intermediary-path non-claims. Specific additional
-names can be added with permission in a later revision. These acknowledgements do
-not imply endorsement of this document.</t>
+target multiplicity, the required-target and freeze-race fixture, in-flight
+operation semantics, and fixture provenance.</t>
+      <t>The author thanks Emek Can Dogru for public review of bounded-population
+accounting, the separation of the structural reconciliation result from claim
+support, diagnostic reduction, and the empty required-target accounting
+observation. Both named reviewers gave permission to be named here.</t>
+      <t>The author also thanks SCITT participants who provided public review on bounded
+populations, qualified claims, adjacent-work composition, SCITT carriage, and
+implementation-reporting boundaries, as well as AgentProto participants whose
+public discussion sharpened the protocol-preservation and intermediary-path
+non-claims. Specific additional names can be added with permission in a later
+revision. Being named here records a review contribution only; these
+acknowledgements do not imply endorsement of this document by any named
+individual, organization, or working group.</t>
     </section>
   </middle>
   <back>
@@ -1524,7 +1588,19 @@ related-work citations in this document does not silently rewrite the fixture.</
           <t>a source emits DEFER but an intermediary maps it to generic FAILURE without a lossless mapping: the relying party cannot claim that the original disposition survived intact and the resulting preservation state remains qualified or INDETERMINATE;</t>
         </li>
         <li>
-          <t>a stable instruction identifier survives an intermediary while the governed instruction content changes: identifier continuity alone does not satisfy content binding and MUST NOT produce CONFIRMED.</t>
+          <t>a stable instruction identifier survives an intermediary while the governed instruction content changes: identifier continuity alone does not satisfy content binding and MUST NOT produce CONFIRMED;</t>
+        </li>
+        <li>
+          <t>an issuer instruction whose target resolution succeeds and yields an empty Required Target Set: the instruction remains accounted for in the report, contributes zero Delivery Obligations, is reported together with the rule or condition that produced the empty set, and does not disappear from reconciliation; instruction-level conservation over |I| still balances; and a structural PASS covering that instruction is available only where the profile explicitly declared an empty Required Target Set to be a valid terminal resolution before reconciliation;</t>
+        </li>
+        <li>
+          <t>a structural aggregate result exposed to a relying party without its corresponding claim scope and claim-support qualification in the same result context: a non-conformant representation that cannot be consumed as the complete result, exercised for a PASS result and for a FAIL result alike;</t>
+        </li>
+        <li>
+          <t>one Delivery Obligation or input record with several applicable diagnostics reduced to one primary disposition: the published reduction rule is deterministic and reviewable, exactly one primary disposition is selected, and every non-selected applicable diagnostic remains visible in the report or in an explicitly linked diagnostic collection, without any profile-specific precedence ordering being required by this document; and</t>
+        </li>
+        <li>
+          <t>an implementation reports FAIL because a receipt or issuer-side object is unmatched while the authenticated comparison population itself was never presented or established: the missing population evidence alone does not satisfy the positive failing condition that a structural FAIL requires under <xref target="global-results"/>, and the result remains INCONCLUSIVE or otherwise qualified according to the profile's semantics. This case exercises the existing rule that FAIL is not inferred from absence; it does not introduce a new disposition.</t>
         </li>
       </ol>
     </section>
