@@ -242,11 +242,18 @@ does **not** ship a vector set, and this work area has published none.
       of travel and the shared bounded-population / total-accounting /
       qualified-claim disciplines, and closes with the explicit non-claim that
       the document "does not describe Cedulon as an implementation of this
-      document". **To verify before submission:** that paragraph cites Cedulon
-      revision **-08**, while this work area's `../SOURCES.md` recorded `-06` as
-      the published revision on 2026-09-01. The candidate's reference list also
-      pins `draft-dogru-cedulon-08`. That revision number is the author's and
-      has not been checked against the Datatracker by this integration.
+      document". The paragraph cites Cedulon revision **-08**, and the
+      reference list pins `draft-dogru-cedulon-08`.
+      **Revision verified 2026-09-03** against the Datatracker
+      (<https://datatracker.ietf.org/doc/draft-dogru-cedulon/>): the current
+      revision is `draft-dogru-cedulon-08`, last updated 2 September 2026,
+      Active Internet-Draft, individual submission, no working group. The
+      candidate's citation is therefore correct and this item is closed.
+      `../SOURCES.md` §5 records `-06` because it is a dated snapshot taken on
+      2026-09-01; it is not wrong, it is earlier, and Cedulon advanced after it
+      was written. Like every draft in that table, Cedulon remains an individual
+      submission — the Datatracker page states the document is "not endorsed by
+      the IETF" and carries "no formal standing".
 - [x] **D3 — EMILIA composition anchors.** `draft-schrock-ep-revocation-statement`
       and `draft-schrock-ep-outcome-binding` as composition anchors rather than
       dependencies; AEB is now published at `-05` while the contributed fixture
@@ -291,6 +298,10 @@ does **not** ship a vector set, and this work area has published none.
       stricter reading of E-7 — keep it out of §12 entirely — was not taken. The
       disclaimers are explicit, so the risk is presentational, not a false
       claim.
+      **Author decision, 2026-09-03: not a submission blocker.** The section is
+      scoped to "implementation *and evaluation* experience" in its own first
+      sentence. If a reviewer raises the placement, the entries move to a
+      separate *Evaluation Experience* subheading; no pre-review churn.
 - [~] **E3 — Acknowledgements.** `-00` §15 says specific names and review
       contributions will be added with permission in a later revision. Reviewers
       on the public record: Iman Schrock, Tiago Pinto, Walter Hawkins, Emek Can
@@ -308,6 +319,12 @@ does **not** ship a vector set, and this work area has published none.
       request is intended to extend to being named personally in the
       Acknowledgements section, as distinct from fixture attribution. No public
       message in `../SOURCES.md` records permission in those terms.
+      **Author decision, 2026-09-03:** ask rather than infer. The contributor's
+      public message both requested EMILIA Protocol attribution and offered to
+      review a `-01` treatment when ready, so the permission question is put
+      directly in the same `-01` review request — naming him in the
+      acknowledgements for the contributed fixture, and inviting him to say if
+      he would prefer different attribution.
 
 ## F. Still-open design questions
 
@@ -336,13 +353,27 @@ author's own public statement did.
       other review comments first". This worklist previously recorded, on the
       strength of that statement, an instruction not to invent these three names
       "unless a later design decision explicitly adopts them".
-      **The candidate is that later design decision, and it adopts exactly those
-      three names.** It is therefore an author-candidate disposition that is
-      *ahead of* the author's last public position, not an implementation of an
-      agreed outcome. E-3 remains `OPEN / NEEDS DESIGN` in `REVIEW_LEDGER.md`;
-      the reviewer has not responded to this resolution, and nothing here is
-      reviewer agreement or consensus. **Flagged for the author to confirm
-      deliberately before `-01` is submitted to the Datatracker.**
+      **The candidate is that later design decision.**
+      **What the candidate does and does not freeze.** It does *not* impose the
+      three names as a wire enum. `claim-qualification` requires a profile to
+      define "a lossless mapping to at least the following conceptual meanings",
+      and R-CD-15 uses the same construction for its coverage conditions — "a
+      profile MAY use different vocabulary, but it MUST preserve the distinction
+      among at least the following conceptual conditions". The three names are a
+      **conceptual interoperability floor**, not a mandated vocabulary. An
+      earlier draft of this note described the candidate as freezing the
+      vocabulary; that was too strong and is corrected here.
+      This is still an author-candidate disposition rather than an agreed
+      outcome: E-3 remains `OPEN / NEEDS DESIGN` in `REVIEW_LEDGER.md` and the
+      reviewer has not responded to it. **The author's decision is to keep the
+      model**, because it resolves the problem E-3 actually raised — that a
+      single aggregate axis collapses structural reconciliation and evidentiary
+      strength into one label. **Action: sync the public record**, by asking the
+      reviewer to review this axis on the candidate and stating explicitly that
+      the labels are used as a conceptual interoperability floor with lossless
+      mapping permitted, rather than as frozen wire vocabulary. That closes the
+      distance between the author's earlier "I do not want to freeze the
+      vocabulary yet" and the candidate's design, on the record and in public.
 - [ ] **F2 — Aborted / refused-operation classification.** *(still open — the
       candidate does not decide it.)* Whether an
       issuer-side aborted receipt satisfies the `EXPLICIT_FAILURE` requirements
@@ -451,15 +482,54 @@ whether the candidate holds to it.
 
 ## Open items to settle before `-01` goes to the Datatracker
 
-- **F1** — confirm the deliberate adoption of the three claim-support names,
-  which is ahead of the author's last public statement on freezing vocabulary.
-- **D2** — the Cedulon revision cited by the candidate (`-08`) is ahead of the
-  revision this work area verified (`-06`, checked 2026-09-01). Verify against
-  the Datatracker before submission.
-- **E3** — confirm that naming Iman Schrock personally in Acknowledgements is
-  covered by the contributor's public attribution request.
-- **W-4** — still unanswered: whether `-01` should additionally cite RFC 9942
-  where receipts specifically are meant. The candidate cites RFC 9943 only.
+Reviewed by the author on **2026-09-03**. One item is closed, two are downgraded
+to non-blocking, and the remaining work is to sync the public record before
+submission.
+
+### Blocking — needs a public-record response
+
+- **F1 — structural result × claim support.** The author's decision is to
+  **keep** the model. It is not blocking because it is doubted; it is blocking
+  because the public record still shows "I do not want to freeze the vocabulary
+  yet" and the candidate now carries a three-value conceptual floor. Resolution
+  is to request review of this axis from the reviewer who raised E-3, stating
+  that the labels are a conceptual interoperability floor with lossless mapping
+  permitted, not frozen wire vocabulary. See **F1**.
+- **E3 — Acknowledgements permission.** The contributor's public message asked
+  that the fixture ID and EMILIA Protocol attribution be preserved and offered
+  to review a `-01` treatment when ready. The candidate names him in that exact
+  context. Because `-00` §15 nevertheless promised that names would be added
+  *with permission*, this is not assumed. Resolution is to ask directly in the
+  same review request rather than to infer consent. See **E3**.
+
+### Closed
+
+- **D2 — Cedulon revision.** ~~Unverified.~~ **Verified 2026-09-03** against the
+  Datatracker: current revision `draft-dogru-cedulon-08`, last updated
+  2 September 2026. The candidate's citation and reference pin are correct.
+
+### Downgraded — not submission blockers
+
+- **W-4 — RFC 9942 vs RFC 9943.** Not a blocker. RFC 9943 defines the SCITT
+  architecture's Signed Statement, registration, and Receipt relationship, and
+  refers to RFC 9942 for the lower-level COSE receipt / verifiable data
+  structure proof mechanics. The candidate's `scitt-composition` text is about
+  carriage and registration properties, so **RFC 9943 alone is the correct
+  citation** and is not an error. RFC 9942 would need to be cited additionally
+  only if `-01` gains a detailed statement about receipt encoding or proof
+  semantics. W-4's original point stands and was honoured: no reference was
+  changed on the strength of reviewer prose.
+- **E2 — Cedulon inside Implementation Status.** Not a blocker at this stage.
+  The section's own first sentence scopes it to "implementation **and
+  evaluation** experience" and labels Cedulon explicitly as "adjacent-domain
+  evaluation evidence, not an implementation of this document", so no false
+  claim is made. If a reviewer raises the placement, the fix is to move those
+  entries under a separate *Evaluation Experience* subheading. Not worth the
+  churn before review.
+
+### Standing caveat
+
 - **E-4, E-5, E-6, E-7** — these reviewer messages postdate the author's last
   public reply and have received no public response. Candidate text addressing
-  them is the author acting alone.
+  them is the author acting alone. This does not block submission; it bounds
+  what may be claimed about them.
