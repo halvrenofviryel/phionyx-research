@@ -11,12 +11,25 @@ during review, and the open worklist for a future revision.
 
 ## Status
 
+Two states are tracked here and they are **not** the same thing.
+
 - **Current published baseline: `-00`.** Submitted 2026-08-29, posted
-  2026-08-31, dated 30 August 2026 in the document itself.
-- **`-01` has NOT been submitted.** No `-01` text exists in this directory.
+  2026-08-31, dated 30 August 2026 in the document itself. The artifacts under
+  `draft/published/00/` are the immutable published baseline and the
+  authoritative statement of what `-00` says.
+- **Current repository candidate: `-01`, dated 3 September 2026.** The author's
+  candidate XML, its `-00` → `-01` changelog, and byte-level checksums are
+  stored under `draft/candidate/01/`. This is an **author working candidate held
+  in this repository**. It is not an IETF artifact and carries no Internet-Draft
+  status.
+- **`-01` has NOT been submitted to the IETF.** It does not appear on the
+  Datatracker, it has not been posted, and it must not be cited or described as
+  a published, submitted, adopted, or accepted revision. Where a revision of
+  this draft is referenced as published, that revision is `-00`.
 - **Review is ongoing.** The public thread is open and no review freeze has been
   declared. The ledger and worklist here are working records, not final
-  dispositions.
+  dispositions. The existence of candidate `-01` text does not close any review
+  item and does not convert a reviewer's finding into an agreed outcome.
 - **Intended status: Informational** (`category="info"` in the published XML;
   "Intended status: Informational" in the published text).
 - On the IETF Datatracker the document is associated with the group
@@ -26,7 +39,10 @@ during review, and the open worklist for a future revision.
 
 - **This is not evidence of IETF Working Group adoption or of IETF consensus.**
   The document is an individual Internet-Draft. Nothing here has been adopted by
-  a working group, and no consensus of any kind is claimed.
+  a working group, and no consensus of any kind is claimed. That applies to the
+  `-01` candidate exactly as it applies to `-00`: text the author has written
+  into a candidate revision is an **author design decision**, not a WG outcome,
+  and not evidence that any reviewer agreed with the resolution chosen.
 - **Discussion on the SCITT mailing list does not by itself mean WG adoption.**
   Posting a draft to a list, receiving review, and receiving supportive review
   comments are all distinct from adoption. Reviewer prose in the thread —
@@ -34,7 +50,9 @@ during review, and the open worklist for a future revision.
   recorded as such.
 - **This is not a normative source.** The published `-00` files under
   `draft/published/00/` are the authoritative statement of what `-00` says.
-  Everything else in this directory is commentary, provenance, or worklist.
+  Everything else in this directory is commentary, provenance, worklist, or
+  unpublished candidate text. In particular, `draft/candidate/01/` is **not**
+  normative and states nothing about what the Internet-Draft series contains.
 
 ## Scope of the draft itself
 
@@ -72,9 +90,14 @@ at a pinned commit rather than vendored. See `RIGHTS_AND_PROVENANCE.md`.
 README.md                     this file
 SOURCES.md                    every source consulted, with URL / revision / digest
 RIGHTS_AND_PROVENANCE.md      rights and provenance rules for material kept here
-draft/published/00/           the published -00 artifacts, unmodified, + SHA256SUMS.txt
+draft/published/00/           the immutable published -00 baseline, unmodified,
+                              + SHA256SUMS.txt
+draft/candidate/01/           current author candidate -01, its changelog, and
+                              SHA256SUMS; NOT an IETF-published artifact and not
+                              submitted to the Datatracker
 reviews/REVIEW_LEDGER.md      one entry per substantive public review item
-reviews/DRAFT_01_WORKLIST.md  working checklist for a future -01 (not the draft)
+reviews/DRAFT_01_WORKLIST.md  traceability/review record for -01; records what
+                              the candidate implements, not consensus
 fixtures/README.md            known contributed fixtures and their provenance
 external-evidence/            third-party adjacent-domain evidence, referenced not vendored
 ```

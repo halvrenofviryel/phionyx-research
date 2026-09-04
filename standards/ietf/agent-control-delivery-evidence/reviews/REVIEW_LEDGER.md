@@ -7,6 +7,11 @@ every entry links to it. Short quotations are attributed.
 **Review is ongoing.** Nothing in this ledger has been incorporated into a
 published revision. `-01` has not been submitted.
 
+Entries `I-1` … `E-7` record public review of the **published `-00`**. Entries
+`E-8` … `E-15` and `I-7` … `I-12` record the **focused pre-submission review
+round on the `-01` candidate**, described in its own section below. Nothing in
+either group is IETF or working-group consensus.
+
 ## Disposition vocabulary
 
 | Disposition | Meaning |
@@ -17,6 +22,9 @@ published revision. `-01` has not been submitted.
 | `COMPOSITION NOTE` | Concerns how `-00` composes with adjacent work. No requirement change implied. |
 | `OPEN / NEEDS DESIGN` | Real problem, no settled answer. Vocabulary/mechanism deliberately not frozen. |
 | `NO CHANGE REQUIRED` | No change to the draft text follows from this item. |
+| `FOCUSED REVIEW COMPLETED` | A review round this work area requested was carried out and its outcome is recorded. Not a consensus outcome. |
+| `SUPPORTING REVIEW` | A second reviewer independently agrees with a finding recorded under another entry. Recorded so the finding is not double-counted as two separate defects. |
+| `AUTHOR-SIDE REPRODUCTION` | This work area independently reran a third party's measurement and preserved the raw output. It is **not** a reviewer finding, **not** an implementation, and evidence about the measured system only. |
 
 `Status` is one of `OPEN`, `TRACKED FOR -01`, or `RECORDED`.
 
@@ -254,10 +262,10 @@ one-paragraph endorsement of the seam already tracked as T-1 and W-1).
 | **Finding** | Offered explicitly "as a question rather than as a proposed requirement". Where nothing failed but the inputs that would attribute the evidence were never supplied (no externally configured observer binding, no declared window): `FAIL` is wrong because §6.4 requires a positive failing condition; `PASS` says more than the evidence does; `INCONCLUSIVE` is available but loses that the run **was** fully reconciled. Those are two different facts about the same run and one label makes them one. Cedulon carries it as a second axis — balanced or not, and separately unconditional or conditional — which must appear wherever the verdict appears, including the passing path. In the follow-up message, 26 of 49 exported finding codes carry no disposition on their own and instead report whether the declared population or the evidence stands at all. |
 | **Evidence / example** | Measured by the pinned probe: `26 not-a-disposition` codes across four sub-kinds (`evidence-authenticity` 14, `population-not-established` 6, `terms-layer` 2, `transparency-layer` 4). |
 | **Author response on public record** | <https://mailarchive.ietf.org/arch/msg/scitt/_R-gOpqjmM0fdOWKUvCR3RVJFqw/> — agrees a single aggregate axis can collapse two facts; "For -01 I therefore want to explore keeping the structural reconciliation result separate from an orthogonal claim/evidence qualification. **I do not want to freeze the vocabulary yet** — I want to compare your -06/-07 treatment and the other review comments first — but I think the distinction itself is important." |
-| **Disposition** | `OPEN / NEEDS DESIGN` |
+| **Disposition** | `OPEN / NEEDS DESIGN` at the time this entry was written; the focused review round closes it — see **E-8**. |
 | **Open questions** | Whether it becomes a second axis, a qualifier on the aggregate, or additional required reporting. Vocabulary deliberately **not** frozen. No enum is adopted. |
 | **Expected `-01` impact** | Possibly a separation of structural result from claim qualification in §6.4. Nothing decided. |
-| **Status** | `OPEN` |
+| **Status** | `SUPERSEDED BY E-8` — the `-01` candidate separates the two dimensions and the reviewer's focused review of that separation is recorded at **E-8**. |
 
 ---
 
@@ -271,10 +279,10 @@ one-paragraph endorsement of the seam already tracked as T-1 and W-1).
 | **Finding** | Cedulon's native output is many-to-one against instructions — one malformed receipt emits seven codes, one of them twice, across the record, matching, chain, checkpoint and scope layers — while a disposition is one verdict. So no mapping can exist without a precedence rule; the probe states one and prints what it did not select. The reviewer is explicit that **this precedence is Cedulon's, not §6.2's**: §6.2 permits selection among duplicate or superseding *records* and requires the discarded alternatives and the rule to stay reviewable, and its object is records, not layered diagnostics of a single record. What may be worth a sentence in `-01` is that a profile whose native output is many-to-one needs the same reviewability for a different reason. |
 | **Evidence / example** | Reproduced in the verification run of the pinned probe: the malformed-issuer-record row emits `malformed-policy-hash, settlement-without-receipt, receipt-chain-break, checkpoint-total-mismatch, checkpoint-total-mismatch, checkpoint-head-mismatch, counterparty-unbound` and selects `INVALID`. |
 | **Author response on public record** | **None.** This message (2026-09-01 12:58 UTC) postdates the author's most recent public reply in the thread (2026-09-01 03:37 UTC). |
-| **Disposition** | `CLARIFICATION CANDIDATE` |
+| **Disposition** | `CLARIFICATION CANDIDATE` at the time this entry was written; carried forward and strengthened — see **E-11** and **E-12**. |
 | **Open questions** | Whether `-01` says anything at all; if it does, only that a reduction rule be **deterministic and reviewable** and that non-selected diagnostics remain visible. **Cedulon's precedence ordering is not to be adopted as a generic rule**, and no normative text for it is to be written. |
 | **Expected `-01` impact** | At most one clarifying sentence extending §6.2's reviewability discipline to many-to-one diagnostics. |
-| **Status** | `OPEN` |
+| **Status** | `SUPERSEDED BY E-11 / E-12` — the constraint against importing Cedulon's precedence ordering is still honoured. |
 
 ---
 
@@ -329,6 +337,300 @@ one-paragraph endorsement of the seam already tracked as T-1 and W-1).
 
 ---
 
+---
+
+# Focused pre-submission review round on the `-01` candidate
+
+**Reviewed artifact.** Both reviewers assessed the `-01` author candidate at
+
+```
+standards/ietf/agent-control-delivery-evidence/draft/candidate/01/draft-abak-agent-control-delivery-evidence-01.xml
+SHA-256 da64a03846e03f3868aa2fa54682c87d338a4dedcbc1dc4b5642cdfea79a81c6
+```
+
+Those are the exact bytes reviewed in this round, each reviewer within the
+review scope this work area requested. The dispositions below were applied to the
+candidate afterwards, producing the disposition candidate
+`11884630dcb89082d88f838051e19b4736b4908c67cca2f65725ac3ed46501a7`. **Both
+reviewers then checked the changed passages on that digest and closed their
+focused reviews** — recorded at `E-16` and `I-13`. **Neither claimed a
+full-document review, and this ledger does not record one.** Candidates after
+that digest — the post-reproduction bytes and the pre-submission date update —
+have **not** been reviewed by either reviewer, and this ledger does not claim
+that they have.
+
+**What these entries are.** They are **public reviewer findings** plus this work
+area's own disposition of them. They are not IETF consensus, not a working-group
+position, and not an adoption signal. In this round the reviewers' messages and
+the author's dispositions are close together in time, so `ACCEPTED FOR -01` here
+records **the author's disposition made in this work area on 2026-09-04** rather
+than a quotation from a separate public author reply. That is a deliberate
+departure from the `-00` convention above and is stated so a reader does not
+mistake it for one.
+
+**Archive links.** No IETF mail-archive URL for these two focused reviews is
+recorded in this work area at the time of writing. Where one becomes available it
+is to be added to the `Source` field of the affected entries. The absence of a
+link here is a gap in this record, not evidence that the review was private.
+
+---
+
+## E-8 — Structural Result × Claim Support: focused review completed
+
+| Field | Value |
+|---|---|
+| **Reviewer** | Emek Can Dogru |
+| **Source** | Focused review of the `-01` candidate at `da64a038…81c6`; archive URL not recorded here |
+| **Affected candidate sections** | `global-results`, `claim-qualification`, R-CD-3, R-CD-13, R-CD-15 |
+| **Finding** | The separation of the structural reconciliation result from Claim Support holds under focused review. In the reviewer's words: *"The distinction survives, and the case I could not place in -00 now has a place."* |
+| **Disposition** | `FOCUSED REVIEW COMPLETED` |
+| **Effect on the candidate** | None required. `FULLY_SUPPORTED`, `CONDITIONALLY_SUPPORTED`, and `NOT_SUPPORTED` are retained as **conceptual interoperability meanings, not wire enums**; a profile may use other vocabulary through the lossless mapping `claim-qualification` requires. |
+| **Effect on the worklist** | **F1 is no longer pending.** The pre-submission review it required has been carried out and its outcome is recorded here. |
+| **Status** | `RECORDED` |
+
+---
+
+## E-9 — A bare structural result can still escape through another representation
+
+| Field | Value |
+|---|---|
+| **Reviewer** | Emek Can Dogru |
+| **Source** | Same focused review |
+| **Affected candidate sections** | `claim-qualification`, R-CD-13 |
+| **Finding** | The candidate requires Claim Support to be **preserved** separately from the structural result, but does not require the qualification to **accompany every representation** in which the structural result is exposed. A profile could therefore export a bare `PASS`, `FAIL`, or `INCONCLUSIVE` that a relying party consumes as the complete result. |
+| **Disposition** | `ACCEPTED FOR -01` (author disposition, 2026-09-04) |
+| **Effect on the candidate** | `claim-qualification` now requires the claim scope and claim-support qualification to be exposed **in the same result context** wherever a structural aggregate result is rendered, returned, exported, or otherwise exposed, and forbids exposing a bare structural result consumable as the complete result. The rule applies to `PASS`, `FAIL`, and `INCONCLUSIVE` alike. R-CD-13 points at it and keeps its existing prohibition on an unqualified end-to-end `PASS`. No wire field layout is mandated. Conformance case 28 exercises it for a passing and a failing result. |
+| **Status** | `APPLIED IN CANDIDATE` |
+
+---
+
+## E-10 — Empty Required Target Set: a real population-accounting hole
+
+| Field | Value |
+|---|---|
+| **Reviewer** | Emek Can Dogru; **independently supported by Iman Schrock** (see `I-11`) |
+| **Source** | Same focused review |
+| **Affected candidate sections** | R-CD-11, `population-conservation` |
+| **Finding** | If `T_i` is empty, instruction `i` contributes no Delivery Obligation to `O` and can disappear from the obligation conservation equation entirely. Obligation-level accounting alone cannot show that the instruction was ever considered. |
+| **Disposition** | `ACCEPTED FOR -01` (author disposition, 2026-09-04) |
+| **Effect on the candidate** | R-CD-11 now requires every instruction in the bounded issuer population to remain accounted for during target-set construction; a zero-target instruction stays in the report, is reported as contributing zero Delivery Obligations, and carries the rule or condition that produced the empty set. `population-conservation` adds `\|I\| = Ninstructions_with_obligations + Nzero_obligation_instructions` alongside the retained `\|O\|` equation, and requires `\|I\|` to be published. A profile MUST declare whether an empty set is a valid terminal resolution; where it is not, the empty set prevents structural `PASS` for the affected scope. **No synthetic target and no synthetic disposition is introduced**, and an empty set is not automatically `EXPLICIT_FAILURE`. Conformance case 27 exercises it. |
+| **Status** | `APPLIED IN CANDIDATE` |
+
+---
+
+## E-11 — R-CD-10 reduction rule was too weak at `SHOULD`
+
+| Field | Value |
+|---|---|
+| **Reviewer** | Emek Can Dogru |
+| **Source** | Same focused review |
+| **Affected candidate sections** | R-CD-10 |
+| **Finding** | `SHOULD be deterministic and reviewable` is too weak, because the minimum reconciliation procedure already requires the structural verdict to be reproducible by a third party. A non-deterministic reduction rule defeats that existing requirement. |
+| **Disposition** | `ACCEPTED FOR -01` (author disposition, 2026-09-04) |
+| **Effect on the candidate** | R-CD-10 now says the reduction rule **MUST** be deterministic and reviewable. |
+| **Status** | `APPLIED IN CANDIDATE` |
+
+---
+
+## E-12 — Non-selected diagnostics are not R-CD-11 population members
+
+| Field | Value |
+|---|---|
+| **Reviewer** | Emek Can Dogru |
+| **Source** | Same focused review |
+| **Affected candidate sections** | R-CD-10 |
+| **Finding** | The candidate made inputs not selected as the primary diagnostic "subject to the population and input-record accounting rules in R-CD-11". That is the wrong object: R-CD-11 accounts for Delivery Obligations and receiver-side **input records**, not for layered diagnostics of a single record. The reviewability requirement is real; the R-CD-11 hook was a category error. |
+| **Disposition** | `ACCEPTED FOR -01` (author disposition, 2026-09-04) |
+| **Effect on the candidate** | The R-CD-11 cross-reference is removed from that paragraph. R-CD-10 now requires **all applicable diagnostics, including those not selected as the primary disposition-driving diagnostic, to remain visible in the report or in an explicitly linked diagnostic collection**. **Cedulon's precedence ordering is still not adopted** and the document still declines to prescribe a universal precedence order. Conformance case 29 exercises it. |
+| **Status** | `APPLIED IN CANDIDATE` |
+
+---
+
+## E-13 — FAIL-from-absence: reviewer measurement supports the existing rule
+
+| Field | Value |
+|---|---|
+| **Reviewer** | Emek Can Dogru |
+| **Source** | Same focused review |
+| **Affected candidate sections** | `global-results` — **applied, not amended** |
+| **Finding** | A no-extract measurement, in which a nominal implementation reports `FAIL` because a receipt or issuer-side object is unmatched while the authenticated comparison population was never presented, lands exactly on the existing rule that `FAIL` **MUST identify at least one positive failing condition and MUST NOT be inferred solely from missing evidence**. |
+| **Disposition** | `EXTERNAL VALIDATION OF EXISTING RULE` |
+| **Effect on the candidate** | The rule is **retained unchanged and not weakened**. The only change is conformance coverage: case 30 exercises it and states explicitly that it tests the existing FAIL-from-absence rule rather than adding a new disposition. |
+| **Status** | `APPLIED IN CANDIDATE` (conformance coverage only) |
+
+---
+
+## E-14 — Cedulon finding-code mapping is stale relative to 0.12.0
+
+| Field | Value |
+|---|---|
+| **Reviewer** | Emek Can Dogru |
+| **Source** | Same focused review |
+| **Affected candidate sections** | Implementation Status — reporting hygiene only |
+| **Finding** | Cedulon 0.12.0 exports an additional finding code, `settlement-comparison-skipped`, which the pinned population probe's mapping does not cover. The old mapping is therefore **known stale relative to 0.12.0**. |
+| **Disposition** | `RECORDED` — **no silent repin** |
+| **What was NOT done** | The pinned probe evidence was **not** edited, repinned, or rewritten. It remains commit `0a3fa04`, SHA-256 `031f84fda2054b1427a510baa45f880d379ea60dced408a4a74028da12b1fceb`, recorded against the package versions it was executed against. That record is **historical pinned evidence and is not corrupted**; a later upstream release exporting a new code does not retroactively invalidate a measurement of an earlier release. This work area does **not** claim the old probe covers current Cedulon 0.12.0. |
+| **Effect on the candidate** | One hygiene sentence in Implementation Status: the probe stays pinned to the versions it was executed against, and later reviewer-reported measurements against a newer Cedulon release are reviewer-reported public evidence that **the author has not independently reproduced**. No reproduction was performed in this pass. |
+| **Status** | `RECORDED` |
+
+---
+
+## E-15 — Acknowledgement permission (Emek Can Dogru)
+
+| Field | Value |
+|---|---|
+| **Reviewer** | Emek Can Dogru |
+| **Source** | Same focused review |
+| **Finding** | Permission granted explicitly: *"On acknowledgements: you may name me."* |
+| **Disposition** | `RECORDED` |
+| **Effect on the candidate** | Acknowledgements now name **Emek Can Dogru** for bounded-population review, structural-result / Claim Support separation, diagnostic-reduction review, and the empty-target accounting observation. Permission was given for the name; no organizational affiliation was requested and none is asserted. The non-endorsement statement is retained and strengthened. |
+| **Status** | `RECORDED` |
+
+---
+
+## I-7 — Multi-target model and parent aggregation: focused review completed
+
+| Field | Value |
+|---|---|
+| **Reviewer** | Iman Schrock (EMILIA Protocol) |
+| **Source** | Focused review of the `-01` candidate at `da64a038…81c6`; archive URL not recorded here |
+| **Affected candidate sections** | `target-set-model`, R-CD-4, R-CD-5, `reconciliation-states`, `parent-aggregation` |
+| **Finding** | **No additional blocker.** The existing per-target Delivery Obligation model and the parent-aggregation rule survive focused review. |
+| **Disposition** | `FOCUSED REVIEW COMPLETED` / `NO CHANGE REQUIRED` |
+| **Status** | `RECORDED` |
+
+---
+
+## I-8 — Structural closure vs verified enumeration: focused review completed
+
+| Field | Value |
+|---|---|
+| **Reviewer** | Iman Schrock (EMILIA Protocol) |
+| **Source** | Same focused review |
+| **Affected candidate sections** | R-CD-11, R-CD-15 |
+| **Finding** | **No additional blocker.** The distinction between a target set closed for a reconciliation run and an independently verified enumeration is kept as it stands. |
+| **Disposition** | `FOCUSED REVIEW COMPLETED` / `NO CHANGE REQUIRED` |
+| **Status** | `RECORDED` |
+
+---
+
+## I-9 — Local admission and provider entry are not interchangeable
+
+| Field | Value |
+|---|---|
+| **Reviewer** | Iman Schrock (EMILIA Protocol) |
+| **Source** | Same focused review |
+| **Affected candidate sections** | `control-activation` (§9.4) |
+| **Finding** | No blocker, but one clarification is required. The candidate's §9.4 treated "admission or provider-entry boundary" as effectively interchangeable. They are not. An operation admitted **before** freeze activation can still be refused at a **later** provider-entry or other enforcement boundary. Non-retroactivity means *do not rewrite a boundary fact that already happened*; it does **not** mean an admitted or in-flight operation is exempt from later applicable enforcement. |
+| **Disposition** | `ACCEPTED FOR -01` (author disposition, 2026-09-04) |
+| **Effect on the candidate** | §9.4 rewritten: every boundary crossing is a historical fact; only a crossing that **actually occurred** before activation is protected from retroactive relabelling; local admission and provider entry are named as distinct, non-interchangeable boundaries; a subsequently applied control **MAY** still prevent a later transition; the report **MUST** preserve the earlier admission fact and separately preserve the later refusal or blocked transition; and an admitted or in-flight operation is not automatically exempt from later applicable enforcement. The existing rule that reversal, compensation, or remedy needs its own evidence is **retained**. A follow-on consistency fix in the same pass repaired the Problem Statement, which still described the protected object as the earlier **operation** rather than the earlier **boundary transition**; the introduction and §9.4 now agree, and no new requirement was added. |
+| **Status** | `APPLIED IN CANDIDATE` |
+
+---
+
+## I-10 — Fixture and provenance treatment verified by the contributor
+
+| Field | Value |
+|---|---|
+| **Reviewer** | Iman Schrock (EMILIA Protocol) |
+| **Source** | Same focused review |
+| **Affected candidate sections** | `appendix-freeze-fixture`, Implementation Status; `../fixtures/`, `../RIGHTS_AND_PROVENANCE.md` §4 |
+| **Finding** | Confirmed by the contributor: the PR treatment preserves the fixture; the per-target binding and parent rule fit the EP-A / EP-B case; structural closure remains separate from verified enumeration; `O1` stays unresolved; `O2` establishes only a scoped EP-A refusal; the fixture attachment remains byte-for-byte archived; and the original AEB `-04` pin and the derivative-provenance rule are intact. |
+| **Disposition** | `NO CHANGE REQUIRED` — verified by the reviewer |
+| **Effect on the candidate** | None. The fixture SHA-256 `2d8faa1b64b8a73fd0bf81b21889bbf726cbfb324af099b700499627af84203a` is unchanged, the stored attachment is untouched, and no derivative exists. |
+| **Status** | `RECORDED` |
+
+---
+
+## I-11 — Empty target accounting: independent supporting review
+
+| Field | Value |
+|---|---|
+| **Reviewer** | Iman Schrock (EMILIA Protocol) |
+| **Source** | Same focused review |
+| **Affected candidate sections** | R-CD-11, `population-conservation` |
+| **Finding** | Explicit agreement with the empty-target accounting point raised in `E-10`. |
+| **Disposition** | `SUPPORTING REVIEW` — of `E-10`, not a second finding |
+| **Effect on the candidate** | None beyond `E-10`. Recorded so the same defect is counted once and so the record shows two reviewers reached it independently. |
+| **Status** | `RECORDED` |
+
+---
+
+## I-12 — Acknowledgement permission (Iman Schrock)
+
+| Field | Value |
+|---|---|
+| **Reviewer** | Iman Schrock (EMILIA Protocol) |
+| **Source** | Same focused review |
+| **Finding** | Permission confirmed for the personal acknowledgement in the form **"Iman Schrock, EMILIA Protocol"**. |
+| **Disposition** | `RECORDED` |
+| **Effect on the candidate** | The open question in worklist item `E3` — whether the fixture-attribution request extends to a personal acknowledgement — is **closed by the contributor's own confirmation**. The fallback of removing the personal name before submission is no longer needed. The acknowledgement scope now also covers target multiplicity, the required-target and freeze-race fixture, in-flight operation semantics, and provenance review. |
+| **Status** | `RECORDED` |
+
+---
+
+---
+
+# Closure of the focused review round, and the author-side reproduction
+
+Three objects are kept separate below and are never merged:
+
+1. **the reviewer measurement** — what a reviewer reported;
+2. **the author-side reproduction** — what this work area independently reran; and
+3. **the draft requirement** — what the document says.
+
+A reproduction of (1) is not evidence for (3), and neither is an implementation
+of the draft.
+
+---
+
+## E-16 — Emek Can Dogru: dispositions checked against the current candidate
+
+| Field | Value |
+|---|---|
+| **Reviewer** | Emek Can Dogru |
+| **Artifact checked** | Candidate XML SHA-256 `11884630dcb89082d88f838051e19b4736b4908c67cca2f65725ac3ed46501a7` |
+| **Finding** | The reviewer checked the **changed passages** on that digest and stated that the dispositions reflect what he meant. |
+| **Scope limit** | **This is not a full-document review**, and is not recorded as one. The reviewer checked the passages that changed in response to his findings; he made no statement about the rest of the document. |
+| **Disposition** | `FOCUSED REVIEW COMPLETED` — closure of `E-8` … `E-15` on the changed passages |
+| **Status** | `RECORDED` |
+
+---
+
+## I-13 — Iman Schrock: dispositions checked against the current candidate
+
+| Field | Value |
+|---|---|
+| **Reviewer** | Iman Schrock (EMILIA Protocol) |
+| **Artifact checked** | Candidate XML SHA-256 `11884630dcb89082d88f838051e19b4736b4908c67cca2f65725ac3ed46501a7` |
+| **Finding** | The reviewer checked the **changed passages** on that digest and closed his focused review. |
+| **Scope limit** | **This is not a full-document review**, and is not recorded as one. |
+| **Disposition** | `FOCUSED REVIEW COMPLETED` — closure of `I-7` … `I-12` on the changed passages |
+| **Status** | `RECORDED` |
+
+---
+
+## A-1 — Author-side reproduction of the Cedulon focused-review measurements
+
+**This is not a reviewer finding.** It is an evidence event produced by this work
+area, recorded in the ledger so it stays visibly distinct from the reviewer
+measurement it reproduces.
+
+| Field | Value |
+|---|---|
+| **Performed by** | the author, 4 September 2026 |
+| **Object** | The measurements Emek Can Dogru reported during focused review (`E-13`, `E-14`, and the measured basis of `E-8`) |
+| **Method** | The reviewer's own pinned case driver — `dogrucanemek-alt/cedulon`, commit `52cf577`, `interop/abak-00/cases-0.12.0.mjs`, observed SHA-256 `f7f1218abd1535f104b0010b9127c565b3afab0e72242583ebc459000937bc8e`, 135 lines, 6 153 bytes, LF only — run **byte-for-byte unmodified** against the published npm package sets `0.12.0` and `0.8.0`, from two separate clean directories created outside every git clone. Both graphs resolved homogeneously (seven `@cedulon` packages each, no third-party dependencies). No lifecycle install scripts exist in either graph, so `--ignore-scripts` was **not** used and the reviewer's invocation contract was preserved. |
+| **Result** | `node` exit `0` and empty `stderr` for both runs. **All seven reviewer-reported behaviors reproduced; no claim failed and no mismatch was observed.** Reproduced: structural-success-plus-`conditional` with `unstated-audit-window` / `unstated-audit-scope`; `unauthenticated-extract` on omitted rail trust; structural `FAIL` returned while the qualification axis reports the comparison population was never established; `aborted=1` / `settled=0` class counts published at `0.12.0` and absent at `0.8.0`; the carried closing-boundary row exposed in `0.12.0` counts; multiple layered diagnostics on one malformed record; and `settlement-comparison-skipped` present at `0.12.0` only. |
+| **Evidence** | `../external-evidence/cedulon-review-reproduction-2026-09-04/` — raw stdout/stderr, dependency graphs, registry metadata for all fourteen package-versions, environment, `SHA256SUMS.txt`, and a case-by-case matrix in `RESULTS.md`. |
+| **Effect on E-14** | The staleness recorded at `E-14` is now **directly confirmed here**: `settlement-comparison-skipped` is emitted at `0.12.0` and by no `0.8.0` case. `E-14`'s disposition is unchanged. |
+| **What was NOT done** | The historical 1 September probe — commit `0a3fa04`, SHA-256 `031f84fda2054b1427a510baa45f880d379ea60dced408a4a74028da12b1fceb` — was **not** repinned, edited, replaced, or corrected. The reproduction is a separate, later evidence event with its own driver, packages, and date. No Cedulon source was vendored into this repository. |
+| **Explicit non-claims** | This is an **author-side reproduction**, not an *independent implementation* of Cedulon, not an implementation of this document, not a conformance result, and not an interoperability result. Cedulon remains adjacent-domain evaluation evidence. The reproduction changed **no normative requirement**; in particular the rule that structural `FAIL` must not be inferred solely from missing evidence was neither modified nor weakened by it. |
+| **Disposition** | `AUTHOR-SIDE REPRODUCTION` |
+| **Status** | `RECORDED` |
+
+---
+
 ## Index
 
 | ID | Reviewer | Disposition | Status |
@@ -350,3 +652,35 @@ one-paragraph endorsement of the seam already tracked as T-1 and W-1).
 | E-5 | Emek Can Dogru | `EXTERNAL VALIDATION OF EXISTING -00 RULE` | RECORDED |
 | E-6 | Emek Can Dogru | `OPEN / NEEDS DESIGN` | OPEN |
 | E-7 | Emek Can Dogru | `NO CHANGE REQUIRED` | RECORDED |
+
+### Focused pre-submission review round on the `-01` candidate
+
+Reviewed artifact: candidate XML SHA-256
+`da64a03846e03f3868aa2fa54682c87d338a4dedcbc1dc4b5642cdfea79a81c6`.
+The reviewers have **not** reviewed the updated candidate produced by these
+dispositions.
+
+| ID | Reviewer | Disposition | Status |
+|---|---|---|---|
+| E-8 | Emek Can Dogru | `FOCUSED REVIEW COMPLETED` | RECORDED |
+| E-9 | Emek Can Dogru | `ACCEPTED FOR -01` | APPLIED IN CANDIDATE |
+| E-10 | Emek Can Dogru (supported by Iman Schrock) | `ACCEPTED FOR -01` | APPLIED IN CANDIDATE |
+| E-11 | Emek Can Dogru | `ACCEPTED FOR -01` | APPLIED IN CANDIDATE |
+| E-12 | Emek Can Dogru | `ACCEPTED FOR -01` | APPLIED IN CANDIDATE |
+| E-13 | Emek Can Dogru | `EXTERNAL VALIDATION OF EXISTING RULE` | APPLIED IN CANDIDATE (conformance coverage only) |
+| E-14 | Emek Can Dogru | `RECORDED` — no silent repin | RECORDED |
+| E-15 | Emek Can Dogru | `RECORDED` — acknowledgement permission | RECORDED |
+| I-7 | Iman Schrock | `FOCUSED REVIEW COMPLETED` / `NO CHANGE REQUIRED` | RECORDED |
+| I-8 | Iman Schrock | `FOCUSED REVIEW COMPLETED` / `NO CHANGE REQUIRED` | RECORDED |
+| I-9 | Iman Schrock | `ACCEPTED FOR -01` | APPLIED IN CANDIDATE |
+| I-10 | Iman Schrock | `NO CHANGE REQUIRED` — verified by reviewer | RECORDED |
+| I-11 | Iman Schrock | `SUPPORTING REVIEW` of E-10 | RECORDED |
+| I-12 | Iman Schrock | `RECORDED` — acknowledgement permission | RECORDED |
+
+### Closure and author-side reproduction
+
+| ID | Actor | Disposition | Status |
+|---|---|---|---|
+| E-16 | Emek Can Dogru | `FOCUSED REVIEW COMPLETED` — changed passages on `11884630…01a7`; **not a full-document review** | RECORDED |
+| I-13 | Iman Schrock | `FOCUSED REVIEW COMPLETED` — changed passages on `11884630…01a7`; **not a full-document review** | RECORDED |
+| A-1 | **the author** (not a reviewer) | `AUTHOR-SIDE REPRODUCTION` of the Cedulon measurements | RECORDED |

@@ -1,0 +1,266 @@
+
+=== d. balanced, full trust, window+scope declared
+keys: ok, findings, warnings, guarantee, summary, counts, scope
+{
+ "ok": true,
+ "guarantee": "unconditional",
+ "summary": "audit: balanced",
+ "counts": {
+  "receipts": {
+   "submitted": 1,
+   "attested": 1,
+   "inScope": 1,
+   "aborted": 0,
+   "settled": 1,
+   "matched": 1,
+   "deferred": 0,
+   "carried": 0,
+   "unmatched": 0,
+   "repeated": 0,
+   "unreconciled": 0
+  },
+  "settlements": {
+   "rows": 1,
+   "matched": 1,
+   "deferred": 0,
+   "unmatched": 0,
+   "repeated": 0,
+   "unreconciled": 0
+  }
+ },
+ "scope": {
+  "accountId": "acct",
+  "railId": "rail",
+  "windowStartMs": 1700000000000,
+  "windowEndMs": 1700003600000
+ }
+}
+findings: (none)
+warnings: counterparty-unbound(counterparty)
+
+=== e. balanced, NO rail key, NO window, NO scope (trust omitted)
+keys: ok, findings, warnings, guarantee, summary, counts, scope
+{
+ "ok": true,
+ "guarantee": "conditional",
+ "summary": "audit: balanced",
+ "counts": {
+  "receipts": {
+   "submitted": 1,
+   "attested": 1,
+   "inScope": 1,
+   "aborted": 0,
+   "settled": 1,
+   "matched": 1,
+   "deferred": 0,
+   "carried": 0,
+   "unmatched": 0,
+   "repeated": 0,
+   "unreconciled": 0
+  },
+  "settlements": {
+   "rows": 1,
+   "matched": 1,
+   "deferred": 0,
+   "unmatched": 0,
+   "repeated": 0,
+   "unreconciled": 0
+  }
+ },
+ "scope": {
+  "accountId": "acct",
+  "railId": "rail",
+  "windowStartMs": 1700000000000,
+  "windowEndMs": 1700003600000
+ }
+}
+findings: (none)
+warnings: unauthenticated-extract(extract), counterparty-unbound(counterparty)
+
+=== e2. balanced, rail key pinned, window+scope NOT declared
+keys: ok, findings, warnings, guarantee, summary, counts, scope
+{
+ "ok": true,
+ "guarantee": "conditional",
+ "summary": "audit: balanced",
+ "counts": {
+  "receipts": {
+   "submitted": 1,
+   "attested": 1,
+   "inScope": 1,
+   "aborted": 0,
+   "settled": 1,
+   "matched": 1,
+   "deferred": 0,
+   "carried": 0,
+   "unmatched": 0,
+   "repeated": 0,
+   "unreconciled": 0
+  },
+  "settlements": {
+   "rows": 1,
+   "matched": 1,
+   "deferred": 0,
+   "unmatched": 0,
+   "repeated": 0,
+   "unreconciled": 0
+  }
+ },
+ "scope": {
+  "accountId": "acct",
+  "railId": "rail",
+  "windowStartMs": 1700000000000,
+  "windowEndMs": 1700003600000
+ }
+}
+findings: (none)
+warnings: unstated-audit-window(extract), unstated-audit-scope(extract), counterparty-unbound(counterparty)
+
+=== b. closing-boundary receipt, next window names it
+keys: ok, findings, warnings, guarantee, summary, counts, scope
+{
+ "ok": true,
+ "guarantee": "unconditional",
+ "summary": "audit: balanced",
+ "counts": {
+  "receipts": {
+   "submitted": 1,
+   "attested": 1,
+   "inScope": 1,
+   "aborted": 0,
+   "settled": 1,
+   "matched": 0,
+   "deferred": 0,
+   "carried": 1,
+   "unmatched": 0,
+   "repeated": 0,
+   "unreconciled": 0
+  },
+  "settlements": {
+   "rows": 0,
+   "matched": 0,
+   "deferred": 0,
+   "unmatched": 0,
+   "repeated": 0,
+   "unreconciled": 0
+  }
+ },
+ "scope": {
+  "accountId": "acct",
+  "railId": "rail",
+  "windowStartMs": 1700000000000,
+  "windowEndMs": 1700003600000
+ }
+}
+findings: (none)
+warnings: counterparty-unbound(counterparty)
+
+=== c. aborted receipt (refused spend)
+keys: ok, findings, warnings, guarantee, summary, counts, scope
+{
+ "ok": true,
+ "guarantee": "unconditional",
+ "summary": "audit: balanced",
+ "counts": {
+  "receipts": {
+   "submitted": 1,
+   "attested": 1,
+   "inScope": 1,
+   "aborted": 1,
+   "settled": 0,
+   "matched": 0,
+   "deferred": 0,
+   "carried": 0,
+   "unmatched": 0,
+   "repeated": 0,
+   "unreconciled": 0
+  },
+  "settlements": {
+   "rows": 0,
+   "matched": 0,
+   "deferred": 0,
+   "unmatched": 0,
+   "repeated": 0,
+   "unreconciled": 0
+  }
+ },
+ "scope": {
+  "accountId": "acct",
+  "railId": "rail",
+  "windowStartMs": 1700000000000,
+  "windowEndMs": 1700003600000
+ }
+}
+findings: (none)
+warnings: counterparty-unbound(counterparty)
+
+=== f. malformed issuer record (many-to-one)
+keys: ok, findings, warnings, guarantee, summary, counts, scope
+{
+ "ok": false,
+ "guarantee": "unconditional",
+ "summary": "audit: 1 settlement without receipt → FAIL",
+ "counts": {
+  "receipts": {
+   "submitted": 1,
+   "attested": 0,
+   "inScope": 0,
+   "aborted": 0,
+   "settled": 0,
+   "matched": 0,
+   "deferred": 0,
+   "carried": 0,
+   "unmatched": 0,
+   "repeated": 0,
+   "unreconciled": 0
+  },
+  "settlements": {
+   "rows": 1,
+   "matched": 0,
+   "deferred": 0,
+   "unmatched": 1,
+   "repeated": 0,
+   "unreconciled": 0
+  }
+ },
+ "scope": {
+  "accountId": "acct",
+  "railId": "rail",
+  "windowStartMs": 1700000000000,
+  "windowEndMs": 1700003600000
+ }
+}
+findings: malformed-policy-hash(n8--------------), settlement-without-receipt(r8), receipt-chain-break(n8--------------), checkpoint-total-mismatch(epoch-1), checkpoint-total-mismatch(epoch-1-count), checkpoint-head-mismatch(epoch-1-head)
+warnings: counterparty-unbound(counterparty)
+
+=== g. rail key pinned, extract signed by a DIFFERENT key (refused)
+ok=false  guarantee=conditional  summary="audit: 1 finding(s) → FAIL"
+counts.receipts: {"submitted":1,"attested":1,"inScope":1,"aborted":0,"settled":1,"matched":0,"deferred":0,"carried":0,"unmatched":0,"repeated":0,"unreconciled":1}
+counts.settlements: {"rows":1,"matched":0,"deferred":0,"unmatched":0,"repeated":0,"unreconciled":1}
+scope: {"accountId":"acct","railId":"rail","windowStartMs":1700000000000,"windowEndMs":1700003600000}
+findings: extract-key-mismatch(extract)
+warnings: settlement-comparison-skipped(extract), counterparty-unbound(counterparty)
+
+=== h. rail key pinned, NO extract supplied at all
+ok=false  guarantee=conditional  summary="audit: 1 finding(s) → FAIL"
+counts.receipts: {"submitted":1,"attested":1,"inScope":1,"aborted":0,"settled":1,"matched":0,"deferred":0,"carried":0,"unmatched":1,"repeated":0,"unreconciled":0}
+counts.settlements: {"rows":0,"matched":0,"deferred":0,"unmatched":0,"repeated":0,"unreconciled":0}
+scope: undefined
+findings: receipt-without-settlement(n1--------------)
+warnings: unauthenticated-extract(extract)
+
+=== i. no rail key, NO extract supplied at all
+ok=false  guarantee=conditional  summary="audit: 1 finding(s) → FAIL"
+counts.receipts: {"submitted":1,"attested":1,"inScope":1,"aborted":0,"settled":1,"matched":0,"deferred":0,"carried":0,"unmatched":1,"repeated":0,"unreconciled":0}
+counts.settlements: {"rows":0,"matched":0,"deferred":0,"unmatched":0,"repeated":0,"unreconciled":0}
+scope: undefined
+findings: receipt-without-settlement(n1--------------)
+warnings: unauthenticated-extract(extract)
+
+=== j. extract declares a DIFFERENT account than pinned
+ok=false  guarantee=conditional  summary="audit: 1 finding(s) → FAIL"
+counts.receipts: {"submitted":1,"attested":1,"inScope":1,"aborted":0,"settled":1,"matched":1,"deferred":0,"carried":0,"unmatched":0,"repeated":0,"unreconciled":0}
+counts.settlements: {"rows":1,"matched":1,"deferred":0,"unmatched":0,"repeated":0,"unreconciled":0}
+scope: {"accountId":"other","railId":"rail","windowStartMs":1700000000000,"windowEndMs":1700003600000}
+findings: extract-scope-mismatch(extract)
+warnings: counterparty-unbound(counterparty)

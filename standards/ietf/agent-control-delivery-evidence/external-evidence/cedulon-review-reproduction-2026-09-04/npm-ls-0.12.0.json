@@ -1,0 +1,95 @@
+{
+  "version": "1.0.0",
+  "name": "cedulon-run-0120-bif7l6",
+  "dependencies": {
+    "@cedulon/audit": {
+      "version": "0.12.0",
+      "resolved": "https://registry.npmjs.org/@cedulon/audit/-/audit-0.12.0.tgz",
+      "overridden": false,
+      "dependencies": {
+        "@cedulon/checkpoint": {
+          "version": "0.12.0"
+        },
+        "@cedulon/cose": {
+          "version": "0.12.0",
+          "resolved": "https://registry.npmjs.org/@cedulon/cose/-/cose-0.12.0.tgz",
+          "overridden": false
+        },
+        "@cedulon/manifest": {
+          "version": "0.12.0",
+          "resolved": "https://registry.npmjs.org/@cedulon/manifest/-/manifest-0.12.0.tgz",
+          "overridden": false,
+          "dependencies": {
+            "@cedulon/core": {
+              "version": "0.12.0"
+            },
+            "@cedulon/cose": {
+              "version": "0.12.0"
+            }
+          }
+        },
+        "@cedulon/receipts": {
+          "version": "0.12.0"
+        },
+        "@cedulon/x402-adapter": {
+          "version": "0.12.0"
+        }
+      }
+    },
+    "@cedulon/checkpoint": {
+      "version": "0.12.0",
+      "resolved": "https://registry.npmjs.org/@cedulon/checkpoint/-/checkpoint-0.12.0.tgz",
+      "overridden": false,
+      "dependencies": {
+        "@cedulon/core": {
+          "version": "0.12.0",
+          "resolved": "https://registry.npmjs.org/@cedulon/core/-/core-0.12.0.tgz",
+          "overridden": false,
+          "dependencies": {
+            "@cedulon/cose": {
+              "version": "0.12.0"
+            }
+          }
+        },
+        "@cedulon/cose": {
+          "version": "0.12.0"
+        },
+        "@cedulon/receipts": {
+          "version": "0.12.0"
+        }
+      }
+    },
+    "@cedulon/receipts": {
+      "version": "0.12.0",
+      "resolved": "https://registry.npmjs.org/@cedulon/receipts/-/receipts-0.12.0.tgz",
+      "overridden": false,
+      "dependencies": {
+        "@cedulon/core": {
+          "version": "0.12.0"
+        },
+        "@cedulon/cose": {
+          "version": "0.12.0"
+        }
+      }
+    },
+    "@cedulon/x402-adapter": {
+      "version": "0.12.0",
+      "resolved": "https://registry.npmjs.org/@cedulon/x402-adapter/-/x402-adapter-0.12.0.tgz",
+      "overridden": false,
+      "dependencies": {
+        "@cedulon/core": {
+          "version": "0.12.0"
+        },
+        "@cedulon/cose": {
+          "version": "0.12.0"
+        },
+        "@cedulon/manifest": {
+          "version": "0.12.0"
+        },
+        "@cedulon/receipts": {
+          "version": "0.12.0"
+        }
+      }
+    }
+  }
+}

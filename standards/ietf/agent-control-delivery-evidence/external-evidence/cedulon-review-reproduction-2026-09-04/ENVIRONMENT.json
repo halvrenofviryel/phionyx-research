@@ -1,0 +1,64 @@
+{
+  "reproduction_utc": "2026-09-04T03:19:23Z",
+  "os": "Linux 6.11.0-29-generic #29~24.04.1-Ubuntu SMP PREEMPT_DYNAMIC Thu Jun 26 14:16:59 UTC 2",
+  "arch": "x86_64",
+  "node": "v20.19.6",
+  "npm": "10.8.2",
+  "npm_registry": "https://registry.npmjs.org/",
+  "driver": {
+    "repository": "dogrucanemek-alt/cedulon",
+    "commit": "52cf577",
+    "path": "interop/abak-00/cases-0.12.0.mjs",
+    "raw_url": "https://raw.githubusercontent.com/dogrucanemek-alt/cedulon/52cf577/interop/abak-00/cases-0.12.0.mjs",
+    "observed_sha256": "f7f1218abd1535f104b0010b9127c565b3afab0e72242583ebc459000937bc8e",
+    "lines": 135,
+    "bytes": 6153,
+    "cr_bytes": 0,
+    "file": "JavaScript source, ASCII text",
+    "vendored_into_this_repository": false
+  },
+  "runs": [
+    {
+      "version": "0.12.0",
+      "directory_kind": "fresh mktemp -d outside every git clone",
+      "npm_install_exit": 0,
+      "node_exit": 0,
+      "stderr_bytes": 0,
+      "stdout_sha256": "d01ac0e023a3c8f6f376a4235a9adb6b3e2ef4d64dc3bd9dfc27921fbb5bd25e",
+      "package_lock_sha256": "2e5abc4b453475893cb5ed6c6160cd50d6e5fcf87e059cf06adc5d24eb90a239",
+      "resolved_cedulon_packages": {
+        "@cedulon/audit": "0.12.0", "@cedulon/checkpoint": "0.12.0", "@cedulon/core": "0.12.0",
+        "@cedulon/cose": "0.12.0", "@cedulon/manifest": "0.12.0", "@cedulon/receipts": "0.12.0",
+        "@cedulon/x402-adapter": "0.12.0"
+      },
+      "graph_homogeneous_at_requested_version": true
+    },
+    {
+      "version": "0.8.0",
+      "directory_kind": "second fresh mktemp -d outside every git clone",
+      "npm_install_exit": 0,
+      "node_exit": 0,
+      "stderr_bytes": 0,
+      "stdout_sha256": "201d0a527234be8e702debd005e437ae08d4c28db842d64462f7a29b4157a8a7",
+      "package_lock_sha256": "dbe8f166bea9dba0c8046c9e7d29108299d46bc3849fd323e9b43d427862b158",
+      "resolved_cedulon_packages": {
+        "@cedulon/audit": "0.8.0", "@cedulon/checkpoint": "0.8.0", "@cedulon/core": "0.8.0",
+        "@cedulon/cose": "0.8.0", "@cedulon/manifest": "0.8.0", "@cedulon/receipts": "0.8.0",
+        "@cedulon/x402-adapter": "0.8.0"
+      },
+      "graph_homogeneous_at_requested_version": true
+    }
+  ],
+  "lifecycle_scripts_checked_before_install": {
+    "checked": ["preinstall", "install", "postinstall"],
+    "packages_checked": 14,
+    "found": "none; every package publishes only a build script, which npm does not run on install",
+    "ignore_scripts_used": false
+  },
+  "historical_probe": {
+    "commit": "0a3fa04",
+    "sha256": "031f84fda2054b1427a510baa45f880d379ea60dced408a4a74028da12b1fceb",
+    "repinned": false,
+    "modified": false
+  }
+}
