@@ -348,9 +348,16 @@ standards/ietf/agent-control-delivery-evidence/draft/candidate/01/draft-abak-age
 SHA-256 da64a03846e03f3868aa2fa54682c87d338a4dedcbc1dc4b5642cdfea79a81c6
 ```
 
-Those are the exact bytes reviewed. The dispositions below were applied to the
-candidate afterwards, producing a **new candidate digest**. Neither reviewer has
-reviewed the updated bytes, and this ledger does not claim that they have.
+Those are the exact bytes reviewed in this round, each reviewer within the
+review scope this work area requested. The dispositions below were applied to the
+candidate afterwards, producing the disposition candidate
+`11884630dcb89082d88f838051e19b4736b4908c67cca2f65725ac3ed46501a7`. **Both
+reviewers then checked the changed passages on that digest and closed their
+focused reviews** — recorded at `E-16` and `I-13`. **Neither claimed a
+full-document review, and this ledger does not record one.** Candidates after
+that digest — the post-reproduction bytes and the pre-submission date update —
+have **not** been reviewed by either reviewer, and this ledger does not claim
+that they have.
 
 **What these entries are.** They are **public reviewer findings** plus this work
 area's own disposition of them. They are not IETF consensus, not a working-group

@@ -6,8 +6,8 @@
 record.
 
 - **A repository candidate `-01` now exists.** It is stored at
-  `../draft/candidate/01/` and dated 3 September 2026. This worklist is
-  reconciled against that candidate's actual text.
+  `../draft/candidate/01/` and dated 4 September 2026 as of the pre-submission
+  update. This worklist is reconciled against that candidate's actual text.
 - **The candidate has been revised once since the focused review round**
   (2026-09-04). Candidate provenance:
 
@@ -15,12 +15,18 @@ record.
   |---|---|---|
   | Initial focused-review candidate | `da64a03846e03f3868aa2fa54682c87d338a4dedcbc1dc4b5642cdfea79a81c6` | Emek Can Dogru; Iman Schrock |
   | Focused-review disposition candidate | `11884630dcb89082d88f838051e19b4736b4908c67cca2f65725ac3ed46501a7` | Emek and Iman each checked the **changed passages** on this digest (ledger `E-16`, `I-13`) — **not a full-document review** |
-  | Current candidate, post-reproduction | `98c6ad0d1560028e56e0ddd619c2f1e8ebbc3becb58cd48d569368f880e383f9` | **not reviewed by either reviewer** |
+  | Post-reproduction candidate | `98c6ad0d1560028e56e0ddd619c2f1e8ebbc3becb58cd48d569368f880e383f9` | **not reviewed by either reviewer** |
+  | Current candidate, pre-submission | `b7d515006a650644e94ddefb24df74b74b9946b39c57b4a077946e8880295ada` | **not reviewed by either reviewer** |
 
-  Both reviewers assessed the initial digest. **Neither has reviewed the updated
-  bytes**, and nothing in this file may be read as saying they have. The
-  document remains `draft-abak-agent-control-delivery-evidence-01`; this is a
-  candidate revision, not a new Internet-Draft revision number.
+  Both reviewers gave a focused review of the initial digest within the
+  requested scope, and **both subsequently checked the changed passages on the
+  disposition candidate and closed their focused reviews** (ledger `E-16`,
+  `I-13`). **Neither claimed a full-document review.** Neither has reviewed the
+  post-reproduction or pre-submission bytes, and nothing in this file may be read
+  as saying they have — those steps changed evidence bookkeeping, provenance
+  wording, and the document date only, with **no normative change**. The document
+  remains `draft-abak-agent-control-delivery-evidence-01`; these are candidate
+  revisions, not new Internet-Draft revision numbers.
 - **The candidate is not an IETF-submitted revision.** It has not been posted to
   the Datatracker. The published baseline of this document remains `-00`.
 - **The worklist remains a traceability/review record**, not a specification and

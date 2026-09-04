@@ -3,7 +3,7 @@
 **Document:** *Evidence Requirements for Agent Control Delivery and Outcome Reconciliation*  
 **Author:** Ali Toygar Abak  
 **Change interval:** `draft-abak-agent-control-delivery-evidence-00` → `draft-abak-agent-control-delivery-evidence-01`  
-**Prepared:** 3 September 2026
+**Prepared:** 3 September 2026; revised 4 September 2026
 
 > **Status of this file:** This is an explanatory, non-normative changelog. It describes the substantive differences between the published `-00` and the current `-01` candidate. If this file and the RFCXML differ, the RFCXML controls.
 
@@ -11,7 +11,7 @@
 
 | Item | `-00` | `-01` candidate |
 |---|---|---|
-| Document date | 30 August 2026 | 3 September 2026 |
+| Document date | 30 August 2026 | 4 September 2026 |
 | Model | Primarily one instruction ↔ one intended enforcement point | One instruction ↔ one or more required enforcement targets |
 | Reconciliation unit | Instruction | Instruction-target **Delivery Obligation** |
 | Normative requirements | R-CD-1 through R-CD-14 | R-CD-1 through R-CD-16 |
@@ -440,13 +440,17 @@ That is the principal semantic difference between `-00` and `-01`.
   - `draft-abak-agent-control-delivery-evidence-01`
   - document date: 3 September 2026
   - XML SHA-256: `da64a03846e03f3868aa2fa54682c87d338a4dedcbc1dc4b5642cdfea79a81c6`
-  - reviewed by Emek Can Dogru and Iman Schrock
+  - **focused review** by Emek Can Dogru and Iman Schrock, each within the
+    requested review scope
 
-- Current `-01` candidate (after the 4 September 2026 review refinements):
+- Current `-01` candidate (after the 4 September 2026 review refinements,
+  the author-side Cedulon reproduction, and the pre-submission date update):
   - `draft-abak-agent-control-delivery-evidence-01`
-  - XML SHA-256: `98c6ad0d1560028e56e0ddd619c2f1e8ebbc3becb58cd48d569368f880e383f9`
+  - document date: 4 September 2026
+  - XML SHA-256: `b7d515006a650644e94ddefb24df74b74b9946b39c57b4a077946e8880295ada`
   - the changelog digest is recorded in `SHA256SUMS.txt` beside this file
-  - **not yet reviewed by either reviewer**
+  - **not reviewed by either reviewer.** The intermediate disposition candidate
+    `11884630…01a7` *was* checked by both — see the full chain in §10.5.
 
 - Current implementation/evaluation pins referenced by `-01` include:
   - AIREP snapshot: `a3973ce3b6ad984635867a2bb52d83c472e5c0cb`
@@ -471,14 +475,20 @@ Both reviewers assessed the candidate at
 XML SHA-256 da64a03846e03f3868aa2fa54682c87d338a4dedcbc1dc4b5642cdfea79a81c6
 ```
 
-The changes below were applied **afterwards** and produce a **new candidate
+The changes below were applied **afterwards** and produced a **new candidate
 digest**:
 
 ```
-XML SHA-256 98c6ad0d1560028e56e0ddd619c2f1e8ebbc3becb58cd48d569368f880e383f9
+XML SHA-256 11884630dcb89082d88f838051e19b4736b4908c67cca2f65725ac3ed46501a7
 ```
 
-**Neither reviewer has reviewed the updated bytes.** Nothing here is
+**Both reviewers subsequently checked the changed passages on that digest and
+closed their focused reviews** — Emek Can Dogru stating that the dispositions
+reflect what he meant, Iman Schrock closing his (ledger `E-16`, `I-13`).
+**Neither claimed a full-document review, and neither is recorded as having
+given one.** Later candidates — the post-reproduction bytes and the
+pre-submission date update — have **not** been reviewed by either reviewer; the
+complete chain is in §10.5. Nothing here is
 IETF consensus, a working-group position, an adoption action, a Datatracker
 submission, or a new Internet-Draft revision number. The document remains
 `draft-abak-agent-control-delivery-evidence-01`; this is a revision of the
@@ -771,6 +781,69 @@ result. Cedulon remains adjacent-domain evaluation evidence.
 | Initial focused-review candidate | `da64a03846e03f3868aa2fa54682c87d338a4dedcbc1dc4b5642cdfea79a81c6` | focused review by Emek Can Dogru and Iman Schrock, each within the requested review scope |
 | Focused-review disposition candidate | `11884630dcb89082d88f838051e19b4736b4908c67cca2f65725ac3ed46501a7` | each reviewer checked the **changed passages** only — **not a full-document review** |
 | Post-reproduction candidate | `98c6ad0d1560028e56e0ddd619c2f1e8ebbc3becb58cd48d569368f880e383f9` | **not reviewed by either reviewer** |
+| Pre-submission candidate (current) | `b7d515006a650644e94ddefb24df74b74b9946b39c57b4a077946e8880295ada` | **not reviewed by either reviewer** |
 
-Neither reviewer has reviewed the post-reproduction bytes, and nothing in this
-file may be read as saying otherwise.
+Neither reviewer has reviewed the post-reproduction or pre-submission bytes, and
+nothing in this file may be read as saying otherwise. The step from the
+disposition candidate onward changed evidence bookkeeping, provenance wording,
+and the document date only; **no normative requirement changed**, so no further
+review round was requested for it.
+
+---
+
+## 11. Pre-submission finalization — 4 September 2026
+
+**No normative change. No model change. No conformance-case change.**
+
+Prepared for Datatracker submission of `-01` on 4 September 2026.
+
+### 11.1 Provenance wording cleanup
+
+Statements written before the reviewers closed their focused reviews had gone
+stale and, read literally, denied a check that had in fact happened. They are
+corrected so the record states exactly what each reviewer did:
+
+| Candidate | Corrected statement |
+|---|---|
+| `da64a038…81c6` | **focused review** by Emek Can Dogru and Iman Schrock, each within the requested review scope — not "reviewed in full" |
+| `11884630…01a7` | both reviewers **checked the changed passages** and closed their focused reviews (`E-16`, `I-13`); **neither claimed a full-document review** |
+| `98c6ad0d…83f9` and later | **not reviewed by either reviewer** unless separately recorded |
+
+Corrected in this changelog (§8, §9.1, §10.5), `reviews/REVIEW_LEDGER.md`, and
+`reviews/DRAFT_01_WORKLIST.md`. **No technical disposition was changed.**
+
+### 11.2 Dates
+
+Two date values changed in the RFCXML, and only these two:
+
+- the front/document date, `3 September 2026` → **`4 September 2026`**;
+- the Implementation Status evidence-cutoff sentence, "available as of
+  3 September 2026" → **"available as of 4 September 2026"**.
+
+The cutoff change is a **correction**, not a shift: that section now describes
+the author-side Cedulon reproduction performed on 4 September 2026, so a
+3 September cutoff understated the evidence the section actually contains.
+
+**Dates inside references were not touched.** In particular the
+`DOGRU-REVIEW-CASES` reference keeps its own 3 September 2026 date, because that
+is when the reviewer's case driver was written.
+
+### 11.3 Deferred
+
+`draft-dogru-cedulon-decision-profile-00` is **not** cited or added in this pass.
+It is new adjacent work and is deferred for later consideration.
+
+### 11.4 Candidate identity
+
+| | XML SHA-256 |
+|---|---|
+| Before this pass | `98c6ad0d1560028e56e0ddd619c2f1e8ebbc3becb58cd48d569368f880e383f9` |
+| **Pre-submission candidate** | `b7d515006a650644e94ddefb24df74b74b9946b39c57b4a077946e8880295ada` |
+
+The digest changed because the document date changed. That is an expected and
+recorded transformation, not a break in provenance: the chain is
+`da64a038…` → `11884630…` → `98c6ad0d…` → `b7d515006a650644e94ddefb24df74b74b9946b39c57b4a077946e8880295ada`.
+
+Because no normative requirement, no reconciliation rule, no conformance case
+and no population equation changed in this pass, **no further review round was
+requested from either reviewer for it.**
