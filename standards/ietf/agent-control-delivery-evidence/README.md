@@ -13,27 +13,36 @@ during review, and the open worklist for a future revision.
 
 Two states are tracked here and they are **not** the same thing.
 
-- **Current published baseline: `-00`.** Submitted 2026-08-29, posted
-  2026-08-31, dated 30 August 2026 in the document itself. The artifacts under
-  `draft/published/00/` are the immutable published baseline and the
-  authoritative statement of what `-00` says.
-- **Current repository candidate: `-01`, dated 3 September 2026.** The author's
-  candidate XML, its `-00` → `-01` changelog, and byte-level checksums are
-  stored under `draft/candidate/01/`. This is an **author working candidate held
-  in this repository**. It is not an IETF artifact and carries no Internet-Draft
-  status.
-- **`-01` has NOT been submitted to the IETF.** It does not appear on the
-  Datatracker, it has not been posted, and it must not be cited or described as
-  a published, submitted, adopted, or accepted revision. Where a revision of
-  this draft is referenced as published, that revision is `-00`.
-- **Review is ongoing.** The public thread is open and no review freeze has been
-  declared. The ledger and worklist here are working records, not final
-  dispositions. The existence of candidate `-01` text does not close any review
-  item and does not convert a reviewer's finding into an agreed outcome.
+- **Current published baseline: `-01`.** Submitted and posted 2026-09-04,
+  dated 4 September 2026 in the document itself, 46 pages. The artifacts under
+  `draft/published/01/` are retrieved unmodified from the IETF archive and are
+  the authoritative statement of what `-01` says.
+- **Previous published revision: `-00`.** Submitted 2026-08-29, posted
+  2026-08-31, dated 30 August 2026. It remains stored unmodified under
+  `draft/published/00/` as the immutable earlier baseline. It is superseded as
+  the current revision, not withdrawn or corrected.
+- **`draft/candidate/01/` is retained as provenance, not as the draft.** It
+  holds the author's pre-submission working candidate, its `-00` → `-01`
+  changelog, and the byte-level digest chain that led to the submitted bytes. It
+  is **not** the authoritative statement of what `-01` says — `draft/published/01/`
+  is. The candidate directory is kept because the review and disposition history
+  is only checkable against it.
+- **The submitted bytes are byte-identical to the final candidate.** The
+  published XML digest
+  `05a95b598c8ebd462ffbcf3ed9a7fedcd08d8555053c8ec57ea43447c3cd64ca` equals the
+  final candidate digest recorded in `draft/candidate/01/SHA256SUMS.txt`, so the
+  candidate-to-published transition introduced no change.
+- **Review is ongoing.** The focused pre-submission review round is closed and
+  its dispositions are recorded, but the public thread remains open and no
+  review freeze has been declared. The ledger and worklist here are working
+  records. Publication of `-01` is **not** evidence that a reviewer agreed with
+  any resolution chosen.
 - **Intended status: Informational** (`category="info"` in the published XML;
   "Intended status: Informational" in the published text).
 - On the IETF Datatracker the document is associated with the group
-  **"Individual Submissions"**, document state *Active / I-D Exists*.
+  **"Individual Submissions"**, document state *Active / I-D Exists*. As of the
+  `-01` posting the Datatracker record carries **no stream assignment**, which is
+  why the submitted RFCXML deliberately omits `submissionType`.
 
 ## What this directory is not
 
@@ -48,11 +57,14 @@ Two states are tracked here and they are **not** the same thing.
   comments are all distinct from adoption. Reviewer prose in the thread —
   including welcoming or supportive wording — is reviewer opinion and is
   recorded as such.
-- **This is not a normative source.** The published `-00` files under
-  `draft/published/00/` are the authoritative statement of what `-00` says.
-  Everything else in this directory is commentary, provenance, worklist, or
-  unpublished candidate text. In particular, `draft/candidate/01/` is **not**
-  normative and states nothing about what the Internet-Draft series contains.
+- **This is not a normative source.** The published files under
+  `draft/published/01/` and `draft/published/00/` are the authoritative
+  statement of what those revisions say. Everything else in this directory is
+  commentary, provenance, worklist, or pre-submission candidate text. In
+  particular, `draft/candidate/01/` is **not** normative: it is retained to make
+  the review and disposition history checkable, and where it and
+  `draft/published/01/` could ever be read differently, the published files
+  control.
 
 ## Scope of the draft itself
 
@@ -65,7 +77,7 @@ regime.**
 
 ## Relationship to AIREP
 
-The AI Runtime Evidence Protocol (AIREP) is cited in `-00` Section 12
+The AI Runtime Evidence Protocol (AIREP) is cited in Section 12
 (Implementation Status, marked for removal before RFC publication) as one
 experimental implementation source for the distinctions the draft makes. That
 section states explicitly that the AIREP artifacts do not establish a deployed
@@ -90,11 +102,15 @@ at a pinned commit rather than vendored. See `RIGHTS_AND_PROVENANCE.md`.
 README.md                     this file
 SOURCES.md                    every source consulted, with URL / revision / digest
 RIGHTS_AND_PROVENANCE.md      rights and provenance rules for material kept here
-draft/published/00/           the immutable published -00 baseline, unmodified,
+draft/published/00/           the immutable published -00 revision, unmodified,
                               + SHA256SUMS.txt
-draft/candidate/01/           current author candidate -01, its changelog, and
-                              SHA256SUMS; NOT an IETF-published artifact and not
-                              submitted to the Datatracker
+draft/published/01/           the current published -01 baseline as retrieved
+                              from the IETF archive, unmodified (XML/TXT/HTML)
+                              + SHA256SUMS.txt
+draft/candidate/01/           the author's pre-submission candidate for -01, its
+                              changelog and digest chain; retained as provenance.
+                              Superseded as the authoritative text by
+                              draft/published/01/
 reviews/REVIEW_LEDGER.md      one entry per substantive public review item
 reviews/DRAFT_01_WORKLIST.md  traceability/review record for -01; records what
                               the candidate implements, not consensus
@@ -106,6 +122,12 @@ external-evidence/            third-party adjacent-domain evidence, referenced n
 
 - Datatracker:
   <https://datatracker.ietf.org/doc/draft-abak-agent-control-delivery-evidence/>
+- IETF `-01` archive (HTML):
+  <https://www.ietf.org/archive/id/draft-abak-agent-control-delivery-evidence-01.html>
+- IETF `-01` archive (TXT):
+  <https://www.ietf.org/archive/id/draft-abak-agent-control-delivery-evidence-01.txt>
+- IETF `-01` archive (XML):
+  <https://www.ietf.org/archive/id/draft-abak-agent-control-delivery-evidence-01.xml>
 - IETF `-00` archive (HTML):
   <https://www.ietf.org/archive/id/draft-abak-agent-control-delivery-evidence-00.html>
 - IETF `-00` archive (TXT):

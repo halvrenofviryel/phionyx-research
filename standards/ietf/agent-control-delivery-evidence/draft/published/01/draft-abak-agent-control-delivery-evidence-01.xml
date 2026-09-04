@@ -1,0 +1,1618 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE rfc>
+<rfc xmlns:xi="http://www.w3.org/2001/XInclude" category="info" docName="draft-abak-agent-control-delivery-evidence-01" ipr="trust200902" tocInclude="true" sortRefs="true" symRefs="true" version="3">
+  <front>
+    <title abbrev="Agent Control Delivery Evidence">Evidence Requirements for Agent Control Delivery and Outcome Reconciliation</title>
+    <seriesInfo name="Internet-Draft" value="draft-abak-agent-control-delivery-evidence-01"/>
+    <author fullname="Ali Toygar Abak" initials="A. T." surname="Abak">
+      <organization>Independent Researcher</organization>
+      <address>
+        <email>founder@phionyx.ai</email>
+        <uri>https://phionyx.ai</uri>
+      </address>
+    </author>
+    <date day="4" month="September" year="2026"/>
+    <area>Security</area>
+    <workgroup>Internet Engineering Task Force</workgroup>
+    <keyword>agent</keyword>
+    <keyword>control</keyword>
+    <keyword>delivery</keyword>
+    <keyword>evidence</keyword>
+    <keyword>reconciliation</keyword>
+    <abstract>
+      <t>Agent systems can issue stop, suspend, revoke, constrain, cancel, or override
+instructions across system and administrative boundaries. A record that such a
+control was decided or dispatched does not establish that every intended
+enforcement point received or applied it. Conversely, the absence of an
+acknowledgement does not, by itself, establish non-delivery.</t>
+      <t>This document defines format-independent evidence requirements for preserving
+those distinctions. It separates issuer-side emission, required-target
+resolution, receiver-side observation, enforcement outcome, and observation of
+the resulting control effect. For a control that must reach more than one
+enforcement target, the unit of delivery reconciliation is an
+instruction-target obligation rather than the parent instruction alone. The
+document also defines bounded negative observations, total reconciliation,
+population conservation, semantic-preservation requirements for intermediary
+paths, and a separate qualification for the evidentiary strength of aggregate
+claims.</t>
+      <t>This document does not define a receipt format, wire protocol, authorization
+system, policy language, transparency service, or audit regime.</t>
+    </abstract>
+  </front>
+  <middle>
+    <section anchor="intro">
+      <name>Introduction</name>
+      <t>Agent communication and execution systems increasingly carry control
+instructions that are expected to constrain a live runtime. Examples include
+stopping a task, suspending a delegated operation, revoking an outstanding
+grant, cancelling a tool request, forcing a handoff, or replacing a permissive
+policy with a restrictive one.</t>
+      <t>These controls frequently cross more than one boundary. A policy component may
+decide that an activity must stop. An issuer may serialize and dispatch the
+corresponding instruction. A broker, gateway, sidecar, or operating-system
+channel may transport it. One or more enforcement points may receive and verify
+it. Each enforcement point may then apply, refuse, or fail to apply it. Finally,
+an observer may or may not see the intended control effect.</t>
+      <t>Collapsing those events into a single label such as "sent", "delivered",
+"enforced", or "stopped" creates an interoperability and security problem. Two
+implementations can emit syntactically valid records while reaching incompatible
+conclusions about the same control. A downstream evidence or audit layer cannot
+reconstruct a boundary fact that was never preserved by either side of that
+boundary.</t>
+      <t>A second collapse occurs when one control resolves to multiple required
+enforcement targets. Evidence that target A received the control is existential
+evidence for target A; it is not evidence that target B, or every target in a
+required set, received it. A third collapse occurs when a target set is declared
+closed for a reconciliation run and that declaration is silently promoted into
+a claim that every possible enforcement path in the deployment was enumerated.
+Those are different facts.</t>
+      <t>A fourth collapse can occur after the originating boundary. A source can preserve
+a governance-relevant distinction correctly while an intermediary suppresses,
+transforms, or collapses it before the relying party sees it. Evidence that a
+state was preserved at one boundary therefore does not establish that the same
+semantic distinction survived intact through the path.</t>
+      <t>This document therefore specifies the minimum logical facts and reconciliation
+behavior needed to preserve control delivery and outcome uncertainty. It also
+separates a structural reconciliation result from the support available for a
+particular attribution, completeness, or complete-mediation claim. The
+requirements are independent of any particular serialization, transport,
+signature scheme, evidence envelope, or transparency system.</t>
+      <section anchor="scope">
+        <name>Scope and Non-Goals</name>
+        <t>This document applies when a governance-relevant control instruction crosses a
+system, process, privilege, trust, or administrative boundary on its way to one
+or more enforcement points. It covers:</t>
+        <ul>
+          <li>
+            <t>Binding issuer-side and receiver-side observations to the same control instruction and, where applicable, the same delivery attempt.</t>
+          </li>
+          <li>
+            <t>Binding a control to the required target set used for a bounded reconciliation run.</t>
+          </li>
+          <li>
+            <t>Assigning delivery dispositions per instruction-target obligation when more than one target is required.</t>
+          </li>
+          <li>
+            <t>Distinguishing receipt, enforcement outcome, and observed control effect.</t>
+          </li>
+          <li>
+            <t>Preserving positive failures and bounded negative observations.</t>
+          </li>
+          <li>
+            <t>Reconciling missing, malformed, duplicated, substituted, orphaned, conflicting, and indeterminate evidence.</t>
+          </li>
+          <li>
+            <t>Separating structural reconciliation from the evidentiary qualification of a resulting claim.</t>
+          </li>
+          <li>
+            <t>Preserving governance-relevant outcome distinctions through intermediaries, or exposing when a transformation prevents lossless preservation from being established.</t>
+          </li>
+          <li>
+            <t>Stating the scope and limitations of any resulting claim.</t>
+          </li>
+        </ul>
+        <t>This document does not:</t>
+        <ul>
+          <li>
+            <t>Define a new receipt, token, log-entry, or evidence-envelope format.</t>
+          </li>
+          <li>
+            <t>Define how an agent is authenticated or authorized.</t>
+          </li>
+          <li>
+            <t>Decide whether a control instruction is correct, lawful, safe, or consistent with policy.</t>
+          </li>
+          <li>
+            <t>Define the semantics of stop, suspend, cancel, revoke, override, or any other control verb.</t>
+          </li>
+          <li>
+            <t>Prove the truth of producer assertions, complete mediation, or physical-world effect.</t>
+          </li>
+          <li>
+            <t>Prove that a declared target set enumerates every possible execution or enforcement path unless an applicable profile separately establishes that fact.</t>
+          </li>
+          <li>
+            <t>Require public disclosure of prompts, model reasoning, personal data, proprietary policy, or protected content.</t>
+          </li>
+          <li>
+            <t>Standardize accountability, auditing, retention, or regulatory compliance.</t>
+          </li>
+        </ul>
+        <t>A protocol or profile can adopt the requirements in this document while using
+its existing identifiers, errors, acknowledgements, signatures, telemetry, or
+external evidence format.</t>
+      </section>
+      <section anchor="requirements-language">
+        <name>Requirements Language</name>
+        <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in BCP 14 <xref target="RFC2119"/> <xref target="RFC8174"/> when, and only when, they appear in all capitals, as shown here.</t>
+        <t>This document is Informational. The requirement terms make the evidence
+contract testable by protocol authors and implementers; they do not define an
+on-wire protocol by themselves.</t>
+      </section>
+    </section>
+    <section anchor="terminology">
+      <name>Terminology</name>
+      <dl newline="true" spacing="normal">
+        <dt>Agent Runtime</dt>
+        <dd>
+          <t>A software environment that plans, mediates, dispatches, or executes actions on behalf of an agent or an agentic application.</t>
+        </dd>
+        <dt>Control Instruction</dt>
+        <dd>
+          <t>A direction intended to restrict, interrupt, replace, or otherwise govern current or future runtime behavior. Examples include stop, suspend, cancel, revoke, constrain, quarantine, handoff, and override. A control instruction is distinct from the business or tool action being governed.</t>
+        </dd>
+        <dt>Issuer</dt>
+        <dd>
+          <t>The component that emits a control instruction toward an enforcement point. The issuer need not be the policy decision point that caused the instruction to be created.</t>
+        </dd>
+        <dt>Enforcement Point</dt>
+        <dd>
+          <t>A component that can apply or refuse the control at a relevant runtime or effect path.</t>
+        </dd>
+        <dt>Control Boundary</dt>
+        <dd>
+          <t>A declared system, process, privilege, trust, or administrative boundary between an issuer-side observation and a receiver-side observation.</t>
+        </dd>
+        <dt>Observation Record</dt>
+        <dd>
+          <t>An attributable statement that a specified observer saw a specified event at a specified boundary and time. An observation record is an assertion whose integrity and trust basis require separate evaluation.</t>
+        </dd>
+        <dt>Required Target Set</dt>
+        <dd>
+          <t>For one control instruction and one declared reconciliation profile, the reproducible set of enforcement targets that are required to receive the control. A target set can be closed for a reconciliation run without proving that the set enumerates every possible enforcement path in the deployment.</t>
+        </dd>
+        <dt>Delivery Obligation</dt>
+        <dd>
+          <t>The tuple formed by a control instruction or delivery attempt and one member of its Required Target Set. It is the minimum unit to which a delivery disposition is assigned when target multiplicity exists.</t>
+        </dd>
+        <dt>Receiver Observation</dt>
+        <dd>
+          <t>An observation made at, or cryptographically bound to, a particular intended enforcement point after that point has read and matched the control instruction. Acceptance by an upstream transport intermediary is not a receiver observation unless a profile explicitly establishes equivalent endpoint semantics.</t>
+        </dd>
+        <dt>Enforcement Outcome</dt>
+        <dd>
+          <t>The enforcement point's attributable result after processing the instruction, such as APPLIED, REFUSED, NO_EFFECT, or UNKNOWN.</t>
+        </dd>
+        <dt>Control Effect</dt>
+        <dd>
+          <t>The change in governed runtime state that the control instruction was intended to cause, such as a task entering a stopped state. This term does not mean the consequential business or physical effect of the action that the agent was attempting to perform.</t>
+        </dd>
+        <dt>Negative Observation</dt>
+        <dd>
+          <t>A positive record of a bounded condition such as a deadline passing without a matching acknowledgement, a transport rejecting an attempt, or a referenced counterpart remaining unavailable at a stated reconciliation cutoff. It is not a bare absence of data.</t>
+        </dd>
+        <dt>Reconciler</dt>
+        <dd>
+          <t>A component that correlates observations and reports scoped dispositions and aggregate results without silently converting uncertainty into success or failure.</t>
+        </dd>
+        <dt>Bounded Population</dt>
+        <dd>
+          <t>A closed, reproducible set of delivery obligations or input records selected by declared inclusion, target-resolution, observation-window, and reconciliation-cutoff rules.</t>
+        </dd>
+        <dt>Structural Reconciliation Result</dt>
+        <dd>
+          <t>An aggregate result, such as PASS, FAIL, or INCONCLUSIVE, derived from the declared population and reconciliation rules. It does not by itself state the evidentiary strength of every attribution, completeness, or mediation claim.</t>
+        </dd>
+        <dt>Claim Support</dt>
+        <dd>
+          <t>The separately reported strength with which the available verified evidence supports a particular scoped claim. Section 6.6 defines the conceptual values FULLY_SUPPORTED, CONDITIONALLY_SUPPORTED, and NOT_SUPPORTED.</t>
+        </dd>
+        <dt>Independent Observer</dt>
+        <dd>
+          <t>An observer whose authority and write path are not controlled by the party or component whose assertion it is intended to corroborate. Administrative, key, process, and storage separation are relevant to this determination.</t>
+        </dd>
+      </dl>
+    </section>
+    <section anchor="problem">
+      <name>Problem Statement and Failure Model</name>
+      <t>For a given control instruction and one required target, the following facts are distinct:</t>
+      <ol>
+        <li>
+          <t>a governance or policy decision was made;</t>
+        </li>
+        <li>
+          <t>a control instruction was constructed and emitted;</t>
+        </li>
+        <li>
+          <t>the instruction crossed the last issuer-controlled boundary;</t>
+        </li>
+        <li>
+          <t>the target was resolved as a required enforcement point under the declared profile;</t>
+        </li>
+        <li>
+          <t>that enforcement point received and matched the instruction;</t>
+        </li>
+        <li>
+          <t>that enforcement point applied or refused it; and</t>
+        </li>
+        <li>
+          <t>the intended control effect was observed.</t>
+        </li>
+      </ol>
+      <t>Evidence for one item does not, without an explicitly specified and verified
+binding, establish a later item. In particular, a decision record does not
+establish dispatch; dispatch does not establish receipt; receipt does not
+establish enforcement; and enforcement does not establish an observed control
+effect.</t>
+      <t>When an instruction has multiple required targets, the facts from target A do
+not establish the corresponding facts for target B. A parent-instruction claim
+must therefore be derived from the dispositions of all required
+instruction-target obligations rather than from the existence of any one
+receiver record.</t>
+      <t>The reverse inference is also unsafe. Missing receiver evidence can result from
+non-delivery, delayed delivery, delayed evidence export, a failed observer,
+retention loss, clock disagreement, identifier mismatch, target-resolution
+failure, or evidence suppression. A receiver cannot report a control it never
+received. An issuer cannot, from silence alone, prove what happened inside the
+receiver's boundary.</t>
+      <t>Control activation is also not retroactive. A later APPLIED control result does
+not retroactively relabel a boundary transition that occurred before the control
+took effect. An operation that crossed one earlier admission, provider-entry, or
+other profile-defined effect boundary can nevertheless remain subject to a later
+applicable enforcement boundary. Evidence of a later refusal does not rewrite the
+earlier transition and does not by itself prove that any prior external effect was
+reversed. That operation's outcome requires its own authenticated
+reconciliation.</t>
+      <t>The failure model includes at least:</t>
+      <ul>
+        <li>
+          <t>transport rejection, loss, reordering, duplication, and retry;</t>
+        </li>
+        <li>
+          <t>identifier collision or reuse;</t>
+        </li>
+        <li>
+          <t>the same identifier carrying a different instruction digest;</t>
+        </li>
+        <li>
+          <t>a receiver record with no issuer-side counterpart;</t>
+        </li>
+        <li>
+          <t>a required target omitted from, added to, or ambiguously resolved within the target population;</t>
+        </li>
+        <li>
+          <t>a target set declared closed without an accepted basis for a stronger complete-mediation claim;</t>
+        </li>
+        <li>
+          <t>malformed or unverifiable records;</t>
+        </li>
+        <li>
+          <t>conflicting observations from the same or different observers;</t>
+        </li>
+        <li>
+          <t>partial observer or evidence-store failure;</t>
+        </li>
+        <li>
+          <t>clock skew and unsupported ordering claims;</t>
+        </li>
+        <li>
+          <t>an enforcement point acknowledging receipt before persistence or processing;</t>
+        </li>
+        <li>
+          <t>successful processing that produces no observable control effect;</t>
+        </li>
+        <li>
+          <t>an operation already consumed or in flight when a later control becomes effective;</t>
+        </li>
+        <li>
+          <t>an intermediary that suppresses, transforms, or collapses a governance-relevant disposition before it reaches the relying party; and</t>
+        </li>
+        <li>
+          <t>compromise of an issuer, receiver, observer, verifier, or signing key.</t>
+        </li>
+      </ul>
+      <t>The requirements below do not eliminate those failures. They make the
+distinctions and residual uncertainty interoperably visible.</t>
+    </section>
+    <section anchor="model">
+      <name>Logical Evidence Model</name>
+      <t>An implementation MAY carry the required facts in one artifact, in several
+artifacts, in protocol fields, in telemetry, or through external references.
+Regardless of packaging, a consumer needs to distinguish the following logical
+observations and bindings.</t>
+      <section anchor="issuer-observation">
+        <name>Issuer-Side Emission</name>
+        <t>The issuer-side observation records that a particular instruction crossed a
+declared issuer boundary. It binds a stable instruction identifier to a digest
+of the exact governed instruction or declared projection, identifies the target,
+Required Target Set, or target-resolution input, and attributes the observation
+to the issuer-side observer.</t>
+        <t>Creation of an in-memory object, enqueueing inside the issuer's own process, or
+a policy decision that has not reached the declared boundary does not satisfy
+this observation.</t>
+      </section>
+      <section anchor="target-set-model">
+        <name>Required Target Set and Delivery Obligations</name>
+        <t>For a bounded reconciliation run, each instruction resolves to one or more
+required enforcement targets under a profile-defined rule. The result is the
+Required Target Set for that instruction. The set, or a verifiable reference
+that resolves to it, is frozen for the reconciliation cutoff before receiver
+evidence is used to decide which targets were expected.</t>
+        <t>Each member of the Required Target Set creates one Delivery Obligation. A
+receiver observation for one obligation cannot satisfy another obligation merely
+because both obligations share the same parent instruction identifier or content
+digest.</t>
+        <t>A target set that is closed for a reconciliation run establishes the population
+over which structural accounting can be repeated. It does not, by that fact
+alone, establish that every possible enforcement path in the deployment has
+been enumerated. A claim of complete mediation requires a separately stated and
+verified coverage basis under the declared deployment scope.</t>
+      </section>
+      <section anchor="receiver-observation">
+        <name>Receiver-Side Observation</name>
+        <t>The receiver-side observation records that a particular intended enforcement
+point, or an endpoint-bound observer acting for it, read an instruction with the
+same stable identifier and content binding. The record identifies the required
+target identity, receiving boundary, and verification or matching result.</t>
+        <t>A transport-level "accepted" or "queued" response is evidence about that
+transport boundary. It MUST NOT be labeled as enforcement-point receipt unless
+the applicable profile defines the endpoint binding, delivery semantics,
+persistence point, and failure behavior that make the equivalence valid.</t>
+      </section>
+      <section anchor="enforcement-observation">
+        <name>Enforcement Outcome</name>
+        <t>The enforcement outcome reports what one enforcement point did after receiving
+and evaluating the instruction. At minimum, a profile that reports enforcement
+MUST be able to distinguish:</t>
+        <dl newline="true" spacing="normal">
+          <dt>APPLIED</dt>
+          <dd>
+            <t>The enforcement point reports that it applied the specified control under the declared local semantics and effective boundary.</t>
+          </dd>
+          <dt>REFUSED</dt>
+          <dd>
+            <t>The enforcement point reports that it intentionally did not apply the control, with a scoped reason or reason class where disclosure policy permits.</t>
+          </dd>
+          <dt>NO_EFFECT</dt>
+          <dd>
+            <t>The enforcement point processed the control but reports that it caused no change under the declared predicate and observation window.</t>
+          </dd>
+          <dt>UNKNOWN</dt>
+          <dd>
+            <t>The enforcement point cannot determine or support one of the preceding outcomes.</t>
+          </dd>
+        </dl>
+        <t>APPLIED is an attributable enforcement assertion for that enforcement point. It
+is not, by itself, independent observation of the resulting runtime state,
+proof that another required target applied the control, or proof that an
+earlier in-flight operation was reversed.</t>
+      </section>
+      <section anchor="effect-observation">
+        <name>Control-Effect Observation</name>
+        <t>A control-effect observation records a scoped predicate over the governed
+runtime state, such as "task X was no longer dispatching tool calls during
+window W" or "operation O2 did not cross provider entry during window W". It
+identifies the observer, observation method, target, predicate, window, and
+result.</t>
+        <t>Where independent corroboration is claimed, the observer MUST be independent of
+both the issuer and the enforcement point under the stated trust model. An
+implementation MUST NOT infer independence from a different process name,
+service label, or signing key alone. A scoped effect observation for one target
+or one operation MUST NOT be generalized to every target or every dispatch path.</t>
+      </section>
+    </section>
+    <section anchor="requirements">
+      <name>Evidence Preservation Requirements</name>
+      <section anchor="r-cd-1">
+        <name>R-CD-1: Stable Instruction Identity</name>
+        <t>Each control instruction crossing a control boundary MUST have an identifier
+that remains stable across issuer, transport, receiver, enforcement, and
+reconciliation observations. The identifier's uniqueness scope and reuse rules
+MUST be defined. A decision, task, session, action, or delegation reference MAY
+also be carried, but it MUST NOT replace the instruction identifier unless the
+protocol defines identical uniqueness and lifecycle semantics.</t>
+        <t>If retries create distinct delivery attempts, the profile MUST define an attempt
+identifier or equivalent rule that prevents observations from different attempts
+from being silently merged.</t>
+      </section>
+      <section anchor="r-cd-2">
+        <name>R-CD-2: Content Binding</name>
+        <t>Every observation used to correlate a control instruction MUST bind the
+instruction identifier to a digest of either the exact instruction or a declared
+canonical projection of it. The projection, digest algorithm, canonicalization
+rule, and domain-separation rule, if any, MUST be identified by the applicable
+protocol or profile.</t>
+        <t>A digest match establishes byte or projection correspondence under the named
+algorithm. It does not establish semantic equivalence, correctness, authority,
+or truth.</t>
+      </section>
+      <section anchor="r-cd-3">
+        <name>R-CD-3: Boundary Attribution</name>
+        <t>Each observation MUST identify the observer, the boundary side observed, and the
+event being asserted. The evidence profile MUST state how the observer identity
+and its authority are verified. If the producer is able to rewrite the purported
+corroborating record, the record MUST NOT be described as independent evidence.</t>
+        <t>If a profile permits structural processing when an external trust or authority binding is absent, it MUST expose that limitation through the claim-support qualification defined in <xref target="claim-qualification"/>. A self-declared key, role, or observer label MUST NOT silently become fully supported attribution.</t>
+      </section>
+      <section anchor="r-cd-4">
+        <name>R-CD-4: Issuer-Side Emission</name>
+        <t>When an implementation claims that a control was dispatched, it MUST emit or
+preserve an issuer-side observation at the last declared issuer-controlled
+boundary. The observation MUST include the stable identifier, content binding,
+target, target-set reference, or resolution input, observed time, and boundary
+description.</t>
+        <t>Where one instruction resolves to multiple required targets, the profile MUST
+preserve a stable binding to the Required Target Set, or to a verifiable
+resolution rule and inputs from which the same set can be reconstructed at the
+reconciliation cutoff.</t>
+        <t>If emission fails before that boundary, the implementation MUST NOT report the
+instruction as dispatched. It SHOULD record the failed emission attempt as a
+positive failure event.</t>
+      </section>
+      <section anchor="r-cd-5">
+        <name>R-CD-5: Receiver-Side Observation</name>
+        <t>An implementation MUST NOT report delivery to a required target unless it has a matching receiver-side observation or a receipt whose endpoint semantics satisfy <xref target="receiver-observation"/>. The observation MUST carry the stable identifier, content binding, receiver identity, required target identity, receiving boundary, observed time, verification result, and an attempt identifier or equivalent retry binding where the profile distinguishes delivery attempts.</t>
+        <t>A receiver observation MAY satisfy only the Delivery Obligation whose target
+identity and boundary it is verified to represent. An observation for target A
+MUST NOT be used to confirm target B merely because the parent instruction
+identifier and content digest match.</t>
+        <t>A receiver MUST NOT acknowledge a digest or instruction identifier it did not
+read and match. If verification or content matching fails, the receiver SHOULD
+preserve a scoped failure observation rather than emitting a successful
+acknowledgement.</t>
+      </section>
+      <section anchor="r-cd-6">
+        <name>R-CD-6: Separate Enforcement Outcome</name>
+        <t>Receipt and enforcement MUST be represented as separate facts. An
+implementation that reports an enforcement result MUST distinguish at least
+APPLIED, REFUSED, NO_EFFECT, and UNKNOWN, or define a lossless mapping from its
+native states to those meanings. Missing enforcement evidence MUST NOT default
+to APPLIED.</t>
+      </section>
+      <section anchor="r-cd-7">
+        <name>R-CD-7: Separate Control-Effect Observation</name>
+        <t>An observed control effect MUST be represented separately from both delivery
+and enforcement. The observation MUST name its predicate, target, method,
+observer relationship, start and end conditions, and result. A claim that no
+effect occurred MUST be bounded by an observation window and predicate; silence
+alone MUST NOT be reported as NO_EFFECT.</t>
+      </section>
+      <section anchor="r-cd-8">
+        <name>R-CD-8: Negative Observations</name>
+        <t>A negative observation MUST record what was positively observed, from which
+boundary, and as of which cutoff. Profiles SHOULD support at least the following
+conceptual conditions where applicable:</t>
+        <ul>
+          <li>
+            <t>deadline elapsed without a matching acknowledgement;</t>
+          </li>
+          <li>
+            <t>counterpart missing at the reconciliation cutoff;</t>
+          </li>
+          <li>
+            <t>transport rejected the identified attempt;</t>
+          </li>
+          <li>
+            <t>verification or content matching failed; and</t>
+          </li>
+          <li>
+            <t>outcome remained undetermined after the declared deadline.</t>
+          </li>
+        </ul>
+        <t>The absence of an observation record is not a negative observation. A
+deadline-elapsed record establishes the reconciler's bounded view; it does not
+prove that the receiver never received the instruction.</t>
+      </section>
+      <section anchor="r-cd-9">
+        <name>R-CD-9: Time and Ordering</name>
+        <t>Each timed observation MUST identify its time value and the relevant clock or
+trust basis. A profile that reports cross-observer latency or precedence MUST
+state how clock synchronization, trusted timestamping, causal linkage, or
+another ordering mechanism supports that claim.</t>
+        <t>Matching identifiers and digests establish correspondence. They do not, by
+themselves, establish that one observation preceded another. Unsupported
+ordering claims MUST be omitted or reported as indeterminate.</t>
+      </section>
+      <section anchor="r-cd-10">
+        <name>R-CD-10: Total Reconciliation</name>
+        <t>A reconciler MUST produce a deterministic disposition for every Delivery
+Obligation and every input record presented under a declared profile. Malformed,
+unverifiable, duplicate, conflicting, and unmatched records MUST NOT be silently
+discarded. A reconciler MUST NOT produce a successful delivery verdict solely
+because no failure record exists.</t>
+        <t>The expected obligation population MUST be constructed from the declared
+issuer-side inclusion and target-resolution rules rather than solely from the
+receiver evidence that happens to be present. Otherwise omitted targets or
+suppressed failures can disappear before reconciliation begins.</t>
+        <t>The minimum per-obligation delivery dispositions are defined in <xref target="reconciliation-states"/>. A profile MAY add more specific states, provided that it defines a lossless mapping to the minimum set and does not weaken UNCONFIRMED, INVALID, CONFLICT, or INDETERMINATE into success.</t>
+        <t>If several applicable observations or diagnostics are reduced to one primary
+per-obligation disposition, the reduction rule MUST be deterministic and
+reviewable. All applicable diagnostics, including diagnostics not selected as the
+primary disposition-driving diagnostic, MUST remain visible in the report or in an
+explicitly linked diagnostic collection. This document does not prescribe a
+universal precedence ordering among profile-specific diagnostics.</t>
+      </section>
+      <section anchor="r-cd-11">
+        <name>R-CD-11: Bounded-Population Accounting</name>
+        <t>An implementation claiming completeness over a set of controls MUST declare a
+reproducible issuer inclusion rule, Required Target Set or target-resolution
+rule for each instruction, observation window, reconciliation cutoff, and
+expected population counts. Each expected Delivery Obligation MUST appear in
+exactly one per-obligation disposition. Each receiver-side input record MUST
+also be accounted for as matched, orphaned, duplicated, conflicting where the
+profile uses a separate record class, or invalid.</t>
+        <t>Every instruction in the bounded issuer population MUST remain accounted for
+during target-set construction, including an instruction whose target resolution
+succeeds and yields an empty Required Target Set. Where the Required Target Set
+for an instruction is empty, the instruction MUST remain in the report, the report
+MUST state that the instruction contributed zero Delivery Obligations, and the
+report MUST state the rule or condition under which target resolution produced the
+empty set. An instruction MUST NOT disappear from reconciliation solely because no
+Delivery Obligation tuple was added for it. The report MUST publish |I| alongside
+|O| and MUST publish counts sufficient to distinguish instructions that
+contributed one or more Delivery Obligations from instructions that contributed
+zero, as required by <xref target="population-conservation"/>.</t>
+        <t>A profile MUST define whether an empty Required Target Set is a valid terminal
+resolution. Where the profile declared that semantics before reconciliation, an
+empty set is a legitimate terminal resolution and the instruction is still
+accounted for as a zero-obligation instruction. Where the profile does not permit
+it, an empty Required Target Set MUST prevent a structural PASS for the affected
+instruction and for any parent or aggregate scope that depends on it. An empty
+Required Target Set MUST NOT be recorded by inventing a synthetic enforcement
+target or a synthetic Delivery Obligation, and MUST NOT be classified as
+EXPLICIT_FAILURE unless a positive, attributable failing condition applies under
+<xref target="reconciliation-states"/>.</t>
+        <t>If the implementation cannot define a closed Required Target Set for an
+instruction, it MUST NOT claim complete delivery for that instruction over an
+unspecified target population. It MAY report per-record or per-known-target
+results with an explicit open-population scope.</t>
+        <t>Closing a target population for reconciliation is not equivalent to proving
+complete mediation. A report MAY state that every member of a declared target
+set is confirmed when the evidence supports that scoped statement; it MUST NOT
+promote that statement into "every possible enforcement path was covered"
+unless the target-set coverage basis separately supports that stronger claim.</t>
+      </section>
+      <section anchor="r-cd-12">
+        <name>R-CD-12: Resolution Failure</name>
+        <t>If a control instruction refers to an external decision, policy, action, task,
+target, target set, key, or evidence binding, the applicable protocol or profile
+MUST define behavior when that reference cannot be resolved, is stale, resolves
+ambiguously, or resolves to inconsistent content. Unresolved or ambiguous
+bindings MUST NOT be treated as verified delivery or successful enforcement.</t>
+      </section>
+      <section anchor="r-cd-13">
+        <name>R-CD-13: Scope, Qualification, and Non-Claims</name>
+        <t>Evidence producers and reconcilers MUST state what each result covers and what
+it does not cover. At minimum, integrity, attribution, delivery, enforcement,
+observed control effect, ordering, population closure, complete mediation, and
+independent corroboration MUST NOT be implied unless each is separately
+supported under the declared trust model.</t>
+        <t>Where an aggregate result is used to support a relying-party claim, the report MUST identify the claim scope and MUST expose the claim-support qualification defined in <xref target="claim-qualification"/>. A structural PASS MUST NOT be rendered or consumed as an unqualified end-to-end success statement when attribution, target-set coverage, ordering, independence, or another claim predicate remains only declared, unverified, or indeterminate. The co-exposure rule in <xref target="claim-qualification"/> applies to every representation in which a structural aggregate result is exposed, not only to the representation in which that result was first derived.</t>
+        <t>Evidence that a governance-relevant distinction was preserved at one boundary
+MUST NOT, by itself, be consumed as evidence that the distinction survived
+unchanged through later intermediaries to the relying party. Likewise,
+preservation at an origin boundary does not by itself establish downstream
+receipt or enforcement, an observed effect, completeness, or that an unrecorded
+event did not occur.</t>
+        <t>A signature establishes only the properties supported by the verified key
+binding and signature input. A transparency receipt establishes only the
+registration or inclusion properties supplied by the relevant transparency
+service. Neither establishes the truth of a producer's event assertion by
+itself.</t>
+      </section>
+      <section anchor="r-cd-14">
+        <name>R-CD-14: Consumption and Fail-Safe Handling</name>
+        <t>An unacknowledged or unresolved safety-relevant Delivery Obligation MUST NOT be
+consumed as delivered. A relying system SHOULD expose UNCONFIRMED, CONFLICT,
+INVALID, and INDETERMINATE results to operational policy and SHOULD define a
+fail-safe, retry, escalation, or human notification behavior appropriate to the
+controlled risk.</t>
+        <t>This document does not select the operational response. It requires that
+uncertainty remain distinguishable at the point where that local response is
+chosen.</t>
+      </section>
+      <section anchor="r-cd-15">
+        <name>R-CD-15: Target-Set Closure and Coverage Qualification</name>
+        <t>For each Required Target Set used in a bounded reconciliation, the profile MUST
+state the set identifier or reproducible resolution rule and the basis on which
+the set is treated as closed. The report MUST also state whether the completeness
+of that enumeration for a stronger deployment-level mediation claim is verified
+under the trust model, merely declared by a source, or indeterminate.</t>
+        <t>A profile MAY use different vocabulary, but it MUST preserve the distinction
+among at least the following conceptual conditions:</t>
+        <dl newline="true" spacing="normal">
+          <dt>VERIFIED</dt>
+          <dd>
+            <t>The relying party accepts evidence, under the declared trust model and scope, that the target set covers the enforcement paths required by the claim.</t>
+          </dd>
+          <dt>DECLARED_ONLY</dt>
+          <dd>
+            <t>A producer or configuration declares the set closed, so structural reconciliation can use it, but the relying party lacks accepted evidence for the stronger enumeration-completeness claim.</t>
+          </dd>
+          <dt>INDETERMINATE</dt>
+          <dd>
+            <t>The verifier cannot determine whether the set is complete for the requested claim scope.</t>
+          </dd>
+        </dl>
+        <t>A DECLARED_ONLY target set can still support reproducible structural accounting over its named members. It MUST NOT, by itself, support a fully qualified claim of complete mediation across every relevant path. The claim-support rules in <xref target="claim-qualification"/> determine whether the requested claim is conditionally supported or not supported.</t>
+      </section>
+      <section anchor="r-cd-16">
+        <name>R-CD-16: Semantic Preservation Across Intermediaries</name>
+        <t>When a profile claims that a source-attributable disposition, outcome, target
+identity, or other governance-relevant state is preserved across one or more
+protocol intermediaries, the evidence available to the relying party MUST
+preserve enough source and transformation information to determine whether the
+relevant distinction survived the path. Where a gateway, broker, adapter, or
+other intermediary transforms the native representation, the applicable profile
+MUST define a lossless mapping for every governance-relevant state used by the
+claim or MUST expose that the mapping is incomplete, ambiguous, or unavailable.</t>
+        <t>An intermediary MUST NOT silently collapse distinct applicable states such as
+deny, defer, reject, timeout, unresolved, or indeterminate into a representation
+that a relying party can consume as a stronger or different state. If lossless
+preservation cannot be established, the resulting state MUST remain explicitly
+qualified or INDETERMINATE according to the profile.</t>
+        <t>This requirement concerns preservation of meaning, not a mandated carrier.
+Native fields, structured errors, acknowledgements, events, or references can
+satisfy it. It does not require every intermediary to emit a new evidence
+artifact.</t>
+      </section>
+    </section>
+    <section anchor="reconciliation">
+      <name>Reconciliation Model</name>
+      <section anchor="reconciliation-states">
+        <name>Per-Obligation Delivery Dispositions</name>
+        <t>A conforming reconciliation profile MUST preserve at least the following meanings:</t>
+        <dl newline="true" spacing="normal">
+          <dt>CONFIRMED</dt>
+          <dd>
+            <t>A receiver-side observation matches the Delivery Obligation's instruction identifier, attempt binding where applicable, content binding, required target identity, and required receiving boundary under the declared verification rules.</t>
+          </dd>
+          <dt>EXPLICIT_FAILURE</dt>
+          <dd>
+            <t>A positive, attributable failure observation applies to the identified delivery attempt, target, and boundary. The result MUST state its scope and MUST NOT be generalized to other targets or delivery paths.</t>
+          </dd>
+          <dt>UNCONFIRMED</dt>
+          <dd>
+            <t>An expected Delivery Obligation exists, but no matching receiver-side observation is available at the reconciliation cutoff.</t>
+          </dd>
+          <dt>SUBSTITUTION</dt>
+          <dd>
+            <t>Applicable issuer-side and receiver-side records address the same Delivery Obligation but carry different content bindings.</t>
+          </dd>
+          <dt>CONFLICT</dt>
+          <dd>
+            <t>Two or more otherwise applicable records make incompatible assertions that the profile cannot deterministically resolve.</t>
+          </dd>
+          <dt>INVALID</dt>
+          <dd>
+            <t>The instruction, obligation, or a required record is malformed, fails native verification, or lacks a binding that the profile requires for structural validity.</t>
+          </dd>
+          <dt>INDETERMINATE</dt>
+          <dd>
+            <t>The available inputs do not support a stronger disposition for a reason other than ordinary absence of a receiver observation, including an unresolved required target or trust binding.</t>
+          </dd>
+        </dl>
+        <t>Receiver-side records that match no expected Delivery Obligation in the declared
+population are ORPHAN records. Duplicate and invalid receiver records are
+counted separately for record accounting. ORPHAN is not an obligation
+disposition because there is no corresponding expected obligation.</t>
+        <t>The delivery disposition is independent of the enforcement outcome and the
+control-effect result. For example, one obligation can have delivery CONFIRMED,
+enforcement APPLIED, and control effect UNKNOWN while another obligation for
+the same parent instruction remains UNCONFIRMED.</t>
+      </section>
+      <section anchor="parent-aggregation">
+        <name>Parent Instruction Aggregation</name>
+        <t>A parent instruction that has one or more required targets can be reported as
+fully confirmed within its declared Required Target Set only when every Delivery
+Obligation for that instruction is CONFIRMED. The report MUST retain the
+per-target dispositions used to derive that parent result.</t>
+        <t>If any required obligation is EXPLICIT_FAILURE, UNCONFIRMED, SUBSTITUTION,
+CONFLICT, INVALID, or INDETERMINATE, the parent instruction MUST NOT be reported
+as fully confirmed. The parent result is scoped to the identified target set and
+does not, by itself, establish complete mediation over paths not proven to be in
+that set.</t>
+      </section>
+      <section anchor="reconciliation-algorithm">
+        <name>Minimum Reconciliation Procedure</name>
+        <t>For a declared bounded population, a reconciler:</t>
+        <ol>
+          <li>
+            <t>freezes the profile revision, trust inputs, issuer inclusion rule, target-resolution rules or target-set references, target-set closure evidence, observation window, and reconciliation cutoff;</t>
+          </li>
+          <li>
+            <t>constructs the expected Delivery Obligation population before using receiver evidence to decide which targets count as expected;</t>
+          </li>
+          <li>
+            <t>parses every input record and retains invalid inputs in an error population;</t>
+          </li>
+          <li>
+            <t>performs each artifact's native integrity, identity, freshness, and authorization checks before consuming its claims;</t>
+          </li>
+          <li>
+            <t>groups valid records by Delivery Obligation identity without assuming that identifier equality implies content, target, or attempt equality;</t>
+          </li>
+          <li>
+            <t>compares content bindings, target identities, target boundaries, and boundary roles;</t>
+          </li>
+          <li>
+            <t>assigns exactly one delivery disposition to every expected Delivery Obligation;</t>
+          </li>
+          <li>
+            <t>accounts separately for every receiver record as matched, orphaned, duplicated, conflicting where separately tracked, or invalid;</t>
+          </li>
+          <li>
+            <t>reports enforcement and control-effect results as separate dimensions;</t>
+          </li>
+          <li>
+            <t>derives any parent-instruction result only from the complete set of required obligation dispositions;</t>
+          </li>
+          <li>
+            <t>derives any structural aggregate result under <xref target="global-results"/> and preserves it separately from claim support;</t>
+          </li>
+          <li>
+            <t>emits counts, exclusions, claim scope, claim-support qualification, and limitations sufficient for a third party to repeat the same structural verdict and understand what stronger claims remain unsupported.</t>
+          </li>
+        </ol>
+        <t>Profile-specific conflict resolution MAY select among duplicate or superseding
+records, but the discarded alternatives and the selection rule MUST remain
+reviewable.</t>
+      </section>
+      <section anchor="population-conservation">
+        <name>Population Conservation</name>
+        <t>Let I be the bounded set of expected issuer instructions. For each instruction i,
+let T_i be its closed Required Target Set under the declared reconciliation
+profile. Let O be the resulting set of Delivery Obligations:</t>
+        <artwork align="center">O = { (i,t) : i in I and t in T_i }</artwork>
+        <t>A reconciliation report that claims complete obligation accounting MUST satisfy:</t>
+        <artwork align="center">|O| = Nconfirmed + Nexplicit_failure + Nunconfirmed
+    + Nsubstitution + Nconflict + Ninvalid + Nindeterminate</artwork>
+        <t>T_i MAY be empty when the declared target-resolution rule terminates with no
+required enforcement target for instruction i. Such an instruction contributes no
+Delivery Obligation to O, so obligation accounting alone cannot demonstrate that
+it was considered. A report that claims complete accounting MUST therefore also
+publish |I| and MUST satisfy the separate instruction-level conservation
+equation:</t>
+        <artwork align="center">|I| = Ninstructions_with_obligations + Nzero_obligation_instructions</artwork>
+        <t>Ninstructions_with_obligations counts the instructions in I whose Required Target
+Set has at least one member. Nzero_obligation_instructions counts the instructions
+in I whose target resolution terminated with zero members. Each zero-obligation
+instruction MUST be reported individually with the rule or condition that produced
+the empty set, as required by <xref target="r-cd-11"/>. The two equations are
+independent: |I| accounts for issuer instructions and |O| accounts for Delivery
+Obligations, and neither substitutes for the other.</t>
+        <t>Let R be the bounded set of receiver-side input records. Complete receiver-record accounting MUST separately satisfy:</t>
+        <artwork align="center">|R| = Nmatched + Norphan + Nduplicate + Ninvalid_receiver</artwork>
+        <t>Profiles MAY retain additional record-side classes, including a distinct conflict
+class, provided that every input record remains accounted for exactly once under
+a published conservation equation.</t>
+        <t>The equations describe accounting classes, not wire values or IANA registries.
+Profiles MAY subdivide a class, but the sum of its subdivisions MUST preserve the
+parent count. Records or targets excluded before population construction MUST be
+reported with the exclusion rule and count; otherwise the completeness claim is
+not reproducible.</t>
+      </section>
+      <section anchor="global-results">
+        <name>Structural Aggregate Results</name>
+        <t>A profile MAY define a structural aggregate result such as PASS, FAIL, or
+INCONCLUSIVE. This result answers whether the declared population reconciled
+under the profile's structural rules. It does not, by itself, answer whether a
+stronger attribution, complete-mediation, independence, or physical-effect claim
+is fully supported.</t>
+        <t>If a profile defines these aggregate results:</t>
+        <ul>
+          <li>
+            <t>PASS MUST require a closed obligation population, successful population conservation, and every expected Delivery Obligation to meet the profile's successful structural conditions;</t>
+          </li>
+          <li>
+            <t>FAIL MUST identify at least one positive failing condition and MUST NOT be inferred solely from missing evidence;</t>
+          </li>
+          <li>
+            <t>UNCONFIRMED, CONFLICT, INVALID, or INDETERMINATE obligation input MUST prevent PASS unless the profile explicitly excluded that obligation before population construction under a published rule;</t>
+          </li>
+          <li>
+            <t>a population-conservation failure MUST prevent PASS; and</t>
+          </li>
+          <li>
+            <t>the report MUST publish the complete class counts rather than only the aggregate label.</t>
+          </li>
+        </ul>
+        <t>A structural PASS can coexist with CONDITIONALLY_SUPPORTED claim support when,
+for example, every declared obligation reconciles but a trust root or
+independent population-coverage predicate required by a stronger relying-party
+claim was not verified. Implementations MUST NOT collapse those two dimensions
+into a bare PASS.</t>
+      </section>
+      <section anchor="claim-qualification">
+        <name>Claim-Support Qualification</name>
+        <t>For each aggregate claim exposed to a relying party, a report MUST identify the
+claim scope, including the target set or population, relevant boundaries,
+observation window or cutoff, and the fact being claimed. The report MUST then
+preserve a claim-support qualification separate from the structural result.</t>
+        <t>Wherever a structural aggregate result is rendered, returned, exported, or
+otherwise exposed to a relying party, the corresponding claim scope and
+claim-support qualification MUST be exposed in the same result context. This
+applies to PASS, FAIL, and INCONCLUSIVE alike. A profile MUST NOT expose a bare
+structural result that can be consumed as the complete result without that
+qualification. The requirement constrains what accompanies the result, not the
+field layout of any particular serialization: native fields, a nested object, a
+structured error, a protocol event, or a resolvable reference can satisfy it,
+provided that a consumer of that result context cannot obtain the structural
+result without also obtaining its claim scope and claim-support qualification.</t>
+        <t>A profile MAY use different vocabulary, but it MUST define a lossless mapping to
+at least the following conceptual meanings:</t>
+        <dl newline="true" spacing="normal">
+          <dt>FULLY_SUPPORTED</dt>
+          <dd>
+            <t>Every evidence predicate required by the scoped claim is satisfied under the declared verification and trust rules. This value does not claim ground truth beyond those predicates.</t>
+          </dd>
+          <dt>CONDITIONALLY_SUPPORTED</dt>
+          <dd>
+            <t>The structural result can be stated, but one or more predicates required for the stronger claim are declared-only, unverified, not independently established, or otherwise limited. The report MUST name each condition or missing predicate.</t>
+          </dd>
+          <dt>NOT_SUPPORTED</dt>
+          <dd>
+            <t>The structural result, population scope, or available evidence does not support the requested claim. The claim MUST NOT be rendered as true.</t>
+          </dd>
+        </dl>
+        <t>The structural result and claim support are orthogonal. A positive failure can
+be strongly evidenced; a structurally balanced or passing population can have
+conditional attribution; and a structurally complete result over a declared
+closed target set can still fail to fully support a claim that every possible
+enforcement path in a deployment was covered.</t>
+        <t>Profiles MUST state which missing predicates may produce CONDITIONALLY_SUPPORTED
+rather than NOT_SUPPORTED. They MUST NOT use conditional support as a silent
+fallback for a predicate that the profile declares mandatory for the requested
+claim.</t>
+      </section>
+    </section>
+    <section anchor="protocol-attachment">
+      <name>Protocol Attachment Points</name>
+      <t>A protocol need not carry an audit receipt to preserve the facts needed by an
+external evidence layer. When a governance-relevant transition crosses a
+protocol or administrative boundary, the protocol or its implementation
+profile SHOULD provide attachment points for:</t>
+      <ul>
+        <li>
+          <t>a stable control-instruction identifier and, where available, a stable delivery-attempt reference and a reference to the upstream decision, action, task, or session;</t>
+        </li>
+        <li>
+          <t>a digest of the exact governed instruction or declared action projection;</t>
+        </li>
+        <li>
+          <t>a target identity or a stable Required Target Set / target-resolution reference;</t>
+        </li>
+        <li>
+          <t>the issuer and intended enforcement-point identities or resolution inputs;</t>
+        </li>
+        <li>
+          <t>an attributable outcome that preserves deny, defer, reject, timeout, unresolved, and indeterminate states;</t>
+        </li>
+        <li>
+          <t>a way to distinguish transport acceptance from target-bound enforcement-point receipt;</t>
+        </li>
+        <li>
+          <t>an explicit rule for stale, missing, ambiguous, or inconsistent external references; and</t>
+        </li>
+        <li>
+          <t>a stable reference through which an external evidence system can bind additional observations without changing the protocol's native message format.</t>
+        </li>
+      </ul>
+      <t>These attachment points can be realized as native fields, structured errors,
+acknowledgements, protocol events, or references. This document does not require
+that evidence artifacts be transferred inline.</t>
+      <t>Where those facts traverse an intermediary, preservation at the originating
+boundary alone is not sufficient for a claim that the relying party received
+the same distinction. A protocol or profile that maps native states through an
+intermediary SHOULD preserve source attribution and lossless distinguishability;
+if it cannot, the mapping and resulting uncertainty need to remain visible under
+<xref target="r-cd-16"/>.</t>
+      <t>Public AgentProto requirements discussion <xref target="AGENTPROTO-PRESERVATION"/>
+<xref target="AGENTPROTO-PRESERVATION-PATH"/> has drawn the same scope boundary:
+accountability and audit formats can remain separate while a protocol still
+preserves stable operation or instruction identity, input binding,
+source-attributable outcomes, and non-success or non-final distinctions. This
+document uses that boundary without claiming that the mailing-list discussion
+constitutes working-group consensus.</t>
+      <t>The distinction is that this document does not ask the protocol to define what
+an auditor concludes. It asks protocol transitions not to erase the identifiers,
+bindings, target-set information, outcomes, and failure semantics that any
+downstream verifier would need, while also refusing to infer that an origin-side
+fact necessarily survived to the eventual reader.</t>
+    </section>
+    <section anchor="composition">
+      <name>Composition with Existing Mechanisms</name>
+      <section anchor="native-verification">
+        <name>Native Verification First</name>
+        <t>Each credential, signature, attestation, authorization result, transport
+acknowledgement, telemetry record, and transparency receipt retains its native
+semantics and verifier. A reconciler MUST perform or consume the result of the
+native verification before treating the artifact as evidence for a
+control-delivery claim.</t>
+        <t>A self-declared algorithm, key identifier, role, observer label, or target-set
+coverage claim MUST NOT drive trust without an externally configured or
+otherwise verified binding when the requested claim requires that trust.
+Composition MUST NOT strengthen the weakest input beyond its verified meaning.
+Where structural processing continues despite a missing trust predicate, the
+claim-support qualification MUST preserve that limitation.</t>
+      </section>
+      <section anchor="scitt-composition">
+        <name>SCITT Composition</name>
+        <t><xref target="RFC9943"/> defines Signed Statements and receipts for registration in a transparency service. A control observation, target-set binding, or reconciliation report can be carried as, or referenced by, a SCITT Signed Statement. A SCITT receipt can then provide evidence of the registration properties defined by that service.</t>
+        <t>This document does not require a new SCITT receipt format. Existing Signed
+Statements and profile-specific payload bindings can carry or reference the
+facts defined here when their native semantics are preserved.</t>
+        <t>SCITT registration does not, by itself, prove that a control was delivered,
+enforced, correctly observed, or true. Those meanings still depend on the
+observation boundary, native verification, content and target binding, target-set
+scope, and reconciliation rules defined here and in the applicable profile.</t>
+      </section>
+      <section anchor="telemetry-composition">
+        <name>Telemetry and Trace Composition</name>
+        <t>Telemetry systems can carry timestamps, trace identifiers, and correlated
+events. A trace identifier can help locate related records, but trace membership
+alone does not establish instruction-content equality, authority, target-bound
+receipt, ordering across untrusted clocks, target-set completeness, or
+independence. Profiles using telemetry MUST state which required bindings are
+native, derived, declared-only, or absent.</t>
+      </section>
+    </section>
+    <section anchor="operational">
+      <name>Operational Considerations</name>
+      <section anchor="deadlines">
+        <name>Deadlines, Retries, and Late Evidence</name>
+        <t>Deployments SHOULD define acknowledgement and reconciliation deadlines based on
+the controlled risk and transport characteristics. The deadline source, start
+event, units, and clock basis need to be explicit. A late receiver observation
+can change UNCONFIRMED to CONFIRMED in a later reconciliation run, but the
+earlier report and its cutoff SHOULD remain available.</t>
+        <t>Retries SHOULD reuse or relate identifiers according to a declared rule. Reusing
+one identifier for different instruction content creates SUBSTITUTION, not a
+retry. Creating a new identifier for every retry without a common attempt-group
+reference can hide repeated delivery failures.</t>
+      </section>
+      <section anchor="durability">
+        <name>Durability and Acknowledgement Point</name>
+        <t>A profile SHOULD state whether receiver acknowledgement occurs after parsing,
+verification, durable persistence, admission to an enforcement queue, or
+completed enforcement. Implementations MUST NOT use the same acknowledgement
+value for several of those points unless the profile defines the combined
+semantics and residual failure window.</t>
+      </section>
+      <section anchor="multi-path">
+        <name>Multiple Enforcement Paths</name>
+        <t>A control can be ineffective even when one enforcement point applies it if an
+alternate path remains open. A deployment claiming delivery across multiple
+required enforcement paths SHOULD bind those paths into a Required Target Set
+and reconcile each resulting Delivery Obligation separately.</t>
+        <t>A deployment claiming complete control mediation SHOULD identify the deployment
+scope and the evidence by which the Required Target Set is considered to cover
+all relevant paths. A set being closed for a reconciliation run does not, by
+itself, prove that the enumeration is complete.</t>
+      </section>
+      <section anchor="control-activation">
+        <name>Control Activation and In-Flight Operations</name>
+        <t>A profile that reports APPLIED for a freeze, revoke, cancel, or similar control
+SHOULD define the local effective boundary and the relationship between the
+control and operations that were already admitted, consumed, dispatched, or in
+flight when the control took effect.</t>
+        <t>Every boundary crossing is a historical fact. A reconciler MUST NOT retroactively
+relabel a boundary transition that occurred before control activation, and MUST
+NOT relabel an operation as blocked merely because a later control was APPLIED.
+Only a boundary crossing that actually occurred before activation is protected
+from retroactive relabelling.</t>
+        <t>Local admission and provider entry are distinct boundaries and are not
+interchangeable. If an operation was admitted before control activation but had
+not yet crossed a later provider-entry or other enforcement boundary, a
+subsequently applied control MAY still prevent that later transition under the
+applicable local semantics. The report MUST preserve the earlier admission fact
+and MUST separately preserve the later refusal or blocked transition. An operation
+that was admitted, or that is in flight, is therefore not automatically exempt
+from a later applicable enforcement boundary: non-retroactivity protects the
+record of what already happened, not the operation's remaining transitions.</t>
+        <t>Where the operation did cross the relevant profile-defined boundary before control
+activation, its outcome at that boundary remains a separate lifecycle fact.
+Missing authenticated outcome evidence for that operation MUST remain unresolved
+or indeterminate according to the applicable outcome profile.</t>
+        <t>Similarly, a later control-effect observation that a subsequent operation was
+blocked does not prove that an earlier operation produced no external effect or
+that a prior effect was reversed. A reversal, compensation, or remedy requires
+its own evidence and does not rewrite the historical ordering of the original
+operation.</t>
+      </section>
+    </section>
+    <section anchor="security">
+      <name>Security Considerations</name>
+      <t>The evidence described here is security-relevant because it can drive
+escalation, incident response, or claims that an agent was stopped. An attacker
+can target the instruction, the delivery path, the target-resolution input, the
+observer, the evidence store, the verifier, or the reconciliation population.</t>
+      <section anchor="substitution-replay">
+        <name>Substitution, Replay, and Identifier Reuse</name>
+        <t>An attacker can reuse an instruction identifier with weaker content, replay an
+old acknowledgement, correlate a receiver record to the wrong attempt, or bind a
+valid observation from target A to target B. Stable identifiers, attempt
+semantics, content digests, freshness rules, target binding, and attempt-group
+semantics mitigate these attacks. Digest algorithms and canonicalization rules
+need downgrade-resistant selection.</t>
+      </section>
+      <section anchor="observer-compromise">
+        <name>Observer and Key Compromise</name>
+        <t>A valid signature proves control of a signing key over the signed bytes; it does
+not prove that the observer actually saw the asserted event. Key-to-observer
+binding, protected key use, process and storage separation, attestation where
+appropriate, and independent observation can improve confidence. None should be
+overstated as ground truth.</t>
+      </section>
+      <section anchor="suppression">
+        <name>Evidence Suppression and Selective Population</name>
+        <t>A producer can suppress failed controls, omit a required target, or choose a
+favorable subset after the fact. Bounded-population construction before
+receiver-evidence evaluation, target-set binding, entry-emission rules,
+append-only or transparency mechanisms, and independent counters can make
+suppression more detectable. An open population cannot support a completeness
+claim.</t>
+        <t>A target set can also be made deceptively small while remaining internally
+closed. Structural conservation over that set is not evidence that no omitted
+path exists. Complete-mediation claims therefore require the separate coverage
+qualification in R-CD-15.</t>
+      </section>
+      <section anchor="availability">
+        <name>Availability and Fail-Safe Policy</name>
+        <t>An attacker can withhold acknowledgements or evidence to force fail-safe
+shutdowns, or flood a reconciler with orphan and invalid records.
+Implementations need resource limits, authenticated inputs, replay control, rate
+limiting, and a local policy that balances safety and availability. The evidence
+layer MUST preserve the uncertain state even when local policy chooses to
+continue operation.</t>
+      </section>
+      <section anchor="semantic-gap">
+        <name>Semantic and Physical-World Gaps</name>
+        <t>Matching digests do not prove that two implementations assign the same meaning
+to a control verb. An enforcement assertion does not prove a physical-world
+outcome. Profiles need versioned control semantics and scoped effect predicates.
+High-consequence deployments require domain-specific validation beyond this
+document.</t>
+      <t>An intermediary can also preserve syntax while weakening semantics, for example by mapping several source dispositions to one downstream label or by dropping source attribution. Such a transformation can make a downstream record look more definite than the upstream fact. Profiles that rely on intermediary-carried evidence need the lossless mapping or explicit uncertainty required by R-CD-16; cryptographic integrity of the transformed record does not restore a distinction that the transformation erased.</t></section>
+    </section>
+    <section anchor="privacy">
+      <name>Privacy Considerations</name>
+      <t>Control evidence can reveal agent identities, user relationships, incident
+timing, policy decisions, operational topology, target-set membership, and
+sensitive task state. Stable identifiers can enable correlation across services
+and observation windows.</t>
+      <t>Implementations SHOULD minimize payloads, use scoped or pseudonymous identifiers
+where possible, separate identity resolution from routine evidence exchange,
+apply access controls and retention limits, and support selective disclosure.
+Raw prompts, chain-of-thought, model context, personal data, and proprietary
+policy SHOULD NOT be included by default.</t>
+      <t>Publishing a digest instead of content reduces direct disclosure but does not
+eliminate it. Digests of low-entropy or enumerable values can be guessed.
+Profiles SHOULD use commitments, nonces, or access-controlled references where
+dictionary attacks are relevant.</t>
+      <t>Independent observation and explicit target-set accounting increase
+corroboration but can also increase data replication and linkability. The
+independence and coverage requirements are scoped to claims that need them; they
+do not require disclosure of every event or internal topology to every party.</t>
+    </section>
+    <section anchor="implementation-status" removeInRFC="true">
+      <name>Implementation Status</name>
+      <t>This section records implementation and evaluation experience available as of 4 September 2026 and is intended to be removed before publication as an RFC. The entries below are deliberately scoped to the requirement or failure mode they exercise. Adjacent interoperability results that do not implement this document are not promoted into implementation claims.</t><t>The AI Runtime Evidence Protocol (AIREP) <xref target="AIREP-REPO"/> is an experimental, author-side source for several distinctions in this document. Its v0.1 control-delivery profile records issuer, enforcement-point, and witness observations and includes a total reconciler that does not treat issuer-side emission alone as receiver-side delivery. This is useful implementation input, but AIREP is not the conformance authority for this document and its broader interoperability evidence is not used here as proof of this draft. In particular, the public AIREP external-evidence record <xref target="AIREP-EXTERNAL-EVIDENCE"/> contains a v0.1.2 external-producer result and a separate v0.2 external consumer/verifier result; because they target different frozen versions, those results are explicitly non-additive and are not a producer-to-consumer interoperability result for any one AIREP version.</t><t>A separate author-side runtime probe in phionyx-research <xref target="PHIONYX-CONTROL-DELIVERY"/> records issuer-side and enforcement-point observations on opposite filesystem trust sides and correlates them by instruction identifier and instruction hash. The enforcement-side record explicitly declares that it is writable by the controlled system and is therefore corroboration, not proof. Its delivery audit also states that an issued instruction with no acknowledgement is unaccounted for, not proven undelivered, because delivery failure, evidence-recording failure, and a never-demanded override are not yet distinguishable. The associated tests pin identity/hash correlation, separate-side recording, coverage of every override-consuming gate, and non-silent evidence-write failure. This is partial author-side implementation experience; it does not establish independent implementation, complete mediation, or observed control effect.</t><t>The historical standalone Agent Control Delivery Evidence Reconciliation (ACDER) probe <xref target="ACDER-REF"/> implements an earlier instruction-target obligation model with seven fixtures. It is retained as a pinned author-side research artifact. It does not implement the full claim-support and intermediary semantic-preservation model in this revision, is not on current AIREP main, and is not an independent implementation of this document.</t><t>A proposed format-neutral fixture contributed by Iman Schrock of EMILIA Protocol on the SCITT mailing list <xref target="SCHROCK-FIXTURE-MSG"/> combines target multiplicity with a control-activation race. Its fixture identifier is freeze-after-provider-entry-with-multiple-required-targets and its SHA-256 is 2d8faa1b64b8a73fd0bf81b21889bbf726cbfb324af099b700499627af84203a. If that fixture is used unchanged, its identifier and digest are preserved. An adapted derivative receives a new fixture identifier and records the source fixture identifier and digest as provenance <xref target="SCHROCK-FIXTURE-PROVENANCE"/>. The contributed fixture is test input, not an implementation of this document; its historical related-work pin is not silently rewritten when current related-work references advance.</t><t>Cross-domain review and a pinned population probe against Cedulon <xref target="DOGRU-POPULATION-PROBE"/> informed the bounded-population and claim-qualification rules. The probe exposed a reporting-scope defect in the adjacent implementation rather than a defect in this document. That probe remains pinned to the artifact and package versions it was executed against. Later reviewer-reported measurements against Cedulon 0.8.0 and 0.12.0 were independently rerun by the author on 4 September 2026 from separate clean directories against the published package sets, using the reviewer's pinned case driver at Cedulon commit 52cf577 <xref target="DOGRU-REVIEW-CASES"/>. The rerun reproduced the scoped behaviors recorded in the public work area. This is an author-side reproduction of an adjacent-domain measurement, not an implementation of this document, and it does not repin or replace the historical 1 September probe. Current Cedulon <xref target="I-D.dogru-cedulon"/> binds returned audit results to an account, rail, and window and conditions stronger claims on its declared scope and trust predicates. Cedulon remains adjacent-domain evaluation evidence, not an implementation of this document.</t><t>The AIREP artifacts, the phionyx-research runtime probe, the historical ACDER probe, the contributed EMILIA fixture, and the Cedulon probe retain distinct provenance and claim boundaries. They are not merged into a self-validating conformance suite for this document. Additional independent implementations are sought, particularly for per-target obligation reconciliation, claim-support qualification, and semantic preservation through intermediaries.</t></section>
+    <section anchor="related-work">
+      <name>Relationship to Adjacent Work</name>
+      <t>The agent communication use-case and requirements work <xref target="I-D.agentic-ai-usecases-requirements"/> treats accountability and auditing as separate work. This document is compatible with that boundary: it defines only the minimum facts and distinctions that need to survive protocol transitions so an external evidence layer can later bind them. AgentProto mailing-list discussion on a minimal preservation requirement <xref target="AGENTPROTO-PRESERVATION"/> and its path-preservation follow-up <xref target="AGENTPROTO-PRESERVATION-PATH"/> sharpen that distinction without creating a receipt format or audit regime.</t>
+      <t><xref target="I-D.bu-agentproto-security-principal-binding"/> separates claims, carriers, verifiers, bindings, failure behavior, and accepted results for agent protocols. The requirements here specialize that discipline for the control-delivery lifecycle and its boundary sides.</t>
+      <t>Signed decision records <xref target="I-D.bradleyb-audit-decision-records"/> preserve authorization decisions, including denials and non-occurring actions, and distinguish correspondence from precedence. A decision record can be an upstream reference for this document. It does not by itself establish that a resulting control instruction reached an enforcement point.</t>
+      <t>The Action Evidence Boundary <xref target="I-D.schrock-action-evidence-boundary"/> defines an executor-side processing model for consequential agent effects, including action correlation, local authorization, atomic consumption, invocation, effect outcomes, and reconciliation. This document addresses a different direction and object: a governance control such as stop or revoke moving toward the component that constrains the runtime. The "control effect" here is the governed runtime state, not the consequential business or physical effect of the protected action.</t>
+      <t>Portable Revocation Statements <xref target="I-D.schrock-ep-revocation-statement"/> bind revocation to an exact authorization target and effective time but explicitly do not prove that every relying party received the revocation. That distribution boundary composes directly with this document: a valid revocation statement can be an upstream control fact, while receiver-side delivery and enforcement remain separate evidence questions. This document does not redefine the revocation statement format or its atomic execution semantics.</t>
+      <t>Outcome Binding <xref target="I-D.schrock-ep-outcome-binding"/> separates evidence availability from comparison and uses pinned source roles and observation windows for post-execution effects. A control-effect observation in this document can compose with such outcome evidence where the predicates align. This document does not redefine consequential-action outcome states, source quorum, or physical-effect reconciliation.</t>
+      <t>Contestability Bindings <xref target="I-D.pinto-agent-authz-contestability"/> define a narrower effect path for an authenticated contestation filing. That work separately represents the declared effect policy, executor acceptance, authenticated trigger, ordering, and claimed application. The shared discipline is to avoid collapsing separately evidenced stages into a stronger end-to-end fact. This document therefore treats that effect-state model as a composition boundary rather than restating its states.</t>
+      <t>Execution-finality work <xref target="I-D.das-agentic-execution-finality"/> distinguishes model tool selection from authorized execution at a dispatch-time gate. A stop or revoke control can target such a gate. The present document asks how delivery and enforcement of that control are evidenced, rather than how the underlying tool action is authorized.</t>
+      <t>The SCITT AI-agent receipt profile <xref target="I-D.noa-scitt-ai-agent-receipt"/> defines how an action receipt can be registered using SCITT. This document is format-neutral and can supply control-delivery statement semantics for a SCITT-based profile without changing SCITT's registration semantics.</t>
+      <t>Cedulon <xref target="I-D.dogru-cedulon"/> reconciles a spend that has already occurred against signed receipts and an authenticated rail extract. Its object moves in the opposite direction from a control instruction moving toward an enforcement point, but the works share bounded-population, total-accounting, and qualified-claim disciplines. Cedulon revision -08 explicitly scopes returned audit results to an account, rail, and window and prevents those results from being read as statements about paths the reconciliation did not examine. This document does not restate Cedulon's payment, settlement, or rail-extract semantics and does not describe Cedulon as an implementation of this document.</t>
+      <t>The OWASP Agentic AI Threats and Mitigations project <xref target="OWASP-APTS"/> includes a human-oversight requirement that an unacknowledged kill instruction not be treated as delivered. The requirements and negative-observation rules in this document generalize that implementation concern into a protocol-independent evidence contract.</t>
+    </section>
+    <section anchor="changes-since-00" removeInRFC="true">
+      <name>Changes Since -00</name>
+      <t>This revision incorporates public SCITT review of -00, relevant AgentProto requirements discussion, and subsequent implementation evidence. The principal changes are:</t>
+      <ul>
+        <li>
+          <t>Introduced Required Target Set and Delivery Obligation terminology so one receiver observation cannot satisfy a multi-target parent instruction.</t>
+        </li>
+        <li>
+          <t>Revised R-CD-4, R-CD-5, R-CD-10, and R-CD-11 to bind target sets and reconcile per instruction-target obligation.</t>
+        </li>
+        <li>
+          <t>Added R-CD-15 to distinguish a population that is closed for structural reconciliation from evidence that the target enumeration is complete for a stronger complete-mediation claim.</t>
+        </li>
+        <li>
+          <t>Replaced per-instruction population conservation with obligation-level conservation while retaining separate receiver-record accounting, and added instruction-level accounting so an instruction whose Required Target Set resolves to zero members remains reported and conserved rather than disappearing from reconciliation.</t>
+        </li>
+        <li>
+          <t>Added parent-instruction aggregation rules: a parent can be fully confirmed within its declared target set only when every required obligation is CONFIRMED.</t>
+        </li>
+        <li>
+          <t>Split structural aggregate results from claim-support qualification, defining FULLY_SUPPORTED, CONDITIONALLY_SUPPORTED, and NOT_SUPPORTED conceptual meanings, and required the claim scope and claim-support qualification to be exposed in the same result context as any exposed structural aggregate result.</t>
+        </li>
+        <li>
+          <t>Added control-activation rules preventing a later APPLIED freeze or revocation from retroactively relabelling a boundary transition that occurred before activation, while distinguishing local admission from a later provider-entry or other enforcement boundary that a subsequently applied control may still refuse.</t>
+        </li>
+        <li>
+          <t>Clarified that SCITT Signed Statements and profile bindings can carry or reference these facts without introducing a new receipt format.</t>
+        </li>
+        <li>
+          <t>Added R-CD-16 and protocol-attachment guidance for semantic preservation through intermediaries, including the non-claim that preservation at an originating boundary does not establish that the distinction survived intact to the eventual reader.</t>
+        </li>
+        <li>
+          <t>Required many-to-one diagnostic reduction to be deterministic and reviewable, required non-selected applicable diagnostics to remain visible or explicitly linked, and declined to define a universal precedence order.</t>
+        </li>
+        <li>
+          <t>Clarified implementation and evaluation status so author-side probes, contributed fixtures, adjacent-domain evaluations, and unrelated cross-version interoperability results retain separate claim boundaries.</t></li>
+        <li>
+          <t>Expanded adjacent-work composition for AgentProto preservation requirements, contestability, revocation, outcome binding, and Cedulon reconciliation.</t>
+        </li>
+        <li>
+          <t>Updated implementation/test-vector status with the current AIREP control-delivery source, the phionyx-research author-side runtime probe, the historical ACDER probe, and provenance-preserving treatment of the contributed EMILIA Protocol fixture; broader AIREP cross-version interoperability remains explicitly non-additive.</t></li>
+        <li>
+          <t>Expanded the minimum conformance cases for target multiplicity, target-set coverage qualification, structural-result/claim-support separation, in-flight races, empty required-target populations, bare aggregate results exposed without their qualification, many-to-one diagnostic reduction, and failure asserted from absent population evidence.</t>
+        </li>
+      </ul>
+    </section>
+    <section anchor="iana">
+      <name>IANA Considerations</name>
+      <t>This document has no IANA actions.</t>
+    </section>
+    <section anchor="acknowledgements">
+      <name>Acknowledgements</name>
+      <t>The author thanks participants in the agent2agent, agentproto, and SCITT
+communities whose discussions helped sharpen the distinction among decision,
+delivery, enforcement, and effect.</t>
+      <t>The author thanks Iman Schrock of EMILIA Protocol for contributing the proposed
+freeze-after-provider-entry-with-multiple-required-targets fixture, requesting
+that the fixture ID and EMILIA Protocol attribution be preserved, and reviewing
+target multiplicity, the required-target and freeze-race fixture, in-flight
+operation semantics, and fixture provenance.</t>
+      <t>The author thanks Emek Can Dogru for public review of bounded-population
+accounting, the separation of the structural reconciliation result from claim
+support, diagnostic reduction, and the empty required-target accounting
+observation. Both named reviewers gave permission to be named here.</t>
+      <t>The author also thanks SCITT participants who provided public review on bounded
+populations, qualified claims, adjacent-work composition, SCITT carriage, and
+implementation-reporting boundaries, as well as AgentProto participants whose
+public discussion sharpened the protocol-preservation and intermediary-path
+non-claims. Specific additional names can be added with permission in a later
+revision. Being named here records a review contribution only; these
+acknowledgements do not imply endorsement of this document by any named
+individual, organization, or working group.</t>
+    </section>
+  </middle>
+  <back>
+    <references>
+      <name>Normative References</name>
+      <reference anchor="RFC2119" target="https://www.rfc-editor.org/info/rfc2119">
+        <front>
+          <title>Key words for use in RFCs to Indicate Requirement Levels</title>
+          <author fullname="Scott Bradner" initials="S." surname="Bradner"/>
+          <date month="March" year="1997"/>
+        </front>
+        <seriesInfo name="BCP" value="14"/>
+        <seriesInfo name="RFC" value="2119"/>
+        <seriesInfo name="DOI" value="10.17487/RFC2119"/>
+      </reference>
+      <reference anchor="RFC8174" target="https://www.rfc-editor.org/info/rfc8174">
+        <front>
+          <title>Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words</title>
+          <author fullname="Barry Leiba" initials="B." surname="Leiba"/>
+          <date month="May" year="2017"/>
+        </front>
+        <seriesInfo name="BCP" value="14"/>
+        <seriesInfo name="RFC" value="8174"/>
+        <seriesInfo name="DOI" value="10.17487/RFC8174"/>
+      </reference>
+    </references>
+    <references>
+      <name>Informative References</name>
+      <reference anchor="RFC9943" target="https://www.rfc-editor.org/info/rfc9943">
+        <front>
+          <title>An Architecture for Trustworthy and Transparent Digital Supply Chains</title>
+          <author fullname="H. Birkholz" initials="H." surname="Birkholz"/>
+          <author fullname="A. Delignat-Lavaud" initials="A." surname="Delignat-Lavaud"/>
+          <author fullname="C. Fournet" initials="C." surname="Fournet"/>
+          <author fullname="Y. Deshpande" initials="Y." surname="Deshpande"/>
+          <author fullname="S. Lasker" initials="S." surname="Lasker"/>
+          <date month="June" year="2026"/>
+        </front>
+        <seriesInfo name="RFC" value="9943"/>
+        <seriesInfo name="DOI" value="10.17487/RFC9943"/>
+      </reference>
+      <reference anchor="I-D.agentic-ai-usecases-requirements" target="https://datatracker.ietf.org/doc/draft-agentic-ai-usecases-requirements/">
+        <front>
+          <title>Agentic AI Use Cases and Requirements</title>
+          <author fullname="Tirumaleswar Reddy.K" initials="T." surname="Reddy.K"/>
+          <author fullname="Zaheduzzaman Sarker" initials="Z." surname="Sarker"/>
+          <author fullname="Kehan Yao" initials="K." surname="Yao"/>
+          <date day="25" month="August" year="2026"/>
+        </front>
+        <seriesInfo name="Internet-Draft" value="draft-agentic-ai-usecases-requirements-02"/>
+        <refcontent>Work in Progress</refcontent>
+      </reference>
+      <reference anchor="I-D.bu-agentproto-security-principal-binding" target="https://datatracker.ietf.org/doc/draft-bu-agentproto-security-principal-binding/">
+        <front>
+          <title>Security Principal and Verifier Binding for Agent Communication Protocols</title>
+          <author fullname="Songbo Bu" initials="S." surname="Bu"/>
+          <date day="16" month="August" year="2026"/>
+        </front>
+        <seriesInfo name="Internet-Draft" value="draft-bu-agentproto-security-principal-binding-06"/>
+        <refcontent>Work in Progress</refcontent>
+      </reference>
+      <reference anchor="I-D.bradleyb-audit-decision-records" target="https://datatracker.ietf.org/doc/draft-bradleyb-audit-decision-records/">
+        <front>
+          <title>Signed Decision Records for Agent Authorization: Disclosures, Entry Emission, and Ordering Evidence</title>
+          <author fullname="Bradley B" initials="B." surname="B"/>
+          <date day="13" month="August" year="2026"/>
+        </front>
+        <seriesInfo name="Internet-Draft" value="draft-bradleyb-audit-decision-records-00"/>
+        <refcontent>Work in Progress</refcontent>
+      </reference>
+      <reference anchor="I-D.schrock-action-evidence-boundary" target="https://datatracker.ietf.org/doc/draft-schrock-action-evidence-boundary/">
+        <front>
+          <title>The Action Evidence Boundary for Consequential Agent Effects</title>
+          <author fullname="Iman Schrock" initials="I." surname="Schrock"/>
+          <date day="31" month="August" year="2026"/>
+        </front>
+        <seriesInfo name="Internet-Draft" value="draft-schrock-action-evidence-boundary-05"/>
+        <refcontent>Work in Progress</refcontent>
+      </reference>
+      <reference anchor="I-D.schrock-ep-revocation-statement" target="https://datatracker.ietf.org/doc/draft-schrock-ep-revocation-statement/">
+        <front>
+          <title>Portable Revocation Statements for Action-Bound Authorization Artifacts</title>
+          <author fullname="Iman Schrock" initials="I." surname="Schrock"/>
+          <date day="27" month="July" year="2026"/>
+        </front>
+        <seriesInfo name="Internet-Draft" value="draft-schrock-ep-revocation-statement-01"/>
+        <refcontent>Work in Progress</refcontent>
+      </reference>
+      <reference anchor="I-D.schrock-ep-outcome-binding" target="https://datatracker.ietf.org/doc/draft-schrock-ep-outcome-binding/">
+        <front>
+          <title>Outcome Binding for Authorized Actions and Independently Observed Effects</title>
+          <author fullname="Iman Schrock" initials="I." surname="Schrock"/>
+          <date day="28" month="July" year="2026"/>
+        </front>
+        <seriesInfo name="Internet-Draft" value="draft-schrock-ep-outcome-binding-00"/>
+        <refcontent>Work in Progress</refcontent>
+      </reference>
+      <reference anchor="I-D.pinto-agent-authz-contestability" target="https://datatracker.ietf.org/doc/draft-pinto-agent-authz-contestability/">
+        <front>
+          <title>Contestability Bindings for Authorized Agent Actions</title>
+          <author fullname="Tiago Pinto" initials="T." surname="Pinto"/>
+          <date day="29" month="August" year="2026"/>
+        </front>
+        <seriesInfo name="Internet-Draft" value="draft-pinto-agent-authz-contestability-00"/>
+        <refcontent>Work in Progress</refcontent>
+      </reference>
+      <reference anchor="I-D.das-agentic-execution-finality" target="https://datatracker.ietf.org/doc/draft-das-agentic-execution-finality/">
+        <front>
+          <title>Tool Selection Is Not Execution: Finality for Agentic Tool Dispatch</title>
+          <author fullname="Sangam Das" initials="S." surname="Das"/>
+          <date day="26" month="August" year="2026"/>
+        </front>
+        <seriesInfo name="Internet-Draft" value="draft-das-agentic-execution-finality-01"/>
+        <refcontent>Work in Progress</refcontent>
+      </reference>
+      <reference anchor="I-D.noa-scitt-ai-agent-receipt" target="https://datatracker.ietf.org/doc/draft-noa-scitt-ai-agent-receipt/">
+        <front>
+          <title>A SCITT Profile for AI-Agent Action Receipts</title>
+          <author fullname="Tora Toraman" initials="T." surname="Toraman"/>
+          <date day="14" month="August" year="2026"/>
+        </front>
+        <seriesInfo name="Internet-Draft" value="draft-noa-scitt-ai-agent-receipt-01"/>
+        <refcontent>Work in Progress</refcontent>
+      </reference>
+      <reference anchor="I-D.dogru-cedulon" target="https://datatracker.ietf.org/doc/draft-dogru-cedulon/">
+        <front>
+          <title>Cedulon: An Audit Layer for Agent-to-Agent Commerce</title>
+          <author fullname="Emek Can Dogru" initials="E. C." surname="Dogru"/>
+          <date day="2" month="September" year="2026"/>
+        </front>
+        <seriesInfo name="Internet-Draft" value="draft-dogru-cedulon-08"/>
+        <refcontent>Work in Progress</refcontent>
+      </reference>
+      <reference anchor="OWASP-APTS" target="https://github.com/OWASP/APTS/blob/2b210945361bac207f37a21440d0f34c05c07ad9/standard/3_Human_Oversight/README.md">
+        <front>
+          <title>Agentic AI - Threats and Mitigations: Human Oversight</title>
+          <author>
+            <organization>OWASP Foundation</organization>
+          </author>
+          <date year="2026"/>
+        </front>
+        <refcontent>Repository snapshot at commit 2b210945361bac207f37a21440d0f34c05c07ad9</refcontent>
+      </reference>
+      <reference anchor="PHIONYX-CONTROL-DELIVERY" target="https://github.com/halvrenofviryel/phionyx-research/tree/706e40748be18e988d4efd1e307787e009161c6a/tools/claude_code_mcp">
+        <front>
+          <title>Phionyx author-side control-delivery runtime probe and tests</title>
+          <author fullname="Ali Toygar Abak" initials="A. T." surname="Abak"/>
+          <date day="1" month="September" year="2026"/>
+        </front>
+        <refcontent>Repository snapshot at commit 706e40748be18e988d4efd1e307787e009161c6a; control_override.py and test_control_delivery_c1.py</refcontent>
+      </reference>
+      <reference anchor="AIREP-REPO" target="https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/tree/a3973ce3b6ad984635867a2bb52d83c472e5c0cb">
+        <front>
+          <title>AI Runtime Evidence Protocol (AIREP): Repository Snapshot</title>
+          <author fullname="Ali Toygar Abak" initials="A. T." surname="Abak"/>
+          <date day="2" month="September" year="2026"/>
+        </front>
+        <refcontent>Commit a3973ce3b6ad984635867a2bb52d83c472e5c0cb</refcontent>
+      </reference>
+      <reference anchor="AIREP-EXTERNAL-EVIDENCE" target="https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/blob/a3973ce3b6ad984635867a2bb52d83c472e5c0cb/EXTERNAL_EVIDENCE.md">
+        <front>
+          <title>AIREP External Evidence: Frozen Producer and Consumer/Verifier Measurements</title>
+          <author fullname="Ali Toygar Abak" initials="A. T." surname="Abak"/>
+          <date day="2" month="September" year="2026"/>
+        </front>
+        <refcontent>Repository snapshot at commit a3973ce3b6ad984635867a2bb52d83c472e5c0cb</refcontent>
+      </reference>
+      <reference anchor="ACDER-REF" target="https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/tree/449f4fb6a07fd54b45a6e68208dece109446ef93/research/nist-acder">
+        <front>
+          <title>Agent Control Delivery Evidence Reconciliation (ACDER): Experimental Reference</title>
+          <author fullname="Ali Toygar Abak" initials="A. T." surname="Abak"/>
+          <date day="31" month="August" year="2026"/>
+        </front>
+        <refcontent>Commit 449f4fb6a07fd54b45a6e68208dece109446ef93</refcontent>
+      </reference>
+      <reference anchor="SCHROCK-FIXTURE-MSG" target="https://mailarchive.ietf.org/arch/msg/scitt/YcoTPgdpSl2RNWvcsB1p3c4VpAM/">
+        <front>
+          <title>SCITT review: proposed freeze-race and multi-target control-delivery fixture</title>
+          <author fullname="Iman Schrock" initials="I." surname="Schrock"/>
+          <date day="31" month="August" year="2026"/>
+        </front>
+        <refcontent>SCITT mailing-list message; attached fixture SHA-256 2d8faa1b64b8a73fd0bf81b21889bbf726cbfb324af099b700499627af84203a</refcontent>
+      </reference>
+      <reference anchor="SCHROCK-FIXTURE-PROVENANCE" target="https://mailarchive.ietf.org/arch/msg/scitt/5J5i8Y6w3WkzewIzH23oMPpb9cI/">
+        <front>
+          <title>SCITT fixture provenance clarification for control-delivery test input</title>
+          <author fullname="Iman Schrock" initials="I." surname="Schrock"/>
+          <date day="31" month="August" year="2026"/>
+        </front>
+        <refcontent>SCITT mailing-list message</refcontent>
+      </reference>
+      <reference anchor="AGENTPROTO-PRESERVATION" target="https://mailarchive.ietf.org/arch/msg/agentproto/A99A4-uKcOG6FwbDgp3fhK3wfUk/">
+        <front>
+          <title>AgentProto discussion: protocol-level information preservation at governance boundaries</title>
+          <author fullname="Ali Toygar Abak" initials="A. T." surname="Abak"/>
+          <date day="30" month="August" year="2026"/>
+        </front>
+        <refcontent>AgentProto mailing-list message and quoted review context</refcontent>
+      </reference>
+      <reference anchor="AGENTPROTO-PRESERVATION-PATH" target="https://mailarchive.ietf.org/arch/msg/agentproto/Vum-DPI6xfAnHYmv747qqoSHryU/">
+        <front>
+          <title>AgentProto discussion: preservation of governance-relevant distinctions through intermediaries</title>
+          <author fullname="Ali Toygar Abak" initials="A. T." surname="Abak"/>
+          <date day="31" month="August" year="2026"/>
+        </front>
+        <refcontent>AgentProto mailing-list follow-up incorporating review from Nancy Sahu and Sumit Ahuja</refcontent>
+      </reference>
+      <reference anchor="DOGRU-REVIEW-CASES" target="https://github.com/dogrucanemek-alt/cedulon/blob/52cf577/interop/abak-00/cases-0.12.0.mjs">
+        <front>
+          <title>Cedulon review case driver used for the draft-abak-01 focused review</title>
+          <author fullname="Emek Can Dogru" initials="E. C." surname="Dogru"/>
+          <date day="3" month="September" year="2026"/>
+        </front>
+        <refcontent>Reviewer-authored case driver exercising published Cedulon packages; commit 52cf577; observed SHA-256 f7f1218abd1535f104b0010b9127c565b3afab0e72242583ebc459000937bc8e. Not test code for this document.</refcontent>
+      </reference>
+      <reference anchor="DOGRU-POPULATION-PROBE" target="https://github.com/dogrucanemek-alt/cedulon/blob/0a3fa04/interop/abak-00/population-probe.mjs">
+        <front>
+          <title>Cedulon population-conservation probe against draft-abak-00</title>
+          <author fullname="Emek Can Dogru" initials="E. C." surname="Dogru"/>
+          <date day="1" month="September" year="2026"/>
+        </front>
+        <refcontent>Commit 0a3fa04; SHA-256 031f84fda2054b1427a510baa45f880d379ea60dced408a4a74028da12b1fceb</refcontent>
+      </reference>
+      </references>
+    <section anchor="appendix-logical-record" numbered="false">
+      <name>Illustrative Multi-Target Reconciliation Record</name>
+      <t>The following example is deliberately not a wire format. Field names are
+descriptive placeholders. Equivalent facts can be carried in native protocol
+messages and external evidence artifacts.</t>
+      <artwork name="Illustrative multi-target control-delivery reconciliation" type="application/json">{
+  "instruction_id": "ctrl-7f3a",
+  "instruction_digest": "sha-256:&lt;digest&gt;",
+  "required_target_set": {
+    "set_id": "targets:runtime-egress:v1",
+    "structural_closure": "closed",
+    "coverage_qualification": "DECLARED_ONLY",
+    "members": ["EP-A", "EP-B"]
+  },
+  "target_results": [
+    {
+      "target_id": "EP-A",
+      "delivery": "CONFIRMED",
+      "enforcement": "APPLIED",
+      "control_effect": "UNKNOWN"
+    },
+    {
+      "target_id": "EP-B",
+      "delivery": "UNCONFIRMED",
+      "enforcement": "UNKNOWN",
+      "control_effect": "UNKNOWN"
+    }
+  ],
+  "parent_instruction": {
+    "fully_confirmed_within_target_set": false
+  },
+  "structural_result": "INCONCLUSIVE",
+  "claim": {
+    "scope": "complete delivery to targets:runtime-egress:v1",
+    "support": "NOT_SUPPORTED"
+  }
+}</artwork>
+      <t>The example does not support a fully confirmed parent delivery because EP-B is
+UNCONFIRMED. The DECLARED_ONLY coverage qualification is a second, independent
+limitation: even if EP-B later became CONFIRMED, the named set alone would not
+prove that every possible enforcement path in the deployment was enumerated.</t>
+    </section>
+    <section anchor="appendix-freeze-fixture" numbered="false">
+      <name>Contributed Freeze-Race Fixture Summary</name>
+      <t>This appendix summarizes the proposed format-neutral fixture contributed by Iman Schrock of EMILIA Protocol in <xref target="SCHROCK-FIXTURE-MSG"/>. The fixture identifier and SHA-256 are preserved for provenance.</t>
+      <dl newline="true" spacing="normal">
+        <dt>fixture_id</dt>
+        <dd>
+          <t>freeze-after-provider-entry-with-multiple-required-targets</t>
+        </dd>
+        <dt>contributor</dt>
+        <dd>
+          <t>Iman Schrock, EMILIA Protocol</t>
+        </dd>
+        <dt>SHA-256</dt>
+        <dd>
+          <t>2d8faa1b64b8a73fd0bf81b21889bbf726cbfb324af099b700499627af84203a</t>
+        </dd>
+        <dt>required targets</dt>
+        <dd>
+          <t>EP-A at checkout/provider-entry and EP-B at alternate-dispatch/provider-entry</t>
+        </dd>
+        <dt>population note</dt>
+        <dd>
+          <t>The set is closed for the fixture, while enumeration completeness is explicitly not independently proven.</t>
+        </dd>
+        <dt>expected EP-A result</dt>
+        <dd>
+          <t>delivery CONFIRMED; enforcement APPLIED; scoped control effect observed for a post-freeze operation.</t>
+        </dd>
+        <dt>expected EP-B result</dt>
+        <dd>
+          <t>delivery UNCONFIRMED; enforcement UNKNOWN; control effect UNKNOWN.</t>
+        </dd>
+        <dt>in-flight operation</dt>
+        <dd>
+          <t>O1 crossed provider entry before the freeze; it remains consumed or in flight with external effect UNKNOWN pending authenticated reconciliation.</t>
+        </dd>
+        <dt>post-freeze operation</dt>
+        <dd>
+          <t>O2 is refused by the freeze before provider entry at EP-A.</t>
+        </dd>
+        <dt>parent claim</dt>
+        <dd>
+          <t>Not fully confirmed; complete-delivery and PASS claims are not permitted for the two-target instruction in the fixture.</t>
+        </dd>
+      </dl>
+      <t>The fixture also requires the following non-claims: EP-A receipt does not
+establish EP-B receipt; EP-A APPLIED does not establish complete control
+mediation; the scoped O2 observation does not establish that every dispatch path
+was closed; and applying the freeze after O1 crossed provider entry does not
+retroactively relabel O1 as blocked or prove that O1 produced no external effect.</t>
+      <t>Provenance handling follows the contributor's clarification
+<xref target="SCHROCK-FIXTURE-PROVENANCE"/>. An unchanged use keeps the original
+fixture identifier and SHA-256. An adapted derivative uses a new fixture
+identifier and records the original fixture identifier and digest as source
+provenance, with EMILIA Protocol attribution retained. The original fixture
+remains pinned to the related-work revisions it named when contributed; updating
+related-work citations in this document does not silently rewrite the fixture.</t>
+    </section>
+    <section anchor="appendix-tests" numbered="false">
+      <name>Minimum Conformance Cases</name>
+      <t>A profile claiming conformance to the reconciliation requirements SHOULD publish machine-readable test vectors for at least:</t>
+      <ol>
+        <li>
+          <t>matching issuer and receiver records for one target: CONFIRMED;</t>
+        </li>
+        <li>
+          <t>expected obligation with issuer evidence only at cutoff: UNCONFIRMED;</t>
+        </li>
+        <li>
+          <t>same obligation identity with different digest: SUBSTITUTION;</t>
+        </li>
+        <li>
+          <t>receiver record with no expected obligation: ORPHAN record accounting;</t>
+        </li>
+        <li>
+          <t>positive transport rejection bound to one attempt and target: scoped EXPLICIT_FAILURE;</t>
+        </li>
+        <li>
+          <t>malformed expected obligation or issuer record: INVALID, retained in counts;</t>
+        </li>
+        <li>
+          <t>malformed receiver record: invalid receiver-record accounting;</t>
+        </li>
+        <li>
+          <t>duplicate matching receiver records: one match plus duplicate accounting under the profile's rule;</t>
+        </li>
+        <li>
+          <t>conflicting valid observations: CONFLICT;</t>
+        </li>
+        <li>
+          <t>missing acknowledgement without a negative-observation record: UNCONFIRMED, not EXPLICIT_FAILURE;</t>
+        </li>
+        <li>
+          <t>deadline-elapsed negative observation followed by late matching receipt: versioned reconciliation results preserving both cutoffs;</t>
+        </li>
+        <li>
+          <t>delivery CONFIRMED with enforcement UNKNOWN;</t>
+        </li>
+        <li>
+          <t>enforcement APPLIED with control effect UNKNOWN;</t>
+        </li>
+        <li>
+          <t>self-declared observer role without verified binding: no independence claim and no silent fully supported attribution;</t>
+        </li>
+        <li>
+          <t>unresolvable required-target or external binding: INDETERMINATE or INVALID according to the declared profile, never CONFIRMED;</t>
+        </li>
+        <li>
+          <t>a bounded obligation population whose category counts fail conservation: structural PASS rejected;</t>
+        </li>
+        <li>
+          <t>one instruction with two required targets, EP-A CONFIRMED and EP-B UNCONFIRMED: one CONFIRMED plus one UNCONFIRMED obligation, parent not fully confirmed, and no complete-delivery PASS;</t>
+        </li>
+        <li>
+          <t>a receiver observation bound to EP-A presented as evidence for EP-B: EP-B is not CONFIRMED;</t>
+        </li>
+        <li>
+          <t>two required targets both CONFIRMED while target-set coverage is DECLARED_ONLY: a scoped result over the named set can be structurally complete, but a complete-mediation claim cannot be FULLY_SUPPORTED solely from that declaration;</t>
+        </li>
+        <li>
+          <t>an open or unresolved Required Target Set: no complete-delivery PASS over an unspecified population;</t>
+        </li>
+        <li>
+          <t>a structurally passing population with a profile-permitted missing external trust predicate: structural result preserved while the stronger claim is CONDITIONALLY_SUPPORTED and the missing predicate is named;</t>
+        </li>
+        <li>
+          <t>a positive failing condition supported by verified evidence: structural FAIL can still have FULLY_SUPPORTED claim support for the scoped failure statement;</t>
+        </li>
+        <li>
+          <t>a freeze applied after operation O1 crossed the relevant provider-entry boundary and before operation O2 attempts entry: O1 is not retroactively labelled blocked, O2 is blocked only within the evidenced target scope, and O1 outcome remains separately reconciled; and</t>
+        </li>
+        <li>
+          <t>a target set closed for the fixture but without independently verified enumeration completeness: structural accounting proceeds over the set while complete-mediation support remains qualified;</t>
+        </li>
+        <li>
+          <t>a source emits DEFER but an intermediary maps it to generic FAILURE without a lossless mapping: the relying party cannot claim that the original disposition survived intact and the resulting preservation state remains qualified or INDETERMINATE;</t>
+        </li>
+        <li>
+          <t>a stable instruction identifier survives an intermediary while the governed instruction content changes: identifier continuity alone does not satisfy content binding and MUST NOT produce CONFIRMED;</t>
+        </li>
+        <li>
+          <t>an issuer instruction whose target resolution succeeds and yields an empty Required Target Set: the instruction remains accounted for in the report, contributes zero Delivery Obligations, is reported together with the rule or condition that produced the empty set, and does not disappear from reconciliation; instruction-level conservation over |I| still balances; and a structural PASS covering that instruction is available only where the profile explicitly declared an empty Required Target Set to be a valid terminal resolution before reconciliation;</t>
+        </li>
+        <li>
+          <t>a structural aggregate result exposed to a relying party without its corresponding claim scope and claim-support qualification in the same result context: a non-conformant representation that cannot be consumed as the complete result, exercised for a PASS result and for a FAIL result alike;</t>
+        </li>
+        <li>
+          <t>one Delivery Obligation or input record with several applicable diagnostics reduced to one primary disposition: the published reduction rule is deterministic and reviewable, exactly one primary disposition is selected, and every non-selected applicable diagnostic remains visible in the report or in an explicitly linked diagnostic collection, without any profile-specific precedence ordering being required by this document; and</t>
+        </li>
+        <li>
+          <t>an implementation reports FAIL because a receipt or issuer-side object is unmatched while the authenticated comparison population itself was never presented or established: the missing population evidence alone does not satisfy the positive failing condition that a structural FAIL requires under <xref target="global-results"/>, and the result remains INCONCLUSIVE or otherwise qualified according to the profile's semantics. This case exercises the existing rule that FAIL is not inferred from absence; it does not introduce a new disposition.</t>
+        </li>
+      </ol>
+    </section>
+  </back>
+</rfc>

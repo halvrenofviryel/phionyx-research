@@ -27,8 +27,11 @@ record.
   wording, and the document date only, with **no normative change**. The document
   remains `draft-abak-agent-control-delivery-evidence-01`; these are candidate
   revisions, not new Internet-Draft revision numbers.
-- **The candidate is not an IETF-submitted revision.** It has not been posted to
-  the Datatracker. The published baseline of this document remains `-00`.
+- **`-01` was submitted and posted on 4 September 2026.** The published baseline
+  of this document is now `-01`, stored under `../draft/published/01/`. This
+  worklist continues to describe the **pre-submission candidate** and is retained
+  as provenance; where it and the published files could be read differently, the
+  published files control.
 - **The worklist remains a traceability/review record**, not a specification and
   not a changelog. `../draft/candidate/01/CHANGELOG.md` is the author's own
   account of what changed; this file records whether each tracked review item is
@@ -662,7 +665,9 @@ whether the candidate holds to it.
   — **Held.** No adoption, consensus, or endorsement claim appears in the
   candidate; this was checked mechanically over the XML as part of integrating
   it. The candidate is stored under `../draft/candidate/01/`, deliberately
-  outside `../draft/published/`, and has not been submitted to the Datatracker.
+  outside `../draft/published/`. It was subsequently submitted and posted on
+  4 September 2026; the published artifacts are under `../draft/published/01/`,
+  and publication remains distinct from adoption or consensus.
 
 ## Open items to settle before `-01` goes to the Datatracker
 
