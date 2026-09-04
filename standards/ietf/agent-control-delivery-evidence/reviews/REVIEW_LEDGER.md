@@ -4,8 +4,11 @@ One entry per substantive public review item raised on the IETF SCITT mailing
 list. Whole messages are **not** reproduced here; the archive is the record and
 every entry links to it. Short quotations are attributed.
 
-**Review is ongoing.** Nothing in this ledger has been incorporated into a
-published revision. `-01` has not been submitted.
+**Review is ongoing.** `-01` was submitted and posted on 4 September 2026, so
+the dispositions recorded here are now incorporated into a published revision.
+That is a statement about what the author published, **not** about reviewer
+agreement, working-group adoption, or consensus: publication closes no ledger
+item and converts no reviewer finding into an agreed outcome.
 
 Entries `I-1` … `E-7` record public review of the **published `-00`**. Entries
 `E-8` … `E-15` and `I-7` … `I-12` record the **focused pre-submission review

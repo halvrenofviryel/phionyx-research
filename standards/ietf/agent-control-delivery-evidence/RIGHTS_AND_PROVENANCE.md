@@ -6,9 +6,11 @@ rights position it arrived with.
 
 ## 1. Published Internet-Draft material
 
-The files under `draft/published/00/` are the published Internet-Draft
-`draft-abak-agent-control-delivery-evidence-00` exactly as retrieved from the
-IETF archive. They are unmodified.
+The files under `draft/published/00/` and `draft/published/01/` are the
+published Internet-Drafts `draft-abak-agent-control-delivery-evidence-00` and
+`-01` exactly as retrieved from the IETF archive. They are unmodified.
+`-01` was submitted and posted on 4 September 2026; `-00` remains stored as the
+earlier revision.
 
 That material remains subject to the applicable **IETF Trust Legal Provisions
 and BCP 78 / BCP 79** terms, as stated in the document itself:
@@ -26,9 +28,9 @@ relicense it under this repository's general software license** (AGPL-3.0, see
 this repository's own software; it does not and cannot apply to an IETF
 Internet-Draft placed here for provenance.
 
-Do not modify the files under `draft/published/00/`. If a future revision is
-published, add it under a new `draft/published/<NN>/` directory rather than
-editing the existing one.
+Do not modify the files under `draft/published/00/` or `draft/published/01/`.
+If a future revision is published, add it under a new `draft/published/<NN>/`
+directory rather than editing an existing one.
 
 `draft/published/` holds **only** revisions actually published by the IETF. An
 author revision that has not been submitted does not go there — see section 7.
@@ -120,15 +122,26 @@ unpublished draft text is stored here.
 
 ## 7. Unpublished author candidate revisions
 
-`draft/candidate/<NN>/` holds the author's own **unpublished** candidate text for
-a future revision, together with its changelog and checksums. As of this writing
-that is `draft/candidate/01/`, the 3 September 2026 candidate for `-01`.
+`draft/candidate/<NN>/` holds the author's own **pre-submission** candidate text
+for a revision, together with its changelog and checksums. As of this writing
+that is `draft/candidate/01/`.
+
+**`-01` has since been submitted and published** (4 September 2026), and the
+published artifacts are under `draft/published/01/`. The candidate directory is
+**retained as provenance**: it records the pre-submission digest chain
+`da64a038…` → `11884630…` → `98c6ad0d…` → `b7d51500…` → `05a95b59…` and the
+review dispositions applied along it, which is the only way the review history
+stays checkable. The final candidate digest
+`05a95b598c8ebd462ffbcf3ed9a7fedcd08d8555053c8ec57ea43447c3cd64ca` is
+byte-identical to the published `-01` XML.
 
 This material has a different position from everything in section 1:
 
-- It is the **author's own work**, not an IETF-published artifact. It has not
-  been submitted to the Datatracker, has no Internet-Draft status, and must not
-  be cited as a published, submitted, or adopted revision.
+- It is the **author's own pre-submission working text**, not an IETF-published
+  artifact. Where it and `draft/published/01/` could ever be read differently,
+  the published files control. Earlier candidate states in the chain above were
+  never submitted and must not be cited as published, submitted, or adopted
+  revisions.
 - It carries the usual Internet-Draft boilerplate (`ipr="trust200902"`) because
   it is drafted for eventual submission. The BCP 78 / IETF Trust Legal
   Provisions position described in section 1 attaches to a revision **on
