@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!DOCTYPE rfc>
-<rfc xmlns:xi="http://www.w3.org/2001/XInclude" category="info" docName="draft-abak-agent-control-delivery-evidence-01" ipr="trust200902" submissionType="IETF" tocInclude="true" sortRefs="true" symRefs="true" version="3">
+<rfc xmlns:xi="http://www.w3.org/2001/XInclude" category="info" docName="draft-abak-agent-control-delivery-evidence-01" ipr="trust200902" tocInclude="true" sortRefs="true" symRefs="true" version="3">
   <front>
     <title abbrev="Agent Control Delivery Evidence">Evidence Requirements for Agent Control Delivery and Outcome Reconciliation</title>
     <seriesInfo name="Internet-Draft" value="draft-abak-agent-control-delivery-evidence-01"/>
