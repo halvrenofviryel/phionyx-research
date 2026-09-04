@@ -1,0 +1,128 @@
+
+=== d. balanced, full trust, window+scope declared
+keys: ok, findings, warnings, guarantee, summary, scope
+{
+ "ok": true,
+ "guarantee": "unconditional",
+ "summary": "audit: balanced",
+ "scope": {
+  "accountId": "acct",
+  "railId": "rail",
+  "windowStartMs": 1700000000000,
+  "windowEndMs": 1700003600000
+ }
+}
+findings: (none)
+warnings: counterparty-unbound(counterparty)
+
+=== e. balanced, NO rail key, NO window, NO scope (trust omitted)
+keys: ok, findings, warnings, guarantee, summary, scope
+{
+ "ok": true,
+ "guarantee": "conditional",
+ "summary": "audit: balanced",
+ "scope": {
+  "accountId": "acct",
+  "railId": "rail",
+  "windowStartMs": 1700000000000,
+  "windowEndMs": 1700003600000
+ }
+}
+findings: (none)
+warnings: unauthenticated-extract(extract), counterparty-unbound(counterparty)
+
+=== e2. balanced, rail key pinned, window+scope NOT declared
+keys: ok, findings, warnings, guarantee, summary, scope
+{
+ "ok": true,
+ "guarantee": "conditional",
+ "summary": "audit: balanced",
+ "scope": {
+  "accountId": "acct",
+  "railId": "rail",
+  "windowStartMs": 1700000000000,
+  "windowEndMs": 1700003600000
+ }
+}
+findings: (none)
+warnings: unstated-audit-window(extract), unstated-audit-scope(extract), counterparty-unbound(counterparty)
+
+=== b. closing-boundary receipt, next window names it
+keys: ok, findings, warnings, guarantee, summary, scope
+{
+ "ok": true,
+ "guarantee": "unconditional",
+ "summary": "audit: balanced",
+ "scope": {
+  "accountId": "acct",
+  "railId": "rail",
+  "windowStartMs": 1700000000000,
+  "windowEndMs": 1700003600000
+ }
+}
+findings: (none)
+warnings: counterparty-unbound(counterparty)
+
+=== c. aborted receipt (refused spend)
+keys: ok, findings, warnings, guarantee, summary, scope
+{
+ "ok": true,
+ "guarantee": "unconditional",
+ "summary": "audit: balanced",
+ "scope": {
+  "accountId": "acct",
+  "railId": "rail",
+  "windowStartMs": 1700000000000,
+  "windowEndMs": 1700003600000
+ }
+}
+findings: (none)
+warnings: counterparty-unbound(counterparty)
+
+=== f. malformed issuer record (many-to-one)
+keys: ok, findings, warnings, guarantee, summary, scope
+{
+ "ok": false,
+ "guarantee": "unconditional",
+ "summary": "audit: 1 settlement without receipt → FAIL",
+ "scope": {
+  "accountId": "acct",
+  "railId": "rail",
+  "windowStartMs": 1700000000000,
+  "windowEndMs": 1700003600000
+ }
+}
+findings: malformed-policy-hash(n8--------------), settlement-without-receipt(r8), receipt-chain-break(n8--------------), checkpoint-total-mismatch(epoch-1), checkpoint-total-mismatch(epoch-1-count), checkpoint-head-mismatch(epoch-1-head)
+warnings: counterparty-unbound(counterparty)
+
+=== g. rail key pinned, extract signed by a DIFFERENT key (refused)
+ok=false  guarantee=conditional  summary="audit: 1 finding(s) → FAIL"
+counts.receipts: undefined
+counts.settlements: undefined
+scope: {"accountId":"acct","railId":"rail","windowStartMs":1700000000000,"windowEndMs":1700003600000}
+findings: extract-key-mismatch(extract)
+warnings: counterparty-unbound(counterparty)
+
+=== h. rail key pinned, NO extract supplied at all
+ok=false  guarantee=conditional  summary="audit: 1 finding(s) → FAIL"
+counts.receipts: undefined
+counts.settlements: undefined
+scope: undefined
+findings: receipt-without-settlement(n1--------------)
+warnings: unauthenticated-extract(extract)
+
+=== i. no rail key, NO extract supplied at all
+ok=false  guarantee=conditional  summary="audit: 1 finding(s) → FAIL"
+counts.receipts: undefined
+counts.settlements: undefined
+scope: undefined
+findings: receipt-without-settlement(n1--------------)
+warnings: unauthenticated-extract(extract)
+
+=== j. extract declares a DIFFERENT account than pinned
+ok=false  guarantee=conditional  summary="audit: 1 finding(s) → FAIL"
+counts.receipts: undefined
+counts.settlements: undefined
+scope: {"accountId":"other","railId":"rail","windowStartMs":1700000000000,"windowEndMs":1700003600000}
+findings: extract-scope-mismatch(extract)
+warnings: counterparty-unbound(counterparty)

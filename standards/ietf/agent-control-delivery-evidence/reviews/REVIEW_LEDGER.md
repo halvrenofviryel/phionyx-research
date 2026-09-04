@@ -24,6 +24,7 @@ either group is IETF or working-group consensus.
 | `NO CHANGE REQUIRED` | No change to the draft text follows from this item. |
 | `FOCUSED REVIEW COMPLETED` | A review round this work area requested was carried out and its outcome is recorded. Not a consensus outcome. |
 | `SUPPORTING REVIEW` | A second reviewer independently agrees with a finding recorded under another entry. Recorded so the finding is not double-counted as two separate defects. |
+| `AUTHOR-SIDE REPRODUCTION` | This work area independently reran a third party's measurement and preserved the raw output. It is **not** a reviewer finding, **not** an implementation, and evidence about the measured system only. |
 
 `Status` is one of `OPEN`, `TRACKED FOR -01`, or `RECORDED`.
 
@@ -561,6 +562,68 @@ link here is a gap in this record, not evidence that the review was private.
 
 ---
 
+---
+
+# Closure of the focused review round, and the author-side reproduction
+
+Three objects are kept separate below and are never merged:
+
+1. **the reviewer measurement** — what a reviewer reported;
+2. **the author-side reproduction** — what this work area independently reran; and
+3. **the draft requirement** — what the document says.
+
+A reproduction of (1) is not evidence for (3), and neither is an implementation
+of the draft.
+
+---
+
+## E-16 — Emek Can Dogru: dispositions checked against the current candidate
+
+| Field | Value |
+|---|---|
+| **Reviewer** | Emek Can Dogru |
+| **Artifact checked** | Candidate XML SHA-256 `11884630dcb89082d88f838051e19b4736b4908c67cca2f65725ac3ed46501a7` |
+| **Finding** | The reviewer checked the **changed passages** on that digest and stated that the dispositions reflect what he meant. |
+| **Scope limit** | **This is not a full-document review**, and is not recorded as one. The reviewer checked the passages that changed in response to his findings; he made no statement about the rest of the document. |
+| **Disposition** | `FOCUSED REVIEW COMPLETED` — closure of `E-8` … `E-15` on the changed passages |
+| **Status** | `RECORDED` |
+
+---
+
+## I-13 — Iman Schrock: dispositions checked against the current candidate
+
+| Field | Value |
+|---|---|
+| **Reviewer** | Iman Schrock (EMILIA Protocol) |
+| **Artifact checked** | Candidate XML SHA-256 `11884630dcb89082d88f838051e19b4736b4908c67cca2f65725ac3ed46501a7` |
+| **Finding** | The reviewer checked the **changed passages** on that digest and closed his focused review. |
+| **Scope limit** | **This is not a full-document review**, and is not recorded as one. |
+| **Disposition** | `FOCUSED REVIEW COMPLETED` — closure of `I-7` … `I-12` on the changed passages |
+| **Status** | `RECORDED` |
+
+---
+
+## A-1 — Author-side reproduction of the Cedulon focused-review measurements
+
+**This is not a reviewer finding.** It is an evidence event produced by this work
+area, recorded in the ledger so it stays visibly distinct from the reviewer
+measurement it reproduces.
+
+| Field | Value |
+|---|---|
+| **Performed by** | the author, 4 September 2026 |
+| **Object** | The measurements Emek Can Dogru reported during focused review (`E-13`, `E-14`, and the measured basis of `E-8`) |
+| **Method** | The reviewer's own pinned case driver — `dogrucanemek-alt/cedulon`, commit `52cf577`, `interop/abak-00/cases-0.12.0.mjs`, observed SHA-256 `f7f1218abd1535f104b0010b9127c565b3afab0e72242583ebc459000937bc8e`, 135 lines, 6 153 bytes, LF only — run **byte-for-byte unmodified** against the published npm package sets `0.12.0` and `0.8.0`, from two separate clean directories created outside every git clone. Both graphs resolved homogeneously (seven `@cedulon` packages each, no third-party dependencies). No lifecycle install scripts exist in either graph, so `--ignore-scripts` was **not** used and the reviewer's invocation contract was preserved. |
+| **Result** | `node` exit `0` and empty `stderr` for both runs. **All seven reviewer-reported behaviors reproduced; no claim failed and no mismatch was observed.** Reproduced: structural-success-plus-`conditional` with `unstated-audit-window` / `unstated-audit-scope`; `unauthenticated-extract` on omitted rail trust; structural `FAIL` returned while the qualification axis reports the comparison population was never established; `aborted=1` / `settled=0` class counts published at `0.12.0` and absent at `0.8.0`; the carried closing-boundary row exposed in `0.12.0` counts; multiple layered diagnostics on one malformed record; and `settlement-comparison-skipped` present at `0.12.0` only. |
+| **Evidence** | `../external-evidence/cedulon-review-reproduction-2026-09-04/` — raw stdout/stderr, dependency graphs, registry metadata for all fourteen package-versions, environment, `SHA256SUMS.txt`, and a case-by-case matrix in `RESULTS.md`. |
+| **Effect on E-14** | The staleness recorded at `E-14` is now **directly confirmed here**: `settlement-comparison-skipped` is emitted at `0.12.0` and by no `0.8.0` case. `E-14`'s disposition is unchanged. |
+| **What was NOT done** | The historical 1 September probe — commit `0a3fa04`, SHA-256 `031f84fda2054b1427a510baa45f880d379ea60dced408a4a74028da12b1fceb` — was **not** repinned, edited, replaced, or corrected. The reproduction is a separate, later evidence event with its own driver, packages, and date. No Cedulon source was vendored into this repository. |
+| **Explicit non-claims** | This is an **author-side reproduction**, not an *independent implementation* of Cedulon, not an implementation of this document, not a conformance result, and not an interoperability result. Cedulon remains adjacent-domain evaluation evidence. The reproduction changed **no normative requirement**; in particular the rule that structural `FAIL` must not be inferred solely from missing evidence was neither modified nor weakened by it. |
+| **Disposition** | `AUTHOR-SIDE REPRODUCTION` |
+| **Status** | `RECORDED` |
+
+---
+
 ## Index
 
 | ID | Reviewer | Disposition | Status |
@@ -606,3 +669,11 @@ dispositions.
 | I-10 | Iman Schrock | `NO CHANGE REQUIRED` — verified by reviewer | RECORDED |
 | I-11 | Iman Schrock | `SUPPORTING REVIEW` of E-10 | RECORDED |
 | I-12 | Iman Schrock | `RECORDED` — acknowledgement permission | RECORDED |
+
+### Closure and author-side reproduction
+
+| ID | Actor | Disposition | Status |
+|---|---|---|---|
+| E-16 | Emek Can Dogru | `FOCUSED REVIEW COMPLETED` — changed passages on `11884630…01a7`; **not a full-document review** | RECORDED |
+| I-13 | Iman Schrock | `FOCUSED REVIEW COMPLETED` — changed passages on `11884630…01a7`; **not a full-document review** | RECORDED |
+| A-1 | **the author** (not a reviewer) | `AUTHOR-SIDE REPRODUCTION` of the Cedulon measurements | RECORDED |

@@ -1,0 +1,132 @@
+{
+  "retrieved_utc": "2026-09-04T03:28:20Z",
+  "registry": "https://registry.npmjs.org/",
+  "packages": {
+    "@cedulon/audit@0.8.0": {
+      "dist.integrity": "sha512-PsubfFqplAefrANC+kG6X2JHnDSHPHUM+uULFShBGtvYaf4QWWpZ9aMS3kszfUxAPT28Qh8zD46jdhuXbtrBiA==",
+      "dist.shasum": "d415d0335b2a60b123c4545029509258e889b1b9",
+      "dist.tarball": "https://registry.npmjs.org/@cedulon/audit/-/audit-0.8.0.tgz",
+      "license": "Apache-2.0",
+      "scripts": {
+        "build": "tsc -p tsconfig.build.json"
+      }
+    },
+    "@cedulon/receipts@0.8.0": {
+      "dist.integrity": "sha512-XpNefKK/G+cO8sJNfqxVcSBnE1CVyCtewhKWmZS76PLiq2v8atCq8JuVSFO3gKGtgZT9LwsHpJOmSYrMiDPb7Q==",
+      "dist.shasum": "86ff944b17a198ad85d7c3273db245c2cc9d8c3c",
+      "dist.tarball": "https://registry.npmjs.org/@cedulon/receipts/-/receipts-0.8.0.tgz",
+      "license": "Apache-2.0",
+      "scripts": {
+        "build": "tsc -p tsconfig.build.json"
+      }
+    },
+    "@cedulon/checkpoint@0.8.0": {
+      "dist.integrity": "sha512-scHUf8N18ugLpPDs/cpNovMJVtCJCR7ylH4B+wkfYwT+9/XrqPJIKXx2u8cYFsFPxyfBWz6Q+Zh6Cw7o4G6Ccg==",
+      "dist.shasum": "dc12589cd8781e8f82aad4c14f4dcd72cc23b692",
+      "dist.tarball": "https://registry.npmjs.org/@cedulon/checkpoint/-/checkpoint-0.8.0.tgz",
+      "license": "Apache-2.0",
+      "scripts": {
+        "build": "tsc -p tsconfig.build.json"
+      }
+    },
+    "@cedulon/x402-adapter@0.8.0": {
+      "dist.integrity": "sha512-XzUB80rGWJR/N8admsU52Y6XdUmxD9D7X8hNXGzxHY3/7jgUIQG8tI5L2/qjoRMJkM9g+/kXph9CxAWJVJrV5Q==",
+      "dist.shasum": "43158bd567f5bfc679191b4076fa9bcc6250485c",
+      "dist.tarball": "https://registry.npmjs.org/@cedulon/x402-adapter/-/x402-adapter-0.8.0.tgz",
+      "license": "Apache-2.0",
+      "scripts": {
+        "build": "tsc -p tsconfig.build.json"
+      }
+    },
+    "@cedulon/core@0.8.0": {
+      "dist.integrity": "sha512-PZFjDFDBKdL3/NRbh5Wb3/dP/cgWTLUY13kN+x/8MlXjBFfFuBkr+/P1NjAM4vqq0fj2TxRoIBfP2ECLztJb4Q==",
+      "dist.shasum": "546b3ea29e46581ee9929b8528cde9a8b70587ce",
+      "dist.tarball": "https://registry.npmjs.org/@cedulon/core/-/core-0.8.0.tgz",
+      "license": "Apache-2.0",
+      "scripts": {
+        "build": "tsc -p tsconfig.build.json"
+      }
+    },
+    "@cedulon/cose@0.8.0": {
+      "dist.integrity": "sha512-cHbRLvrAlmxcToGmQUn00SlW5Tig1qq15LR6hEbqbTUFEa8A3v9njlcX7vNkGz6NIntwB692VIIbkhaD9/nkKg==",
+      "dist.shasum": "ee5cd4ff152c223e778417229c2476e43e2658d4",
+      "dist.tarball": "https://registry.npmjs.org/@cedulon/cose/-/cose-0.8.0.tgz",
+      "license": "Apache-2.0",
+      "scripts": {
+        "build": "tsc -p tsconfig.build.json"
+      }
+    },
+    "@cedulon/manifest@0.8.0": {
+      "dist.integrity": "sha512-KxVUG2WSMJzhWyVo7U5B2Zp35lnlaxCcq+pyji9LhzkxWxfLRrsS7LGRsQ17uuUhfPgkZKsgedD/4s110/FkgQ==",
+      "dist.shasum": "937051088213dc60df51c64032e67f47b0fa391a",
+      "dist.tarball": "https://registry.npmjs.org/@cedulon/manifest/-/manifest-0.8.0.tgz",
+      "license": "Apache-2.0",
+      "scripts": {
+        "build": "tsc -p tsconfig.build.json"
+      }
+    },
+    "@cedulon/audit@0.12.0": {
+      "dist.integrity": "sha512-wLxesHdF85jWxJIUKbgL+auy89QQkp7heRuFCylZeXUAFnJJUYCNDNO2AE8JBfXDXyCeiUQBZIoUdCirLPvLwg==",
+      "dist.shasum": "895ee13ba2c58dfdcb213ae9df1f3808383b2bc3",
+      "dist.tarball": "https://registry.npmjs.org/@cedulon/audit/-/audit-0.12.0.tgz",
+      "license": "Apache-2.0",
+      "scripts": {
+        "build": "tsc -p tsconfig.build.json"
+      }
+    },
+    "@cedulon/receipts@0.12.0": {
+      "dist.integrity": "sha512-1Y0YgwCbQfTuv+InPKbsXHrPBD7AAFZwE4CpvNj4D211Y0qBuc4DHo/V4xdy7NJgplW774eEvTpFonAzANKYPQ==",
+      "dist.shasum": "f3fae36db672a1242dffa16f5f23c161f727466a",
+      "dist.tarball": "https://registry.npmjs.org/@cedulon/receipts/-/receipts-0.12.0.tgz",
+      "license": "Apache-2.0",
+      "scripts": {
+        "build": "tsc -p tsconfig.build.json"
+      }
+    },
+    "@cedulon/checkpoint@0.12.0": {
+      "dist.integrity": "sha512-wd4RvcB3erO47z5bQ0/TKTgN471H856nV4YqgDuwJFsfcb4xc8/vYFoKqePl4UJwD3/w4ABH45L+/jLO1ogNBg==",
+      "dist.shasum": "7bbf1042a2b145c8aab308dace4069c860ac55a4",
+      "dist.tarball": "https://registry.npmjs.org/@cedulon/checkpoint/-/checkpoint-0.12.0.tgz",
+      "license": "Apache-2.0",
+      "scripts": {
+        "build": "tsc -p tsconfig.build.json"
+      }
+    },
+    "@cedulon/x402-adapter@0.12.0": {
+      "dist.integrity": "sha512-NC6/Wn6TC6+sDSMuGqvIkVbvZQF2bMvV1xljje1OYwbRRs0tI4teq8uNVFh46JTpSoQ+bBXo4wGLkft42P0cWQ==",
+      "dist.shasum": "41051d017f30f46b44d26a35ac8ca83ede135fb5",
+      "dist.tarball": "https://registry.npmjs.org/@cedulon/x402-adapter/-/x402-adapter-0.12.0.tgz",
+      "license": "Apache-2.0",
+      "scripts": {
+        "build": "tsc -p tsconfig.build.json"
+      }
+    },
+    "@cedulon/core@0.12.0": {
+      "dist.integrity": "sha512-0A2O99I7Pej9uEHET1jW1ngd/RJu5DSVDrl0WG3nSKyaRuXrnugBI5n4vY97D1Y8jA9FuBEr38Q6EG/dnrjLog==",
+      "dist.shasum": "cb34e605f371371c14eb689209bc4c81c55735d6",
+      "dist.tarball": "https://registry.npmjs.org/@cedulon/core/-/core-0.12.0.tgz",
+      "license": "Apache-2.0",
+      "scripts": {
+        "build": "tsc -p tsconfig.build.json"
+      }
+    },
+    "@cedulon/cose@0.12.0": {
+      "dist.integrity": "sha512-na9kjF1Y3vg1KEySjCL13yZmS8Tj1yz+gaxRYcnyrDvbQhAyDKh2mJdya5b+Otb/MtTFntHCapjAZhpjcY7MYg==",
+      "dist.shasum": "9fe653cd8d54148014af0268cdd935db3422a852",
+      "dist.tarball": "https://registry.npmjs.org/@cedulon/cose/-/cose-0.12.0.tgz",
+      "license": "Apache-2.0",
+      "scripts": {
+        "build": "tsc -p tsconfig.build.json"
+      }
+    },
+    "@cedulon/manifest@0.12.0": {
+      "dist.integrity": "sha512-utu4B80hwVQluRRtGPp9XDbOvrUlFFdoV5u7jpubsn/UYiTp7Iu5MUUwkYnGw+8sFmDT4xCUe11oy0qFVEtcCA==",
+      "dist.shasum": "fae1b533af468fdb25cb16fc1e604d2bf4c2d66d",
+      "dist.tarball": "https://registry.npmjs.org/@cedulon/manifest/-/manifest-0.12.0.tgz",
+      "license": "Apache-2.0",
+      "scripts": {
+        "build": "tsc -p tsconfig.build.json"
+      }
+    }
+  }
+}

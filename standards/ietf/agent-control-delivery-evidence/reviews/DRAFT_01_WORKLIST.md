@@ -14,7 +14,8 @@ record.
   | Candidate state | XML SHA-256 | Reviewed by |
   |---|---|---|
   | Initial focused-review candidate | `da64a03846e03f3868aa2fa54682c87d338a4dedcbc1dc4b5642cdfea79a81c6` | Emek Can Dogru; Iman Schrock |
-  | Current candidate (this revision pass) | `11884630dcb89082d88f838051e19b4736b4908c67cca2f65725ac3ed46501a7` | **not yet reviewed by either reviewer** |
+  | Focused-review disposition candidate | `11884630dcb89082d88f838051e19b4736b4908c67cca2f65725ac3ed46501a7` | Emek and Iman each checked the **changed passages** on this digest (ledger `E-16`, `I-13`) — **not a full-document review** |
+  | Current candidate, post-reproduction | `98c6ad0d1560028e56e0ddd619c2f1e8ebbc3becb58cd48d569368f880e383f9` | **not reviewed by either reviewer** |
 
   Both reviewers assessed the initial digest. **Neither has reviewed the updated
   bytes**, and nothing in this file may be read as saying they have. The
@@ -526,10 +527,11 @@ has reviewed**.
       **not** edited, repinned, or rewritten, and this work area does **not**
       claim it covers current Cedulon 0.12.0. Staleness relative to a later
       upstream release is **not** corruption of the historical measurement.
-      **No reproduction of the reviewer's 0.8.0 / 0.12.0 measurements was
-      performed in this pass**, so they are recorded as reviewer-reported public
-      evidence only, and the candidate says so explicitly rather than claiming
-      independent reproduction.
+      **Superseded on 2026-09-04 by G15.** At the time this item was written no
+      reproduction had been performed, so the measurements were recorded as
+      reviewer-reported evidence only. They have since been independently rerun
+      by the author; see **G15**. The "no repin" constraint is unchanged and still
+      holds.
 - [x] **G8 — Acknowledgement permission recorded.** *(E-15)* → See **E3**.
 
 ### Iman Schrock
@@ -567,6 +569,43 @@ has reviewed**.
 - [x] **G13 — Empty-target: supporting review of E-10.** *(I-11)*
       → Recorded as independent support for **G3**, not as a second finding.
 - [x] **G14 — Acknowledgement permission confirmed.** *(I-12)* → See **E3**.
+
+---
+
+### Closure and author-side reproduction (2026-09-04)
+
+- [x] **G15 — Author-side reproduction of the Cedulon focused-review
+      measurements.** *(ledger A-1; supersedes the "not reproduced" note in G7)*
+      → **Performed and PASSED.** The reviewer's pinned case driver
+      (`dogrucanemek-alt/cedulon`, commit `52cf577`,
+      `interop/abak-00/cases-0.12.0.mjs`, observed SHA-256
+      `f7f1218abd1535f104b0010b9127c565b3afab0e72242583ebc459000937bc8e`,
+      135 lines, 6 153 bytes, LF only) was rerun **byte-for-byte unmodified**
+      against the published `0.12.0` and `0.8.0` npm package sets, from two
+      separate clean directories outside every git clone. Both graphs resolved
+      homogeneously at the requested version with no third-party dependencies;
+      `node` exited `0` with empty `stderr` in both runs.
+      **All seven reviewer-reported behaviors reproduced; nothing failed.**
+      Raw output, dependency graphs, registry metadata for all fourteen
+      package-versions, environment, and the case matrix are in
+      `../external-evidence/cedulon-review-reproduction-2026-09-04/`.
+      **Three objects stay separate:** the reviewer measurement, the author-side
+      reproduction, and the draft requirement. This is an **author-side
+      reproduction**, not an independent implementation of Cedulon, not an
+      implementation of this document, and not a conformance or interoperability
+      result. **The historical 1 September probe was not repinned or edited**, and
+      no Cedulon source was vendored. **No normative requirement changed because
+      of it** — in particular the FAIL-from-absence rule was neither modified nor
+      weakened; cases `h` and `i` are recorded as adjacent-domain evaluation
+      evidence bearing on that rule.
+- [x] **G16 — Emek checked the dispositions on the current candidate.**
+      *(ledger E-16)* → He checked the **changed passages** on
+      `11884630dcb89082d88f838051e19b4736b4908c67cca2f65725ac3ed46501a7` and
+      stated that the dispositions reflect what he meant. **Not a full-document
+      review**, and not recorded as one.
+- [x] **G17 — Iman checked the dispositions and closed his focused review.**
+      *(ledger I-13)* → Same digest, **changed passages only**. **Not a
+      full-document review.**
 
 ---
 

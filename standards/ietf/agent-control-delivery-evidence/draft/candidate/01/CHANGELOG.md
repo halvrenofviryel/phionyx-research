@@ -444,7 +444,7 @@ That is the principal semantic difference between `-00` and `-01`.
 
 - Current `-01` candidate (after the 4 September 2026 review refinements):
   - `draft-abak-agent-control-delivery-evidence-01`
-  - XML SHA-256: `11884630dcb89082d88f838051e19b4736b4908c67cca2f65725ac3ed46501a7`
+  - XML SHA-256: `98c6ad0d1560028e56e0ddd619c2f1e8ebbc3becb58cd48d569368f880e383f9`
   - the changelog digest is recorded in `SHA256SUMS.txt` beside this file
   - **not yet reviewed by either reviewer**
 
@@ -475,7 +475,7 @@ The changes below were applied **afterwards** and produce a **new candidate
 digest**:
 
 ```
-XML SHA-256 11884630dcb89082d88f838051e19b4736b4908c67cca2f65725ac3ed46501a7
+XML SHA-256 98c6ad0d1560028e56e0ddd619c2f1e8ebbc3becb58cd48d569368f880e383f9
 ```
 
 **Neither reviewer has reviewed the updated bytes.** Nothing here is
@@ -689,3 +689,88 @@ independent reproduction by the author**.
   untouched, and `draft/published/00/` is byte-identical.
 - No Datatracker submission, working-group adoption, or IETF consensus is claimed
   or has occurred.
+
+---
+
+## 10. Cedulon review measurement reproduction — 4 September 2026
+
+**Evidence bookkeeping only. No normative requirement changed because of this
+reproduction.**
+
+### 10.1 What was done
+
+The measurements **Emek Can Dogru** reported during focused review were
+**independently rerun by the author**. The reviewer's own pinned case driver was
+used byte-for-byte unmodified:
+
+| Field | Value |
+|---|---|
+| Repository | `dogrucanemek-alt/cedulon` |
+| Commit | `52cf577` |
+| Path | `interop/abak-00/cases-0.12.0.mjs` |
+| Observed SHA-256 | `f7f1218abd1535f104b0010b9127c565b3afab0e72242583ebc459000937bc8e` |
+| Size | 135 lines, 6 153 bytes, LF only |
+
+It was run against the **published** npm package sets from two separate clean
+directories created outside every git clone:
+
+- **0.12.0** — `@cedulon/audit`, `receipts`, `checkpoint`, `x402-adapter`, and
+  transitively `core`, `cose`, `manifest`, all at `0.12.0`.
+- **0.8.0** — the same seven packages, all at `0.8.0`.
+
+Both graphs were homogeneous at the requested version with no third-party
+dependencies. `node` exited `0` with empty `stderr` in both runs. All seven
+reviewer-reported behaviors reproduced; none failed.
+
+Raw stdout and stderr, both dependency graphs, npm registry metadata for all
+fourteen package-versions, the execution environment, a case-by-case matrix, and
+`SHA256SUMS.txt` are in:
+
+```
+external-evidence/cedulon-review-reproduction-2026-09-04/
+```
+
+### 10.2 What changed in the candidate
+
+One passage in **Implementation Status** — an evaluation-status statement, not a
+requirement. It previously said the later reviewer-reported Cedulon measurements
+had not been independently reproduced by the author. That became false once the
+reproduction succeeded, so it now records the rerun, its date, its pinned driver,
+and its scope. One **informative** reference, `DOGRU-REVIEW-CASES`, was added for
+the pinned driver; its title states that it is the reviewer's case driver and not
+test code for this document. No normative reference was added.
+
+### 10.3 What did not change
+
+- **No normative requirement was changed by the reproduction.** R-CD-1 … R-CD-16
+  are untouched, as are the reconciliation model, the conservation equations, the
+  conformance cases, and the claim-support rules.
+- In particular the rule that structural `FAIL` "MUST identify at least one
+  positive failing condition and MUST NOT be inferred solely from missing
+  evidence" was **neither modified nor weakened**. The measured cases bearing on
+  it are recorded as adjacent-domain evaluation evidence, not as a reason to
+  revisit the rule.
+- The historical **1 September 2026 probe** — commit `0a3fa04`, SHA-256
+  `031f84fda2054b1427a510baa45f880d379ea60dced408a4a74028da12b1fceb` — was
+  **not repinned, edited, replaced, or corrected**. The reproduction is a
+  separate, later evidence event.
+- No Cedulon source was vendored into this repository; only identity metadata is
+  recorded.
+
+### 10.4 Claim boundaries
+
+This is an **author-side reproduction** of a third party's measurement. It is
+**not** an independent implementation of Cedulon, **not** an implementation of
+this document, **not** a conformance result, and **not** an interoperability
+result. Cedulon remains adjacent-domain evaluation evidence.
+
+### 10.5 Candidate digest provenance
+
+| Candidate state | XML SHA-256 | Review status |
+|---|---|---|
+| Initial focused-review candidate | `da64a03846e03f3868aa2fa54682c87d338a4dedcbc1dc4b5642cdfea79a81c6` | reviewed in full by Emek Can Dogru and Iman Schrock |
+| Focused-review disposition candidate | `11884630dcb89082d88f838051e19b4736b4908c67cca2f65725ac3ed46501a7` | each reviewer checked the **changed passages** only — **not a full-document review** |
+| Post-reproduction candidate | `98c6ad0d1560028e56e0ddd619c2f1e8ebbc3becb58cd48d569368f880e383f9` | **not reviewed by either reviewer** |
+
+Neither reviewer has reviewed the post-reproduction bytes, and nothing in this
+file may be read as saying otherwise.

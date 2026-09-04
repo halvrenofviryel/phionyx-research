@@ -99,6 +99,25 @@ No additional message with the draft's subject was found dated 2026-08-31 or
 | Upstream licence | Cedulon | same commit | Establishes the terms the referenced probe is published under | <https://raw.githubusercontent.com/dogrucanemek-alt/cedulon/0a3fa04/LICENSE> | `0a3fa04` | `578ddb1a35574604e675c6155ed356ad75b909bae380dcb6d3239081626b2bd8` | 10 848 bytes. **Apache License 2.0.** Corroborated by npm metadata for `@cedulon/audit@0.8.0` (`"license": "Apache-2.0"`). No `LICENSE.md` / `LICENSE.txt` / `COPYING` / `NOTICE` at that commit's root (HTTP 404). Not vendored, not relicensed here. |
 | npm packages resolved during verification run | Cedulon | — | Probe dependencies | npm registry | `@cedulon/audit@0.8.0`, `@cedulon/receipts@0.8.0`, `@cedulon/checkpoint@0.8.0`, `@cedulon/x402-adapter@0.8.0`; transitively `@cedulon/core@0.8.0`, `@cedulon/cose@0.8.0`, `@cedulon/manifest@0.8.0` | — | Installed in a clean temporary directory outside every clone. |
 
+
+### 4a. Cedulon focused-review case driver and author-side reproduction (added 2026-09-04)
+
+**Appended, not substituted.** The 1 September 2026 rows above are a dated
+snapshot of a different artifact and are left exactly as they were. The pinned
+population probe at commit `0a3fa04` is **not** repinned, superseded, or
+corrected by anything in this subsection.
+
+| Type | Project | Date | Purpose | URL | Commit | Digest (SHA-256) | Notes |
+|---|---|---|---|---|---|---|---|
+| Review case driver (`.mjs`, 135 lines, 6 153 bytes, LF, no CR) | Cedulon (`dogrucanemek-alt/cedulon`) | pinned commit; written for the `-01` focused review, 3 September 2026 | Exercises ten named Cedulon audit cases (`d`, `e`, `e2`, `b`, `c`, `f`, `g`, `h`, `i`, `j`) against the published packages | <https://github.com/dogrucanemek-alt/cedulon/blob/52cf577/interop/abak-00/cases-0.12.0.mjs> (raw: <https://raw.githubusercontent.com/dogrucanemek-alt/cedulon/52cf577/interop/abak-00/cases-0.12.0.mjs>) | `52cf577` | `f7f1218abd1535f104b0010b9127c565b3afab0e72242583ebc459000937bc8e` | **Observed here**, not compared against a reviewer-stated digest: no copy of a message stating one is held in this work area, and none was invented. Line count, byte count and line endings **do** match the reviewer's stated values. **Not vendored.** |
+| npm packages resolved — 0.12.0 run | Cedulon | 2026-09-04 | Reproduction dependency graph | npm registry | `@cedulon/audit`, `receipts`, `checkpoint`, `x402-adapter`, and transitively `core`, `cose`, `manifest` — **all `0.12.0`** | `package-lock.json` `2e5abc4b453475893cb5ed6c6160cd50d6e5fcf87e059cf06adc5d24eb90a239` | Homogeneous graph, no third-party dependencies. Clean `mktemp -d` outside every clone. |
+| npm packages resolved — 0.8.0 run | Cedulon | 2026-09-04 | Reproduction dependency graph | npm registry | same four direct and three transitive packages — **all `0.8.0`** | `package-lock.json` `dbe8f166bea9dba0c8046c9e7d29108299d46bc3849fd323e9b43d427862b158` | Second, separate clean directory. Same driver bytes, unmodified. |
+| Author-side reproduction record | this work area | 2026-09-04 | Raw stdout/stderr, dependency graphs, registry metadata, environment, and the case-by-case matrix | `external-evidence/cedulon-review-reproduction-2026-09-04/` | — | see that directory's `SHA256SUMS.txt` | Author-side **reproduction** of reviewer-reported measurements. Not an implementation of Cedulon and not an implementation of this document. |
+
+Per-package `license`, `dist.integrity`, `dist.shasum` and tarball URLs for all
+fourteen package-versions are recorded in that directory's
+`REGISTRY_METADATA.json`. All fourteen declare `Apache-2.0`.
+
 ---
 
 ## 5. Adjacent IETF work (Datatracker metadata, retrieved 2026-09-01)

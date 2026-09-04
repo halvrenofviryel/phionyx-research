@@ -1,2 +1,2 @@
-11884630dcb89082d88f838051e19b4736b4908c67cca2f65725ac3ed46501a7  draft-abak-agent-control-delivery-evidence-01.xml
-d080f7510fa1ea089066a93751c4d483af2ba59ed0dea755287c99e3c09c9cd5  CHANGELOG.md
+98c6ad0d1560028e56e0ddd619c2f1e8ebbc3becb58cd48d569368f880e383f9  draft-abak-agent-control-delivery-evidence-01.xml
+4185205077e75ee58f77c817a14307d67d4b39f60c54b2e4d642a72597e92dde  CHANGELOG.md
