@@ -447,7 +447,7 @@ That is the principal semantic difference between `-00` and `-01`.
   the author-side Cedulon reproduction, and the pre-submission date update):
   - `draft-abak-agent-control-delivery-evidence-01`
   - document date: 4 September 2026
-  - XML SHA-256: `b7d515006a650644e94ddefb24df74b74b9946b39c57b4a077946e8880295ada`
+  - XML SHA-256: `05a95b598c8ebd462ffbcf3ed9a7fedcd08d8555053c8ec57ea43447c3cd64ca`
   - the changelog digest is recorded in `SHA256SUMS.txt` beside this file
   - **not reviewed by either reviewer.** The intermediate disposition candidate
     `11884630…01a7` *was* checked by both — see the full chain in §10.5.
@@ -781,7 +781,8 @@ result. Cedulon remains adjacent-domain evaluation evidence.
 | Initial focused-review candidate | `da64a03846e03f3868aa2fa54682c87d338a4dedcbc1dc4b5642cdfea79a81c6` | focused review by Emek Can Dogru and Iman Schrock, each within the requested review scope |
 | Focused-review disposition candidate | `11884630dcb89082d88f838051e19b4736b4908c67cca2f65725ac3ed46501a7` | each reviewer checked the **changed passages** only — **not a full-document review** |
 | Post-reproduction candidate | `98c6ad0d1560028e56e0ddd619c2f1e8ebbc3becb58cd48d569368f880e383f9` | **not reviewed by either reviewer** |
-| Pre-submission candidate (current) | `b7d515006a650644e94ddefb24df74b74b9946b39c57b4a077946e8880295ada` | **not reviewed by either reviewer** |
+| Pre-submission candidate | `b7d515006a650644e94ddefb24df74b74b9946b39c57b4a077946e8880295ada` | **not reviewed by either reviewer** |
+| Submission-metadata fix (current) | `05a95b598c8ebd462ffbcf3ed9a7fedcd08d8555053c8ec57ea43447c3cd64ca` | **not reviewed by either reviewer** |
 
 Neither reviewer has reviewed the post-reproduction or pre-submission bytes, and
 nothing in this file may be read as saying otherwise. The step from the
@@ -838,12 +839,35 @@ It is new adjacent work and is deferred for later consideration.
 | | XML SHA-256 |
 |---|---|
 | Before this pass | `98c6ad0d1560028e56e0ddd619c2f1e8ebbc3becb58cd48d569368f880e383f9` |
-| **Pre-submission candidate** | `b7d515006a650644e94ddefb24df74b74b9946b39c57b4a077946e8880295ada` |
+| Pre-submission candidate | `b7d515006a650644e94ddefb24df74b74b9946b39c57b4a077946e8880295ada` |
+| **Submission-metadata fix (current)** | `05a95b598c8ebd462ffbcf3ed9a7fedcd08d8555053c8ec57ea43447c3cd64ca` |
 
 The digest changed because the document date changed. That is an expected and
 recorded transformation, not a break in provenance: the chain is
-`da64a038…` → `11884630…` → `98c6ad0d…` → `b7d515006a650644e94ddefb24df74b74b9946b39c57b4a077946e8880295ada`.
+`da64a038…` → `11884630…` → `98c6ad0d…` → `b7d51500…` → `05a95b598c8ebd462ffbcf3ed9a7fedcd08d8555053c8ec57ea43447c3cd64ca`.
 
 Because no normative requirement, no reconciliation rule, no conformance case
 and no population equation changed in this pass, **no further review round was
 requested from either reviewer for it.**
+
+### 11.5 Submission metadata — `submissionType` removed
+
+The Datatracker `idnits3` submission check returned one error,
+`SUBMISSION_TYPE_UNEXPECTED`: the RFCXML asserted `submissionType="IETF"` while
+the Datatracker record for this document has no stream assigned yet.
+
+**Removed the explicit `submissionType="IETF"` attribute from the root `<rfc>`
+element** to avoid asserting a Datatracker stream before one is assigned; the
+RFCXML default remains `IETF`, so the intended rendering is preserved.
+
+`submissionType="independent"` was deliberately **not** substituted: that value
+denotes the RFC Editor Independent Submission Stream, which is not the same
+thing as an individual Internet-Draft.
+
+This is a metadata-only correction. The root element's `category="info"`,
+`docName`, `ipr`, `version`, `tocInclude`, `sortRefs` and `symRefs` attributes,
+the document date, the workgroup element, and every line of normative text,
+reference and evidence/provenance text are unchanged. The rendered text output is
+**byte-identical** to the previous candidate (`sha256
+2f0356fcb834ba6b80970721273cd8e2e0b2cc19ef1f89a0205a78991653fabf`), confirming
+that the default applies as intended.
