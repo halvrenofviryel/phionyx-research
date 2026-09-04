@@ -768,7 +768,7 @@ result. Cedulon remains adjacent-domain evaluation evidence.
 
 | Candidate state | XML SHA-256 | Review status |
 |---|---|---|
-| Initial focused-review candidate | `da64a03846e03f3868aa2fa54682c87d338a4dedcbc1dc4b5642cdfea79a81c6` | reviewed in full by Emek Can Dogru and Iman Schrock |
+| Initial focused-review candidate | `da64a03846e03f3868aa2fa54682c87d338a4dedcbc1dc4b5642cdfea79a81c6` | focused review by Emek Can Dogru and Iman Schrock, each within the requested review scope |
 | Focused-review disposition candidate | `11884630dcb89082d88f838051e19b4736b4908c67cca2f65725ac3ed46501a7` | each reviewer checked the **changed passages** only — **not a full-document review** |
 | Post-reproduction candidate | `98c6ad0d1560028e56e0ddd619c2f1e8ebbc3becb58cd48d569368f880e383f9` | **not reviewed by either reviewer** |
 
