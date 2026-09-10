@@ -14,9 +14,20 @@
 #                       (no version numbers here — that is what drifted; linter enforces
 #                        "a README states only its own version" instead)
 #   signing_default     optional | none  (nothing in the portfolio signs by default today)
-#   external_validation false until a named third party independently reproduces a result
+#   external_validation false until a named third party independently reproduces a result.
+#                       This is an anti-overclaim GATE, not an evidence ledger: setting it
+#                       true unlocks "independently verified/reproduced/validated" wording
+#                       for that artefact. AIREP has scoped external implementation
+#                       evidence (a v0.1.2 producer result, a v0.2 consumer/verifier
+#                       result) recorded in its own EXTERNAL_EVIDENCE.md; that does not
+#                       license blanket "independently validated" prose here, so the flag
+#                       stays false and Phionyx runtime/benchmark claims stay first-party.
 #   airep_relationship  self | developed_toward | none   ("profile_of"/"conformant" would be
-#                       new values requiring a released, verified projection — none exists)
+#                       new values requiring a released, verified projection — none exists.
+#                       An experimental Decision-only RGE v0.2 -> AIREP v0.2.0-alpha.1
+#                       projection IS implemented, but it is not released, not
+#                       independently rerun, and Control/Execution/Effect remain
+#                       NOT_PROJECTABLE — so the value stays developed_toward.)
 #   replay_semantics    verification_replay (re-verify stored records) |
 #                       decision_replay (re-run deterministic gate on recorded inputs) |
 #                       execution_replay (re-execute external interactions) | none

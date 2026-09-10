@@ -11,8 +11,8 @@ Beyond governance, Phionyx Core ships a **physics module** that produces determi
 > turn it runs is recorded as a signed, hash-chained, offline-checkable **Reasoned
 > Governance Envelope (RGE)** — one evidence receipt per AI runtime decision. RGE is a
 > Phionyx profile developed alongside the **[AI Runtime Evidence Protocol (AIREP)](https://github.com/halvrenofviryel/ai-runtime-evidence-protocol)**,
-> an experimental, vendor-neutral open format; a released conformant projection into AIREP
-> is not yet implemented. See
+> an experimental, vendor-neutral open format; an experimental Decision-only projection
+> into AIREP is implemented, but a released conformant bridge is not. See
 > [Runtime evidence format (AIREP)](#runtime-evidence-format-airep) for what a record
 > contains and how anyone can verify one.
 
@@ -269,7 +269,7 @@ Each record carries a fixed set of groups — `subject`, `input`, `claim`, `outp
 
 **Where Phionyx sits:** the Phionyx **Reasoned Governance Envelope (RGE)** is developed alongside AIREP and matures by conforming toward the format. RGE is a Phionyx *profile* of AIREP, not the format itself; a released conformant projection from RGE into AIREP is not yet implemented.
 
-AIREP is **experimental — a *proposed* open format, not a ratified standard**, with no conformant producer yet. The format (`phionyx-core` engine, the RGE producer, and AIREP itself) carries **independent version lines** — engine **v0.9.0**, AIREP **v0.1 (Experimental)** — which must never be cross-attributed.
+AIREP is **experimental — a *proposed* open format, not a ratified standard**. External implementation evidence is scoped per version: an independently authored producer measured against frozen v0.1.2, and an independently implemented consumer/verifier measured against v0.2. Those target different frozen versions and do not establish producer↔consumer interoperability; AIREP v0.2 has no third-party producer measurement. The format (`phionyx-core` engine, the RGE producer, and AIREP itself) carries **independent version lines** — engine **v0.9.0**, AIREP **v0.1 (Experimental)** — which must never be cross-attributed.
 
 - Spec: CC-BY-4.0 · Reference code: Apache-2.0
 - DOI: concept [10.5281/zenodo.20475136](https://doi.org/10.5281/zenodo.20475136) · v0.1 [10.5281/zenodo.20475137](https://doi.org/10.5281/zenodo.20475137)
