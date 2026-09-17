@@ -65,6 +65,7 @@ Every threat below follows the same structure:
 - Tests: `tests/core/test_consolidation*.py`, `tests/core/test_knowledge_boundary*.py`
 - Schema: `phionyx_core/contracts/v4/audit_record.py`
 - Reproducibility: `python scripts/make_reproducibility_pack.py` produces `audit_chain_example.json`.
+- Adversarial demo: `examples/adversarial/memory_poisoning.py` — retrieved poisoned memory vs governed block (OWASP T1 side-by-side). The demo’s stop condition is a **scenario-local authorization-source surrogate**, not a claim that `meta/knowledge_boundary` (block 16 OOD/abstention) already enforces authorization-provenance on retrieved notes.
 
 **What's still missing.** No active anomaly detection on the *content* of memory writes; the system trusts the upstream input gate to catch malicious content. A poisoned item that passes `input_safety_gate` and looks coherent will be stored. This is an explicit gap; an upstream content-classification adapter is recommended for hostile environments.
 

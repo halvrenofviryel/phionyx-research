@@ -10,6 +10,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- **Adversarial demo — memory poisoning (OWASP T1)** (`examples/adversarial/memory_poisoning.py`):
+  side-by-side ungoverned vs governed path when durable memory is poisoned and
+  retrieved on the next turn. The governed stop uses a scenario-local
+  authorization-source surrogate (explicitly *not* core block-16
+  `knowledge_boundary`) and asserts the tool-invoke differential. Listed in
+  `examples/adversarial/README.md` and cited from the T1 evidence row in
+  `docs/mappings/owasp-agentic-ai-2025.md`.
+  Addresses [halvrenofviryel/phionyx-research#71](https://github.com/halvrenofviryel/phionyx-research/issues/71).
 - **Docs — LangChain governance wrap tutorial** (`docs/integration/from-langchain-orchestrator.md`):
   narrative walkthrough for adding Phionyx as a governance wrapper around an
   existing LangChain producer, using `examples/comparison/with_orchestrator.py`
