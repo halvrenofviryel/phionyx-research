@@ -1,0 +1,17 @@
+{
+  "submission_status": "prepared-only",
+  "work_type": "standards-or-policy",
+  "title": "Claim-Preserving Exchange of AI Evaluation Evidence",
+  "publication_date": {
+    "year": 2026,
+    "month": 9,
+    "day": 23
+  },
+  "author": "Ali Toygar Abak",
+  "description": "Individual Informational Internet-Draft defining format-neutral requirements for preserving the meaning, scope and material qualifications of AI evaluation evidence across transformations and downstream use.",
+  "url": "https://datatracker.ietf.org/doc/draft-abak-ai-evaluation-claim-preservation/",
+  "external_identifier": null,
+  "doi": null,
+  "note": "Prepared metadata only. Do not submit without explicit ORCID write authorization and working credentials. The Internet-Draft has no DOI; do not invent an identifier."
+}
+

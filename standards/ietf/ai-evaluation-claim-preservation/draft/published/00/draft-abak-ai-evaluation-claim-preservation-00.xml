@@ -1,0 +1,657 @@
+<?xml version='1.0' encoding='utf-8'?>
+<rfc version="3" docName="draft-abak-ai-evaluation-claim-preservation-00" category="info" ipr="trust200902" submissionType="IETF" consensus="false" tocInclude="true" symRefs="true" sortRefs="true">
+  <front>
+    <title abbrev="AI Evaluation Claim Preservation">Claim-Preserving Exchange of AI Evaluation Evidence</title>
+    <author fullname="Ali Toygar Abak" initials="A. T." surname="Abak">
+      <organization>Independent Researcher</organization>
+      <address>
+        <email>founder@phionyx.ai</email>
+        <uri>https://phionyx.ai</uri>
+      </address>
+    </author>
+    <date day="23" month="September" year="2026"/>
+    <area>Security</area>
+    <workgroup>Individual Submission</workgroup>
+    <keyword>artificial intelligence</keyword>
+    <keyword>evaluation evidence</keyword>
+    <keyword>semantic interoperability</keyword>
+    <keyword>claim preservation</keyword>
+    <abstract>
+      <t>AI evaluation records can pass through evaluation frameworks, exporters, evidence services, independent reviewers, and systems that make decisions. A conversion can retain a score while losing whether the measurement ran, which result was selected, whether a criterion existed, or which evidence was unavailable. Authenticating the converted record does not recover these distinctions.</t>
+      <t>This document specifies format-neutral requirements for mapping profiles and consumers that exchange AI evaluation evidence. It separates source assertions, explicit derivations, and later policy judgments; requires claim-relevant loss and uncertainty to remain visible; and describes consumer behavior when preservation cannot be established. It includes synthetic counterexamples and guidance for composition with existing evidence mechanisms. It defines neither a wire format nor an evaluation benchmark, safety certification, authorization protocol, or new cryptographic envelope. A concrete mapping profile is needed for interoperable implementation.</t>
+    </abstract>
+    <note removeInRFC="true">
+      <name>Discussion of This Document</name>
+      <t>This is an individual contribution with an Informational target. No working-group adoption or endorsement is implied. Comments may be sent to the author. The choice between a standalone application profile and guidance incorporated into existing work remains open.</t>
+    </note>
+  </front>
+  <middle>
+    <section anchor="introduction">
+      <name>Introduction</name>
+      <t>Consider an evaluation operator that exports results to an evidence service. A second organization retrieves a summary from that service and uses selected results in its own decision system. These boundaries can involve different native formats, parser versions, aggregation conventions, access permissions, and trust policies. A correctly authenticated summary can nevertheless misrepresent the source if a conversion changes the meaning of a result.</t>
+      <t>Native formats already make relevant distinctions. Inspect documents evaluation-log status separately from scoring results <xref target="INSPECT"/>. LightEval documents task-indexed numerical results and configuration metadata <xref target="LIGHTEVAL"/>. This document does not allege a defect in either implementation. Its question is what a converter and a downstream consumer need to preserve when exchanging such records.</t>
+      <t>For example, completion of a run does not mean that a metric met a criterion. A consumer can legitimately apply its own threshold to a source score, but that is a new assessment by that consumer, not a verdict reported by the original evaluator. Similarly, checking a signature on a model-name assertion does not establish which model actually executed.</t>
+      <t>General evidence-to-decision architectures and preservation principles are not new contributions of this document. RATS separates evidence appraisal from relying-party policy <xref target="RFC9334"/>. Related work on evidence qualification, statement graphs, and agent control intermediaries is discussed in <xref target="related"/>. The contribution proposed here is a bounded set of requirements for AI-evaluation-specific mappings: result selection, run and measurement state, scores and criteria, population scope, and the qualifications that survive conversion.</t>
+      <section anchor="scope">
+        <name>Scope and Non-Goals</name>
+        <t>The requirements apply to exchange across components or administrative domains, including offline exchange. They apply to evaluations of AI systems, including frontier-system use cases, without defining a frontier capability threshold. They do not require native evaluation frameworks to adopt a new format or to disclose confidential samples.</t>
+        <t>This document does not define scientific validity, acceptable risk, evaluator competence or independence, legal authority, or whether deployment should occur. It does not create an evidence-to-decision graph format, transparency service, trust-anchor system, or control-delivery mechanism. Accurate preservation of an unsupported or false source assertion does not make that assertion true.</t>
+      </section>
+      <section anchor="conventions">
+        <name>Requirements Language and Applicability</name>
+        <t>The key words "<bcp14>MUST</bcp14>", "<bcp14>MUST NOT</bcp14>", "<bcp14>REQUIRED</bcp14>", "<bcp14>SHALL</bcp14>", "<bcp14>SHALL NOT</bcp14>", "<bcp14>SHOULD</bcp14>", "<bcp14>SHOULD NOT</bcp14>", "<bcp14>RECOMMENDED</bcp14>", "<bcp14>NOT RECOMMENDED</bcp14>", "<bcp14>MAY</bcp14>", and "<bcp14>OPTIONAL</bcp14>" in this document are to be interpreted as described in BCP 14 <xref target="BCP14"/> when, and only when, they appear in all capitals, as shown here.</t>
+        <t>These requirements apply to a mapping profile, converter, or consumer that explicitly adopts them. They do not retroactively change the specifications of native formats or evidence carriers. A claim of compliance with these requirements <bcp14>MUST</bcp14> identify the concrete profile, the implementation role, and the tested version; a bare claim of "claim-preserving" is insufficient. A profile supplies the encodings, selection rules, and processing details identified in <xref target="profiles"/>. This document alone is not a complete wire-level interoperability specification.</t>
+        <t>An application can accept a limited result while withholding a stronger conclusion. Preservation failures affect the conclusions that require the missing distinction; they do not automatically make every other field unusable. No requirement here prescribes a particular deployment or business decision.</t>
+      </section>
+    </section>
+    <section anchor="terminology">
+      <name>Terminology and Claim Boundaries</name>
+      <dl newline="true">
+        <dt>Native evidence</dt>
+        <dd>
+          <t>The source output of an evaluation process, such as a result file, sample record, log, or configuration. "Native" identifies provenance, not truth or completeness. Evidence is used here in a general sense, not as a replacement definition for RATS Evidence.</t>
+        </dd>
+        <dt>Result unit</dt>
+        <dd>
+          <t>The particular source observation or assessment being exchanged: an identified source object and selection, together with the run, attempt, task, scorer, metric, aggregation, and population context needed to distinguish it. A run identifier alone need not identify a result unit.</t>
+        </dd>
+        <dt>Mapping profile</dt>
+        <dd>
+          <t>An identified, versioned definition of source and destination interpretations, selection rules, permitted transformations, preserved qualifications, and consumer behavior. It is not a model-safety profile.</t>
+        </dd>
+        <dt>Mapping instance</dt>
+        <dd>
+          <t>A particular application of a mapping profile to identified source objects. It records the converter, outputs, transformations, and material limitations of that application.</t>
+        </dd>
+        <dt>Source assertion</dt>
+        <dd>
+          <t>An assertion attributable to an identified source, including its scope and qualifications. A copied assertion does not become independently observed merely because a converter signs it.</t>
+        </dd>
+        <dt>Derivation</dt>
+        <dd>
+          <t>A reported calculation or transformation with identified inputs and rules. A derivation may add useful information, but it is distinct from a source assertion. A policy judgment based on it is also distinct.</t>
+        </dd>
+        <dt>Verification basis</dt>
+        <dd>
+          <t>The procedure, inputs, accepted identities or trust material, and policy under which a particular verification result is produced. Different verification types establish different properties.</t>
+        </dd>
+        <dt>Material qualification</dt>
+        <dd>
+          <t>Context or uncertainty needed to interpret a stated claim, such as a denominator, missing samples, a criterion, units, access limitations, or the distinction between declared and verified identity. Materiality is relative to the claim and mapping profile, not to an arbitrary converter preference.</t>
+        </dd>
+        <dt>Claim preservation</dt>
+        <dd>
+          <t>Preservation of the attribution, meaning, scope, and material qualifications of the source assertions selected for exchange. It does not prohibit explicitly identified derivations or new judgments. It prohibits representing those as stronger original assertions or silently broadening what the source supports.</t>
+        </dd>
+        <dt>Reliance record</dt>
+        <dd>
+          <t>A record asserting that an actor used identified evidence as an input to a particular decision under an identified policy. It does not, by itself, establish causation, complete deliberation, valid authority, or enforcement.</t>
+        </dd>
+      </dl>
+      <t>Claim preservation is evaluated for a specified mapping and bounded claim set. This document provides no universal decision procedure for semantic equivalence, natural-language entailment, or arbitrary converter correctness. A profile that claims preservation of a particular distinction needs an explicit rule and testable examples for that distinction.</t>
+    </section>
+    <section anchor="model">
+      <name>Exchange and Failure Model</name>
+      <t>The roles are source operator, converter or publisher, evidence service, consumer or verifier, and optional decision maker. One entity can perform several roles. Different names, keys, or services do not establish organizational independence.</t>
+      <figure anchor="exchange-path">
+        <name>Example Exchange Path</name>
+        <artwork type="ascii-art"><![CDATA[Native result + context
+           |
+  identified mapping + loss record
+           |
+      evidence view  -----> another mapping, if present
+           |
+       consumer
+           |
+  optional new assessment / real reliance decision
+]]></artwork>
+      </figure>
+      <t>The protected unit of exchange can use existing statements, attachments, or referenced objects. Co-location in a file, matching display names, and nearby timestamps do not establish a required relationship. The profile needs an explicit binding between the source selection, mapping information, and output; otherwise a loss statement from one conversion could be substituted for that of another.</t>
+      <t>Failures include status coercion, task or metric substitution, omitted failed attempts, changed denominators, rounding across a threshold, criterion laundering, identity substitution, stale or revised source objects, and loss of access restrictions. Attackers can exploit the same conditions deliberately. The requirements also address honest conversion mistakes; they do not assume an honest source or converter merely because its output is signed.</t>
+      <t>A source may already be incomplete or contradictory. A converter can preserve that condition or report that it cannot map it. It cannot reconstruct missing observations from an absence of evidence. A consumer may need external evidence or a narrower claim, rather than a more permissive default.</t>
+    </section>
+    <section anchor="requirements">
+      <name>Preservation Requirements</name>
+      <section anchor="cp1">
+        <name>R-CP-1: Source and Mapping Identity</name>
+        <t>A mapping instance <bcp14>MUST</bcp14> identify its source objects, source format and interpretation basis, destination basis, converter implementation/version, and mapping-profile revision. Where a source revision cannot be established, that limitation <bcp14>MUST</bcp14> be explicit and <bcp14>MUST NOT</bcp14> be replaced with an assumed current revision. A content digest identifies bytes; it does not by itself identify the rules used to interpret those bytes.</t>
+        <t>The instance <bcp14>MUST</bcp14> bind the output and material mapping information to the source objects and selections on which they depend. For each content digest, the algorithm and byte selection or canonicalization rule <bcp14>MUST</bcp14> be identified. Hashing an original JSON file and hashing a canonical representation are different operations; a profile <bcp14>MUST NOT</bcp14> silently substitute one for the other. Native source objects <bcp14>SHOULD</bcp14> remain available under the applicable access policy; their unavailability is handled under <xref target="cp8"/>.</t>
+      </section>
+      <section anchor="cp2">
+        <name>R-CP-2: Unambiguous Result Selection</name>
+        <t>A mapping <bcp14>MUST</bcp14> identify the result unit being carried or assessed. It <bcp14>MUST</bcp14> preserve the context needed to distinguish task, scorer, metric, run attempt, aggregation, dataset/split, and population whenever these affect the claim. A profile <bcp14>MUST</bcp14> specify which native identifiers or selectors supply that context and how their uniqueness is scoped. Unsupported, unresolved, or ambiguous selections <bcp14>MUST NOT</bcp14> be resolved by taking an arbitrary first, last, largest, or most favorable result.</t>
+        <t>A selector <bcp14>MUST</bcp14> be interpreted against the identified source snapshot and under an identified selector syntax. When a summary combines results, the inputs and selection/aggregation rule <bcp14>MUST</bcp14> be identifiable. When a referenced object changes, the old selector <bcp14>MUST NOT</bcp14> silently become a reference to new content. A selector identifies data, not a measured population's completeness. JSON Pointer <xref target="RFC6901"/> is one possible syntax, not a required wire mechanism.</t>
+      </section>
+      <section anchor="cp3">
+        <name>R-CP-3: Execution, Observation, and Assessment</name>
+        <t>A mapping <bcp14>MUST</bcp14> distinguish whether a measurement executed, what value or finding was reported, and whether an identified criterion was assessed. It <bcp14>MUST NOT</bcp14> translate successful process completion into a successful metric or safety assessment. Non-execution, invalidation, error, inconclusive outcome, and absence of evidence <bcp14>MUST NOT</bcp14> silently become a measured pass. They also <bcp14>MUST NOT</bcp14> be relabeled as a measured failure unless the source semantics actually establish such a failure.</t>
+        <t>A score without an established criterion <bcp14>MUST</bcp14> remain a score without an attributed source verdict. "The source states that no criterion was applied" and "the available source does not establish a criterion" <bcp14>MUST</bcp14> remain distinguishable. An omitted field alone establishes neither condition unless the identified native format defines that omission unambiguously. A non-applicability assertion <bcp14>MUST</bcp14> retain its stated scope and basis, not be invented from a missing value.</t>
+      </section>
+      <section anchor="cp4">
+        <name>R-CP-4: Values, Units, and Numerical Transformations</name>
+        <t>For a selected result, a mapping <bcp14>MUST</bcp14> preserve the meaning of its value, including applicable units, scale, metric definition, comparator direction, precision, and uncertainty information. A profile <bcp14>MUST</bcp14> specify acceptable numerical conversions and any tolerance. It <bcp14>MUST</bcp14> distinguish a source uncertainty estimate from information lost through conversion. Missing uncertainty information <bcp14>MUST NOT</bcp14> be mapped to zero uncertainty or to a source claim of statistical confidence. An exact integer identifier <bcp14>MUST NOT</bcp14> be changed by a lossy numeric representation.</t>
+        <t>Rounding, normalization, aggregation, or recomputation <bcp14>MUST</bcp14> be identified as a derivation when it can affect interpretation. A consumer <bcp14>MUST NOT</bcp14> use a rounded presentation value to claim that the source met a threshold when the unrounded source did not. If the native representation cannot support the requested numerical comparison, that comparison <bcp14>MUST</bcp14> remain unestablished. A profile <bcp14>MAY</bcp14> permit a bounded conversion for a narrower claim; the bound and the affected claim <bcp14>MUST</bcp14> be explicit.</t>
+      </section>
+      <section anchor="cp5">
+        <name>R-CP-5: Criteria, New Judgments, and Chronology</name>
+        <t>A transported criterion assessment <bcp14>MUST</bcp14> identify the criterion and revision actually attributed to its source. A consumer <bcp14>MAY</bcp14> apply a new criterion or policy to a source observation, provided it records a separate assessment with its own actor, inputs, rule/version, scope, and result. It <bcp14>MUST NOT</bcp14> describe this new judgment as the original evaluator's verdict or as a criterion fixed before the source run without supporting evidence.</t>
+        <t>A claim that criteria preceded execution <bcp14>MUST</bcp14> have a supported ordering relationship between the identified criteria and that run. A bare timestamp string, matching identifiers, or a hash-only commitment is not sufficient by itself. Existing preregistration mechanisms can be referenced; this document defines none. Unknown ordering <bcp14>MUST</bcp14> remain unknown. Legitimate corrections and later reassessments are permitted but <bcp14>MUST</bcp14> preserve the original assessment and explicit revision relationship.</t>
+      </section>
+      <section anchor="cp6">
+        <name>R-CP-6: Coverage, Aggregation, and Attempts</name>
+        <t>A claim about an evaluation campaign or complete population <bcp14>MUST</bcp14> identify the population or reproducible inclusion rule, its source, and the accounting method. Recorded samples, unexecuted samples, errors, exclusions, invalidations, and unknown portions <bcp14>MUST NOT</bcp14> disappear solely because an aggregate counts only successful records. When totals or categories are unknown, a mapping <bcp14>MUST</bcp14> record that limitation rather than invent counts.</t>
+        <t>The profile <bcp14>MUST</bcp14> define how retries, repeated measurements, duplicate records, changed sample sets, and overlapping outcomes affect the denominator. It <bcp14>MUST NOT</bcp14> assume that native status categories are disjoint when they are not. A partial run <bcp14>MAY</bcp14> preserve a local criterion result; that result <bcp14>MUST</bcp14> retain its narrower scope. Preserving all supplied records does not establish that all actual attempts were supplied. Selection or deduplication that changes the population <bcp14>MUST</bcp14> be visible as a transformation.</t>
+      </section>
+      <section anchor="cp7">
+        <name>R-CP-7: Qualified Identity and Evaluation Context</name>
+        <t>A mapping <bcp14>MUST</bcp14> distinguish display names and declarations from identities established by a specified verification procedure. When a conclusion requires an exact model, checkpoint, configuration, dataset, harness, or environment, the profile <bcp14>MUST</bcp14> identify the evidence required for that conclusion. Missing required identity evidence <bcp14>MUST</bcp14> prevent that conclusion, but need not prevent carrying a more limited declared result.</t>
+        <t>Context material to the selected claim, such as tool access, network restrictions, safeguard state, scoring method, or system configuration, <bcp14>MUST</bcp14> retain its source and verification status. A declared container digest or model hash <bcp14>MUST NOT</bcp14> be presented as proof that those bytes executed. Attestation references <bcp14>MUST</bcp14> retain the scope and accepting verification basis of the attestation. Evaluator access and independence declarations <bcp14>MUST NOT</bcp14> be promoted to established access or independence merely through conversion.</t>
+      </section>
+      <section anchor="cp8">
+        <name>R-CP-8: Evidence Availability and Digest Knowledge</name>
+        <t>A mapping <bcp14>MUST</bcp14> distinguish evidence availability from digest knowledge. It <bcp14>MUST</bcp14> distinguish a digest recomputed from available bytes by an identified actor, a digest reported by another source but not recomputed by that actor, and a digest that is unavailable. It <bcp14>MUST NOT</bcp14> fabricate a digest or use a dummy value to make an unavailable object appear content-bound.</t>
+        <t>Availability statements <bcp14>MUST</bcp14> be scoped to an actor and the relevant observation or exchange context. Public location, permission to access, successful retrieval, and retention are different properties. A profile <bcp14>MUST</bcp14> define how known restrictions and unknown availability are represented. It <bcp14>MUST NOT</bcp14> invent a custodian, withholding reason, or claim that an object exists. When the destination cannot express a required unavailable state, the mapper <bcp14>MUST</bcp14> provide a bound, interpretable qualification through the profile or report that the affected mapping is unsupported.</t>
+      </section>
+      <section anchor="cp9">
+        <name>R-CP-9: Loss, Conflict, and Multi-Hop Preservation</name>
+        <t>The mapping report <bcp14>MUST</bcp14> distinguish copied assertions, transformations, out-of-band declarations, and material losses. A profile <bcp14>MUST</bcp14> identify which source qualifications are required for each supported claim class. A converter <bcp14>MUST NOT</bcp14> omit a known material qualification merely by declaring it irrelevant. Unknown extensions that may qualify the selected claim <bcp14>MUST</bcp14> remain uninterpreted or prevent that claim from being established; a profile <bcp14>MAY</bcp14> define an explicit criticality mechanism or extension points whose contents cannot qualify its stated claim class under that profile.</t>
+        <t>Every transformation hop used to support an end-to-end preservation claim <bcp14>MUST</bcp14> be accounted for, either through the chain of mapping records or by a direct check against an adequately identified earlier source. A later converter <bcp14>MUST NOT</bcp14> erase an earlier material loss or present reintroduced information as though it had survived the lost hop. Corrections, contradictory records, alternative interpretations, and amendments <bcp14>MUST</bcp14> retain provenance. A signed loss report is itself an assertion; it does not prove that its loss inventory is complete. A contradictory source verdict may be retained as an attributed assertion, but <bcp14>MUST NOT</bcp14> be endorsed merely because it was copied faithfully.</t>
+      </section>
+      <section anchor="cp10">
+        <name>R-CP-10: Typed Verification and Bounded Consumption</name>
+        <t>A verification result <bcp14>MUST</bcp14> identify the actor, procedure/version, checked inputs, verification type, result, and material limitations. Structural validation, digest recomputation, signature verification, attestation appraisal, mapping verification, and substantive evaluation judgments <bcp14>MUST</bcp14> remain distinct. Successful verification of a carrier <bcp14>MUST NOT</bcp14> imply successful verification of an unsupported profile, unavailable source, or source statement not covered by that carrier.</t>
+        <t>A consumer <bcp14>MUST</bcp14> evaluate preservation relative to the selected claim and accepted verification basis. If an essential binding, interpretation, qualification, or verification input is unavailable, it <bcp14>MUST NOT</bcp14> report that claim as established. It <bcp14>MAY</bcp14> retain or forward an opaque record without accepting its semantics. A local policy may deny, defer, request evidence, or otherwise act on uncertainty, but the resulting action <bcp14>MUST NOT</bcp14> rewrite uncertainty as a measured source failure or success.</t>
+      </section>
+      <section anchor="cp11">
+        <name>R-CP-11: Separate Reliance and Downstream Decisions</name>
+        <t>An exporter completing a conversion <bcp14>MUST NOT</bcp14>, on that basis alone, assert that a governance decision occurred. When a reliance record is supplied, it <bcp14>MUST</bcp14> identify the asserting actor, actual reported decision, applicable policy basis, affected subject, and selected evaluation inputs. A new judgment under <xref target="cp5"/> <bcp14>MUST</bcp14> remain separate from the transported source assertions.</t>
+        <t>The consumer <bcp14>MUST NOT</bcp14> infer valid decision authority, complete deliberation, causal influence, control delivery, enforcement, or observed effect solely from a reliance record. Authentication of its author is a separate check. Changes to evidence or policy <bcp14>MUST</bcp14> produce a distinguishable reassessment or amendment, not retroactively rewrite the evidentiary basis of an earlier decision. Existing decision and control mechanisms should carry any actual downstream records; this document defines no such protocol.</t>
+      </section>
+      <section anchor="cp12">
+        <name>R-CP-12: Versioned Mappings and Verification Evidence</name>
+        <t>A concrete profile <bcp14>MUST</bcp14> identify the source and destination versions and semantic rules it supports, including its extension and unknown-value policy. An implementation <bcp14>MUST NOT</bcp14> silently treat a new or incompatible basis as the old one. A profile <bcp14>MUST</bcp14> specify observable expected behavior for negative and ambiguous cases, including cases where a limited result can be preserved but a stronger claim cannot.</t>
+        <t>Implementation reports <bcp14>MUST</bcp14> identify the profile and implementation versions, source cases, procedure, and observed results on which their claims rely. A schema check or a documentation crosswalk <bcp14>MUST NOT</bcp14> be described as a complete semantic mapping test. Same-author tests <bcp14>MUST NOT</bcp14> be described as independent interoperability. An interoperability claim <bcp14>MUST</bcp14> name the tested producer and consumer, exact bases, inputs, procedure, outcomes, and known limitations.</t>
+      </section>
+    </section>
+    <section anchor="profiles">
+      <name>What a Concrete Mapping Profile Must Specify</name>
+      <t>A mapping profile can use native fields, an existing evidence predicate, or a sidecar manifest. This document does not allocate an identifier or prescribe a new envelope. A sidecar used to qualify an output <bcp14>MUST</bcp14> be bound to that output and its source selection under the accepted integrity and attribution mechanism; an unrelated explanatory file is not sufficient.</t>
+      <ul>
+        <li>
+          <t>The source and destination interpretation bases; claim classes supported; and how a result unit is selected without ambiguity.</t>
+        </li>
+        <li>
+          <t>The preservation rules for execution, observation, criteria, values, population scope, identity, and uncertainty, including explicit unsupported cases.</t>
+        </li>
+        <li>
+          <t>The representation and protection of mapping provenance, material loss, conflicts, access limitations, and digest knowledge.</t>
+        </li>
+        <li>
+          <t>The trust, authentication, freshness, retrieval, and resource-limit rules required for its claims, with unknown and failed states distinguished.</t>
+        </li>
+        <li>
+          <t>The consumer-visible outcomes and reproducible examples against which mapping and consumption are tested.</t>
+        </li>
+      </ul>
+      <t>The profile <bcp14>MUST</bcp14> describe how each applicable requirement in <xref target="requirements"/> is satisfied and why a conditional requirement is inapplicable when it is not used. It need not require every possible identity or metadata field for every claim. However, reducing metadata cannot be used to preserve the name of a stronger claim while discarding the conditions needed to support it.</t>
+      <t>A loss statement need not enumerate every field outside the chosen claim set. It needs to identify which material information was not preserved and which claims consequently remain unsupported. Retention or disclosure of confidential source content is not required when a bounded commitment, restricted reference, or explicit unavailable state suffices for the narrower claim.</t>
+    </section>
+    <section anchor="consumer">
+      <name>Consumer Processing</name>
+      <t>The following procedure summarizes the requirements. It is not a new verification algorithm or mandatory wire-state vocabulary. An implementation <bcp14>MAY</bcp14> combine steps if the same distinctions remain observable.</t>
+      <ol>
+        <li>
+          <t>Select the requested claim and supported mapping profile. Bound parsing, retrieval, and decompression before processing untrusted content.</t>
+        </li>
+        <li>
+          <t>Identify the source snapshot and result unit. Check that selectors, references, and content/projection bindings are unambiguous and apply to those exact inputs.</t>
+        </li>
+        <li>
+          <t>Perform the required integrity, attribution, freshness, and other checks under the consumer's accepted basis. Do not use a statement's own declaration as a substitute for that basis.</t>
+        </li>
+        <li>
+          <t>Check that source status, values, criteria, coverage, identity qualifications, and material limitations were preserved or explicitly transformed under the profile. Consider previous hops or recheck against the source.</t>
+        </li>
+        <li>
+          <t>Report separately: which preservation checks succeeded, which found violations, and which could not be established. Preserve reasons when more than one condition applies; a summary label must not hide a failure or unknown prerequisite.</t>
+        </li>
+        <li>
+          <t>Only then use the supported result as an input to a separately identified assessment or decision, if any. Retain the original source assertions and the separate basis of the new judgment.</t>
+        </li>
+      </ol>
+      <t>These outcomes concern a bounded preservation check. A demonstrated mapping violation is not proof that the model failed a benchmark. Failure to establish preservation is not a proof that a source assertion is false. Conversely, success in every mapping check does not validate the benchmark, source honesty, or deployment safety.</t>
+    </section>
+    <section anchor="examples">
+      <name>Worked Counterexamples</name>
+      <t>All examples in this section are synthetic. Field names outside the explicitly described native-style fragments are explanatory notation, not a wire schema, registered vocabulary, full native log, or released AIREP profile. No model was run to produce these values. The examples illustrate required distinctions; they neither demonstrate upstream implementation defects nor establish interoperability.</t>
+      <section anchor="ex-status">
+        <name>Run Completion Is Not a Scoring Verdict</name>
+        <t>Inspect documents run status and scoring results separately <xref target="INSPECT"/>. The following synthetic excerpt uses those concepts. It is not a complete EvalLog. The run finished successfully; the accuracy observation is 0.734. The excerpt supplies no criterion, so it does not establish whether the full evaluation had one.</t>
+        <figure anchor="example-inspect-fragment">
+          <name>Synthetic Inspect-Style Excerpt</name>
+          <sourcecode type="json"><![CDATA[{
+  "status": "success",
+  "results": {
+    "scores": [
+      {
+        "name": "example_scorer",
+        "metrics": {
+          "accuracy": {
+            "value": 0.734
+          }
+        }
+      }
+    ]
+  }
+}
+]]></sourcecode>
+        </figure>
+        <t>An output that attributes <tt>PASS</tt> to the evaluator solely from <tt>status = success</tt> violates <xref target="cp3"/>. A limited view can preserve the reported completion status and selected score while leaving the criterion state unknown. Explicit source evidence that no criterion was applied would instead support that narrower absence assertion.</t>
+        <t>A consumer can apply its own threshold. The following explanatory record reports a new local assessment; it does not invent a historical source verdict. The source object reference is an illustrative identifier scoped to this example, not a substitute for the binding required by a deployed profile.</t>
+        <figure anchor="example-new-assessment">
+          <name>A Separately Attributed Local Assessment</name>
+          <sourcecode type="json"><![CDATA[{
+  "actor": "consumer.example",
+  "source_selection": {
+    "object": "example-inspect-fragment",
+    "syntax": "RFC6901",
+    "pointer": "/results/scores/0/metrics/accuracy/value"
+  },
+  "source_criterion_state": "unknown",
+  "new_criterion": {
+    "id": "local-accuracy-policy-v1",
+    "operator": ">=",
+    "threshold": 0.7
+  },
+  "new_assessment": "PASS",
+  "criterion_preceded_source_run": "not-established"
+}
+]]></sourcecode>
+        </figure>
+        <t>This new assessment is allowed by <xref target="cp5"/>. Its authority and suitability for a real decision remain separate questions. A later evidence view must not remove the attribution and turn it into "the evaluation passed its preregistered test".</t>
+      </section>
+      <section anchor="ex-selector">
+        <name>A Run Identifier Does Not Select a Metric</name>
+        <t>LightEval describes a task-keyed <tt>results</tt> object with numerical metrics <xref target="LIGHTEVAL"/>. The following is a synthetic excerpt, using a fictional task name and an added explanatory run identifier. The values are not a real LightEval run.</t>
+        <figure anchor="example-lighteval-fragment">
+          <name>Synthetic Task-Indexed Results</name>
+          <sourcecode type="json"><![CDATA[{
+  "example_run_id": "run-17",
+  "results": {
+    "example/task|0": {
+      "em": 0.62,
+      "maj@8": 0.8
+    }
+  },
+  "versions": {
+    "example/task|0": 1
+  }
+}
+]]></sourcecode>
+        </figure>
+        <t>Under JSON Pointer <xref target="RFC6901"/>, <tt>/results/example~1task|0/em</tt> selects 0.62; <tt>/results/example~1task|0/maj@8</tt> selects 0.8. These are different result units. A record saying only "run-17 passed 0.75" fails to specify the metric or the assessment rule. The slash in the task key is escaped as <tt>~1</tt> in the pointer. This example uses a JSON Pointer string, not an assumed URI-fragment convention for <tt>application/json</tt>.</t>
+        <t>A deployed mapping must additionally bind the source snapshot, native task/scoring interpretation, and population needed for its claim. A JSON pointer into a mutable URL does not satisfy those requirements. A pointer to a numerical value also does not carry the surrounding context on its own.</t>
+      </section>
+      <section anchor="ex-coverage">
+        <name>Local Success and Incomplete Coverage</name>
+        <figure anchor="example-coverage">
+          <name>Synthetic Bounded Sample Accounting</name>
+          <sourcecode type="json"><![CDATA[{
+  "population": {
+    "source": "declared-plan-v1",
+    "planned_samples": 100
+  },
+  "completed_samples": 80,
+  "sample_criterion_met": 76,
+  "sample_criterion_not_met": 4,
+  "not_run_samples": 20,
+  "derived_fraction_among_completed": 0.95
+}
+]]></sourcecode>
+        </figure>
+        <t>Here the sample categories are defined by the example to be disjoint. The observed fraction is 76/80, not evidence that 95 of 100 planned samples met the criterion. A new policy could accept incomplete coverage, but it must identify that choice separately. If the plan were unavailable, the record could not infer a total of 100. If attempts rather than unique samples were counted, the deduplication and retry rules would have to be stated. Even a verified plan does not establish that an operator disclosed all real attempts.</t>
+      </section>
+      <section anchor="ex-precision">
+        <name>Rounding Can Change a Decision</name>
+        <figure anchor="example-rounding">
+          <name>Synthetic Decimal Comparison</name>
+          <sourcecode type="json"><![CDATA[{
+  "source_decimal": "0.94996",
+  "display_decimal": "0.950",
+  "criterion": {
+    "operator": ">=",
+    "threshold_decimal": "0.95"
+  },
+  "comparison_on_source": "FAIL",
+  "comparison_on_display": "PASS"
+}
+]]></sourcecode>
+        </figure>
+        <t>The strings in this example denote exact base-10 values. Rounding to three fractional places changes the result of the stated comparison. Displaying 0.950 can be useful, but treating it as the original evidence for a 0.95 threshold violates <xref target="cp4"/>. A new assessment deliberately using rounded values would require its own explicit rule and attribution; it cannot replace the earlier comparison silently.</t>
+      </section>
+      <section anchor="ex-availability">
+        <name>A Restricted Reference Is Not Verified Bytes</name>
+        <figure anchor="example-unavailable">
+          <name>Synthetic Unavailable Evidence Description</name>
+          <sourcecode type="json"><![CDATA[{
+  "object_ref": "https://evaluator.example/private/run-17.log",
+  "availability_to": "publisher.example",
+  "availability_context": "this conversion",
+  "availability": "not-retrieved",
+  "digest_knowledge": "unavailable",
+  "reason": "source supplied a restricted reference only",
+  "object_existence_basis": "source assertion only"
+}
+]]></sourcecode>
+        </figure>
+        <t>The publisher can preserve the reference and its limitation. It cannot supply a made-up all-zero hash, claim a recomputed digest, infer the log's contents, or conclude that the source actually retained a complete log. Whether another actor can retrieve the object is a separate observation. A destination requiring a known digest needs a supported qualification mechanism or must report the affected object as unsupported, not counterfeit compliance.</t>
+      </section>
+      <section anchor="ex-chain">
+        <name>Later Authentication Does Not Repair Earlier Loss</name>
+        <t>Suppose an initial mapper receives the partial-population record in <xref target="ex-coverage"/> and exports only 0.95. A second mapper signs that score and reports "complete evaluation passed". The signature may authenticate the second mapper, but it neither recovers the missing population nor authenticates the first operator's actions. A consumer without adequate upstream evidence cannot establish that stronger claim.</t>
+        <t>A direct recheck against the identified original can restore the missing context for a new derived view. The new view must identify that recheck, rather than assert that the context survived the earlier mapping. If a corrected source result later appears, it must be distinguished from the source snapshot used in the original decision.</t>
+      </section>
+    </section>
+    <section anchor="related">
+      <name>Relationship to Existing Work</name>
+      <t>The following are reuse boundaries, not assertions of field-for-field compatibility or adopted working-group scope. Referenced Internet-Drafts are works in progress. None of the examples implements a binding to all of these mechanisms.</t>
+      <section anchor="related-attestation">
+        <name>Attestation and Transparency</name>
+        <t>RATS <xref target="RFC9334"/> supplies attestation roles, evidence appraisal, and relying-party decisions. This document does not change those roles or claim that a behavioral evaluation result is equivalent to platform attestation. It addresses preservation of the assertions passed between applications, including the limits of any attestation reference they carry.</t>
+        <t>SCITT <xref target="RFC9943"/> supplies signed-statement transparency and receipts. Composite Evidence Verification <xref target="SCITT-COMPOSITE"/> addresses statements and relationships assessed under a verification profile. These mechanisms can protect and relate mapping records. A receipt or verified graph does not, by itself, establish that a converter faithfully interpreted an AI metric. This document neither extends SCITT's core payload semantics nor defines a new graph envelope.</t>
+      </section>
+      <section anchor="related-criteria">
+        <name>Criteria and Evidence Qualification</name>
+        <t>PRML <xref target="PRML"/> addresses registration of evaluation criteria and amendments, including limits of hash-only commitments. A mapping can reference that work when carrying criteria provenance. It must still preserve whether the particular run is evidenced to have followed registration. This document defines no competing preregistration scheme.</t>
+        <t>Evidence Qualification Receipts <xref target="EQR"/> distinguish evidence qualification from authorization and include representation-compatibility requirements. This document does not claim those principles as new. Its narrower application is to native AI evaluation outputs: distinguishing run state from scoring, selecting the exact metric and population, and retaining qualifications when those results are converted. No EQR field mapping or equivalence is asserted.</t>
+      </section>
+      <section anchor="related-provenance">
+        <name>Provenance and Existing Evidence Formats</name>
+        <t>The in-toto Statement <xref target="IN-TOTO"/> provides digest-bound subjects and typed predicates. A concrete mapping profile could use such a predicate or another existing extension point rather than inventing an envelope. SLSA's retired Verification Summary Attestation <xref target="SLSA-VSA"/> is historical related work for relating a verifier, policy, inputs, subject, and result; it is not recommended here as an active dependency.</t>
+        <t>AIREP's experimental Embedded Evaluation Profile 0.1 <xref target="AIREP-PROFILE"/> already carries evaluation context, explicit measurement states, evidence references, and claim boundaries. It is an informative example, not a normative dependency or an implementation claim for this document. The author also develops AIREP. These requirements do not silently revise its frozen profile basis or grant any AIREP assurance class.</t>
+      </section>
+      <section anchor="related-control">
+        <name>Control Delivery Is a Separate Boundary</name>
+        <t>Section 5.16 (R-CD-16) of <xref target="CONTROL-EVIDENCE"/> already addresses semantic preservation across agent control intermediaries. This document specializes the problem for evaluation-result interpretation; it does not reproduce dispatch, receipt, enforcement, or observed-effect reconciliation. Actual downstream control records can reference a real decision, but carrying evaluation evidence does not manufacture those events.</t>
+      </section>
+    </section>
+    <section anchor="security">
+      <name>Security Considerations</name>
+      <t>A conforming mapping can preserve a false, biased, manipulated, or selectively published source assertion. A compromised source, converter, or verifier can sign false claims. Claim preservation is not a substitute for source trust, independent observation, evaluator competence assessment, containment, or scientific review. A loss report cannot independently prove that no omitted information existed.</t>
+      <t>A deployed profile <bcp14>MUST</bcp14> specify the integrity and attribution bindings required for its claims, including which actor authenticated which object. An authenticated channel can protect a transfer while leaving later re-export attribution unresolved. When offline third-party verification is claimed, the profile <bcp14>MUST</bcp14> provide evidence sufficient for that verification rather than relying only on an earlier channel session. Signature validity under an unaccepted or self-declared key is not accepted source attribution.</t>
+      <t>Source and mapping substitution, replay, and equivocation can make a genuine result appear to concern another model, policy, population, or time. Consumers need binding and freshness checks appropriate to the requested claim. A recent signature over an old evaluation does not make the evaluation recent. Append-only history does not by itself prove all real evaluations were logged. Revocation or a changed trust basis may alter a verification conclusion without authorizing silent rewriting of historical records.</t>
+      <t>Implementations <bcp14>MUST</bcp14> apply bounded resource limits to parsing, archive expansion, reference traversal, and evidence graphs. A profile using JSON needs deterministic handling of duplicate names, excessive nesting, large numbers, and invalid encodings; ambiguity in claim-relevant data <bcp14>MUST NOT</bcp14> be resolved by accidental parser behavior. The interoperability cautions in <xref target="RFC8259"/> are relevant. A structural validator does not necessarily perform numerical, chronological, or semantic consistency checks.</t>
+      <t>An evidence reference is not permission to fetch or execute its target. Consumers <bcp14>MUST</bcp14> apply an explicit retrieval policy, including access control and restrictions on destinations, redirects, schemes, and content processing. Evaluation logs, prompts, and tool outputs are untrusted data, even when embedded in a valid signed record. Instructions in them <bcp14>MUST NOT</bcp14> be executed as verifier instructions merely because they appear in evidence.</t>
+      <t>A display layer can undo preservation performed by the converter. Interfaces that collapse "not checked", "unavailable", "invalid", and "passed" into the same indicator can mislead a decision maker. A profile <bcp14>MUST</bcp14> preserve the distinction at the consumer interface for the claims it supports, not only in an inaccessible raw attachment.</t>
+    </section>
+    <section anchor="privacy">
+      <name>Privacy Considerations</name>
+      <t>Evaluation evidence may include personal data, credentials, proprietary configurations, restricted test items, or information useful for misuse. A mapping <bcp14>SHOULD</bcp14> minimize transferred content to what is needed for the selected claim. Restrictions and redactions <bcp14>MUST</bcp14> remain visible when material; they need not reveal the restricted content itself.</t>
+      <t>Content hashes are not anonymization. Low-entropy values can be guessed; stable digests and identifiers can correlate runs, operators, and sensitive activity. Profiles should select existing confidentiality, access-control, or commitment mechanisms appropriate to their threat model. This document specifies no confidentiality-preserving proof system and does not require publication of confidential benchmark contents.</t>
+      <t>References can expire, access can change, and retention obligations may require deletion. A preserved reference should not be described as perpetual availability. A later consumer that lacks material evidence <bcp14>MUST</bcp14> record its actual verification limit, not rely on a publisher's earlier access statement as proof that the bytes were checked by that consumer.</t>
+    </section>
+    <section anchor="iana">
+      <name>IANA Considerations</name>
+      <t>This document has no IANA actions. It creates no registry, media type, URI scheme, namespace, or wire-level status code. Identifiers and JSON member names in examples are illustrative only.</t>
+    </section>
+    <section anchor="implementation">
+      <name>Implementation and Validation Status</name>
+      <t>This revision specifies requirements and illustrative processing behavior, not a complete mapping profile. It claims no deployed implementation, independent implementation, interoperability result, real-model evaluation, or proof of arbitrary semantic preservation. The examples and test scenarios are synthetic explanatory material, not measurements of frontier-model safety.</t>
+      <t>Existing AIREP profile tooling is related work, not automatically an implementation of this document. Parsing an example, checking arithmetic, or validating an existing schema does not establish compliance with all of these requirements. An implementation report needs the versioned mappings and consumer behavior required by <xref target="cp12"/>.</t>
+    </section>
+    <section anchor="next-steps">
+      <name>Further Specification Work</name>
+      <t>The next engineering question is whether concrete mappings using existing native formats and evidence predicates can satisfy these requirements without a new carrier. Useful work includes version-pinned Inspect and LightEval mappings, explicit treatment of score-only and partial-run cases, and independent consumer checks. A mapping profile must resolve claim-dependent materiality and source ambiguity rather than hide them in a generic success flag.</t>
+      <t>Whether these requirements are best maintained as an independent application profile or incorporated into related work remains open. This document makes no claim about working-group adoption. Its scope is evidence interpretation at exchange boundaries, not selection of benchmarks or policy outcomes.</t>
+    </section>
+  </middle>
+  <back>
+    <references>
+      <name>References</name>
+      <references>
+        <name>Normative References</name>
+        <referencegroup anchor="BCP14" target="https://www.rfc-editor.org/info/bcp14">
+          <reference anchor="RFC2119" target="https://www.rfc-editor.org/info/rfc2119">
+            <front>
+              <title>Key words for use in RFCs to Indicate Requirement Levels</title>
+              <author initials="S." surname="Bradner"/>
+              <date year="1997" month="March"/>
+            </front>
+            <seriesInfo name="BCP" value="14"/>
+            <seriesInfo name="RFC" value="2119"/>
+            <seriesInfo name="DOI" value="10.17487/RFC2119"/>
+          </reference>
+          <reference anchor="RFC8174" target="https://www.rfc-editor.org/info/rfc8174">
+            <front>
+              <title>Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words</title>
+              <author initials="B." surname="Leiba"/>
+              <date year="2017" month="May"/>
+            </front>
+            <seriesInfo name="BCP" value="14"/>
+            <seriesInfo name="RFC" value="8174"/>
+            <seriesInfo name="DOI" value="10.17487/RFC8174"/>
+          </reference>
+        </referencegroup>
+      </references>
+      <references>
+        <name>Informative References</name>
+        <reference anchor="RFC6901" target="https://www.rfc-editor.org/info/rfc6901">
+          <front>
+            <title>JavaScript Object Notation (JSON) Pointer</title>
+            <author initials="P." surname="Bryan"/>
+            <author initials="K." surname="Zyp"/>
+            <author initials="M." surname="Nottingham"/>
+            <date year="2013" month="April"/>
+          </front>
+          <seriesInfo name="RFC" value="6901"/>
+          <seriesInfo name="DOI" value="10.17487/RFC6901"/>
+        </reference>
+        <reference anchor="RFC8259" target="https://www.rfc-editor.org/info/rfc8259">
+          <front>
+            <title>The JavaScript Object Notation (JSON) Data Interchange Format</title>
+            <author initials="T." surname="Bray"/>
+            <date year="2017" month="December"/>
+          </front>
+          <seriesInfo name="STD" value="90"/>
+          <seriesInfo name="RFC" value="8259"/>
+          <seriesInfo name="DOI" value="10.17487/RFC8259"/>
+        </reference>
+        <reference anchor="RFC9334" target="https://www.rfc-editor.org/info/rfc9334">
+          <front>
+            <title>Remote ATtestation procedureS (RATS) Architecture</title>
+            <author initials="H." surname="Birkholz"/>
+            <author initials="D." surname="Thaler"/>
+            <author initials="M." surname="Richardson"/>
+            <author initials="N." surname="Smith"/>
+            <author initials="W." surname="Pan"/>
+            <date year="2023" month="January"/>
+          </front>
+          <seriesInfo name="RFC" value="9334"/>
+          <seriesInfo name="DOI" value="10.17487/RFC9334"/>
+        </reference>
+        <reference anchor="RFC9943" target="https://www.rfc-editor.org/info/rfc9943">
+          <front>
+            <title>An Architecture for Trustworthy and Transparent Digital Supply Chains</title>
+            <author initials="H." surname="Birkholz"/>
+            <author initials="A." surname="Delignat-Lavaud"/>
+            <author initials="C." surname="Fournet"/>
+            <author initials="Y." surname="Deshpande"/>
+            <author initials="S." surname="Lasker"/>
+            <date year="2026" month="June"/>
+          </front>
+          <seriesInfo name="RFC" value="9943"/>
+          <seriesInfo name="DOI" value="10.17487/RFC9943"/>
+        </reference>
+        <reference anchor="CONTROL-EVIDENCE" target="https://datatracker.ietf.org/doc/html/draft-abak-agent-control-delivery-evidence-01">
+          <front>
+            <title>Evidence Requirements for Agent Control Delivery and Outcome Reconciliation</title>
+            <author initials="A. T." surname="Abak"/>
+            <date year="2026" month="September" day="4"/>
+          </front>
+          <seriesInfo name="Internet-Draft" value="draft-abak-agent-control-delivery-evidence-01"/>
+          <refcontent>Work in Progress. Individual submission; in particular, Section 5.16, R-CD-16.</refcontent>
+        </reference>
+        <reference anchor="EQR" target="https://datatracker.ietf.org/doc/html/draft-watts-agent-evidence-boundary-00">
+          <front>
+            <title>Evidence-Bounded Authorization for Agentic Systems: Evidence Qualification Receipts</title>
+            <author initials="D." surname="Watts"/>
+            <date year="2026" month="September" day="12"/>
+          </front>
+          <seriesInfo name="Internet-Draft" value="draft-watts-agent-evidence-boundary-00"/>
+          <refcontent>Work in Progress. Individual submission.</refcontent>
+        </reference>
+        <reference anchor="PRML" target="https://datatracker.ietf.org/doc/html/draft-ozturk-scitt-prml-profile-00">
+          <front>
+            <title>A SCITT Profile for Pre-Run Evaluation Criteria (PRML)</title>
+            <author initials="C." surname="Ozturk"/>
+            <date year="2026" month="September" day="11"/>
+          </front>
+          <seriesInfo name="Internet-Draft" value="draft-ozturk-scitt-prml-profile-00"/>
+          <refcontent>Work in Progress. Individual submission.</refcontent>
+        </reference>
+        <reference anchor="SCITT-COMPOSITE" target="https://datatracker.ietf.org/doc/html/draft-nobuo-scitt-composite-evidence-verification-00">
+          <front>
+            <title>Composite Evidence Verification for SCITT Statement Graphs</title>
+            <author initials="N." surname="Aoki"/>
+            <date year="2026" month="July" day="7"/>
+          </front>
+          <seriesInfo name="Internet-Draft" value="draft-nobuo-scitt-composite-evidence-verification-00"/>
+          <refcontent>Work in Progress. Individual submission.</refcontent>
+        </reference>
+        <reference anchor="INSPECT" target="https://inspect.aisi.org.uk/eval-logs.html">
+          <front>
+            <title>Log Files</title>
+            <author>
+              <organization>Inspect</organization>
+            </author>
+            <date/>
+          </front>
+          <refcontent>Online documentation, accessed 22 September 2026. Not a pinned implementation revision.</refcontent>
+        </reference>
+        <reference anchor="LIGHTEVAL" target="https://huggingface.co/docs/lighteval/saving-and-reading-results">
+          <front>
+            <title>Saving and Reading Results</title>
+            <author>
+              <organization>Hugging Face</organization>
+            </author>
+            <date/>
+          </front>
+          <refcontent>LightEval documentation, accessed 22 September 2026. Not a pinned implementation revision.</refcontent>
+        </reference>
+        <reference anchor="IN-TOTO" target="https://github.com/in-toto/attestation/blob/main/spec/v1/statement.md">
+          <front>
+            <title>in-toto Attestation Framework: Statement</title>
+            <author>
+              <organization>in-toto</organization>
+            </author>
+            <date/>
+          </front>
+          <refcontent>Statement v1 documentation, accessed 22 September 2026. The linked branch can change.</refcontent>
+        </reference>
+        <reference anchor="SLSA-VSA" target="https://slsa.dev/spec/v1.1/verification_summary">
+          <front>
+            <title>Verification Summary Attestation</title>
+            <author>
+              <organization>SLSA</organization>
+            </author>
+            <date/>
+          </front>
+          <refcontent>SLSA v1.1; status Retired. Historical related work, accessed 22 September 2026.</refcontent>
+        </reference>
+        <reference anchor="AIREP-PROFILE" target="https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/blob/9c1154ffd15781782e8b77242d05b6da87d240f7/spec/airep/v0.2/profiles/embedded-evaluation/README.md">
+          <front>
+            <title>AIREP Embedded Evaluation Profile v0.1</title>
+            <author initials="A. T." surname="Abak"/>
+            <date/>
+          </front>
+          <refcontent>Experimental companion profile; AIREP carrier 0.2. Source commit 9c1154ffd15781782e8b77242d05b6da87d240f7. Accessed 22 September 2026.</refcontent>
+        </reference>
+      </references>
+    </references>
+    <section anchor="test-scenarios">
+      <name>Mapping Test Scenarios</name>
+      <t>These are proposed test obligations for concrete profiles, not a claimed executed conformance suite. A profile needs actual source and destination fixtures, accepted interpretation bases, and observable consumer outputs. An expected limitation can be the correct result; a test does not need to produce a pass verdict about a model.</t>
+      <t>Each test report should state exactly which checks were performed. Native-format schema acceptance, arithmetic correctness, carrier verification, mapping correctness for selected cases, and independent interoperability are different claims.</t>
+      <section anchor="CP-T01">
+        <name>Run completes; score has no established criterion</name>
+        <t><tt>CP-T01</tt> (<xref target="cp3"/>): Preserve completion and score; do not attribute a criterion verdict to the source.</t>
+      </section>
+      <section anchor="CP-T02">
+        <name>Source explicitly declares no criterion; another source has an omitted unknown criterion</name>
+        <t><tt>CP-T02</tt> (<xref target="cp3"/>): Keep the two meanings distinct; do not infer explicit absence from omission alone.</t>
+      </section>
+      <section anchor="CP-T03">
+        <name>Consumer applies a new threshold to a source score</name>
+        <t><tt>CP-T03</tt> (<xref target="cp5"/>): Permit a separately attributed new assessment with its inputs and rule; do not rewrite the source verdict or criterion chronology.</t>
+      </section>
+      <section anchor="CP-T04">
+        <name>Two metrics share one task and run identifier</name>
+        <t><tt>CP-T04</tt> (<xref target="cp2"/>): Require unambiguous result selection; reject arbitrary metric choice as support for the requested claim.</t>
+      </section>
+      <section anchor="CP-T05">
+        <name>Unexecuted, errored, or invalidated measurement</name>
+        <t><tt>CP-T05</tt> (<xref target="cp3"/>): Retain the native distinction; do not promote it to a measured pass or silently coerce it to a measured failure.</t>
+      </section>
+      <section anchor="CP-T06">
+        <name>Partial campaign has successful results in the observed subset</name>
+        <t><tt>CP-T06</tt> (<xref target="cp6"/>): Retain local outcomes and population limits; do not infer complete coverage.</t>
+      </section>
+      <section anchor="CP-T07">
+        <name>Retries and duplicate records change an apparent denominator</name>
+        <t><tt>CP-T07</tt> (<xref target="cp6"/>): Apply the declared attempt/aggregation rules and expose exclusions; do not count only favorable attempts silently.</t>
+      </section>
+      <section anchor="CP-T08">
+        <name>Rounding or a unit conversion crosses a threshold</name>
+        <t><tt>CP-T08</tt> (<xref target="cp4"/>): Preserve the source interpretation and explicit derivation; do not attribute the rounded comparison to the source.</t>
+      </section>
+      <section anchor="CP-T09">
+        <name>Only a model display name or declared network setting is available</name>
+        <t><tt>CP-T09</tt> (<xref target="cp7"/>): Preserve the declaration; leave actual executed identity or enforced isolation unestablished.</t>
+      </section>
+      <section anchor="CP-T10">
+        <name>Evidence reference is supplied without bytes or digest</name>
+        <t><tt>CP-T10</tt> (<xref target="cp8"/>): Report actual access and digest knowledge; no invented bytes, custodian, existence proof, or dummy digest.</t>
+      </section>
+      <section anchor="CP-T11">
+        <name>Digest is copied from an authenticated report</name>
+        <t><tt>CP-T11</tt> (<xref target="cp8"/>): Preserve reported digest and its source; do not call it recomputed by the consumer.</t>
+      </section>
+      <section anchor="CP-T12">
+        <name>An earlier hop drops a material qualification</name>
+        <t><tt>CP-T12</tt> (<xref target="cp9"/>): Report the limit or recheck against adequate source evidence; a later signature does not repair the loss.</t>
+      </section>
+      <section anchor="CP-T13">
+        <name>Carrier verifies but semantic profile is unsupported</name>
+        <t><tt>CP-T13</tt> (<xref target="cp10"/>): Retain the carrier result; do not claim semantic preservation or successful model assessment.</t>
+      </section>
+      <section anchor="CP-T14">
+        <name>Export succeeds without any decision record</name>
+        <t><tt>CP-T14</tt> (<xref target="cp11"/>): Do not manufacture a release, pause, authorization, or control event.</t>
+      </section>
+      <section anchor="CP-T15">
+        <name>Criteria commitment exists but run ordering is not supported</name>
+        <t><tt>CP-T15</tt> (<xref target="cp5"/>): Preserve the commitment; do not infer that criteria preceded the run.</t>
+      </section>
+      <section anchor="CP-T16">
+        <name>A corrected result conflicts with an earlier result</name>
+        <t><tt>CP-T16</tt> (<xref target="cp9"/>): Preserve snapshots, attribution, and amendment relationship; do not rewrite the earlier decision basis.</t>
+      </section>
+      <section anchor="CP-T17">
+        <name>A new profile basis is supplied to an old consumer</name>
+        <t><tt>CP-T17</tt> (<xref target="cp12"/>): Expose unsupported semantics; do not silently reuse the old interpretation.</t>
+      </section>
+      <section anchor="CP-T18">
+        <name>A loss manifest is substituted between two conversions</name>
+        <t><tt>CP-T18</tt> (<xref target="cp1"/>): Require binding to the actual source selection and output; do not rely on an unrelated qualification.</t>
+      </section>
+      <section anchor="CP-T19">
+        <name>Duplicate JSON keys or ambiguous selection affect a score</name>
+        <t><tt>CP-T19</tt> (<xref target="cp2"/>): Handle under deterministic profile rules; parser accident must not establish the claim.</t>
+      </section>
+      <section anchor="CP-T20">
+        <name>Two consumers accept the same source but apply different policies</name>
+        <t><tt>CP-T20</tt> (<xref target="cp10"/>): Preserve the common source assertion and both distinct judgments; disagreement is not repaired by overwriting a result.</t>
+      </section>
+    </section>
+  </back>
+</rfc>
