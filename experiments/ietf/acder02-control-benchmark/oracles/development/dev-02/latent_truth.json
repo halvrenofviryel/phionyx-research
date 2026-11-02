@@ -1,0 +1,21 @@
+{
+  "case_id": "dev-02",
+  "claim_truth": {
+    "q-all": true,
+    "q-integrity": true,
+    "q-issuer": true,
+    "q-receipt": true
+  },
+  "latent_facts": [
+    {
+      "fact": "issuer actually dispatched but observation was not retained",
+      "value": true
+    },
+    {
+      "fact": "target read control",
+      "value": true
+    }
+  ],
+  "schema": "acder02-synthetic-latent-truth-v1",
+  "status": "Authored synthetic scenario specification, not measured runtime ground truth."
+}

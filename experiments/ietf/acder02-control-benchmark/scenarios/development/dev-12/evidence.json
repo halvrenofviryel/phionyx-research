@@ -1,0 +1,145 @@
+{
+  "case_id": "dev-12",
+  "instructions": [
+    {
+      "content_sha256": "c524abf6700812177010198048ee91aebee31b0f944357b66428f4158514b206",
+      "content_utf8": "{\"control\":\"freeze\",\"task\":\"task-dev-12\"}",
+      "identity_scope": "scope-dev-12",
+      "instruction_id": "instruction-alpha",
+      "resolution": {
+        "candidates": [
+          "ep-a"
+        ],
+        "coverage": {
+          "evidence_refs": [
+            "profile:synthetic-deployment-inventory"
+          ],
+          "status": "VERIFIED"
+        },
+        "excluded": [],
+        "status": "CLOSED"
+      }
+    }
+  ],
+  "population": {
+    "cutoff": {
+      "clock_id": "mono",
+      "time": 10
+    },
+    "exclusion_rule": {
+      "evidence_available": true,
+      "frozen_time": 0,
+      "permitted_inputs": [
+        "issuer_metadata",
+        "target_resolution"
+      ],
+      "rule_id": "target-exclusion-v1",
+      "version": "1"
+    },
+    "included_instruction_ids": [
+      "instruction-alpha"
+    ],
+    "inclusion_rule": {
+      "evidence_available": true,
+      "frozen_time": 0,
+      "permitted_inputs": [
+        "instruction_id"
+      ],
+      "rule_id": "issuer-inclusion-v1",
+      "version": "1"
+    },
+    "manifest_id": "manifest-dev-12",
+    "manifest_instruction_ids": [
+      "instruction-alpha"
+    ]
+  },
+  "profile_id": "acder02-control-benchmark-v1",
+  "queries": [
+    {
+      "claim_id": "q-integrity",
+      "kind": "envelope_integrity",
+      "scope": {
+        "clock_id": "mono",
+        "cutoff": 10,
+        "target_id": "ep-a"
+      },
+      "subject": {
+        "record_ids": [
+          "r-issuer",
+          "r-receiver",
+          "r-enforcement",
+          "r-transform",
+          "r-ack"
+        ]
+      }
+    },
+    {
+      "claim_id": "q-receipt",
+      "kind": "receiver_receipt",
+      "scope": {
+        "boundary_id": "target-entry",
+        "clock_id": "mono",
+        "cutoff": 10,
+        "target_id": "ep-a"
+      },
+      "subject": {
+        "instruction_id": "instruction-alpha"
+      }
+    },
+    {
+      "claim_id": "q-enforcement",
+      "kind": "enforcement_applied",
+      "scope": {
+        "boundary_id": "target-entry",
+        "clock_id": "mono",
+        "cutoff": 10,
+        "effective_time": 5,
+        "target_id": "ep-a"
+      },
+      "subject": {
+        "instruction_id": "instruction-alpha"
+      }
+    },
+    {
+      "claim_id": "q-semantics",
+      "kind": "semantic_preservation",
+      "scope": {
+        "clock_id": "mono",
+        "cutoff": 10,
+        "target_id": "ep-a",
+        "transformation_record_id": "r-transform"
+      },
+      "subject": {
+        "instruction_id": "instruction-alpha"
+      }
+    }
+  ],
+  "records": [
+    {
+      "payload_sha256": "fae83dc66a1991ed023926bb88643f541759088c3cfd1e2797ba145cb67fd014",
+      "payload_utf8": "{\"attempt_id\":\"attempt-1\",\"boundary_id\":\"issuer-egress\",\"clock_id\":\"mono\",\"content_sha256\":\"c524abf6700812177010198048ee91aebee31b0f944357b66428f4158514b206\",\"identity_scope\":\"scope-dev-12\",\"instruction_id\":\"instruction-alpha\",\"kind\":\"issuer_emission\",\"observer_id\":\"issuer\",\"outcome\":\"EMITTED\",\"resolution_ref\":\"instruction-alpha#resolution\",\"target_ids\":[\"ep-a\"],\"time\":1}",
+      "record_id": "r-issuer"
+    },
+    {
+      "payload_sha256": "67534d5c3d25140d4331685561c2a85ff575a5fe08c23e2af21b2f65f2c4a53e",
+      "payload_utf8": "{\"attempt_id\":\"attempt-1\",\"boundary_id\":\"target-entry\",\"clock_id\":\"mono\",\"content_sha256\":\"c524abf6700812177010198048ee91aebee31b0f944357b66428f4158514b206\",\"identity_scope\":\"scope-dev-12\",\"instruction_id\":\"instruction-alpha\",\"kind\":\"receiver_observation\",\"observer_id\":\"ep-a\",\"outcome\":\"RECEIVED\",\"target_id\":\"ep-a\",\"time\":3}",
+      "record_id": "r-receiver"
+    },
+    {
+      "payload_sha256": "fe4d7ccb73c5674f467db3fbb0ed26a2167b07456f37bdda3590e7fa07ee9906",
+      "payload_utf8": "{\"attempt_id\":\"attempt-1\",\"boundary_id\":\"target-entry\",\"clock_id\":\"mono\",\"content_sha256\":\"c524abf6700812177010198048ee91aebee31b0f944357b66428f4158514b206\",\"effective_time\":5,\"identity_scope\":\"scope-dev-12\",\"instruction_id\":\"instruction-alpha\",\"kind\":\"enforcement\",\"observer_id\":\"ep-a\",\"outcome\":\"UNKNOWN\",\"target_id\":\"ep-a\",\"time\":5}",
+      "record_id": "r-enforcement"
+    },
+    {
+      "payload_sha256": "29ac6ad1d894e489ce51c1b9f1f46ba733b660c1fe622177243d839931d007c3",
+      "payload_utf8": "{\"attempt_id\":\"attempt-1\",\"boundary_id\":\"gateway-egress\",\"clock_id\":\"mono\",\"content_sha256\":\"c524abf6700812177010198048ee91aebee31b0f944357b66428f4158514b206\",\"destination_state\":\"APPLIED\",\"identity_scope\":\"scope-dev-12\",\"instruction_id\":\"instruction-alpha\",\"kind\":\"transformation\",\"observer_id\":\"gateway\",\"source_record_id\":\"r-enforcement\",\"source_state\":\"UNKNOWN\",\"state_mapping\":{\"APPLIED\":\"APPLIED\",\"NO_EFFECT\":\"NO_EFFECT\",\"REFUSED\":\"REFUSED\",\"UNKNOWN\":\"APPLIED\"},\"target_id\":\"ep-a\",\"time\":6}",
+      "record_id": "r-transform"
+    },
+    {
+      "payload_sha256": "347d79d97cd31482b8729aceb7fb5dae37f8a1c849e0b9983ddc077be2cd9979",
+      "payload_utf8": "{\"attempt_id\":\"attempt-1\",\"boundary_id\":\"transport-queue\",\"clock_id\":\"mono\",\"content_sha256\":\"c524abf6700812177010198048ee91aebee31b0f944357b66428f4158514b206\",\"identity_scope\":\"scope-dev-12\",\"instruction_id\":\"instruction-alpha\",\"kind\":\"transport_ack\",\"observer_id\":\"gateway\",\"outcome\":\"ACCEPTED\",\"target_id\":\"ep-a\",\"time\":7,\"transformation_record_id\":\"r-transform\"}",
+      "record_id": "r-ack"
+    }
+  ],
+  "schema": "acder02-control-benchmark-evidence-v1"
+}

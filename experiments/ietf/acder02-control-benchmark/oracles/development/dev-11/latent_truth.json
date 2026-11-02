@@ -1,0 +1,21 @@
+{
+  "case_id": "dev-11",
+  "claim_truth": {
+    "q-all": false,
+    "q-integrity": true,
+    "q-population": false,
+    "q-receipt": true
+  },
+  "latent_facts": [
+    {
+      "fact": "omitted instruction exists in frozen issuer population",
+      "value": true
+    },
+    {
+      "fact": "omitted instruction was delivered to all its real required targets",
+      "value": false
+    }
+  ],
+  "schema": "acder02-synthetic-latent-truth-v1",
+  "status": "Authored synthetic scenario specification, not measured runtime ground truth."
+}

@@ -1,0 +1,204 @@
+{
+  "case_count": 12,
+  "claim_count": 53,
+  "file_count": 39,
+  "files": [
+    {
+      "byte_length": 4170,
+      "path": "development/dev-01/evidence.json",
+      "sha256": "da7eb2376524904ed0a57f4ff5daa84c80827936e4b2b1a7b214d47fb4ed28a1"
+    },
+    {
+      "byte_length": 632,
+      "path": "development/dev-01/latent_truth.json",
+      "sha256": "483e74c9160827dc5659a801b31062abca6cc0d132e67ea06b3b8a1595624744"
+    },
+    {
+      "byte_length": 5230,
+      "path": "development/dev-01/oracle.json",
+      "sha256": "8cb5b95f22ce76ccaaa0e83fb9d34b1af8e44667df122ad89086269e392e23c3"
+    },
+    {
+      "byte_length": 3181,
+      "path": "development/dev-02/evidence.json",
+      "sha256": "ab1256d001e4489f3e3f3608f3c8ead6201b4b4f67d0c900cd0843729b0285c6"
+    },
+    {
+      "byte_length": 484,
+      "path": "development/dev-02/latent_truth.json",
+      "sha256": "445bc12bd6a0bcf0b01b8ef4a7696fafdfe884c56f647f004cfa4ad82c9c269d"
+    },
+    {
+      "byte_length": 4787,
+      "path": "development/dev-02/oracle.json",
+      "sha256": "e0bf3f9ca04c6effbd390019fd5ad9ad74a5dd0a0e06159b69b27d50f641853d"
+    },
+    {
+      "byte_length": 3960,
+      "path": "development/dev-03/evidence.json",
+      "sha256": "a8e11d2bd1de8ba4d04d07af1ff890d06d92e8d63b27a4fa72f54f16c7a5dcd6"
+    },
+    {
+      "byte_length": 527,
+      "path": "development/dev-03/latent_truth.json",
+      "sha256": "adf2588a532d9901dfb1091f1f104efd35ede8adefc9f28c4dd0a807cd1f1775"
+    },
+    {
+      "byte_length": 5270,
+      "path": "development/dev-03/oracle.json",
+      "sha256": "ae1b2b05c8f7d6e26a2026223561faff5871079390149fd50cf6309deb31ad18"
+    },
+    {
+      "byte_length": 3751,
+      "path": "development/dev-04/evidence.json",
+      "sha256": "82e31d869082817125efd542ae5bd16f0f2aa6eee1b3dfa2e151a9179c3afbf6"
+    },
+    {
+      "byte_length": 502,
+      "path": "development/dev-04/latent_truth.json",
+      "sha256": "ad20d053e6f2bd6630cc00deace8d0825898dfe97d6a4f8e2b4a5afde65bf24a"
+    },
+    {
+      "byte_length": 4658,
+      "path": "development/dev-04/oracle.json",
+      "sha256": "e418a845c2133ae62e7febacdf542511b541a046c94f43098c753cd126b51291"
+    },
+    {
+      "byte_length": 3784,
+      "path": "development/dev-05/evidence.json",
+      "sha256": "78da3c78ed8fad596b7e1a9cbf2c4a4767d193550e357fd625f9f9037b33439d"
+    },
+    {
+      "byte_length": 497,
+      "path": "development/dev-05/latent_truth.json",
+      "sha256": "09ebd136fd48f762ce4a5bed3504125a3bbc46fe7e5b12e1b10531df03bc66ef"
+    },
+    {
+      "byte_length": 4570,
+      "path": "development/dev-05/oracle.json",
+      "sha256": "dbe82fa5617e920b35056946db5fad590b594d8a4b5c99a6a24e9bd50a2cb21f"
+    },
+    {
+      "byte_length": 4117,
+      "path": "development/dev-06/evidence.json",
+      "sha256": "0386444b9c7c7657f18f219e903c1d6f4cbba944262d6bfc606a5117299ec94c"
+    },
+    {
+      "byte_length": 549,
+      "path": "development/dev-06/latent_truth.json",
+      "sha256": "0b75f1f6e286d528a33b05e2f879bfe0c8d219f8342acd8aee926ae909f3f52f"
+    },
+    {
+      "byte_length": 4904,
+      "path": "development/dev-06/oracle.json",
+      "sha256": "e2c9fad672f454dec75c4dabfa660887abf71357eba328adf33daec79fe23f0e"
+    },
+    {
+      "byte_length": 4659,
+      "path": "development/dev-07/evidence.json",
+      "sha256": "ead1fa39a22e96f57c8dbffbbe4cc782bc4ab0935524ae7aad92a41b10ef00f2"
+    },
+    {
+      "byte_length": 613,
+      "path": "development/dev-07/latent_truth.json",
+      "sha256": "03fc176ed91002b1abf4d3dc9b18ebbfa62b1e2a1374b3c0c496f7ece883cdeb"
+    },
+    {
+      "byte_length": 5443,
+      "path": "development/dev-07/oracle.json",
+      "sha256": "ae7453ac68ebb9bcc869ea344863b6b31f37517f80373eab69ca306ddb61052b"
+    },
+    {
+      "byte_length": 64,
+      "path": "development/dev-07/signature.bin",
+      "sha256": "f958b6b6c3ef983236d27f3ef42dc343441efd705c102eba204bb1f1b849a193"
+    },
+    {
+      "byte_length": 1252,
+      "path": "development/dev-07/signature_verification.json",
+      "sha256": "ab1eb217f8ce03502beae62c9efd9152eecdaff597b4916f3d1be173fbb86694"
+    },
+    {
+      "byte_length": 326,
+      "path": "development/dev-07/signed_payload.bin",
+      "sha256": "e09595cf253374906c193e94ce4f9ae20983ef1fe651d5d8014a03d52035a961"
+    },
+    {
+      "byte_length": 4817,
+      "path": "development/dev-08/evidence.json",
+      "sha256": "c08992273a973bf70b38da4d8431b115ff3861c4925e117b851730fd8c695c55"
+    },
+    {
+      "byte_length": 542,
+      "path": "development/dev-08/latent_truth.json",
+      "sha256": "36c745526cd79a13ea0253e313a7d0c765c62014e3d32c86ef292eb3dd1a24a0"
+    },
+    {
+      "byte_length": 5401,
+      "path": "development/dev-08/oracle.json",
+      "sha256": "3433c69dc724ce7308d3d9b4154bf7134d884fb68bce320466708b337af833d7"
+    },
+    {
+      "byte_length": 6298,
+      "path": "development/dev-09/evidence.json",
+      "sha256": "768c01c3a7d2535e1f37b696ee5f823ec232e07fe87ba0a22c5d56b7d6f04f3a"
+    },
+    {
+      "byte_length": 778,
+      "path": "development/dev-09/latent_truth.json",
+      "sha256": "e971696474162b4a5bca7c51c43d20cc2d3aa60cac82e390f7e538ab39ea54eb"
+    },
+    {
+      "byte_length": 5414,
+      "path": "development/dev-09/oracle.json",
+      "sha256": "2598e716eff7806302903473bab713346468c308d93ad2f3698cf92cc5946131"
+    },
+    {
+      "byte_length": 3841,
+      "path": "development/dev-10/evidence.json",
+      "sha256": "bc7101a4d9b216543b77b9977b6cabbd2eef6eb9f7a9305b3aa4e799230938db"
+    },
+    {
+      "byte_length": 402,
+      "path": "development/dev-10/latent_truth.json",
+      "sha256": "bec1ef6d9dbd5168c194d739481fc6f4ce5aab8af55dc92f484b3f2f56f950ff"
+    },
+    {
+      "byte_length": 4591,
+      "path": "development/dev-10/oracle.json",
+      "sha256": "61e56ff7f62cfa8c8fdb43214ea6ff456b904c204dc23b0b5115ac6fd1357d85"
+    },
+    {
+      "byte_length": 3852,
+      "path": "development/dev-11/evidence.json",
+      "sha256": "d13a37cd327f52ac167711aeae9a88a8d11e903f819ff52c5a0c57c30e45cbd8"
+    },
+    {
+      "byte_length": 533,
+      "path": "development/dev-11/latent_truth.json",
+      "sha256": "4a7cefbccae4a96f35690d8692e5d731bd6f6e8415493a34a1a6bb55e0d67f63"
+    },
+    {
+      "byte_length": 4939,
+      "path": "development/dev-11/oracle.json",
+      "sha256": "67e87d759bd6f12781eee53a014a84093f6ce6e05d06534ac9b4ca7120b3f306"
+    },
+    {
+      "byte_length": 5715,
+      "path": "development/dev-12/evidence.json",
+      "sha256": "73580ed98553dd8836e1b4a5df65f2e9b1a19aaae4a52e44322e9c23b070ab01"
+    },
+    {
+      "byte_length": 483,
+      "path": "development/dev-12/latent_truth.json",
+      "sha256": "f6d8e382e37d8b49562a8aed764acc9a9d1a615d51591d9429b848bc8ebfbdf7"
+    },
+    {
+      "byte_length": 4814,
+      "path": "development/dev-12/oracle.json",
+      "sha256": "372949e2e355a1f3b0e7ba9c7ec4b57a4c346de41b911f6345696cd9f65c4a84"
+    }
+  ],
+  "schema": "k1-author-split-manifest-v1",
+  "split": "development"
+}

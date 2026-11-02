@@ -1,0 +1,30 @@
+{
+  "case_id": "dev-09",
+  "claim_truth": {
+    "q-effect-earlier": false,
+    "q-effect-later": true,
+    "q-execution": true,
+    "q-integrity": true,
+    "q-order": true
+  },
+  "latent_facts": [
+    {
+      "fact": "operation admitted before activation in synthetic history",
+      "value": true
+    },
+    {
+      "fact": "operation entered provider before activation",
+      "value": true
+    },
+    {
+      "fact": "later operation did not enter during its observed window",
+      "value": true
+    },
+    {
+      "fact": "earlier operation was prevented from provider entry in requested window",
+      "value": false
+    }
+  ],
+  "schema": "acder02-synthetic-latent-truth-v1",
+  "status": "Authored synthetic scenario specification, not measured runtime ground truth."
+}
