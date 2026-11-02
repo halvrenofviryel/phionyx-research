@@ -1,0 +1,77 @@
+{
+  "schema": "acder02-source-audit-v1",
+  "sources": [
+    {
+      "path": "sources/draft-abak-agent-control-delivery-evidence-02.txt",
+      "url": "https://www.ietf.org/archive/id/draft-abak-agent-control-delivery-evidence-02.txt",
+      "accessed_at_utc": "2026-11-02T16:16:08.496070+00:00",
+      "sha256": "fe3baeb08c8e0979ca64efece098c972827fab483debe0b2bcbfd697bb714782",
+      "byte_length": 123860
+    },
+    {
+      "path": "sources/datatracker-document.json",
+      "url": "https://datatracker.ietf.org/api/v1/doc/document/draft-abak-agent-control-delivery-evidence/",
+      "accessed_at_utc": "2026-11-02T16:16:08.782339+00:00",
+      "sha256": "3d50183144ff1f1a73c81f69e7d3588ad0ebfdb31a8e93646ac9cb239db56154",
+      "byte_length": 2133
+    },
+    {
+      "revision": "19c3b0b909639d2b6e4cfff04d9434c878be3616",
+      "url": "https://raw.githubusercontent.com/b7n0de/proofbundle/19c3b0b909639d2b6e4cfff04d9434c878be3616/interop/acde_01/README.md",
+      "accessed_at_utc": "2026-11-02T16:17:28.851917+00:00",
+      "sha256": "a7668fadd9c338213e5504e526959f7bd86e7033a1edd997040025b7b296b4f5",
+      "byte_length": 8929
+    },
+    {
+      "revision": "19c3b0b909639d2b6e4cfff04d9434c878be3616",
+      "url": "https://raw.githubusercontent.com/b7n0de/proofbundle/19c3b0b909639d2b6e4cfff04d9434c878be3616/interop/acde_01/RUN_RECORD.md",
+      "accessed_at_utc": "2026-11-02T16:17:30.169244+00:00",
+      "sha256": "0fc999dcfb53a81d1d3b0f611b10be023bbfdae87e550d842ded8379bef6dad4",
+      "byte_length": 21654
+    },
+    {
+      "revision": "c8b5b28519191cbe8d229cbf3378e749cb8ccc64",
+      "url": "https://raw.githubusercontent.com/b7n0de/proofbundle/c8b5b28519191cbe8d229cbf3378e749cb8ccc64/interop/acde_01/README.md",
+      "accessed_at_utc": "2026-11-02T16:17:26.595417+00:00",
+      "sha256": "a7668fadd9c338213e5504e526959f7bd86e7033a1edd997040025b7b296b4f5",
+      "byte_length": 8929
+    },
+    {
+      "revision": "c8b5b28519191cbe8d229cbf3378e749cb8ccc64",
+      "url": "https://raw.githubusercontent.com/b7n0de/proofbundle/c8b5b28519191cbe8d229cbf3378e749cb8ccc64/interop/acde_01/RUN_RECORD.md",
+      "accessed_at_utc": "2026-11-02T16:17:26.752136+00:00",
+      "sha256": "0fc999dcfb53a81d1d3b0f611b10be023bbfdae87e550d842ded8379bef6dad4",
+      "byte_length": 21654
+    }
+  ],
+  "latest_revision_check": {
+    "observed": "02",
+    "frozen": "02",
+    "difference": "NONE",
+    "source": "sources/datatracker-document.json"
+  },
+  "proofbundle_comparison": {
+    "draft_pin": "19c3b0b909639d2b6e4cfff04d9434c878be3616",
+    "observed_head": "c8b5b28519191cbe8d229cbf3378e749cb8ccc64",
+    "README.md": "identical raw bytes",
+    "RUN_RECORD.md": "identical raw bytes",
+    "scope": "Only README and RUN_RECORD were read. No implementation or vector source was read or copied. Historical reported test outcomes were not rerun in B1."
+  },
+  "repository": {
+    "base": "69bc8cfd282e9a0a45e34b1fcf6106b1ab618f9d",
+    "branch": "codex/acder02-sealed-challenge-builder",
+    "initial_status_short": "",
+    "fetch_command": "git fetch --all --prune",
+    "fetch_exit_code": 0,
+    "fetch_observed_by_utc": "2026-11-02T16:15:12Z",
+    "head_after_fetch": "69bc8cfd282e9a0a45e34b1fcf6106b1ab618f9d",
+    "origin_main_after_fetch": "69bc8cfd282e9a0a45e34b1fcf6106b1ab618f9d",
+    "fetch_notes": [
+      "deleted origin/codex/acde-01-independent-assessment",
+      "origin/HEAD became dangling; no branch/base change",
+      "three dependabot branches and docs/claim-realignment discovered"
+    ]
+  },
+  "acquisition": "Raw IETF download first failed sandbox DNS; authorized read-only network escalation succeeded. GitHub connector used for discovery, raw HTTPS bytes independently downloaded at exact revisions for SHA-256.",
+  "rules": "No applicable AGENTS.md found in clone or ancestors. CONTRIBUTING.md read; isolated stdlib tooling, documentation and tests follow its applicable rules. No PR workflow invoked."
+}

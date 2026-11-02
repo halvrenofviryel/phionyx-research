@@ -1,0 +1,40 @@
+[
+  {
+    "command": [
+      "ruff",
+      "check",
+      "--no-cache",
+      "experiments/ietf/audit/decision-receipts-03/fixtures.py",
+      "experiments/ietf/audit/decision-receipts-03/probe.py",
+      "experiments/ietf/audit/decision-receipts-03/tests/test_probe.py"
+    ],
+    "started_at_utc": "2026-11-02T16:38:34.573066+00:00",
+    "finished_at_utc": "2026-11-02T16:38:34.583406+00:00",
+    "exit_code": 0
+  },
+  {
+    "command": [
+      "ruff",
+      "format",
+      "--check",
+      "--no-cache",
+      "--line-length",
+      "100",
+      "experiments/ietf/audit/decision-receipts-03/fixtures.py",
+      "experiments/ietf/audit/decision-receipts-03/probe.py",
+      "experiments/ietf/audit/decision-receipts-03/tests/test_probe.py"
+    ],
+    "started_at_utc": "2026-11-02T16:38:34.583425+00:00",
+    "finished_at_utc": "2026-11-02T16:38:34.593280+00:00",
+    "exit_code": 0
+  },
+  {
+    "command": [
+      "bash",
+      "experiments/ietf/audit/decision-receipts-03/reproduce.sh"
+    ],
+    "started_at_utc": "2026-11-02T16:38:34.593304+00:00",
+    "finished_at_utc": "2026-11-02T16:38:37.078325+00:00",
+    "exit_code": 0
+  }
+]

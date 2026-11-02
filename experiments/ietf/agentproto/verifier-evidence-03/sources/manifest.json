@@ -1,0 +1,22 @@
+[
+  {
+    "path": "current-datatracker.json",
+    "url": "https://datatracker.ietf.org/api/v1/doc/document/draft-he-agentproto-verifier-evidence/",
+    "accessed_at_utc": "2026-11-02T16:15:48.310847+00:00",
+    "status": "AVAILABLE",
+    "final_url": "https://datatracker.ietf.org/api/v1/doc/document/draft-he-agentproto-verifier-evidence/",
+    "http_status": 200,
+    "sha256": "68d2f16394ebf5eb147bada903402e04fa0a87efeb4339ff4d75a6c892bf1853",
+    "byte_count": 2070
+  },
+  {
+    "path": "draft-he-agentproto-verifier-evidence-03.txt",
+    "url": "https://www.ietf.org/archive/id/draft-he-agentproto-verifier-evidence-03.txt",
+    "accessed_at_utc": "2026-11-02T16:15:48.609068+00:00",
+    "status": "AVAILABLE",
+    "final_url": "https://www.ietf.org/archive/id/draft-he-agentproto-verifier-evidence-03.txt",
+    "http_status": 200,
+    "sha256": "c64cb2fd988476a56f82bdc4386a652c5841f7b3723941bffea44e73208ef600",
+    "byte_count": 71649
+  }
+]

@@ -1,0 +1,103 @@
+{
+  "references": [
+    {
+      "task": "D",
+      "repository": "halvrenofviryel/ai-runtime-evidence-protocol",
+      "original_commit": "0130fcf8e7d70a0f9c4f977957e5de76ca8ef689",
+      "integration_commit": null,
+      "publication_status": "UNPUBLISHED",
+      "source_local_path": "/home/toygar/.codex/worktrees/a4cd/ai-runtime-evidence-protocol/reports/explain/source-basis.json",
+      "snapshot_path": "docs/standards-lab-evidence/local-refs/D/source-basis.json",
+      "sha256": "6d00c376e6ccd2710e51d4e87e1b10f01d71ee691ec7b56077e47ebb906f4f6a",
+      "bytes": 14955,
+      "accessed_at_utc": "2026-11-02T17:13:44.693630+00:00",
+      "verified_against_exact_git_blob": true
+    },
+    {
+      "task": "D",
+      "repository": "halvrenofviryel/ai-runtime-evidence-protocol",
+      "original_commit": "0130fcf8e7d70a0f9c4f977957e5de76ca8ef689",
+      "integration_commit": null,
+      "publication_status": "UNPUBLISHED",
+      "source_local_path": "/home/toygar/.codex/worktrees/a4cd/ai-runtime-evidence-protocol/reports/explain/validation.json",
+      "snapshot_path": "docs/standards-lab-evidence/local-refs/D/validation.json",
+      "sha256": "031ac7a31bc329e5c1bcd19f382cc21075adad528aeb8255c150884415d94169",
+      "bytes": 5420,
+      "accessed_at_utc": "2026-11-02T17:13:44.698245+00:00",
+      "verified_against_exact_git_blob": true
+    },
+    {
+      "task": "D",
+      "repository": "halvrenofviryel/ai-runtime-evidence-protocol",
+      "original_commit": "0130fcf8e7d70a0f9c4f977957e5de76ca8ef689",
+      "integration_commit": null,
+      "publication_status": "UNPUBLISHED",
+      "source_local_path": "/home/toygar/.codex/worktrees/a4cd/ai-runtime-evidence-protocol/examples/v02/EXPLAIN.md",
+      "snapshot_path": "docs/standards-lab-evidence/local-refs/D/EXPLAIN.md",
+      "sha256": "ab8338f3528eecd855a1ea0a96a8c1cd8a5c40052d53021b9ef30bc893b54767",
+      "bytes": 5611,
+      "accessed_at_utc": "2026-11-02T17:13:44.702360+00:00",
+      "verified_against_exact_git_blob": true
+    },
+    {
+      "task": "B1",
+      "repository": "halvrenofviryel/phionyx-research",
+      "original_commit": "d749ea7c1789aa0377a5e25e40d28f20cf700821",
+      "commit_basis": "coordinator handoff; no builder Git history accessed",
+      "integration_commit": null,
+      "publication_status": "UNPUBLISHED",
+      "source_local_path": "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/b1-acder-sealed-challenge/phionyx-research/experiments/ietf/acder02-sealed-challenge/METHODOLOGY.md",
+      "snapshot_path": "docs/standards-lab-evidence/local-refs/B1/METHODOLOGY.md",
+      "sha256": "d0b29740d78aaa93e2baef19e4a4baaf3ddf28ffa5c804208b6ce7e1fa44ca29",
+      "bytes": 6922,
+      "accessed_at_utc": "2026-11-02T17:13:44.702570+00:00",
+      "verified_against_exact_git_blob": "NOT_EVALUATED"
+    },
+    {
+      "task": "B1",
+      "repository": "halvrenofviryel/phionyx-research",
+      "original_commit": "d749ea7c1789aa0377a5e25e40d28f20cf700821",
+      "commit_basis": "coordinator handoff; no builder Git history accessed",
+      "integration_commit": null,
+      "publication_status": "UNPUBLISHED",
+      "source_local_path": "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/b1-acder-sealed-challenge/phionyx-research/experiments/ietf/acder02-sealed-challenge/public/challenge_manifest.json",
+      "snapshot_path": "docs/standards-lab-evidence/local-refs/B1/challenge_manifest.json",
+      "sha256": "def095c2efe235be958a978dce7a886ce407dc5c98a88c84bbeeafe27a6be248",
+      "bytes": 5457,
+      "accessed_at_utc": "2026-11-02T17:13:44.702717+00:00",
+      "verified_against_exact_git_blob": "NOT_EVALUATED"
+    },
+    {
+      "task": "B1",
+      "repository": "halvrenofviryel/phionyx-research",
+      "original_commit": "d749ea7c1789aa0377a5e25e40d28f20cf700821",
+      "commit_basis": "coordinator handoff; no builder Git history accessed",
+      "integration_commit": null,
+      "publication_status": "UNPUBLISHED",
+      "source_local_path": "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/b1-acder-sealed-challenge/phionyx-research/experiments/ietf/acder02-sealed-challenge/public/commitment.json",
+      "snapshot_path": "docs/standards-lab-evidence/local-refs/B1/commitment.json",
+      "sha256": "cda835db77dc737694786bb73cee63977cff468279edfba1c62ea05a7f6aa7c7",
+      "bytes": 370,
+      "accessed_at_utc": "2026-11-02T17:13:44.702840+00:00",
+      "verified_against_exact_git_blob": "NOT_EVALUATED"
+    },
+    {
+      "task": "B1",
+      "repository": "halvrenofviryel/phionyx-research",
+      "original_commit": "d749ea7c1789aa0377a5e25e40d28f20cf700821",
+      "commit_basis": "coordinator handoff; no builder Git history accessed",
+      "integration_commit": null,
+      "publication_status": "UNPUBLISHED",
+      "source_local_path": "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/b1-acder-sealed-challenge/phionyx-research/experiments/ietf/acder02-sealed-challenge/public/source_audit.json",
+      "snapshot_path": "docs/standards-lab-evidence/local-refs/B1/source_audit.json",
+      "sha256": "c62de0aa7ebe12ff5d3cb9256ab83e853c48fcbe5aa87fc80f4f581954516a57",
+      "bytes": 3936,
+      "accessed_at_utc": "2026-11-02T17:13:44.702979+00:00",
+      "verified_against_exact_git_blob": "NOT_EVALUATED"
+    }
+  ],
+  "private_expected_results": "NOT_ACCESSED",
+  "B1_builder_history": "NOT_ACCESSED",
+  "B1_tests": "NOT_RUN",
+  "D_tests_in_G": "NOT_RUN"
+}

@@ -1,0 +1,50 @@
+{
+  "pin_scope": "SHA-256 over exact HTTP response body bytes; no newline normalization. Revision discovery metadata is separate from immutable document URLs. Raw standards text is not redistributed.",
+  "documents": [
+    {
+      "revision": "rfc9943",
+      "url": "https://www.rfc-editor.org/rfc/rfc9943.txt",
+      "resolved_url": "https://www.rfc-editor.org/rfc/rfc9943.txt",
+      "sha256": "204aea020731e1306e8ffe0aaae5c9559a7a8edf24bd089ae79d6a6d6c7676f1",
+      "byte_length": 76117,
+      "retrieved_at_utc": "2026-11-02T17:06:17.082150Z"
+    },
+    {
+      "revision": "draft-templeman-scitt-measurement-capsule-01",
+      "url": "https://www.ietf.org/archive/id/draft-templeman-scitt-measurement-capsule-01.txt",
+      "resolved_url": "https://www.ietf.org/archive/id/draft-templeman-scitt-measurement-capsule-01.txt",
+      "sha256": "d02bb2146fef267050e689375c7db22cb954f02f0a69ff8038382540c5192600",
+      "byte_length": 81263,
+      "retrieved_at_utc": "2026-11-02T17:06:17.300056Z"
+    },
+    {
+      "revision": "draft-thaha-scitt-agent-execution-evidence-02",
+      "url": "https://www.ietf.org/archive/id/draft-thaha-scitt-agent-execution-evidence-02.txt",
+      "resolved_url": "https://www.ietf.org/archive/id/draft-thaha-scitt-agent-execution-evidence-02.txt",
+      "sha256": "2b1f9f27b04a2c67c358c222827dbdb445c198fd9b8bba2fb56e5a2a3ba6a092",
+      "byte_length": 184994,
+      "retrieved_at_utc": "2026-11-02T17:06:17.561837Z"
+    }
+  ],
+  "revision_discovery": [
+    {
+      "kind": "current_revision_lookup",
+      "url": "https://datatracker.ietf.org/api/v1/doc/document/draft-templeman-scitt-measurement-capsule/",
+      "revision": "01",
+      "name": "draft-templeman-scitt-measurement-capsule",
+      "sha256": "dd3c2f3de27490d16ea10ae8e74de5b0173946c7bbfbadcb02a537f0a6a7236c",
+      "byte_length": 1774,
+      "retrieved_at_utc": "2026-11-02T17:06:18.063206Z"
+    },
+    {
+      "kind": "current_revision_lookup",
+      "url": "https://datatracker.ietf.org/api/v1/doc/document/draft-thaha-scitt-agent-execution-evidence/",
+      "revision": "02",
+      "name": "draft-thaha-scitt-agent-execution-evidence",
+      "sha256": "2ba61eeb3b815bd709695eddce3a363303e07de34a9de8a36f692afb5d48dc26",
+      "byte_length": 1782,
+      "retrieved_at_utc": "2026-11-02T17:06:18.322199Z"
+    }
+  ],
+  "optional_statement_identity_document": "NOT_NEEDED: only local payload bytes are identified; no Signed Statement identity comparison is implemented."
+}

@@ -1,0 +1,435 @@
+{
+  "implementation": "proofbundle==6.4.0, unmodified PyPI wheel",
+  "runtime_scenarios_executed": 0,
+  "scenario_count": 9,
+  "scenarios": [
+    {
+      "approval_consumption_state": {
+        "reason": "No released durable consume/store/rotation API found",
+        "status": "NOT_EVALUATED"
+      },
+      "approval_verification": {
+        "local_fixture_preflight": "api_results.json:baseline.approval_fixture",
+        "reason": "No package approval-record verifier; unsigned fixture is not human authentication",
+        "status": "NOT_EVALUATED"
+      },
+      "decision_receipt_validity": {
+        "limit": "Package receipt verification is not full draft sections 3.2/3.3 conformance",
+        "result_ref": "api_results.json:baseline",
+        "status": "MEASURED_API_SUBSET"
+      },
+      "does_not_establish": [
+        "human approval authenticity or durable consumption",
+        "at-most-once authorization or at-most-once execution",
+        "that a recorded executed effect occurred",
+        "that a timeout means execution failed",
+        "completeness beyond supplied records or operational independence of signing keys",
+        "Agent Guard preview behavior or historical -00 execution observations"
+      ],
+      "effect_observation_state": {
+        "reason": "No external effect-observation channel was exercised",
+        "status": "UNOBSERVED"
+      },
+      "execution_observation_state": {
+        "reason": "No executor or Agent Guard was run; receipt assertions are synthetic",
+        "runtime_probe": "NOT_EVALUATED",
+        "status": "UNOBSERVED"
+      },
+      "id": "S01",
+      "observed_behavior": "One ALLOW and one synthetic executed outcome verify; no action was run.",
+      "outcome_receipt_validity": {
+        "limit": "No actual effect, full cross-record temporal check, or independent observer established",
+        "result_ref": "api_results.json:baseline",
+        "status": "MEASURED_API_SUBSET"
+      },
+      "scenario": "Baseline approval -> ALLOW -> executed outcome",
+      "set_level_audit_finding": {
+        "reason": "No released section-3.5 duplicate-approval auditor found",
+        "status": "NOT_EVALUATED",
+        "supplement": null
+      },
+      "status": "PARTIALLY_EVALUATED"
+    },
+    {
+      "approval_consumption_state": {
+        "reason": "No released durable consume/store/rotation API found",
+        "status": "NOT_EVALUATED"
+      },
+      "approval_verification": {
+        "local_fixture_preflight": null,
+        "reason": "No package approval-record verifier; unsigned fixture is not human authentication",
+        "status": "NOT_EVALUATED"
+      },
+      "decision_receipt_validity": {
+        "limit": "Package receipt verification is not full draft sections 3.2/3.3 conformance",
+        "result_ref": null,
+        "status": "NOT_EVALUATED"
+      },
+      "does_not_establish": [
+        "human approval authenticity or durable consumption",
+        "at-most-once authorization or at-most-once execution",
+        "that a recorded executed effect occurred",
+        "that a timeout means execution failed",
+        "completeness beyond supplied records or operational independence of signing keys",
+        "Agent Guard preview behavior or historical -00 execution observations"
+      ],
+      "effect_observation_state": {
+        "reason": "No external effect-observation channel was exercised",
+        "status": "UNOBSERVED"
+      },
+      "execution_observation_state": {
+        "reason": "No executor or Agent Guard was run; receipt assertions are synthetic",
+        "runtime_probe": "NOT_EVALUATED",
+        "status": "UNOBSERVED"
+      },
+      "id": "S02",
+      "observed_behavior": "No public consume/re-present hook; no behavior inferred.",
+      "outcome_receipt_validity": {
+        "limit": "No actual effect, full cross-record temporal check, or independent observer established",
+        "result_ref": null,
+        "status": "NOT_EVALUATED"
+      },
+      "scenario": "Consumed approval presented again with state retained",
+      "set_level_audit_finding": {
+        "reason": "No released section-3.5 duplicate-approval auditor found",
+        "status": "NOT_EVALUATED",
+        "supplement": null
+      },
+      "status": "NOT_EVALUATED"
+    },
+    {
+      "approval_consumption_state": {
+        "reason": "No released durable consume/store/rotation API found",
+        "status": "NOT_EVALUATED"
+      },
+      "approval_verification": {
+        "local_fixture_preflight": null,
+        "reason": "No package approval-record verifier; unsigned fixture is not human authentication",
+        "status": "NOT_EVALUATED"
+      },
+      "decision_receipt_validity": {
+        "limit": "Package receipt verification is not full draft sections 3.2/3.3 conformance",
+        "result_ref": null,
+        "status": "NOT_EVALUATED"
+      },
+      "does_not_establish": [
+        "human approval authenticity or durable consumption",
+        "at-most-once authorization or at-most-once execution",
+        "that a recorded executed effect occurred",
+        "that a timeout means execution failed",
+        "completeness beyond supplied records or operational independence of signing keys",
+        "Agent Guard preview behavior or historical -00 execution observations"
+      ],
+      "effect_observation_state": {
+        "reason": "No external effect-observation channel was exercised",
+        "status": "UNOBSERVED"
+      },
+      "execution_observation_state": {
+        "reason": "No executor or Agent Guard was run; receipt assertions are synthetic",
+        "runtime_probe": "NOT_EVALUATED",
+        "status": "UNOBSERVED"
+      },
+      "id": "S03",
+      "observed_behavior": "No public store/rotation/preservation hook; no behavior inferred.",
+      "outcome_receipt_validity": {
+        "limit": "No actual effect, full cross-record temporal check, or independent observer established",
+        "result_ref": null,
+        "status": "NOT_EVALUATED"
+      },
+      "scenario": "Rotation preserving required old state/digest",
+      "set_level_audit_finding": {
+        "reason": "No released section-3.5 duplicate-approval auditor found",
+        "status": "NOT_EVALUATED",
+        "supplement": null
+      },
+      "status": "NOT_EVALUATED"
+    },
+    {
+      "approval_consumption_state": {
+        "reason": "No released durable consume/store/rotation API found",
+        "status": "NOT_EVALUATED"
+      },
+      "approval_verification": {
+        "local_fixture_preflight": null,
+        "reason": "No package approval-record verifier; unsigned fixture is not human authentication",
+        "status": "NOT_EVALUATED"
+      },
+      "decision_receipt_validity": {
+        "limit": "Package receipt verification is not full draft sections 3.2/3.3 conformance",
+        "result_ref": null,
+        "status": "NOT_EVALUATED"
+      },
+      "does_not_establish": [
+        "human approval authenticity or durable consumption",
+        "at-most-once authorization or at-most-once execution",
+        "that a recorded executed effect occurred",
+        "that a timeout means execution failed",
+        "completeness beyond supplied records or operational independence of signing keys",
+        "Agent Guard preview behavior or historical -00 execution observations"
+      ],
+      "effect_observation_state": {
+        "reason": "No external effect-observation channel was exercised",
+        "status": "UNOBSERVED"
+      },
+      "execution_observation_state": {
+        "reason": "No executor or Agent Guard was run; receipt assertions are synthetic",
+        "runtime_probe": "NOT_EVALUATED",
+        "status": "UNOBSERVED"
+      },
+      "id": "S04",
+      "observed_behavior": "No public missing-generation hook; refusal vs indeterminate vs re-allow is unknown.",
+      "outcome_receipt_validity": {
+        "limit": "No actual effect, full cross-record temporal check, or independent observer established",
+        "result_ref": null,
+        "status": "NOT_EVALUATED"
+      },
+      "scenario": "Missing required consumption-state generation",
+      "set_level_audit_finding": {
+        "reason": "No released section-3.5 duplicate-approval auditor found",
+        "status": "NOT_EVALUATED",
+        "supplement": null
+      },
+      "status": "NOT_EVALUATED"
+    },
+    {
+      "approval_consumption_state": {
+        "reason": "No released durable consume/store/rotation API found",
+        "status": "NOT_EVALUATED"
+      },
+      "approval_verification": {
+        "local_fixture_preflight": "api_results.json:baseline.approval_fixture",
+        "reason": "No package approval-record verifier; unsigned fixture is not human authentication",
+        "status": "NOT_EVALUATED"
+      },
+      "decision_receipt_validity": {
+        "limit": "Package receipt verification is not full draft sections 3.2/3.3 conformance",
+        "result_ref": "api_results.json:repeat_verification",
+        "status": "MEASURED_API_SUBSET"
+      },
+      "does_not_establish": [
+        "human approval authenticity or durable consumption",
+        "at-most-once authorization or at-most-once execution",
+        "that a recorded executed effect occurred",
+        "that a timeout means execution failed",
+        "completeness beyond supplied records or operational independence of signing keys",
+        "Agent Guard preview behavior or historical -00 execution observations"
+      ],
+      "effect_observation_state": {
+        "reason": "No external effect-observation channel was exercised",
+        "status": "UNOBSERVED"
+      },
+      "execution_observation_state": {
+        "reason": "No executor or Agent Guard was run; receipt assertions are synthetic",
+        "runtime_probe": "NOT_EVALUATED",
+        "status": "UNOBSERVED"
+      },
+      "id": "S05",
+      "observed_behavior": "The same receipt verifies twice at the same audit time; these are not execution attempts.",
+      "outcome_receipt_validity": {
+        "limit": "No actual effect, full cross-record temporal check, or independent observer established",
+        "result_ref": null,
+        "status": "NOT_EVALUATED"
+      },
+      "scenario": "Reuse one ALLOW for two execution attempts",
+      "set_level_audit_finding": {
+        "reason": "No released section-3.5 duplicate-approval auditor found",
+        "status": "NOT_EVALUATED",
+        "supplement": null
+      },
+      "status": "PARTIALLY_EVALUATED"
+    },
+    {
+      "approval_consumption_state": {
+        "reason": "No released durable consume/store/rotation API found",
+        "status": "NOT_EVALUATED"
+      },
+      "approval_verification": {
+        "local_fixture_preflight": "api_results.json:baseline.approval_fixture",
+        "reason": "No package approval-record verifier; unsigned fixture is not human authentication",
+        "status": "NOT_EVALUATED"
+      },
+      "decision_receipt_validity": {
+        "limit": "Package receipt verification is not full draft sections 3.2/3.3 conformance",
+        "result_ref": "api_results.json:unknown",
+        "status": "MEASURED_API_SUBSET"
+      },
+      "does_not_establish": [
+        "human approval authenticity or durable consumption",
+        "at-most-once authorization or at-most-once execution",
+        "that a recorded executed effect occurred",
+        "that a timeout means execution failed",
+        "completeness beyond supplied records or operational independence of signing keys",
+        "Agent Guard preview behavior or historical -00 execution observations"
+      ],
+      "effect_observation_state": {
+        "reason": "No external effect-observation channel was exercised",
+        "status": "UNOBSERVED"
+      },
+      "execution_observation_state": {
+        "reason": "No executor or Agent Guard was run; receipt assertions are synthetic",
+        "runtime_probe": "NOT_EVALUATED",
+        "status": "UNOBSERVED"
+      },
+      "id": "S06",
+      "observed_behavior": "Decision actionOutcome=unknown validates; outcome status=unknown is rejected by enum.",
+      "outcome_receipt_validity": {
+        "limit": "No actual effect, full cross-record temporal check, or independent observer established",
+        "result_ref": "api_results.json:unknown",
+        "status": "MEASURED_ENUM_REJECTION"
+      },
+      "scenario": "Timeout with UNKNOWN/UNOBSERVED outcome followed by retry",
+      "set_level_audit_finding": {
+        "reason": "No released section-3.5 duplicate-approval auditor found",
+        "status": "NOT_EVALUATED",
+        "supplement": null
+      },
+      "status": "PARTIALLY_EVALUATED"
+    },
+    {
+      "approval_consumption_state": {
+        "reason": "No released durable consume/store/rotation API found",
+        "status": "NOT_EVALUATED"
+      },
+      "approval_verification": {
+        "local_fixture_preflight": "api_results.json:baseline.approval_fixture",
+        "reason": "No package approval-record verifier; unsigned fixture is not human authentication",
+        "status": "NOT_EVALUATED"
+      },
+      "decision_receipt_validity": {
+        "limit": "Package receipt verification is not full draft sections 3.2/3.3 conformance",
+        "result_ref": "api_results.json:two_outcomes",
+        "status": "MEASURED_API_SUBSET"
+      },
+      "does_not_establish": [
+        "human approval authenticity or durable consumption",
+        "at-most-once authorization or at-most-once execution",
+        "that a recorded executed effect occurred",
+        "that a timeout means execution failed",
+        "completeness beyond supplied records or operational independence of signing keys",
+        "Agent Guard preview behavior or historical -00 execution observations"
+      ],
+      "effect_observation_state": {
+        "reason": "No external effect-observation channel was exercised",
+        "status": "UNOBSERVED"
+      },
+      "execution_observation_state": {
+        "reason": "No executor or Agent Guard was run; receipt assertions are synthetic",
+        "runtime_probe": "NOT_EVALUATED",
+        "status": "UNOBSERVED"
+      },
+      "id": "S07",
+      "observed_behavior": "Both distinct outcomes verify against one decision. Unnumbered sequence scan returns no groups.",
+      "outcome_receipt_validity": {
+        "limit": "No actual effect, full cross-record temporal check, or independent observer established",
+        "result_ref": "api_results.json:two_outcomes",
+        "status": "MEASURED_API_SUBSET"
+      },
+      "scenario": "Two outcome receipts reference one ALLOW",
+      "set_level_audit_finding": {
+        "reason": "No released section-3.5 duplicate-approval auditor found",
+        "status": "NOT_EVALUATED",
+        "supplement": "api_results.json:two_outcomes and sequence_control"
+      },
+      "status": "PARTIALLY_EVALUATED"
+    },
+    {
+      "approval_consumption_state": {
+        "reason": "No released durable consume/store/rotation API found",
+        "status": "NOT_EVALUATED"
+      },
+      "approval_verification": {
+        "local_fixture_preflight": "api_results.json:baseline.approval_fixture",
+        "reason": "No package approval-record verifier; unsigned fixture is not human authentication",
+        "status": "NOT_EVALUATED"
+      },
+      "decision_receipt_validity": {
+        "limit": "Package receipt verification is not full draft sections 3.2/3.3 conformance",
+        "result_ref": "api_results.json:same_approval_two_allows",
+        "status": "MEASURED_API_SUBSET"
+      },
+      "does_not_establish": [
+        "human approval authenticity or durable consumption",
+        "at-most-once authorization or at-most-once execution",
+        "that a recorded executed effect occurred",
+        "that a timeout means execution failed",
+        "completeness beyond supplied records or operational independence of signing keys",
+        "Agent Guard preview behavior or historical -00 execution observations"
+      ],
+      "effect_observation_state": {
+        "reason": "No external effect-observation channel was exercised",
+        "status": "UNOBSERVED"
+      },
+      "execution_observation_state": {
+        "reason": "No executor or Agent Guard was run; receipt assertions are synthetic",
+        "runtime_probe": "NOT_EVALUATED",
+        "status": "UNOBSERVED"
+      },
+      "id": "S08",
+      "observed_behavior": "Both distinct ALLOW payloads verify separately. Their identical approval fixture is visible.",
+      "outcome_receipt_validity": {
+        "limit": "No actual effect, full cross-record temporal check, or independent observer established",
+        "result_ref": null,
+        "status": "NOT_EVALUATED"
+      },
+      "scenario": "Two distinct ALLOW receipts cite the same approval identity",
+      "set_level_audit_finding": {
+        "reason": "No released section-3.5 duplicate-approval auditor found",
+        "status": "NOT_EVALUATED",
+        "supplement": "api_results.json:same_approval_two_allows.local_inventory"
+      },
+      "status": "PARTIALLY_EVALUATED"
+    },
+    {
+      "approval_consumption_state": {
+        "reason": "No released durable consume/store/rotation API found",
+        "status": "NOT_EVALUATED"
+      },
+      "approval_verification": {
+        "local_fixture_preflight": "api_results.json:baseline.approval_fixture",
+        "reason": "No package approval-record verifier; unsigned fixture is not human authentication",
+        "status": "NOT_EVALUATED"
+      },
+      "decision_receipt_validity": {
+        "limit": "Package receipt verification is not full draft sections 3.2/3.3 conformance",
+        "result_ref": "api_results.json:evaluation_evidence",
+        "status": "MEASURED_API_SUBSET"
+      },
+      "does_not_establish": [
+        "human approval authenticity or durable consumption",
+        "at-most-once authorization or at-most-once execution",
+        "that a recorded executed effect occurred",
+        "that a timeout means execution failed",
+        "completeness beyond supplied records or operational independence of signing keys",
+        "Agent Guard preview behavior or historical -00 execution observations"
+      ],
+      "effect_observation_state": {
+        "reason": "No external effect-observation channel was exercised",
+        "status": "UNOBSERVED"
+      },
+      "execution_observation_state": {
+        "reason": "No executor or Agent Guard was run; receipt assertions are synthetic",
+        "runtime_probe": "NOT_EVALUATED",
+        "status": "UNOBSERVED"
+      },
+      "id": "S09",
+      "observed_behavior": "P1 digest resolves; the decision stays DENY and is rejected by an ALLOW-only policy.",
+      "outcome_receipt_validity": {
+        "limit": "No actual effect, full cross-record temporal check, or independent observer established",
+        "result_ref": null,
+        "status": "NOT_EVALUATED"
+      },
+      "scenario": "Evaluation evidence is not authorization",
+      "set_level_audit_finding": {
+        "reason": "No released section-3.5 duplicate-approval auditor found",
+        "status": "NOT_EVALUATED",
+        "supplement": null
+      },
+      "status": "PARTIALLY_EVALUATED"
+    }
+  ],
+  "status_counts": {
+    "NOT_EVALUATED": 3,
+    "PARTIALLY_EVALUATED": 6
+  },
+  "target_draft": "draft-gruszka-audit-decision-receipts-03"
+}

@@ -1,0 +1,135 @@
+{
+  "draft": {
+    "url": "https://www.ietf.org/archive/id/draft-he-agentproto-verifier-evidence-03.txt",
+    "revision": "03",
+    "sha256": "c64cb2fd988476a56f82bdc4386a652c5841f7b3723941bffea44e73208ef600",
+    "line_numbering": "One-based LF-separated raw text lines; form-feed characters do not add lines."
+  },
+  "derived_before_logic_at_utc": "2026-11-02T16:19:13.512533+00:00",
+  "requirements": [
+    {
+      "id": "DEF-DOMAIN",
+      "section": "3",
+      "lines": [
+        [
+          215,
+          216
+        ]
+      ],
+      "paraphrase": "Coverage is the record set asserted by the claim.",
+      "local_interpretation_or_limit": "A finite, named domain and half-open UTC window are required by this local experiment; the draft does not prescribe a closure algorithm."
+    },
+    {
+      "id": "DEF-MATERIAL",
+      "section": "3",
+      "lines": [
+        [
+          218,
+          233
+        ]
+      ],
+      "paraphrase": "Materiality is relative to the conduct or assertion at issue.",
+      "local_interpretation_or_limit": "Party identities and their materiality are stipulated fixture facts, not discovered or externally certified."
+    },
+    {
+      "id": "CMP-1",
+      "section": "8",
+      "lines": [
+        [
+          567,
+          585
+        ]
+      ],
+      "paraphrase": "Name the claimed domain and omission-revealing mechanism; valid disclosed artifacts do not establish wider completeness.",
+      "local_interpretation_or_limit": "Missing domain or detector leaves the completeness appraisal INDETERMINATE; a separate reporting-conformance check is not implemented. Omission causes are not inferred."
+    },
+    {
+      "id": "CMP-2-CONTROL",
+      "section": "9",
+      "lines": [
+        [
+          589,
+          627
+        ]
+      ],
+      "paraphrase": "Same-party operation or input selection needs an independently appraised basis. Its absence alone is not UNSATISFIED.",
+      "local_interpretation_or_limit": "A separately controlled exhaustive counterparty index is the only basis implemented. Material-party input selection is disqualifying even with a different operator."
+    },
+    {
+      "id": "CMP-2-APPRAISAL",
+      "section": "9",
+      "lines": [
+        [
+          629,
+          637
+        ]
+      ],
+      "paraphrase": "Retain completed authority, result/domain binding, extent and temporal appraisals before SATISFIED.",
+      "local_interpretation_or_limit": "A local fixture policy defines exact scope, version+digest binding, trusted counterparty authority, and full-window coverage. Neither digest nor matching identifiers proves truth or independence."
+    },
+    {
+      "id": "CMP-2-EXERCISE",
+      "section": "9",
+      "lines": [
+        [
+          639,
+          645
+        ]
+      ],
+      "paraphrase": "Demonstrate both unestablished and independently appraised established outcomes under one revision and prior expectations.",
+      "local_interpretation_or_limit": "Pairs and prior local digests will be retained. No externally timed commitment or independently controlled exercise evidence exists; full exercise conformance is NOT claimed."
+    },
+    {
+      "id": "OUTCOME-4",
+      "section": "6",
+      "lines": [
+        [
+          399,
+          440
+        ]
+      ],
+      "paraphrase": "Keep satisfied, unsatisfied, indeterminate and not-evaluated distinct.",
+      "local_interpretation_or_limit": "Uppercase underscore spellings are local JSON tokens. A proven missing member of the independently enumerated domain is UNSATISFIED under the local equality predicate; unavailable evidence is INDETERMINATE."
+    },
+    {
+      "id": "OUTCOME-TIME",
+      "section": "6",
+      "lines": [
+        [
+          442,
+          470
+        ]
+      ],
+      "paraphrase": "Record check time, carried evidence times, and distinguish capability from an unattempted check.",
+      "local_interpretation_or_limit": "A fixed replay instant gives deterministic output; the actual wall-clock execution interval is recorded separately. Capability is supplied explicitly in the evaluation plan, never inferred from resolver failure."
+    },
+    {
+      "id": "PREDICATE-SEPARATION",
+      "section": "9",
+      "lines": [
+        [
+          597,
+          607
+        ]
+      ],
+      "paraphrase": "A refuted predicate and unestablished completeness are separate verdicts.",
+      "local_interpretation_or_limit": "An optional at-most-once check counts only fixture-authenticated disclosed occurrences; it never reads scenario truth."
+    },
+    {
+      "id": "NON-CLAIMS",
+      "section": "10 / A.4",
+      "lines": [
+        [
+          663,
+          687
+        ],
+        [
+          1371,
+          1384
+        ]
+      ],
+      "paraphrase": "Missing independent coverage is not proof of omission; the requirements do not establish protocol truth or deployment security.",
+      "local_interpretation_or_limit": "Scenario-only withheld records are kept outside the evaluator input. The test author is not an independent evidence root."
+    }
+  ]
+}

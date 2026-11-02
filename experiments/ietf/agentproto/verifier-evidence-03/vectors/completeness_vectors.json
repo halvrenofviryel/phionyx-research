@@ -1,0 +1,1185 @@
+{
+  "profile": "synthetic-finite-counterparty-v1",
+  "replay_at": "2026-11-02T12:00:00Z",
+  "fixture_assumptions": [
+    "All sources, roles, authority and authentication are synthetic stipulations.",
+    "No cryptographic verification or real independent testimony is provided.",
+    "scenario_only and expected are forbidden evaluator inputs."
+  ],
+  "vectors": [
+    {
+      "id": "closed_independent",
+      "description": "Closed population reconciles with an independently controlled counterparty index.",
+      "input": {
+        "profile": "synthetic-finite-counterparty-v1",
+        "result_id": "fixture-result",
+        "claim": {
+          "kind": "complete",
+          "domain": {
+            "id": "d-full",
+            "population": "All occurrence records in the synthetic closed counterparty index",
+            "window": {
+              "start": "2026-11-01T00:00:00Z",
+              "end": "2026-11-01T01:00:00Z"
+            },
+            "closure": "closed"
+          },
+          "material_parties": [
+            "producer"
+          ],
+          "qualification": "Exactly the named finite domain; no wider history claim."
+        },
+        "disclosed": [
+          {
+            "record_id": "r1",
+            "occurrence_id": "e1",
+            "authentication": "stipulated_valid"
+          },
+          {
+            "record_id": "r2",
+            "occurrence_id": "e2",
+            "authentication": "stipulated_valid"
+          }
+        ],
+        "mechanism": {
+          "id": "producer-log",
+          "operator": "producer",
+          "input_selectors": [
+            "producer"
+          ]
+        },
+        "basis": {
+          "id": "counterparty-index",
+          "kind": "exhaustive_counterparty_index",
+          "operator": "counterparty",
+          "input_selectors": [
+            "counterparty"
+          ],
+          "constrained_at_production": true,
+          "domain_id": "d-full",
+          "result_id": "fixture-result",
+          "state_version": "index-v1",
+          "window": {
+            "start": "2026-11-01T00:00:00Z",
+            "end": "2026-11-01T01:00:00Z"
+          },
+          "issued_at": "2026-11-01T02:00:00Z",
+          "expires_at": "2026-11-03T00:00:00Z",
+          "exhaustive": true,
+          "records": [
+            {
+              "record_id": "r1",
+              "occurrence_id": "e1",
+              "authentication": "stipulated_valid"
+            },
+            {
+              "record_id": "r2",
+              "occurrence_id": "e2",
+              "authentication": "stipulated_valid"
+            }
+          ]
+        },
+        "authority": {
+          "id": "fixture-authority",
+          "profile": "synthetic-finite-counterparty-v1",
+          "party": "counterparty",
+          "basis_id": "counterparty-index",
+          "domain_id": "d-full",
+          "window": {
+            "start": "2026-11-01T00:00:00Z",
+            "end": "2026-11-01T01:00:00Z"
+          },
+          "issued_at": "2026-10-31T00:00:00Z",
+          "expires_at": "2026-11-03T00:00:00Z"
+        },
+        "plan": {
+          "id": "local-evaluation-plan",
+          "attempt": true,
+          "capability": "SUPPORTED",
+          "resolver_status": "AVAILABLE"
+        },
+        "run_binding": {
+          "basis_id": "counterparty-index",
+          "state_version": "index-v1",
+          "sha256": "eb29de143a37e02b2f0874aeee8bfda128f82efc5c6de4d824e80871b0871bdc"
+        }
+      },
+      "scenario_only": {},
+      "expected": {
+        "result": "SATISFIED",
+        "diagnostic": "C_COMPLETE",
+        "predicate_result": "NOT_EVALUATED"
+      }
+    },
+    {
+      "id": "same_party_only",
+      "description": "All supplied records valid, but the only list is producer-controlled.",
+      "input": {
+        "profile": "synthetic-finite-counterparty-v1",
+        "result_id": "fixture-result",
+        "claim": {
+          "kind": "complete",
+          "domain": {
+            "id": "d-full",
+            "population": "All occurrence records in the synthetic closed counterparty index",
+            "window": {
+              "start": "2026-11-01T00:00:00Z",
+              "end": "2026-11-01T01:00:00Z"
+            },
+            "closure": "closed"
+          },
+          "material_parties": [
+            "producer"
+          ],
+          "qualification": "Exactly the named finite domain; no wider history claim."
+        },
+        "disclosed": [
+          {
+            "record_id": "r1",
+            "occurrence_id": "e1",
+            "authentication": "stipulated_valid"
+          },
+          {
+            "record_id": "r2",
+            "occurrence_id": "e2",
+            "authentication": "stipulated_valid"
+          }
+        ],
+        "mechanism": {
+          "id": "producer-log",
+          "operator": "producer",
+          "input_selectors": [
+            "producer"
+          ]
+        },
+        "basis": {
+          "id": "counterparty-index",
+          "kind": "exhaustive_counterparty_index",
+          "operator": "producer",
+          "input_selectors": [
+            "producer"
+          ],
+          "constrained_at_production": true,
+          "domain_id": "d-full",
+          "result_id": "fixture-result",
+          "state_version": "index-v1",
+          "window": {
+            "start": "2026-11-01T00:00:00Z",
+            "end": "2026-11-01T01:00:00Z"
+          },
+          "issued_at": "2026-11-01T02:00:00Z",
+          "expires_at": "2026-11-03T00:00:00Z",
+          "exhaustive": true,
+          "records": [
+            {
+              "record_id": "r1",
+              "occurrence_id": "e1",
+              "authentication": "stipulated_valid"
+            },
+            {
+              "record_id": "r2",
+              "occurrence_id": "e2",
+              "authentication": "stipulated_valid"
+            }
+          ]
+        },
+        "authority": {
+          "id": "fixture-authority",
+          "profile": "synthetic-finite-counterparty-v1",
+          "party": "producer",
+          "basis_id": "counterparty-index",
+          "domain_id": "d-full",
+          "window": {
+            "start": "2026-11-01T00:00:00Z",
+            "end": "2026-11-01T01:00:00Z"
+          },
+          "issued_at": "2026-10-31T00:00:00Z",
+          "expires_at": "2026-11-03T00:00:00Z"
+        },
+        "plan": {
+          "id": "local-evaluation-plan",
+          "attempt": true,
+          "capability": "SUPPORTED",
+          "resolver_status": "AVAILABLE"
+        },
+        "run_binding": {
+          "basis_id": "counterparty-index",
+          "state_version": "index-v1",
+          "sha256": "665d7f7df2d5f0d5f6aecbc62a5c20f3f81f9ee2f820fdfa0fe1dd962522e91a"
+        }
+      },
+      "scenario_only": {},
+      "expected": {
+        "result": "INDETERMINATE",
+        "diagnostic": "C_SAME_PARTY",
+        "predicate_result": "NOT_EVALUATED"
+      }
+    },
+    {
+      "id": "withheld_unobservable",
+      "description": "One valid record withheld from both disclosure and same-party enumeration; evaluator cannot know it.",
+      "input": {
+        "profile": "synthetic-finite-counterparty-v1",
+        "result_id": "fixture-result",
+        "claim": {
+          "kind": "complete",
+          "domain": {
+            "id": "d-full",
+            "population": "All occurrence records in the synthetic closed counterparty index",
+            "window": {
+              "start": "2026-11-01T00:00:00Z",
+              "end": "2026-11-01T01:00:00Z"
+            },
+            "closure": "closed"
+          },
+          "material_parties": [
+            "producer"
+          ],
+          "qualification": "Exactly the named finite domain; no wider history claim."
+        },
+        "disclosed": [
+          {
+            "record_id": "r1",
+            "occurrence_id": "e1",
+            "authentication": "stipulated_valid"
+          }
+        ],
+        "mechanism": {
+          "id": "producer-log",
+          "operator": "producer",
+          "input_selectors": [
+            "producer"
+          ]
+        },
+        "basis": {
+          "id": "counterparty-index",
+          "kind": "exhaustive_counterparty_index",
+          "operator": "producer",
+          "input_selectors": [
+            "producer"
+          ],
+          "constrained_at_production": true,
+          "domain_id": "d-full",
+          "result_id": "fixture-result",
+          "state_version": "index-v1",
+          "window": {
+            "start": "2026-11-01T00:00:00Z",
+            "end": "2026-11-01T01:00:00Z"
+          },
+          "issued_at": "2026-11-01T02:00:00Z",
+          "expires_at": "2026-11-03T00:00:00Z",
+          "exhaustive": true,
+          "records": [
+            {
+              "record_id": "r1",
+              "occurrence_id": "e1",
+              "authentication": "stipulated_valid"
+            }
+          ]
+        },
+        "authority": {
+          "id": "fixture-authority",
+          "profile": "synthetic-finite-counterparty-v1",
+          "party": "producer",
+          "basis_id": "counterparty-index",
+          "domain_id": "d-full",
+          "window": {
+            "start": "2026-11-01T00:00:00Z",
+            "end": "2026-11-01T01:00:00Z"
+          },
+          "issued_at": "2026-10-31T00:00:00Z",
+          "expires_at": "2026-11-03T00:00:00Z"
+        },
+        "plan": {
+          "id": "local-evaluation-plan",
+          "attempt": true,
+          "capability": "SUPPORTED",
+          "resolver_status": "AVAILABLE"
+        },
+        "predicate": "at_most_once",
+        "run_binding": {
+          "basis_id": "counterparty-index",
+          "state_version": "index-v1",
+          "sha256": "829a607d467e4c54421b2e8d69f7dbf05d06e4a4ac35bb18028e4d405bdc44fb"
+        }
+      },
+      "scenario_only": {
+        "actual_record_ids": [
+          "r1",
+          "r2"
+        ],
+        "withheld_valid_record": "r2",
+        "actual_occurrences": 2
+      },
+      "expected": {
+        "result": "INDETERMINATE",
+        "diagnostic": "C_SAME_PARTY",
+        "predicate_result": "INDETERMINATE"
+      }
+    },
+    {
+      "id": "resolver_unavailable",
+      "description": "Required index resolver is unavailable, with supported capability declared.",
+      "input": {
+        "profile": "synthetic-finite-counterparty-v1",
+        "result_id": "fixture-result",
+        "claim": {
+          "kind": "complete",
+          "domain": {
+            "id": "d-full",
+            "population": "All occurrence records in the synthetic closed counterparty index",
+            "window": {
+              "start": "2026-11-01T00:00:00Z",
+              "end": "2026-11-01T01:00:00Z"
+            },
+            "closure": "closed"
+          },
+          "material_parties": [
+            "producer"
+          ],
+          "qualification": "Exactly the named finite domain; no wider history claim."
+        },
+        "disclosed": [
+          {
+            "record_id": "r1",
+            "occurrence_id": "e1",
+            "authentication": "stipulated_valid"
+          },
+          {
+            "record_id": "r2",
+            "occurrence_id": "e2",
+            "authentication": "stipulated_valid"
+          }
+        ],
+        "mechanism": {
+          "id": "producer-log",
+          "operator": "producer",
+          "input_selectors": [
+            "producer"
+          ]
+        },
+        "basis": null,
+        "authority": null,
+        "plan": {
+          "id": "local-evaluation-plan",
+          "attempt": true,
+          "capability": "SUPPORTED",
+          "resolver_status": "UNAVAILABLE"
+        }
+      },
+      "scenario_only": {},
+      "expected": {
+        "result": "INDETERMINATE",
+        "diagnostic": "C_RESOLVER",
+        "predicate_result": "NOT_EVALUATED"
+      }
+    },
+    {
+      "id": "known_omission",
+      "description": "Independent appraised index knows r1 and r2; disclosure contains only r1.",
+      "input": {
+        "profile": "synthetic-finite-counterparty-v1",
+        "result_id": "fixture-result",
+        "claim": {
+          "kind": "complete",
+          "domain": {
+            "id": "d-full",
+            "population": "All occurrence records in the synthetic closed counterparty index",
+            "window": {
+              "start": "2026-11-01T00:00:00Z",
+              "end": "2026-11-01T01:00:00Z"
+            },
+            "closure": "closed"
+          },
+          "material_parties": [
+            "producer"
+          ],
+          "qualification": "Exactly the named finite domain; no wider history claim."
+        },
+        "disclosed": [
+          {
+            "record_id": "r1",
+            "occurrence_id": "e1",
+            "authentication": "stipulated_valid"
+          }
+        ],
+        "mechanism": {
+          "id": "producer-log",
+          "operator": "producer",
+          "input_selectors": [
+            "producer"
+          ]
+        },
+        "basis": {
+          "id": "counterparty-index",
+          "kind": "exhaustive_counterparty_index",
+          "operator": "counterparty",
+          "input_selectors": [
+            "counterparty"
+          ],
+          "constrained_at_production": true,
+          "domain_id": "d-full",
+          "result_id": "fixture-result",
+          "state_version": "index-v1",
+          "window": {
+            "start": "2026-11-01T00:00:00Z",
+            "end": "2026-11-01T01:00:00Z"
+          },
+          "issued_at": "2026-11-01T02:00:00Z",
+          "expires_at": "2026-11-03T00:00:00Z",
+          "exhaustive": true,
+          "records": [
+            {
+              "record_id": "r1",
+              "occurrence_id": "e1",
+              "authentication": "stipulated_valid"
+            },
+            {
+              "record_id": "r2",
+              "occurrence_id": "e2",
+              "authentication": "stipulated_valid"
+            }
+          ]
+        },
+        "authority": {
+          "id": "fixture-authority",
+          "profile": "synthetic-finite-counterparty-v1",
+          "party": "counterparty",
+          "basis_id": "counterparty-index",
+          "domain_id": "d-full",
+          "window": {
+            "start": "2026-11-01T00:00:00Z",
+            "end": "2026-11-01T01:00:00Z"
+          },
+          "issued_at": "2026-10-31T00:00:00Z",
+          "expires_at": "2026-11-03T00:00:00Z"
+        },
+        "plan": {
+          "id": "local-evaluation-plan",
+          "attempt": true,
+          "capability": "SUPPORTED",
+          "resolver_status": "AVAILABLE"
+        },
+        "run_binding": {
+          "basis_id": "counterparty-index",
+          "state_version": "index-v1",
+          "sha256": "eb29de143a37e02b2f0874aeee8bfda128f82efc5c6de4d824e80871b0871bdc"
+        }
+      },
+      "scenario_only": {},
+      "expected": {
+        "result": "UNSATISFIED",
+        "diagnostic": "C_OMISSION",
+        "predicate_result": "NOT_EVALUATED"
+      }
+    },
+    {
+      "id": "open_domain",
+      "description": "Scope has no established finite population boundary.",
+      "input": {
+        "profile": "synthetic-finite-counterparty-v1",
+        "result_id": "fixture-result",
+        "claim": {
+          "kind": "complete",
+          "domain": {
+            "id": "d-full",
+            "population": "All occurrence records in the synthetic closed counterparty index",
+            "window": {
+              "start": "2026-11-01T00:00:00Z",
+              "end": "2026-11-01T01:00:00Z"
+            },
+            "closure": "unknown"
+          },
+          "material_parties": [
+            "producer"
+          ],
+          "qualification": "Exactly the named finite domain; no wider history claim."
+        },
+        "disclosed": [
+          {
+            "record_id": "r1",
+            "occurrence_id": "e1",
+            "authentication": "stipulated_valid"
+          },
+          {
+            "record_id": "r2",
+            "occurrence_id": "e2",
+            "authentication": "stipulated_valid"
+          }
+        ],
+        "mechanism": {
+          "id": "producer-log",
+          "operator": "producer",
+          "input_selectors": [
+            "producer"
+          ]
+        },
+        "basis": {
+          "id": "counterparty-index",
+          "kind": "exhaustive_counterparty_index",
+          "operator": "counterparty",
+          "input_selectors": [
+            "counterparty"
+          ],
+          "constrained_at_production": true,
+          "domain_id": "d-full",
+          "result_id": "fixture-result",
+          "state_version": "index-v1",
+          "window": {
+            "start": "2026-11-01T00:00:00Z",
+            "end": "2026-11-01T01:00:00Z"
+          },
+          "issued_at": "2026-11-01T02:00:00Z",
+          "expires_at": "2026-11-03T00:00:00Z",
+          "exhaustive": true,
+          "records": [
+            {
+              "record_id": "r1",
+              "occurrence_id": "e1",
+              "authentication": "stipulated_valid"
+            },
+            {
+              "record_id": "r2",
+              "occurrence_id": "e2",
+              "authentication": "stipulated_valid"
+            }
+          ]
+        },
+        "authority": {
+          "id": "fixture-authority",
+          "profile": "synthetic-finite-counterparty-v1",
+          "party": "counterparty",
+          "basis_id": "counterparty-index",
+          "domain_id": "d-full",
+          "window": {
+            "start": "2026-11-01T00:00:00Z",
+            "end": "2026-11-01T01:00:00Z"
+          },
+          "issued_at": "2026-10-31T00:00:00Z",
+          "expires_at": "2026-11-03T00:00:00Z"
+        },
+        "plan": {
+          "id": "local-evaluation-plan",
+          "attempt": true,
+          "capability": "SUPPORTED",
+          "resolver_status": "AVAILABLE"
+        },
+        "run_binding": {
+          "basis_id": "counterparty-index",
+          "state_version": "index-v1",
+          "sha256": "eb29de143a37e02b2f0874aeee8bfda128f82efc5c6de4d824e80871b0871bdc"
+        }
+      },
+      "scenario_only": {},
+      "expected": {
+        "result": "INDETERMINATE",
+        "diagnostic": "C_DOMAIN_UNCLOSED",
+        "predicate_result": "NOT_EVALUATED"
+      }
+    },
+    {
+      "id": "qualified_sample",
+      "description": "Honest partial coverage, explicitly closed and independently indexed at sample scope only.",
+      "input": {
+        "profile": "synthetic-finite-counterparty-v1",
+        "result_id": "fixture-result",
+        "claim": {
+          "kind": "complete",
+          "domain": {
+            "id": "d-sample",
+            "population": "Predeclared one-member sample only: r1",
+            "window": {
+              "start": "2026-11-01T00:00:00Z",
+              "end": "2026-11-01T01:00:00Z"
+            },
+            "closure": "closed"
+          },
+          "material_parties": [
+            "producer"
+          ],
+          "qualification": "Complete only for this declared sample; wider population completeness NOT_EVALUATED."
+        },
+        "disclosed": [
+          {
+            "record_id": "r1",
+            "occurrence_id": "e1",
+            "authentication": "stipulated_valid"
+          }
+        ],
+        "mechanism": {
+          "id": "producer-log",
+          "operator": "producer",
+          "input_selectors": [
+            "producer"
+          ]
+        },
+        "basis": {
+          "id": "counterparty-index",
+          "kind": "exhaustive_counterparty_index",
+          "operator": "counterparty",
+          "input_selectors": [
+            "counterparty"
+          ],
+          "constrained_at_production": true,
+          "domain_id": "d-sample",
+          "result_id": "fixture-result",
+          "state_version": "index-v1",
+          "window": {
+            "start": "2026-11-01T00:00:00Z",
+            "end": "2026-11-01T01:00:00Z"
+          },
+          "issued_at": "2026-11-01T02:00:00Z",
+          "expires_at": "2026-11-03T00:00:00Z",
+          "exhaustive": true,
+          "records": [
+            {
+              "record_id": "r1",
+              "occurrence_id": "e1",
+              "authentication": "stipulated_valid"
+            }
+          ]
+        },
+        "authority": {
+          "id": "fixture-authority",
+          "profile": "synthetic-finite-counterparty-v1",
+          "party": "counterparty",
+          "basis_id": "counterparty-index",
+          "domain_id": "d-sample",
+          "window": {
+            "start": "2026-11-01T00:00:00Z",
+            "end": "2026-11-01T01:00:00Z"
+          },
+          "issued_at": "2026-10-31T00:00:00Z",
+          "expires_at": "2026-11-03T00:00:00Z"
+        },
+        "plan": {
+          "id": "local-evaluation-plan",
+          "attempt": true,
+          "capability": "SUPPORTED",
+          "resolver_status": "AVAILABLE"
+        },
+        "run_binding": {
+          "basis_id": "counterparty-index",
+          "state_version": "index-v1",
+          "sha256": "835639d5ea70de612a834873f912aafd4138ef467630cfe3fbda535fe83ee44a"
+        }
+      },
+      "scenario_only": {
+        "wider_record_ids": [
+          "r1",
+          "r2"
+        ],
+        "wider_coverage_claim": false
+      },
+      "expected": {
+        "result": "SATISFIED",
+        "diagnostic": "C_COMPLETE",
+        "predicate_result": "NOT_EVALUATED"
+      }
+    },
+    {
+      "id": "unbound_detector_state",
+      "description": "An independent detector exists but no state/version is bound to this run.",
+      "input": {
+        "profile": "synthetic-finite-counterparty-v1",
+        "result_id": "fixture-result",
+        "claim": {
+          "kind": "complete",
+          "domain": {
+            "id": "d-full",
+            "population": "All occurrence records in the synthetic closed counterparty index",
+            "window": {
+              "start": "2026-11-01T00:00:00Z",
+              "end": "2026-11-01T01:00:00Z"
+            },
+            "closure": "closed"
+          },
+          "material_parties": [
+            "producer"
+          ],
+          "qualification": "Exactly the named finite domain; no wider history claim."
+        },
+        "disclosed": [
+          {
+            "record_id": "r1",
+            "occurrence_id": "e1",
+            "authentication": "stipulated_valid"
+          },
+          {
+            "record_id": "r2",
+            "occurrence_id": "e2",
+            "authentication": "stipulated_valid"
+          }
+        ],
+        "mechanism": {
+          "id": "producer-log",
+          "operator": "producer",
+          "input_selectors": [
+            "producer"
+          ]
+        },
+        "basis": {
+          "id": "counterparty-index",
+          "kind": "exhaustive_counterparty_index",
+          "operator": "counterparty",
+          "input_selectors": [
+            "counterparty"
+          ],
+          "constrained_at_production": true,
+          "domain_id": "d-full",
+          "result_id": "fixture-result",
+          "state_version": "index-v1",
+          "window": {
+            "start": "2026-11-01T00:00:00Z",
+            "end": "2026-11-01T01:00:00Z"
+          },
+          "issued_at": "2026-11-01T02:00:00Z",
+          "expires_at": "2026-11-03T00:00:00Z",
+          "exhaustive": true,
+          "records": [
+            {
+              "record_id": "r1",
+              "occurrence_id": "e1",
+              "authentication": "stipulated_valid"
+            },
+            {
+              "record_id": "r2",
+              "occurrence_id": "e2",
+              "authentication": "stipulated_valid"
+            }
+          ]
+        },
+        "authority": {
+          "id": "fixture-authority",
+          "profile": "synthetic-finite-counterparty-v1",
+          "party": "counterparty",
+          "basis_id": "counterparty-index",
+          "domain_id": "d-full",
+          "window": {
+            "start": "2026-11-01T00:00:00Z",
+            "end": "2026-11-01T01:00:00Z"
+          },
+          "issued_at": "2026-10-31T00:00:00Z",
+          "expires_at": "2026-11-03T00:00:00Z"
+        },
+        "plan": {
+          "id": "local-evaluation-plan",
+          "attempt": true,
+          "capability": "SUPPORTED",
+          "resolver_status": "AVAILABLE"
+        }
+      },
+      "scenario_only": {},
+      "expected": {
+        "result": "INDETERMINATE",
+        "diagnostic": "C_STATE_BINDING",
+        "predicate_result": "NOT_EVALUATED"
+      }
+    },
+    {
+      "id": "anchor_outside_window",
+      "description": "Authoritative independent anchor is for a different coverage window.",
+      "input": {
+        "profile": "synthetic-finite-counterparty-v1",
+        "result_id": "fixture-result",
+        "claim": {
+          "kind": "complete",
+          "domain": {
+            "id": "d-full",
+            "population": "All occurrence records in the synthetic closed counterparty index",
+            "window": {
+              "start": "2026-11-01T00:00:00Z",
+              "end": "2026-11-01T01:00:00Z"
+            },
+            "closure": "closed"
+          },
+          "material_parties": [
+            "producer"
+          ],
+          "qualification": "Exactly the named finite domain; no wider history claim."
+        },
+        "disclosed": [
+          {
+            "record_id": "r1",
+            "occurrence_id": "e1",
+            "authentication": "stipulated_valid"
+          },
+          {
+            "record_id": "r2",
+            "occurrence_id": "e2",
+            "authentication": "stipulated_valid"
+          }
+        ],
+        "mechanism": {
+          "id": "producer-log",
+          "operator": "producer",
+          "input_selectors": [
+            "producer"
+          ]
+        },
+        "basis": {
+          "id": "counterparty-index",
+          "kind": "exhaustive_counterparty_index",
+          "operator": "counterparty",
+          "input_selectors": [
+            "counterparty"
+          ],
+          "constrained_at_production": true,
+          "domain_id": "d-full",
+          "result_id": "fixture-result",
+          "state_version": "index-v1",
+          "window": {
+            "start": "2026-10-31T00:00:00Z",
+            "end": "2026-10-31T01:00:00Z"
+          },
+          "issued_at": "2026-11-01T02:00:00Z",
+          "expires_at": "2026-11-03T00:00:00Z",
+          "exhaustive": true,
+          "records": [
+            {
+              "record_id": "r1",
+              "occurrence_id": "e1",
+              "authentication": "stipulated_valid"
+            },
+            {
+              "record_id": "r2",
+              "occurrence_id": "e2",
+              "authentication": "stipulated_valid"
+            }
+          ]
+        },
+        "authority": {
+          "id": "fixture-authority",
+          "profile": "synthetic-finite-counterparty-v1",
+          "party": "counterparty",
+          "basis_id": "counterparty-index",
+          "domain_id": "d-full",
+          "window": {
+            "start": "2026-11-01T00:00:00Z",
+            "end": "2026-11-01T01:00:00Z"
+          },
+          "issued_at": "2026-10-31T00:00:00Z",
+          "expires_at": "2026-11-03T00:00:00Z"
+        },
+        "plan": {
+          "id": "local-evaluation-plan",
+          "attempt": true,
+          "capability": "SUPPORTED",
+          "resolver_status": "AVAILABLE"
+        },
+        "run_binding": {
+          "basis_id": "counterparty-index",
+          "state_version": "index-v1",
+          "sha256": "db01bed0af805b12b088b38c3af18cea58c421102f33a523e020f2ea1056ee5b"
+        }
+      },
+      "scenario_only": {},
+      "expected": {
+        "result": "INDETERMINATE",
+        "diagnostic": "C_WINDOW",
+        "predicate_result": "NOT_EVALUATED"
+      }
+    },
+    {
+      "id": "no_completeness_claim",
+      "description": "No completeness claim must remain unassessed even with valid supplied records.",
+      "input": {
+        "profile": "synthetic-finite-counterparty-v1",
+        "result_id": "fixture-result",
+        "claim": {
+          "kind": "none",
+          "qualification": "Only supplied artifact validity discussed; no completeness assertion."
+        },
+        "disclosed": [
+          {
+            "record_id": "r1",
+            "occurrence_id": "e1",
+            "authentication": "stipulated_valid"
+          },
+          {
+            "record_id": "r2",
+            "occurrence_id": "e2",
+            "authentication": "stipulated_valid"
+          }
+        ],
+        "mechanism": {
+          "id": "producer-log",
+          "operator": "producer",
+          "input_selectors": [
+            "producer"
+          ]
+        },
+        "basis": {
+          "id": "counterparty-index",
+          "kind": "exhaustive_counterparty_index",
+          "operator": "counterparty",
+          "input_selectors": [
+            "counterparty"
+          ],
+          "constrained_at_production": true,
+          "domain_id": "d-full",
+          "result_id": "fixture-result",
+          "state_version": "index-v1",
+          "window": {
+            "start": "2026-11-01T00:00:00Z",
+            "end": "2026-11-01T01:00:00Z"
+          },
+          "issued_at": "2026-11-01T02:00:00Z",
+          "expires_at": "2026-11-03T00:00:00Z",
+          "exhaustive": true,
+          "records": [
+            {
+              "record_id": "r1",
+              "occurrence_id": "e1",
+              "authentication": "stipulated_valid"
+            },
+            {
+              "record_id": "r2",
+              "occurrence_id": "e2",
+              "authentication": "stipulated_valid"
+            }
+          ]
+        },
+        "authority": {
+          "id": "fixture-authority",
+          "profile": "synthetic-finite-counterparty-v1",
+          "party": "counterparty",
+          "basis_id": "counterparty-index",
+          "domain_id": "d-full",
+          "window": {
+            "start": "2026-11-01T00:00:00Z",
+            "end": "2026-11-01T01:00:00Z"
+          },
+          "issued_at": "2026-10-31T00:00:00Z",
+          "expires_at": "2026-11-03T00:00:00Z"
+        },
+        "plan": {
+          "id": "local-evaluation-plan",
+          "attempt": true,
+          "capability": "SUPPORTED",
+          "resolver_status": "AVAILABLE"
+        },
+        "run_binding": {
+          "basis_id": "counterparty-index",
+          "state_version": "index-v1",
+          "sha256": "eb29de143a37e02b2f0874aeee8bfda128f82efc5c6de4d824e80871b0871bdc"
+        }
+      },
+      "scenario_only": {},
+      "expected": {
+        "result": "NOT_EVALUATED",
+        "diagnostic": "C_NO_CLAIM",
+        "predicate_result": "NOT_EVALUATED"
+      }
+    },
+    {
+      "id": "material_input_selection",
+      "description": "A different operator receives only material-party-selected inputs.",
+      "input": {
+        "profile": "synthetic-finite-counterparty-v1",
+        "result_id": "fixture-result",
+        "claim": {
+          "kind": "complete",
+          "domain": {
+            "id": "d-full",
+            "population": "All occurrence records in the synthetic closed counterparty index",
+            "window": {
+              "start": "2026-11-01T00:00:00Z",
+              "end": "2026-11-01T01:00:00Z"
+            },
+            "closure": "closed"
+          },
+          "material_parties": [
+            "producer"
+          ],
+          "qualification": "Exactly the named finite domain; no wider history claim."
+        },
+        "disclosed": [
+          {
+            "record_id": "r1",
+            "occurrence_id": "e1",
+            "authentication": "stipulated_valid"
+          },
+          {
+            "record_id": "r2",
+            "occurrence_id": "e2",
+            "authentication": "stipulated_valid"
+          }
+        ],
+        "mechanism": {
+          "id": "producer-log",
+          "operator": "producer",
+          "input_selectors": [
+            "producer"
+          ]
+        },
+        "basis": {
+          "id": "counterparty-index",
+          "kind": "exhaustive_counterparty_index",
+          "operator": "counterparty",
+          "input_selectors": [
+            "producer"
+          ],
+          "constrained_at_production": true,
+          "domain_id": "d-full",
+          "result_id": "fixture-result",
+          "state_version": "index-v1",
+          "window": {
+            "start": "2026-11-01T00:00:00Z",
+            "end": "2026-11-01T01:00:00Z"
+          },
+          "issued_at": "2026-11-01T02:00:00Z",
+          "expires_at": "2026-11-03T00:00:00Z",
+          "exhaustive": true,
+          "records": [
+            {
+              "record_id": "r1",
+              "occurrence_id": "e1",
+              "authentication": "stipulated_valid"
+            },
+            {
+              "record_id": "r2",
+              "occurrence_id": "e2",
+              "authentication": "stipulated_valid"
+            }
+          ]
+        },
+        "authority": {
+          "id": "fixture-authority",
+          "profile": "synthetic-finite-counterparty-v1",
+          "party": "counterparty",
+          "basis_id": "counterparty-index",
+          "domain_id": "d-full",
+          "window": {
+            "start": "2026-11-01T00:00:00Z",
+            "end": "2026-11-01T01:00:00Z"
+          },
+          "issued_at": "2026-10-31T00:00:00Z",
+          "expires_at": "2026-11-03T00:00:00Z"
+        },
+        "plan": {
+          "id": "local-evaluation-plan",
+          "attempt": true,
+          "capability": "SUPPORTED",
+          "resolver_status": "AVAILABLE"
+        },
+        "run_binding": {
+          "basis_id": "counterparty-index",
+          "state_version": "index-v1",
+          "sha256": "cdd92e019fa4f4fcaeff1a33e9ccd666ece021429244101f38e8ab4d18daef31"
+        }
+      },
+      "scenario_only": {},
+      "expected": {
+        "result": "INDETERMINATE",
+        "diagnostic": "C_SAME_PARTY",
+        "predicate_result": "NOT_EVALUATED"
+      }
+    },
+    {
+      "id": "two_disclosed_predicate",
+      "description": "Two disclosed authenticated occurrences refute at-most-once while wider completeness is unknown.",
+      "input": {
+        "profile": "synthetic-finite-counterparty-v1",
+        "result_id": "fixture-result",
+        "claim": {
+          "kind": "complete",
+          "domain": {
+            "id": "d-full",
+            "population": "All occurrence records in the synthetic closed counterparty index",
+            "window": {
+              "start": "2026-11-01T00:00:00Z",
+              "end": "2026-11-01T01:00:00Z"
+            },
+            "closure": "closed"
+          },
+          "material_parties": [
+            "producer"
+          ],
+          "qualification": "Exactly the named finite domain; no wider history claim."
+        },
+        "disclosed": [
+          {
+            "record_id": "r1",
+            "occurrence_id": "e1",
+            "authentication": "stipulated_valid"
+          },
+          {
+            "record_id": "r2",
+            "occurrence_id": "e2",
+            "authentication": "stipulated_valid"
+          }
+        ],
+        "mechanism": {
+          "id": "producer-log",
+          "operator": "producer",
+          "input_selectors": [
+            "producer"
+          ]
+        },
+        "basis": {
+          "id": "counterparty-index",
+          "kind": "exhaustive_counterparty_index",
+          "operator": "producer",
+          "input_selectors": [
+            "producer"
+          ],
+          "constrained_at_production": true,
+          "domain_id": "d-full",
+          "result_id": "fixture-result",
+          "state_version": "index-v1",
+          "window": {
+            "start": "2026-11-01T00:00:00Z",
+            "end": "2026-11-01T01:00:00Z"
+          },
+          "issued_at": "2026-11-01T02:00:00Z",
+          "expires_at": "2026-11-03T00:00:00Z",
+          "exhaustive": true,
+          "records": [
+            {
+              "record_id": "r1",
+              "occurrence_id": "e1",
+              "authentication": "stipulated_valid"
+            },
+            {
+              "record_id": "r2",
+              "occurrence_id": "e2",
+              "authentication": "stipulated_valid"
+            }
+          ]
+        },
+        "authority": {
+          "id": "fixture-authority",
+          "profile": "synthetic-finite-counterparty-v1",
+          "party": "producer",
+          "basis_id": "counterparty-index",
+          "domain_id": "d-full",
+          "window": {
+            "start": "2026-11-01T00:00:00Z",
+            "end": "2026-11-01T01:00:00Z"
+          },
+          "issued_at": "2026-10-31T00:00:00Z",
+          "expires_at": "2026-11-03T00:00:00Z"
+        },
+        "plan": {
+          "id": "local-evaluation-plan",
+          "attempt": true,
+          "capability": "SUPPORTED",
+          "resolver_status": "AVAILABLE"
+        },
+        "predicate": "at_most_once",
+        "run_binding": {
+          "basis_id": "counterparty-index",
+          "state_version": "index-v1",
+          "sha256": "665d7f7df2d5f0d5f6aecbc62a5c20f3f81f9ee2f820fdfa0fe1dd962522e91a"
+        }
+      },
+      "scenario_only": {},
+      "expected": {
+        "result": "INDETERMINATE",
+        "diagnostic": "C_SAME_PARTY",
+        "predicate_result": "UNSATISFIED"
+      }
+    }
+  ]
+}

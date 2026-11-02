@@ -1,0 +1,32 @@
+{
+  "recorded_at_utc": "2026-11-02T17:55:21.478584+00:00",
+  "decision": "NO_GO_ON_AVAILABLE_EVIDENCE",
+  "B3_dependency": "UNAVAILABLE; no claim of complete B3-dependent gate",
+  "proposed_change_count": 0,
+  "normative_change_count": 0,
+  "patch": null,
+  "base_commit": "69bc8cfd282e9a0a45e34b1fcf6106b1ab618f9d",
+  "branch": "codex/acder-03-evidence-gate",
+  "public_sources_verified": 12,
+  "evidence_snapshot_files": 8,
+  "referenced_by_drafts": [
+    "draft-abak-ai-evaluation-claim-preservation",
+    "draft-baek-audit-absence-claims",
+    "draft-dogru-cedulon-core",
+    "draft-dogru-cedulon-decision-profile",
+    "draft-gruszka-evaluation-receipt-mappings",
+    "draft-sergeev-claim-boundaries",
+    "draft-wadkins-agentproto-action-determinability",
+    "draft-zhang-audit-record-limits"
+  ],
+  "C04_commit": "ecaff138be0fd833848b6f27267e555e6b31e7f6",
+  "private_expected_outputs_read": false,
+  "publication_approval_granted": false,
+  "validation": [
+    "All source pins match exact raw bytes and lengths",
+    "Evidence report/run-record snapshots copied from exact Git commits",
+    "No published draft/source patch produced",
+    "Snapshot hashes and sizes recorded; local relative links resolve"
+  ],
+  "commit_binding": "Containing Git commit identifies this review; no self-referential hash."
+}

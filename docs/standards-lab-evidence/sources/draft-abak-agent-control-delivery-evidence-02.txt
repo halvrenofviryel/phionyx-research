@@ -1,0 +1,2856 @@
+
+
+
+
+Internet Engineering Task Force                               A. T. Abak
+Internet-Draft                                    Independent Researcher
+Intended status: Informational                           11 October 2026
+Expires: 14 April 2027
+
+
+      Evidence Requirements for Agent Control Delivery and Outcome
+                             Reconciliation
+             draft-abak-agent-control-delivery-evidence-02
+
+Abstract
+
+   Agent systems can issue stop, suspend, revoke, constrain, cancel, or
+   override instructions across system and administrative boundaries.  A
+   record that such a control was decided or dispatched does not
+   establish that every intended enforcement point received or applied
+   it.  Conversely, the absence of an acknowledgement does not, by
+   itself, establish non-delivery.
+
+   This document defines format-independent evidence requirements for
+   preserving those distinctions.  It separates issuer-side emission,
+   required-target resolution, receiver-side observation, enforcement
+   outcome, and observation of the resulting control effect.  For a
+   control that must reach more than one enforcement target, the unit of
+   delivery reconciliation is an instruction-target obligation rather
+   than the parent instruction alone.  The document also defines bounded
+   negative observations, total reconciliation, population conservation,
+   semantic-preservation requirements for intermediary paths, and a
+   separate qualification for the evidentiary strength of aggregate
+   claims.
+
+   This document does not define a receipt format, wire protocol,
+   authorization system, policy language, transparency service, or audit
+   regime.
+
+Status of This Memo
+
+   This Internet-Draft is submitted in full conformance with the
+   provisions of BCP 78 and BCP 79.
+
+   Internet-Drafts are working documents of the Internet Engineering
+   Task Force (IETF).  Note that other groups may also distribute
+   working documents as Internet-Drafts.  The list of current Internet-
+   Drafts is at https://datatracker.ietf.org/drafts/current/.
+
+
+
+
+
+
+
+Abak                      Expires 14 April 2027                 [Page 1]
+
+Internet-Draft       Agent Control Delivery Evidence        October 2026
+
+
+   Internet-Drafts are draft documents valid for a maximum of six months
+   and may be updated, replaced, or obsoleted by other documents at any
+   time.  It is inappropriate to use Internet-Drafts as reference
+   material or to cite them other than as "work in progress."
+
+   This Internet-Draft will expire on 14 April 2027.
+
+Copyright Notice
+
+   Copyright (c) 2026 IETF Trust and the persons identified as the
+   document authors.  All rights reserved.
+
+   This document is subject to BCP 78 and the IETF Trust's Legal
+   Provisions Relating to IETF Documents (https://trustee.ietf.org/
+   license-info) in effect on the date of publication of this document.
+   Please review these documents carefully, as they describe your rights
+   and restrictions with respect to this document.  Code Components
+   extracted from this document must include Revised BSD License text as
+   described in Section 4.e of the Trust Legal Provisions and are
+   provided without warranty as described in the Revised BSD License.
+
+Table of Contents
+
+   1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   3
+     1.1.  Scope and Non-Goals . . . . . . . . . . . . . . . . . . .   4
+     1.2.  Requirements Language . . . . . . . . . . . . . . . . . .   6
+   2.  Terminology . . . . . . . . . . . . . . . . . . . . . . . . .   6
+   3.  Problem Statement and Failure Model . . . . . . . . . . . . .   8
+   4.  Logical Evidence Model  . . . . . . . . . . . . . . . . . . .  10
+     4.1.  Issuer-Side Emission  . . . . . . . . . . . . . . . . . .  10
+     4.2.  Required Target Set and Delivery Obligations  . . . . . .  10
+     4.3.  Receiver-Side Observation . . . . . . . . . . . . . . . .  11
+     4.4.  Enforcement Outcome . . . . . . . . . . . . . . . . . . .  11
+     4.5.  Control-Effect Observation  . . . . . . . . . . . . . . .  12
+   5.  Evidence Preservation Requirements  . . . . . . . . . . . . .  12
+     5.1.  R-CD-1: Stable Instruction Identity . . . . . . . . . . .  13
+     5.2.  R-CD-2: Content Binding . . . . . . . . . . . . . . . . .  13
+     5.3.  R-CD-3: Boundary Attribution  . . . . . . . . . . . . . .  13
+     5.4.  R-CD-4: Issuer-Side Emission  . . . . . . . . . . . . . .  14
+     5.5.  R-CD-5: Receiver-Side Observation . . . . . . . . . . . .  14
+     5.6.  R-CD-6: Separate Enforcement Outcome  . . . . . . . . . .  15
+     5.7.  R-CD-7: Separate Control-Effect Observation . . . . . . .  15
+     5.8.  R-CD-8: Negative Observations . . . . . . . . . . . . . .  15
+     5.9.  R-CD-9: Time and Ordering . . . . . . . . . . . . . . . .  16
+     5.10. R-CD-10: Total Reconciliation . . . . . . . . . . . . . .  16
+     5.11. R-CD-11: Bounded-Population Accounting  . . . . . . . . .  17
+     5.12. R-CD-12: Resolution Failure . . . . . . . . . . . . . . .  19
+     5.13. R-CD-13: Scope, Qualification, and Non-Claims . . . . . .  19
+
+
+
+Abak                      Expires 14 April 2027                 [Page 2]
+
+Internet-Draft       Agent Control Delivery Evidence        October 2026
+
+
+     5.14. R-CD-14: Consumption and Fail-Safe Handling . . . . . . .  20
+     5.15. R-CD-15: Target-Set Closure and Coverage Qualification  .  20
+     5.16. R-CD-16: Semantic Preservation Across Intermediaries  . .  21
+   6.  Reconciliation Model  . . . . . . . . . . . . . . . . . . . .  21
+     6.1.  Per-Obligation Delivery Dispositions  . . . . . . . . . .  21
+     6.2.  Parent Instruction Aggregation  . . . . . . . . . . . . .  23
+     6.3.  Minimum Reconciliation Procedure  . . . . . . . . . . . .  23
+     6.4.  Population Conservation . . . . . . . . . . . . . . . . .  24
+     6.5.  Structural Aggregate Results  . . . . . . . . . . . . . .  26
+     6.6.  Claim-Support Qualification . . . . . . . . . . . . . . .  27
+   7.  Protocol Attachment Points  . . . . . . . . . . . . . . . . .  28
+   8.  Composition with Existing Mechanisms  . . . . . . . . . . . .  29
+     8.1.  Native Verification First . . . . . . . . . . . . . . . .  30
+     8.2.  SCITT Composition . . . . . . . . . . . . . . . . . . . .  30
+     8.3.  Telemetry and Trace Composition . . . . . . . . . . . . .  30
+   9.  Operational Considerations  . . . . . . . . . . . . . . . . .  31
+     9.1.  Deadlines, Retries, and Late Evidence . . . . . . . . . .  31
+     9.2.  Durability and Acknowledgement Point  . . . . . . . . . .  31
+     9.3.  Multiple Enforcement Paths  . . . . . . . . . . . . . . .  31
+     9.4.  Control Activation and In-Flight Operations . . . . . . .  32
+   10. Security Considerations . . . . . . . . . . . . . . . . . . .  32
+     10.1.  Substitution, Replay, and Identifier Reuse . . . . . . .  33
+     10.2.  Observer and Key Compromise  . . . . . . . . . . . . . .  33
+     10.3.  Evidence Suppression and Selective Population  . . . . .  33
+     10.4.  Availability and Fail-Safe Policy  . . . . . . . . . . .  33
+     10.5.  Semantic and Physical-World Gaps . . . . . . . . . . . .  34
+   11. Privacy Considerations  . . . . . . . . . . . . . . . . . . .  34
+   12. Implementation Status . . . . . . . . . . . . . . . . . . . .  34
+   13. Relationship to Adjacent Work . . . . . . . . . . . . . . . .  37
+   14. Changes Since -01 . . . . . . . . . . . . . . . . . . . . . .  39
+   15. IANA Considerations . . . . . . . . . . . . . . . . . . . . .  41
+   16. Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  41
+   17. References  . . . . . . . . . . . . . . . . . . . . . . . . .  41
+     17.1.  Normative References . . . . . . . . . . . . . . . . . .  41
+     17.2.  Informative References . . . . . . . . . . . . . . . . .  41
+   Illustrative Multi-Target Reconciliation Record . . . . . . . . .  46
+   Contributed Freeze-Race Fixture Summary . . . . . . . . . . . . .  47
+   Minimum Conformance Cases . . . . . . . . . . . . . . . . . . . .  48
+   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .  51
+
+1.  Introduction
+
+   Agent communication and execution systems increasingly carry control
+   instructions that are expected to constrain a live runtime.  Examples
+   include stopping a task, suspending a delegated operation, revoking
+   an outstanding grant, cancelling a tool request, forcing a handoff,
+   or replacing a permissive policy with a restrictive one.
+
+
+
+
+Abak                      Expires 14 April 2027                 [Page 3]
+
+Internet-Draft       Agent Control Delivery Evidence        October 2026
+
+
+   These controls frequently cross more than one boundary.  A policy
+   component may decide that an activity must stop.  An issuer may
+   serialize and dispatch the corresponding instruction.  A broker,
+   gateway, sidecar, or operating-system channel may transport it.  One
+   or more enforcement points may receive and verify it.  Each
+   enforcement point may then apply, refuse, or fail to apply it.
+   Finally, an observer may or may not see the intended control effect.
+
+   Collapsing those events into a single label such as "sent",
+   "delivered", "enforced", or "stopped" creates an interoperability and
+   security problem.  Two implementations can emit syntactically valid
+   records while reaching incompatible conclusions about the same
+   control.  A downstream evidence or audit layer cannot reconstruct a
+   boundary fact that was never preserved by either side of that
+   boundary.
+
+   A second collapse occurs when one control resolves to multiple
+   required enforcement targets.  Evidence that target A received the
+   control is existential evidence for target A; it is not evidence that
+   target B, or every target in a required set, received it.  A third
+   collapse occurs when a target set is declared closed for a
+   reconciliation run and that declaration is silently promoted into a
+   claim that every possible enforcement path in the deployment was
+   enumerated.  Those are different facts.
+
+   A fourth collapse can occur after the originating boundary.  A source
+   can preserve a governance-relevant distinction correctly while an
+   intermediary suppresses, transforms, or collapses it before the
+   relying party sees it.  Evidence that a state was preserved at one
+   boundary therefore does not establish that the same semantic
+   distinction survived intact through the path.
+
+   This document therefore specifies the minimum logical facts and
+   reconciliation behavior needed to preserve control delivery and
+   outcome uncertainty.  It also separates a structural reconciliation
+   result from the support available for a particular attribution,
+   completeness, or complete-mediation claim.  The requirements are
+   independent of any particular serialization, transport, signature
+   scheme, evidence envelope, or transparency system.
+
+1.1.  Scope and Non-Goals
+
+   This document applies when a governance-relevant control instruction
+   crosses a system, process, privilege, trust, or administrative
+   boundary on its way to one or more enforcement points.  It covers:
+
+
+
+
+
+
+Abak                      Expires 14 April 2027                 [Page 4]
+
+Internet-Draft       Agent Control Delivery Evidence        October 2026
+
+
+   *  Binding issuer-side and receiver-side observations to the same
+      control instruction and, where applicable, the same delivery
+      attempt.
+
+   *  Binding a control to the required target set used for a bounded
+      reconciliation run.
+
+   *  Assigning delivery dispositions per instruction-target obligation
+      when more than one target is required.
+
+   *  Distinguishing receipt, enforcement outcome, and observed control
+      effect.
+
+   *  Preserving positive failures and bounded negative observations.
+
+   *  Reconciling missing, malformed, duplicated, substituted, orphaned,
+      conflicting, and indeterminate evidence.
+
+   *  Separating structural reconciliation from the evidentiary
+      qualification of a resulting claim.
+
+   *  Preserving governance-relevant outcome distinctions through
+      intermediaries, or exposing when a transformation prevents
+      lossless preservation from being established.
+
+   *  Stating the scope and limitations of any resulting claim.
+
+   This document does not:
+
+   *  Define a new receipt, token, log-entry, or evidence-envelope
+      format.
+
+   *  Define how an agent is authenticated or authorized.
+
+   *  Decide whether a control instruction is correct, lawful, safe, or
+      consistent with policy.
+
+   *  Define the semantics of stop, suspend, cancel, revoke, override,
+      or any other control verb.
+
+   *  Prove the truth of producer assertions, complete mediation, or
+      physical-world effect.
+
+   *  Prove that a declared target set enumerates every possible
+      execution or enforcement path unless an applicable profile
+      separately establishes that fact.
+
+
+
+
+
+Abak                      Expires 14 April 2027                 [Page 5]
+
+Internet-Draft       Agent Control Delivery Evidence        October 2026
+
+
+   *  Require public disclosure of prompts, model reasoning, personal
+      data, proprietary policy, or protected content.
+
+   *  Standardize accountability, auditing, retention, or regulatory
+      compliance.
+
+   A protocol or profile can adopt the requirements in this document
+   while using its existing identifiers, errors, acknowledgements,
+   signatures, telemetry, or external evidence format.
+
+1.2.  Requirements Language
+
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
+   "OPTIONAL" in this document are to be interpreted as described in BCP
+   14 [RFC2119] [RFC8174] when, and only when, they appear in all
+   capitals, as shown here.
+
+   This document is Informational.  The requirement terms make the
+   evidence contract testable by protocol authors and implementers; they
+   do not define an on-wire protocol by themselves.
+
+2.  Terminology
+
+   Agent Runtime
+      A software environment that plans, mediates, dispatches, or
+      executes actions on behalf of an agent or an agentic application.
+
+   Control Instruction
+      A direction intended to restrict, interrupt, replace, or otherwise
+      govern current or future runtime behavior.  Examples include stop,
+      suspend, cancel, revoke, constrain, quarantine, handoff, and
+      override.  A control instruction is distinct from the business or
+      tool action being governed.
+
+   Issuer
+      The component that emits a control instruction toward an
+      enforcement point.  The issuer need not be the policy decision
+      point that caused the instruction to be created.
+
+   Enforcement Point
+      A component that can apply or refuse the control at a relevant
+      runtime or effect path.
+
+   Control Boundary
+      A declared system, process, privilege, trust, or administrative
+      boundary between an issuer-side observation and a receiver-side
+      observation.
+
+
+
+Abak                      Expires 14 April 2027                 [Page 6]
+
+Internet-Draft       Agent Control Delivery Evidence        October 2026
+
+
+   Observation Record
+      An attributable statement that a specified observer saw a
+      specified event at a specified boundary and time.  An observation
+      record is an assertion whose integrity and trust basis require
+      separate evaluation.
+
+   Required Target Set
+      For one control instruction and one declared reconciliation
+      profile, the reproducible set of enforcement targets that are
+      required to receive the control.  A target set can be closed for a
+      reconciliation run without proving that the set enumerates every
+      possible enforcement path in the deployment.
+
+   Delivery Obligation
+      The tuple formed by one control instruction and one member of its
+      Required Target Set. It is the base unit to which a delivery
+      disposition is assigned.  Delivery attempts bind evidence to that
+      base obligation and MAY be reported as lossless subaccounting, but
+      they do not change the cardinality of the base obligation
+      population.
+
+   Receiver Observation
+      An observation made at, or cryptographically bound to, a
+      particular intended enforcement point after that point has read
+      and matched the control instruction.  Acceptance by an upstream
+      transport intermediary is not a receiver observation unless a
+      profile explicitly establishes equivalent endpoint semantics.
+
+   Enforcement Outcome
+      The enforcement point's attributable result after processing the
+      instruction, such as APPLIED, REFUSED, NO_EFFECT, or UNKNOWN.
+
+   Control Effect
+      The change in governed runtime state that the control instruction
+      was intended to cause, such as a task entering a stopped state.
+      This term does not mean the consequential business or physical
+      effect of the action that the agent was attempting to perform.
+
+   Negative Observation
+      A positive record of a bounded condition such as a deadline
+      passing without a matching acknowledgement, a transport rejecting
+      an attempt, or a referenced counterpart remaining unavailable at a
+      stated reconciliation cutoff.  It is not a bare absence of data.
+
+   Reconciler
+      A component that correlates observations and reports scoped
+      dispositions and aggregate results without silently converting
+      uncertainty into success or failure.
+
+
+
+Abak                      Expires 14 April 2027                 [Page 7]
+
+Internet-Draft       Agent Control Delivery Evidence        October 2026
+
+
+   Bounded Population
+      A closed, reproducible set of delivery obligations or input
+      records selected by declared inclusion, target-resolution,
+      observation-window, and reconciliation-cutoff rules.
+
+   Structural Reconciliation Result
+      An aggregate result, such as PASS, FAIL, or INCONCLUSIVE, derived
+      from the declared population and reconciliation rules.  It does
+      not by itself state the evidentiary strength of every attribution,
+      completeness, or mediation claim.
+
+   Claim Support
+      The separately reported strength with which the available verified
+      evidence supports a particular scoped claim.  Section 6.6 defines
+      the conceptual values FULLY_SUPPORTED, CONDITIONALLY_SUPPORTED,
+      and NOT_SUPPORTED.
+
+   Independent Observer
+      An observer whose authority and write path are not controlled by
+      the party or component whose assertion it is intended to
+      corroborate.  Administrative, key, process, and storage separation
+      are relevant to this determination.
+
+3.  Problem Statement and Failure Model
+
+   For a given control instruction and one required target, the
+   following facts are distinct:
+
+   1.  a governance or policy decision was made;
+
+   2.  a control instruction was constructed and emitted;
+
+   3.  the instruction crossed the last issuer-controlled boundary;
+
+   4.  the target was resolved as a required enforcement point under the
+       declared profile;
+
+   5.  that enforcement point received and matched the instruction;
+
+   6.  that enforcement point applied or refused it; and
+
+   7.  the intended control effect was observed.
+
+   Evidence for one item does not, without an explicitly specified and
+   verified binding, establish a later item.  In particular, a decision
+   record does not establish dispatch; dispatch does not establish
+   receipt; receipt does not establish enforcement; and enforcement does
+   not establish an observed control effect.
+
+
+
+Abak                      Expires 14 April 2027                 [Page 8]
+
+Internet-Draft       Agent Control Delivery Evidence        October 2026
+
+
+   When an instruction has multiple required targets, the facts from
+   target A do not establish the corresponding facts for target B.  A
+   parent-instruction claim must therefore be derived from the
+   dispositions of all required instruction-target obligations rather
+   than from the existence of any one receiver record.
+
+   The reverse inference is also unsafe.  Missing receiver evidence can
+   result from non-delivery, delayed delivery, delayed evidence export,
+   a failed observer, retention loss, clock disagreement, identifier
+   mismatch, target-resolution failure, or evidence suppression.  A
+   receiver cannot report a control it never received.  An issuer
+   cannot, from silence alone, prove what happened inside the receiver's
+   boundary.
+
+   Control activation is also not retroactive.  A later APPLIED control
+   result does not retroactively relabel a boundary transition that
+   occurred before the control took effect.  An operation that crossed
+   one earlier admission, provider-entry, or other profile-defined
+   effect boundary can nevertheless remain subject to a later applicable
+   enforcement boundary.  Evidence of a later refusal does not rewrite
+   the earlier transition and does not by itself prove that any prior
+   external effect was reversed.  That operation's outcome requires its
+   own authenticated reconciliation.
+
+   The failure model includes at least:
+
+   *  transport rejection, loss, reordering, duplication, and retry;
+
+   *  identifier collision or reuse;
+
+   *  the same identifier carrying a different instruction digest;
+
+   *  a receiver record with no issuer-side counterpart;
+
+   *  a required target omitted from, added to, or ambiguously resolved
+      within the target population;
+
+   *  a target set declared closed without an accepted basis for a
+      stronger complete-mediation claim;
+
+   *  malformed or unverifiable records;
+
+   *  conflicting observations from the same or different observers;
+
+   *  partial observer or evidence-store failure;
+
+   *  clock skew and unsupported ordering claims;
+
+
+
+
+Abak                      Expires 14 April 2027                 [Page 9]
+
+Internet-Draft       Agent Control Delivery Evidence        October 2026
+
+
+   *  an enforcement point acknowledging receipt before persistence or
+      processing;
+
+   *  successful processing that produces no observable control effect;
+
+   *  an operation already consumed or in flight when a later control
+      becomes effective;
+
+   *  an intermediary that suppresses, transforms, or collapses a
+      governance-relevant disposition before it reaches the relying
+      party; and
+
+   *  compromise of an issuer, receiver, observer, verifier, or signing
+      key.
+
+   The requirements below do not eliminate those failures.  They make
+   the distinctions and residual uncertainty interoperably visible.
+
+4.  Logical Evidence Model
+
+   An implementation MAY carry the required facts in one artifact, in
+   several artifacts, in protocol fields, in telemetry, or through
+   external references.  Regardless of packaging, a consumer needs to
+   distinguish the following logical observations and bindings.
+
+4.1.  Issuer-Side Emission
+
+   The issuer-side observation records that a particular instruction
+   crossed a declared issuer boundary.  It binds a stable instruction
+   identifier to a digest of the exact governed instruction or declared
+   projection, identifies the target, Required Target Set, or target-
+   resolution input, and attributes the observation to the issuer-side
+   observer.
+
+   Creation of an in-memory object, enqueueing inside the issuer's own
+   process, or a policy decision that has not reached the declared
+   boundary does not satisfy this observation.
+
+4.2.  Required Target Set and Delivery Obligations
+
+   For a bounded reconciliation run, each instruction i is processed
+   under a profile-defined target-resolution rule.  If resolution
+   closes, let C_i be its resolved target-candidate set.  Let E_i be the
+   subset of C_i excluded under the frozen pre-population rule, and let
+   T_i = { t in C_i : t not in E_i } be the resulting Required Target
+   Set. Resolution can instead remain unclosed; that state creates no
+   synthetic target or Delivery Obligation and remains separately
+   accounted for at instruction level.
+
+
+
+Abak                      Expires 14 April 2027                [Page 10]
+
+Internet-Draft       Agent Control Delivery Evidence        October 2026
+
+
+   The target-resolution rule, its version, its permitted issuer-side or
+   target-resolution inputs, and any pre-population exclusion rule are
+   frozen for the reconciliation cutoff before receiver evidence is
+   evaluated.  Receiver evidence, an eventual disposition, or an
+   aggregate result MUST NOT determine whether a candidate instruction
+   or target was included.  Every member of E_i and its exclusion reason
+   MUST be reported separately.  The report MUST distinguish C_i being
+   empty from C_i being non-empty while T_i is empty.
+
+   Each member of a closed Required Target Set creates one base Delivery
+   Obligation for the instruction-target pair.  Attempts bind
+   observations and MAY produce subresults under a published
+   deterministic reduction rule.  They MUST NOT create additional base
+   obligations, and all attempt evidence and diagnostics MUST remain
+   reviewable.  A receiver observation for one obligation cannot satisfy
+   another obligation merely because both obligations share the same
+   parent instruction identifier or content digest.
+
+   A target set that is closed for a reconciliation run establishes the
+   population over which structural accounting can be repeated.  It does
+   not, by that fact alone, establish that every possible enforcement
+   path in the deployment has been enumerated.  A claim of complete
+   mediation requires a separately stated and verified coverage basis
+   under the declared deployment scope.
+
+4.3.  Receiver-Side Observation
+
+   The receiver-side observation records that a particular intended
+   enforcement point, or an endpoint-bound observer acting for it, read
+   an instruction with the same stable identifier and content binding.
+   The record identifies the required target identity, receiving
+   boundary, and verification or matching result.
+
+   A transport-level "accepted" or "queued" response is evidence about
+   that transport boundary.  It MUST NOT be labeled as enforcement-point
+   receipt unless the applicable profile defines the endpoint binding,
+   delivery semantics, persistence point, and failure behavior that make
+   the equivalence valid.
+
+4.4.  Enforcement Outcome
+
+   The enforcement outcome reports what one enforcement point did after
+   receiving and evaluating the instruction.  At minimum, a profile that
+   reports enforcement MUST be able to distinguish:
+
+   APPLIED
+      The enforcement point reports that it applied the specified
+      control under the declared local semantics and effective boundary.
+
+
+
+Abak                      Expires 14 April 2027                [Page 11]
+
+Internet-Draft       Agent Control Delivery Evidence        October 2026
+
+
+   REFUSED
+      The enforcement point reports that it intentionally did not apply
+      the control, with a scoped reason or reason class where disclosure
+      policy permits.
+
+   NO_EFFECT
+      The enforcement point processed the control but reports that it
+      caused no change under the declared predicate and observation
+      window.
+
+   UNKNOWN
+      The enforcement point cannot determine or support one of the
+      preceding outcomes.
+
+   The labels in this subsection are enforcement-outcome values.  If a
+   profile also uses the lexical token NO_EFFECT for a control-effect
+   result, the two values remain in separate conceptual namespaces and
+   neither is inferred from the other.  For example, enforcement
+   NO_EFFECT can coexist with control-effect UNKNOWN.
+
+   APPLIED is an attributable enforcement assertion for that enforcement
+   point.  It is not, by itself, independent observation of the
+   resulting runtime state, proof that another required target applied
+   the control, or proof that an earlier in-flight operation was
+   reversed.
+
+4.5.  Control-Effect Observation
+
+   A control-effect observation records a scoped predicate over the
+   governed runtime state, such as "task X was no longer dispatching
+   tool calls during window W" or "operation O2 did not cross provider
+   entry during window W".  It identifies the observer, observation
+   method, target, predicate, window, and result.  A profile MAY use
+   conceptual effect results such as EFFECT_OBSERVED, NO_EFFECT, and
+   UNKNOWN, but these are control-effect values rather than enforcement
+   outcomes.  Control-effect NO_EFFECT requires an explicit predicate,
+   observation window, and sufficient observation evidence; silence is
+   insufficient.
+
+   Where independent corroboration is claimed, the observer MUST be
+   independent of both the issuer and the enforcement point under the
+   stated trust model.  An implementation MUST NOT infer independence
+   from a different process name, service label, or signing key alone.
+   A scoped effect observation for one target or one operation MUST NOT
+   be generalized to every target or every dispatch path.
+
+5.  Evidence Preservation Requirements
+
+
+
+
+Abak                      Expires 14 April 2027                [Page 12]
+
+Internet-Draft       Agent Control Delivery Evidence        October 2026
+
+
+5.1.  R-CD-1: Stable Instruction Identity
+
+   Each control instruction crossing a control boundary MUST have an
+   identifier that remains stable across issuer, transport, receiver,
+   enforcement, and reconciliation observations.  The identifier's
+   uniqueness scope and reuse rules MUST be defined.  A decision, task,
+   session, action, or delegation reference MAY also be carried, but it
+   MUST NOT replace the instruction identifier unless the protocol
+   defines identical uniqueness and lifecycle semantics.
+
+   If retries create distinct delivery attempts, the profile MUST define
+   an attempt identifier or equivalent rule that prevents observations
+   from different attempts from being silently merged.  Attempt-level
+   results MUST reduce deterministically to the one instruction-target
+   Delivery Obligation without changing |O|. The reduction MUST retain
+   every applicable attempt record and diagnostic; a later successful
+   retry MUST NOT erase an earlier failed attempt.
+
+5.2.  R-CD-2: Content Binding
+
+   Every observation used to correlate a control instruction MUST bind
+   the instruction identifier to a digest of either the exact
+   instruction or a declared canonical projection of it.  The
+   projection, digest algorithm, canonicalization rule, and domain-
+   separation rule, if any, MUST be identified by the applicable
+   protocol or profile.
+
+   A digest match establishes byte or projection correspondence under
+   the named algorithm.  It does not establish semantic equivalence,
+   correctness, authority, or truth.
+
+5.3.  R-CD-3: Boundary Attribution
+
+   Each observation MUST identify the observer, the boundary side
+   observed, and the event being asserted.  The evidence profile MUST
+   state how the observer identity and its authority are verified.  If
+   the producer is able to rewrite the purported corroborating record,
+   the record MUST NOT be described as independent evidence.
+
+   If a profile permits structural processing when an external trust or
+   authority binding is absent, it MUST expose that limitation through
+   the claim-support qualification defined in Section 6.6.  A self-
+   declared key, role, or observer label MUST NOT silently become fully
+   supported attribution.
+
+
+
+
+
+
+
+Abak                      Expires 14 April 2027                [Page 13]
+
+Internet-Draft       Agent Control Delivery Evidence        October 2026
+
+
+5.4.  R-CD-4: Issuer-Side Emission
+
+   When an implementation claims that a control was dispatched, it MUST
+   emit or preserve an issuer-side observation at the last declared
+   issuer-controlled boundary.  The observation MUST include the stable
+   identifier, content binding, target, target-set reference, or
+   resolution input, observed time, and boundary description.
+
+   Where one instruction resolves to multiple required targets, the
+   profile MUST preserve a stable binding to the Required Target Set, or
+   to a verifiable resolution rule and inputs from which the same set
+   can be reconstructed at the reconciliation cutoff.
+
+   If an instruction is independently established as a member of the
+   frozen issuer population but its required issuer-side observation is
+   missing, the instruction remains accounted for.  The report MUST
+   describe dispatch as NOT_ESTABLISHED or equivalently unsupported;
+   absence alone MUST NOT be rendered as dispatched=false, INVALID, or
+   EXPLICIT_FAILURE.  For an already constructed obligation, missing
+   issuer evidence produces INDETERMINATE by default only when no
+   stronger applicable verified condition controls under the frozen
+   deterministic reduction rule.  The missing-evidence diagnostic MUST
+   remain visible and MUST NOT suppress applicable conflict, structural-
+   invalidity, or scoped-failure evidence.  A receiver observation
+   remains independently reportable at its supported scope but does not
+   retroactively create the missing issuer observation.
+
+   If emission fails before that boundary, the implementation MUST NOT
+   report the instruction as dispatched.  It SHOULD record the failed
+   emission attempt as a positive instruction-level failure event.  The
+   failure establishes per-obligation EXPLICIT_FAILURE only where
+   verified evidence binds the failed attempt, required target, and
+   issuer boundary.  Otherwise it MUST NOT be fanned out to unrelated
+   targets or consumed as proof of non-delivery.
+
+5.5.  R-CD-5: Receiver-Side Observation
+
+   An implementation MUST NOT report delivery to a required target
+   unless it has a matching receiver-side observation or a receipt whose
+   endpoint semantics satisfy Section 4.3.  The observation MUST carry
+   the stable identifier, content binding, receiver identity, required
+   target identity, receiving boundary, observed time, verification
+   result, and an attempt identifier or equivalent retry binding where
+   the profile distinguishes delivery attempts.
+
+
+
+
+
+
+
+Abak                      Expires 14 April 2027                [Page 14]
+
+Internet-Draft       Agent Control Delivery Evidence        October 2026
+
+
+   A receiver observation MAY satisfy only the Delivery Obligation whose
+   target identity and boundary it is verified to represent.  An
+   observation for target A MUST NOT be used to confirm target B merely
+   because the parent instruction identifier and content digest match.
+
+   A receiver MUST NOT acknowledge a digest or instruction identifier it
+   did not read and match.  If verification or content matching fails,
+   the receiver SHOULD preserve a scoped failure observation rather than
+   emitting a successful acknowledgement.
+
+5.6.  R-CD-6: Separate Enforcement Outcome
+
+   Receipt and enforcement MUST be represented as separate facts.  An
+   implementation that reports an enforcement result MUST distinguish at
+   least APPLIED, REFUSED, NO_EFFECT, and UNKNOWN, or define a lossless
+   mapping from its native states to those meanings.  Missing
+   enforcement evidence MUST NOT default to APPLIED.
+
+5.7.  R-CD-7: Separate Control-Effect Observation
+
+   An observed control effect MUST be represented separately from both
+   delivery and enforcement.  The observation MUST name its predicate,
+   target, method, observer relationship, start and end conditions, and
+   result.  A claim that no effect occurred MUST be bounded by an
+   observation window and predicate; silence alone MUST NOT be reported
+   as NO_EFFECT.
+
+5.8.  R-CD-8: Negative Observations
+
+   A negative observation MUST record what was positively observed, from
+   which boundary, and as of which cutoff.  Profiles SHOULD support at
+   least the following conceptual conditions where applicable:
+
+   *  deadline elapsed without a matching acknowledgement;
+
+   *  counterpart missing at the reconciliation cutoff;
+
+   *  transport rejected the identified attempt;
+
+   *  verification or content matching failed; and
+
+   *  outcome remained undetermined after the declared deadline.
+
+   The absence of an observation record is not a negative observation.
+   A deadline-elapsed record establishes the reconciler's bounded view;
+   it does not prove that the receiver never received the instruction.
+   Deadline elapsed without a matching receipt leaves the delivery
+   disposition UNCONFIRMED and adds a deadline diagnostic.  A separately
+
+
+
+Abak                      Expires 14 April 2027                [Page 15]
+
+Internet-Draft       Agent Control Delivery Evidence        October 2026
+
+
+   scoped timely-delivery claim MAY have a positive failure result under
+   a frozen profile, but that result MUST NOT be generalized to "never
+   delivered".
+
+5.9.  R-CD-9: Time and Ordering
+
+   Each timed observation MUST identify its time value and the relevant
+   clock or trust basis.  A profile that reports cross-observer latency
+   or precedence MUST state how clock synchronization, trusted
+   timestamping, causal linkage, or another ordering mechanism supports
+   that claim.
+
+   Matching identifiers and digests establish correspondence.  They do
+   not, by themselves, establish that one observation preceded another.
+   Unsupported ordering claims MUST be omitted or reported as
+   indeterminate.
+
+5.10.  R-CD-10: Total Reconciliation
+
+   A reconciler MUST produce a deterministic disposition for every
+   Delivery Obligation and every input record presented under a declared
+   profile.  Malformed, unverifiable, duplicate, conflicting, and
+   unmatched records MUST NOT be silently discarded.  A reconciler MUST
+   NOT produce a successful delivery verdict solely because no failure
+   record exists.
+
+   The expected obligation population MUST be constructed from the
+   declared, versioned issuer-side inclusion, exclusion, and target-
+   resolution rules rather than solely from the receiver evidence that
+   happens to be present.  Those rules and their permitted inputs MUST
+   be frozen before receiver evidence is evaluated.  Otherwise omitted
+   targets or suppressed failures can disappear before reconciliation
+   begins.
+
+   Applicable records that reuse one stable instruction or obligation
+   identity with different governed content within the identity's
+   declared uniqueness scope MUST produce SUBSTITUTION evidence,
+   including issuer-issuer and issuer-receiver relations.  The
+   conflicting records and provenance MUST remain visible.  Equal
+   identifier strings from distinct valid uniqueness scopes MUST NOT be
+   merged.
+
+   The minimum per-obligation delivery dispositions are defined in
+   Section 6.1.  A profile MAY add more specific states, provided that
+   it defines a lossless mapping to the minimum set and does not weaken
+   UNCONFIRMED, INVALID, CONFLICT, or INDETERMINATE into success.
+
+
+
+
+
+Abak                      Expires 14 April 2027                [Page 16]
+
+Internet-Draft       Agent Control Delivery Evidence        October 2026
+
+
+   If several applicable observations or diagnostics are reduced to one
+   primary per-obligation disposition, the reduction rule MUST be
+   deterministic and reviewable.  All applicable diagnostics, including
+   diagnostics not selected as the primary disposition-driving
+   diagnostic, MUST remain visible in the report or in an explicitly
+   linked diagnostic collection.  This document does not prescribe a
+   universal precedence ordering among profile-specific diagnostics.
+
+5.11.  R-CD-11: Bounded-Population Accounting
+
+   An implementation claiming completeness over a set of controls MUST
+   declare a reproducible, versioned issuer inclusion and exclusion
+   rule, the permitted issuer-side or target-resolution inputs to those
+   rules, a Required Target Set or target-resolution rule for each
+   instruction, the observation window, the reconciliation cutoff, and
+   expected population counts.  The rules, versions, and permitted
+   inputs MUST be frozen before receiver evidence is evaluated.  Each
+   expected Delivery Obligation MUST appear in exactly one per-
+   obligation disposition.
+
+   Every excluded candidate MUST be reported with its reason, rule
+   version, and count separately from the included population.  An
+   exclusion MUST NOT depend on receiver evidence, eventual disposition,
+   or aggregate result.  Changing an exclusion rule, version, or
+   permitted input requires a new versioned reconciliation run and MUST
+   NOT rewrite an earlier run.  A positively established invalid or
+   outcome-adaptive exclusion and an unverifiable exclusion both prevent
+   structural PASS.  Absence of exclusion-rule evidence is not by itself
+   a positive FAIL condition.  If a valid frozen rule excludes every
+   resolved target candidate, the instruction remains in instruction
+   conservation as an exclusion-induced zero-obligation instruction.
+   That outcome is distinct from target resolution terminating with an
+   empty candidate set.  Empty cardinality alone MUST NOT produce
+   structural PASS: the profile has to predeclare whether a fully
+   accounted all-target exclusion is eligible for a narrowly scoped
+   structural PASS, and the report has to expose the excluded
+   candidates, reasons, rule version, counts, and resulting claim scope.
+
+   Each receiver-side input record MUST occupy exactly one mutually
+   exclusive primary record-accounting class under the frozen profile.
+   Record-accounting "matched" means correlated to an expected
+   obligation, not CONFIRMED.  Correlation MAY remain as a relationship
+   or diagnostic on a record whose primary class is duplicate, conflict,
+   substitution, or invalid, but MUST NOT cause a second count.  ORPHAN
+   means that no expected obligation can be correlated.  A parent or
+   derived correlated total is not additive beside its disjoint
+   subclasses.
+
+
+
+
+Abak                      Expires 14 April 2027                [Page 17]
+
+Internet-Draft       Agent Control Delivery Evidence        October 2026
+
+
+   Every instruction in the bounded issuer population MUST remain
+   accounted for during target-set construction, including an
+   instruction whose target resolution succeeds and yields an empty
+   Required Target Set. Where the Required Target Set for an instruction
+   is empty, the instruction MUST remain in the report, the report MUST
+   state that the instruction contributed zero Delivery Obligations, and
+   the report MUST state the rule or condition under which target
+   resolution produced the empty set.  An instruction MUST NOT disappear
+   from reconciliation solely because no Delivery Obligation tuple was
+   added for it.  The report MUST publish |I| alongside |O| and MUST
+   publish counts sufficient to distinguish instructions that
+   contributed one or more Delivery Obligations from instructions that
+   contributed zero, as required by Section 6.4.
+
+   A profile MUST define whether an empty Required Target Set is a valid
+   terminal resolution.  Where the profile declared that semantics
+   before reconciliation, an empty set is a legitimate terminal
+   resolution and the instruction is still accounted for as a zero-
+   obligation instruction.  Where the profile does not permit it, an
+   empty Required Target Set MUST prevent a structural PASS for the
+   affected instruction and for any parent or aggregate scope that
+   depends on it.  An empty Required Target Set MUST NOT be recorded by
+   inventing a synthetic enforcement target or a synthetic Delivery
+   Obligation, and MUST NOT be classified as EXPLICIT_FAILURE unless a
+   positive, attributable failing condition applies under Section 6.1.
+
+   If the implementation cannot define a closed Required Target Set for
+   an instruction, the instruction MUST be placed in the disjoint
+   target_resolution_unclosed instruction-accounting class with its
+   reason.  It creates no synthetic target or Delivery Obligation and
+   prevents structural PASS for the affected scope.  Balancing
+   instruction accounting does not close the obligation population.
+   Independently closed subscopes MAY be reported only with their
+   narrower scope explicit.
+
+   Closing a target population for reconciliation is not equivalent to
+   proving complete mediation.  A report MAY state that every member of
+   a declared target set is confirmed when the evidence supports that
+   scoped statement; it MUST NOT promote that statement into "every
+   possible enforcement path was covered" unless the target-set coverage
+   basis separately supports that stronger claim.
+
+
+
+
+
+
+
+
+
+
+Abak                      Expires 14 April 2027                [Page 18]
+
+Internet-Draft       Agent Control Delivery Evidence        October 2026
+
+
+5.12.  R-CD-12: Resolution Failure
+
+   If a control instruction refers to an external decision, policy,
+   action, task, target, target set, key, or evidence binding, the
+   applicable protocol or profile MUST classify the verified evidence
+   condition.  A syntactically valid reference that cannot be resolved,
+   cannot be selected unambiguously, or lacks sufficient trust or
+   freshness evidence at the cutoff is INDETERMINATE.  A malformed
+   record or a record missing a binding required for structural validity
+   is INVALID.  Multiple otherwise applicable verified records with
+   irreconcilable claims are CONFLICT.  Age alone does not make evidence
+   invalid; uncertainty about freshness is INDETERMINATE for a
+   freshness-dependent claim, while positive failure of a mandatory
+   native validity rule is INVALID or ineligible as that frozen rule
+   defines.  None of these conditions may be treated as verified
+   delivery or successful enforcement.
+
+5.13.  R-CD-13: Scope, Qualification, and Non-Claims
+
+   Evidence producers and reconcilers MUST state what each result covers
+   and what it does not cover.  At minimum, integrity, attribution,
+   delivery, enforcement, observed control effect, ordering, population
+   closure, complete mediation, and independent corroboration MUST NOT
+   be implied unless each is separately supported under the declared
+   trust model.
+
+   Where an aggregate result is used to support a relying-party claim,
+   the report MUST identify the claim scope and MUST expose the claim-
+   support qualification defined in Section 6.6.  A structural PASS MUST
+   NOT be rendered or consumed as an unqualified end-to-end success
+   statement when attribution, target-set coverage, ordering,
+   independence, or another claim predicate remains only declared,
+   unverified, or indeterminate.  The co-exposure rule in Section 6.6
+   applies to every representation in which a structural aggregate
+   result is exposed, not only to the representation in which that
+   result was first derived.
+
+   Evidence that a governance-relevant distinction was preserved at one
+   boundary MUST NOT, by itself, be consumed as evidence that the
+   distinction survived unchanged through later intermediaries to the
+   relying party.  Likewise, preservation at an origin boundary does not
+   by itself establish downstream receipt or enforcement, an observed
+   effect, completeness, or that an unrecorded event did not occur.
+
+
+
+
+
+
+
+
+Abak                      Expires 14 April 2027                [Page 19]
+
+Internet-Draft       Agent Control Delivery Evidence        October 2026
+
+
+   A signature establishes only the properties supported by the verified
+   key binding and signature input.  A transparency receipt establishes
+   only the registration or inclusion properties supplied by the
+   relevant transparency service.  Neither establishes the truth of a
+   producer's event assertion by itself.
+
+5.14.  R-CD-14: Consumption and Fail-Safe Handling
+
+   An unacknowledged or unresolved safety-relevant Delivery Obligation
+   MUST NOT be consumed as delivered.  A relying system SHOULD expose
+   UNCONFIRMED, CONFLICT, INVALID, and INDETERMINATE results to
+   operational policy and SHOULD define a fail-safe, retry, escalation,
+   or human notification behavior appropriate to the controlled risk.
+
+   This document does not select the operational response.  It requires
+   that uncertainty remain distinguishable at the point where that local
+   response is chosen.
+
+5.15.  R-CD-15: Target-Set Closure and Coverage Qualification
+
+   For each Required Target Set used in a bounded reconciliation, the
+   profile MUST state the set identifier or reproducible resolution rule
+   and the basis on which the set is treated as closed.  The report MUST
+   also state whether the completeness of that enumeration for a
+   stronger deployment-level mediation claim is verified under the trust
+   model, merely declared by a source, or indeterminate.
+
+   A profile MAY use different vocabulary, but it MUST preserve the
+   distinction among at least the following conceptual conditions:
+
+   VERIFIED
+      The relying party accepts evidence, under the declared trust model
+      and scope, that the target set covers the enforcement paths
+      required by the claim.
+
+   DECLARED_ONLY
+      A producer or configuration declares the set closed, so structural
+      reconciliation can use it, but the relying party lacks accepted
+      evidence for the stronger enumeration-completeness claim.
+
+   INDETERMINATE
+      The verifier cannot determine whether the set is complete for the
+      requested claim scope.
+
+
+
+
+
+
+
+
+Abak                      Expires 14 April 2027                [Page 20]
+
+Internet-Draft       Agent Control Delivery Evidence        October 2026
+
+
+   A DECLARED_ONLY target set can still support reproducible structural
+   accounting over its named members.  It MUST NOT, by itself, support a
+   fully qualified claim of complete mediation across every relevant
+   path.  The claim-support rules in Section 6.6 determine whether the
+   requested claim is conditionally supported or not supported.
+
+5.16.  R-CD-16: Semantic Preservation Across Intermediaries
+
+   When a profile claims that a source-attributable disposition,
+   outcome, target identity, or other governance-relevant state is
+   preserved across one or more protocol intermediaries, the evidence
+   available to the relying party MUST preserve enough source and
+   transformation information to determine whether the relevant
+   distinction survived the path.  Where a gateway, broker, adapter, or
+   other intermediary transforms the native representation, the
+   applicable profile MUST define a lossless mapping for every
+   governance-relevant state used by the claim or MUST expose that the
+   mapping is incomplete, ambiguous, or unavailable.
+
+   An intermediary MUST NOT silently collapse distinct applicable states
+   such as deny, defer, reject, timeout, unresolved, or indeterminate
+   into a representation that a relying party can consume as a stronger
+   or different state.  If lossless preservation cannot be established,
+   the resulting state MUST remain explicitly qualified or INDETERMINATE
+   according to the profile.
+
+   This requirement concerns preservation of meaning, not a mandated
+   carrier.  Native fields, structured errors, acknowledgements, events,
+   or references can satisfy it.  It does not require every intermediary
+   to emit a new evidence artifact.
+
+6.  Reconciliation Model
+
+6.1.  Per-Obligation Delivery Dispositions
+
+   A conforming reconciliation profile MUST preserve at least the
+   following meanings:
+
+   CONFIRMED
+      A receiver-side observation matches the Delivery Obligation's
+      instruction identifier, attempt binding where applicable, content
+      binding, required target identity, and required receiving boundary
+      under the declared verification rules.
+
+   EXPLICIT_FAILURE
+
+
+
+
+
+
+Abak                      Expires 14 April 2027                [Page 21]
+
+Internet-Draft       Agent Control Delivery Evidence        October 2026
+
+
+      A positive, attributable failure observation applies to the
+      identified delivery attempt, target, and boundary.  The result
+      MUST state its scope and MUST NOT be generalized to other targets
+      or delivery paths.
+
+   UNCONFIRMED
+      An expected Delivery Obligation exists, but no matching receiver-
+      side observation is available at the reconciliation cutoff.
+
+   SUBSTITUTION
+      Two or more applicable records within one declared identity-
+      uniqueness scope reuse the same stable instruction or obligation
+      identity with different governed content.  This includes issuer-
+      issuer and issuer-receiver relations.  Where target resolution is
+      unclosed, the finding remains at instruction level and creates no
+      synthetic obligation.
+
+   CONFLICT
+      Two or more otherwise applicable records make incompatible
+      assertions that the profile cannot deterministically resolve.
+
+   INVALID
+      The instruction, obligation, or a required record is malformed,
+      fails native verification, or lacks a binding that the profile
+      requires for structural validity.
+
+   INDETERMINATE
+      The available inputs do not support a stronger disposition for a
+      reason other than ordinary absence of a receiver observation,
+      including an unresolved required target or trust binding.
+
+   A receiver record is matched or correlated when its claimed identity
+   can be associated with an expected Delivery Obligation.  Correlation
+   does not establish CONFIRMED and can coexist diagnostically with
+   duplicate, conflict, SUBSTITUTION, or invalid evidence.  A record is
+   ORPHAN only when no expected obligation can be correlated.  Every
+   receiver input occupies exactly one primary record-accounting class;
+   relationship and diagnostic labels do not add another count.  ORPHAN
+   is not an obligation disposition because there is no corresponding
+   expected obligation.
+
+   The delivery disposition is independent of the enforcement outcome
+   and the control-effect result.  For example, one obligation can have
+   delivery CONFIRMED, enforcement APPLIED, and control effect UNKNOWN
+   while another obligation for the same parent instruction remains
+   UNCONFIRMED.
+
+
+
+
+
+Abak                      Expires 14 April 2027                [Page 22]
+
+Internet-Draft       Agent Control Delivery Evidence        October 2026
+
+
+6.2.  Parent Instruction Aggregation
+
+   A parent instruction that has one or more required targets can be
+   reported as fully confirmed within its declared Required Target Set
+   only when every Delivery Obligation for that instruction is
+   CONFIRMED.  The report MUST retain the per-target dispositions used
+   to derive that parent result.
+
+   If any required obligation is EXPLICIT_FAILURE, UNCONFIRMED,
+   SUBSTITUTION, CONFLICT, INVALID, or INDETERMINATE, the parent
+   instruction MUST NOT be reported as fully confirmed.  The parent
+   result is scoped to the identified target set and does not, by
+   itself, establish complete mediation over paths not proven to be in
+   that set.
+
+   For a valid terminal empty Required Target Set, parent delivery
+   confirmation is NOT_APPLICABLE or absent; it MUST NOT be reported as
+   fully confirmed by vacuous truth.  A separately qualified structural
+   PASS MAY cover the valid empty-set resolution only where the frozen
+   profile declared that condition and the report exposes the rule and
+   scope.
+
+6.3.  Minimum Reconciliation Procedure
+
+   For a declared bounded population, a reconciler:
+
+   1.   freezes the profile revision, trust inputs, issuer inclusion and
+        exclusion rule versions and permitted inputs, target-resolution
+        rules or target-set references, target-set closure evidence,
+        positive structural FAIL conditions, deterministic reduction
+        rules, observation window, and reconciliation cutoff;
+
+   2.   accounts for every issuer instruction, constructs Delivery
+        Obligations only from closed target sets, records valid empty
+        sets separately, and records unclosed target resolutions without
+        synthetic obligations, all before receiver evidence is used to
+        decide which candidates count as expected;
+
+   3.   parses every input record and retains invalid inputs in an error
+        population;
+
+   4.   performs each artifact's native integrity, identity, freshness,
+        and authorization checks before consuming its claims;
+
+   5.   groups valid records by Delivery Obligation identity without
+        assuming that identifier equality implies content, target, or
+        attempt equality;
+
+
+
+
+Abak                      Expires 14 April 2027                [Page 23]
+
+Internet-Draft       Agent Control Delivery Evidence        October 2026
+
+
+   6.   compares content bindings, target identities, target boundaries,
+        and boundary roles;
+
+   7.   assigns exactly one delivery disposition to every expected
+        Delivery Obligation;
+
+   8.   assigns every receiver record to exactly one mutually exclusive
+        primary accounting class while preserving correlation and all
+        applicable diagnostics without double counting;
+
+   9.   reports enforcement and control-effect results as separate
+        dimensions;
+
+   10.  derives any parent-instruction result only from the complete set
+        of required obligation dispositions;
+
+   11.  derives any structural aggregate result under Section 6.5 and
+        preserves it separately from claim support;
+
+   12.  emits counts, exclusions, claim scope, claim-support
+        qualification, and limitations sufficient for a third party to
+        repeat the same structural verdict and understand what stronger
+        claims remain unsupported.
+
+   Profile-specific conflict resolution MAY select among duplicate or
+   superseding records, but the discarded alternatives and the selection
+   rule MUST remain reviewable.
+
+6.4.  Population Conservation
+
+   Let I be the bounded set of expected issuer instructions.  For each
+   instruction i whose target resolution closes, let C_i be the closed
+   set of resolved target candidates, let E_i be the subset excluded
+   under the frozen pre-population rule, and let T_i be the resulting
+   Required Target Set:
+
+                  E_i is a subset of C_i
+                        T_i = { t in C_i : t not in E_i }
+
+   For instructions whose target resolution remains unclosed, C_i, E_i,
+   and T_i are not synthesized.  For closed resolutions, the base
+   Delivery Obligation population is:
+
+     O = { (i,t) : i in I, resolution for i is closed, and t in T_i }
+
+
+
+
+
+
+
+Abak                      Expires 14 April 2027                [Page 24]
+
+Internet-Draft       Agent Control Delivery Evidence        October 2026
+
+
+   Consequently, |C_i| > 0 and |E_i| = |C_i| produces |T_i| = 0 and zero
+   base obligations for i.  Every member of E_i remains separately
+   accounted for.  The report MUST distinguish that exclusion-induced
+   result from the terminal-empty case |C_i| = 0.
+
+   Delivery attempts bind evidence to members of O and do not add
+   elements to O.  A reconciliation report that claims complete
+   obligation accounting MUST satisfy:
+
+     |O| = Nconfirmed + Nexplicit_failure + Nunconfirmed
+               + Nsubstitution + Nconflict + Ninvalid + Nindeterminate
+
+   Obligation accounting alone cannot demonstrate that every instruction
+   was considered.  A report that claims complete instruction accounting
+   MUST publish |I| and satisfy:
+
+                 |I| = Ninstructions_with_obligations
+                           + Nzero_obligation_instructions
+                           + Ntarget_resolution_unclosed
+
+   The three instruction classes are disjoint.  Every member of
+   Ntarget_resolution_unclosed MUST be reported individually with its
+   reason and creates no synthetic target or Delivery Obligation.  A
+   balanced instruction equation does not close the affected obligation
+   population and does not permit structural PASS for that affected
+   scope.  Every zero-obligation instruction MUST be reported with the
+   frozen rule or condition that produced it.  The report MUST
+   distinguish target resolution that terminated with no candidates from
+   a non-empty resolved candidate set whose every member was excluded.
+   The latter is an exclusion-induced zero-obligation instruction,
+   remains accompanied by separate exclusion accounting, creates no
+   synthetic obligation, and does not become a successful terminal-empty
+   resolution merely because its post-exclusion cardinality is zero.
+
+   Let R be the bounded set of receiver-side input records and C_R be
+   the frozen profile's mutually exclusive primary receiver-record
+   classes.  Complete receiver-record accounting MUST satisfy:
+
+                        |R| = sum(N_c for c in C_R)
+
+   A profile can define C_R with primary classes such as confirming,
+   correlated-nonconfirming, orphan, duplicate, substitution, conflict,
+   and invalid, provided that every receiver record occupies exactly one
+   class.  Record-accounting "matched" means correlated, not CONFIRMED.
+   Correlation and other diagnostics MAY be preserved across primary
+   classes but do not add another count.  If a profile exposes a parent
+   or derived correlated total, it MUST NOT add that total beside its
+   disjoint subclasses in the conservation equation.
+
+
+
+Abak                      Expires 14 April 2027                [Page 25]
+
+Internet-Draft       Agent Control Delivery Evidence        October 2026
+
+
+   The equations describe accounting classes, not wire values or IANA
+   registries.  Profiles MAY subdivide a class, but the sum of its
+   subdivisions MUST preserve the parent count.  Every excluded
+   candidate, reason, rule version, and count MUST be reported
+   separately.  A change to an inclusion or exclusion rule or permitted
+   input requires a new versioned reconciliation run.
+
+6.5.  Structural Aggregate Results
+
+   A profile MAY define a structural aggregate result such as PASS,
+   FAIL, or INCONCLUSIVE.  This result answers whether the declared
+   population reconciled under the profile's structural rules.  It does
+   not, by itself, answer whether a stronger attribution, complete-
+   mediation, independence, or physical-effect claim is fully supported.
+
+   If a profile defines these aggregate results, it MUST publish and
+   freeze before evidence evaluation the positive conditions that
+   produce FAIL, including how SUBSTITUTION, CONFLICT, INVALID, and any
+   exclusion-rule violation are handled.  A profile MUST NOT add,
+   remove, or reinterpret those conditions after observing the evidence.
+   No universal mapping from a disposition name to FAIL is implied by
+   this document.
+
+   *  PASS MUST require a closed obligation population, successful
+      population conservation, and every expected Delivery Obligation to
+      meet the profile's successful structural conditions;
+
+   *  FAIL MUST identify at least one positive failing condition and
+      MUST NOT be inferred solely from missing evidence;
+
+   *  EXPLICIT_FAILURE, UNCONFIRMED, SUBSTITUTION, CONFLICT, INVALID, or
+      INDETERMINATE obligation input MUST prevent PASS unless the
+      profile explicitly excluded that obligation before population
+      construction under a published rule.  This PASS prohibition does
+      not by itself select FAIL: FAIL still requires a frozen positive
+      condition published by the profile, and otherwise the applicable
+      aggregate can be INCONCLUSIVE;
+
+   *  a missing required issuer observation or dispatch state of
+      NOT_ESTABLISHED MUST prevent structural PASS for the affected
+      scope even when a valid receiver observation is retained; the
+      receiver fact remains independently reportable and MUST NOT be
+      promoted into the missing issuer evidence;
+
+
+
+
+
+
+
+
+Abak                      Expires 14 April 2027                [Page 26]
+
+Internet-Draft       Agent Control Delivery Evidence        October 2026
+
+
+   *  an exclusion-induced zero-obligation instruction MUST prevent PASS
+      unless the frozen profile expressly permits that case and every
+      resolved candidate, exclusion reason, rule version, and count is
+      established and reflected in the narrow claim scope; it MUST NOT
+      be treated as a terminal empty target resolution;
+
+   *  a population-conservation failure, an outcome-adaptive exclusion,
+      or inability to establish the applied frozen exclusion rule/
+      version MUST prevent PASS; only a predeclared positive condition
+      can produce FAIL; and
+
+   *  the report MUST publish the complete class counts rather than only
+      the aggregate label.
+
+   A structural PASS can coexist with CONDITIONALLY_SUPPORTED claim
+   support when, for example, every declared obligation reconciles but a
+   trust root or independent population-coverage predicate required by a
+   stronger relying-party claim was not verified.  Implementations MUST
+   NOT collapse those two dimensions into a bare PASS.
+
+6.6.  Claim-Support Qualification
+
+   For each aggregate claim exposed to a relying party, a report MUST
+   identify the claim scope, including the target set or population,
+   relevant boundaries, observation window or cutoff, and the fact being
+   claimed.  The report MUST then preserve a claim-support qualification
+   separate from the structural result.  If no stronger relying-party
+   claim was explicitly requested, the corresponding claim is the
+   minimal structural statement that the declared population reconciled
+   under the named profile, cutoff, and structural rules.  That default
+   does not imply delivery beyond the scope, enforcement, mediation, or
+   effect.
+
+   Wherever a structural aggregate result is rendered, returned,
+   exported, or otherwise exposed to a relying party, the corresponding
+   claim scope and claim-support qualification MUST be exposed in the
+   same result context.  This applies to PASS, FAIL, and INCONCLUSIVE
+   alike.  A profile MUST NOT expose a bare structural result that can
+   be consumed as the complete result without that qualification.  The
+   requirement constrains what accompanies the result, not the field
+   layout of any particular serialization: native fields, a nested
+   object, a structured error, a protocol event, or a resolvable
+   reference can satisfy it, provided that a consumer of that result
+   context cannot obtain the structural result without also obtaining
+   its claim scope and claim-support qualification.
+
+   A profile MAY use different vocabulary, but it MUST define a lossless
+   mapping to at least the following conceptual meanings:
+
+
+
+Abak                      Expires 14 April 2027                [Page 27]
+
+Internet-Draft       Agent Control Delivery Evidence        October 2026
+
+
+   FULLY_SUPPORTED
+      Every evidence predicate required by the scoped claim is satisfied
+      under the declared verification and trust rules.  This value does
+      not claim ground truth beyond those predicates.
+
+   CONDITIONALLY_SUPPORTED
+      The structural result can be stated, but one or more predicates
+      required for the stronger claim are declared-only, unverified, not
+      independently established, or otherwise limited.  The report MUST
+      name each condition or missing predicate.
+
+   NOT_SUPPORTED
+      The structural result, population scope, or available evidence
+      does not support the requested claim.  The claim MUST NOT be
+      rendered as true.
+
+   The structural result and claim support are orthogonal.  A positive
+   failure can be strongly evidenced; a structurally balanced or passing
+   population can have conditional attribution; and a structurally
+   complete result over a declared closed target set can still fail to
+   fully support a claim that every possible enforcement path in a
+   deployment was covered.
+
+   Profiles MUST state which missing predicates may produce
+   CONDITIONALLY_SUPPORTED rather than NOT_SUPPORTED.  They MUST NOT use
+   conditional support as a silent fallback for a predicate that the
+   profile declares mandatory for the requested claim.
+
+7.  Protocol Attachment Points
+
+   A protocol need not carry an audit receipt to preserve the facts
+   needed by an external evidence layer.  When a governance-relevant
+   transition crosses a protocol or administrative boundary, the
+   protocol or its implementation profile SHOULD provide attachment
+   points for:
+
+   *  a stable control-instruction identifier and, where available, a
+      stable delivery-attempt reference and a reference to the upstream
+      decision, action, task, or session;
+
+   *  a digest of the exact governed instruction or declared action
+      projection;
+
+   *  a target identity or a stable Required Target Set / target-
+      resolution reference;
+
+   *  the issuer and intended enforcement-point identities or resolution
+      inputs;
+
+
+
+Abak                      Expires 14 April 2027                [Page 28]
+
+Internet-Draft       Agent Control Delivery Evidence        October 2026
+
+
+   *  an attributable outcome that preserves deny, defer, reject,
+      timeout, unresolved, and indeterminate states;
+
+   *  a way to distinguish transport acceptance from target-bound
+      enforcement-point receipt;
+
+   *  an explicit rule for stale, missing, ambiguous, or inconsistent
+      external references; and
+
+   *  a stable reference through which an external evidence system can
+      bind additional observations without changing the protocol's
+      native message format.
+
+   These attachment points can be realized as native fields, structured
+   errors, acknowledgements, protocol events, or references.  This
+   document does not require that evidence artifacts be transferred
+   inline.
+
+   Where those facts traverse an intermediary, preservation at the
+   originating boundary alone is not sufficient for a claim that the
+   relying party received the same distinction.  A protocol or profile
+   that maps native states through an intermediary SHOULD preserve
+   source attribution and lossless distinguishability; if it cannot, the
+   mapping and resulting uncertainty need to remain visible under
+   Section 5.16.
+
+   Public AgentProto requirements discussion [AGENTPROTO-PRESERVATION]
+   [AGENTPROTO-PRESERVATION-PATH] has drawn the same scope boundary:
+   accountability and audit formats can remain separate while a protocol
+   still preserves stable operation or instruction identity, input
+   binding, source-attributable outcomes, and non-success or non-final
+   distinctions.  This document uses that boundary without claiming that
+   the mailing-list discussion constitutes working-group consensus.
+
+   The distinction is that this document does not ask the protocol to
+   define what an auditor concludes.  It asks protocol transitions not
+   to erase the identifiers, bindings, target-set information, outcomes,
+   and failure semantics that any downstream verifier would need, while
+   also refusing to infer that an origin-side fact necessarily survived
+   to the eventual reader.
+
+8.  Composition with Existing Mechanisms
+
+
+
+
+
+
+
+
+
+Abak                      Expires 14 April 2027                [Page 29]
+
+Internet-Draft       Agent Control Delivery Evidence        October 2026
+
+
+8.1.  Native Verification First
+
+   Each credential, signature, attestation, authorization result,
+   transport acknowledgement, telemetry record, and transparency receipt
+   retains its native semantics and verifier.  A reconciler MUST perform
+   or consume the result of the native verification before treating the
+   artifact as evidence for a control-delivery claim.
+
+   A self-declared algorithm, key identifier, role, observer label, or
+   target-set coverage claim MUST NOT drive trust without an externally
+   configured or otherwise verified binding when the requested claim
+   requires that trust.  Composition MUST NOT strengthen the weakest
+   input beyond its verified meaning.  Where structural processing
+   continues despite a missing trust predicate, the claim-support
+   qualification MUST preserve that limitation.
+
+8.2.  SCITT Composition
+
+   [RFC9943] defines Signed Statements and receipts for registration in
+   a transparency service.  A control observation, target-set binding,
+   or reconciliation report can be carried as, or referenced by, a SCITT
+   Signed Statement.  A SCITT receipt can then provide evidence of the
+   registration properties defined by that service.
+
+   This document does not require a new SCITT receipt format.  Existing
+   Signed Statements and profile-specific payload bindings can carry or
+   reference the facts defined here when their native semantics are
+   preserved.
+
+   SCITT registration does not, by itself, prove that a control was
+   delivered, enforced, correctly observed, or true.  Those meanings
+   still depend on the observation boundary, native verification,
+   content and target binding, target-set scope, and reconciliation
+   rules defined here and in the applicable profile.
+
+8.3.  Telemetry and Trace Composition
+
+   Telemetry systems can carry timestamps, trace identifiers, and
+   correlated events.  A trace identifier can help locate related
+   records, but trace membership alone does not establish instruction-
+   content equality, authority, target-bound receipt, ordering across
+   untrusted clocks, target-set completeness, or independence.  Profiles
+   using telemetry MUST state which required bindings are native,
+   derived, declared-only, or absent.
+
+
+
+
+
+
+
+Abak                      Expires 14 April 2027                [Page 30]
+
+Internet-Draft       Agent Control Delivery Evidence        October 2026
+
+
+9.  Operational Considerations
+
+9.1.  Deadlines, Retries, and Late Evidence
+
+   Deployments SHOULD define acknowledgement and reconciliation
+   deadlines based on the controlled risk and transport characteristics.
+   The deadline source, start event, units, and clock basis need to be
+   explicit.  Deadline elapsed without a matching receipt leaves
+   delivery UNCONFIRMED and adds a deadline diagnostic.  A late receiver
+   observation can change UNCONFIRMED to CONFIRMED in a later versioned
+   reconciliation run, but the earlier result, cutoff, and deadline
+   diagnostic MUST remain available.  A separate timely-delivery claim
+   MAY fail under a frozen profile without establishing that delivery
+   never occurred.
+
+   Retries SHOULD reuse or relate identifiers according to a declared
+   rule.  Reusing one identifier for different instruction content
+   creates SUBSTITUTION, not a retry.  Creating a new identifier for
+   every retry without a common attempt-group reference can hide
+   repeated delivery failures.
+
+9.2.  Durability and Acknowledgement Point
+
+   A profile SHOULD state whether receiver acknowledgement occurs after
+   parsing, verification, durable persistence, admission to an
+   enforcement queue, or completed enforcement.  Implementations MUST
+   NOT use the same acknowledgement value for several of those points
+   unless the profile defines the combined semantics and residual
+   failure window.
+
+9.3.  Multiple Enforcement Paths
+
+   A control can be ineffective even when one enforcement point applies
+   it if an alternate path remains open.  A deployment claiming delivery
+   across multiple required enforcement paths SHOULD bind those paths
+   into a Required Target Set and reconcile each resulting Delivery
+   Obligation separately.
+
+   A deployment claiming complete control mediation SHOULD identify the
+   deployment scope and the evidence by which the Required Target Set is
+   considered to cover all relevant paths.  A set being closed for a
+   reconciliation run does not, by itself, prove that the enumeration is
+   complete.
+
+
+
+
+
+
+
+
+Abak                      Expires 14 April 2027                [Page 31]
+
+Internet-Draft       Agent Control Delivery Evidence        October 2026
+
+
+9.4.  Control Activation and In-Flight Operations
+
+   A profile that reports APPLIED for a freeze, revoke, cancel, or
+   similar control SHOULD define the local effective boundary and the
+   relationship between the control and operations that were already
+   admitted, consumed, dispatched, or in flight when the control took
+   effect.
+
+   Every boundary crossing is a historical fact.  A reconciler MUST NOT
+   retroactively relabel a boundary transition that occurred before
+   control activation, and MUST NOT relabel an operation as blocked
+   merely because a later control was APPLIED.  Only a boundary crossing
+   whose ordering before activation is supported under Section 5.9 is
+   protected from retroactive relabelling.  Asserted timestamps from
+   independent clocks do not establish precedence by themselves;
+   unsupported ordering is omitted or INDETERMINATE.
+
+   Local admission and provider entry are distinct boundaries and are
+   not interchangeable.  If an operation was admitted before control
+   activation but had not yet crossed a later provider-entry or other
+   enforcement boundary, a subsequently applied control MAY still
+   prevent that later transition under the applicable local semantics.
+   The report MUST preserve the earlier admission fact and MUST
+   separately preserve the later refusal or blocked transition.  An
+   operation that was admitted, or that is in flight, is therefore not
+   automatically exempt from a later applicable enforcement boundary:
+   non-retroactivity protects the record of what already happened, not
+   the operation's remaining transitions.
+
+   Where the operation did cross the relevant profile-defined boundary
+   before control activation, its outcome at that boundary remains a
+   separate lifecycle fact.  Missing authenticated outcome evidence for
+   that operation MUST remain unresolved or indeterminate according to
+   the applicable outcome profile.
+
+   Similarly, a later control-effect observation that a subsequent
+   operation was blocked does not prove that an earlier operation
+   produced no external effect or that a prior effect was reversed.  A
+   reversal, compensation, or remedy requires its own evidence and does
+   not rewrite the historical ordering of the original operation.
+
+10.  Security Considerations
+
+   The evidence described here is security-relevant because it can drive
+   escalation, incident response, or claims that an agent was stopped.
+   An attacker can target the instruction, the delivery path, the
+   target-resolution input, the observer, the evidence store, the
+   verifier, or the reconciliation population.
+
+
+
+Abak                      Expires 14 April 2027                [Page 32]
+
+Internet-Draft       Agent Control Delivery Evidence        October 2026
+
+
+10.1.  Substitution, Replay, and Identifier Reuse
+
+   An attacker can reuse an instruction identifier with weaker content,
+   replay an old acknowledgement, correlate a receiver record to the
+   wrong attempt, or bind a valid observation from target A to target B.
+   Stable identifiers, attempt semantics, content digests, freshness
+   rules, target binding, and attempt-group semantics mitigate these
+   attacks.  Digest algorithms and canonicalization rules need
+   downgrade-resistant selection.
+
+10.2.  Observer and Key Compromise
+
+   A valid signature proves control of a signing key over the signed
+   bytes; it does not prove that the observer actually saw the asserted
+   event.  Key-to-observer binding, protected key use, process and
+   storage separation, attestation where appropriate, and independent
+   observation can improve confidence.  None should be overstated as
+   ground truth.
+
+10.3.  Evidence Suppression and Selective Population
+
+   A producer can suppress failed controls, omit a required target, or
+   choose a favorable subset after the fact.  Bounded-population
+   construction before receiver-evidence evaluation, target-set binding,
+   entry-emission rules, append-only or transparency mechanisms, and
+   independent counters can make suppression more detectable.  An open
+   population cannot support a completeness claim.
+
+   A target set can also be made deceptively small while remaining
+   internally closed.  Structural conservation over that set is not
+   evidence that no omitted path exists.  Complete-mediation claims
+   therefore require the separate coverage qualification in R-CD-15.
+
+   Outcome-adaptive exclusion is a population-manipulation attack.
+   Inclusion and exclusion rule versions and their permitted issuer-side
+   or target-resolution inputs need to be frozen before receiver
+   evidence is evaluated.  Excluded candidates and reasons need separate
+   accounting, and rule changes need a new versioned run rather than
+   retroactive recomputation.
+
+10.4.  Availability and Fail-Safe Policy
+
+   An attacker can withhold acknowledgements or evidence to force fail-
+   safe shutdowns, or flood a reconciler with orphan and invalid
+   records.  Implementations need resource limits, authenticated inputs,
+   replay control, rate limiting, and a local policy that balances
+   safety and availability.  The evidence layer MUST preserve the
+   uncertain state even when local policy chooses to continue operation.
+
+
+
+Abak                      Expires 14 April 2027                [Page 33]
+
+Internet-Draft       Agent Control Delivery Evidence        October 2026
+
+
+10.5.  Semantic and Physical-World Gaps
+
+   Matching digests do not prove that two implementations assign the
+   same meaning to a control verb.  An enforcement assertion does not
+   prove a physical-world outcome.  Profiles need versioned control
+   semantics and scoped effect predicates.  High-consequence deployments
+   require domain-specific validation beyond this document.
+
+   An intermediary can also preserve syntax while weakening semantics,
+   for example by mapping several source dispositions to one downstream
+   label or by dropping source attribution.  Such a transformation can
+   make a downstream record look more definite than the upstream fact.
+   Profiles that rely on intermediary-carried evidence need the lossless
+   mapping or explicit uncertainty required by R-CD-16; cryptographic
+   integrity of the transformed record does not restore a distinction
+   that the transformation erased.
+
+11.  Privacy Considerations
+
+   Control evidence can reveal agent identities, user relationships,
+   incident timing, policy decisions, operational topology, target-set
+   membership, and sensitive task state.  Stable identifiers can enable
+   correlation across services and observation windows.
+
+   Implementations SHOULD minimize payloads, use scoped or pseudonymous
+   identifiers where possible, separate identity resolution from routine
+   evidence exchange, apply access controls and retention limits, and
+   support selective disclosure.  Raw prompts, chain-of-thought, model
+   context, personal data, and proprietary policy SHOULD NOT be included
+   by default.
+
+   Publishing a digest instead of content reduces direct disclosure but
+   does not eliminate it.  Digests of low-entropy or enumerable values
+   can be guessed.  Profiles SHOULD use commitments, nonces, or access-
+   controlled references where dictionary attacks are relevant.
+
+   Independent observation and explicit target-set accounting increase
+   corroboration but can also increase data replication and linkability.
+   The independence and coverage requirements are scoped to claims that
+   need them; they do not require disclosure of every event or internal
+   topology to every party.
+
+12.  Implementation Status
+
+   This section is to be removed before publishing as an RFC.
+
+
+
+
+
+
+Abak                      Expires 14 April 2027                [Page 34]
+
+Internet-Draft       Agent Control Delivery Evidence        October 2026
+
+
+   This section records implementation and evaluation experience
+   available as of 11 October 2026 and is intended to be removed before
+   publication as an RFC.  The entries below are deliberately scoped to
+   the requirement or failure mode they exercise.  Adjacent
+   interoperability results that do not implement this document are not
+   promoted into implementation claims.
+
+   The AI Runtime Evidence Protocol (AIREP) [AIREP-REPO] is an
+   experimental, author-side source for several distinctions in this
+   document.  Its v0.1 control-delivery profile records issuer,
+   enforcement-point, and witness observations and includes a total
+   reconciler that does not treat issuer-side emission alone as
+   receiver-side delivery.  This is useful implementation input, but
+   AIREP is not the conformance authority for this document and its
+   broader interoperability evidence is not used here as proof of this
+   draft.  In particular, the public AIREP external-evidence record
+   [AIREP-EXTERNAL-EVIDENCE] contains a v0.1.2 external-producer result
+   and a separate v0.2 external consumer/verifier result; because they
+   target different frozen versions, those results are explicitly non-
+   additive and are not a producer-to-consumer interoperability result
+   for any one AIREP version.
+
+   The historical author-side runtime probe pinned in
+   [PHIONYX-CONTROL-DELIVERY] records issuer-side and enforcement-point
+   observations on opposite filesystem trust sides and records both an
+   instruction identifier and instruction hash.  At that pinned
+   revision, however, delivery_audit() correlates an acknowledgement by
+   instruction identifier alone; its tests cover matching normal records
+   but do not reject a different-hash acknowledgement for the same
+   identifier.  The pin is therefore not evidence of ID-plus-hash audit
+   correlation.  The enforcement-side record also declares that it is
+   writable by the controlled system and is corroboration, not proof.  A
+   later local, owner-reviewed OD-12 correction correlates
+   acknowledgements by both instruction identifier and hash, validates
+   their phase and physical source, and preserves an independent issuer
+   identity-integrity finding.  That correction is not represented by
+   the historical pin and has no upstream commit identifier assigned
+   here; 24 targeted and 95 MCP test passes are author-side reported
+   results.  PCD-02 and PCD-03 remain separate open audit-hardening
+   limits.  Neither snapshot establishes independent implementation,
+   complete mediation, or observed control effect.
+
+
+
+
+
+
+
+
+
+
+Abak                      Expires 14 April 2027                [Page 35]
+
+Internet-Draft       Agent Control Delivery Evidence        October 2026
+
+
+   The historical standalone Agent Control Delivery Evidence
+   Reconciliation (ACDER) probe [ACDER-REF] implements an earlier
+   instruction-target obligation model with seven fixtures.  It is
+   retained as a pinned author-side research artifact.  It does not
+   implement the full claim-support and intermediary semantic-
+   preservation model in this revision, is not on current AIREP main,
+   and is not an independent implementation of this document.
+
+   A proposed format-neutral fixture contributed by Iman Schrock of
+   EMILIA Protocol on the SCITT mailing list [SCHROCK-FIXTURE-MSG]
+   combines target multiplicity with a control-activation race.  Its
+   fixture identifier is freeze-after-provider-entry-with-multiple-
+   required-targets and its SHA-256 is
+   2d8faa1b64b8a73fd0bf81b21889bbf726cbfb324af099b700499627af84203a.  If
+   that fixture is used unchanged, its identifier and digest are
+   preserved.  An adapted derivative receives a new fixture identifier
+   and records the source fixture identifier and digest as provenance
+   [SCHROCK-FIXTURE-PROVENANCE].  The contributed fixture is test input,
+   not an implementation of this document; its historical related-work
+   pin is not silently rewritten when current related-work references
+   advance.
+
+   Cross-domain review and a pinned population probe against Cedulon
+   [DOGRU-POPULATION-PROBE] informed the bounded-population and claim-
+   qualification rules.  The probe exposed a reporting-scope defect in
+   the adjacent implementation rather than a defect in this document.
+   That probe remains pinned to the artifact and package versions it was
+   executed against.  Later reviewer-reported measurements against
+   Cedulon 0.8.0 and 0.12.0 were independently rerun by the author on 4
+   September 2026 from separate clean directories against the published
+   package sets, using the reviewer's pinned case driver at Cedulon
+   commit 52cf577 [DOGRU-REVIEW-CASES].  The rerun reproduced the scoped
+   behaviors recorded in the public work area.  This is an author-side
+   reproduction of an adjacent-domain measurement, not an implementation
+   of this document, and it does not repin or replace the historical 1
+   September probe.  Current Cedulon Core [I-D.dogru-cedulon-core] binds
+   returned audit results to an account, rail, and window and conditions
+   stronger claims on its declared scope and trust predicates.  Cedulon
+   remains adjacent-domain evaluation evidence, not an implementation of
+   this document.
+
+   The AIREP artifacts, the phionyx-research runtime probe, the
+   historical ACDER probe, the contributed EMILIA fixture, and the
+   Cedulon probe retain distinct provenance and claim boundaries.  They
+   are not merged into a self-validating conformance suite for this
+   document.
+
+
+
+
+
+Abak                      Expires 14 April 2027                [Page 36]
+
+Internet-Draft       Agent Control Delivery Evidence        October 2026
+
+
+   Konrad Gruszka's independently developed verifier-side implementation
+   [PROOFBUNDLE-ACDE01] at pinned proofbundle commit
+   19c3b0b909639d2b6e4cfff04d9434c878be3616 was reproduced against the
+   published -01 baseline and informed the bounded ambiguity review for
+   this candidate.  It is supporting implementation evidence, not
+   normative authority, Working Group consensus, joint implementation,
+   format adoption, or independent certification of this candidate.  The
+   author-side candidate regression suite uses independently authored
+   representations and does not copy that implementation's vectors or
+   expected outputs.
+
+   Additional independent implementations remain useful, particularly
+   for per-target obligation reconciliation, claim-support
+   qualification, and semantic preservation through intermediaries.
+
+13.  Relationship to Adjacent Work
+
+   The agent communication use-case and requirements work
+   [I-D.agentic-ai-usecases-requirements] treats accountability and
+   auditing as separate work.  This document is compatible with that
+   boundary: it defines only the minimum facts and distinctions that
+   need to survive protocol transitions so an external evidence layer
+   can later bind them.  AgentProto mailing-list discussion on a minimal
+   preservation requirement [AGENTPROTO-PRESERVATION] and its path-
+   preservation follow-up [AGENTPROTO-PRESERVATION-PATH] sharpen that
+   distinction without creating a receipt format or audit regime.
+
+   [I-D.bu-agentproto-security-principal-binding] separates claims,
+   carriers, verifiers, bindings, failure behavior, and accepted results
+   for agent protocols.  The requirements here specialize that
+   discipline for the control-delivery lifecycle and its boundary sides.
+
+   Signed decision records [I-D.bradleyb-audit-decision-records]
+   preserve authorization decisions, including denials and non-occurring
+   actions, and distinguish correspondence from precedence.  A decision
+   record can be an upstream reference for this document.  It does not
+   by itself establish that a resulting control instruction reached an
+   enforcement point.
+
+   The Action Evidence Boundary [I-D.schrock-action-evidence-boundary]
+   defines an executor-side processing model for consequential agent
+   effects, including action correlation, local authorization, atomic
+   consumption, invocation, effect outcomes, and reconciliation.  This
+   document addresses a different direction and object: a governance
+   control such as stop or revoke moving toward the component that
+   constrains the runtime.  The "control effect" here is the governed
+   runtime state, not the consequential business or physical effect of
+   the protected action.
+
+
+
+Abak                      Expires 14 April 2027                [Page 37]
+
+Internet-Draft       Agent Control Delivery Evidence        October 2026
+
+
+   Portable Revocation Statements [I-D.schrock-ep-revocation-statement]
+   bind revocation to an exact authorization target and effective time
+   but explicitly do not prove that every relying party received the
+   revocation.  That distribution boundary composes directly with this
+   document: a valid revocation statement can be an upstream control
+   fact, while receiver-side delivery and enforcement remain separate
+   evidence questions.  This document does not redefine the revocation
+   statement format or its atomic execution semantics.
+
+   Outcome Binding [I-D.schrock-ep-outcome-binding] separates evidence
+   availability from comparison and uses pinned source roles and
+   observation windows for post-execution effects.  A control-effect
+   observation in this document can compose with such outcome evidence
+   where the predicates align.  This document does not redefine
+   consequential-action outcome states, source quorum, or physical-
+   effect reconciliation.
+
+   Contestability Bindings [I-D.pinto-agent-authz-contestability] define
+   a narrower effect path for an authenticated contestation filing.
+   That work separately represents the declared effect policy, executor
+   acceptance, authenticated trigger, ordering, and claimed application.
+   The shared discipline is to avoid collapsing separately evidenced
+   stages into a stronger end-to-end fact.  This document therefore
+   treats that effect-state model as a composition boundary rather than
+   restating its states.
+
+   Execution-finality work [I-D.das-agentic-execution-finality]
+   distinguishes model tool selection from authorized execution at a
+   dispatch-time gate.  A stop or revoke control can target such a gate.
+   The present document asks how delivery and enforcement of that
+   control are evidenced, rather than how the underlying tool action is
+   authorized.
+
+   The SCITT AI-agent receipt profile [I-D.noa-scitt-ai-agent-receipt]
+   defines how an action receipt can be registered using SCITT.  This
+   document is format-neutral and can supply control-delivery statement
+   semantics for a SCITT-based profile without changing SCITT's
+   registration semantics.
+
+   Historical Cedulon revision -08 [I-D.dogru-cedulon-08-HISTORICAL]
+   reconciles a spend that has already occurred against signed receipts
+   and an authenticated rail extract.  Its object moves in the opposite
+   direction from a control instruction moving toward an enforcement
+   point, but the works share bounded-population, total-accounting, and
+   qualified-claim disciplines.  That historical revision explicitly
+   scopes returned audit results to an account, rail, and window and
+   prevents those results from being read as statements about paths the
+   reconciliation did not examine.  The current successor for the cited
+
+
+
+Abak                      Expires 14 April 2027                [Page 38]
+
+Internet-Draft       Agent Control Delivery Evidence        October 2026
+
+
+   spend-receipt and rail-extract reconciliation claim is Cedulon Core
+   [I-D.dogru-cedulon-core].  The Checkpoint and Threats successors
+   partition other concerns and are not cited for this claim.  This
+   document does not restate Cedulon's payment, settlement, or rail-
+   extract semantics and does not describe Cedulon as an implementation
+   of this document.
+
+   The OWASP Agentic AI Threats and Mitigations project [OWASP-APTS]
+   includes a human-oversight requirement that an unacknowledged kill
+   instruction not be treated as delivered.  The requirements and
+   negative-observation rules in this document generalize that
+   implementation concern into a protocol-independent evidence contract.
+
+14.  Changes Since -01
+
+   This section is to be removed before publishing as an RFC.
+
+   This candidate applies the accepted owner model decisions produced by
+   the independent-implementation assessment of the published -01
+   baseline.  The principal changes are:
+
+   *  fixed the base Delivery Obligation as instruction times required
+      target and made attempts lossless evidence subaccounting;
+
+   *  added target_resolution_unclosed to instruction conservation
+      without creating synthetic obligations;
+
+   *  made deadline elapsed leave delivery UNCONFIRMED while preserving
+      a separate timely-delivery claim;
+
+   *  froze versioned exclusion rules and permitted inputs before
+      receiver evidence, prohibited outcome-adaptive exclusion, and
+      required separate exclusion accounting;
+
+   *  separated valid unresolved evidence, structural invalidity,
+      verified conflict, and substitution;
+
+   *  defined missing issuer-side observation as NOT_ESTABLISHED
+      dispatch with default INDETERMINATE only when no stronger verified
+      condition controls;
+
+   *  limited pre-boundary emission failures to their verified attempt,
+      target, and boundary scope and retained unscoped failures as
+      instruction diagnostics;
+
+   *  widened SUBSTITUTION to stable-identity reuse with different
+      governed content, including issuer-issuer reuse within one
+      uniqueness scope;
+
+
+
+Abak                      Expires 14 April 2027                [Page 39]
+
+Internet-Draft       Agent Control Delivery Evidence        October 2026
+
+
+   *  defined zero-obligation parent confirmation as NOT_APPLICABLE or
+      absent, independently from a qualified structural PASS;
+
+   *  made receiver-record correlation distinct from CONFIRMED and
+      required mutually exclusive primary receiver-accounting classes;
+
+   *  explicitly separated enforcement and control-effect namespaces,
+      named the default structural claim, and cross-referenced the
+      ordering basis for activation races;
+
+   *  required profiles to freeze and publish their positive structural
+      FAIL conditions before evidence evaluation; and
+
+   *  updated the thirty minimum conformance cases and added an
+      independently authored author-side regression suite for RT-01
+      through RT-14 and named subcases;
+
+   *  clarified that missing required issuer evidence prevents
+      structural PASS even when valid receiver facts are preserved,
+      formally defined the candidate, exclusion, Required Target Set,
+      and obligation relationship, and distinguished an exclusion-
+      induced zero-obligation instruction from a terminal empty target
+      resolution;
+
+   *  made EXPLICIT_FAILURE and SUBSTITUTION explicit alongside every
+      other non-success obligation disposition that prevents PASS,
+      without deriving FAIL unless a frozen positive profile condition
+      applies;
+
+   *  corrected the historical Phionyx implementation scope, added a
+      pinned informative reference for the independent -01 verifier, and
+      grouped normative and informative references under one References
+      section;
+
+   *  updated five active related-work references after checking that
+      their cited claims remain supported, preserved the historical
+      Cedulon -08 citation, and cited Cedulon Core for the current rail-
+      extract claim; and
+
+   *  used stream-neutral candidate metadata and ASCII set-builder
+      notation for submission-tool compatibility.
+
+   These changes retain the document's format-neutral scope and do not
+   define a new wire format, receipt format, authorization system, or
+   implementation dependency.
+
+
+
+
+
+
+Abak                      Expires 14 April 2027                [Page 40]
+
+Internet-Draft       Agent Control Delivery Evidence        October 2026
+
+
+15.  IANA Considerations
+
+   This document has no IANA actions.
+
+16.  Acknowledgements
+
+   The author thanks participants in the agent2agent, agentproto, and
+   SCITT communities whose discussions helped sharpen the distinction
+   among decision, delivery, enforcement, and effect.
+
+   The author thanks Iman Schrock of EMILIA Protocol for contributing
+   the proposed freeze-after-provider-entry-with-multiple-required-
+   targets fixture, requesting that the fixture ID and EMILIA Protocol
+   attribution be preserved, and reviewing target multiplicity, the
+   required-target and freeze-race fixture, in-flight operation
+   semantics, and fixture provenance.
+
+   The author thanks Emek Can Dogru for public review of bounded-
+   population accounting, the separation of the structural
+   reconciliation result from claim support, diagnostic reduction, and
+   the empty required-target accounting observation.  Both named
+   reviewers gave permission to be named here.
+
+   The author also thanks SCITT participants who provided public review
+   on bounded populations, qualified claims, adjacent-work composition,
+   SCITT carriage, and implementation-reporting boundaries, as well as
+   AgentProto participants whose public discussion sharpened the
+   protocol-preservation and intermediary-path non-claims.  Specific
+   additional names can be added with permission in a later revision.
+   Being named here records a review contribution only; these
+   acknowledgements do not imply endorsement of this document by any
+   named individual, organization, or working group.
+
+17.  References
+
+17.1.  Normative References
+
+   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", BCP 14, RFC 2119,
+              DOI 10.17487/RFC2119, March 1997,
+              <https://www.rfc-editor.org/info/rfc2119>.
+
+   [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
+              2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
+              May 2017, <https://www.rfc-editor.org/info/rfc8174>.
+
+17.2.  Informative References
+
+
+
+
+Abak                      Expires 14 April 2027                [Page 41]
+
+Internet-Draft       Agent Control Delivery Evidence        October 2026
+
+
+   [ACDER-REF]
+              Abak, A. T., "Agent Control Delivery Evidence
+              Reconciliation (ACDER): Experimental Reference", Commit
+              449f4fb6a07fd54b45a6e68208dece109446ef93, 31 August 2026,
+              <https://github.com/halvrenofviryel/ai-runtime-evidence-
+              protocol/tree/449f4fb6a07fd54b45a6e68208dece109446ef93/
+              research/nist-acder>.
+
+   [AGENTPROTO-PRESERVATION]
+              Abak, A. T., "AgentProto discussion: protocol-level
+              information preservation at governance boundaries",
+              AgentProto mailing-list message and quoted review context,
+              30 August 2026,
+              <https://mailarchive.ietf.org/arch/msg/agentproto/
+              A99A4-uKcOG6FwbDgp3fhK3wfUk/>.
+
+   [AGENTPROTO-PRESERVATION-PATH]
+              Abak, A. T., "AgentProto discussion: preservation of
+              governance-relevant distinctions through intermediaries",
+              AgentProto mailing-list follow-up incorporating review
+              from Nancy Sahu and Sumit Ahuja, 31 August 2026,
+              <https://mailarchive.ietf.org/arch/msg/agentproto/Vum-
+              DPI6xfAnHYmv747qqoSHryU/>.
+
+   [AIREP-EXTERNAL-EVIDENCE]
+              Abak, A. T., "AIREP External Evidence: Frozen Producer and
+              Consumer/Verifier Measurements", Repository snapshot at
+              commit a3973ce3b6ad984635867a2bb52d83c472e5c0cb, 2
+              September 2026, <https://github.com/halvrenofviryel/ai-
+              runtime-evidence-
+              protocol/blob/a3973ce3b6ad984635867a2bb52d83c472e5c0cb/
+              EXTERNAL_EVIDENCE.md>.
+
+   [AIREP-REPO]
+              Abak, A. T., "AI Runtime Evidence Protocol (AIREP):
+              Repository Snapshot", Commit
+              a3973ce3b6ad984635867a2bb52d83c472e5c0cb, 2 September
+              2026, <https://github.com/halvrenofviryel/ai-runtime-
+              evidence-protocol/tree/
+              a3973ce3b6ad984635867a2bb52d83c472e5c0cb>.
+
+   [DOGRU-POPULATION-PROBE]
+              Dogru, E. C., "Cedulon population-conservation probe
+              against draft-abak-00", Commit 0a3fa04; SHA-256
+              031f84fda2054b1427a510baa45f880d379ea60dced408a4a74028da12b1fceb,
+              1 September 2026, <https://github.com/dogrucanemek-
+              alt/cedulon/blob/0a3fa04/interop/abak-00/population-
+              probe.mjs>.
+
+
+
+Abak                      Expires 14 April 2027                [Page 42]
+
+Internet-Draft       Agent Control Delivery Evidence        October 2026
+
+
+   [DOGRU-REVIEW-CASES]
+              Dogru, E. C., "Cedulon review case driver used for the
+              draft-abak-01 focused review", Reviewer-authored case
+              driver exercising published Cedulon packages; commit
+              52cf577; observed SHA-256
+              f7f1218abd1535f104b0010b9127c565b3afab0e72242583ebc459000937bc8e.
+              Not test code for this document., 3 September 2026,
+              <https://github.com/dogrucanemek-
+              alt/cedulon/blob/52cf577/interop/abak-00/cases-
+              0.12.0.mjs>.
+
+   [I-D.agentic-ai-usecases-requirements]
+              Reddy.K, T., Sarker, Z., and K. Yao, "Agentic AI Use Cases
+              and Requirements", Work in Progress, Internet-Draft,
+              draft-agentic-ai-usecases-requirements-03, 9 October 2026,
+              <https://datatracker.ietf.org/doc/html/draft-agentic-ai-
+              usecases-requirements-03>.
+
+   [I-D.bradleyb-audit-decision-records]
+              B, B., "Signed Decision Records for Agent Authorization:
+              Disclosures, Entry Emission, and Ordering Evidence", Work
+              in Progress, Internet-Draft, draft-bradleyb-audit-
+              decision-records-00, 13 August 2026,
+              <https://datatracker.ietf.org/doc/draft-bradleyb-audit-
+              decision-records/>.
+
+   [I-D.bu-agentproto-security-principal-binding]
+              Bu, S., "Security Principal and Verifier Binding for Agent
+              Communication Protocols", Work in Progress, Internet-
+              Draft, draft-bu-agentproto-security-principal-binding-07,
+              15 September 2026, <https://datatracker.ietf.org/doc/html/
+              draft-bu-agentproto-security-principal-binding-07>.
+
+   [I-D.das-agentic-execution-finality]
+              Das, S., "Tool Selection Is Not Execution: Finality for
+              Agentic Tool Dispatch in High-Risk AI Systems", Work in
+              Progress, Internet-Draft, draft-das-agentic-execution-
+              finality-02, 10 September 2026,
+              <https://datatracker.ietf.org/doc/html/draft-das-agentic-
+              execution-finality-02>.
+
+   [I-D.dogru-cedulon-08-HISTORICAL]
+              Dogru, E. C., "Cedulon: An Audit Layer for Agent-to-Agent
+              Commerce", Historical revision; the draft was subsequently
+              replaced and archived, Work in Progress, Internet-Draft,
+              draft-dogru-cedulon-08, 2 September 2026,
+              <https://datatracker.ietf.org/doc/html/draft-dogru-
+              cedulon-08>.
+
+
+
+Abak                      Expires 14 April 2027                [Page 43]
+
+Internet-Draft       Agent Control Delivery Evidence        October 2026
+
+
+   [I-D.dogru-cedulon-core]
+              Dogru, E. C., "Spend Receipts and Payment Rail
+              Reconciliation for AI Agents", Work in Progress, Internet-
+              Draft, draft-dogru-cedulon-core-04, 7 October 2026,
+              <https://datatracker.ietf.org/doc/html/draft-dogru-
+              cedulon-core-04>.
+
+   [I-D.noa-scitt-ai-agent-receipt]
+              Toraman, T., "A SCITT Profile for AI-Agent Action
+              Receipts", Work in Progress, Internet-Draft, draft-noa-
+              scitt-ai-agent-receipt-01, 14 August 2026,
+              <https://datatracker.ietf.org/doc/draft-noa-scitt-ai-
+              agent-receipt/>.
+
+   [I-D.pinto-agent-authz-contestability]
+              Pinto, T., "Contestability Bindings for Authorized Agent
+              Actions", Work in Progress, Internet-Draft, draft-pinto-
+              agent-authz-contestability-01, 10 September 2026,
+              <https://datatracker.ietf.org/doc/html/draft-pinto-agent-
+              authz-contestability-01>.
+
+   [I-D.schrock-action-evidence-boundary]
+              Schrock, I., "The Action Evidence Boundary for
+              Consequential Agent Effects", Work in Progress, Internet-
+              Draft, draft-schrock-action-evidence-boundary-07, 25
+              September 2026, <https://datatracker.ietf.org/doc/html/
+              draft-schrock-action-evidence-boundary-07>.
+
+   [I-D.schrock-ep-outcome-binding]
+              Schrock, I., "Outcome Binding for Authorized Actions and
+              Independently Observed Effects", Work in Progress,
+              Internet-Draft, draft-schrock-ep-outcome-binding-00, 28
+              July 2026, <https://datatracker.ietf.org/doc/draft-
+              schrock-ep-outcome-binding/>.
+
+   [I-D.schrock-ep-revocation-statement]
+              Schrock, I., "Portable Revocation Statements for Action-
+              Bound Authorization Artifacts", Work in Progress,
+              Internet-Draft, draft-schrock-ep-revocation-statement-01,
+              27 July 2026, <https://datatracker.ietf.org/doc/draft-
+              schrock-ep-revocation-statement/>.
+
+
+
+
+
+
+
+
+
+
+Abak                      Expires 14 April 2027                [Page 44]
+
+Internet-Draft       Agent Control Delivery Evidence        October 2026
+
+
+   [OWASP-APTS]
+              OWASP Foundation, "Agentic AI - Threats and Mitigations:
+              Human Oversight", Repository snapshot at commit
+              2b210945361bac207f37a21440d0f34c05c07ad9, 2026,
+              <https://github.com/OWASP/APTS/
+              blob/2b210945361bac207f37a21440d0f34c05c07ad9/
+              standard/3_Human_Oversight/README.md>.
+
+   [PHIONYX-CONTROL-DELIVERY]
+              Abak, A. T., "Phionyx author-side control-delivery runtime
+              probe and tests", Repository snapshot at commit
+              706e40748be18e988d4efd1e307787e009161c6a;
+              control_override.py and test_control_delivery_c1.py, 1
+              September 2026, <https://github.com/halvrenofviryel/
+              phionyx-
+              research/tree/706e40748be18e988d4efd1e307787e009161c6a/
+              tools/claude_code_mcp>.
+
+   [PROOFBUNDLE-ACDE01]
+              Gruszka, K., "Independent verifier-side implementation for
+              draft-abak-agent-control-delivery-evidence-01",
+              proofbundle repository snapshot at commit
+              19c3b0b909639d2b6e4cfff04d9434c878be3616; implementation,
+              requirements map, vectors, and run record for the
+              published -01 baseline, 11 October 2026,
+              <https://github.com/b7n0de/proofbundle/
+              tree/19c3b0b909639d2b6e4cfff04d9434c878be3616/interop/
+              acde_01>.
+
+   [RFC9943]  Birkholz, H., Delignat-Lavaud, A., Fournet, C., Deshpande,
+              Y., and S. Lasker, "An Architecture for Trustworthy and
+              Transparent Digital Supply Chains", RFC 9943,
+              DOI 10.17487/RFC9943, June 2026,
+              <https://www.rfc-editor.org/info/rfc9943>.
+
+   [SCHROCK-FIXTURE-MSG]
+              Schrock, I., "SCITT review: proposed freeze-race and
+              multi-target control-delivery fixture", SCITT mailing-list
+              message; attached fixture SHA-256
+              2d8faa1b64b8a73fd0bf81b21889bbf726cbfb324af099b700499627af84203a,
+              31 August 2026,
+              <https://mailarchive.ietf.org/arch/msg/scitt/
+              YcoTPgdpSl2RNWvcsB1p3c4VpAM/>.
+
+
+
+
+
+
+
+
+Abak                      Expires 14 April 2027                [Page 45]
+
+Internet-Draft       Agent Control Delivery Evidence        October 2026
+
+
+   [SCHROCK-FIXTURE-PROVENANCE]
+              Schrock, I., "SCITT fixture provenance clarification for
+              control-delivery test input", SCITT mailing-list message,
+              31 August 2026, <https://mailarchive.ietf.org/arch/msg/
+              scitt/5J5i8Y6w3WkzewIzH23oMPpb9cI/>.
+
+Illustrative Multi-Target Reconciliation Record
+
+   The following example is deliberately not a wire format.  Field names
+   are descriptive placeholders.  Equivalent facts can be carried in
+   native protocol messages and external evidence artifacts.
+
+   {
+     "instruction_id": "ctrl-7f3a",
+     "instruction_digest": "sha-256:<digest>",
+     "required_target_set": {
+       "set_id": "targets:runtime-egress:v1",
+       "structural_closure": "closed",
+       "coverage_qualification": "DECLARED_ONLY",
+       "members": ["EP-A", "EP-B"]
+     },
+     "target_results": [
+       {
+         "target_id": "EP-A",
+         "delivery": "CONFIRMED",
+         "enforcement": "APPLIED",
+         "control_effect": "UNKNOWN"
+       },
+       {
+         "target_id": "EP-B",
+         "delivery": "UNCONFIRMED",
+         "enforcement": "UNKNOWN",
+         "control_effect": "UNKNOWN"
+       }
+     ],
+     "parent_instruction": {
+       "fully_confirmed_within_target_set": false
+     },
+     "structural_result": "INCONCLUSIVE",
+     "claim": {
+       "scope": "complete delivery to targets:runtime-egress:v1",
+       "support": "NOT_SUPPORTED"
+     }
+   }
+
+
+
+
+
+
+
+Abak                      Expires 14 April 2027                [Page 46]
+
+Internet-Draft       Agent Control Delivery Evidence        October 2026
+
+
+   The example does not support a fully confirmed parent delivery
+   because EP-B is UNCONFIRMED.  The DECLARED_ONLY coverage
+   qualification is a second, independent limitation: even if EP-B later
+   became CONFIRMED, the named set alone would not prove that every
+   possible enforcement path in the deployment was enumerated.
+
+Contributed Freeze-Race Fixture Summary
+
+   This appendix summarizes the proposed format-neutral fixture
+   contributed by Iman Schrock of EMILIA Protocol in
+   [SCHROCK-FIXTURE-MSG].  The fixture identifier and SHA-256 are
+   preserved for provenance.
+
+   fixture_id
+      freeze-after-provider-entry-with-multiple-required-targets
+
+   contributor
+      Iman Schrock, EMILIA Protocol
+
+   SHA-256
+      2d8faa1b64b8a73fd0bf81b21889bbf726cbfb324af099b700499627af84203a
+
+   required targets
+      EP-A at checkout/provider-entry and EP-B at alternate-dispatch/
+      provider-entry
+
+   population note
+      The set is closed for the fixture, while enumeration completeness
+      is explicitly not independently proven.
+
+   expected EP-A result
+      delivery CONFIRMED; enforcement APPLIED; scoped control effect
+      observed for a post-freeze operation.
+
+   expected EP-B result
+      delivery UNCONFIRMED; enforcement UNKNOWN; control effect UNKNOWN.
+
+   in-flight operation
+      O1 crossed provider entry before the freeze; it remains consumed
+      or in flight with external effect UNKNOWN pending authenticated
+      reconciliation.
+
+   post-freeze operation
+      O2 is refused by the freeze before provider entry at EP-A.
+
+   parent claim
+      Not fully confirmed; complete-delivery and PASS claims are not
+      permitted for the two-target instruction in the fixture.
+
+
+
+Abak                      Expires 14 April 2027                [Page 47]
+
+Internet-Draft       Agent Control Delivery Evidence        October 2026
+
+
+   The fixture also requires the following non-claims: EP-A receipt does
+   not establish EP-B receipt; EP-A APPLIED does not establish complete
+   control mediation; the scoped O2 observation does not establish that
+   every dispatch path was closed; and applying the freeze after O1
+   crossed provider entry does not retroactively relabel O1 as blocked
+   or prove that O1 produced no external effect.
+
+   Provenance handling follows the contributor's clarification
+   [SCHROCK-FIXTURE-PROVENANCE].  An unchanged use keeps the original
+   fixture identifier and SHA-256.  An adapted derivative uses a new
+   fixture identifier and records the original fixture identifier and
+   digest as source provenance, with EMILIA Protocol attribution
+   retained.  The original fixture remains pinned to the related-work
+   revisions it named when contributed; updating related-work citations
+   in this document does not silently rewrite the fixture.
+
+Minimum Conformance Cases
+
+   A profile claiming conformance to the reconciliation requirements
+   SHOULD publish machine-readable test vectors for at least:
+
+   1.   one instruction-target base obligation with a rejected attempt
+        followed by a confirmed retry: one CONFIRMED obligation, with
+        both attempt records and the earlier failure diagnostic
+        retained;
+
+   2.   an expected obligation with issuer evidence only at cutoff:
+        UNCONFIRMED;
+
+   3.   issuer-receiver content mismatch and issuer-issuer stable-ID
+        reuse with different governed content inside one uniqueness
+        scope: SUBSTITUTION with all conflicting records retained;
+
+   4.   a receiver record for which no expected obligation identity can
+        be correlated: ORPHAN record accounting;
+
+   5.   a positive pre-boundary rejection bound to one attempt, target,
+        and issuer boundary: scoped EXPLICIT_FAILURE; without those
+        bindings it remains an instruction diagnostic and is not fanned
+        out;
+
+   6.   a missing required issuer observation for an independently
+        established instruction with a closed target set and a valid
+        receiver observation: retain the receiver fact, report dispatch
+        NOT_ESTABLISHED and the affected obligation INDETERMINATE absent
+        a stronger verified non-success condition, and prevent
+        structural PASS; a malformed issuer record remains INVALID; an
+        unclosed target resolution follows case 20;
+
+
+
+Abak                      Expires 14 April 2027                [Page 48]
+
+Internet-Draft       Agent Control Delivery Evidence        October 2026
+
+
+   7.   a malformed receiver record whose correlatable identity is
+        retained diagnostically but whose record occupies exactly one
+        primary invalid receiver-accounting class;
+
+   8.   duplicate receiver records: each input occupies exactly one
+        frozen primary receiver class, correlation remains visible, and
+        no record is double counted;
+
+   9.   otherwise applicable verified observations with irreconcilable
+        claims: CONFLICT with all positive evidence retained;
+
+   10.  a deadline-elapsed negative observation with no receipt:
+        delivery remains UNCONFIRMED with a deadline diagnostic; a
+        separate frozen timely-delivery claim may fail;
+
+   11.  case 10 followed by a late matching receipt: a later CONFIRMED
+        result while the earlier cutoff, UNCONFIRMED result, and
+        deadline diagnostic remain preserved;
+
+   12.  delivery CONFIRMED with enforcement UNKNOWN;
+
+   13.  delivery CONFIRMED, enforcement NO_EFFECT, and control-effect
+        UNKNOWN; in a companion case control-effect NO_EFFECT is
+        accepted only with an explicit predicate, observation window,
+        and sufficient evidence;
+
+   14.  a self-declared observer role without verified binding: no
+        independence claim and no silent fully supported attribution;
+
+   15.  valid unresolved, ambiguous, or insufficient-trust reference:
+        INDETERMINATE; malformed or missing-required-binding record:
+        INVALID; irreconcilable verified records: CONFLICT; age alone is
+        not invalidity;
+
+   16.  a valid frozen issuer-side exclusion with separate
+        candidate/reason/version/count accounting, including C_i with
+        two resolved candidates and E_i equal to C_i:
+        verify |C_i|=2, |E_i|=2, |T_i|=0, and zero base obligations;
+        account that instruction as exclusion-induced zero-obligation,
+        not as terminal-empty resolution, create no synthetic
+        obligation, and prevent PASS unless the frozen profile expressly
+        permits the fully accounted narrow case; an outcome-adaptive
+        exclusion and an unverifiable rule version each prevent PASS;
+        changing the rule requires a new versioned run; FAIL occurs only
+        under a predeclared positive condition;
+
+
+
+
+
+
+Abak                      Expires 14 April 2027                [Page 49]
+
+Internet-Draft       Agent Control Delivery Evidence        October 2026
+
+
+   17.  one instruction with two required targets, EP-A CONFIRMED and
+        EP-B UNCONFIRMED: one CONFIRMED plus one UNCONFIRMED obligation,
+        parent not fully confirmed, and no complete-delivery PASS;
+
+   18.  a receiver observation bound to EP-A presented as evidence for
+        EP-B: EP-B is not CONFIRMED;
+
+   19.  two required targets both CONFIRMED while target-set coverage is
+        DECLARED_ONLY: scoped structural completion without
+        FULLY_SUPPORTED complete mediation;
+
+   20.  an open or unresolved Required Target Set: instruction counted
+        in target_resolution_unclosed, no synthetic obligation, and no
+        PASS for the affected scope;
+
+   21.  a structurally passing population with a profile-permitted
+        missing external trust predicate: structural result preserved
+        while the stronger claim is CONDITIONALLY_SUPPORTED and the
+        missing predicate is named;
+
+   22.  two profiles frozen before evaluation publish different positive
+        FAIL conditions: each mapping remains reviewable and immutable;
+        EXPLICIT_FAILURE and SUBSTITUTION each prevent PASS, but neither
+        produces FAIL unless the applicable frozen positive condition is
+        established; missing evidence alone never produces FAIL;
+
+   23.  the same activation and crossing events under trusted causal
+        order and under asserted timestamps from independent clocks:
+        only supported ordering permits a before/after classification;
+        otherwise the relation is INDETERMINATE;
+
+   24.  a target set closed for the fixture but without independently
+        verified enumeration completeness: structural accounting
+        proceeds while complete-mediation support remains qualified;
+
+   25.  a source emits DEFER but an intermediary maps it to generic
+        FAILURE without a lossless mapping: preservation remains
+        qualified or INDETERMINATE;
+
+   26.  a stable instruction identifier survives an intermediary while
+        governed content changes: identifier continuity alone does not
+        satisfy content binding and produces SUBSTITUTION rather than
+        CONFIRMED;
+
+
+
+
+
+
+
+
+Abak                      Expires 14 April 2027                [Page 50]
+
+Internet-Draft       Agent Control Delivery Evidence        October 2026
+
+
+   27.  a valid terminal empty Required Target Set with no resolved
+        target candidates: zero obligations, parent confirmation
+        NOT_APPLICABLE or absent, the instruction and empty-set rule
+        reported, and only a separately qualified profile-permitted
+        structural PASS; this is distinct from case 16's exclusion-
+        induced zero-obligation instruction;
+
+   28.  a structural aggregate result exposed without an explicit
+        stronger claim request: the default structural claim scope and
+        claim-support qualification accompany PASS, FAIL, and
+        INCONCLUSIVE in the same result context;
+
+   29.  several attempts, observations, or diagnostics reduced to one
+        primary disposition: deterministic reduction, exactly one base
+        obligation disposition, and every non-selected input retained or
+        linked; and
+
+   30.  an implementation reports FAIL because a receipt, issuer object,
+        or population evidence is absent: reject FAIL unless a frozen
+        positive failing condition is established, and retain
+        INCONCLUSIVE or the applicable qualified result.
+
+Author's Address
+
+   Ali Toygar Abak
+   Independent Researcher
+   Email: founder@phionyx.ai
+   URI:   https://phionyx.ai
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Abak                      Expires 14 April 2027                [Page 51]

@@ -1,0 +1,3528 @@
+
+
+
+
+Network Working Group                                         K. Gruszka
+Internet-Draft                                                    b7n0de
+Intended status: Informational                           26 October 2026
+Expires: 29 April 2027
+
+
+       Citing Signed Evaluation Receipts from Existing Envelopes
+              draft-gruszka-evaluation-receipt-mappings-04
+
+Abstract
+
+   A Signed Evaluation Receipt records one evaluation result as signed
+   payload bytes B.  This document describes how existing envelopes cite
+   such a receipt by the SHA-256 digest of B, and how a DSSE envelope
+   carries B with the receipt's own signature.  It fixes those bytes and
+   a matching rule, maps the parts of a receipt onto DSSE, the in-toto
+   Statement with the test-result predicate and the SLSA Verification
+   Summary Attestation, shows that the signature of a receipt is already
+   a valid DSSE signature, gives a SCITT Signed Statement that names a
+   receipt only by its digest, in a key profile and a certificate
+   profile, declares the receipt digest as an artifact type for typed
+   digest references, states how three formats for records of agent
+   actions can cite a receipt, and relates a receipt to a pre-run
+   criteria set written in PRML.  It defines no new format and no new
+   predicate.
+
+Status of This Memo
+
+   This Internet-Draft is submitted in full conformance with the
+   provisions of BCP 78 and BCP 79.
+
+   Internet-Drafts are working documents of the Internet Engineering
+   Task Force (IETF).  Note that other groups may also distribute
+   working documents as Internet-Drafts.  The list of current Internet-
+   Drafts is at https://datatracker.ietf.org/drafts/current/.
+
+   Internet-Drafts are draft documents valid for a maximum of six months
+   and may be updated, replaced, or obsoleted by other documents at any
+   time.  It is inappropriate to use Internet-Drafts as reference
+   material or to cite them other than as "work in progress."
+
+   This Internet-Draft will expire on 29 April 2027.
+
+Copyright Notice
+
+   Copyright (c) 2026 IETF Trust and the persons identified as the
+   document authors.  All rights reserved.
+
+
+
+
+Gruszka                   Expires 29 April 2027                 [Page 1]
+
+Internet-Draft         Evaluation Receipt Mappings          October 2026
+
+
+   This document is subject to BCP 78 and the IETF Trust's Legal
+   Provisions Relating to IETF Documents (https://trustee.ietf.org/
+   license-info) in effect on the date of publication of this document.
+   Please review these documents carefully, as they describe your rights
+   and restrictions with respect to this document.  Code Components
+   extracted from this document must include Revised BSD License text as
+   described in Section 4.e of the Trust Legal Provisions and are
+   provided without warranty as described in the Revised BSD License.
+
+Table of Contents
+
+   1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   3
+   2.  Conventions and Terminology . . . . . . . . . . . . . . . . .   4
+   3.  The Receipt Digest  . . . . . . . . . . . . . . . . . . . . .   4
+     3.1.  Definition  . . . . . . . . . . . . . . . . . . . . . . .   4
+     3.2.  Why B . . . . . . . . . . . . . . . . . . . . . . . . . .   4
+     3.3.  Matching Rule . . . . . . . . . . . . . . . . . . . . . .   5
+     3.4.  Against the Identification Requirements . . . . . . . . .   7
+   4.  Mapping to Existing Envelopes . . . . . . . . . . . . . . . .   8
+     4.1.  DSSE  . . . . . . . . . . . . . . . . . . . . . . . . . .  10
+     4.2.  in-toto Statement with test-result  . . . . . . . . . . .  11
+     4.3.  SLSA Verification Summary . . . . . . . . . . . . . . . .  12
+   5.  COSE and SCITT  . . . . . . . . . . . . . . . . . . . . . . .  12
+     5.1.  A Typed Digest Reference  . . . . . . . . . . . . . . . .  12
+     5.2.  A Signed Statement that Cites a Receipt . . . . . . . . .  14
+       5.2.1.  Making a Statement  . . . . . . . . . . . . . . . . .  17
+       5.2.2.  Checking a Statement  . . . . . . . . . . . . . . . .  17
+       5.2.3.  What Crosses and What Is Lost . . . . . . . . . . . .  20
+       5.2.4.  Choice of alg . . . . . . . . . . . . . . . . . . . .  21
+   6.  Citations in Agent Evidence Formats . . . . . . . . . . . . .  21
+     6.1.  Control Delivery Evidence . . . . . . . . . . . . . . . .  22
+     6.2.  Evidence Qualification Receipts . . . . . . . . . . . . .  23
+     6.3.  Agent Interaction Records . . . . . . . . . . . . . . . .  24
+   7.  Criteria Sets in PRML . . . . . . . . . . . . . . . . . . . .  25
+   8.  Relation to Claim-Preservation Requirements . . . . . . . . .  27
+   9.  What Is Not Proven  . . . . . . . . . . . . . . . . . . . . .  27
+   10. Related Work  . . . . . . . . . . . . . . . . . . . . . . . .  29
+   11. Security Considerations . . . . . . . . . . . . . . . . . . .  30
+   12. Privacy Considerations  . . . . . . . . . . . . . . . . . . .  31
+   13. IANA Considerations . . . . . . . . . . . . . . . . . . . . .  32
+   14. Implementation Status . . . . . . . . . . . . . . . . . . . .  32
+   15. References  . . . . . . . . . . . . . . . . . . . . . . . . .  34
+     15.1.  Normative References . . . . . . . . . . . . . . . . . .  34
+     15.2.  Informative References . . . . . . . . . . . . . . . . .  36
+   Appendix A.  Examples . . . . . . . . . . . . . . . . . . . . . .  39
+     A.1.  Constants . . . . . . . . . . . . . . . . . . . . . . . .  39
+     A.2.  Digests of Vector P1  . . . . . . . . . . . . . . . . . .  39
+     A.3.  Citation Cases  . . . . . . . . . . . . . . . . . . . . .  40
+
+
+
+Gruszka                   Expires 29 April 2027                 [Page 2]
+
+Internet-Draft         Evaluation Receipt Mappings          October 2026
+
+
+     A.4.  M1, DSSE Envelope with the Receipt's Signature  . . . . .  41
+     A.5.  M2, SCITT Signed Statement Citing the Receipt by
+            Digest . . . . . . . . . . . . . . . . . . . . . . . . .  41
+     A.6.  Status Vectors  . . . . . . . . . . . . . . . . . . . . .  43
+     A.7.  Typed Digest References . . . . . . . . . . . . . . . . .  45
+     A.8.  Certificate-Profile Vectors . . . . . . . . . . . . . . .  48
+     A.9.  Transparent Statements  . . . . . . . . . . . . . . . . .  53
+     A.10. Agent Evidence Format Vectors . . . . . . . . . . . . . .  55
+       A.10.1.  Control Delivery Evidence  . . . . . . . . . . . . .  55
+       A.10.2.  Evidence Qualification Receipts  . . . . . . . . . .  56
+       A.10.3.  Agent Interaction Records  . . . . . . . . . . . . .  58
+   Changes (to be removed before publication)  . . . . . . . . . . .  60
+     Since draft-gruszka-evaluation-receipt-mappings-03  . . . . . .  60
+     Since draft-gruszka-evaluation-receipt-mappings-02  . . . . . .  61
+     Since draft-gruszka-evaluation-receipt-mappings-01  . . . . . .  62
+     Since draft-gruszka-evaluation-receipt-mappings-00  . . . . . .  62
+   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .  63
+
+1.  Introduction
+
+   A Signed Evaluation Receipt (receipt) [RECEIPTS] holds one assertion,
+   whether a threshold held for a metric of a test suite, as payload
+   bytes B.  B is signed with Ed25519 over a pre-authentication encoding
+   with a fixed type.  A receipt carries no inclusion proof and does not
+   prove registration with a Transparency Service.  In SCITT,
+   transparency additionally requires registering a Signed Statement
+   that names the receipt and verifying the resulting SCITT Receipt
+   (Section 5).
+
+   Other parties will want to refer to a receipt from the envelopes they
+   already use: a DSSE envelope, an in-toto Statement, a SLSA
+   Verification Summary, or a SCITT Signed Statement.  This document is
+   the third part of one line of work: [STATEMENT-ID] asks how a signed
+   statement is named unambiguously, [RECEIPTS] fixes the bytes of a
+   receipt, and this document shows how existing envelopes cite such a
+   receipt by digest.
+
+   It states how three formats for records of agent actions can cite a
+   receipt (Section 6), relates a receipt to a criteria set fixed before
+   the run in PRML [PRML] (Section 7), and says where it meets the
+   requirements of [ABAK] for exchanging evaluation evidence
+   (Section 8).
+
+   This document defines no second receipt format, no new in-toto
+   predicate and no new COSE header parameter.  What a receipt does not
+   prove stays unproven when an envelope cites it (Section 9).
+
+
+
+
+
+Gruszka                   Expires 29 April 2027                 [Page 3]
+
+Internet-Draft         Evaluation Receipt Mappings          October 2026
+
+
+2.  Conventions and Terminology
+
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
+   "OPTIONAL" in this document are to be interpreted as described in BCP
+   14 [RFC2119] [RFC8174] when, and only when, they appear in all
+   capitals, as shown here.
+
+   The terms receipt, B, Issuer, Receiver and type are used as in
+   [RECEIPTS].  The type is the fixed string
+
+   application/vnd.signed-evidence.eval-receipt+json
+
+   The type identifies B ([RECEIPTS] Section 10.1).  The receipt object
+   uses the same fixed string as its schema discriminator, but is a
+   different JSON representation.
+
+   Receipt digest:  SHA-256 over B (Section 3).
+
+   Citation:  A hash algorithm and a digest value that an envelope
+      carries to name a receipt.
+
+   Citing envelope:  An in-toto Statement or a COSE Signed Statement
+      that carries a citation.  A DSSE envelope carries B itself, not a
+      citation (Section 4.1).
+
+3.  The Receipt Digest
+
+3.1.  Definition
+
+   The receipt digest is SHA-256 over B, the payload bytes of the
+   receipt as defined in [RECEIPTS] Section 3.4: the bytes that steps 1
+   to 3 of [RECEIPTS] Section 5 obtain from payload_b64.  A candidate
+   for which one of those steps fails has no B, even if a lenient
+   decoder would produce bytes from it (cases C6 and C7).  It is not
+   computed over the receipt bytes or over PAE(type, B).  An envelope
+   that carries the digest as text uses the text form that step 1 of
+   Section 3.3 fixes for its carrier; one that carries it as bytes uses
+   the 32 bytes.  This document defines no other hash algorithm.
+
+3.2.  Why B
+
+   The digest runs over B for two reasons.
+
+   *  B is what is signed.  The signing input PAE(type, B) depends on B
+      alone, because the type is fixed ([RECEIPTS] Section 4.2).  A
+      digest over B therefore names exactly the signed content; a digest
+      over the signing input would carry no further information.
+
+
+
+Gruszka                   Expires 29 April 2027                 [Page 4]
+
+Internet-Draft         Evaluation Receipt Mappings          October 2026
+
+
+   *  The receipt bytes are not stable.  The receipt object around B is
+      not canonicalized, and its key hint is not signed.  Vectors P1, P4
+      and P6 of [RECEIPTS] are three different receipt byte strings that
+      all verify and all carry the same B (cases C1 to C3 of Table 1).
+      A digest over the receipt bytes would give one signed statement
+      three names, and it would change whenever the receipt object is
+      written again.  In-toto resource descriptors and the COSE Hash
+      Envelope each name content by the digest of its bytes, and a DSSE
+      envelope carries the bytes themselves.
+
+   The price of this choice: the receipt digest identifies the signed
+   content, not the signature and not the key.  Two receipts with the
+   same B under different keys have the same digest.  The iss and kid of
+   a citing Signed Statement (Section 5.2) identify its signer, which
+   need not be the receipt signer.  This mapping does not encode a
+   constraint on the receipt signer.  A Receiver verifies the cited
+   receipt under the receipt key it fixed independently.
+
+3.3.  Matching Rule
+
+   Given a citation and a candidate receipt, the result is computed as
+   follows.  For the JSON representation in Section 5.1, first apply
+   that section's extraction rule; it either gives INDETERMINATE or
+   supplies the algorithm and value for the steps below.  The matching
+   result is independent of the typed reference's processing state.
+
+   1.  If the citation's algorithm is not SHA-256, or its value is not
+       32 bytes in the form that its carrier fixes, the result is
+       INDETERMINATE.  SHA-256 is named sha256 as the key of an in-toto
+       digest set [INTOTO-DIGESTSET], -16 as the value of COSE header
+       parameter 258, and sha-256 as the algorithm label of the examples
+       (Appendix A); each name counts only in its own carrier, and names
+       are compared exactly, so SHA256 is none of them.  A typed digest
+       reference names it SHA-256 (Section 5.1), an evidence descriptor
+       of [EQR] names it sha-256 in hash_alg (Section 6.2), and in an
+       ExternalRef of [AIR], which carries no algorithm, the type as
+       ref_type names it (Section 6.3).  The value is 64 lowercase
+       hexadecimal digits in text form in a digest set (Section 4.3), in
+       a typed digest reference (Section 5.1), in an ExternalRef
+       (Section 6.3) and in the examples (Appendix A.2); it is the
+       base64url encoding without padding of Section 5 of [RFC4648], 43
+       characters, in an evidence descriptor (Section 6.2), and a string
+       that is not exactly that encoding of 32 bytes is not such a
+       value; and it is 32 bytes as the payload of a statement whose
+       parameter 258 is -16 (Section 5.2).  A digest set with several
+       entries is matched on its sha256 entry alone; this document does
+       not judge the other entries.  This is narrower than the matching
+       guidance of [INTOTO-DIGESTSET], under which two digest sets match
+
+
+
+Gruszka                   Expires 29 April 2027                 [Page 5]
+
+Internet-Draft         Evaluation Receipt Mappings          October 2026
+
+
+       if any acceptable field matches: here a digest set without a
+       sha256 entry gives INDETERMINATE, and one whose sha256 entry
+       passes step 1 but differs from SHA-256 over B gives NO_MATCH,
+       whatever its other entries are.
+
+   2.  If steps 1 through 3 of [RECEIPTS] Section 5 do not all complete
+       successfully, including when processing stops at a resource
+       limit, B is not obtained and the result is INDETERMINATE.
+
+   3.  Otherwise the result is MATCH when SHA-256 over B equals the
+       cited value, and NO_MATCH when it does not.
+
+   A MATCH establishes neither that the candidate verifies, nor who
+   signed it, nor that its assertion is true.  A Receiver that relies on
+   a cited receipt runs the full procedure of [RECEIPTS] Section 5 under
+   a key it fixed.  Case C5 is a candidate that matches and fails that
+   procedure at step 11.
+
+   +======+===========+===============+==============+=================+
+   | Case | Candidate | Result        | Verification | What it shows   |
+   |      |           |               | of the       |                 |
+   |      |           |               | candidate    |                 |
+   +======+===========+===============+==============+=================+
+   | C1   | P1        | MATCH         | PASS         | the receipt     |
+   |      |           |               |              | the citation    |
+   |      |           |               |              | was made from   |
+   +------+-----------+---------------+--------------+-----------------+
+   | C2   | P4        | MATCH         | PASS         | other receipt   |
+   |      |           |               |              | bytes (an       |
+   |      |           |               |              | escaped         |
+   |      |           |               |              | character in    |
+   |      |           |               |              | schema), same   |
+   |      |           |               |              | B               |
+   +------+-----------+---------------+--------------+-----------------+
+   | C3   | P6        | MATCH         | PASS         | other receipt   |
+   |      |           |               |              | bytes (no key   |
+   |      |           |               |              | hint), same B   |
+   +------+-----------+---------------+--------------+-----------------+
+   | C4   | P2        | NO_MATCH      | PASS         | another         |
+   |      |           |               |              | receipt with    |
+   |      |           |               |              | another B       |
+   +------+-----------+---------------+--------------+-----------------+
+   | C5   | N7        | MATCH         | FAIL, step   | same B,         |
+   |      |           |               | 11 (profile  | signature made  |
+   |      |           |               | 4)           | over another    |
+   |      |           |               |              | type: a match   |
+   |      |           |               |              | is not a        |
+   |      |           |               |              | verification    |
+
+
+
+Gruszka                   Expires 29 April 2027                 [Page 6]
+
+Internet-Draft         Evaluation Receipt Mappings          October 2026
+
+
+   +------+-----------+---------------+--------------+-----------------+
+   | C6   | N13       | INDETERMINATE | FAIL, step 3 | payload_b64 is  |
+   |      |           |               |              | not canonical   |
+   |      |           |               |              | base64: B is    |
+   |      |           |               |              | not obtained    |
+   +------+-----------+---------------+--------------+-----------------+
+   | C7   | N14       | INDETERMINATE | FAIL, step 1 | the receipt     |
+   |      |           |               |              | has duplicate   |
+   |      |           |               |              | member names:   |
+   |      |           |               |              | B is not        |
+   |      |           |               |              | obtained        |
+   +------+-----------+---------------+--------------+-----------------+
+   | C8   | P1        | INDETERMINATE | PASS         | the citation    |
+   |      |           |               |              | names an        |
+   |      |           |               |              | algorithm this  |
+   |      |           |               |              | document does   |
+   |      |           |               |              | not define      |
+   +------+-----------+---------------+--------------+-----------------+
+
+                          Table 1: Citation cases
+
+3.4.  Against the Identification Requirements
+
+   [STATEMENT-ID] proposes requirements A1 to A5 for references to
+   signed statements.  This section checks the receipt digest against
+   them.  It is the author's analysis, not a conformance claim.
+
+   A1, unambiguous target and matching rule:  The scheme names the hash
+      algorithm (SHA-256), the input bytes (B, as steps 1 to 3 of
+      [RECEIPTS] Section 5 obtain it from payload_b64) and the encoding
+      (the text form that step 1 of Section 3.3 fixes for each carrier,
+      or 32 bytes).  Section 3.3 is the matching rule.  An unsupported
+      algorithm or a candidate without B gives INDETERMINATE, never
+      MATCH (C6 to C8).  Identity is preserved under every difference
+      outside B that leaves steps 1 to 3 of [RECEIPTS] Section 5
+      succeeding: the receipt's whitespace and escapes, its key hint,
+      and its signature value.  In the terms of [STATEMENT-ID] Section 5
+      the receipt digest is a digest of the payload.  Because the type
+      is fixed and nothing else enters the signature, it also determines
+      the signing input; neither names the signer.
+
+   A2, readable without interpreting the carrier's payload:  In the COSE
+      Hash Envelope of Section 5.2 the citation is read from header
+      parameters 258 and 259 and the payload, as [RFC9995] defines them,
+      without interpreting application content.  In an in-toto Statement
+      the citation lies inside the predicate, which is the Statement's
+      application content; a reader has to know the predicate to find
+      it.  A2 is met by the first and not by the second.
+
+
+
+Gruszka                   Expires 29 April 2027                 [Page 7]
+
+Internet-Draft         Evaluation Receipt Mappings          October 2026
+
+
+   A3, matching independent of registration:  B does not change when the
+      receipt is registered anywhere or its object is written again.
+      Cases C2 and C3 carry other receipt bytes and still match.
+
+   A4, acceptance test for A3:  Cases C2 and C3 apply local changes that
+      a re-encoding may cause (another JSON escape, a key hint left
+      out), and the result stays MATCH.  This is not a measurement of
+      registration in two services.
+
+   A5, receipt-verification dependency:  Matching does not depend on a
+      leaf hash or a COSE Receipt.  A receipt has no inclusion proof of
+      its own; a Transparency Service that registers a statement naming
+      it fixes its own leaf construction, and matching does not use it.
+
+4.  Mapping to Existing Envelopes
+
+   Table 2 shows, for each part of a receipt, where it has a place in
+   three envelopes and what that envelope does not have: DSSE [DSSE],
+   the in-toto Statement v1 [INTOTO-STATEMENT] with the test-result
+   predicate v0.1 [TEST-RESULT] (test-result in the table), and the SLSA
+   Verification Summary Attestation v1 [VSA] (VSA).  "None" means that
+   the envelope has no field for it.  This document defines no predicate
+   of its own.
+
+   +=====================+============+===============================+
+   | Receipt part        |Envelope    | Field there, or what is       |
+   |                     |            | missing                       |
+   +=====================+============+===============================+
+   | B                   |DSSE        | payload, base64 of B          |
+   +---------------------+------------+-------------------------------+
+   |                     |test-result | none; a Statement that        |
+   |                     |            | restates the members is other |
+   |                     |            | bytes                         |
+   +---------------------+------------+-------------------------------+
+   |                     |VSA         | none;                         |
+   |                     |            | inputAttestations[].digest    |
+   |                     |            | names B by its digest         |
+   +---------------------+------------+-------------------------------+
+   | type                |DSSE        | payloadType                   |
+   +---------------------+------------+-------------------------------+
+   |                     |test-result | none; the Statement's         |
+   |                     |            | envelope carries an in-toto   |
+   |                     |            | type                          |
+   +---------------------+------------+-------------------------------+
+   |                     |VSA         | inputAttestations[].mediaType |
+   +---------------------+------------+-------------------------------+
+   | signature.sig       |DSSE        | signatures[].sig, the same    |
+   |                     |            | bytes (vector M1)             |
+
+
+
+Gruszka                   Expires 29 April 2027                 [Page 8]
+
+Internet-Draft         Evaluation Receipt Mappings          October 2026
+
+
+   +---------------------+------------+-------------------------------+
+   |                     |test-result | none; the Statement's         |
+   |                     |            | envelope carries a new        |
+   |                     |            | signature                     |
+   +---------------------+------------+-------------------------------+
+   |                     |VSA         | none; the VSA is signed by    |
+   |                     |            | its verifier                  |
+   +---------------------+------------+-------------------------------+
+   | signature.alg       |DSSE        | none; DSSE names no signature |
+   |                     |            | algorithm                     |
+   +---------------------+------------+-------------------------------+
+   |                     |test-result,| none                          |
+   |                     |VSA         |                               |
+   +---------------------+------------+-------------------------------+
+   | signature.key       |DSSE        | keyid, optional and not       |
+   |                     |            | signed                        |
+   +---------------------+------------+-------------------------------+
+   |                     |test-result,| none                          |
+   |                     |VSA         |                               |
+   +---------------------+------------+-------------------------------+
+   | passed              |DSSE        | inside B                      |
+   +---------------------+------------+-------------------------------+
+   |                     |test-result | result PASSED or FAILED;      |
+   |                     |            | WARNED has no receipt         |
+   |                     |            | counterpart                   |
+   +---------------------+------------+-------------------------------+
+   |                     |VSA         | none; verificationResult is   |
+   |                     |            | the verifier's result         |
+   +---------------------+------------+-------------------------------+
+   | payload schema      |DSSE        | inside B                      |
+   +---------------------+------------+-------------------------------+
+   |                     |test-result | none; predicateType names     |
+   |                     |            | test-result, not the payload  |
+   |                     |            | schema                        |
+   +---------------------+------------+-------------------------------+
+   |                     |VSA         | none                          |
+   +---------------------+------------+-------------------------------+
+   | suite,              |DSSE        | inside B                      |
+   | suite_version       |            |                               |
+   +---------------------+------------+-------------------------------+
+   |                     |test-result | no field of its own;          |
+   |                     |            | configuration or url can name |
+   |                     |            | the suite                     |
+   +---------------------+------------+-------------------------------+
+   |                     |VSA         | none                          |
+   +---------------------+------------+-------------------------------+
+   | metric, comparator, |DSSE        | inside B                      |
+   | threshold, score, n |            |                               |
+
+
+
+Gruszka                   Expires 29 April 2027                 [Page 9]
+
+Internet-Draft         Evaluation Receipt Mappings          October 2026
+
+
+   +---------------------+------------+-------------------------------+
+   |                     |test-result,| none                          |
+   |                     |VSA         |                               |
+   +---------------------+------------+-------------------------------+
+   | criteria_digest,    |DSSE        | inside B                      |
+   | when present        |            |                               |
+   +---------------------+------------+-------------------------------+
+   |                     |test-result,| none                          |
+   |                     |VSA         |                               |
+   +---------------------+------------+-------------------------------+
+   | model_id_commit,    |DSSE        | inside B                      |
+   | dataset_id_commit,  |            |                               |
+   | commit_alg          |            |                               |
+   +---------------------+------------+-------------------------------+
+   |                     |test-result | none; subject wants a digest  |
+   |                     |            | of the artifact, and a        |
+   |                     |            | commitment is not one         |
+   +---------------------+------------+-------------------------------+
+   |                     |VSA         | none; subject and resourceUri |
+   |                     |            | name the verified artifact    |
+   +---------------------+------------+-------------------------------+
+   | timestamp           |DSSE        | inside B                      |
+   +---------------------+------------+-------------------------------+
+   |                     |test-result | none                          |
+   +---------------------+------------+-------------------------------+
+   |                     |VSA         | none; timeVerified is the     |
+   |                     |            | verifier's time               |
+   +---------------------+------------+-------------------------------+
+
+                Table 2: Receipt parts in three envelopes
+
+   In the other direction, a receipt has no counterpart for the required
+   VSA fields verifier, resourceUri, policy and verifiedLevels, for its
+   optional timeVerified, or for the subject of an in-toto Statement.
+
+4.1.  DSSE
+
+   The signature of a receipt is a valid DSSE signature without any new
+   signature.  DSSE [DSSE] signs PAE(payloadType, payload) with the same
+   pre-authentication encoding that [RECEIPTS] Section 4.1 defines.  The
+   envelope
+
+   {"payloadType": <type>, "payload": <base64 of B>,
+    "signatures": [{"sig": <the receipt's signature.sig>}]}
+
+
+
+
+
+
+
+Gruszka                   Expires 29 April 2027                [Page 10]
+
+Internet-Draft         Evaluation Receipt Mappings          October 2026
+
+
+   therefore verifies as DSSE under the Issuer's key when payloadType is
+   exactly the type and payload decodes to B.  Vector M1 (Appendix A)
+   gives the bytes; its signature is the signature of vector P1 of
+   [RECEIPTS], byte for byte.  M1 leaves out keyid, which DSSE treats as
+   an optional, unauthenticated hint.
+
+   A successful DSSE signature check alone is not a receipt verdict.
+   DSSE also requires a supported payloadType and parsing the
+   authenticated payload according to that type.  To obtain a receipt
+   verdict, a Receiver decodes the payload and the selected signature
+   once, uses those same bytes to construct the receipt object with
+   canonical base64 as required by [RECEIPTS] Section 3.1, and runs
+   [RECEIPTS] Section 5 under its independently selected receipt
+   verification key.
+
+   The signature is expected to be valid as DSSE only under this
+   payloadType, because Ed25519 binds the exact signing input; this is
+   not measured beyond sample types.  Vector N7 of [RECEIPTS] shows the
+   converse for the receipt itself: its signature, made over PAE with
+   the type application/vnd.example.other+json, fails under the fixed
+   type.
+
+4.2.  in-toto Statement with test-result
+
+   The test-result predicate [TEST-RESULT] records result (PASSED,
+   WARNED or FAILED), configuration (a required list of resource
+   descriptors), url, and the lists passedTests, warnedTests and
+   failedTests.  A Statement [INTOTO-STATEMENT] that restates a receipt
+   maps passed to result PASSED or FAILED.  No member of the predicate
+   carries the metric, the comparator, the threshold, the score, the
+   sample count or the timestamp; passedTests and failedTests are lists
+   of test names, not a count.  The Statement's subject names the tested
+   artifact by digest; a commitment is not a digest of the artifact's
+   bytes, so the model commitment cannot stand as subject without
+   changing what subject means.
+
+   Such a Statement is a new statement by whoever signs its envelope
+   [INTOTO-ENVELOPE].  It does not carry the receipt's signature and the
+   predicate has no member for the evidence a result rests on.  This
+   document therefore does not cite receipts from test-result; the
+   mapping states what a party loses when it restates a receipt in that
+   form.
+
+
+
+
+
+
+
+
+
+Gruszka                   Expires 29 April 2027                [Page 11]
+
+Internet-Draft         Evaluation Receipt Mappings          October 2026
+
+
+4.3.  SLSA Verification Summary
+
+   A Verification Summary Attestation [VSA] states that a verifier
+   verified an artifact against a policy.  Its inputAttestations is a
+   list of resource descriptors [INTOTO-RD], each of which carries a
+   digest of the attestation it names.  A verifier that used a receipt
+   as evidence when it verified an artifact, for example the evaluated
+   model, and verified the receipt under [RECEIPTS] Section 5, cites the
+   receipt there; the artifact itself is the VSA's subject:
+
+   {"digest": {"sha256": "<receipt digest, 64 hex digits>"},
+    "mediaType": "application/vnd.signed-evidence.eval-receipt+json"}
+
+   The mediaType identifies B. verificationResult is the verifier's
+   result under its policy, not the receipt's passed: a receipt that
+   verifies and records passed false (vector P2 of [RECEIPTS]) can be
+   the input of a VSA whose verificationResult is PASSED, when the
+   verifier's policy asks only for a valid receipt.
+
+5.  COSE and SCITT
+
+   A Signed Evaluation Receipt is not a COSE Receipt.  Its format is
+   JSON with Ed25519 over PAE, not COSE; it carries no inclusion proof,
+   and no Transparency Service or Registration Policy [RFC9943] takes
+   part in making it.  In SCITT, a Transparency Service registers a
+   Signed Statement and returns a COSE Receipt [RFC9942] proving its
+   inclusion.
+
+   Two existing constructions carry the receipt digest without a new
+   field: a typed digest reference (Section 5.1) and a Signed Statement
+   whose payload is the digest (Section 5.2).  Both name the receipt;
+   neither carries it.
+
+5.1.  A Typed Digest Reference
+
+   [CPB] Section 9 defines a typed digest reference with the members
+   type, purpose, digest_alg and digest, and leaves the declaration of
+   artifact types to the profiles that accept them ([CPB] Section 9.1).
+   This document declares one artifact type for the receipt digest:
+
+   *  type is application/vnd.signed-evidence.eval-receipt+json, the
+      type, which identifies B;
+
+   *  there is one digest context, so purpose is absent;
+
+   *  the context has no purpose label, so a well-formed reference that
+      carries purpose is Unresolved ([CPB] Section 9.1);
+
+
+
+
+Gruszka                   Expires 29 April 2027                [Page 12]
+
+Internet-Draft         Evaluation Receipt Mappings          October 2026
+
+
+   *  the canonicalization algorithm is as-transmitted ([CPB]
+      Section 5.4), with the byte-boundary selector [RECEIPTS]
+      Section 3.4, "The Bytes B";
+
+   *  the pre-image is B as Section 3.1 defines it, the bytes that steps
+      1 to 3 of [RECEIPTS] Section 5 obtain, with no exclusion set, no
+      further encoding and no domain separation;
+
+   *  the hash function is SHA-256, and digest_alg is exactly SHA-256;
+
+   *  digest is the receipt digest as its 64 lowercase hexadecimal
+      digits, a text value; in the cpb-refs header parameter of [CPB]
+      Section 9.3 it is a text string.
+
+   For the JSON representation defined here and used in Appendix A.7, a
+   reference is one JSON object [RFC8259] with the required members
+   type, digest_alg and digest, and the optional member purpose.  Each
+   of these members, when present, has a JSON string value.  No other
+   member is allowed.  Member names of this object are compared after
+   JSON string unescaping, without case folding or Unicode
+   normalization; repeated names are detected before any conversion that
+   could discard them.  Input that violates the JSON grammar, is not an
+   object, has a repeated member name, lacks a required member, has a
+   non-string value for one of the named members, or has another member
+   is Malformed ([CPB] Section 4).  A byte order mark before the JSON
+   text is not part of the JSON grammar, so such input is Malformed,
+   although [RFC8259] Section 8.1 allows a parser to ignore it.  Input
+   that is not UTF-8 is Malformed as well ([RFC8259] Section 8.1); no
+   replacement character is substituted before this check.  This form
+   check precedes reference resolution and verification.  The rules
+   assigning Unresolved, Failed or Verified apply only to well-formed
+   references.  These form requirements define this JSON representation;
+   they do not replace the rules for cpb-refs or another profile's own
+   serialization.
+
+   For this JSON representation, the independent matching result of
+   Section 3.3 is INDETERMINATE unless the input is UTF-8, conforms to
+   the JSON grammar, its top-level value is an object, and that object
+   contains exactly one digest_alg member and exactly one digest member,
+   both with string values.  Otherwise Section 3.3 applies to those two
+   values regardless of the reference state.  No occurrence is chosen
+   from repeated digest_alg or digest members, even if their values
+   agree, and non-string values are not converted to strings.  A
+   matching result does not change the reference state or make a
+   Malformed reference Verified.
+
+
+
+
+
+
+Gruszka                   Expires 29 April 2027                [Page 13]
+
+Internet-Draft         Evaluation Receipt Mappings          October 2026
+
+
+   A reference under this declaration can stand in the cpb-refs header
+   parameter of a Signed Statement, or in a payload that carries
+   references in its own serialization, for example in the references of
+   [CAPSULE].  For a well-formed reference, context selection and
+   verification follow [CPB] Section 9.1.  A well-formed reference whose
+   type is not the type of this declaration is not under it; where no
+   other declaration that the consuming profile accepts matches it, it
+   is Unresolved ([CPB] Section 9.1).  A consuming profile that does not
+   name this declaration by normative reference leaves a well-formed
+   reference to it Unresolved; no profile names it at the time of
+   writing.  Once this digest context has been selected, a digest_alg
+   other than SHA-256 or a digest outside the declared text
+   representation of 64 lowercase hexadecimal digits makes the reference
+   Failed.  Section 3.3 gives INDETERMINATE for either case.  After
+   those checks, a verifier that does not implement the construction of
+   this context leaves the reference Unresolved (cause: unimplemented),
+   whether or not a receipt can be obtained.  A verifier that implements
+   it obtains the cited receipt and takes B from it by steps 1 to 3 of
+   [RECEIPTS] Section 5.  If no receipt is obtained, the reference is
+   Unresolved (cause: unavailable), and the matching result is
+   INDETERMINATE, as in step 2 of Section 3.3.  If a receipt is obtained
+   and those steps fail, it is not input that the construction of this
+   context accepts, and the reference is Failed ([CPB] Section 9.1).
+   If those steps stop at a resource limit, the verifier reports the
+   resource-limit error of [RECEIPTS] Section 5 instead of a state, as
+   in Section 5.2.2.  When those steps fail or stop at a resource limit,
+   the matching result is INDETERMINATE.  Otherwise the verifier
+   computes SHA-256 over B and compares its hexadecimal text with
+   digest: equality gives Verified and MATCH, and inequality gives
+   Failed and NO_MATCH.  Vectors R1 to R16 (Appendix A.7) illustrate
+   these states and Malformed.
+
+   Only the digest crosses, as for the Signed Statement below.  A
+   reference that is Verified shows that the cited bytes are B; it does
+   not show that the receipt verifies, who signed it, or that its
+   assertion is true ([CPB] Section 9.5).
+
+5.2.  A Signed Statement that Cites a Receipt
+
+   A Signed Statement that cites a receipt is a COSE_Sign1 [RFC9052]
+   with CBOR tag 18 in the form of a COSE Hash Envelope [RFC9995].  It
+   has one of two profiles, which differ in how the statement names its
+   signer.  In the key profile, kid names an Ed25519 statement key that
+   the Receiver has configured for the issuer.  In the certificate
+   profile, the protected header carries an X.509 certificate chain
+   [RFC9360] whose last certificate is a trust anchor that the Receiver
+   has configured for a did:x509 issuer [DIDX509].  The labels of the
+   protected header select the profile (step 2 of Section 5.2.2).
+
+
+
+Gruszka                   Expires 29 April 2027                [Page 14]
+
+Internet-Draft         Evaluation Receipt Mappings          October 2026
+
+
+   Vector M2 (Appendix A) is a statement in the key profile, vector X1
+   one in the certificate profile.
+
+   Both profiles share these rules:
+
+   *  The protected header holds exactly the parameters of its profile,
+      given below, and no other.  Three of them are the same in both
+      profiles:
+
+      -  15 (CWT Claims) [RFC9597]: a map with exactly 1 (iss), whose
+         form each profile gives, and 2 (sub), the text value of
+         model_id_commit of B;
+
+      -  258 (payload hash algorithm): -16 (SHA-256);
+
+      -  259 (preimage content type): the type, as a text string.
+
+   *  The unprotected header is the empty map.
+
+   *  The payload is the receipt digest, 32 bytes.
+
+   *  The COSE_Sign1, its protected header included, is encoded with the
+      core deterministic encoding of [RFC8949] Section 4.2.1.
+
+   Key profile.  The protected header holds exactly the five parameters
+   1, 4, 15, 258 and 259:
+
+   *  1 (alg): -19, Ed25519 as fully specified in [RFC9864], or -8,
+      EdDSA [RFC9053].  A party that makes a statement MUST write -19.
+      A Receiver MUST accept both values and applies every other check
+      of Section 5.2.2 to either; under the Ed25519 statement keys that
+      step 3 selects, both values select the same signature algorithm.
+      Changing alg changes the protected header bytes and requires a new
+      signature (Section 5.2.4);
+
+   *  4 (kid): the COSE Key Thumbprint [RFC9679] with SHA-256 of the
+      statement key, a byte string of 32 bytes.  For an Ed25519 public
+      key x, kid is SHA-256 over the core-deterministically encoded
+      COSE_Key map {1: 1, -1: 6, -2: x}; no optional COSE_Key parameter
+      enters the thumbprint;
+
+   *  15 (CWT Claims): iss is an absolute URI ([RFC3986] Section 4.3)
+      that names the party that makes the statement.
+
+   Its form is fixed, so that one receipt digest, one statement key, one
+   issuer and one algorithm value give one byte string.
+
+
+
+
+
+Gruszka                   Expires 29 April 2027                [Page 15]
+
+Internet-Draft         Evaluation Receipt Mappings          October 2026
+
+
+   Certificate profile.  The protected header holds exactly the six
+   parameters 1, 4, 15, 33, 258 and 259:
+
+   *  1 (alg): -7, ECDSA with SHA-256 ([RFC9053] Section 2.1); the
+      signature is r and s, 32 bytes each, under the P-256 public key of
+      the leaf certificate (Section 5.2.4);
+
+   *  4 (kid): SHA-256 over the DER encoding of the SubjectPublicKeyInfo
+      [RFC5280] of the leaf certificate, a byte string of 32 bytes;
+
+   *  15 (CWT Claims): iss is a did:x509 identifier [DIDX509] that is
+      exactly the concatenation of the text did:x509:0:sha256:, F, the
+      text ::eku: and O, with no other character, where F is SHA-256
+      over the DER bytes of the last certificate of x5chain, encoded in
+      base64url without padding (43 characters), and O is an object
+      identifier in dotted decimal form: the first arc is 0, 1 or 2, it
+      is followed by one or more further arcs, the second arc is at most
+      39 when the first arc is 0 or 1, the arcs are separated by full
+      stops, and each arc is a decimal number without leading zeros;
+
+   *  33 (x5chain) [RFC9360]: an array of exactly two byte strings, each
+      a DER-encoded X.509 certificate [RFC5280]: first the leaf
+      certificate, whose P-256 public key verifies the statement
+      signature, then the trust anchor certificate, whose RSA public key
+      signed the leaf certificate with sha256WithRSAEncryption (RSASSA-
+      PKCS1-v1_5 with SHA-256, [RFC8017]).
+
+   This profile names one trust anchor and no intermediate certificate.
+   The profile is limited to this form, two certificates with an RSA
+   trust anchor, because it is the form measured to work (Section 14).
+   An x5chain array with more or fewer than two elements, an x5chain
+   that is a single byte string, and an iss with a predicate other than
+   one eku give outside_profile in step 2 of Section 5.2.2.  Certificate
+   contents, key restrictions and their bindings are checked in step 3,
+   which gives untrusted_key when one of those checks fails.  An ECDSA
+   signature depends on a per-signature nonce, so one statement in this
+   profile can have more than one byte string; the vectors use the
+   deterministic nonce of [RFC6979], which a Receiver does not check.
+
+   The value of sub is a choice of this example; the receipt digest does
+   not depend on it.  The key that signs a statement and the receipt key
+   can be the same key or different keys.  The statement carries its own
+   signature over its own Sig_structure; it is not the receipt's
+   signature, even when one key makes both.  Registering M2 or X1 with a
+   Transparency Service yields a COSE Receipt for that statement, not
+   for the evaluation receipt.
+
+
+
+
+
+Gruszka                   Expires 29 April 2027                [Page 16]
+
+Internet-Draft         Evaluation Receipt Mappings          October 2026
+
+
+5.2.1.  Making a Statement
+
+   A party makes a statement for a receipt only after the receipt has
+   passed the verification procedure of [RECEIPTS] Section 5 under a key
+   that party fixed.  A receipt that fails it gives no statement.  The
+   party computes the receipt digest over B, takes sub from the
+   model_id_commit of B, writes the protected header of one profile,
+   signs the Sig_structure of [RFC9052] Section 4.4 with an empty
+   external_aad, under the statement key in the key profile and under
+   the private key of the leaf certificate in the certificate profile,
+   and encodes the COSE_Sign1.
+
+5.2.2.  Checking a Statement
+
+   The Receiver holds the statement, a candidate receipt, its
+   independently selected receipt verification key, and configured
+   pairs.  A pair for the key profile is an issuer URI with an Ed25519
+   statement key; a pair for the certificate profile is a did:x509
+   identifier with a trust anchor certificate.  The received iss value
+   does not establish either association.  It applies the following
+   steps in order.  The first step that fails gives the status named in
+   it, and the statement is refused; only a statement that passes every
+   step is accepted.  A Receiver that stops because it reached a
+   resource limit, in any step, reports a resource-limit error; that is
+   no status, and the statement is not accepted.
+
+   1.  If the bytes are not one CBOR data item in the deterministic
+       encoding, if the item is not a COSE_Sign1, or if its protected
+       header is not a map in the deterministic encoding, the status is
+       malformed.  A data item that is well-formed but not valid under
+       [RFC8949] Section 5.3.1, such as a text string that is not valid
+       UTF-8 or a map with duplicate keys, is malformed; two keys are
+       duplicates only when they are equal under the key equivalence of
+       [RFC8949] Section 5.6.1, so the integer 1 and true are two keys
+       and 0.0 and -0.0 are one.  For the choices that [RFC8949]
+       Section 4.2.2 leaves to a protocol, step 1 uses these: a NaN is
+       in the deterministic encoding only as the half-precision quiet
+       NaN 0xf97e00, and any other encoding of a NaN is malformed; no
+       tag, the bignum tags 2 and 3 included, adds a rule of its own.
+       Step 1 does not check whether the content of a tag inside the
+       COSE_Sign1 is valid for that tag ([RFC8949] Section 5.3.2); the
+       data items inside a tag are checked like any other data item.
+       For step 1, the COSE_Sign1 check concerns only the outer tag, the
+       four-element array and its element types: a wrapping in a CBOR
+       tag other than 18 is not a COSE_Sign1 and is malformed, and an
+       otherwise valid COSE_Sign1 without a tag goes on to step 2 and is
+       outside_profile there.  The protected-header byte string is
+       decoded as a CBOR map, with the empty byte string treated as an
+
+
+
+Gruszka                   Expires 29 April 2027                [Page 17]
+
+Internet-Draft         Evaluation Receipt Mappings          October 2026
+
+
+       empty map ([RFC9052] Section 3), which fails in step 2.  CBOR
+       validity and deterministic encoding are checked before step 2.
+       Header label types are checked only in step 2; a header label
+       that is not a label of either profile gives outside_profile if
+       step 1 succeeds.
+
+   2.  A Transparent Statement [RFC9943] carries COSE Receipts [RFC9942]
+       in its unprotected header under label 394.  If the unprotected
+       header holds label 394 and no other label, and the value of 394
+       is an array of one or more byte strings, the Receiver removes
+       label 394 and applies the rest of this step and the following
+       steps with the empty unprotected header; the protected header,
+       the payload and the signature stay as they are.  These steps do
+       not read the receipts.
+
+       The labels of the protected header select the profile: exactly
+       the integer labels 1, 4, 15, 258 and 259 select the key profile,
+       and exactly the integer labels 1, 4, 15, 33, 258 and 259 select
+       the certificate profile.  If the item is not tagged 18, the
+       unprotected header is not empty, or the labels select neither
+       profile, the status is outside_profile.
+
+       In both profiles, kid is a byte string of 32 bytes; 15 is a map
+       with exactly the integer labels 1 (iss) and 2 (sub), both text
+       strings; 258 is the integer -16; and 259 is the type as a text
+       string.  In the key profile, alg is the integer -19 or -8, and
+       iss is an absolute URI.  In the certificate profile, alg is the
+       integer -7, iss has the syntactic form given in Section 5.2, and
+       x5chain is an array of exactly two byte strings.  This step
+       checks only the syntax of iss and the container form of x5chain;
+       the certificate contents, key properties, and the bindings of iss
+       and kid are checked in step 3.  A violation of these structural
+       rules, a detached payload, a payload that is not 32 bytes, or a
+       signature that is not 64 bytes gives outside_profile. sub MUST
+       match sha256: followed by exactly 64 lowercase hexadecimal
+       digits; otherwise the status is outside_profile.  Step 7 compares
+       sub byte for byte with model_id_commit of B.
+
+   3.  Key profile.  A configured pair counts only if its statement key
+       is 32 octets and its point A meets rules 1 and 2 of [RECEIPTS]
+       Section 4.4: A is a canonical encoding of a point of order L.  A
+       point of small order or of mixed order does not count.  If no
+       configured pair that counts has both an issuer URI exactly equal
+       to iss and a statement key whose SHA-256 COSE Key Thumbprint
+       equals kid, the status is untrusted_key.  Subsequent signature
+       verification uses only keys selected by this pairwise match.
+
+
+
+
+
+Gruszka                   Expires 29 April 2027                [Page 18]
+
+Internet-Draft         Evaluation Receipt Mappings          October 2026
+
+
+       Certificate profile.  A configured pair counts only if its
+       identifier is exactly equal to iss, its trust anchor certificate
+       is byte for byte the second certificate of x5chain, and F of iss
+       is SHA-256 over that certificate.  The status is untrusted_key if
+       no configured pair counts, or if any of the following does not
+       hold: both certificates are DER-encoded X.509 certificates; the
+       public key of the trust anchor is an RSA key with a modulus of at
+       least 2048 bits; the leaf certificate is signed by that key with
+       sha256WithRSAEncryption; the issuer name of the leaf certificate
+       is byte for byte the subject name of the trust anchor; the
+       extended key usage of the leaf certificate contains O of iss; the
+       public key of the leaf certificate is a P-256 key; and kid is
+       SHA-256 over its SubjectPublicKeyInfo.  This step is not
+       certification path validation ([RFC5280] Section 6) and does not
+       resolve iss as a DID: it evaluates no validity period, revocation
+       status, name constraint, certificate policy or other extension.
+       [DIDX509] requires path validation for resolution.  An
+       application that additionally performs path validation reports
+       its result separately from the status of this procedure and may
+       refuse to use a statement whose status is accepted.
+
+   4.  Key profile.  If the signature does not meet the four rules of
+       [RECEIPTS] Section 4.4 under a key that step 3 selected, with the
+       Sig_structure of [RFC9052] Section 4.4 in place of PAE(type, B)
+       in rule 4, the status is signature_invalid.
+
+       Certificate profile.  Read r and s as unsigned big-endian
+       integers from the first and the last 32 bytes of the signature.
+       If r or s is not in the range 1 to n-1, where n is the order of
+       the P-256 base point, or the signature is not a valid ECDSA
+       signature with SHA-256 over the Sig_structure under the public
+       key of the leaf certificate, the status is signature_invalid.
+
+   5.  Run the verification procedure of [RECEIPTS] Section 5 under the
+       Receiver's receipt key.  Continue to step 6 only if it returns
+       PASS.  If it returns FAIL, the status is receipt_not_verified.
+       If it stops with a resource-limit error, or with the input error
+       of [RECEIPTS] Section 5 because the receipt key is not 32 octets,
+       propagate that error and stop without accepting the statement.
+
+   6.  If the payload is not the receipt digest of the candidate, the
+       status is digest_mismatch.
+
+   7.  If sub is not the model_id_commit of B, the status is
+       subject_mismatch.
+
+
+
+
+
+
+Gruszka                   Expires 29 April 2027                [Page 19]
+
+Internet-Draft         Evaluation Receipt Mappings          October 2026
+
+
+   If every step passes, the status is accepted.  Vector M2 with vector
+   P1 of [RECEIPTS] is accepted, and Appendix A.6 gives a statement for
+   each other status.  Vector X1 with P1 is accepted under the
+   certificate pair of Appendix A.8, and X2 to X6 fail at steps 2, 3 and
+   4 in the certificate profile.  Vectors T1 to T5 (Appendix A.9) are
+   Transparent Statements: T1 and T2 are accepted, and T3 to T5, whose
+   unprotected headers hold more than the receipts or the receipts in
+   another form, are outside_profile.
+
+   Steps 1 to 4 do not use the receipt.  For the key profile, a general
+   COSE verifier that implements the statement's alg value checks the
+   signature under the rules of its own Ed25519 implementation, which
+   can accept a signature that step 4 refuses, for example one whose R
+   is a point of small order.  For either profile, a COSE signature
+   check alone does not apply steps 5 to 7, and its success does not
+   show that the statement cites a receipt that verifies.
+
+5.2.3.  What Crosses and What Is Lost
+
+   +============================================+======================+
+   | Receipt                                    | Signed Statement     |
+   +============================================+======================+
+   | B                                          | only its receipt     |
+   |                                            | digest, as the       |
+   |                                            | payload              |
+   +--------------------------------------------+----------------------+
+   | model_id_commit of B                       | sub (2) of the CWT   |
+   |                                            | Claims               |
+   +--------------------------------------------+----------------------+
+   | the type                                   | parameter 259        |
+   +--------------------------------------------+----------------------+
+   | the other members of B (schema, suite,     | not carried; named   |
+   | suite_version, metric, comparator,         | only through the     |
+   | threshold, score, passed, n,               | digest               |
+   | dataset_id_commit, commit_alg, timestamp), |                      |
+   | including criteria_digest when present     |                      |
+   +--------------------------------------------+----------------------+
+   | the receipt's signature and its key hint   | not carried          |
+   +--------------------------------------------+----------------------+
+   | (none)                                     | iss, kid, alg and,   |
+   |                                            | in the certificate   |
+   |                                            | profile, x5chain:    |
+   |                                            | the statement of     |
+   |                                            | the party that       |
+   |                                            | signs it             |
+   +--------------------------------------------+----------------------+
+
+           Table 3: What a Signed Statement carries of a receipt
+
+
+
+Gruszka                   Expires 29 April 2027                [Page 20]
+
+Internet-Draft         Evaluation Receipt Mappings          October 2026
+
+
+   A Receiver that relies on the assertion of a receipt needs the
+   receipt itself; the statement only names it.
+
+5.2.4.  Choice of alg
+
+   In the key profile, value -19 is the fully specified Ed25519
+   identifier of [RFC9864], which sets the polymorphic EdDSA identifier
+   -8 of [RFC9053] to Deprecated.  A party that makes a statement
+   therefore writes -19 only.  Every Receiver accepts -8 as well, for
+   statements made before a producer moved to -19 and for general COSE
+   verifiers that implement -8 but not -19 (Section 14), so that one
+   statement gives one status. -8 names EdDSA for any curve; step 3 of
+   Section 5.2.2 counts only Ed25519 statement keys, so a statement with
+   -8 under any other key is untrusted_key.  Vector S1 (Appendix A.6) is
+   M2 with alg -8, signed again under the same key; it is accepted.
+
+   The certificate profile fixes -7.  [RFC9864] also sets -7 to
+   Deprecated and registers -9 (ESP256) for ECDSA with SHA-256 on P-256.
+   The certificate profile does not admit -9: the Transparency Service
+   measured in Section 14 refuses a statement with -9 at registration,
+   also when its configuration names ESP256, and neither the offline
+   verifier nor the two general COSE libraries named there implement -9.
+   A statement with -9 is outside the certificate profile (vector X2).
+   -7 does not name a curve; step 3 counts only a P-256 leaf key, so -7
+   selects one signature algorithm here.
+
+   The payload follows the pattern of the hash-only mode of
+   [PRML-PROFILE]: the 32 raw octets of a SHA-256, carried as a byte
+   string and not as hexadecimal text.  That profile leaves open how a
+   verifier tells such a payload from a full one, and names a COSE
+   header parameter that declares the digest algorithm as one candidate.
+   Header parameters 258 and 259 of [RFC9995], used here, are such a
+   declaration.
+
+6.  Citations in Agent Evidence Formats
+
+   Three individual drafts define records about the actions of software
+   agents.  Each subsection below states, for one of them and only from
+   the revision it names, where its record can carry a citation of a
+   receipt, in which form, and what that revision leaves open.  A
+   citation names B (Section 3).  The verification that a neighbouring
+   format defines for its own record shows nothing about the receipt: a
+   Receiver that relies on the receipt runs [RECEIPTS] Section 5 under a
+   key it fixed.  The vectors are in Appendix A.10.
+
+
+
+
+
+
+
+Gruszka                   Expires 29 April 2027                [Page 21]
+
+Internet-Draft         Evaluation Receipt Mappings          October 2026
+
+
+6.1.  Control Delivery Evidence
+
+   [ACDE] (revision -02) states evidence requirements for the delivery
+   of control instructions, such as stop or suspend, to enforcement
+   points.  It defines a logical evidence model and no wire format; its
+   illustrative record is, in its own words, "deliberately not a wire
+   format".  Every observation used to correlate an instruction binds
+   the instruction identifier to a digest of either the exact
+   instruction or a declared canonical projection of it, and the
+   applicable protocol or profile identifies the projection, the digest
+   algorithm, the canonicalization rule and the domain-separation rule,
+   if any (its Section 5.2, R-CD-2).  Records within one declared
+   identity-uniqueness scope that reuse one instruction identity with
+   different governed content are SUBSTITUTION, also between issuer and
+   receiver records (its Section 6.1).
+
+   A receipt that motivates a control can therefore be cited inside the
+   governed instruction: an instruction whose exact bytes contain a
+   typed digest reference to the receipt (Section 5.1) carries the
+   citation, and every observation that binds the digest of those bytes
+   binds the citation with them.  An observation that binds the digest
+   of an instruction with another citation does not bind the same
+   content.  Section 7 of [ACDE] also lists, next to the instruction
+   identifier, an attachment point for a reference to the upstream
+   decision, action, task or session; whether a receipt on which such a
+   decision rested may be referenced there is left open by that draft.
+
+   Matching applies Section 3.3 to the typed digest reference that is
+   the value of the citing member of the instruction; the rule of
+   Section 5.1 that takes digest_alg and digest from a top-level object
+   applies to that value.  The matching result does not change a
+   disposition of [ACDE], and a disposition does not change the matching
+   result.
+
+   Open in [ACDE] -02, and not assumed here:
+
+   *  the format of a control instruction, and so the member that holds
+      a citation, and whether the exact bytes or a projection of them
+      are hashed (the vectors hash the exact bytes of a JSON object in
+      the serialization of [RFC8785], with no domain separation, and use
+      a member basis);
+
+   *  the form of the reference to an upstream decision in its
+      Section 7, whether it may name a receipt, and whether it may carry
+      a digest;
+
+
+
+
+
+
+Gruszka                   Expires 29 April 2027                [Page 22]
+
+Internet-Draft         Evaluation Receipt Mappings          October 2026
+
+
+   *  the representation of a content digest (the vectors use sha-256:
+      followed by 64 lowercase hexadecimal digits; the illustrative
+      record of [ACDE] writes sha-256:<digest> and fixes no encoding of
+      the digest).
+
+6.2.  Evidence Qualification Receipts
+
+   [EQR] (revision -00) defines the Evidence Qualification Receipt
+   (EQR), a JSON object that binds a proposition to a versioned evidence
+   profile and lists evidence descriptors.  Each descriptor binds at
+   least a digest and an evidence class; sha-256 is the mandatory-to-
+   implement digest algorithm, and digest values are base64url without
+   padding (its Section 5).  Its Section 5 also says that an
+   implementation that computes a digest over a JSON payload should use
+   [RFC8785] before hashing, and that the applicable profile defines the
+   bytes hashed for an object that is not JSON.
+
+   An EQR cites a receipt with one evidence descriptor, written with the
+   member names of the example in its Section 5.2: class is the type,
+   hash_alg is sha-256, and digest is the receipt digest in base64url
+   without padding.  B is in the serialization of [RFC8785] (step 5 of
+   [RECEIPTS] Section 5), so its RFC 8785 bytes are B itself and the
+   digest over them is the receipt digest.  The bytes cited are B, not
+   the receipt object (Section 3.2); an EQR profile that admits receipts
+   as evidence is where that choice would be stated.
+
+   Matching applies Section 3.3 to hash_alg and digest of the
+   descriptor.  An EQR that is valid under Section 8 of [EQR] and
+   qualifies under its Section 8.1 shows nothing about the cited
+   receipt, and the two results stay apart.
+
+   Open in [EQR] -00, and not assumed here:
+
+   *  a vocabulary of evidence classes, and whether the local trust
+      policy of step 7 of its Section 8 accepts the type as a class;
+
+   *  the member names of an evidence descriptor, which appear only in
+      its example (the vectors use class, hash_alg and digest);
+
+   *  the format of an evidence profile, which it does not define (the
+      vectors use a JSON object of their own);
+
+   *  how a profile states which bytes of a cited object are hashed;
+
+   *  local metadata such as a retrieval reference for the receipt,
+      which it leaves to deployments.
+
+
+
+
+
+Gruszka                   Expires 29 April 2027                [Page 23]
+
+Internet-Draft         Evaluation Receipt Mappings          October 2026
+
+
+6.3.  Agent Interaction Records
+
+   [AIR] (revision -01) defines the AgentInteractionRecord (AIR), the
+   payload of a COSE_Sign1 Signed Statement that records one action of
+   an agent.  The payload is the serialization of the record under
+   [RFC8785] (its Sections 5.6 and 5.7); external_refs is a required
+   array of ExternalRef objects, each with the members ref_type and
+   ref_value, both text, and ref_system, text or null, for references
+   into other systems (its Sections 5.2 and 5.3).  Its Section 10.1
+   names external_refs as the place for a reference to a related
+   authorization record.
+
+   An AIR cites a receipt with one ExternalRef: ref_type is the type,
+   ref_value is the receipt digest as 64 lowercase hexadecimal digits,
+   and ref_system is null.  The citation lies in the payload, so the
+   content_hash of the record and its signature cover it (Sections 5.5
+   to 5.8 of [AIR]).
+
+   Matching applies Section 3.3 to the ref_value of an ExternalRef whose
+   ref_type is the type; that ref_type names SHA-256.  A record that
+   passes the four steps of Section 5.8 of [AIR] is VERIFIED in the
+   sense of that document, which shows nothing about the cited receipt.
+
+   Open in [AIR] -01, and not assumed here:
+
+   *  a vocabulary of ref_type values, and whether a digest may be a
+      ref_value;
+
+   *  the JSON representation of the members that its CDDL gives as byte
+      strings, such as input_hash and outcome_hash, in a payload that is
+      JSON (the vectors write lowercase hexadecimal digits);
+
+   *  whether content_hash is taken over the content of the payload byte
+      string or over its CBOR encoding (its Section 5.7 calls the
+      payload both "the raw byte string" and "the CBOR-encoded canonical
+      JSON serialisation"; the vectors hash the content, the JSON
+      bytes);
+
+   *  whether members whose value is null are written or left out (the
+      vectors write every member of the CDDL);
+
+   *  the encoding of a protected header that mixes integer and text
+      labels (the vectors use the core deterministic encoding of
+      [RFC8949] Section 4.2.1), and how the text operator_pubkey_id
+      becomes the byte string kid (the vectors use its UTF-8 bytes).
+
+
+
+
+
+
+Gruszka                   Expires 29 April 2027                [Page 24]
+
+Internet-Draft         Evaluation Receipt Mappings          October 2026
+
+
+7.  Criteria Sets in PRML
+
+   PRML [PRML] serializes an evaluation claim fixed before the run: a
+   metric, a comparator, a threshold, a dataset content hash and a seed,
+   in canonical YAML whose SHA-256 is the manifest hash.  A receipt
+   records one result after the run.  A receipt names a criteria set at
+   most through its optional criteria_digest ([RECEIPTS] Section 3.5).
+   When the criteria set is a PRML manifest, the bytes that PRML fixes
+   for it are its canonical bytes, whose SHA-256 is the manifest hash,
+   and criteria_digest over them is sha256: followed by the manifest
+   hash.  Table 4 maps the members of a PRML manifest, version 0.1, onto
+   a receipt.
+
+   +==============+===================+================================+
+   | PRML         | Receipt           | Lost or changed                |
+   +==============+===================+================================+
+   | version      | none              | which PRML rules apply         |
+   +--------------+-------------------+--------------------------------+
+   | claim_id     | none              | the claim and its amendment    |
+   |              |                   | chain; only one manifest is    |
+   |              |                   | named, by criteria_digest      |
+   +--------------+-------------------+--------------------------------+
+   | created_at   | none              | timestamp is when the          |
+   |              |                   | Issuer states the              |
+   |              |                   | evaluation ran, not when       |
+   |              |                   | the criteria were written      |
+   +--------------+-------------------+--------------------------------+
+   | metric       | metric            | nothing when the string is     |
+   |              |                   | copied exactly                 |
+   +--------------+-------------------+--------------------------------+
+   | comparator   | comparator        | == has no counterpart; such    |
+   |              |                   | a claim has no receipt         |
+   +--------------+-------------------+--------------------------------+
+   | threshold    | threshold         | a number becomes a decimal     |
+   |              |                   | string; the rule below         |
+   |              |                   | compares values                |
+   +--------------+-------------------+--------------------------------+
+   | dataset.id,  | dataset_id_commit | the content hash; the          |
+   | dataset.hash |                   | receipt commits to an          |
+   |              |                   | identifier with a salt, not    |
+   |              |                   | to the content                 |
+   +--------------+-------------------+--------------------------------+
+   | seed         | none              | the seed                       |
+   +--------------+-------------------+--------------------------------+
+   | producer     | none              | the producer; the receipt      |
+   |              |                   | names no issuer, the           |
+   |              |                   | Receiver fixes the key         |
+   +--------------+-------------------+--------------------------------+
+
+
+
+Gruszka                   Expires 29 April 2027                [Page 25]
+
+Internet-Draft         Evaluation Receipt Mappings          October 2026
+
+
+   | model        | model_id_commit   | the clear identifier;          |
+   |              |                   | checking an opening            |
+   |              |                   | requires the salt and          |
+   |              |                   | identifier                     |
+   +--------------+-------------------+--------------------------------+
+   | prior_hash,  | none              | all of them                    |
+   | metric_args, |                   |                                |
+   | code, notes  |                   |                                |
+   +--------------+-------------------+--------------------------------+
+   | none         | suite,            | a manifest has no result       |
+   |              | suite_version,    |                                |
+   |              | score, passed, n, |                                |
+   |              | timestamp         |                                |
+   +--------------+-------------------+--------------------------------+
+
+                   Table 4: A PRML manifest and a receipt
+
+   A Receiver that holds a receipt and a PRML manifest compares them as
+   follows and reports the two results separately.
+
+   1.  Run the procedure of [RECEIPTS] Section 5 under the Receiver's
+       receipt key.  Continue only if it returns PASS.  If it returns
+       FAIL, do not perform the comparison.  If it stops with a
+       resource-limit error, or with the input error of [RECEIPTS]
+       Section 5 because the receipt key is not 32 octets, propagate
+       that error and stop without reporting binding or agreement
+       results.
+
+   2.  The manifest is canonicalized as [PRML] Section 3 requires, and
+       its manifest hash is computed.  A manifest that PRML rejects is
+       not compared.
+
+   3.  Binding.  The result is BOUND when the receipt carries
+       criteria_digest and it equals sha256: followed by the manifest
+       hash, and UNBOUND otherwise.
+
+   4.  Agreement.  The result is AGREE when metric is the same string in
+       both, comparator is the same and is not ==, and the receipt's
+       threshold and the manifest's threshold are the same decimal
+       number, the manifest's value read as the decimal that its
+       canonical rendering denotes (so 0.8 in the manifest and 0.800 in
+       the receipt agree, and 0.80000000000000001 in the receipt does
+       not).  Otherwise it is DIFFER.
+
+   BOUND says that the Issuer states this result belongs to that
+   manifest; AGREE says that the two documents state the same metric,
+   comparator and threshold.  Neither result shows that the manifest
+   existed before the run, which needs a time-anchored record of the
+
+
+
+Gruszka                   Expires 29 April 2027                [Page 26]
+
+Internet-Draft         Evaluation Receipt Mappings          October 2026
+
+
+   manifest, such as a registration under [PRML-PROFILE], and evidence
+   of when the run began.  Neither shows that the dataset with the
+   manifest's content hash was the one evaluated, or that the seed was
+   used.
+
+8.  Relation to Claim-Preservation Requirements
+
+   [ABAK] states format-neutral requirements for converting and
+   consuming evaluation evidence.  This document addresses parts of
+   these requirements for the conversions it describes; the
+   correspondences below are not a conformance claim.  Table 2 and
+   Table 4 name what each envelope or document loses, in the sense of
+   its requirement R-CP-9.  Section 3.3 gives INDETERMINATE when B
+   cannot be obtained or the algorithm is unknown, never a match (R-CP-
+   8, R-CP-10).  Section 9 keeps the result of a verifier or of a
+   registration apart from the receipt's passed, and claims no order of
+   criteria and run (R-CP-5, R-CP-11).  It does not meet the
+   requirements on coverage and attempts (R-CP-6) or on records of a
+   mapping instance (R-CP-1): a receipt has no field for them, and this
+   document defines none.
+
+9.  What Is Not Proven
+
+   The list of [RECEIPTS] Section 6 applies unchanged to a cited
+   receipt.  It is repeated here word for word; its one cross-reference
+   is written as a reference to Section 5 of [RECEIPTS].
+
+   Verification establishes that the receipt passes the format,
+   consistency and signature checks in Section 5 of [RECEIPTS] under the
+   Receiver's selected key.  PASS does not mean that passed is true or
+   that the result meets the Receiver's requirements for its intended
+   use.  Establishing who controls that key and whether that party is
+   authorized to make the claim is outside this procedure.  Verification
+   does not establish that the Issuer's claims are true.  In particular:
+
+   *  The score can be false.  The evaluation can be wrong, badly
+      designed or not run at all; the receipt records what the Issuer
+      states.
+
+   *  The run need not have been the only run.  An Issuer can evaluate
+      many times and record only the run it prefers.
+
+   *  The Issuer can lie.  A valid signature binds the statement to the
+      key, not to the truth.
+
+   *  A receipt does not show that it was published, logged or shown to
+      anyone else.  A receipt does not prove registration with a
+      Transparency Service.  In SCITT, transparency additionally
+
+
+
+Gruszka                   Expires 29 April 2027                [Page 27]
+
+Internet-Draft         Evaluation Receipt Mappings          October 2026
+
+
+      requires registering a Signed Statement carrying the receipt or
+      its digest with a Transparency Service and verifying the resulting
+      SCITT Receipt.  Registration and verification of the resulting
+      SCITT Receipt are outside this document.
+
+   *  The receipt bytes are not a stable name for the receipt.  Only B
+      is signed; the receipt object around it is not canonicalized, and
+      its key hint can be present or absent.  A party that cites a
+      receipt cites SHA-256 over B.
+
+   *  A commitment is computationally binding under the collision
+      resistance of SHA-256.  A Receiver can check a claimed opening
+      only after receiving the salt and identifier.  Hiding depends on
+      keeping an unpredictable salt secret.
+
+   *  The timestamp is the Issuer's statement, not a time attested by
+      another party.
+
+   *  The receipt says nothing about individual samples: n is the
+      Issuer's statement, and no sample result is committed or can be
+      disclosed against the receipt.  A sample-level audit is outside
+      this document and is left to a separate document.
+
+   *  A receipt does not show that the threshold was fixed before the
+      run.
+
+   *  criteria_digest binds only the Issuer's statement that this result
+      belongs to the criteria set with that digest.  It shows neither
+      that the criteria set existed before the run nor that the metric,
+      comparator and threshold in it equal those in the receipt.
+
+   *  Even with salt and identifier disclosed, the receipt does not show
+      that the named model or dataset was the one actually evaluated.
+
+   *  A receipt does not show where B came from.  B carries no reference
+      to another receipt or record that it was made from, for example
+      when an Issuer translates the result of another format into a
+      receipt; this format has no member for it.
+
+   Each envelope adds what it does not prove:
+
+   *  A citation.  A MATCH does not show that the candidate verifies,
+      who signed it, or that its assertion is true (case C5).  The
+      digest names B; it names neither a signature nor a key.
+
+
+
+
+
+
+
+Gruszka                   Expires 29 April 2027                [Page 28]
+
+Internet-Draft         Evaluation Receipt Mappings          October 2026
+
+
+   *  DSSE.  A successful DSSE signature check authenticates PAE(type,
+      B) under the selected key.  A receipt verdict additionally
+      requires the verification profile and all checks of [RECEIPTS]
+      Section 5.  The unauthenticated keyid is only a key-selection
+      hint.
+
+   *  in-toto test-result.  A Statement that restates a receipt is the
+      statement of its signer.  It does not show that a receipt exists,
+      and its result does not show that the receipt's passed is true;
+      both are statements.
+
+   *  SLSA VSA.  A VSA shows that its verifier states that it verified
+      its subject under its policy, with the cited receipt among its
+      inputs. verificationResult is not passed, and the VSA does not
+      make the receipt's assertion true.  The digest in
+      inputAttestations names B, not the signature or the key the
+      verifier used.
+
+   *  SCITT Signed Statement and COSE Receipt.  The Hash Envelope
+      carries only the digest.  Its registration shows that a
+      Transparency Service registered a statement naming that digest
+      under its Registration Policy.  It does not show that a receipt
+      with that B exists or that it verifies, and sub binds nothing
+      beyond the commitment it repeats.
+
+   *  Typed digest reference.  A Verified reference shows that the cited
+      bytes are B, nothing about the signature, the key or the
+      assertion.  A MATCH alone does not establish that the reference is
+      well formed or that its digest context has been resolved.
+
+   *  PRML.  BOUND and AGREE (Section 7) do not show that the criteria
+      were fixed before the run.
+
+   No envelope in this document carries sample data: a receipt commits
+   to no sample result ([RECEIPTS] Section 6), and a citation names only
+   B.
+
+10.  Related Work
+
+   [FRAMING-SPACE] measures the CBOR framing space of one COSE_Sign1
+   object under six encoding freedoms: with or without tag 18, definite
+   or indefinite length for the outer array and for the unprotected
+   header map, and whole or chunked byte strings for the protected
+   header, the payload and the signature.  It reports 64 distinct octet
+   sequences that share one Sig_structure, and so one signature, while
+   each has its own digest over the transmitted octets.  It notes that
+   the core deterministic encoding of [RFC8949] Section 4.2.1 excludes
+   five of these freedoms and leaves the choice between the tagged and
+
+
+
+Gruszka                   Expires 29 April 2027                [Page 29]
+
+Internet-Draft         Evaluation Receipt Mappings          October 2026
+
+
+   the untagged form.
+
+   The Signed Statement of Section 5.2 is restricted in both respects:
+   the whole COSE_Sign1, its protected header included, is in the core
+   deterministic encoding, and step 2 of Section 5.2.2 requires tag 18.
+   For a statement whose header contents, payload and signature bytes
+   are fixed, one of the 64 combinations therefore remains.  A digest
+   over the transmitted octets and a digest over the Sig_structure still
+   identify different objects: in the certificate profile one statement
+   can have more than one byte string (Section 5.2), each with its own
+   digest over the transmitted octets and all with one Sig_structure.
+   This document names a receipt by the digest of B (Section 3) and
+   defines no identifier for a statement that cites it.
+
+11.  Security Considerations
+
+   This section follows the guidance of [RFC3552].  The attacker can
+   read, create, modify, replay and reorder receipts and citing
+   envelopes, and controls every input except the Receiver's choice of
+   verification key.
+
+   Collisions.  A citation names B only as well as SHA-256 resists
+   collisions and second preimages.
+
+   Signer not bound.  The receipt digest does not name a key.  An
+   attacker who signs the same B with its own key produces a receipt
+   that matches every citation of B.  It fails verification under the
+   Receiver's key (Section 3.2).
+
+   Signature reuse across envelopes.  By design the signature of a
+   receipt is a valid DSSE signature under payloadType equal to the type
+   (Section 4.1).  A DSSE consumer that accepts that payloadType holds
+   the B and the signature of a receipt, and applies [RECEIPTS]
+   Section 5 before it relies on them.  Under any other payloadType the
+   signature is expected to be invalid (Section 4.1).  It is not a COSE
+   signature, because COSE signs a Sig_structure and not PAE.
+
+   Digest confusion.  For one receipt, the receipt digest, the SHA-256
+   of the receipt bytes and the SHA-256 of a DSSE envelope are three
+   different values.  A Receiver compares only the receipt digest with a
+   citation.  Appendix A lists the first two for vector P1 and the third
+   for M1.  The type identifies B, but a receipt object carries the same
+   string as its schema: a Receiver that fetches a receipt object for a
+   citation takes B from it by steps 1 to 3 of [RECEIPTS] Section 5 and
+   compares the digest of that B, never the digest of the object.
+
+
+
+
+
+
+Gruszka                   Expires 29 April 2027                [Page 30]
+
+Internet-Draft         Evaluation Receipt Mappings          October 2026
+
+
+   Algorithm.  Only SHA-256 is defined.  A citation with another
+   algorithm gives INDETERMINATE (case C8), so it cannot be satisfied by
+   a weaker digest.
+
+   Reference parsing.  For the JSON representation in Section 5.1,
+   duplicate detection precedes any conversion that could discard member
+   names.  Selecting a first or last occurrence can change the reference
+   state or matching result.  A MATCH is not a substitute for Verified:
+   a Malformed, Unresolved or Failed reference is not relied on as
+   evidence of a content binding ([CPB] Section 9.1), and neither is a
+   reference whose processing stopped at a resource limit.
+
+   Receipts not read.  Step 2 of Section 5.2.2 removes the receipts of a
+   Transparent Statement without reading them; vector T1 carries a
+   receipt made for another statement and is accepted.  An accepted
+   status therefore says nothing about registration.  A Receiver that
+   relies on registration verifies each receipt under [RFC9942] with a
+   Transparency Service key that it fixed itself.  It fixes the key, not
+   the issuer name in the receipt: two instances of a Transparency
+   Service can carry the same issuer name and differ only in their keys
+   (Section 14).
+
+   Digest not checked by registration alone.  The Signed Statement
+   carries a digest, not B.  Registration under a Transparency Service's
+   policy does not by itself establish that the payload equals SHA-256
+   over B; Section 14 records the registration of a statement whose
+   payload was not that digest.  The Receiver recomputes the receipt
+   digest in step 6 of Section 5.2.2.
+
+   Configured trust.  A Receiver trusts a statement key or a trust
+   anchor because it configured it.  In the certificate profile, the
+   procedure checks the leaf under the configured anchor but evaluates
+   no validity period or revocation status.  A compromised leaf key can
+   therefore continue to pass this procedure while the configured pair
+   remains.  Additional path validation or other acceptance policy can
+   refuse its use separately.  Removing a configured pair makes
+   statements that would pass step 2 and whose only matching pair was
+   removed fail at step 3 with untrusted_key.
+
+12.  Privacy Considerations
+
+   The receipt digest lets anyone who holds a candidate B confirm it.  B
+   carries salted commitments, so B cannot be guessed without them; a
+   party that knows them can test guesses for the remaining members,
+   such as score and threshold.  A citation registered with a
+   Transparency Service publishes the digest for as long as that service
+   keeps its log.  The sub of M2 repeats the model commitment of B in
+   clear; registered, it links every receipt and statement that commit
+
+
+
+Gruszka                   Expires 29 April 2027                [Page 31]
+
+Internet-Draft         Evaluation Receipt Mappings          October 2026
+
+
+   to the same model identifier with the same salt ([RECEIPTS]
+   Section 9).  The same holds for a criteria_digest that a receipt
+   carries.
+
+13.  IANA Considerations
+
+   This document has no IANA actions.
+
+14.  Implementation Status
+
+   This section records the status of known implementations at the time
+   of writing, following [RFC7942], and is to be removed before
+   publication.
+
+   The examples of Appendix A were produced by a generator script whose
+   two runs are byte-identical, and checked by a separate script that
+   re-derives every value of Appendices A.1 to A.9 from the bytes,
+   except the vectors R15 and R16 added in this revision and the state
+   of R6, which this revision changes: the match result of every case,
+   with its own implementation of steps 1 to 3 of [RECEIPTS] Section 5;
+   the status of M2, of every status vector and of every certificate-
+   profile vector, with its own implementation of the steps of
+   Section 5.2.2 in both profiles; and the state and the matching result
+   of each of R1 to R14, the state of R6 aside, with its own
+   implementation of the rules of Section 5.1.  R15, R16 and the state
+   of R6 were checked against the text of Section 5.1 by a separate
+   checker written from this document and the documents it cites alone.
+
+   An implementation of both directions of the key profile of
+   Section 5.2, the open-source package proofbundle (module
+   receipt_cose, experimental), reproduces M2 byte for byte from vector
+   P1 of [RECEIPTS] and returns each status of Section 5.2.2 for a set
+   of 49 statements and 6 receipts.  M2 and the status vectors other
+   than S4 and S5 of Appendix A.6 are, byte for byte, statements of that
+   set, made independently by the generator of Appendix A.  It writes
+   -19 only and reads -8 only under an Ed25519 statement key.  Measured
+   on 2026-10-08 with these pinned versions: pycose 1.1.0 (with cbor2
+   5.9.0) and go-cose v1.3.0 verified the statement with alg -8, refused
+   the same statement with one signature bit changed, and reported alg
+   -19 (vector M2) as an unknown algorithm; microsoft/scitt-verifier
+   0.4.0 evaluated the signature of neither statement (its result for
+   both was cannot-evaluate, with the statement signature not
+   evaluated).  The certificate profile and the typed digest references
+   of Section 5.1 are implemented only by the scripts named in this
+   section.
+
+
+
+
+
+
+Gruszka                   Expires 29 April 2027                [Page 32]
+
+Internet-Draft         Evaluation Receipt Mappings          October 2026
+
+
+   Registration with a Transparency Service was measured on 2026-10-10
+   with a local instance of microsoft/scitt-ccf-ledger at commit
+   00101f76 (CCF 7.0.17, virtual mode); no hosted service took part.  No
+   statement in the exact form of the key profile was registered: the
+   service refused its https issuer ("CWT_Claims issuer is unsupported")
+   with alg -19 and with alg -8, and, under a did:x509 issuer with
+   x5chain, refused alg -19 ("COSE algorithm -19 is not supported") and
+   an Ed25519 key with alg -8 ("Unsupported key type").  A statement in
+   the form of the certificate profile, with an RSA-3072 test root, a
+   P-256 test leaf and alg -7, was registered, and microsoft/scitt-
+   verifier 0.4.0 verified the Transparent Statement it returned
+   offline, with the network unavailable, under a policy that fixed the
+   receipt issuer, the statement issuer and the statement subject and
+   compared the payload with SHA-256 over B.  On 2026-10-12 the same
+   service, built again at commit 00101f76 and configured for the test
+   root, registered X1 again and refused X2, which is X1 with alg -9
+   signed again under the test leaf, with "COSE algorithm -9 is not
+   supported", also when ESP256 was named among its accepted algorithms;
+   its source at that commit and at commit d68579b5, the head of its
+   main branch inspected that day, maps no -9. pycose 1.1.0 and go-cose
+   v1.3.0 refused -9 as an unknown algorithm before verifying, and the
+   source of microsoft/scitt-verifier at commit bd6fb8ba (package
+   version 0.4.0) maps no -9 for the statement signature.  The steps of
+   Section 5.2.2, applied on 2026-10-11 to the registered statement
+   under the certificate pair of its test root, give accepted, and so
+   they do for the Transparent Statement that the service returned for
+   it.
+
+   In the earlier registration and offline-verification measurement, the
+   service registered a statement whose payload was not SHA-256 over the
+   B it named, and two local instances of the service carried the same
+   receipt issuer name (127.0.0.1:8000) and differed only in their
+   service keys. microsoft/scitt-verifier 0.4.0 reported a receipt taken
+   from another entry, a receipt with one byte changed and a receipt of
+   the other instance as cannot-evaluate (exit status 3), not as
+   untrusted (exit status 1); this document maps no verdict of another
+   tool to a status of Section 5.2.2. scitt-verifier 0.4.0 did not
+   anchor a chain whose leaf certificate was signed with ECDSA (exit
+   status 3) and verified the chain with an RSA root.  Vector T2 is the
+   Transparent Statement that a local instance of the same service
+   returned on 2026-10-11 for X1: X1 with one receipt under label 394,
+   byte for byte.
+
+   The signature of M2 (alg -19) is checked from the text alone, without
+   a COSE library: a script written from the texts of this document and
+   of [RECEIPTS] builds the Sig_structure by hand and verifies the
+   signature over it with a general Ed25519 implementation (its checks
+   M2-17 and M2-18).
+
+
+
+Gruszka                   Expires 29 April 2027                [Page 33]
+
+Internet-Draft         Evaluation Receipt Mappings          October 2026
+
+
+   The vectors of Appendix A.10 were made by a generator script from the
+   texts named in Section 6.  Two of the three families were run, on
+   2026-10-25, through readers of the drafts concerned that were written
+   separately from the generator, each from the text of its draft alone.
+   The two readers named here are kept in the proofbundle repository on
+   branches other than main; their run on these vectors is not recorded
+   there, and the readers' run records in those commits are of earlier
+   runs over their own vectors.  A reader of [ACDE] at commit
+   6388f20201b9cb210e97e9d640f5fb74d3424b27 on the branch
+   feat/interop-acde01-reads-abak-02 gives CONFIRMED for both
+   obligations of A1, and CONFIRMED for EP-A and SUBSTITUTION for EP-B
+   in A2; a reader of [EQR] at commit
+   834796d306290c3215967eee43ae30db42554cb7 on the branch
+   feat/interop-eqr00-reader finds W1 valid and qualifying, and W2
+   invalid for the form of its digest.  For V1 and V2 no implementation
+   of [AIR] other than the generator's own check of its Section 5.8 was
+   run.
+
+15.  References
+
+15.1.  Normative References
+
+   [CPB]      Mih, S. and A. Sokolov, "Canonicalization Declaration for
+              SCITT Signed Statements", Work in Progress, Internet-
+              Draft, draft-mih-sokolov-scitt-payload-binding-06, 26
+              October 2026, <https://datatracker.ietf.org/doc/draft-mih-
+              sokolov-scitt-payload-binding/06/>.
+
+   [DSSE]     Secure Systems Lab, "DSSE: Dead Simple Signing Envelope,
+              protocol specification, version 1.0.2", 28 May 2024,
+              <https://github.com/secure-systems-lab/dsse/blob/v1.0.2/
+              protocol.md>.
+
+   [INTOTO-DIGESTSET]
+              in-toto project, "in-toto Attestation Framework: DigestSet
+              field type, v1 (release v1.2.0)", 18 March 2026,
+              <https://github.com/in-
+              toto/attestation/blob/v1.2.0/spec/v1/digest_set.md>.
+
+   [INTOTO-RD]
+              in-toto project, "in-toto Attestation Framework:
+              ResourceDescriptor field type, v1 (release v1.2.0)", 18
+              March 2026, <https://github.com/in-
+              toto/attestation/blob/v1.2.0/spec/v1/
+              resource_descriptor.md>.
+
+
+
+
+
+
+Gruszka                   Expires 29 April 2027                [Page 34]
+
+Internet-Draft         Evaluation Receipt Mappings          October 2026
+
+
+   [INTOTO-STATEMENT]
+              in-toto project, "in-toto Attestation Framework: Statement
+              layer, v1 (release v1.2.0)", 18 March 2026,
+              <https://github.com/in-
+              toto/attestation/blob/v1.2.0/spec/v1/statement.md>.
+
+   [PRML]     Öztürk, C., Ed., "PRML: Pre-Registered ML Manifest
+              Specification, Version 0.1", 1 May 2026,
+              <https://spec.falsify.dev/v0.1>.
+
+   [RECEIPTS] Gruszka, K., "Signed Evaluation Receipts", Work in
+              Progress, Internet-Draft, draft-gruszka-signed-evaluation-
+              receipts-04, October 2026,
+              <https://datatracker.ietf.org/doc/draft-gruszka-signed-
+              evaluation-receipts/>.
+
+   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", BCP 14, RFC 2119, March 1997,
+              <https://www.rfc-editor.org/info/rfc2119>.
+
+   [RFC3986]  Berners-Lee, T., Fielding, R., and L. Masinter, "Uniform
+              Resource Identifier (URI): Generic Syntax", STD 66,
+              RFC 3986, January 2005,
+              <https://www.rfc-editor.org/info/rfc3986>.
+
+   [RFC4648]  Josefsson, S., "The Base16, Base32, and Base64 Data
+              Encodings", RFC 4648, October 2006,
+              <https://www.rfc-editor.org/info/rfc4648>.
+
+   [RFC5280]  Cooper, D., Santesson, S., Farrell, S., Boeyen, S.,
+              Housley, R., and W. Polk, "Internet X.509 Public Key
+              Infrastructure Certificate and Certificate Revocation List
+              (CRL) Profile", RFC 5280, May 2008,
+              <https://www.rfc-editor.org/info/rfc5280>.
+
+   [RFC8017]  Moriarty, K., Ed., Kaliski, B., Jonsson, J., and A. Rusch,
+              "PKCS #1: RSA Cryptography Specifications Version 2.2",
+              RFC 8017, November 2016,
+              <https://www.rfc-editor.org/info/rfc8017>.
+
+   [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
+              2119 Key Words", BCP 14, RFC 8174, May 2017,
+              <https://www.rfc-editor.org/info/rfc8174>.
+
+   [RFC8259]  Bray, T., Ed., "The JavaScript Object Notation (JSON) Data
+              Interchange Format", STD 90, RFC 8259, December 2017,
+              <https://www.rfc-editor.org/info/rfc8259>.
+
+
+
+
+Gruszka                   Expires 29 April 2027                [Page 35]
+
+Internet-Draft         Evaluation Receipt Mappings          October 2026
+
+
+   [RFC8949]  Bormann, C. and P. Hoffman, "Concise Binary Object
+              Representation (CBOR)", STD 94, RFC 8949, December 2020,
+              <https://www.rfc-editor.org/info/rfc8949>.
+
+   [RFC9052]  Schaad, J., "CBOR Object Signing and Encryption (COSE):
+              Structures and Process", STD 96, RFC 9052, August 2022,
+              <https://www.rfc-editor.org/info/rfc9052>.
+
+   [RFC9053]  Schaad, J., "CBOR Object Signing and Encryption (COSE):
+              Initial Algorithms", RFC 9053, August 2022,
+              <https://www.rfc-editor.org/info/rfc9053>.
+
+   [RFC9360]  Schaad, J., "CBOR Object Signing and Encryption (COSE):
+              Header Parameters for Carrying and Referencing X.509
+              Certificates", RFC 9360, February 2023,
+              <https://www.rfc-editor.org/info/rfc9360>.
+
+   [RFC9597]  Prorock, M., Steele, O., Mahy, R., and H. Birkholz, "CBOR
+              Web Token (CWT) Claims in COSE Headers", RFC 9597, July
+              2024, <https://www.rfc-editor.org/info/rfc9597>.
+
+   [RFC9679]  Isobe, K., Tschofenig, H., and O. Steele, "CBOR Object
+              Signing and Encryption (COSE) Key Thumbprint", RFC 9679,
+              December 2024, <https://www.rfc-editor.org/info/rfc9679>.
+
+   [RFC9864]  Jones, M. B. and O. Steele, "Fully-Specified Algorithms
+              for JSON Object Signing and Encryption (JOSE) and CBOR
+              Object Signing and Encryption (COSE)", RFC 9864, October
+              2025, <https://www.rfc-editor.org/info/rfc9864>.
+
+   [RFC9995]  Steele, O., Lasker, S., and H. Birkholz, "CBOR Object
+              Signing and Encryption (COSE) Hash Envelope", RFC 9995,
+              July 2026, <https://www.rfc-editor.org/info/rfc9995>.
+
+   [VSA]      OpenSSF SLSA project, "SLSA Verification Summary
+              Attestation (VSA), version 1", n.d.,
+              <https://slsa.dev/spec/v1.2/verification_summary>.
+
+15.2.  Informative References
+
+   [ABAK]     Abak, A. T., "Claim-Preserving Exchange of AI Evaluation
+              Evidence", Work in Progress, Internet-Draft, draft-abak-
+              ai-evaluation-claim-preservation-00, 23 September 2026,
+              <https://datatracker.ietf.org/doc/draft-abak-ai-
+              evaluation-claim-preservation/00/>.
+
+
+
+
+
+
+Gruszka                   Expires 29 April 2027                [Page 36]
+
+Internet-Draft         Evaluation Receipt Mappings          October 2026
+
+
+   [ACDE]     Abak, A. T., "Evidence Requirements for Agent Control
+              Delivery and Outcome Reconciliation", Work in Progress,
+              Internet-Draft, draft-abak-agent-control-delivery-
+              evidence-02, 11 October 2026,
+              <https://datatracker.ietf.org/doc/draft-abak-agent-
+              control-delivery-evidence/02/>.
+
+   [AIR]      Emirdag, P. and D. Feichtinger, "AI Agent Execution
+              Profile of SCITT", Work in Progress, Internet-Draft,
+              draft-emirdag-scitt-ai-agent-execution-01, 12 October
+              2026, <https://datatracker.ietf.org/doc/draft-emirdag-
+              scitt-ai-agent-execution/01/>.
+
+   [CAPSULE]  Mih, S., "An Agent Action Capsule Profile for SCITT", Work
+              in Progress, Internet-Draft, draft-mih-scitt-agent-action-
+              capsule-05, 26 September 2026,
+              <https://datatracker.ietf.org/doc/draft-mih-scitt-agent-
+              action-capsule/05/>.
+
+   [DIDX509]  Riechert, M. and A. Delignat-Lavaud, "did:x509 Method
+              Specification, method version 0 (status: draft)", 6
+              October 2026, <https://github.com/microsoft/did-
+              x509/blob/054f1f6e364580c42fad862747903f2a6ee19976/
+              specification.md>.
+
+   [EQR]      Watts, D., "Evidence-Bounded Authorization for Agentic
+              Systems: Evidence Qualification Receipts", Work in
+              Progress, Internet-Draft, draft-watts-agent-evidence-
+              boundary-00, 12 September 2026,
+              <https://datatracker.ietf.org/doc/draft-watts-agent-
+              evidence-boundary/00/>.
+
+   [FRAMING-SPACE]
+              Templeman, N., "Measuring the CBOR Framing Space of
+              COSE_Sign1 Data-Hash Pre-images", Work in Progress,
+              Internet-Draft, draft-templeman-scitt-framing-space-01, 27
+              September 2026, <https://datatracker.ietf.org/doc/draft-
+              templeman-scitt-framing-space/01/>.
+
+   [INTOTO-ENVELOPE]
+              in-toto project, "in-toto Attestation Framework: Envelope
+              layer, v1 (release v1.2.0)", 18 March 2026,
+              <https://github.com/in-
+              toto/attestation/blob/v1.2.0/spec/v1/envelope.md>.
+
+   [PRML-PROFILE]
+              Öztürk, C., "A SCITT Profile for Pre-Run Evaluation
+              Criteria (PRML)", Work in Progress, Internet-Draft, draft-
+
+
+
+Gruszka                   Expires 29 April 2027                [Page 37]
+
+Internet-Draft         Evaluation Receipt Mappings          October 2026
+
+
+              ozturk-scitt-prml-profile-00, 11 September 2026,
+              <https://datatracker.ietf.org/doc/draft-ozturk-scitt-prml-
+              profile/00/>.
+
+   [RFC3552]  Rescorla, E. and B. Korver, "Guidelines for Writing RFC
+              Text on Security Considerations", BCP 72, RFC 3552, July
+              2003, <https://www.rfc-editor.org/info/rfc3552>.
+
+   [RFC6979]  Pornin, T., "Deterministic Usage of the Digital Signature
+              Algorithm (DSA) and Elliptic Curve Digital Signature
+              Algorithm (ECDSA)", RFC 6979, August 2013,
+              <https://www.rfc-editor.org/info/rfc6979>.
+
+   [RFC7942]  Sheffer, Y. and A. Farrel, "Improving Awareness of Running
+              Code: The Implementation Status Section", BCP 205,
+              RFC 7942, July 2016,
+              <https://www.rfc-editor.org/info/rfc7942>.
+
+   [RFC8785]  Rundgren, A., Jordan, B., and S. Erdtman, "JSON
+              Canonicalization Scheme (JCS)", RFC 8785, June 2020,
+              <https://www.rfc-editor.org/info/rfc8785>.
+
+   [RFC9942]  Steele, O., Birkholz, H., Delignat-Lavaud, A., and C.
+              Fournet, "CBOR Object Signing and Encryption (COSE)
+              Receipts", RFC 9942, June 2026,
+              <https://www.rfc-editor.org/info/rfc9942>.
+
+   [RFC9943]  Birkholz, H., Delignat-Lavaud, A., Fournet, C., Deshpande,
+              Y., and S. Lasker, "An Architecture for Trustworthy and
+              Transparent Digital Supply Chains", RFC 9943, June 2026,
+              <https://www.rfc-editor.org/info/rfc9943>.
+
+   [STATEMENT-ID]
+              Gruszka, K., "Requirements and Test Cases for Identifying
+              SCITT Signed Statements", Work in Progress, Internet-
+              Draft, draft-gruszka-scitt-statement-identification-03,
+              October 2026, <https://datatracker.ietf.org/doc/draft-
+              gruszka-scitt-statement-identification/>.
+
+   [TEST-RESULT]
+              in-toto project, "in-toto Attestation Framework: Test
+              Result predicate, v0.1 (release v1.2.0)", 18 March 2026,
+              <https://github.com/in-
+              toto/attestation/blob/v1.2.0/spec/predicates/test-
+              result.md>.
+
+
+
+
+
+
+Gruszka                   Expires 29 April 2027                [Page 38]
+
+Internet-Draft         Evaluation Receipt Mappings          October 2026
+
+
+Appendix A.  Examples
+
+   The values below are derived from vectors of [RECEIPTS] (P1, and the
+   candidates named in Table 1 and Table 5) and from the issuer test key
+   of that document, whose seed is given there; the issuer URI of the
+   Signed Statement is a constant of this example.  PURE TEST KEY.  It
+   MUST NOT be used for anything real.
+
+A.1.  Constants
+
+   Type:
+
+   application/vnd.signed-evidence.eval-receipt+json
+
+   Issuer test key, public key (base64 and hex):
+
+   x7ppA99DtumHO/Au0M/gumSK8IwCzNwPiID92BSFbak=
+   c7ba6903df43b6e9873bf02ed0cfe0ba648af08c02ccdc0f8880fdd814856da9
+
+   Issuer URI of the Signed Statement (iss):
+
+   https://issuer.example/eval
+
+A.2.  Digests of Vector P1
+
+   B, 458 bytes (hex):
+
+   7b22636f6d6d69745f616c67223a227368613235362d73616c7465642d763122
+   2c22636f6d70617261746f72223a223e3d222c22646174617365745f69645f63
+   6f6d6d6974223a227368613235363a6132316261346439366338303364343236
+   3364643364323136316263303339613330663434363262643539343730653331
+   626135613961623061396233623633222c226d6574726963223a226163637572
+   616379222c226d6f64656c5f69645f636f6d6d6974223a227368613235363a39
+   3034646534323536326639613139363531653139656237616231363565346666
+   6531313463653561326639386535376461353833383935393638346662306622
+   2c226e223a313830302c22706173736564223a747275652c22736368656d6122
+   3a2268747470733a2f2f7369676e65642d65766964656e63652e6f72672f6576
+   616c2d726563656970742f7631222c2273636f7265223a22302e383334222c22
+   7375697465223a2261636d652d7361666574792d7375697465222c2273756974
+   655f76657273696f6e223a22312e322e30222c227468726573686f6c64223a22
+   302e383030222c2274696d657374616d70223a22323032362d31302d30325430
+   303a30303a30305a227d
+
+   Receipt digest, SHA-256 over B:
+
+   8cd849a6dcce08aee334511d7b2f31c54e478885dda1795d3c8f972dd0d4811c
+
+   SHA-256 over the receipt bytes of P1; not the receipt digest:
+
+
+
+Gruszka                   Expires 29 April 2027                [Page 39]
+
+Internet-Draft         Evaluation Receipt Mappings          October 2026
+
+
+   02036d1f57509858330383755ec16c532bdc58b0f2d949464488d57abc9f95e7
+
+A.3.  Citation Cases
+
+   Every case cites B of P1.  Cases C1 to C7 cite, with the algorithm
+   sha-256, the receipt digest given in Appendix A.2.  C8 cites, with
+   the algorithm sha-512, this value over the same B:
+
+   d5cccf69bb4f9b2c6d102e1a4da3d057cf8fc00bbbae69c0889bb423d243e246
+   1685c907c22f86f34c15290063ee3cd0c5815a85e25e40ef1609fcd4e11c2dc8
+
+   The candidates are the vectors of [RECEIPTS] named in Table 1, whose
+   bytes are given there.  Case and SHA-256 over the candidate's receipt
+   bytes:
+
+   C1 02036d1f57509858330383755ec16c532bdc58b0f2d949464488d57abc9f95e7
+   C2 c2a7943f0ea3de6e9da88c11925b1e112d32f697a403f07fcfbc3776bca10e72
+   C3 2c8144d50b4cc42a712d84e4d0417e52b0d8cbc484ad8e6d8d4b36a429b94ec1
+   C4 2405d1783d1803ddea207c027622fba40b3e82161686505ee96988e306e17278
+   C5 18b1b6dc631cf0f00d8b0d2c237b28a67b12c2d7088ae0313a2fb27760f96bdd
+   C6 31a34194edd90bade6568a3cb00dbb983dabab9efccfd7a8b38650bd3e8d5201
+   C7 8966f27c5f2566d986b0ab7821060ea0c901504fe984d450dfc7f8ca7d1c27e1
+   C8 02036d1f57509858330383755ec16c532bdc58b0f2d949464488d57abc9f95e7
+
+   The expected results are those of Table 1; the reasons are:
+
+   *  C1: SHA-256 over the candidate's B equals the cited digest.
+
+   *  C2: SHA-256 over the candidate's B equals the cited digest.
+
+   *  C3: SHA-256 over the candidate's B equals the cited digest.
+
+   *  C4: SHA-256 over the candidate's B differs from the cited digest.
+
+   *  C5: SHA-256 over the candidate's B equals the cited digest.
+
+   *  C6: B not obtained, step 3 of [RECEIPTS] Section 5 fails.
+
+   *  C7: B not obtained, step 1 of [RECEIPTS] Section 5 fails.
+
+   *  C8: Citation algorithm not defined.
+
+
+
+
+
+
+
+
+
+
+Gruszka                   Expires 29 April 2027                [Page 40]
+
+Internet-Draft         Evaluation Receipt Mappings          October 2026
+
+
+A.4.  M1, DSSE Envelope with the Receipt's Signature
+
+   The envelope is a JSON object with the members payloadType, payload
+   and signatures, serialized without insignificant whitespace and with
+   members sorted by name.  Its only signature is signature.sig of P1,
+   unchanged; it verifies as Ed25519 over PAE(payloadType, payload)
+   under the issuer test key.
+
+   PAE(type, B) of [RECEIPTS] Section 4.1: 522 bytes, SHA-256
+   6ffed54e62fa5d5e37830be8435f44466a4016013049b6f3307b6adef909aecc.
+
+   Envelope, 806 bytes (hex):
+
+   7b227061796c6f6164223a2265794a6a62323174615852665957786e496a6f69
+   633268684d6a55324c584e686248526c5a4331324d534973496d4e7662584268
+   636d4630623349694f69492b50534973496d52686447467a5a58526661575266
+   5932397462576c30496a6f69633268684d6a55324f6d45794d574a684e475135
+   4e6d4d344d444e6b4e4449324d32526b4d3251794d545978596d4d774d7a6c68
+   4d7a426d4e4451324d6d4a6b4e546b304e7a426c4d7a4669595456684f574669
+   4d474535596a4e694e6a4d694c434a745a58527961574d694f694a6859324e31
+   636d466a65534973496d31765a47567358326c6b58324e766257317064434936
+   496e4e6f595449314e6a6f354d44526b5a5451794e5459795a6a6c684d546b32
+   4e54466c4d546c6c596a6468596a45324e5755305a6d5a6c4d54453059325531
+   59544a6d4f54686c4e54646b595455344d7a67354e546b324f44526d596a426d
+   49697769626949364d5467774d4377696347467a6332566b496a7030636e566c
+   4c434a7a5932686c625745694f694a6f64485277637a6f764c334e705a32356c
+   5a43316c646d6c6b5a57356a5a533576636d63765a585a68624331795a574e6c
+   615842304c3359784969776963324e76636d55694f6949774c6a677a4e434973
+   496e4e316158526c496a6f6959574e745a53317a59575a6c64486b7463335670
+   644755694c434a7a64576c305a5639325a584a7a61573975496a6f694d533479
+   4c6a41694c434a3061484a6c63326876624751694f6949774c6a67774d434973
+   496e52706257567a6447467463434936496a49774d6a59744d5441744d444a55
+   4d4441364d4441364d444261496e303d222c227061796c6f616454797065223a
+   226170706c69636174696f6e2f766e642e7369676e65642d65766964656e6365
+   2e6576616c2d726563656970742b6a736f6e222c227369676e61747572657322
+   3a5b7b22736967223a22434247744e323639464f68505372357865307a6c4a47
+   53424e427a47696e457a38693031664d36312b4a4e614a50646e5a793148626f
+   596934656d686d384b5a715055337973546d726d434578537653786f637a4241
+   3d3d227d5d7d
+
+   SHA-256 over the envelope bytes; not the receipt digest:
+
+   d96e0b9635949045a6f7c7b29eac8c163f6fad0d6d0bff446beeff601e45fed0
+
+A.5.  M2, SCITT Signed Statement Citing the Receipt by Digest
+
+   A COSE_Sign1 with CBOR tag 18 in the form of a COSE Hash Envelope.
+   The protected header holds these parameters, in this order:
+
+
+
+Gruszka                   Expires 29 April 2027                [Page 41]
+
+Internet-Draft         Evaluation Receipt Mappings          October 2026
+
+
+   *  1 (alg): -19
+
+   *  4 (kid): a 32-byte string, given below
+
+   *  15 (CWT Claims): a map with 1 (iss), the URI of Appendix A.1, and
+      2 (sub), the text string given below
+
+   *  258 (payload hash algorithm): -16
+
+   *  259 (preimage content type): the type, as a text string
+
+   kid, the COSE Key Thumbprint (SHA-256) of the issuer test key (hex):
+
+   c94d618c32417cedb44280d4d66029e6486aa834802d12cd919c817453eb1561
+
+   sub, the model commitment of B:
+
+ sha256:904de42562f9a19651e19eb7ab165e4ffe114ce5a2f98e57da5838959684fb0f
+
+   Protected header, the deterministic encoding of these parameters: 202
+   bytes, SHA-256
+   6d9a1e26f95a4588e6a6907669ee721680b270776533cad1a5c4688877b388ab.
+
+   The unprotected header is the empty map.  The payload is the receipt
+   digest given in Appendix A.2.
+
+   Sig_structure (ToBeSigned) of [RFC9052] Section 4.4, with
+   external_aad the empty byte string: 251 bytes, SHA-256
+   4d2c862f04a9af14e7da56df52898ac4abb0f20fca6e3e0a04b918a7f063132d.
+   The signature, Ed25519 over it under the issuer test key, is the last
+   64 bytes of the COSE_Sign1.
+
+   COSE_Sign1, 307 bytes (hex):
+
+   d28458caa50132045820c94d618c32417cedb44280d4d66029e6486aa834802d
+   12cd919c817453eb15610fa201781b68747470733a2f2f6973737565722e6578
+   616d706c652f6576616c0278477368613235363a393034646534323536326639
+   6131393635316531396562376162313635653466666531313463653561326639
+   38653537646135383338393539363834666230661901022f1901037831617070
+   6c69636174696f6e2f766e642e7369676e65642d65766964656e63652e657661
+   6c2d726563656970742b6a736f6ea058208cd849a6dcce08aee334511d7b2f31
+   c54e478885dda1795d3c8f972dd0d4811c5840f8be22ab6b1c196611d884ea63
+   5f610ac45c042ab7958828c2af46dd5e35ac8d66b0c01fc115f7d93597f3cf78
+   3e95df37ef78da9006b773e08e6239af01a10e
+
+   SHA-256 over the COSE_Sign1 bytes:
+
+   64e78be4636b8d1e90cb7a1ebe06c4cfba2848603d6f64958d7c2080a901c575
+
+
+
+Gruszka                   Expires 29 April 2027                [Page 42]
+
+Internet-Draft         Evaluation Receipt Mappings          October 2026
+
+
+A.6.  Status Vectors
+
+   Each vector is a Signed Statement presented with a candidate receipt
+   of [RECEIPTS], whose bytes are given there.  The Receiver's receipt
+   key is the issuer test key, and its one configured pair is the issuer
+   URI of Appendix A.1 with the issuer test key.  With M2, the vectors
+   give one statement for each status of Section 5.2.2; S1 is the
+   statement with alg -8 that every Receiver accepts (Section 5.2.4).
+
+    +========+===========+======================+====================+
+    | Vector | Candidate | Status               | First failing step |
+    +========+===========+======================+====================+
+    | M2     | P1        | accepted             | (none)             |
+    +--------+-----------+----------------------+--------------------+
+    | S1     | P1        | accepted             | (none)             |
+    +--------+-----------+----------------------+--------------------+
+    | S2     | P1        | malformed            | 1                  |
+    +--------+-----------+----------------------+--------------------+
+    | S3     | P1        | outside_profile      | 2                  |
+    +--------+-----------+----------------------+--------------------+
+    | S4     | P1        | untrusted_key        | 3                  |
+    +--------+-----------+----------------------+--------------------+
+    | S5     | P1        | signature_invalid    | 4                  |
+    +--------+-----------+----------------------+--------------------+
+    | S6     | N7        | receipt_not_verified | 5                  |
+    +--------+-----------+----------------------+--------------------+
+    | S7     | P1        | digest_mismatch      | 6                  |
+    +--------+-----------+----------------------+--------------------+
+    | S8     | P1        | subject_mismatch     | 7                  |
+    +--------+-----------+----------------------+--------------------+
+
+                         Table 5: Status vectors
+
+   What each vector shows:
+
+   *  M2: the statement of Appendix A.5, with the receipt it was made
+      from.
+
+   *  S1: M2 with alg -8 in place of -19, signed again under the issuer
+      test key.
+
+   *  S2: the bytes of M2 with CBOR tag 98 (COSE_Sign) in place of tag
+      18.
+
+   *  S3: alg -7 (ES256), signed again under the issuer test key.
+
+   *  S4: kid names the foreign test key, which signs it; no configured
+      pair has that key.
+
+
+
+Gruszka                   Expires 29 April 2027                [Page 43]
+
+Internet-Draft         Evaluation Receipt Mappings          October 2026
+
+
+   *  S5: kid names the issuer test key, the foreign test key signs it.
+
+   *  S6: M2, presented with N7, which fails step 11 of [RECEIPTS]
+      Section 5.
+
+   *  S7: a statement on B of P2, with sub its model commitment,
+      presented with P1.
+
+   *  S8: M2 with sub the dataset commitment of P1, signed again.
+
+   S4 and S5 are signed by a foreign test key whose seed is SHA-256 over
+   the UTF-8 bytes of "foreign statement key, PURE TEST KEY"; it MUST
+   NOT be used for anything real.  Its public key (base64 and hex):
+
+   8Jv/BfSuPxDYgM2PeOlxCSUOFRF/ZC53c2PTs7sjvnM=
+   f09bff05f4ae3f10d880cd8f78e97109250e15117f642e777363d3b3bb23be73
+
+   Each of S1, S3, S4, S5, S7 and S8 is a COSE_Sign1 with tag 18 in the
+   deterministic encoding whose protected header is the deterministic
+   encoding of the protected header of M2 with the change named above,
+   whose unprotected header is the empty map, whose payload is that of
+   M2 except for S7, whose payload is SHA-256 over B of P2, and whose
+   signature, given below, is Ed25519 over its own Sig_structure.  S2 is
+   the bytes of M2 with the first byte d2 replaced by the two bytes d8
+   62.  S6 is M2.
+
+   S1, signature (hex):
+
+   a4a112c376243af157d0335babe0d43aa1d6b6e50137a4c95d8b93a345786565
+   546f009bd739bc3dcadf69f78ef1f7870eba885d123dd480b528acb2f83c960c
+
+   S3, signature (hex):
+
+   76d76d742ee817df32f456dae6ddf646442962a4e8993a00041bb4fb5bed9595
+   33bb7bc10ffd4bf2a2fa6365565e0015e99b0f46809db250778f203921482201
+
+   S4, signature (hex):
+
+   613b433477c5ff77148e22ac70044244a13fc352dc18717827598c313c56e656
+   d317880d09c975139772499a7ba5fb48601147ce6de47d86bf9217da85ab5e0e
+
+   S5, signature (hex):
+
+   778e57e38d8e4f3ed08c291362a5803a364b41a4d6ebe112ea411abe7aaa946f
+   bfae6907adddf81ecb2a8efb898bdf55b2c96425f6a264a87e71ca2594f0370d
+
+   S7, signature (hex):
+
+
+
+
+Gruszka                   Expires 29 April 2027                [Page 44]
+
+Internet-Draft         Evaluation Receipt Mappings          October 2026
+
+
+   e98ea4b9da8e6568c9905f308cfdf4c609f941fe311c3484cae0813502201137
+   a0fdd92fc83f542718508ccf6122d80e73c42ec4dd61b366e9860a8bb472d700
+
+   S8, signature (hex):
+
+   1a820d86d8615d7b60d5e7d7f9791a7ae27b49fbce1d554bb7444407b0a9926b
+   ec5ea93f45d342f86291b14c79ee84d3d50e1bf915c21621b852afe91a613201
+
+   Vector and SHA-256 over its bytes:
+
+   S1 4ffcd0d2a970d9dfa17cc9ffed00d7ff84b368177390bb170ee270bc1a336bda
+   S2 652517f5fe70201d687a073ad81a5057079aa0f4575a6055950c50b472b6a90e
+   S3 75acb36c52ff43f1ee137aa816967f75142535213a08fb3b95d306cba38b227d
+   S4 88463392ccefcd436f17e36e647830c5e4fd8f3e7714f7c5e2ad9f54dae8c3ec
+   S5 f422a35282e540745e1d982847a79dbbacb13a9de9ef6353bf37ec3850f76224
+   S6 64e78be4636b8d1e90cb7a1ebe06c4cfba2848603d6f64958d7c2080a901c575
+   S7 8f275a639482390b6e187fd9e224e4c5af38b9985a321c7d148674e9ece0aae7
+   S8 7460b48972153c566ad6eaaad35a4d335f24d7f52512d58a519de215b016cc30
+
+A.7.  Typed Digest References
+
+   Each vector supplies an input to the typed digest reference
+   processing of Section 5.1.  R1 is a JSON object with exactly three
+   members: type, the type; digest_alg, SHA-256; and digest, the receipt
+   digest of Appendix A.2 as 64 lowercase hexadecimal digits.  Each
+   other vector is R1 with the change in Table 6; "names B of P2" means
+   SHA-256 over B of vector P2 of [RECEIPTS], as 64 lowercase
+   hexadecimal digits.  The candidate is the vector of [RECEIPTS] named
+   in the table.  For State, assume a consuming profile that accepts the
+   declaration in Section 5.1, and no other, by normative reference, and
+   a verifier that implements the construction of its context and
+   obtains the candidate.  State is the reference processing state in
+   the terms of [CPB] Sections 4 and 9.1.  Matching rule is the
+   independent result of Section 3.3, including the JSON extraction rule
+   in Section 5.1.
+
+   +========+================+===========+============+===============+
+   | Vector | Change to R1   | Candidate | State      | Matching rule |
+   +========+================+===========+============+===============+
+   | R1     | (none)         | P1        | Verified   | MATCH         |
+   +--------+----------------+-----------+------------+---------------+
+   | R2     | purpose        | P1        | Unresolved | MATCH         |
+   |        | evaluation     |           |            |               |
+   |        | added          |           |            |               |
+   +--------+----------------+-----------+------------+---------------+
+   | R3     | digest_alg     | P1        | Failed     | INDETERMINATE |
+   |        | sha-256        |           |            |               |
+   +--------+----------------+-----------+------------+---------------+
+
+
+
+Gruszka                   Expires 29 April 2027                [Page 45]
+
+Internet-Draft         Evaluation Receipt Mappings          October 2026
+
+
+   | R4     | digest in      | P1        | Failed     | INDETERMINATE |
+   |        | uppercase      |           |            |               |
+   +--------+----------------+-----------+------------+---------------+
+   | R5     | digest names B | P1        | Failed     | NO_MATCH      |
+   |        | of P2          |           |            |               |
+   +--------+----------------+-----------+------------+---------------+
+   | R6     | (none)         | N13       | Failed     | INDETERMINATE |
+   +--------+----------------+-----------+------------+---------------+
+   | R7     | member x       | P1        | Malformed  | MATCH         |
+   |        | added, value 1 |           |            |               |
+   +--------+----------------+-----------+------------+---------------+
+   | R8     | second digest  | P1        | Malformed  | INDETERMINATE |
+   |        | member, names  |           |            |               |
+   |        | B of P2        |           |            |               |
+   +--------+----------------+-----------+------------+---------------+
+   | R9     | digest_alg     | P1        | Malformed  | INDETERMINATE |
+   |        | removed        |           |            |               |
+   +--------+----------------+-----------+------------+---------------+
+   | R10    | R1 as the only | P1        | Malformed  | INDETERMINATE |
+   |        | element of a   |           |            |               |
+   |        | JSON array     |           |            |               |
+   +--------+----------------+-----------+------------+---------------+
+   | R11    | purpose added, | P1        | Malformed  | MATCH         |
+   |        | value null     |           |            |               |
+   +--------+----------------+-----------+------------+---------------+
+   | R12    | sole digest    | P1        | Verified   | MATCH         |
+   |        | name written   |           |            |               |
+   |        | as             |           |            |               |
+   |        | "\u0064igest"  |           |            |               |
+   +--------+----------------+-----------+------------+---------------+
+   | R13    | second name    | P1        | Malformed  | INDETERMINATE |
+   |        | "\u0064igest", |           |            |               |
+   |        | same value     |           |            |               |
+   +--------+----------------+-----------+------------+---------------+
+   | R14    | R1 preceded by | P1        | Malformed  | INDETERMINATE |
+   |        | the UTF-8 byte |           |            |               |
+   |        | order mark     |           |            |               |
+   +--------+----------------+-----------+------------+---------------+
+   | R15    | purpose        | P1        | Malformed  | INDETERMINATE |
+   |        | evaluation     |           |            |               |
+   |        | added, its     |           |            |               |
+   |        | first letter   |           |            |               |
+   |        | replaced by    |           |            |               |
+   |        | the byte FF    |           |            |               |
+   +--------+----------------+-----------+------------+---------------+
+   | R16    | type           | P1        | Unresolved | MATCH         |
+   |        | text/plain     |           |            |               |
+   +--------+----------------+-----------+------------+---------------+
+
+
+
+Gruszka                   Expires 29 April 2027                [Page 46]
+
+Internet-Draft         Evaluation Receipt Mappings          October 2026
+
+
+                     Table 6: Typed digest references
+
+   What each vector shows:
+
+   *  R1: a reference under the declaration, with the receipt it names.
+
+   *  R2: R1 with a purpose member; the context has no purpose label.
+
+   *  R3: R1 with digest_alg sha-256, not the exact token SHA-256.
+
+   *  R4: R1 with the digest in uppercase hexadecimal digits.
+
+   *  R5: a reference that names B of P2, presented with P1.
+
+   *  R6: R1 presented with N13, which fails step 3 of [RECEIPTS]
+      Section 5, so B is not obtained from it; N13 is not input that the
+      construction accepts.
+
+   *  R7: R1 with a member that the declaration does not name.
+
+   *  R8: R1 with a second digest member that names B of P2; neither
+      value is chosen.
+
+   *  R9: R1 without digest_alg.
+
+   *  R10: R1 inside a JSON array, which is not a JSON object.
+
+   *  R11: R1 with purpose set to null, not a JSON string.  Unlike R2,
+      this is a form error before context selection.
+
+   *  R12: R1 with the sole digest member name written as "\u0064igest"
+      in the JSON text; the decoded name is unchanged.
+
+   *  R13: R1 with an additional member named "\u0064igest" whose value
+      equals the original digest.  The decoded names are equal; equal
+      values do not make a repeated name acceptable.
+
+   *  R14: R1 with the UTF-8 byte order mark EF BB BF before the JSON
+      text; this representation does not ignore it.
+
+   *  R15: R2 with the byte FF, which is not UTF-8, in place of the
+      first letter of the purpose value.  A decoder that substituted a
+      replacement character would read a well-formed reference with
+      purpose, as in R2; this representation does not.
+
+
+
+
+
+
+
+Gruszka                   Expires 29 April 2027                [Page 47]
+
+Internet-Draft         Evaluation Receipt Mappings          October 2026
+
+
+   *  R16: R1 with type text/plain, a well-formed reference that is not
+      under the declaration.  The consuming profile accepts no other
+      declaration, so it is Unresolved; its algorithm and digest are
+      still extracted and compared.
+
+   The matching rule compares an unambiguously extracted algorithm and
+   digest independently of the reference state.  Thus R2 and R16 give
+   MATCH while Unresolved, and R7 and R11 give MATCH while Malformed.
+   Neither result makes the reference Verified.
+
+A.8.  Certificate-Profile Vectors
+
+   Each vector is a Signed Statement in the form of the certificate
+   profile, or one change away from it, presented with vector P1 of
+   [RECEIPTS].  The Receiver's receipt key is the issuer test key, and
+   its one configured certificate pair is the did:x509 identifier below
+   with the test root certificate.  The test root holds an RSA-3072 key
+   and the test leaf a P-256 key; both certificates, and the other P-256
+   key that signs X6, are test material made by the generator of
+   Appendix A, and they MUST NOT be used for anything real.  The
+   signatures use the deterministic nonce of [RFC6979].
+
+   iss of X1, the identifier of the configured pair, is the
+   concatenation that Section 5.2 defines, 84 characters long, with F,
+   SHA-256 over the test root certificate in base64url without padding,
+   and O, the object identifier of code signing:
+
+   F 27XKFJ4cMLsuFMzbCyW81i24r8Un94N9wwLkmA5QE20
+   O 1.3.6.1.5.5.7.3.3
+
+   Test leaf certificate, 819 bytes (hex):
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Gruszka                   Expires 29 April 2027                [Page 48]
+
+Internet-Draft         Evaluation Receipt Mappings          October 2026
+
+
+   3082032f30820197a003020102020102300d06092a864886f70d01010b050030
+   3f313d303b06035504030c346576616c2d72656365697074206d617070696e67
+   73207465737420726f6f742028505552452054455354204d4154455249414c29
+   301e170d3236303130313030303030305a170d3335313233313233353935395a
+   304b3149304706035504030c406576616c2d72656365697074206d617070696e
+   677320746573742073746174656d656e74207369676e65722028505552452054
+   455354204d4154455249414c293059301306072a8648ce3d020106082a8648ce
+   3d030107034200042b7ff297baafbcd54b9c2804c2025d5e84d51d24151ffe62
+   af08557f4cba8841c0b05fc73ddaf743e4a05f06c872da47c8af27d87a5a93c4
+   b85bc16a6f603735a3753073300c0603551d130101ff04023000300e0603551d
+   0f0101ff040403020780301d0603551d0e0416041492e1e87ec4a7fc7192a549
+   9386d6203c19ea2ab6301f0603551d230418301680144c0bb4bc8ca56a0d1643
+   ee21bb1e7c3dbf66305030130603551d25040c300a06082b0601050507030330
+   0d06092a864886f70d01010b050003820181002d0db050da36399de8a05cadf7
+   dbf3309a522c7c10dfdacd5f2538d689a147227dc1aaac7966f978f878c39420
+   c6ebb006b7dee8f359ad33fed0e3efd4d452448342a32b60b4a970c1f13370e0
+   f61e45545058aeaa911caf61c01f022770e11bd9f5c339e60b3a2a415b3a5827
+   dc35dda2515672ef6fdc2bcbe4301524a437636ec3f2da7ddecedd4b93842a27
+   f563842882b64c3baee82c73c1740cbeb90472e1a59c113a5e9fe72af4f8f5e5
+   cb8016e2a6db5c1f6ff0a47e1767ce8143955ba391ca97e18c24b4a86f0e6de0
+   1dfa74baab5f921fe751317ab3bc55892e5a76718a66f85c8b2a587b52f0b54c
+   8d54fb2122dcc9a52ca7dc81e1bc67304fe96df38f83b39e8ab3a07628a246f3
+   b19b74f7f7f30cbc4639db12e6807e3c3369952e8fc4ddd19cb048928ac2559b
+   3a10de43860b69dc2afdb1c2184940e8ceee3641e2e11251f47544b30534afd3
+   aa5a6bc7a1997042e442faf102d664a292dde70bfb266ed96ae87c0a63064947
+   fcefa92658e0f2684771c99688d1017a5a1838
+
+   Test root certificate, the trust anchor of the configured pair, 1120
+   bytes (hex):
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Gruszka                   Expires 29 April 2027                [Page 49]
+
+Internet-Draft         Evaluation Receipt Mappings          October 2026
+
+
+   3082045c308202c4a003020102020101300d06092a864886f70d01010b050030
+   3f313d303b06035504030c346576616c2d72656365697074206d617070696e67
+   73207465737420726f6f742028505552452054455354204d4154455249414c29
+   301e170d3236303130313030303030305a170d3335313233313233353935395a
+   303f313d303b06035504030c346576616c2d72656365697074206d617070696e
+   6773207465737420726f6f742028505552452054455354204d4154455249414c
+   29308201a2300d06092a864886f70d01010105000382018f003082018a028201
+   8100bf2c98f756260c3bdfa487f85009454ed25b4191589b4c6451cf683b69fc
+   b883f29f710166bf9f0c2a474c340d25fbd5b21514afbf2dfff6333e4f1ab5e1
+   58e38e5d8eddcd4d883337dc11aae54b0954b94e5b5e41964f4fc600fde25a8c
+   2406e24940fc5da14862d55fb86a7de2e7477d28d19c56cb4d404da14fd3a464
+   fe52015f93a504162b87807dc636a7dd2671c64e2eff4307609e12d68a5085f4
+   d80539bb9599b8aaf83e1abf37ed2671a08034e56c77faf8aa5743767b2dbe56
+   1e7adc2069164d62214e444799bdacbd6917d2219c83dff5b910ad6256e57302
+   16eb57fc0021a26e4581a06ded76f0f1c289b67577ba43db6a68c154a01e3512
+   558f618aac5c738f97b163164a6a76f3b07d48dd9b94fbcdc3a2edbd486cb385
+   3844e4c04653ae9c2b2060b7802cebb44a8cb918626c6ccb448d96f908579319
+   63196610d64a4cd2480a12410f3580ac7ceee44316b6930f585dfbe6abfdd0db
+   288552e03baee551a6c5b697e2537e32156ee66d644522d63640591f69d47cb0
+   d68d0203010001a3633061300f0603551d130101ff040530030101ff300e0603
+   551d0f0101ff040403020204301d0603551d0e041604144c0bb4bc8ca56a0d16
+   43ee21bb1e7c3dbf663050301f0603551d230418301680144c0bb4bc8ca56a0d
+   1643ee21bb1e7c3dbf663050300d06092a864886f70d01010b05000382018100
+   678c28e3f30305df549eac036a15ebfdad96843501900ac45dc5a3c632cd94b2
+   4e80df9ddc63998b354a1e51074cf763937306db4cb2961b2a0eb0f4e37e0301
+   bdc7dd06240e8ceaa1af908b1f83db81247f61c32166830c539ac6d488b0bced
+   7fa830c9e5c5d67f35c5f357007ce8cbfe004d210f54b1fd0cf84a240856759b
+   e99ea4e933f37a818c0dd355faef418350e40818274babc0e35debe3f04507c8
+   f84bdfd75ffa1f2aea2a440933c9d4d2c58a9b23655ff7783e21728d74c00343
+   69567e399133d06f5df1a44aa9c245a35d2db598265b9c01f3c9904ca2a43c2c
+   4ffe4e04459c8fa933be3ca466584673a0a7ad43305f428b82e8f201db81d625
+   235d4f5a520889a1b59df8e385f05ea617514cb82708361fd18eb942d6c9b1c0
+   ac1d1c3a00c58e3edf39403d56ee5affcad4faedcb0ebbeaa789b8140c0ea07d
+   165363808b7cb511eb080aefca268ddf446447dba0d6f472e6f04ec2c422b5b4
+   24721a7e8c1b792cda88aeef7ce3c6c851012c8c80c10635d7b26d53454b5d89
+
+   SHA-256 over the test leaf and over the test root certificate:
+
+   dafe68bab183c88b167482d58243e1eb99d490b2fac60515903103ec3286d034
+   dbb5ca149e1c30bb2e14ccdb0b25bcd62db8afc527f7837dc302e4980e50136d
+
+   kid of X1, SHA-256 over the SubjectPublicKeyInfo of the test leaf
+   (hex):
+
+   a17f91f02052b42e799a7b1fc1061fe90f105bccac812a407c0e236005809fba
+
+   The protected header of X1 holds these parameters, in this order:
+
+
+
+
+Gruszka                   Expires 29 April 2027                [Page 50]
+
+Internet-Draft         Evaluation Receipt Mappings          October 2026
+
+
+   *  1 (alg): -7
+
+   *  4 (kid): the kid above
+
+   *  15 (CWT Claims): a map with 1 (iss), the identifier above, and 2
+      (sub), the sub of Appendix A.5
+
+   *  33 (x5chain): an array of the test leaf and the test root
+      certificate
+
+   *  258 (payload hash algorithm): -16
+
+   *  259 (preimage content type): the type, as a text string
+
+   The unprotected header is the empty map, and the payload is the
+   receipt digest of Appendix A.2.
+
+   X1 is a COSE_Sign1 with tag 18 in the deterministic encoding of these
+   parts and this signature, ECDSA with SHA-256 over its own
+   Sig_structure under the test leaf key; 2313 bytes.
+
+   X1, signature (hex):
+
+   a6c0730a565a1ab3e0a2a490fd18c9d885b317b1ff47d6c4c8ab71b3c5b1d11b
+   c94e3350ab2edc2ad5b3504d400ef79971f3493e477d6bc44d73fc8b56212c05
+
+   Each of X2 to X6 is a COSE_Sign1 with tag 18 whose protected header
+   is the deterministic encoding of the protected header of X1 with the
+   change below, whose unprotected header is the empty map, whose
+   payload is that of X1, and whose signature is given below, ECDSA with
+   SHA-256 over its own Sig_structure, under the test leaf key except
+   for X6, which the other P-256 test key signs.
+
+   X2: X1 with 1 (alg) -9 in place of -7.  Signature (hex):
+
+   ae307dd37eb66ad7f53885d1bfbb638c60a2d531564414261c8a41c651839c67
+   2380e33157627c3e41815129a9232464eb8c8981a50ec022bb8302d01825e0e9
+
+   X3: X1 without parameter 33 (x5chain).  Signature (hex):
+
+   884255369e0044d654ec7b2adf62df7275d8d7192228fe76c31432016c3ac895
+   8a40b0108236b4a3e797f6597f1532f1daf552a4f73fa465fd5186c639fc7260
+
+   X4: X1 with iss in the form of Section 5.2, whose F is SHA-256 over
+   the test leaf certificate.  Signature (hex):
+
+   1b9cf8ccc06086f9c87dc7cf44eda63a170f52818aab54b28684a28092240946
+   93f04574344a566777981423c9aa7f918bd092f8fc09c5e5e12b986434391db2
+
+
+
+Gruszka                   Expires 29 April 2027                [Page 51]
+
+Internet-Draft         Evaluation Receipt Mappings          October 2026
+
+
+   X5: X1 with one more parameter, 16 (typ), the text string
+   "application/cose".  Signature (hex):
+
+   e7f13c54e7ac52cd8080404fe5856da616195652ddfd3386da794388b4231fdb
+   fc4b232c87b0572dea5ed014619b722d69154c38dc1da1bfd28c87dfab9318f6
+
+   X6: X1's protected header unchanged.  Signature (hex):
+
+   a902939e4d89caeae6a5e7f683ffb76c01273d0c4f0f099ebc499f9894064a11
+   fcb423d6238fd9d93df18a16d2f577b46464afaa1cbfb0bb5b0a6fe85945961b
+
+     +========+=======+===========+===================+==============+
+     | Vector | Bytes | Candidate | Status            | First        |
+     |        |       |           |                   | failing step |
+     +========+=======+===========+===================+==============+
+     | X1     | 2313  | P1        | accepted          | (none)       |
+     +--------+-------+-----------+-------------------+--------------+
+     | X2     | 2313  | P1        | outside_profile   | 2            |
+     +--------+-------+-----------+-------------------+--------------+
+     | X3     | 365   | P1        | outside_profile   | 2            |
+     +--------+-------+-----------+-------------------+--------------+
+     | X4     | 2313  | P1        | untrusted_key     | 3            |
+     +--------+-------+-----------+-------------------+--------------+
+     | X5     | 2331  | P1        | outside_profile   | 2            |
+     +--------+-------+-----------+-------------------+--------------+
+     | X6     | 2313  | P1        | signature_invalid | 4            |
+     +--------+-------+-----------+-------------------+--------------+
+
+                    Table 7: Certificate-profile vectors
+
+   What each vector shows:
+
+   *  X1: the certificate profile: alg -7, x5chain of the test leaf and
+      the test root, iss a did:x509 identifier that names the test root.
+
+   *  X2: X1 with alg -9 (ESP256) in place of -7, signed again under the
+      test leaf; the Transparency Service of Section 14 refuses it at
+      registration.
+
+   *  X3: X1 without x5chain, signed again under the test leaf: its
+      labels are those of the key profile, and -7 is not an alg value of
+      that profile.
+
+   *  X4: X1 with an iss whose fingerprint names the test leaf
+      certificate and not the test root, signed again under the test
+      leaf.
+
+
+
+
+
+Gruszka                   Expires 29 April 2027                [Page 52]
+
+Internet-Draft         Evaluation Receipt Mappings          October 2026
+
+
+   *  X5: X1 with one more protected parameter, 16 (typ), signed again
+      under the test leaf.
+
+   *  X6: X1 signed by another P-256 test key; kid and x5chain still
+      name the test leaf.
+
+   Vector and SHA-256 over its bytes:
+
+   X1 fcf278cc997cbae6fbc9fa76c7b38da21231ee394c331c3477ea8a7aa060e1df
+   X2 2322eb9197b41fddbcbc9e68223b3be016111654f4017e77fd046d2e89271721
+   X3 c6c017fc3c6b1340c10b88c513e06a91c536c928fd0cb0ad350ace733ea139ce
+   X4 ef7a6ac337943b9bc8984749a3ab5d5bfc8ac33e62b7639220e6ca42a7bec7aa
+   X5 18fa79f5b6159308994129affcdd9ea9f1b0ebf57dd65d9f77d9423647c29c93
+   X6 a01501daefafa0c32793612675999e25c83fa8f1d5d5431eb2094727fc01091a
+
+A.9.  Transparent Statements
+
+   T2 is the Transparent Statement that a local instance of a
+   Transparency Service returned on 2026-10-11 when X1 was registered
+   (see Section 14).  It is X1 with one COSE Receipt R under unprotected
+   label 394; nothing else differs from X1.  R was made by the service
+   with the key of that test instance and is given here as recorded.
+   Each vector below is a COSE_Sign1 with tag 18 in the deterministic
+   encoding, made of the parts named, and is presented with vector P1 of
+   [RECEIPTS].  The Receiver's configured pairs are the pair of
+   Appendix A.6 and the certificate pair of Appendix A.8.  The steps of
+   Section 5.2.2 do not read R.
+
+   R, 472 bytes (hex):
+
+   d284588da5013822045840633566393532643661306331653364616537356434
+   3139313739343064366462366637393938663138303566643639313635356664
+   31643231353763386432300fa3016e3132372e302e302e313a38303030027673
+   636974742e6363662e7369676e61747572652e7631061a6acb64c519018b0266
+   6363662e7631a1647478696464322e3133a119018ca1208158dba2018358200c
+   1484f4d094e618cfb5f6c65c44ef651006c589c932aaca1d8ba0f441a54d9078
+   4863653a322e31323a3963363236346130383637653135366330303138363830
+   6264353832326639343431396632353533353737333933356239376364613038
+   6666306235383335335820fcf278cc997cbae6fbc9fa76c7b38da21231ee394c
+   331c3477ea8a7aa060e1df028282f558200b1afcd5a9b3799142e015598e429d
+   2d5572b686189b3737f9064b27465a548b82f558206e44317d4a8df07c74e928
+   c3fe66b5e01fd66f0ac6e3406ba7d61d72dfc4158df6586012cda8a3bb20d82c
+   d3c1e36e428bf18b7b6a4f6e4c63c7c3e84f7fdca13bb4a157e17fd3458dad91
+   95f1fb540b590a2b067ad16ae5c87e7fe0a205fbe98833c3eee31fdbf6e4f6c9
+   13df773b799896d6916a03d43142f6d37cd4cb1e19a50b1c
+
+   *  T1: the protected header, payload and signature of M2; unprotected
+      header {394: [ R ]}.
+
+
+
+Gruszka                   Expires 29 April 2027                [Page 53]
+
+Internet-Draft         Evaluation Receipt Mappings          October 2026
+
+
+   *  T2: the protected header, payload and signature of X1; unprotected
+      header {394: [ R ]}.
+
+   *  T3: as T2; unprotected header {4: the kid of X1, 394: [ R ]}.
+
+   *  T4: as T2; unprotected header {394: R}, the byte string not in an
+      array.
+
+   *  T5: as T2; unprotected header {394: []}.
+
+   +========+=======+===========+=================+====================+
+   | Vector | Bytes | Candidate | Status          | First              |
+   |        |       |           |                 | failing step       |
+   +========+=======+===========+=================+====================+
+   | T1     | 786   | P1        | accepted        | (none)             |
+   +--------+-------+-----------+-----------------+--------------------+
+   | T2     | 2792  | P1        | accepted        | (none)             |
+   +--------+-------+-----------+-----------------+--------------------+
+   | T3     | 2827  | P1        | outside_profile | 2                  |
+   +--------+-------+-----------+-----------------+--------------------+
+   | T4     | 2791  | P1        | outside_profile | 2                  |
+   +--------+-------+-----------+-----------------+--------------------+
+   | T5     | 2317  | P1        | outside_profile | 2                  |
+   +--------+-------+-----------+-----------------+--------------------+
+
+                      Table 8: Transparent Statements
+
+   What each vector shows:
+
+   *  T1: M2 with the receipt of T2 under unprotected label 394; that
+      receipt is one for X1, and the steps of the checking procedure do
+      not read it.
+
+   *  T2: the Transparent Statement that a local Transparency Service
+      returned for X1: X1 with one receipt under unprotected label 394.
+
+   *  T3: T2 with one more unprotected parameter, 4 (kid), the kid of
+      X1.
+
+   *  T4: T2 with the receipt under label 394 as a byte string and not
+      in an array.
+
+   *  T5: T2 with an empty array under label 394.
+
+   Vector and SHA-256 over its bytes:
+
+
+
+
+
+
+Gruszka                   Expires 29 April 2027                [Page 54]
+
+Internet-Draft         Evaluation Receipt Mappings          October 2026
+
+
+   T1 241496e7136bf76a26cf916ef868ce172ef1915d18127a6ffacb63cef4290a82
+   T2 312a7d2a840607d4251c260f815fda0e0e1da8c11b1e5ae125c2927a32fcacbe
+   T3 5308f2023566dc02ab6039afc85053f79e1a5d85c0358df989d99a8f29734973
+   T4 cbb701b815313232d111dbfd7653267ef7bdf4fe2134212b231e7e22380279ca
+   T5 aabfeefa90488172b30c6913db50ab5bdc181e043a0c1202c52d66694567080e
+
+A.10.  Agent Evidence Format Vectors
+
+   Each vector is presented with the candidates of [RECEIPTS] named in
+   its table; the matching result is that of Section 3.3 after the
+   extraction of the subsection of Section 6 for its format.  The result
+   under the neighbouring draft is that draft's own, given for
+   orientation; it does not enter the matching result.
+
+A.10.1.  Control Delivery Evidence
+
+   The instruction of A1 and A2 is a JSON object with three members:
+   basis, a typed digest reference (Section 5.1) whose digest names B of
+   P2; control, the text string "suspend"; and governed, the text string
+   "deployment of model acme/model-x@2026-09".  Its serialization under
+   [RFC8785], 243 bytes, SHA-256
+   55650003507b779e0f19567b0d8fdf7b7f09379bd5e1e1e46d26d4211f9db725
+   (hex):
+
+   7b226261736973223a7b22646967657374223a22303731383265396266663639
+   6261613861623961353634366436396235313138636366333738306239303362
+   3961396435623462643064396339643730623837222c226469676573745f616c
+   67223a225348412d323536222c2274797065223a226170706c69636174696f6e
+   2f766e642e7369676e65642d65766964656e63652e6576616c2d726563656970
+   742b6a736f6e227d2c22636f6e74726f6c223a2273757370656e64222c22676f
+   7665726e6564223a226465706c6f796d656e74206f66206d6f64656c2061636d
+   652f6d6f64656c2d7840323032362d3039227d
+
+   Its content digest is sha-256: followed by the SHA-256 above.  The
+   same instruction with digest naming B of P1 is 243 bytes, SHA-256
+   fab6265f622a37d22fa82763af9681c30e4ff16abe7b7390d7a1b2009006b116.
+
+   In both vectors an issuer observation and receiver observations at
+   two required targets, EP-A and EP-B, refer to one instruction
+   identifier within one declared identity-uniqueness scope, and they
+   agree in every binding but the content digest.  In A1 all three bind
+   the content digest of the instruction above.  In A2 the receiver
+   observation at EP-B binds the content digest of the instruction that
+   names B of P1.
+
+   The last column of the table gives the dispositions of Section 6.1 of
+   [ACDE] for the two obligations.
+
+
+
+
+Gruszka                   Expires 29 April 2027                [Page 55]
+
+Internet-Draft         Evaluation Receipt Mappings          October 2026
+
+
+   +========+===========+==========+===================================+
+   | Vector | Candidate | Matching | Dispositions, its Section 6.1     |
+   +========+===========+==========+===================================+
+   | A1     | P2        | MATCH    | EP-A CONFIRMED, EP-B CONFIRMED    |
+   +--------+-----------+----------+-----------------------------------+
+   | A1     | P1        | NO_MATCH | EP-A CONFIRMED, EP-B CONFIRMED    |
+   +--------+-----------+----------+-----------------------------------+
+   | A2     | P2        | MATCH    | EP-A CONFIRMED, EP-B              |
+   |        |           |          | SUBSTITUTION                      |
+   +--------+-----------+----------+-----------------------------------+
+
+                                  Table 9
+
+A.10.2.  Evidence Qualification Receipts
+
+   The issuer test key of W1 and W2 is the Ed25519 key whose seed is
+   SHA-256 over the UTF-8 bytes of "EQR test key, PURE TEST KEY"; it
+   MUST NOT be used for anything real.  Its public key (base64url) and
+   key identifier:
+
+   9Z58iP2s9ESi8Oy4aKlBngE797Qy3M1soYQ68rFJGnY
+   eqr-test-1
+
+   The issuer is https://qualifier.example.  Under the verifier's local
+   trust policy (step 7 of Section 8 of [EQR]), the issuer is trusted
+   with this key and the type is the only accepted evidence class.  The
+   accepted profile has the identifier https://example.org/profiles/
+   evaluation-gated-promotion/v1, one required condition, and a rule
+   each for missing, stale and contradictory evidence; it compares no
+   values and so states no tolerance.  Its bytes, the serialization
+   under [RFC8785] of a JSON object (hex):
+
+   7b22636f6e74726164696374696f6e223a226661696c222c226d697373696e67
+   223a22696e64657465726d696e617465222c2270726f66696c65223a22657661
+   6c756174696f6e2d67617465642d70726f6d6f74696f6e222c22726571756972
+   65645f636f6e646974696f6e73223a5b227369676e65645f6576616c75617469
+   6f6e5f726563656970745f7665726966696564225d2c227374616c65223a2269
+   6e64657465726d696e617465222c2276657273696f6e223a317d
+
+   The proposition, with claim identifier urn:example:claim:model-
+   x-accuracy, as the serialization under [RFC8785] of a JSON object
+   (hex):
+
+   7b22636c61696d223a226d6f64656c2061636d652f6d6f64656c2d7840323032
+   362d3039206d6574206163637572616379203e3d20302e383030206f6e206163
+   6d652d7361666574792d737569746520312e322e30227d
+
+
+
+
+
+Gruszka                   Expires 29 April 2027                [Page 56]
+
+Internet-Draft         Evaluation Receipt Mappings          October 2026
+
+
+   Each vector is a JWS in compact serialization with the protected
+   header {"alg":"EdDSA","kid":"eqr-test-1"}, whose payload is the
+   serialization under [RFC8785] of the EQR and whose signature is
+   Ed25519 under the issuer test key.  The verification time is
+   2026-10-02T00:15:00Z.
+
+   W1, payload, 707 bytes, SHA-256
+   7e31e4d7acfcabe459e6a2c5bfd93e77b8a1d43432c8cfd729e1e3110bbccd00
+   (hex):
+
+   7b22636c61696d223a7b22646967657374223a22396e4275452d5f456564534d
+   625456795834784b6e7258582d4b6b514f4a686d555f5f596436355f33396b22
+   2c22686173685f616c67223a227368612d323536222c226964223a2275726e3a
+   6578616d706c653a636c61696d3a6d6f64656c2d782d6163637572616379227d
+   2c226576616c756174696f6e223a7b22626c6f636b696e675f636f6e74726164
+   696374696f6e73223a5b5d2c22726571756972656d656e74735f736174697366
+   696564223a747275652c22737461747573223a2270617373227d2c2265766964
+   656e6365223a5b7b22636c617373223a226170706c69636174696f6e2f766e64
+   2e7369676e65642d65766964656e63652e6576616c2d726563656970742b6a73
+   6f6e222c22646967657374223a226a4e684a70747a4f434b376a4e4645646579
+   387878553548694958646f586c6450492d584c644455675277222c2268617368
+   5f616c67223a227368612d323536227d5d2c22657870697265735f6174223a22
+   323032362d31302d30325430303a32353a30305a222c226973737565645f6174
+   223a22323032362d31302d30325430303a31303a30305a222c22697373756572
+   223a2268747470733a2f2f7175616c69666965722e6578616d706c65222c2270
+   726f66696c65223a7b22646967657374223a227743504a6234614f5341654352
+   6e566250567a634d70427355535869647969526b6f546f587a5471367173222c
+   22686173685f616c67223a227368612d323536222c226964223a226874747073
+   3a2f2f6578616d706c652e6f72672f70726f66696c65732f6576616c75617469
+   6f6e2d67617465642d70726f6d6f74696f6e2f7631227d2c2272656365697074
+   5f6964223a2275726e3a757569643a33663163396132652d376234342d346430
+   652d396135312d306336653262376438663130222c2276657273696f6e223a22
+   31227d
+
+   W1, signature (hex):
+
+   878adebdb043bf5f1847ec5ec5f638bf8c84062a3fbfe8607c1384228121c217
+   4f10bff17ea761f6fadb13470f6be5791c64d1ecb5543b4fb8902eceb307e407
+
+   W2 is W1 with the character = appended to the evidence digest; its
+   payload is 708 bytes, SHA-256
+   238293b8312d20e24d382169f303501128710c74d8985fcc904fc3a9a264d22c.
+   W2, signature (hex):
+
+   c583493759b300de04c0fe36a9f59333173ee77866618671cf95b05dcd95d587
+   1d88ef78467b7915101e3ae4ff891907b7f04527f86e42e1c7a4467f3f7a3201
+
+
+
+
+
+Gruszka                   Expires 29 April 2027                [Page 57]
+
+Internet-Draft         Evaluation Receipt Mappings          October 2026
+
+
+   The last column of the table is the result under Section 8 of [EQR]
+   with the inputs above.
+
+    +========+===========+===============+============================+
+    | Vector | Candidate | Matching      | EQR, its Section 8         |
+    +========+===========+===============+============================+
+    | W1     | P1        | MATCH         | valid, qualifies           |
+    +--------+-----------+---------------+----------------------------+
+    | W1     | P2        | NO_MATCH      | valid, qualifies           |
+    +--------+-----------+---------------+----------------------------+
+    | W2     | P1        | INDETERMINATE | invalid: the digest is not |
+    |        |           |               | base64url without padding  |
+    +--------+-----------+---------------+----------------------------+
+
+                                  Table 10
+
+A.10.3.  Agent Interaction Records
+
+   The record is signed with the P-256 test key whose private scalar is
+   d = (SHA-256 over the UTF-8 bytes of "AIR test key, PURE TEST KEY",
+   read as a big-endian integer) mod (n - 1) + 1, where n is the order
+   of the P-256 base point; it MUST NOT be used for anything real.  Its
+   public key, uncompressed (hex):
+
+   04691c2dc7328c790c83bfc0e2a5b437d19d9e6e8dc18373e0b47ae25ac34f13
+   ce67ccb94224f878de9cf0e77974c143495c0e6165a02f4f53848e52193eb068
+   0b
+
+   operator_id and iss are https://operator.example, agent_id and sub
+   are agent-promotion-1, and operator_pubkey_id is air-test-key-1,
+   whose UTF-8 bytes are kid.  V1 is the first record of its chain:
+   sequence_number 0, prev_chain_hash 32 zero bytes, action_timestamp_ms
+   1791417600000.  Its payload, 1253 bytes, SHA-256
+   ffd0f00f280920c1ed018268869d7b2870a582e55ecdbf57e26452d0aa255795, is
+   the serialization under [RFC8785] of a record with action_type
+   configuration_change, outcome_state completed, empty tool_calls,
+   policy_refs and redaction_receipts, and one ExternalRef, whose
+   ref_type is the type, whose ref_value names B of P1 and whose
+   ref_system is null.  The signature is ECDSA with SHA-256 under the
+   test key, with the deterministic nonce of [RFC6979].
+
+   V1, COSE_Sign1, 1610 bytes, SHA-256
+   db53ccf188407ec9eb382f2146927d799fc2b525849f70d5a14393ab8b8b2ae6
+   (hex):
+
+
+
+
+
+
+
+Gruszka                   Expires 29 April 2027                [Page 58]
+
+Internet-Draft         Evaluation Receipt Mappings          October 2026
+
+
+   d28459011aa90126044e6169722d746573742d6b65792d310fa2017818687474
+   70733a2f2f6f70657261746f722e6578616d706c6502716167656e742d70726f
+   6d6f74696f6e2d31686167656e745f6964716167656e742d70726f6d6f74696f
+   6e2d316a636861696e5f6861736858206f24488e7024580e8644adfefbaa6207
+   8866534204a13c1fa6439a39197370616c636f6e74656e745f686173685820ff
+   d0f00f280920c1ed018268869d7b2870a582e55ecdbf57e26452d0aa2557956f
+   707265765f636861696e5f686173685820000000000000000000000000000000
+   00000000000000000000000000000000006f73657175656e63655f6e756d6265
+   720073616374696f6e5f74696d657374616d705f6d731b000001a118cf4800a0
+   5904e57b22616374696f6e5f73756274797065223a6e756c6c2c22616374696f
+   6e5f74696d657374616d705f6d73223a313739313431373630303030302c2261
+   6374696f6e5f74797065223a22636f6e66696775726174696f6e5f6368616e67
+   65222c226167656e745f646964223a6e756c6c2c226167656e745f6964223a22
+   6167656e742d70726f6d6f74696f6e2d31222c226167656e745f76657273696f
+   6e223a226578616d706c652d6167656e7420312e303b206578616d706c652d6d
+   6f64656c20323032362d30393b206578616d706c652d6672616d65776f726b20
+   322e33222c226167656e745f776f726b6c6f61645f6964223a6e756c6c2c2261
+   7574685f636f6e74657874223a6e756c6c2c2263617074757265645f74696d65
+   7374616d705f6d73223a313739313431373630303132302c22636f6e73756d65
+   725f696e737472756374696f6e73223a6e756c6c2c2264656c65676174696f6e
+   5f636861696e223a6e756c6c2c2265787465726e616c5f72656673223a5b7b22
+   7265665f73797374656d223a6e756c6c2c227265665f74797065223a22617070
+   6c69636174696f6e2f766e642e7369676e65642d65766964656e63652e657661
+   6c2d726563656970742b6a736f6e222c227265665f76616c7565223a22386364
+   3834396136646363653038616565333334353131643762326633316335346534
+   3738383835646461313739356433633866393732646430643438313163227d5d
+   2c22696e7075745f68617368223a223963383065356535326637396331353532
+   3863353233643766363434623262623761303535333466366661366637343337
+   613361316538663165633733306532222c22696e7075745f73756d6d61727922
+   3a6e756c6c2c22696e74656e745f6174746573746174696f6e223a6e756c6c2c
+   226a7572697364696374696f6e223a224445222c226f70657261746f725f6964
+   223a2268747470733a2f2f6f70657261746f722e6578616d706c65222c226f70
+   657261746f725f7075626b65795f6964223a226169722d746573742d6b65792d
+   31222c226f7574636f6d655f68617368223a2233343161356366346431626237
+   3732343565666638323037386636383963616363623165663261396239316433
+   30353135646332313061336330646263336364222c226f7574636f6d655f7374
+   617465223a22636f6d706c65746564222c226f7574636f6d655f73756d6d6172
+   79223a6e756c6c2c22706172656e745f7265636f72645f6964223a6e756c6c2c
+   22706f6c6963795f72656673223a5b5d2c227072696e636970616c5f6964223a
+   6e756c6c2c22726561736f6e696e675f68617368223a6e756c6c2c227265636f
+   72645f6964223a2230313932306633652d386130302d376333612d396231652d
+   346632643663386130623131222c22726564616374696f6e5f72656365697074
+   73223a5b5d2c22726574656e74696f6e5f636c617373223a226f706572617469
+   6f6e616c5f317972222c22736368656d615f76657273696f6e223a226169722d
+   312e30222c2273657373696f6e5f6964223a2230313932306633652d38613030
+   2d376333612d396231652d346632643663386130623130222c22746f6f6c5f63
+   616c6c73223a5b5d2c2274726163655f6964223a6e756c6c2c22776f726b666c
+   6f775f6964223a6e756c6c2c227772697474656e5f74696d657374616d705f6d
+
+
+
+Gruszka                   Expires 29 April 2027                [Page 59]
+
+Internet-Draft         Evaluation Receipt Mappings          October 2026
+
+
+   73223a6e756c6c7d5840811c2edf8cefb9d82abdfeac70a983f916029e3c5778
+   269aa546e83e304daba75b0992ed2b4cf9cbe96e259ce8a7a2e56d27098697b2
+   ee1b73a38b4a1463739d
+
+   V2 is V1 with ref_value in uppercase hexadecimal digits;
+   content_hash, chain_hash and the signature follow from that change.
+   V2, 1610 bytes, SHA-256
+   a80769361c304e0cd49cda542e210779ffcf19ddbbab339ab374cf874cbbdb5c;
+   signature (hex):
+
+   b433e17925384a304c39e2ab3f21f702283f466109f3f11ea6346057dc59fee1
+   40d4c11249c4b2a5044126e1f9e8797d309183aa347a89facb9e50ad83646989
+
+   The last column of the table is the result of the four steps of
+   Section 5.8 of [AIR] for the first record of a chain.
+
+       +========+===========+===============+======================+
+       | Vector | Candidate | Matching      | AIR, its Section 5.8 |
+       +========+===========+===============+======================+
+       | V1     | P1        | MATCH         | VERIFIED             |
+       +--------+-----------+---------------+----------------------+
+       | V1     | P2        | NO_MATCH      | VERIFIED             |
+       +--------+-----------+---------------+----------------------+
+       | V2     | P1        | INDETERMINATE | VERIFIED             |
+       +--------+-----------+---------------+----------------------+
+
+                                  Table 11
+
+Changes (to be removed before publication)
+
+Since draft-gruszka-evaluation-receipt-mappings-03
+
+   *  Section 10 is new.  It cites the framing-space measurement
+      [FRAMING-SPACE] and states what the restriction of Section 5.2
+      leaves of the 64 encodings it measures.
+
+   *  Section 6 is new.  It states how records of [ACDE], [EQR] and
+      [AIR] can cite a receipt and what each of those drafts leaves
+      open, and Appendix A.10 gives six vectors.  Step 1 of Section 3.3
+      names the form of the value in the two further carriers.
+
+   *  [RECEIPTS] is cited as revision -04 and [STATEMENT-ID] as revision
+      -03.  Section 9 now repeats [RECEIPTS] Section 6 of that revision
+      word for word, with its two further sentences.
+
+   *  [CPB] and [PRML] are normative references because Sections 5.1 and
+      7 depend on their procedures.  [DIDX509] is now informative.
+      [RFC4648] is normative; [RFC8785] is informative.
+
+
+
+Gruszka                   Expires 29 April 2027                [Page 60]
+
+Internet-Draft         Evaluation Receipt Mappings          October 2026
+
+
+   *  Section 3.1 takes the text form of the digest from step 1 of
+      Section 3.3.  Section 5.1 states the result for input that is not
+      UTF-8 and for a well-formed reference of another type, with the
+      vectors R15 and R16 in Appendix A.7.  Section 5.2 writes the form
+      of iss as a concatenation without spaces.  Section 5.2.2 and
+      Section 7 pass on the input error of [RECEIPTS] Section 5.
+
+   *  The foreign test key of S4 and S5 has a seed label without a
+      module name; S4 and S5 are signed again with it.
+
+   *  In Appendix A, byte strings that follow from others in this
+      document by a stated construction are given by that construction,
+      their length and their SHA-256: PAE(type, B), the protected header
+      and the Sig_structure of M2, S1 to S8 and X1.  A signature that
+      appears nowhere else is given in full.  No vector changed except
+      S4 and S5.
+
+   *  The sections that followed Section 5 in -03 are numbered one
+      higher, and those from Section 11 on two higher.
+
+   *  [CPB] is cited as revision -06, and its section numbers follow
+      that revision.  Section 5.1 states the pre-image of its digest
+      context and, following [CPB] Section 9.1, gives Unresolved (cause:
+      unimplemented) for a verifier that does not implement the
+      construction, Unresolved (cause: unavailable) if no receipt is
+      obtained, and Failed if steps 1 to 3 of [RECEIPTS] Section 5 fail
+      for the receipt obtained; if processing stops at a resource limit,
+      it gives the resource-limit error of [RECEIPTS] Section 5 instead
+      of a state, and Section 11 does not rely on such a reference.  R6
+      is now Failed; its matching result stays INDETERMINATE.
+      Appendix A.7 assumes a verifier that implements the construction
+      and obtains the candidate, and Section 14 says how the state of R6
+      was checked and which scripts implement Section 5.1.
+
+Since draft-gruszka-evaluation-receipt-mappings-02
+
+   *  The certificate profile does not admit alg -9 (ESP256).
+      Section 5.2.4 gives the measured reason, Section 14 the
+      measurement, and vector X2 (Appendix A.8) is the statement that
+      was refused.
+
+   *  The Open Items section is removed.  The in-toto references stay
+      pinned to release v1.2.0, the draft names of [RECEIPTS] and
+      [STATEMENT-ID] stay as cited, Section 5.1 already says that no
+      profile names its declaration, and Section 5.2 now states the
+      measured reason for retaining the certificate profile's existing
+      limits.
+
+
+
+
+Gruszka                   Expires 29 April 2027                [Page 61]
+
+Internet-Draft         Evaluation Receipt Mappings          October 2026
+
+
+   *  Section 5.1 makes explicit that a byte order mark is not ignored
+      in this JSON representation, and vector R14 illustrates the
+      resulting Malformed state and INDETERMINATE matching result.
+
+   *  This appendix is added.
+
+Since draft-gruszka-evaluation-receipt-mappings-01
+
+   *  Section 5.1 defines the JSON representation of a typed digest
+      reference.  Input outside it is Malformed before the other states,
+      member names are compared after unescaping, and repeated names are
+      found before any conversion.  The matching rule takes exactly one
+      digest_alg and one digest, both strings, whatever the state.
+
+   *  Vectors R7 to R13 (Appendix A.7) give Malformed inputs and an
+      escaped member name.
+
+   *  Step 1 of Section 3.3 names the form of the value in each carrier.
+
+   *  Section 9 and Section 11 say that a MATCH is not a Verified
+      reference, and [RFC8259] is a normative reference.
+
+Since draft-gruszka-evaluation-receipt-mappings-00
+
+   *  Section 5.2 adds a certificate profile next to the key profile.
+      Its statement carries an X.509 chain in x5chain and a did:x509
+      issuer and is signed with alg -7, and step 3 of Section 5.2.2
+      checks it against a did:x509 identifier and trust anchor that the
+      Receiver configured.  Vectors X1 to X6 (Appendix A.8) cover it.
+
+   *  Section 5.2.2 checks a Transparent Statement after removing its
+      receipts under label 394 unread, and step 1 fixes the encoding
+      choices that [RFC8949] Section 4.2.2 leaves to a protocol.
+      Vectors T1 to T5 (Appendix A.9) are Transparent Statements, and
+      Appendix A.6 gives a statement for each status other than
+      accepted.
+
+   *  Section 5.1 assigns the states Unresolved and Failed of [CPB]
+      Section 9.1 to typed digest references, with vectors R1 to R6
+      (Appendix A.7).
+
+   *  Section 9 adds that a receipt does not show where B came from, and
+      Section 11 adds that an accepted status says nothing about
+      registration and that registration alone does not establish that
+      the payload is the receipt digest.
+
+
+
+
+
+
+Gruszka                   Expires 29 April 2027                [Page 62]
+
+Internet-Draft         Evaluation Receipt Mappings          October 2026
+
+
+   *  Section 14 records the registration of a statement in the
+      certificate profile with a local Transparency Service and the
+      offline verification of the Transparent Statement it returned.
+
+Author's Address
+
+   Konrad Gruszka
+   b7n0de
+   Germany
+   Email: kontakt@b7n0de.com
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Gruszka                   Expires 29 April 2027                [Page 63]

@@ -1,0 +1,1568 @@
+
+
+
+
+Individual Submission                                         A. T. Abak
+Internet-Draft                                    Independent Researcher
+Intended status: Informational                         23 September 2026
+Expires: 27 March 2027
+
+
+          Claim-Preserving Exchange of AI Evaluation Evidence
+             draft-abak-ai-evaluation-claim-preservation-00
+
+Abstract
+
+   AI evaluation records can pass through evaluation frameworks,
+   exporters, evidence services, independent reviewers, and systems that
+   make decisions.  A conversion can retain a score while losing whether
+   the measurement ran, which result was selected, whether a criterion
+   existed, or which evidence was unavailable.  Authenticating the
+   converted record does not recover these distinctions.
+
+   This document specifies format-neutral requirements for mapping
+   profiles and consumers that exchange AI evaluation evidence.  It
+   separates source assertions, explicit derivations, and later policy
+   judgments; requires claim-relevant loss and uncertainty to remain
+   visible; and describes consumer behavior when preservation cannot be
+   established.  It includes synthetic counterexamples and guidance for
+   composition with existing evidence mechanisms.  It defines neither a
+   wire format nor an evaluation benchmark, safety certification,
+   authorization protocol, or new cryptographic envelope.  A concrete
+   mapping profile is needed for interoperable implementation.
+
+Discussion of This Document
+
+   This note is to be removed before publishing as an RFC.
+
+   This is an individual contribution with an Informational target.  No
+   working-group adoption or endorsement is implied.  Comments may be
+   sent to the author.  The choice between a standalone application
+   profile and guidance incorporated into existing work remains open.
+
+Status of This Memo
+
+   This Internet-Draft is submitted in full conformance with the
+   provisions of BCP 78 and BCP 79.
+
+   Internet-Drafts are working documents of the Internet Engineering
+   Task Force (IETF).  Note that other groups may also distribute
+   working documents as Internet-Drafts.  The list of current Internet-
+   Drafts is at https://datatracker.ietf.org/drafts/current/.
+
+
+
+
+Abak                      Expires 27 March 2027                 [Page 1]
+
+Internet-Draft      AI Evaluation Claim Preservation      September 2026
+
+
+   Internet-Drafts are draft documents valid for a maximum of six months
+   and may be updated, replaced, or obsoleted by other documents at any
+   time.  It is inappropriate to use Internet-Drafts as reference
+   material or to cite them other than as "work in progress."
+
+   This Internet-Draft will expire on 27 March 2027.
+
+Copyright Notice
+
+   Copyright (c) 2026 IETF Trust and the persons identified as the
+   document authors.  All rights reserved.
+
+   This document is subject to BCP 78 and the IETF Trust's Legal
+   Provisions Relating to IETF Documents (https://trustee.ietf.org/
+   license-info) in effect on the date of publication of this document.
+   Please review these documents carefully, as they describe your rights
+   and restrictions with respect to this document.  Code Components
+   extracted from this document must include Revised BSD License text as
+   described in Section 4.e of the Trust Legal Provisions and are
+   provided without warranty as described in the Revised BSD License.
+
+Table of Contents
+
+   1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   4
+     1.1.  Scope and Non-Goals . . . . . . . . . . . . . . . . . . .   4
+     1.2.  Requirements Language and Applicability . . . . . . . . .   5
+   2.  Terminology and Claim Boundaries  . . . . . . . . . . . . . .   5
+   3.  Exchange and Failure Model  . . . . . . . . . . . . . . . . .   7
+   4.  Preservation Requirements . . . . . . . . . . . . . . . . . .   8
+     4.1.  R-CP-1: Source and Mapping Identity . . . . . . . . . . .   8
+     4.2.  R-CP-2: Unambiguous Result Selection  . . . . . . . . . .   8
+     4.3.  R-CP-3: Execution, Observation, and Assessment  . . . . .   9
+     4.4.  R-CP-4: Values, Units, and Numerical Transformations  . .   9
+     4.5.  R-CP-5: Criteria, New Judgments, and Chronology . . . . .  10
+     4.6.  R-CP-6: Coverage, Aggregation, and Attempts . . . . . . .  10
+     4.7.  R-CP-7: Qualified Identity and Evaluation Context . . . .  10
+     4.8.  R-CP-8: Evidence Availability and Digest Knowledge  . . .  11
+     4.9.  R-CP-9: Loss, Conflict, and Multi-Hop Preservation  . . .  11
+     4.10. R-CP-10: Typed Verification and Bounded Consumption . . .  12
+     4.11. R-CP-11: Separate Reliance and Downstream Decisions . . .  12
+     4.12. R-CP-12: Versioned Mappings and Verification Evidence . .  13
+   5.  What a Concrete Mapping Profile Must Specify  . . . . . . . .  13
+   6.  Consumer Processing . . . . . . . . . . . . . . . . . . . . .  14
+   7.  Worked Counterexamples  . . . . . . . . . . . . . . . . . . .  15
+     7.1.  Run Completion Is Not a Scoring Verdict . . . . . . . . .  15
+     7.2.  A Run Identifier Does Not Select a Metric . . . . . . . .  16
+     7.3.  Local Success and Incomplete Coverage . . . . . . . . . .  17
+     7.4.  Rounding Can Change a Decision  . . . . . . . . . . . . .  18
+
+
+
+Abak                      Expires 27 March 2027                 [Page 2]
+
+Internet-Draft      AI Evaluation Claim Preservation      September 2026
+
+
+     7.5.  A Restricted Reference Is Not Verified Bytes  . . . . . .  18
+     7.6.  Later Authentication Does Not Repair Earlier Loss . . . .  19
+   8.  Relationship to Existing Work . . . . . . . . . . . . . . . .  19
+     8.1.  Attestation and Transparency  . . . . . . . . . . . . . .  19
+     8.2.  Criteria and Evidence Qualification . . . . . . . . . . .  20
+     8.3.  Provenance and Existing Evidence Formats  . . . . . . . .  20
+     8.4.  Control Delivery Is a Separate Boundary . . . . . . . . .  20
+   9.  Security Considerations . . . . . . . . . . . . . . . . . . .  21
+   10. Privacy Considerations  . . . . . . . . . . . . . . . . . . .  22
+   11. IANA Considerations . . . . . . . . . . . . . . . . . . . . .  22
+   12. Implementation and Validation Status  . . . . . . . . . . . .  22
+   13. Further Specification Work  . . . . . . . . . . . . . . . . .  23
+   14. References  . . . . . . . . . . . . . . . . . . . . . . . . .  23
+     14.1.  Normative References . . . . . . . . . . . . . . . . . .  23
+     14.2.  Informative References . . . . . . . . . . . . . . . . .  23
+   Appendix A.  Mapping Test Scenarios . . . . . . . . . . . . . . .  25
+     A.1.  Run completes; score has no established criterion . . . .  25
+     A.2.  Source explicitly declares no criterion; another source has
+            an omitted unknown criterion . . . . . . . . . . . . . .  25
+     A.3.  Consumer applies a new threshold to a source score  . . .  26
+     A.4.  Two metrics share one task and run identifier . . . . . .  26
+     A.5.  Unexecuted, errored, or invalidated measurement . . . . .  26
+     A.6.  Partial campaign has successful results in the observed
+            subset . . . . . . . . . . . . . . . . . . . . . . . . .  26
+     A.7.  Retries and duplicate records change an apparent
+            denominator  . . . . . . . . . . . . . . . . . . . . . .  26
+     A.8.  Rounding or a unit conversion crosses a threshold . . . .  26
+     A.9.  Only a model display name or declared network setting is
+            available  . . . . . . . . . . . . . . . . . . . . . . .  26
+     A.10. Evidence reference is supplied without bytes or digest  .  26
+     A.11. Digest is copied from an authenticated report . . . . . .  26
+     A.12. An earlier hop drops a material qualification . . . . . .  27
+     A.13. Carrier verifies but semantic profile is unsupported  . .  27
+     A.14. Export succeeds without any decision record . . . . . . .  27
+     A.15. Criteria commitment exists but run ordering is not
+            supported  . . . . . . . . . . . . . . . . . . . . . . .  27
+     A.16. A corrected result conflicts with an earlier result . . .  27
+     A.17. A new profile basis is supplied to an old consumer  . . .  27
+     A.18. A loss manifest is substituted between two conversions  .  27
+     A.19. Duplicate JSON keys or ambiguous selection affect a
+            score  . . . . . . . . . . . . . . . . . . . . . . . . .  27
+     A.20. Two consumers accept the same source but apply different
+            policies . . . . . . . . . . . . . . . . . . . . . . . .  27
+   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .  27
+
+
+
+
+
+
+
+Abak                      Expires 27 March 2027                 [Page 3]
+
+Internet-Draft      AI Evaluation Claim Preservation      September 2026
+
+
+1.  Introduction
+
+   Consider an evaluation operator that exports results to an evidence
+   service.  A second organization retrieves a summary from that service
+   and uses selected results in its own decision system.  These
+   boundaries can involve different native formats, parser versions,
+   aggregation conventions, access permissions, and trust policies.  A
+   correctly authenticated summary can nevertheless misrepresent the
+   source if a conversion changes the meaning of a result.
+
+   Native formats already make relevant distinctions.  Inspect documents
+   evaluation-log status separately from scoring results [INSPECT].
+   LightEval documents task-indexed numerical results and configuration
+   metadata [LIGHTEVAL].  This document does not allege a defect in
+   either implementation.  Its question is what a converter and a
+   downstream consumer need to preserve when exchanging such records.
+
+   For example, completion of a run does not mean that a metric met a
+   criterion.  A consumer can legitimately apply its own threshold to a
+   source score, but that is a new assessment by that consumer, not a
+   verdict reported by the original evaluator.  Similarly, checking a
+   signature on a model-name assertion does not establish which model
+   actually executed.
+
+   General evidence-to-decision architectures and preservation
+   principles are not new contributions of this document.  RATS
+   separates evidence appraisal from relying-party policy [RFC9334].
+   Related work on evidence qualification, statement graphs, and agent
+   control intermediaries is discussed in Section 8.  The contribution
+   proposed here is a bounded set of requirements for AI-evaluation-
+   specific mappings: result selection, run and measurement state,
+   scores and criteria, population scope, and the qualifications that
+   survive conversion.
+
+1.1.  Scope and Non-Goals
+
+   The requirements apply to exchange across components or
+   administrative domains, including offline exchange.  They apply to
+   evaluations of AI systems, including frontier-system use cases,
+   without defining a frontier capability threshold.  They do not
+   require native evaluation frameworks to adopt a new format or to
+   disclose confidential samples.
+
+
+
+
+
+
+
+
+
+Abak                      Expires 27 March 2027                 [Page 4]
+
+Internet-Draft      AI Evaluation Claim Preservation      September 2026
+
+
+   This document does not define scientific validity, acceptable risk,
+   evaluator competence or independence, legal authority, or whether
+   deployment should occur.  It does not create an evidence-to-decision
+   graph format, transparency service, trust-anchor system, or control-
+   delivery mechanism.  Accurate preservation of an unsupported or false
+   source assertion does not make that assertion true.
+
+1.2.  Requirements Language and Applicability
+
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
+   "OPTIONAL" in this document are to be interpreted as described in BCP
+   14 [BCP14] when, and only when, they appear in all capitals, as shown
+   here.
+
+   These requirements apply to a mapping profile, converter, or consumer
+   that explicitly adopts them.  They do not retroactively change the
+   specifications of native formats or evidence carriers.  A claim of
+   compliance with these requirements MUST identify the concrete
+   profile, the implementation role, and the tested version; a bare
+   claim of "claim-preserving" is insufficient.  A profile supplies the
+   encodings, selection rules, and processing details identified in
+   Section 5.  This document alone is not a complete wire-level
+   interoperability specification.
+
+   An application can accept a limited result while withholding a
+   stronger conclusion.  Preservation failures affect the conclusions
+   that require the missing distinction; they do not automatically make
+   every other field unusable.  No requirement here prescribes a
+   particular deployment or business decision.
+
+2.  Terminology and Claim Boundaries
+
+   Native evidence
+      The source output of an evaluation process, such as a result file,
+      sample record, log, or configuration.  "Native" identifies
+      provenance, not truth or completeness.  Evidence is used here in a
+      general sense, not as a replacement definition for RATS Evidence.
+
+   Result unit
+      The particular source observation or assessment being exchanged:
+      an identified source object and selection, together with the run,
+      attempt, task, scorer, metric, aggregation, and population context
+      needed to distinguish it.  A run identifier alone need not
+      identify a result unit.
+
+   Mapping profile
+
+
+
+
+Abak                      Expires 27 March 2027                 [Page 5]
+
+Internet-Draft      AI Evaluation Claim Preservation      September 2026
+
+
+      An identified, versioned definition of source and destination
+      interpretations, selection rules, permitted transformations,
+      preserved qualifications, and consumer behavior.  It is not a
+      model-safety profile.
+
+   Mapping instance
+      A particular application of a mapping profile to identified source
+      objects.  It records the converter, outputs, transformations, and
+      material limitations of that application.
+
+   Source assertion
+      An assertion attributable to an identified source, including its
+      scope and qualifications.  A copied assertion does not become
+      independently observed merely because a converter signs it.
+
+   Derivation
+      A reported calculation or transformation with identified inputs
+      and rules.  A derivation may add useful information, but it is
+      distinct from a source assertion.  A policy judgment based on it
+      is also distinct.
+
+   Verification basis
+      The procedure, inputs, accepted identities or trust material, and
+      policy under which a particular verification result is produced.
+      Different verification types establish different properties.
+
+   Material qualification
+      Context or uncertainty needed to interpret a stated claim, such as
+      a denominator, missing samples, a criterion, units, access
+      limitations, or the distinction between declared and verified
+      identity.  Materiality is relative to the claim and mapping
+      profile, not to an arbitrary converter preference.
+
+   Claim preservation
+      Preservation of the attribution, meaning, scope, and material
+      qualifications of the source assertions selected for exchange.  It
+      does not prohibit explicitly identified derivations or new
+      judgments.  It prohibits representing those as stronger original
+      assertions or silently broadening what the source supports.
+
+   Reliance record
+      A record asserting that an actor used identified evidence as an
+      input to a particular decision under an identified policy.  It
+      does not, by itself, establish causation, complete deliberation,
+      valid authority, or enforcement.
+
+
+
+
+
+
+Abak                      Expires 27 March 2027                 [Page 6]
+
+Internet-Draft      AI Evaluation Claim Preservation      September 2026
+
+
+   Claim preservation is evaluated for a specified mapping and bounded
+   claim set.  This document provides no universal decision procedure
+   for semantic equivalence, natural-language entailment, or arbitrary
+   converter correctness.  A profile that claims preservation of a
+   particular distinction needs an explicit rule and testable examples
+   for that distinction.
+
+3.  Exchange and Failure Model
+
+   The roles are source operator, converter or publisher, evidence
+   service, consumer or verifier, and optional decision maker.  One
+   entity can perform several roles.  Different names, keys, or services
+   do not establish organizational independence.
+
+   Native result + context
+              |
+     identified mapping + loss record
+              |
+         evidence view  -----> another mapping, if present
+              |
+          consumer
+              |
+     optional new assessment / real reliance decision
+
+                      Figure 1: Example Exchange Path
+
+   The protected unit of exchange can use existing statements,
+   attachments, or referenced objects.  Co-location in a file, matching
+   display names, and nearby timestamps do not establish a required
+   relationship.  The profile needs an explicit binding between the
+   source selection, mapping information, and output; otherwise a loss
+   statement from one conversion could be substituted for that of
+   another.
+
+   Failures include status coercion, task or metric substitution,
+   omitted failed attempts, changed denominators, rounding across a
+   threshold, criterion laundering, identity substitution, stale or
+   revised source objects, and loss of access restrictions.  Attackers
+   can exploit the same conditions deliberately.  The requirements also
+   address honest conversion mistakes; they do not assume an honest
+   source or converter merely because its output is signed.
+
+   A source may already be incomplete or contradictory.  A converter can
+   preserve that condition or report that it cannot map it.  It cannot
+   reconstruct missing observations from an absence of evidence.  A
+   consumer may need external evidence or a narrower claim, rather than
+   a more permissive default.
+
+
+
+
+Abak                      Expires 27 March 2027                 [Page 7]
+
+Internet-Draft      AI Evaluation Claim Preservation      September 2026
+
+
+4.  Preservation Requirements
+
+4.1.  R-CP-1: Source and Mapping Identity
+
+   A mapping instance MUST identify its source objects, source format
+   and interpretation basis, destination basis, converter
+   implementation/version, and mapping-profile revision.  Where a source
+   revision cannot be established, that limitation MUST be explicit and
+   MUST NOT be replaced with an assumed current revision.  A content
+   digest identifies bytes; it does not by itself identify the rules
+   used to interpret those bytes.
+
+   The instance MUST bind the output and material mapping information to
+   the source objects and selections on which they depend.  For each
+   content digest, the algorithm and byte selection or canonicalization
+   rule MUST be identified.  Hashing an original JSON file and hashing a
+   canonical representation are different operations; a profile MUST NOT
+   silently substitute one for the other.  Native source objects SHOULD
+   remain available under the applicable access policy; their
+   unavailability is handled under Section 4.8.
+
+4.2.  R-CP-2: Unambiguous Result Selection
+
+   A mapping MUST identify the result unit being carried or assessed.
+   It MUST preserve the context needed to distinguish task, scorer,
+   metric, run attempt, aggregation, dataset/split, and population
+   whenever these affect the claim.  A profile MUST specify which native
+   identifiers or selectors supply that context and how their uniqueness
+   is scoped.  Unsupported, unresolved, or ambiguous selections MUST NOT
+   be resolved by taking an arbitrary first, last, largest, or most
+   favorable result.
+
+   A selector MUST be interpreted against the identified source snapshot
+   and under an identified selector syntax.  When a summary combines
+   results, the inputs and selection/aggregation rule MUST be
+   identifiable.  When a referenced object changes, the old selector
+   MUST NOT silently become a reference to new content.  A selector
+   identifies data, not a measured population's completeness.  JSON
+   Pointer [RFC6901] is one possible syntax, not a required wire
+   mechanism.
+
+
+
+
+
+
+
+
+
+
+
+Abak                      Expires 27 March 2027                 [Page 8]
+
+Internet-Draft      AI Evaluation Claim Preservation      September 2026
+
+
+4.3.  R-CP-3: Execution, Observation, and Assessment
+
+   A mapping MUST distinguish whether a measurement executed, what value
+   or finding was reported, and whether an identified criterion was
+   assessed.  It MUST NOT translate successful process completion into a
+   successful metric or safety assessment.  Non-execution, invalidation,
+   error, inconclusive outcome, and absence of evidence MUST NOT
+   silently become a measured pass.  They also MUST NOT be relabeled as
+   a measured failure unless the source semantics actually establish
+   such a failure.
+
+   A score without an established criterion MUST remain a score without
+   an attributed source verdict.  "The source states that no criterion
+   was applied" and "the available source does not establish a
+   criterion" MUST remain distinguishable.  An omitted field alone
+   establishes neither condition unless the identified native format
+   defines that omission unambiguously.  A non-applicability assertion
+   MUST retain its stated scope and basis, not be invented from a
+   missing value.
+
+4.4.  R-CP-4: Values, Units, and Numerical Transformations
+
+   For a selected result, a mapping MUST preserve the meaning of its
+   value, including applicable units, scale, metric definition,
+   comparator direction, precision, and uncertainty information.  A
+   profile MUST specify acceptable numerical conversions and any
+   tolerance.  It MUST distinguish a source uncertainty estimate from
+   information lost through conversion.  Missing uncertainty information
+   MUST NOT be mapped to zero uncertainty or to a source claim of
+   statistical confidence.  An exact integer identifier MUST NOT be
+   changed by a lossy numeric representation.
+
+   Rounding, normalization, aggregation, or recomputation MUST be
+   identified as a derivation when it can affect interpretation.  A
+   consumer MUST NOT use a rounded presentation value to claim that the
+   source met a threshold when the unrounded source did not.  If the
+   native representation cannot support the requested numerical
+   comparison, that comparison MUST remain unestablished.  A profile MAY
+   permit a bounded conversion for a narrower claim; the bound and the
+   affected claim MUST be explicit.
+
+
+
+
+
+
+
+
+
+
+
+Abak                      Expires 27 March 2027                 [Page 9]
+
+Internet-Draft      AI Evaluation Claim Preservation      September 2026
+
+
+4.5.  R-CP-5: Criteria, New Judgments, and Chronology
+
+   A transported criterion assessment MUST identify the criterion and
+   revision actually attributed to its source.  A consumer MAY apply a
+   new criterion or policy to a source observation, provided it records
+   a separate assessment with its own actor, inputs, rule/version,
+   scope, and result.  It MUST NOT describe this new judgment as the
+   original evaluator's verdict or as a criterion fixed before the
+   source run without supporting evidence.
+
+   A claim that criteria preceded execution MUST have a supported
+   ordering relationship between the identified criteria and that run.
+   A bare timestamp string, matching identifiers, or a hash-only
+   commitment is not sufficient by itself.  Existing preregistration
+   mechanisms can be referenced; this document defines none.  Unknown
+   ordering MUST remain unknown.  Legitimate corrections and later
+   reassessments are permitted but MUST preserve the original assessment
+   and explicit revision relationship.
+
+4.6.  R-CP-6: Coverage, Aggregation, and Attempts
+
+   A claim about an evaluation campaign or complete population MUST
+   identify the population or reproducible inclusion rule, its source,
+   and the accounting method.  Recorded samples, unexecuted samples,
+   errors, exclusions, invalidations, and unknown portions MUST NOT
+   disappear solely because an aggregate counts only successful records.
+   When totals or categories are unknown, a mapping MUST record that
+   limitation rather than invent counts.
+
+   The profile MUST define how retries, repeated measurements, duplicate
+   records, changed sample sets, and overlapping outcomes affect the
+   denominator.  It MUST NOT assume that native status categories are
+   disjoint when they are not.  A partial run MAY preserve a local
+   criterion result; that result MUST retain its narrower scope.
+   Preserving all supplied records does not establish that all actual
+   attempts were supplied.  Selection or deduplication that changes the
+   population MUST be visible as a transformation.
+
+4.7.  R-CP-7: Qualified Identity and Evaluation Context
+
+   A mapping MUST distinguish display names and declarations from
+   identities established by a specified verification procedure.  When a
+   conclusion requires an exact model, checkpoint, configuration,
+   dataset, harness, or environment, the profile MUST identify the
+   evidence required for that conclusion.  Missing required identity
+   evidence MUST prevent that conclusion, but need not prevent carrying
+   a more limited declared result.
+
+
+
+
+Abak                      Expires 27 March 2027                [Page 10]
+
+Internet-Draft      AI Evaluation Claim Preservation      September 2026
+
+
+   Context material to the selected claim, such as tool access, network
+   restrictions, safeguard state, scoring method, or system
+   configuration, MUST retain its source and verification status.  A
+   declared container digest or model hash MUST NOT be presented as
+   proof that those bytes executed.  Attestation references MUST retain
+   the scope and accepting verification basis of the attestation.
+   Evaluator access and independence declarations MUST NOT be promoted
+   to established access or independence merely through conversion.
+
+4.8.  R-CP-8: Evidence Availability and Digest Knowledge
+
+   A mapping MUST distinguish evidence availability from digest
+   knowledge.  It MUST distinguish a digest recomputed from available
+   bytes by an identified actor, a digest reported by another source but
+   not recomputed by that actor, and a digest that is unavailable.  It
+   MUST NOT fabricate a digest or use a dummy value to make an
+   unavailable object appear content-bound.
+
+   Availability statements MUST be scoped to an actor and the relevant
+   observation or exchange context.  Public location, permission to
+   access, successful retrieval, and retention are different properties.
+   A profile MUST define how known restrictions and unknown availability
+   are represented.  It MUST NOT invent a custodian, withholding reason,
+   or claim that an object exists.  When the destination cannot express
+   a required unavailable state, the mapper MUST provide a bound,
+   interpretable qualification through the profile or report that the
+   affected mapping is unsupported.
+
+4.9.  R-CP-9: Loss, Conflict, and Multi-Hop Preservation
+
+   The mapping report MUST distinguish copied assertions,
+   transformations, out-of-band declarations, and material losses.  A
+   profile MUST identify which source qualifications are required for
+   each supported claim class.  A converter MUST NOT omit a known
+   material qualification merely by declaring it irrelevant.  Unknown
+   extensions that may qualify the selected claim MUST remain
+   uninterpreted or prevent that claim from being established; a profile
+   MAY define an explicit criticality mechanism or extension points
+   whose contents cannot qualify its stated claim class under that
+   profile.
+
+   Every transformation hop used to support an end-to-end preservation
+   claim MUST be accounted for, either through the chain of mapping
+   records or by a direct check against an adequately identified earlier
+   source.  A later converter MUST NOT erase an earlier material loss or
+   present reintroduced information as though it had survived the lost
+   hop.  Corrections, contradictory records, alternative
+   interpretations, and amendments MUST retain provenance.  A signed
+
+
+
+Abak                      Expires 27 March 2027                [Page 11]
+
+Internet-Draft      AI Evaluation Claim Preservation      September 2026
+
+
+   loss report is itself an assertion; it does not prove that its loss
+   inventory is complete.  A contradictory source verdict may be
+   retained as an attributed assertion, but MUST NOT be endorsed merely
+   because it was copied faithfully.
+
+4.10.  R-CP-10: Typed Verification and Bounded Consumption
+
+   A verification result MUST identify the actor, procedure/version,
+   checked inputs, verification type, result, and material limitations.
+   Structural validation, digest recomputation, signature verification,
+   attestation appraisal, mapping verification, and substantive
+   evaluation judgments MUST remain distinct.  Successful verification
+   of a carrier MUST NOT imply successful verification of an unsupported
+   profile, unavailable source, or source statement not covered by that
+   carrier.
+
+   A consumer MUST evaluate preservation relative to the selected claim
+   and accepted verification basis.  If an essential binding,
+   interpretation, qualification, or verification input is unavailable,
+   it MUST NOT report that claim as established.  It MAY retain or
+   forward an opaque record without accepting its semantics.  A local
+   policy may deny, defer, request evidence, or otherwise act on
+   uncertainty, but the resulting action MUST NOT rewrite uncertainty as
+   a measured source failure or success.
+
+4.11.  R-CP-11: Separate Reliance and Downstream Decisions
+
+   An exporter completing a conversion MUST NOT, on that basis alone,
+   assert that a governance decision occurred.  When a reliance record
+   is supplied, it MUST identify the asserting actor, actual reported
+   decision, applicable policy basis, affected subject, and selected
+   evaluation inputs.  A new judgment under Section 4.5 MUST remain
+   separate from the transported source assertions.
+
+   The consumer MUST NOT infer valid decision authority, complete
+   deliberation, causal influence, control delivery, enforcement, or
+   observed effect solely from a reliance record.  Authentication of its
+   author is a separate check.  Changes to evidence or policy MUST
+   produce a distinguishable reassessment or amendment, not
+   retroactively rewrite the evidentiary basis of an earlier decision.
+   Existing decision and control mechanisms should carry any actual
+   downstream records; this document defines no such protocol.
+
+
+
+
+
+
+
+
+
+Abak                      Expires 27 March 2027                [Page 12]
+
+Internet-Draft      AI Evaluation Claim Preservation      September 2026
+
+
+4.12.  R-CP-12: Versioned Mappings and Verification Evidence
+
+   A concrete profile MUST identify the source and destination versions
+   and semantic rules it supports, including its extension and unknown-
+   value policy.  An implementation MUST NOT silently treat a new or
+   incompatible basis as the old one.  A profile MUST specify observable
+   expected behavior for negative and ambiguous cases, including cases
+   where a limited result can be preserved but a stronger claim cannot.
+
+   Implementation reports MUST identify the profile and implementation
+   versions, source cases, procedure, and observed results on which
+   their claims rely.  A schema check or a documentation crosswalk MUST
+   NOT be described as a complete semantic mapping test.  Same-author
+   tests MUST NOT be described as independent interoperability.  An
+   interoperability claim MUST name the tested producer and consumer,
+   exact bases, inputs, procedure, outcomes, and known limitations.
+
+5.  What a Concrete Mapping Profile Must Specify
+
+   A mapping profile can use native fields, an existing evidence
+   predicate, or a sidecar manifest.  This document does not allocate an
+   identifier or prescribe a new envelope.  A sidecar used to qualify an
+   output MUST be bound to that output and its source selection under
+   the accepted integrity and attribution mechanism; an unrelated
+   explanatory file is not sufficient.
+
+   *  The source and destination interpretation bases; claim classes
+      supported; and how a result unit is selected without ambiguity.
+
+   *  The preservation rules for execution, observation, criteria,
+      values, population scope, identity, and uncertainty, including
+      explicit unsupported cases.
+
+   *  The representation and protection of mapping provenance, material
+      loss, conflicts, access limitations, and digest knowledge.
+
+   *  The trust, authentication, freshness, retrieval, and resource-
+      limit rules required for its claims, with unknown and failed
+      states distinguished.
+
+   *  The consumer-visible outcomes and reproducible examples against
+      which mapping and consumption are tested.
+
+
+
+
+
+
+
+
+
+Abak                      Expires 27 March 2027                [Page 13]
+
+Internet-Draft      AI Evaluation Claim Preservation      September 2026
+
+
+   The profile MUST describe how each applicable requirement in
+   Section 4 is satisfied and why a conditional requirement is
+   inapplicable when it is not used.  It need not require every possible
+   identity or metadata field for every claim.  However, reducing
+   metadata cannot be used to preserve the name of a stronger claim
+   while discarding the conditions needed to support it.
+
+   A loss statement need not enumerate every field outside the chosen
+   claim set.  It needs to identify which material information was not
+   preserved and which claims consequently remain unsupported.
+   Retention or disclosure of confidential source content is not
+   required when a bounded commitment, restricted reference, or explicit
+   unavailable state suffices for the narrower claim.
+
+6.  Consumer Processing
+
+   The following procedure summarizes the requirements.  It is not a new
+   verification algorithm or mandatory wire-state vocabulary.  An
+   implementation MAY combine steps if the same distinctions remain
+   observable.
+
+   1.  Select the requested claim and supported mapping profile.  Bound
+       parsing, retrieval, and decompression before processing untrusted
+       content.
+
+   2.  Identify the source snapshot and result unit.  Check that
+       selectors, references, and content/projection bindings are
+       unambiguous and apply to those exact inputs.
+
+   3.  Perform the required integrity, attribution, freshness, and other
+       checks under the consumer's accepted basis.  Do not use a
+       statement's own declaration as a substitute for that basis.
+
+   4.  Check that source status, values, criteria, coverage, identity
+       qualifications, and material limitations were preserved or
+       explicitly transformed under the profile.  Consider previous hops
+       or recheck against the source.
+
+   5.  Report separately: which preservation checks succeeded, which
+       found violations, and which could not be established.  Preserve
+       reasons when more than one condition applies; a summary label
+       must not hide a failure or unknown prerequisite.
+
+   6.  Only then use the supported result as an input to a separately
+       identified assessment or decision, if any.  Retain the original
+       source assertions and the separate basis of the new judgment.
+
+
+
+
+
+Abak                      Expires 27 March 2027                [Page 14]
+
+Internet-Draft      AI Evaluation Claim Preservation      September 2026
+
+
+   These outcomes concern a bounded preservation check.  A demonstrated
+   mapping violation is not proof that the model failed a benchmark.
+   Failure to establish preservation is not a proof that a source
+   assertion is false.  Conversely, success in every mapping check does
+   not validate the benchmark, source honesty, or deployment safety.
+
+7.  Worked Counterexamples
+
+   All examples in this section are synthetic.  Field names outside the
+   explicitly described native-style fragments are explanatory notation,
+   not a wire schema, registered vocabulary, full native log, or
+   released AIREP profile.  No model was run to produce these values.
+   The examples illustrate required distinctions; they neither
+   demonstrate upstream implementation defects nor establish
+   interoperability.
+
+7.1.  Run Completion Is Not a Scoring Verdict
+
+   Inspect documents run status and scoring results separately
+   [INSPECT].  The following synthetic excerpt uses those concepts.  It
+   is not a complete EvalLog.  The run finished successfully; the
+   accuracy observation is 0.734.  The excerpt supplies no criterion, so
+   it does not establish whether the full evaluation had one.
+
+   {
+     "status": "success",
+     "results": {
+       "scores": [
+         {
+           "name": "example_scorer",
+           "metrics": {
+             "accuracy": {
+               "value": 0.734
+             }
+           }
+         }
+       ]
+     }
+   }
+
+                 Figure 2: Synthetic Inspect-Style Excerpt
+
+   An output that attributes PASS to the evaluator solely from status =
+   success violates Section 4.3.  A limited view can preserve the
+   reported completion status and selected score while leaving the
+   criterion state unknown.  Explicit source evidence that no criterion
+   was applied would instead support that narrower absence assertion.
+
+
+
+
+Abak                      Expires 27 March 2027                [Page 15]
+
+Internet-Draft      AI Evaluation Claim Preservation      September 2026
+
+
+   A consumer can apply its own threshold.  The following explanatory
+   record reports a new local assessment; it does not invent a
+   historical source verdict.  The source object reference is an
+   illustrative identifier scoped to this example, not a substitute for
+   the binding required by a deployed profile.
+
+   {
+     "actor": "consumer.example",
+     "source_selection": {
+       "object": "example-inspect-fragment",
+       "syntax": "RFC6901",
+       "pointer": "/results/scores/0/metrics/accuracy/value"
+     },
+     "source_criterion_state": "unknown",
+     "new_criterion": {
+       "id": "local-accuracy-policy-v1",
+       "operator": ">=",
+       "threshold": 0.7
+     },
+     "new_assessment": "PASS",
+     "criterion_preceded_source_run": "not-established"
+   }
+
+             Figure 3: A Separately Attributed Local Assessment
+
+   This new assessment is allowed by Section 4.5.  Its authority and
+   suitability for a real decision remain separate questions.  A later
+   evidence view must not remove the attribution and turn it into "the
+   evaluation passed its preregistered test".
+
+7.2.  A Run Identifier Does Not Select a Metric
+
+   LightEval describes a task-keyed results object with numerical
+   metrics [LIGHTEVAL].  The following is a synthetic excerpt, using a
+   fictional task name and an added explanatory run identifier.  The
+   values are not a real LightEval run.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Abak                      Expires 27 March 2027                [Page 16]
+
+Internet-Draft      AI Evaluation Claim Preservation      September 2026
+
+
+   {
+     "example_run_id": "run-17",
+     "results": {
+       "example/task|0": {
+         "em": 0.62,
+         "maj@8": 0.8
+       }
+     },
+     "versions": {
+       "example/task|0": 1
+     }
+   }
+
+                  Figure 4: Synthetic Task-Indexed Results
+
+   Under JSON Pointer [RFC6901], /results/example~1task|0/em selects
+   0.62; /results/example~1task|0/maj@8 selects 0.8.  These are
+   different result units.  A record saying only "run-17 passed 0.75"
+   fails to specify the metric or the assessment rule.  The slash in the
+   task key is escaped as ~1 in the pointer.  This example uses a JSON
+   Pointer string, not an assumed URI-fragment convention for
+   application/json.
+
+   A deployed mapping must additionally bind the source snapshot, native
+   task/scoring interpretation, and population needed for its claim.  A
+   JSON pointer into a mutable URL does not satisfy those requirements.
+   A pointer to a numerical value also does not carry the surrounding
+   context on its own.
+
+7.3.  Local Success and Incomplete Coverage
+
+   {
+     "population": {
+       "source": "declared-plan-v1",
+       "planned_samples": 100
+     },
+     "completed_samples": 80,
+     "sample_criterion_met": 76,
+     "sample_criterion_not_met": 4,
+     "not_run_samples": 20,
+     "derived_fraction_among_completed": 0.95
+   }
+
+               Figure 5: Synthetic Bounded Sample Accounting
+
+   Here the sample categories are defined by the example to be disjoint.
+   The observed fraction is 76/80, not evidence that 95 of 100 planned
+   samples met the criterion.  A new policy could accept incomplete
+
+
+
+Abak                      Expires 27 March 2027                [Page 17]
+
+Internet-Draft      AI Evaluation Claim Preservation      September 2026
+
+
+   coverage, but it must identify that choice separately.  If the plan
+   were unavailable, the record could not infer a total of 100.  If
+   attempts rather than unique samples were counted, the deduplication
+   and retry rules would have to be stated.  Even a verified plan does
+   not establish that an operator disclosed all real attempts.
+
+7.4.  Rounding Can Change a Decision
+
+   {
+     "source_decimal": "0.94996",
+     "display_decimal": "0.950",
+     "criterion": {
+       "operator": ">=",
+       "threshold_decimal": "0.95"
+     },
+     "comparison_on_source": "FAIL",
+     "comparison_on_display": "PASS"
+   }
+
+                   Figure 6: Synthetic Decimal Comparison
+
+   The strings in this example denote exact base-10 values.  Rounding to
+   three fractional places changes the result of the stated comparison.
+   Displaying 0.950 can be useful, but treating it as the original
+   evidence for a 0.95 threshold violates Section 4.4.  A new assessment
+   deliberately using rounded values would require its own explicit rule
+   and attribution; it cannot replace the earlier comparison silently.
+
+7.5.  A Restricted Reference Is Not Verified Bytes
+
+   {
+     "object_ref": "https://evaluator.example/private/run-17.log",
+     "availability_to": "publisher.example",
+     "availability_context": "this conversion",
+     "availability": "not-retrieved",
+     "digest_knowledge": "unavailable",
+     "reason": "source supplied a restricted reference only",
+     "object_existence_basis": "source assertion only"
+   }
+
+            Figure 7: Synthetic Unavailable Evidence Description
+
+
+
+
+
+
+
+
+
+
+Abak                      Expires 27 March 2027                [Page 18]
+
+Internet-Draft      AI Evaluation Claim Preservation      September 2026
+
+
+   The publisher can preserve the reference and its limitation.  It
+   cannot supply a made-up all-zero hash, claim a recomputed digest,
+   infer the log's contents, or conclude that the source actually
+   retained a complete log.  Whether another actor can retrieve the
+   object is a separate observation.  A destination requiring a known
+   digest needs a supported qualification mechanism or must report the
+   affected object as unsupported, not counterfeit compliance.
+
+7.6.  Later Authentication Does Not Repair Earlier Loss
+
+   Suppose an initial mapper receives the partial-population record in
+   Section 7.3 and exports only 0.95.  A second mapper signs that score
+   and reports "complete evaluation passed".  The signature may
+   authenticate the second mapper, but it neither recovers the missing
+   population nor authenticates the first operator's actions.  A
+   consumer without adequate upstream evidence cannot establish that
+   stronger claim.
+
+   A direct recheck against the identified original can restore the
+   missing context for a new derived view.  The new view must identify
+   that recheck, rather than assert that the context survived the
+   earlier mapping.  If a corrected source result later appears, it must
+   be distinguished from the source snapshot used in the original
+   decision.
+
+8.  Relationship to Existing Work
+
+   The following are reuse boundaries, not assertions of field-for-field
+   compatibility or adopted working-group scope.  Referenced Internet-
+   Drafts are works in progress.  None of the examples implements a
+   binding to all of these mechanisms.
+
+8.1.  Attestation and Transparency
+
+   RATS [RFC9334] supplies attestation roles, evidence appraisal, and
+   relying-party decisions.  This document does not change those roles
+   or claim that a behavioral evaluation result is equivalent to
+   platform attestation.  It addresses preservation of the assertions
+   passed between applications, including the limits of any attestation
+   reference they carry.
+
+   SCITT [RFC9943] supplies signed-statement transparency and receipts.
+   Composite Evidence Verification [SCITT-COMPOSITE] addresses
+   statements and relationships assessed under a verification profile.
+   These mechanisms can protect and relate mapping records.  A receipt
+   or verified graph does not, by itself, establish that a converter
+   faithfully interpreted an AI metric.  This document neither extends
+   SCITT's core payload semantics nor defines a new graph envelope.
+
+
+
+Abak                      Expires 27 March 2027                [Page 19]
+
+Internet-Draft      AI Evaluation Claim Preservation      September 2026
+
+
+8.2.  Criteria and Evidence Qualification
+
+   PRML [PRML] addresses registration of evaluation criteria and
+   amendments, including limits of hash-only commitments.  A mapping can
+   reference that work when carrying criteria provenance.  It must still
+   preserve whether the particular run is evidenced to have followed
+   registration.  This document defines no competing preregistration
+   scheme.
+
+   Evidence Qualification Receipts [EQR] distinguish evidence
+   qualification from authorization and include representation-
+   compatibility requirements.  This document does not claim those
+   principles as new.  Its narrower application is to native AI
+   evaluation outputs: distinguishing run state from scoring, selecting
+   the exact metric and population, and retaining qualifications when
+   those results are converted.  No EQR field mapping or equivalence is
+   asserted.
+
+8.3.  Provenance and Existing Evidence Formats
+
+   The in-toto Statement [IN-TOTO] provides digest-bound subjects and
+   typed predicates.  A concrete mapping profile could use such a
+   predicate or another existing extension point rather than inventing
+   an envelope.  SLSA's retired Verification Summary Attestation
+   [SLSA-VSA] is historical related work for relating a verifier,
+   policy, inputs, subject, and result; it is not recommended here as an
+   active dependency.
+
+   AIREP's experimental Embedded Evaluation Profile 0.1 [AIREP-PROFILE]
+   already carries evaluation context, explicit measurement states,
+   evidence references, and claim boundaries.  It is an informative
+   example, not a normative dependency or an implementation claim for
+   this document.  The author also develops AIREP.  These requirements
+   do not silently revise its frozen profile basis or grant any AIREP
+   assurance class.
+
+8.4.  Control Delivery Is a Separate Boundary
+
+   Section 5.16 (R-CD-16) of [CONTROL-EVIDENCE] already addresses
+   semantic preservation across agent control intermediaries.  This
+   document specializes the problem for evaluation-result
+   interpretation; it does not reproduce dispatch, receipt, enforcement,
+   or observed-effect reconciliation.  Actual downstream control records
+   can reference a real decision, but carrying evaluation evidence does
+   not manufacture those events.
+
+
+
+
+
+
+Abak                      Expires 27 March 2027                [Page 20]
+
+Internet-Draft      AI Evaluation Claim Preservation      September 2026
+
+
+9.  Security Considerations
+
+   A conforming mapping can preserve a false, biased, manipulated, or
+   selectively published source assertion.  A compromised source,
+   converter, or verifier can sign false claims.  Claim preservation is
+   not a substitute for source trust, independent observation, evaluator
+   competence assessment, containment, or scientific review.  A loss
+   report cannot independently prove that no omitted information
+   existed.
+
+   A deployed profile MUST specify the integrity and attribution
+   bindings required for its claims, including which actor authenticated
+   which object.  An authenticated channel can protect a transfer while
+   leaving later re-export attribution unresolved.  When offline third-
+   party verification is claimed, the profile MUST provide evidence
+   sufficient for that verification rather than relying only on an
+   earlier channel session.  Signature validity under an unaccepted or
+   self-declared key is not accepted source attribution.
+
+   Source and mapping substitution, replay, and equivocation can make a
+   genuine result appear to concern another model, policy, population,
+   or time.  Consumers need binding and freshness checks appropriate to
+   the requested claim.  A recent signature over an old evaluation does
+   not make the evaluation recent.  Append-only history does not by
+   itself prove all real evaluations were logged.  Revocation or a
+   changed trust basis may alter a verification conclusion without
+   authorizing silent rewriting of historical records.
+
+   Implementations MUST apply bounded resource limits to parsing,
+   archive expansion, reference traversal, and evidence graphs.  A
+   profile using JSON needs deterministic handling of duplicate names,
+   excessive nesting, large numbers, and invalid encodings; ambiguity in
+   claim-relevant data MUST NOT be resolved by accidental parser
+   behavior.  The interoperability cautions in [RFC8259] are relevant.
+   A structural validator does not necessarily perform numerical,
+   chronological, or semantic consistency checks.
+
+   An evidence reference is not permission to fetch or execute its
+   target.  Consumers MUST apply an explicit retrieval policy, including
+   access control and restrictions on destinations, redirects, schemes,
+   and content processing.  Evaluation logs, prompts, and tool outputs
+   are untrusted data, even when embedded in a valid signed record.
+   Instructions in them MUST NOT be executed as verifier instructions
+   merely because they appear in evidence.
+
+
+
+
+
+
+
+Abak                      Expires 27 March 2027                [Page 21]
+
+Internet-Draft      AI Evaluation Claim Preservation      September 2026
+
+
+   A display layer can undo preservation performed by the converter.
+   Interfaces that collapse "not checked", "unavailable", "invalid", and
+   "passed" into the same indicator can mislead a decision maker.  A
+   profile MUST preserve the distinction at the consumer interface for
+   the claims it supports, not only in an inaccessible raw attachment.
+
+10.  Privacy Considerations
+
+   Evaluation evidence may include personal data, credentials,
+   proprietary configurations, restricted test items, or information
+   useful for misuse.  A mapping SHOULD minimize transferred content to
+   what is needed for the selected claim.  Restrictions and redactions
+   MUST remain visible when material; they need not reveal the
+   restricted content itself.
+
+   Content hashes are not anonymization.  Low-entropy values can be
+   guessed; stable digests and identifiers can correlate runs,
+   operators, and sensitive activity.  Profiles should select existing
+   confidentiality, access-control, or commitment mechanisms appropriate
+   to their threat model.  This document specifies no confidentiality-
+   preserving proof system and does not require publication of
+   confidential benchmark contents.
+
+   References can expire, access can change, and retention obligations
+   may require deletion.  A preserved reference should not be described
+   as perpetual availability.  A later consumer that lacks material
+   evidence MUST record its actual verification limit, not rely on a
+   publisher's earlier access statement as proof that the bytes were
+   checked by that consumer.
+
+11.  IANA Considerations
+
+   This document has no IANA actions.  It creates no registry, media
+   type, URI scheme, namespace, or wire-level status code.  Identifiers
+   and JSON member names in examples are illustrative only.
+
+12.  Implementation and Validation Status
+
+   This revision specifies requirements and illustrative processing
+   behavior, not a complete mapping profile.  It claims no deployed
+   implementation, independent implementation, interoperability result,
+   real-model evaluation, or proof of arbitrary semantic preservation.
+   The examples and test scenarios are synthetic explanatory material,
+   not measurements of frontier-model safety.
+
+   Existing AIREP profile tooling is related work, not automatically an
+   implementation of this document.  Parsing an example, checking
+   arithmetic, or validating an existing schema does not establish
+
+
+
+Abak                      Expires 27 March 2027                [Page 22]
+
+Internet-Draft      AI Evaluation Claim Preservation      September 2026
+
+
+   compliance with all of these requirements.  An implementation report
+   needs the versioned mappings and consumer behavior required by
+   Section 4.12.
+
+13.  Further Specification Work
+
+   The next engineering question is whether concrete mappings using
+   existing native formats and evidence predicates can satisfy these
+   requirements without a new carrier.  Useful work includes version-
+   pinned Inspect and LightEval mappings, explicit treatment of score-
+   only and partial-run cases, and independent consumer checks.  A
+   mapping profile must resolve claim-dependent materiality and source
+   ambiguity rather than hide them in a generic success flag.
+
+   Whether these requirements are best maintained as an independent
+   application profile or incorporated into related work remains open.
+   This document makes no claim about working-group adoption.  Its scope
+   is evidence interpretation at exchange boundaries, not selection of
+   benchmarks or policy outcomes.
+
+14.  References
+
+14.1.  Normative References
+
+   [BCP14]    Best Current Practice 14,
+              <https://www.rfc-editor.org/info/bcp14>.
+              At the time of writing, this BCP comprises the following:
+
+              Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", BCP 14, RFC 2119,
+              DOI 10.17487/RFC2119, March 1997,
+              <https://www.rfc-editor.org/info/rfc2119>.
+
+              Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
+              2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
+              May 2017, <https://www.rfc-editor.org/info/rfc8174>.
+
+14.2.  Informative References
+
+   [AIREP-PROFILE]
+              Abak, A. T., "AIREP Embedded Evaluation Profile v0.1",
+              Experimental companion profile; AIREP carrier 0.2. Source
+              commit 9c1154ffd15781782e8b77242d05b6da87d240f7. Accessed
+              22 September 2026., <https://github.com/halvrenofviryel/
+              ai-runtime-evidence-
+              protocol/blob/9c1154ffd15781782e8b77242d05b6da87d240f7/spec/airep/
+              v0.2/profiles/embedded-evaluation/README.md>.
+
+
+
+
+Abak                      Expires 27 March 2027                [Page 23]
+
+Internet-Draft      AI Evaluation Claim Preservation      September 2026
+
+
+   [CONTROL-EVIDENCE]
+              Abak, A. T., "Evidence Requirements for Agent Control
+              Delivery and Outcome Reconciliation", Work in Progress.
+              Individual submission; in particular, Section 5.16, R-CD-
+              16., Work in Progress, Internet-Draft, draft-abak-agent-
+              control-delivery-evidence-01, 4 September 2026,
+              <https://datatracker.ietf.org/doc/html/draft-abak-agent-
+              control-delivery-evidence-01>.
+
+   [EQR]      Watts, D., "Evidence-Bounded Authorization for Agentic
+              Systems: Evidence Qualification Receipts", Work in
+              Progress. Individual submission., Work in Progress,
+              Internet-Draft, draft-watts-agent-evidence-boundary-00, 12
+              September 2026, <https://datatracker.ietf.org/doc/html/
+              draft-watts-agent-evidence-boundary-00>.
+
+   [IN-TOTO]  in-toto, "in-toto Attestation Framework: Statement",
+              Statement v1 documentation, accessed 22 September 2026.
+              The linked branch can change., <https://github.com/in-
+              toto/attestation/blob/main/spec/v1/statement.md>.
+
+   [INSPECT]  Inspect, "Log Files", Online documentation, accessed 22
+              September 2026. Not a pinned implementation revision.,
+              <https://inspect.aisi.org.uk/eval-logs.html>.
+
+   [LIGHTEVAL]
+              Hugging Face, "Saving and Reading Results", LightEval
+              documentation, accessed 22 September 2026. Not a pinned
+              implementation revision.,
+              <https://huggingface.co/docs/lighteval/saving-and-reading-
+              results>.
+
+   [PRML]     Ozturk, C., "A SCITT Profile for Pre-Run Evaluation
+              Criteria (PRML)", Work in Progress. Individual
+              submission., Work in Progress, Internet-Draft, draft-
+              ozturk-scitt-prml-profile-00, 11 September 2026,
+              <https://datatracker.ietf.org/doc/html/draft-ozturk-scitt-
+              prml-profile-00>.
+
+   [RFC6901]  Bryan, P., Zyp, K., and M. Nottingham, "JavaScript Object
+              Notation (JSON) Pointer", RFC 6901, DOI 10.17487/RFC6901,
+              April 2013, <https://www.rfc-editor.org/info/rfc6901>.
+
+   [RFC8259]  Bray, T., "The JavaScript Object Notation (JSON) Data
+              Interchange Format", STD 90, RFC 8259,
+              DOI 10.17487/RFC8259, December 2017,
+              <https://www.rfc-editor.org/info/rfc8259>.
+
+
+
+
+Abak                      Expires 27 March 2027                [Page 24]
+
+Internet-Draft      AI Evaluation Claim Preservation      September 2026
+
+
+   [RFC9334]  Birkholz, H., Thaler, D., Richardson, M., Smith, N., and
+              W. Pan, "Remote ATtestation procedureS (RATS)
+              Architecture", RFC 9334, DOI 10.17487/RFC9334, January
+              2023, <https://www.rfc-editor.org/info/rfc9334>.
+
+   [RFC9943]  Birkholz, H., Delignat-Lavaud, A., Fournet, C., Deshpande,
+              Y., and S. Lasker, "An Architecture for Trustworthy and
+              Transparent Digital Supply Chains", RFC 9943,
+              DOI 10.17487/RFC9943, June 2026,
+              <https://www.rfc-editor.org/info/rfc9943>.
+
+   [SCITT-COMPOSITE]
+              Aoki, N., "Composite Evidence Verification for SCITT
+              Statement Graphs", Work in Progress. Individual
+              submission., Work in Progress, Internet-Draft, draft-
+              nobuo-scitt-composite-evidence-verification-00, 7 July
+              2026, <https://datatracker.ietf.org/doc/html/draft-nobuo-
+              scitt-composite-evidence-verification-00>.
+
+   [SLSA-VSA] SLSA, "Verification Summary Attestation", SLSA v1.1;
+              status Retired. Historical related work, accessed 22
+              September 2026.,
+              <https://slsa.dev/spec/v1.1/verification_summary>.
+
+Appendix A.  Mapping Test Scenarios
+
+   These are proposed test obligations for concrete profiles, not a
+   claimed executed conformance suite.  A profile needs actual source
+   and destination fixtures, accepted interpretation bases, and
+   observable consumer outputs.  An expected limitation can be the
+   correct result; a test does not need to produce a pass verdict about
+   a model.
+
+   Each test report should state exactly which checks were performed.
+   Native-format schema acceptance, arithmetic correctness, carrier
+   verification, mapping correctness for selected cases, and independent
+   interoperability are different claims.
+
+A.1.  Run completes; score has no established criterion
+
+   CP-T01 (Section 4.3): Preserve completion and score; do not attribute
+   a criterion verdict to the source.
+
+A.2.  Source explicitly declares no criterion; another source has an
+      omitted unknown criterion
+
+   CP-T02 (Section 4.3): Keep the two meanings distinct; do not infer
+   explicit absence from omission alone.
+
+
+
+Abak                      Expires 27 March 2027                [Page 25]
+
+Internet-Draft      AI Evaluation Claim Preservation      September 2026
+
+
+A.3.  Consumer applies a new threshold to a source score
+
+   CP-T03 (Section 4.5): Permit a separately attributed new assessment
+   with its inputs and rule; do not rewrite the source verdict or
+   criterion chronology.
+
+A.4.  Two metrics share one task and run identifier
+
+   CP-T04 (Section 4.2): Require unambiguous result selection; reject
+   arbitrary metric choice as support for the requested claim.
+
+A.5.  Unexecuted, errored, or invalidated measurement
+
+   CP-T05 (Section 4.3): Retain the native distinction; do not promote
+   it to a measured pass or silently coerce it to a measured failure.
+
+A.6.  Partial campaign has successful results in the observed subset
+
+   CP-T06 (Section 4.6): Retain local outcomes and population limits; do
+   not infer complete coverage.
+
+A.7.  Retries and duplicate records change an apparent denominator
+
+   CP-T07 (Section 4.6): Apply the declared attempt/aggregation rules
+   and expose exclusions; do not count only favorable attempts silently.
+
+A.8.  Rounding or a unit conversion crosses a threshold
+
+   CP-T08 (Section 4.4): Preserve the source interpretation and explicit
+   derivation; do not attribute the rounded comparison to the source.
+
+A.9.  Only a model display name or declared network setting is available
+
+   CP-T09 (Section 4.7): Preserve the declaration; leave actual executed
+   identity or enforced isolation unestablished.
+
+A.10.  Evidence reference is supplied without bytes or digest
+
+   CP-T10 (Section 4.8): Report actual access and digest knowledge; no
+   invented bytes, custodian, existence proof, or dummy digest.
+
+A.11.  Digest is copied from an authenticated report
+
+   CP-T11 (Section 4.8): Preserve reported digest and its source; do not
+   call it recomputed by the consumer.
+
+
+
+
+
+
+Abak                      Expires 27 March 2027                [Page 26]
+
+Internet-Draft      AI Evaluation Claim Preservation      September 2026
+
+
+A.12.  An earlier hop drops a material qualification
+
+   CP-T12 (Section 4.9): Report the limit or recheck against adequate
+   source evidence; a later signature does not repair the loss.
+
+A.13.  Carrier verifies but semantic profile is unsupported
+
+   CP-T13 (Section 4.10): Retain the carrier result; do not claim
+   semantic preservation or successful model assessment.
+
+A.14.  Export succeeds without any decision record
+
+   CP-T14 (Section 4.11): Do not manufacture a release, pause,
+   authorization, or control event.
+
+A.15.  Criteria commitment exists but run ordering is not supported
+
+   CP-T15 (Section 4.5): Preserve the commitment; do not infer that
+   criteria preceded the run.
+
+A.16.  A corrected result conflicts with an earlier result
+
+   CP-T16 (Section 4.9): Preserve snapshots, attribution, and amendment
+   relationship; do not rewrite the earlier decision basis.
+
+A.17.  A new profile basis is supplied to an old consumer
+
+   CP-T17 (Section 4.12): Expose unsupported semantics; do not silently
+   reuse the old interpretation.
+
+A.18.  A loss manifest is substituted between two conversions
+
+   CP-T18 (Section 4.1): Require binding to the actual source selection
+   and output; do not rely on an unrelated qualification.
+
+A.19.  Duplicate JSON keys or ambiguous selection affect a score
+
+   CP-T19 (Section 4.2): Handle under deterministic profile rules;
+   parser accident must not establish the claim.
+
+A.20.  Two consumers accept the same source but apply different policies
+
+   CP-T20 (Section 4.10): Preserve the common source assertion and both
+   distinct judgments; disagreement is not repaired by overwriting a
+   result.
+
+Author's Address
+
+
+
+
+Abak                      Expires 27 March 2027                [Page 27]
+
+Internet-Draft      AI Evaluation Claim Preservation      September 2026
+
+
+   Ali Toygar Abak
+   Independent Researcher
+   Email: founder@phionyx.ai
+   URI:   https://phionyx.ai
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Abak                      Expires 27 March 2027                [Page 28]

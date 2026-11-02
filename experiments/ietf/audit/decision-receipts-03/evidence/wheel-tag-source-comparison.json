@@ -1,0 +1,6 @@
+{
+  "release_commit": "699545521ec5ef479bb84e61fe7461fc79ed558c",
+  "method": "Git blob SHA-1 of wheel Python member bytes vs pinned release tree; not a whole-build reproducibility claim",
+  "matching_count": 80,
+  "mismatches": []
+}

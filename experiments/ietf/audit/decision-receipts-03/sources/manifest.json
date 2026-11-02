@@ -1,0 +1,191 @@
+[
+  {
+    "path": "draft-gruszka-audit-decision-receipts-00.txt",
+    "url": "https://www.ietf.org/archive/id/draft-gruszka-audit-decision-receipts-00.txt",
+    "resolved_url": "https://www.ietf.org/archive/id/draft-gruszka-audit-decision-receipts-00.txt",
+    "accessed_at_utc": "2026-11-02T16:16:07.453611+00:00",
+    "status": 200,
+    "bytes": 63275,
+    "sha256": "427a7f6958c9c4f169136e980989bc55de707e24a52e9b55fc60d25430f1eefa"
+  },
+  {
+    "path": "draft-gruszka-audit-decision-receipts-03.txt",
+    "url": "https://www.ietf.org/archive/id/draft-gruszka-audit-decision-receipts-03.txt",
+    "resolved_url": "https://www.ietf.org/archive/id/draft-gruszka-audit-decision-receipts-03.txt",
+    "accessed_at_utc": "2026-11-02T16:16:07.667901+00:00",
+    "status": 200,
+    "bytes": 80358,
+    "sha256": "c0aae84b82108a3bd40cbbbee33df13c760b5c2e943a205e9efca4c623438245"
+  },
+  {
+    "path": "datatracker-document.json",
+    "url": "https://datatracker.ietf.org/api/v1/doc/document/draft-gruszka-audit-decision-receipts/",
+    "resolved_url": "https://datatracker.ietf.org/api/v1/doc/document/draft-gruszka-audit-decision-receipts/",
+    "accessed_at_utc": "2026-11-02T16:16:07.890868+00:00",
+    "status": 200,
+    "bytes": 2203,
+    "sha256": "95acdfe207f5ddc516de8ec8e18b197a7cc3f191a2ce114ab94a85c8326e5fbe"
+  },
+  {
+    "path": "proofbundle-6.4.0-pypi.json",
+    "url": "https://pypi.org/pypi/proofbundle/6.4.0/json",
+    "resolved_url": "https://pypi.org/pypi/proofbundle/6.4.0/json",
+    "accessed_at_utc": "2026-11-02T16:16:08.396522+00:00",
+    "status": 200,
+    "bytes": 21341,
+    "sha256": "bbeff23d3fd63c215ab2c0c9991e9821eebb4f9a71ae984ac52fbcd2550c9095"
+  },
+  {
+    "path": "proofbundle-v6.4.0-ref.json",
+    "url": "https://api.github.com/repos/b7n0de/proofbundle/git/ref/tags/v6.4.0",
+    "resolved_url": "https://api.github.com/repos/b7n0de/proofbundle/git/ref/tags/v6.4.0",
+    "accessed_at_utc": "2026-11-02T16:16:08.655848+00:00",
+    "status": 200,
+    "bytes": 331,
+    "sha256": "b4ec976f10b034b77160b114773721923c692f0d1e38e8af98669c3f762ffdaa"
+  },
+  {
+    "path": "proofbundle-v6.4.0-tag.json",
+    "url": "https://api.github.com/repos/b7n0de/proofbundle/git/tags/e57b357c2ba2bd859d20e712835af26e42be38b1",
+    "resolved_url": "https://api.github.com/repos/b7n0de/proofbundle/git/tags/e57b357c2ba2bd859d20e712835af26e42be38b1",
+    "accessed_at_utc": "2026-11-02T16:16:09.000064+00:00",
+    "status": 200,
+    "bytes": 8751,
+    "sha256": "6b4c02ba19ee770855dfee3deb7ae0c21e558129d51bf0f6024ae3ed1173e7fd"
+  },
+  {
+    "path": "proofbundle-preview-commit.json",
+    "url": "https://api.github.com/repos/b7n0de/proofbundle/git/commits/8bb289c8b41d32c54734155fc00756231093bc2a",
+    "resolved_url": "https://api.github.com/repos/b7n0de/proofbundle/git/commits/8bb289c8b41d32c54734155fc00756231093bc2a",
+    "accessed_at_utc": "2026-11-02T16:16:09.324735+00:00",
+    "status": 200,
+    "bytes": 2931,
+    "sha256": "9f03813f6283f9fd952c0c7727cf1b497243e29abcc4b4a4a8937bf6805b4e10"
+  },
+  {
+    "path": "proofbundle-release-tree.json",
+    "url": "https://api.github.com/repos/b7n0de/proofbundle/git/trees/699545521ec5ef479bb84e61fe7461fc79ed558c?recursive=1",
+    "resolved_url": "https://api.github.com/repos/b7n0de/proofbundle/git/trees/699545521ec5ef479bb84e61fe7461fc79ed558c?recursive=1",
+    "accessed_at_utc": "2026-11-02T16:16:09.669812+00:00",
+    "status": 200,
+    "bytes": 871884,
+    "sha256": "3aac560ae9ceaf372458d9f776c1a2a426fbd2082cc05f95c2f7d1f49a3210b6"
+  },
+  {
+    "path": "../.downloads/proofbundle-6.4.0.tar.gz",
+    "url": "https://files.pythonhosted.org/packages/7a/0a/b2f155f78d5bda2449e8ec9a8a464cea4a1aa457ae766909dd86cca296d6/proofbundle-6.4.0.tar.gz",
+    "resolved_url": "https://files.pythonhosted.org/packages/7a/0a/b2f155f78d5bda2449e8ec9a8a464cea4a1aa457ae766909dd86cca296d6/proofbundle-6.4.0.tar.gz",
+    "accessed_at_utc": "2026-11-02T16:17:33.773322+00:00",
+    "status": 200,
+    "bytes": 5170132,
+    "sha256": "9b074c7ed9dec106b45ae541b9194087f7238230953a7c784df7c4a08c386699"
+  },
+  {
+    "path": "decision-receipt.md",
+    "url": "https://raw.githubusercontent.com/b7n0de/proofbundle/699545521ec5ef479bb84e61fe7461fc79ed558c/docs/predicates/decision-receipt.md",
+    "resolved_url": "https://raw.githubusercontent.com/b7n0de/proofbundle/699545521ec5ef479bb84e61fe7461fc79ed558c/docs/predicates/decision-receipt.md",
+    "accessed_at_utc": "2026-11-02T16:17:34.751931+00:00",
+    "status": 200,
+    "bytes": 14274,
+    "sha256": "06d6527fcf08a03dc9002d42574f8b723e0491a7d127cf8f16b03d1225444cb6"
+  },
+  {
+    "path": "action-outcome.md",
+    "url": "https://raw.githubusercontent.com/b7n0de/proofbundle/699545521ec5ef479bb84e61fe7461fc79ed558c/docs/predicates/action-outcome.md",
+    "resolved_url": "https://raw.githubusercontent.com/b7n0de/proofbundle/699545521ec5ef479bb84e61fe7461fc79ed558c/docs/predicates/action-outcome.md",
+    "accessed_at_utc": "2026-11-02T16:17:37.960504+00:00",
+    "status": 200,
+    "bytes": 13211,
+    "sha256": "b773bb642da9902a28e369620e9dba904645848b35079063036edee48390411e"
+  },
+  {
+    "path": "preview-README.md",
+    "url": "https://raw.githubusercontent.com/b7n0de/proofbundle/8bb289c8b41d32c54734155fc00756231093bc2a/plugins/proofbundle/README.md",
+    "resolved_url": "https://raw.githubusercontent.com/b7n0de/proofbundle/8bb289c8b41d32c54734155fc00756231093bc2a/plugins/proofbundle/README.md",
+    "accessed_at_utc": "2026-11-02T16:17:40.415495+00:00",
+    "status": 200,
+    "bytes": 56318,
+    "sha256": "64716c068a2311886d689a1180ceff3a993db8a3f9c11814a31f2764e7d5fbb0"
+  },
+  {
+    "path": "draft-gruszka-signed-evaluation-receipts-04.txt",
+    "url": "https://www.ietf.org/archive/id/draft-gruszka-signed-evaluation-receipts-04.txt",
+    "resolved_url": "https://www.ietf.org/archive/id/draft-gruszka-signed-evaluation-receipts-04.txt",
+    "accessed_at_utc": "2026-11-02T16:19:47.720143+00:00",
+    "status": 200,
+    "bytes": 109277,
+    "sha256": "d60c3dd95aefb8019a5f1c0ce041d8c4eb1d4571302766944bfbc92b91c1e358"
+  },
+  {
+    "path": "../.downloads/proofbundle-6.4.0-py3-none-any.whl",
+    "url": "https://files.pythonhosted.org/packages/ac/f5/9bb58c6d15eafa618491d269efd8ecdd50af862c0408ee0b312f548f3f92/proofbundle-6.4.0-py3-none-any.whl",
+    "resolved_url": "https://files.pythonhosted.org/packages/ac/f5/9bb58c6d15eafa618491d269efd8ecdd50af862c0408ee0b312f548f3f92/proofbundle-6.4.0-py3-none-any.whl",
+    "accessed_at_utc": "2026-11-02T16:19:48.025981+00:00",
+    "status": 200,
+    "bytes": 937177,
+    "sha256": "72153d160c2f78647095f029c0946dbfd64a15e006a233a5abc78a3071eebf94"
+  },
+  {
+    "path": "../.downloads/cryptography-50.0.2-cp311-abi3-manylinux_2_34_x86_64.whl",
+    "url": "https://files.pythonhosted.org/packages/d3/69/2c833a049475e0a3444e94c7d0aca0aa51d166374a449b09e92ac98138de/cryptography-50.0.2-cp311-abi3-manylinux_2_34_x86_64.whl",
+    "resolved_url": "https://files.pythonhosted.org/packages/d3/69/2c833a049475e0a3444e94c7d0aca0aa51d166374a449b09e92ac98138de/cryptography-50.0.2-cp311-abi3-manylinux_2_34_x86_64.whl",
+    "accessed_at_utc": "2026-11-02T16:19:48.460708+00:00",
+    "status": 200,
+    "bytes": 4752576,
+    "sha256": "9dab55f57c74c3cad24c323bacbbd04be4705ba6eb0d92e920b1fc4837ed5079"
+  },
+  {
+    "path": "../.downloads/rfc8785-0.1.4-py3-none-any.whl",
+    "url": "https://files.pythonhosted.org/packages/4d/78/119878110660b2ad709888c8a1614fce7e2fab39080ab960656dc8605bf6/rfc8785-0.1.4-py3-none-any.whl",
+    "resolved_url": "https://files.pythonhosted.org/packages/4d/78/119878110660b2ad709888c8a1614fce7e2fab39080ab960656dc8605bf6/rfc8785-0.1.4-py3-none-any.whl",
+    "accessed_at_utc": "2026-11-02T16:19:48.923467+00:00",
+    "status": 200,
+    "bytes": 9240,
+    "sha256": "520d690b448ecf0703691c76e1a34a24ddcd4fc5bc41d589cb7c58ec651bcd48"
+  },
+  {
+    "path": "../.downloads/cffi-2.1.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl",
+    "url": "https://files.pythonhosted.org/packages/b1/db/dceb9dd5b231e1da801793f8acc9f3c52a7e1afe40bb1aae37e02b0faad5/cffi-2.1.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl",
+    "resolved_url": "https://files.pythonhosted.org/packages/b1/db/dceb9dd5b231e1da801793f8acc9f3c52a7e1afe40bb1aae37e02b0faad5/cffi-2.1.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl",
+    "accessed_at_utc": "2026-11-02T16:19:49.066224+00:00",
+    "status": 200,
+    "bytes": 221822,
+    "sha256": "c1453022f490d2459a11819d83ad1d586e9ff65a12ac3e705ffebd46d3685dcf"
+  },
+  {
+    "path": "../.downloads/pycparser-3.12-py3-none-any.whl",
+    "url": "https://files.pythonhosted.org/packages/b6/ae/315bbeee126a769cbde43cf4908acb4b40408d8bf8bbf334dd7368d8dadf/pycparser-3.12-py3-none-any.whl",
+    "resolved_url": "https://files.pythonhosted.org/packages/b6/ae/315bbeee126a769cbde43cf4908acb4b40408d8bf8bbf334dd7368d8dadf/pycparser-3.12-py3-none-any.whl",
+    "accessed_at_utc": "2026-11-02T16:19:49.320206+00:00",
+    "status": 200,
+    "bytes": 62600,
+    "sha256": "a076f3f489b39b43ed13563a1dafe42447445bec2e294154ec5c57fcdda4c85e"
+  },
+  {
+    "path": "ietf-corrected-tlp-5.html",
+    "url": "https://trustee.ietf.org/documents/trust-legal-provisions/tlp-5/",
+    "resolved_url": "https://trustee.ietf.org/documents/trust-legal-provisions/tlp-5/",
+    "accessed_at_utc": "2026-11-02T16:35:55.246425+00:00",
+    "status": 200,
+    "bytes": 70789,
+    "sha256": "559024f7a8aac775fc2f61d9cf4b5959894c55414039011dccf29e7a87258026"
+  },
+  {
+    "path": "proofbundle-release-LICENSE",
+    "url": "https://raw.githubusercontent.com/b7n0de/proofbundle/699545521ec5ef479bb84e61fe7461fc79ed558c/LICENSE",
+    "resolved_url": "https://raw.githubusercontent.com/b7n0de/proofbundle/699545521ec5ef479bb84e61fe7461fc79ed558c/LICENSE",
+    "accessed_at_utc": "2026-11-02T16:35:55.707437+00:00",
+    "status": 200,
+    "bytes": 1071,
+    "sha256": "e498a26fa5825cc7e7bd2544f97090059bd3743db5ae070c2685a86a0e555cb1"
+  },
+  {
+    "path": "proofbundle-preview-LICENSE",
+    "url": "https://raw.githubusercontent.com/b7n0de/proofbundle/8bb289c8b41d32c54734155fc00756231093bc2a/LICENSE",
+    "resolved_url": "https://raw.githubusercontent.com/b7n0de/proofbundle/8bb289c8b41d32c54734155fc00756231093bc2a/LICENSE",
+    "accessed_at_utc": "2026-11-02T16:35:56.177850+00:00",
+    "status": 200,
+    "bytes": 1071,
+    "sha256": "e498a26fa5825cc7e7bd2544f97090059bd3743db5ae070c2685a86a0e555cb1"
+  }
+]

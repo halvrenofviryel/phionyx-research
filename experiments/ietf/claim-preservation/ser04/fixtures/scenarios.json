@@ -1,0 +1,182 @@
+[
+  {
+    "id": "CP-T01",
+    "requirement": "R-CP-3",
+    "source_section": "Appendix A.1",
+    "title": "Run completes; no established criterion",
+    "operation": "boundary",
+    "observable_expectation": "Run completion and a score cannot be turned into a source criterion verdict.",
+    "provenance": "local scenario derived from published CP-00; external receipt bytes identified separately"
+  },
+  {
+    "id": "CP-T02",
+    "requirement": "R-CP-3",
+    "source_section": "Appendix A.2",
+    "title": "Explicit no criterion versus omitted criterion",
+    "operation": "criterion_absence",
+    "observable_expectation": "Explicit absence and unavailable criterion information stay distinct.",
+    "provenance": "local scenario derived from published CP-00; external receipt bytes identified separately"
+  },
+  {
+    "id": "CP-T03",
+    "requirement": "R-CP-5",
+    "source_section": "Appendix A.3",
+    "title": "New consumer threshold",
+    "operation": "consumer_threshold",
+    "observable_expectation": "A later threshold assessment has its own actor, rule, inputs and result.",
+    "provenance": "local scenario derived from published CP-00; external receipt bytes identified separately"
+  },
+  {
+    "id": "CP-T04",
+    "requirement": "R-CP-2",
+    "source_section": "Appendix A.4",
+    "title": "Two metrics in one contextual run",
+    "operation": "ambiguous_selection",
+    "observable_expectation": "No first/last/favorable selection without a unique snapshot selector.",
+    "provenance": "local scenario derived from published CP-00; external receipt bytes identified separately"
+  },
+  {
+    "id": "CP-T05",
+    "requirement": "R-CP-3",
+    "source_section": "Appendix A.5",
+    "title": "Non-execution/error/invalidation",
+    "operation": "measurement_states",
+    "observable_expectation": "Local source states are retained but unsupported by SER; no boolean coercion.",
+    "provenance": "local scenario derived from published CP-00; external receipt bytes identified separately"
+  },
+  {
+    "id": "CP-T06",
+    "requirement": "R-CP-6",
+    "source_section": "Appendix A.6",
+    "title": "Partial successful subset",
+    "operation": "coverage",
+    "observable_expectation": "Reported n does not supply a campaign denominator.",
+    "provenance": "local scenario derived from published CP-00; external receipt bytes identified separately"
+  },
+  {
+    "id": "CP-T07",
+    "requirement": "R-CP-6",
+    "source_section": "Appendix A.7",
+    "title": "Retries and duplicates",
+    "operation": "attempts",
+    "observable_expectation": "Known attempt/deduplication context is not transported by SER.",
+    "provenance": "local scenario derived from published CP-00; external receipt bytes identified separately"
+  },
+  {
+    "id": "CP-T08",
+    "requirement": "R-CP-4",
+    "source_section": "Appendix A.8",
+    "title": "Rounding crosses threshold",
+    "operation": "rounding",
+    "observable_expectation": "The exact P2 score remains false while its rounded presentation compares true.",
+    "provenance": "local scenario derived from published CP-00; external receipt bytes identified separately"
+  },
+  {
+    "id": "CP-T09",
+    "requirement": "R-CP-7",
+    "source_section": "Appendix A.9",
+    "title": "Declared name or setting only",
+    "operation": "identity",
+    "observable_expectation": "Declared suite/model/dataset commitments do not establish executed artifacts.",
+    "provenance": "local scenario derived from published CP-00; external receipt bytes identified separately"
+  },
+  {
+    "id": "CP-T10",
+    "requirement": "R-CP-8",
+    "source_section": "Appendix A.10",
+    "title": "Evidence reference without bytes/digest",
+    "operation": "unavailable_evidence",
+    "observable_expectation": "The offline observer has neither bytes nor digest; no invented custody/existence.",
+    "provenance": "local scenario derived from published CP-00; external receipt bytes identified separately"
+  },
+  {
+    "id": "CP-T11",
+    "requirement": "R-CP-8",
+    "source_section": "Appendix A.11",
+    "title": "Copied digest",
+    "operation": "reported_digest",
+    "observable_expectation": "criteria_digest is an issuer report, not recomputation of unseen criteria bytes.",
+    "provenance": "local scenario derived from published CP-00; external receipt bytes identified separately"
+  },
+  {
+    "id": "CP-T12",
+    "requirement": "R-CP-9",
+    "source_section": "Appendix A.12",
+    "title": "Earlier hop loses qualification",
+    "operation": "earlier_loss",
+    "observable_expectation": "A later test MAC authenticates only the surviving bytes; lost coverage stays lost.",
+    "provenance": "local scenario derived from published CP-00; external receipt bytes identified separately"
+  },
+  {
+    "id": "CP-T13",
+    "requirement": "R-CP-10",
+    "source_section": "Appendix A.13",
+    "title": "Carrier authenticates; semantics unsupported",
+    "operation": "typed_auth",
+    "observable_expectation": "Local MAC authentication is separate from unsupported payload interpretation.",
+    "provenance": "local scenario derived from published CP-00; external receipt bytes identified separately"
+  },
+  {
+    "id": "CP-T14",
+    "requirement": "R-CP-11",
+    "source_section": "Appendix A.14",
+    "title": "Export without decision",
+    "operation": "no_decision",
+    "observable_expectation": "No decision/control/release event is invented.",
+    "provenance": "local scenario derived from published CP-00; external receipt bytes identified separately"
+  },
+  {
+    "id": "CP-T15",
+    "requirement": "R-CP-5",
+    "source_section": "Appendix A.15",
+    "title": "Criteria commitment without ordering",
+    "operation": "chronology",
+    "observable_expectation": "P10 criteria digest and timestamp do not establish pre-run ordering.",
+    "provenance": "local scenario derived from published CP-00; external receipt bytes identified separately"
+  },
+  {
+    "id": "CP-T16",
+    "requirement": "R-CP-9",
+    "source_section": "Appendix A.16",
+    "title": "Correction conflicts with prior result",
+    "operation": "amendment",
+    "observable_expectation": "Two snapshots remain distinct; SER has no amendment link to transport.",
+    "provenance": "local scenario derived from published CP-00; external receipt bytes identified separately"
+  },
+  {
+    "id": "CP-T17",
+    "requirement": "R-CP-12",
+    "source_section": "Appendix A.17",
+    "title": "Unsupported new basis",
+    "operation": "new_basis",
+    "observable_expectation": "Unknown local profile and native payload basis cannot reuse old semantics.",
+    "provenance": "local scenario derived from published CP-00; external receipt bytes identified separately"
+  },
+  {
+    "id": "CP-T18",
+    "requirement": "R-CP-1",
+    "source_section": "Appendix A.18",
+    "title": "Substituted loss manifest",
+    "operation": "binding",
+    "observable_expectation": "Local record must match source, output and selector; no native wire binding claimed.",
+    "provenance": "local scenario derived from published CP-00; external receipt bytes identified separately"
+  },
+  {
+    "id": "CP-T19",
+    "requirement": "R-CP-2",
+    "source_section": "Appendix A.19",
+    "title": "Duplicate JSON members",
+    "operation": "duplicate_keys",
+    "observable_expectation": "Reject duplicate decoded names deterministically.",
+    "provenance": "local scenario derived from published CP-00; external receipt bytes identified separately"
+  },
+  {
+    "id": "CP-T20",
+    "requirement": "R-CP-10",
+    "source_section": "Appendix A.20",
+    "title": "Two policies disagree",
+    "operation": "policy_disagreement",
+    "observable_expectation": "Retain common source and both later judgments without rewriting it.",
+    "provenance": "local scenario derived from published CP-00; external receipt bytes identified separately"
+  }
+]

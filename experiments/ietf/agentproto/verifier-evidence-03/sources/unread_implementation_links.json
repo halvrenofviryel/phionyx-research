@@ -1,0 +1,56 @@
+[
+  {
+    "reference": "MP",
+    "url": "https://github.com/Silentpartnercoding/minority-prophet/tree/b4ee46924ebe8fd0bee38b4986a01229e859764b/research/verifier-evidence",
+    "source": "13 / Appendix A; commit and path combined from draft text",
+    "status": "NOT_FETCHED_NOT_READ",
+    "accessed_at_utc": null,
+    "sha256": null,
+    "reason": "Recorded from draft only; not treated as verified evidence or authority. No post-hoc comparison performed."
+  },
+  {
+    "reference": "MOLTRUST-AUDIT",
+    "url": "https://github.com/Silentpartnercoding/agent-security-verifier-matrix/tree/635f3d57eb6f90fdf4c6945778020c34521be0a1/experiments/moltrust-reader-audit-001",
+    "source": "References, LF lines 1139\u20131145",
+    "status": "NOT_FETCHED_NOT_READ",
+    "accessed_at_utc": null,
+    "sha256": null,
+    "reason": "Recorded from draft only; not treated as verified evidence or authority. No post-hoc comparison performed."
+  },
+  {
+    "reference": "MOLTRUST-READER",
+    "url": "https://github.com/MoltyCel/reporting-format-v01-reader/tree/6d8ee54b01d20a819869ceb9fcea096d59251f8c",
+    "source": "References, LF lines 1132\u20131137",
+    "status": "NOT_FETCHED_NOT_READ",
+    "accessed_at_utc": null,
+    "sha256": null,
+    "reason": "Recorded from draft only; not treated as verified evidence or authority. No post-hoc comparison performed."
+  },
+  {
+    "reference": "MOLTRUST-RUN",
+    "url": "https://lists.w3.org/Archives/Public/public-agent-conformance/2026Oct/0139.html",
+    "source": "References, LF lines 1147\u20131152",
+    "status": "NOT_FETCHED_NOT_READ",
+    "accessed_at_utc": null,
+    "sha256": null,
+    "reason": "Recorded from draft only; not treated as verified evidence or authority. No post-hoc comparison performed."
+  },
+  {
+    "reference": "MUSUBI-N17",
+    "url": "https://github.com/ogasurfproject-jpg/horizon-shield/tree/dd64d0e2/workers/hs-ledger/nenrin/musubi-v0/settle-core-v0",
+    "source": "References, LF lines 1168\u20131172; draft only supplies abbreviated commit",
+    "status": "NOT_FETCHED_NOT_READ",
+    "accessed_at_utc": null,
+    "sha256": null,
+    "reason": "Recorded from draft only; not treated as verified evidence or authority. No post-hoc comparison performed."
+  },
+  {
+    "reference": "WYCHEPROOF",
+    "url": "https://github.com/C2SP/wycheproof",
+    "source": "References, LF lines 1271\u20131273; no revision supplied",
+    "status": "NOT_FETCHED_NOT_READ",
+    "accessed_at_utc": null,
+    "sha256": null,
+    "reason": "Recorded from draft only; not treated as verified evidence or authority. No post-hoc comparison performed."
+  }
+]

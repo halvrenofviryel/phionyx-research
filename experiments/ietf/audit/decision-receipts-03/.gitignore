@@ -1,0 +1,4 @@
+.venv/
+.downloads/
+.reproduced/
+__pycache__/

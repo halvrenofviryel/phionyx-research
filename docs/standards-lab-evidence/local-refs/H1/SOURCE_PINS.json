@@ -1,0 +1,128 @@
+{
+  "documents": [
+    {
+      "name": "draft-abak-agent-control-delivery-evidence",
+      "expected_revision": "02",
+      "current_revision": "02",
+      "revision_changed": false,
+      "sources": [
+        {
+          "url": "https://datatracker.ietf.org/api/v1/doc/document/draft-abak-agent-control-delivery-evidence/?format=json",
+          "path": "sources/draft-abak-agent-control-delivery-evidence.metadata.json",
+          "sha256": "3d50183144ff1f1a73c81f69e7d3588ad0ebfdb31a8e93646ac9cb239db56154",
+          "bytes": 2133,
+          "retrieved_at_utc": "2026-11-02T17:36:20.185709+00:00"
+        },
+        {
+          "url": "https://www.ietf.org/archive/id/draft-abak-agent-control-delivery-evidence-02.txt",
+          "path": "sources/draft-abak-agent-control-delivery-evidence-02.txt",
+          "sha256": "fe3baeb08c8e0979ca64efece098c972827fab483debe0b2bcbfd697bb714782",
+          "bytes": 123860,
+          "retrieved_at_utc": "2026-11-02T17:36:20.733142+00:00"
+        }
+      ]
+    },
+    {
+      "name": "draft-he-agentproto-verifier-evidence",
+      "expected_revision": "03",
+      "current_revision": "03",
+      "revision_changed": false,
+      "sources": [
+        {
+          "url": "https://datatracker.ietf.org/api/v1/doc/document/draft-he-agentproto-verifier-evidence/?format=json",
+          "path": "sources/draft-he-agentproto-verifier-evidence.metadata.json",
+          "sha256": "68d2f16394ebf5eb147bada903402e04fa0a87efeb4339ff4d75a6c892bf1853",
+          "bytes": 2070,
+          "retrieved_at_utc": "2026-11-02T17:36:20.186346+00:00"
+        },
+        {
+          "url": "https://www.ietf.org/archive/id/draft-he-agentproto-verifier-evidence-03.txt",
+          "path": "sources/draft-he-agentproto-verifier-evidence-03.txt",
+          "sha256": "c64cb2fd988476a56f82bdc4386a652c5841f7b3723941bffea44e73208ef600",
+          "bytes": 71649,
+          "retrieved_at_utc": "2026-11-02T17:36:20.758580+00:00"
+        }
+      ]
+    },
+    {
+      "name": "draft-gruszka-audit-decision-receipts",
+      "expected_revision": "03",
+      "current_revision": "04",
+      "revision_changed": true,
+      "sources": [
+        {
+          "url": "https://datatracker.ietf.org/api/v1/doc/document/draft-gruszka-audit-decision-receipts/?format=json",
+          "path": "sources/draft-gruszka-audit-decision-receipts.metadata.json",
+          "sha256": "768efae1ebbc5764f57548cb3cb4dcd038a5c7132a51d8ede6c4ada21568bbeb",
+          "bytes": 2240,
+          "retrieved_at_utc": "2026-11-02T17:36:20.186844+00:00"
+        },
+        {
+          "url": "https://www.ietf.org/archive/id/draft-gruszka-audit-decision-receipts-03.txt",
+          "path": "sources/draft-gruszka-audit-decision-receipts-03.txt",
+          "sha256": "c0aae84b82108a3bd40cbbbee33df13c760b5c2e943a205e9efca4c623438245",
+          "bytes": 80358,
+          "retrieved_at_utc": "2026-11-02T17:36:20.759236+00:00"
+        },
+        {
+          "url": "https://www.ietf.org/archive/id/draft-gruszka-audit-decision-receipts-04.txt",
+          "path": "sources/draft-gruszka-audit-decision-receipts-04.txt",
+          "sha256": "f5065d91493fb15a4995f85ffd1a71911d01bc9c8b063b1938521e1bfc05c826",
+          "bytes": 127824,
+          "retrieved_at_utc": "2026-11-02T17:37:05.422379+00:00"
+        }
+      ]
+    },
+    {
+      "name": "draft-templeman-scitt-measurement-capsule",
+      "expected_revision": "01",
+      "current_revision": "01",
+      "revision_changed": false,
+      "sources": [
+        {
+          "url": "https://datatracker.ietf.org/api/v1/doc/document/draft-templeman-scitt-measurement-capsule/?format=json",
+          "path": "sources/draft-templeman-scitt-measurement-capsule.metadata.json",
+          "sha256": "dd3c2f3de27490d16ea10ae8e74de5b0173946c7bbfbadcb02a537f0a6a7236c",
+          "bytes": 1774,
+          "retrieved_at_utc": "2026-11-02T17:36:20.187318+00:00"
+        },
+        {
+          "url": "https://www.ietf.org/archive/id/draft-templeman-scitt-measurement-capsule-01.txt",
+          "path": "sources/draft-templeman-scitt-measurement-capsule-01.txt",
+          "sha256": "d02bb2146fef267050e689375c7db22cb954f02f0a69ff8038382540c5192600",
+          "bytes": 81263,
+          "retrieved_at_utc": "2026-11-02T17:36:20.904046+00:00"
+        }
+      ]
+    },
+    {
+      "name": "draft-thaha-scitt-agent-execution-evidence",
+      "expected_revision": "02",
+      "current_revision": "02",
+      "revision_changed": false,
+      "sources": [
+        {
+          "url": "https://datatracker.ietf.org/api/v1/doc/document/draft-thaha-scitt-agent-execution-evidence/?format=json",
+          "path": "sources/draft-thaha-scitt-agent-execution-evidence.metadata.json",
+          "sha256": "2ba61eeb3b815bd709695eddce3a363303e07de34a9de8a36f692afb5d48dc26",
+          "bytes": 1782,
+          "retrieved_at_utc": "2026-11-02T17:36:20.187783+00:00"
+        },
+        {
+          "url": "https://www.ietf.org/archive/id/draft-thaha-scitt-agent-execution-evidence-02.txt",
+          "path": "sources/draft-thaha-scitt-agent-execution-evidence-02.txt",
+          "sha256": "2b1f9f27b04a2c67c358c222827dbdb445c198fd9b8bba2fb56e5a2a3ba6a092",
+          "bytes": 184994,
+          "retrieved_at_utc": "2026-11-02T17:36:20.740148+00:00"
+        }
+      ]
+    }
+  ],
+  "referenced_by": {
+    "url": "https://datatracker.ietf.org/doc/draft-abak-agent-control-delivery-evidence/referencedby/",
+    "path": "sources/acder-referencedby.html",
+    "sha256": "21bfe384af2dc25fc982fdb12174ddb4c3308c324224bb9cc2c49b0922a09d77",
+    "bytes": 35496,
+    "retrieved_at_utc": "2026-11-02T17:36:21.469497+00:00"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "created_at_utc": "2026-11-02T16:19:13.515381+00:00",
+  "phase": "Requirements derived and written before implementation logic",
+  "sha256": {
+    "REQUIREMENTS.md": "ceac6a25c4702b60a0a219e280e06741b7c99e49e6b8b25d6ed655f278d1e799",
+    "requirements.json": "5271bc2ac444ac8ce4ad845c03f5fbb349a182d19cae0c0f0b124e665da9d75e"
+  },
+  "independent_timestamp": false
+}

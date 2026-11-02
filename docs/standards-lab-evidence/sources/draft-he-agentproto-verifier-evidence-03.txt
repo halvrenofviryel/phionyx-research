@@ -1,0 +1,1568 @@
+
+
+
+
+Network Working Group                                           J. S. He
+Internet-Draft                                               Independent
+Intended status: Informational                           31 October 2026
+Expires: 4 May 2027
+
+
+ Exercise and Completeness Evidence for Agent Protocol Verifier Results
+                draft-he-agentproto-verifier-evidence-03
+
+Abstract
+
+   A verifier result reports what a check returned.  It does not report
+   whether the check could have returned anything else.  A check that
+   inspects too narrow a set of fields, and a check whose rejecting or
+   indeterminate input has never occurred, both report the same
+   accepting value as a check that distinguishes, and a conformance
+   matrix does not tell them apart.
+
+   This document defines requirements for reporting whether a check has
+   been exercised into its declared rejecting and indeterminate
+   outcomes, and requirements for results that claim completeness: that
+   the records relied on were the whole of some stated set.  Those are
+   two separate obligations.  A result must name the set it claims to
+   have seen, and must not treat a party with an interest in the answer
+   as the only thing looking.
+
+   This document defines no wire format, encoding, token, claim
+   vocabulary, test harness, or registry.  It does require a record to
+   identify certain facts.  That constrains what a record must be able
+   to express and leaves its encoding open.  A profile satisfying these
+   requirements will need a place to put those facts.
+
+Status of This Memo
+
+   This Internet-Draft is submitted in full conformance with the
+   provisions of BCP 78 and BCP 79.
+
+   Internet-Drafts are working documents of the Internet Engineering
+   Task Force (IETF).  Note that other groups may also distribute
+   working documents as Internet-Drafts.  The list of current Internet-
+   Drafts is at https://datatracker.ietf.org/drafts/current/.
+
+   Internet-Drafts are draft documents valid for a maximum of six months
+   and may be updated, replaced, or obsoleted by other documents at any
+   time.  It is inappropriate to use Internet-Drafts as reference
+   material or to cite them other than as "work in progress."
+
+   This Internet-Draft will expire on 4 May 2027.
+
+
+
+He                         Expires 4 May 2027                   [Page 1]
+
+Internet-Draft         Verifier Exercise Evidence           October 2026
+
+
+Copyright Notice
+
+   Copyright (c) 2026 IETF Trust and the persons identified as the
+   document authors.  All rights reserved.
+
+   This document is subject to BCP 78 and the IETF Trust's Legal
+   Provisions Relating to IETF Documents (https://trustee.ietf.org/
+   license-info) in effect on the date of publication of this document.
+   Please review these documents carefully, as they describe your rights
+   and restrictions with respect to this document.  Code Components
+   extracted from this document must include Revised BSD License text as
+   described in Section 4.e of the Trust Legal Provisions and are
+   provided without warranty as described in the Revised BSD License.
+
+Table of Contents
+
+   1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   3
+   2.  Conventions and Definitions . . . . . . . . . . . . . . . . .   3
+   3.  Terminology . . . . . . . . . . . . . . . . . . . . . . . . .   4
+   4.  Problem Statement . . . . . . . . . . . . . . . . . . . . . .   5
+   5.  EXR-1: Exercised Rejection and Indeterminate Paths  . . . . .   6
+   6.  Outcome Vocabulary  . . . . . . . . . . . . . . . . . . . . .   8
+   7.  EXR-2: Reporting an Unexercised Check . . . . . . . . . . . .   9
+   8.  CMP-1: Coverage Domain  . . . . . . . . . . . . . . . . . . .  11
+   9.  CMP-2: Material-Party Detection . . . . . . . . . . . . . . .  11
+   10. What These Requirements Do Not Establish  . . . . . . . . . .  12
+   11. Scope Relative to Agent Protocol and Audit Work . . . . . . .  13
+   12. Relationship to Adjacent Work . . . . . . . . . . . . . . . .  13
+   13. Implementation Status . . . . . . . . . . . . . . . . . . . .  17
+   14. Security Considerations . . . . . . . . . . . . . . . . . . .  20
+   15. Privacy Considerations  . . . . . . . . . . . . . . . . . . .  20
+   16. IANA Considerations . . . . . . . . . . . . . . . . . . . . .  20
+   17. Normative References  . . . . . . . . . . . . . . . . . . . .  20
+   18. Informative References  . . . . . . . . . . . . . . . . . . .  20
+   Appendix A.  Negative Vectors . . . . . . . . . . . . . . . . . .  24
+     A.1.  Check Comparing Too Little  . . . . . . . . . . . . . . .  24
+     A.2.  Constant Probe  . . . . . . . . . . . . . . . . . . . . .  24
+     A.3.  A Silent System Under a One-Sided Endpoint  . . . . . . .  24
+     A.4.  Withheld Record Under a Completeness Claim  . . . . . . .  25
+     A.5.  One Outcome Token, Two Rules  . . . . . . . . . . . . . .  25
+     A.6.  Path Shadowed by an Earlier Rule  . . . . . . . . . . . .  26
+   Appendix B.  Changes from -02 . . . . . . . . . . . . . . . . . .  26
+   Appendix C.  Changes from -01 . . . . . . . . . . . . . . . . . .  26
+   Appendix D.  Changes from -00 . . . . . . . . . . . . . . . . . .  27
+   Acknowledgments . . . . . . . . . . . . . . . . . . . . . . . . .  28
+   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .  28
+
+
+
+
+
+He                         Expires 4 May 2027                   [Page 2]
+
+Internet-Draft         Verifier Exercise Evidence           October 2026
+
+
+1.  Introduction
+
+   Agent protocol work has converged on conformance matrices: a row per
+   security-relevant claim, recording which field carries it, which
+   party verifies it, and what the verifier returned.  The value of such
+   a matrix rests on an assumption that is rarely stated, which is that
+   a row reporting an accepting outcome would have reported something
+   else had the protocol misbehaved or the evidence could not settle the
+   question.
+
+   That assumption fails in two ways, and both produce the same printed
+   result.
+
+   In the first, the check compares too little.  It runs, it returns an
+   accepting outcome, and the difference it was written to detect cannot
+   be expressed in the fields it reads.  Increasing the number of
+   observations does not help, because every observation is drawn from
+   the same blind region.
+
+   In the second, the check reads the right material but an input
+   leading to a rejecting or indeterminate outcome has never occurred.
+   The path is written down and may be correct, but nothing has driven
+   the check into it, so its accepting results carry no information
+   about what it would do with that input.
+
+   Neither failure is addressed by the presence of negative test
+   vectors.  A suite can contain many and still contain checks whose
+   rejecting or indeterminate outcome has never occurred on the record.
+   A conformance matrix records only the outcomes that occurred.
+
+   The interoperability problem: two implementations can publish the
+   same conformance row, with the same accepting outcome, where one
+   check would have rejected a malformed input and the other could not
+   have.  A relying party comparing candidate protocols, or composing
+   across administrative domains, cannot tell those apart from what is
+   published, so incomparable rows get compared anyway.  What follows is
+   a reporting requirement aimed at that.  It does not prescribe test
+   methodology, coverage arithmetic, or the correctness of any protocol.
+
+2.  Conventions and Definitions
+
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
+   "OPTIONAL" in this document are to be interpreted as described in BCP
+   14 [RFC2119] [RFC8174] when, and only when, they appear in all
+   capitals, as shown here.
+
+
+
+
+
+He                         Expires 4 May 2027                   [Page 3]
+
+Internet-Draft         Verifier Exercise Evidence           October 2026
+
+
+3.  Terminology
+
+   check:  A procedure that returns one of an enumerated set of outcomes
+      for a given input.
+
+   rejection path:  The condition, stated by the specification or
+      profile, under which a check returns an outcome classified as
+      rejecting.  Paths to outcomes classified as neither accepting nor
+      rejecting are neither paths, defined next.
+
+   neither path:  The condition, stated by the specification or profile,
+      under which a check returns an outcome classified as neither
+      accepting nor rejecting, including a path to an indeterminate
+      outcome.
+
+   exercise path:  A declared rejection path or neither path for which
+      the profile requires exercise evidence.
+
+   reachable-unexercised:  An exercise path for which the defined input
+      domain contains a reaching input, but the path has not been
+      exercised under the current check revision.
+
+   shadowed-unreachable:  An exercise path that no input in the defined
+      input domain can reach under the current check revision because an
+      earlier rule or structural precondition necessarily returns first.
+
+   exercised:  An exercise path is exercised under a given check
+      revision when the record identifies, for that revision, a
+      discriminating pair for the path on which the check returned the
+      expected outcome on each population, together with the inputs, the
+      outcomes, and the rule or condition reached.  This is the only
+      sense in which this document uses the term.
+
+   discriminating pair:  Two populations supplied together with the
+      outcome expected on each stated in advance, one expected to accept
+      and one expected to produce the declared non-accepting outcome on
+      the exercise path, whether that outcome is rejecting or neither.
+      The pair is used to detect a check that cannot tell the
+      populations apart.  The profile states which population is
+      expected to produce each outcome.  That depends on what the check
+      asserts; the labels do not imply it.
+
+   coverage domain:  The set of records over which a completeness claim
+      is asserted.
+
+   material party:  A party whose conduct or assertion is at issue in
+
+
+
+
+
+He                         Expires 4 May 2027                   [Page 4]
+
+Internet-Draft         Verifier Exercise Evidence           October 2026
+
+
+      the claim a result supports.  The term is taken from
+      [I-D.wadkins-agentproto-action-determinability], where it
+      qualifies a claimed transition.  It is applied here to the claim a
+      verifier result supports; the test is unchanged and only the
+      object differs.
+
+4.  Problem Statement
+
+   The instances below are why the author noticed the problem.  They
+   establish no rate and no claim that the failure is widespread, and no
+   requirement in this document rests on them.  Each is in a public
+   repository [MP] so that a reader can check the characterisation
+   against the artifact.  Instances known to the author that are not
+   public are omitted, because an unpublished instance is author
+   testimony.
+
+   A tightness check reported 4,638 of 4,638 from a computation that
+   never constructed a second world.  The quantity it reported could not
+   have come out otherwise, and the ratio was recorded as though it were
+   a measurement.
+
+   A registered endpoint set a 95 percent recall target on a two-arm
+   comparison in which both arms run the identical scanner.  Recall is
+   therefore equal by construction, and was measured equal to the digit
+   on both corpora.  The endpoint was retired and re-scoped to an
+   invariant that can fail: if the arms ever stop sharing a scanner, the
+   comparison silently stops being a comparison.
+
+   A positive test case was found to be an identity.  Its verdict is a
+   function of a multiset that the transformation under test preserves,
+   so the case cannot fail under the intended reading and its zero
+   carries no evidence about the schema.  This was published as a
+   correction to two earlier findings by the same author, and the
+   neighbouring cases that do carry information were identified at the
+   same time.
+
+   A record-only rule accepted 642 of 642 records written over six weeks
+   by a production job-control system.  The rule is non-falsifiable: the
+   condition it was written to detect cannot be expressed in the fields
+   it reads.  A second rule, evaluated on the same corpora, found the
+   condition absent in 284 of 284 cases where it could be checked.
+
+   These differ in mechanism and are identical on the page.  None was
+   found by reading the check.  Each was found by asking what input
+   would produce the other outcome, and then looking in the record for
+   that input.
+
+
+
+
+
+He                         Expires 4 May 2027                   [Page 5]
+
+Internet-Draft         Verifier Exercise Evidence           October 2026
+
+
+   The coverage domain of this evidence is one research programme, and
+   the instances were selected from its records by the author of this
+   document.  CMP-1 makes that limited domain explicit; under CMP-2 the
+   author's selection supplies no independently appraised basis for
+   excluding omission.  It establishes that these failures occur and are
+   recognisable; it does not establish how often they occur, or that
+   this programme is representative.  Nothing below depends on the rate.
+
+   A related observation, because it bears on Section 7: a scoring
+   endpoint that counts only incorrect confirmations is optimised by a
+   system that never confirms anything.  Appendix A records a
+   measurement.  The silent system scores perfectly on such an endpoint
+   while producing no useful output.
+
+5.  EXR-1: Exercised Rejection and Indeterminate Paths
+
+   A specification or profile claiming conformance to EXR-1 MUST NOT
+   permit a check to be reported as satisfying its exercise-evidence
+   requirement unless each of the check's declared exercise paths has
+   been exercised, as defined in Section 3, under the current check
+   revision.
+
+   A check whose outcomes have only ever held one value MUST NOT be
+   reported as satisfying this exercise-evidence requirement,
+   irrespective of the number of observations.
+
+   The classification MUST be computable from the record alone.  Two
+   evaluators holding the same record and the same profile that reach
+   different classifications show that the record is underspecified, and
+   the profile MUST state the form in which an exercising input and its
+   outcome are identified.
+
+   The obligation is per check.  A suite-level statement that negative
+   vectors exist does not satisfy EXR-1 for any individual check,
+   because the property EXR-1 requires is a property of the check.
+
+   Where a check states more than one rejection path, EXR-1 applies to
+   each separately.  Exercising one path establishes nothing about the
+   others, and a report that does not say which paths were exercised
+   does not satisfy this requirement for any of them.
+
+   Each exercise record MUST name a stable rule or condition identifier
+   from the governing specification or profile.  An outcome token alone
+   does not identify the rule or condition that fired when more than one
+   condition produces that outcome.  Where multiple conditions are
+   reached, the record MUST identify each and preserve the order needed
+   to reproduce the reported result.
+
+
+
+
+He                         Expires 4 May 2027                   [Page 6]
+
+Internet-Draft         Verifier Exercise Evidence           October 2026
+
+
+   Accepting and rejecting do not exhaust the outcomes a check may
+   return.  A check may report that the record could not settle the
+   question, which is neither.  Where a check has such an outcome the
+   profile MUST classify each outcome as accepting, rejecting, or
+   neither, and MUST do so before the check is exercised.  Where a check
+   specifies paths to outcomes classified as neither, including
+   indeterminate, EXR-1 applies to each declared path in the same way.
+   CMP-2 below returns such an outcome and is subject to this paragraph.
+
+   EXR-1 does not grade an exercising input by who supplied it.  An
+   input supplied by the party reporting the result can satisfy EXR-1.
+   For a separate completeness claim relying on that input, its party-
+   controlled provenance does not by itself establish the independent
+   omission-detection basis required by CMP-2.  The record MUST identify
+   who supplied each exercising input, and MUST permit a later reader to
+   establish that the input preceded the report relying on it.  Co-
+   presence in one record does not establish that order.
+
+   An exercising input establishes the property only for the revision of
+   the check it was supplied to.  Where the check changes, prior
+   exercise MUST NOT be carried forward, and the record MUST identify
+   the revision each exercising input was supplied to.  A check whose
+   non-accepting outcome was last observed under an earlier revision is
+   unexercised for the current one.
+
+   For each declared exercise path, the exercise record MUST identify a
+   discriminating pair under the same check revision: one population
+   expected to accept and one expected to produce the path's rejecting
+   or neither outcome.  The profile MUST state those expectations before
+   the check is run, and the check MUST return the stated outcome on
+   each.  A check that returns the same outcome on both has not
+   satisfied this requirement, whichever outcome it returned.  The name
+   of a population does not fix its expected outcome: a check asserting
+   that a defect is absent rejects where the defect is present, and a
+   check asserting that a property holds rejects where it does not.
+
+   Where this document requires an expectation, outcome classification,
+   or discriminating pair to be stated before a check is run, the record
+   MUST permit a later reader to establish that the statement preceded
+   the outcomes it governs, and that it applies to the same check
+   revision.  Co-presence in one record does not establish that order.
+   A profile MAY meet this with a commitment digest published before the
+   run, an entry in an append-only log, or a timestamp from a source not
+   controlled by a material party, and MUST state which it uses.
+
+
+
+
+
+
+
+He                         Expires 4 May 2027                   [Page 7]
+
+Internet-Draft         Verifier Exercise Evidence           October 2026
+
+
+6.  Outcome Vocabulary
+
+   An evaluator reporting the result of a check MUST distinguish at
+   least the following four outcomes, and MUST NOT collapse any of them
+   into another:
+
+   satisfied  The check ran over the evidence it names and the condition
+      held.
+
+   unsatisfied  The check ran over the evidence it names and the
+      condition did not hold.  This is the only outcome that condemns,
+      and it is available only where the check actually reached an
+      answer.
+
+   indeterminate  The check was attempted and could not reach an answer,
+      because required evidence was unavailable, a resolver did not
+      respond, or no resolver was configured.
+
+   not-evaluated  The check was not reached, or the record names nothing
+      for it to range over.  No check verdict was reached.  An explicit
+      not-evaluated record identifies the unattempted check and the
+      reason.
+
+   These names follow the row outcomes of
+   [I-D.bu-agentproto-security-principal-binding], Section 16.  Revision
+   -02 of this document called the first three verified, violation, and
+   unverifiable; the definitions are unchanged.  In the dereference
+   layer of the implementation described in Section 13, the value
+   verified corresponds to satisfied, absent (a completed negative
+   lookup) to unsatisfied, unverifiable to indeterminate, and
+   no_reference to not-evaluated.  The labels of that implementation's
+   report and policy layers do not map one-to-one, as Section 13 states.
+
+   The separation of indeterminate from unsatisfied matters most.
+   Reading indeterminate as unsatisfied produces false alarms, and
+   reading it as satisfied produces false confidence.  The evaluator's
+   policy fixes which of these errors a collapse produces.  The party
+   presenting evidence then decides whether to trigger it, because
+   evidence that cannot be checked is cheap to produce.  Under a policy
+   that reads indeterminate as unsatisfied, that party can force
+   unsatisfied outcomes by presenting such evidence.  Under a policy
+   that reads it as satisfied, that party can obtain acceptance by
+   presenting nothing else.  A profile MAY define finer outcome values,
+   but MUST NOT collapse these four.
+
+   The record of each satisfied, unsatisfied, or indeterminate outcome
+   MUST state when the check was performed and, for each item of
+   evidence the check relied on, that evidence's issue time and expiry
+
+
+
+He                         Expires 4 May 2027                   [Page 8]
+
+Internet-Draft         Verifier Exercise Evidence           October 2026
+
+
+   time where the evidence carries them.  A not-evaluated record MUST
+   state when the record was produced and MUST NOT state a time at which
+   the check was performed.
+
+   The evaluator MUST distinguish a known absence of a required verifier
+   capability from a supported check that was not attempted.  The record
+   MUST identify the capability or evaluation-plan evidence supporting
+   that diagnosis.  This distinction MAY be represented by separate
+   outcome values or by mandatory structured diagnostics; it does not
+   require a fifth native outcome token.  Where the record does not
+   establish which condition applies, the evaluator MUST preserve that
+   uncertainty and MUST NOT infer either condition from a broad outcome
+   label alone.  Missing resolver configuration, for example, does not
+   by itself establish that the verifier revision lacks resolver
+   capability.  A profile mapping these results into another
+   specification's outcome vocabulary MUST retain its required
+   capability and attempt context rather than treating a bare
+   indeterminate value as proof of unsupported.
+
+   An outcome of indeterminate or not-evaluated MUST NOT contribute to a
+   coverage figure as though it were satisfied, and MUST NOT be
+   relabelled to improve one.  This is the same prohibition
+   [I-D.bu-agentproto-security-principal-binding] places on relabelling
+   a not-run scenario as not-applicable.
+
+7.  EXR-2: Reporting an Unexercised Check
+
+   Where a check has not been exercised into a declared exercise-path
+   outcome, the evaluator MUST NOT report that check as satisfying this
+   document's implemented exercise-evidence condition.  It MAY use
+   implemented-unexercised as an EXR exercise annotation for a check
+   with implementation evidence under another profile, identifying the
+   exercise path for which no exercising input appears in the record.
+   That annotation leaves the other profile's implementation status
+   unchanged.
+
+   A record produced to satisfy EXR-1 or EXR-2 is orthogonal to any
+   implementation-status field a profile already maintains.  It MUST NOT
+   raise such a field, and a rejection path with no exercising input
+   MUST NOT be counted as measured coverage on the strength of the
+   record's existence.  Where a profile maintains per-scenario
+   dispositions of its own, those dispositions and the per-input
+   outcomes required here are separate records of separate properties
+   and MUST NOT be merged into one figure.
+
+   An explicit weaker result is required.  Without a name for it, a
+   report can conceal the difference between a check whose rejection
+   path was exercised and one whose rejection path remains unexercised.
+
+
+
+He                         Expires 4 May 2027                   [Page 9]
+
+Internet-Draft         Verifier Exercise Evidence           October 2026
+
+
+   An absent declaration MUST NOT be treated as a statement that no
+   rejection or neither path exists.  A specification that means a check
+   has no reachable non-accepting outcome MUST state that, because it is
+   a strong claim about the check and is itself reviewable.
+
+   implemented-unexercised does not by itself distinguish a check whose
+   rejecting outcome is unreachable for every input the verifier can
+   receive from one that has simply not received such an input.  These
+   are different facts: the first is a property of the check, the second
+   of the sample.  Where a profile can tell them apart it SHOULD report
+   which, and where it cannot it MUST NOT imply either.
+
+   Where the profile establishes that an input in the defined domain can
+   reach the path, but the exercise record contains no such input, the
+   evaluator SHOULD report reachable-unexercised.  Where the
+   specification's rule order and input-domain constraints establish
+   that an earlier rule necessarily returns first, the evaluator SHOULD
+   report shadowed-unreachable.  Absence from a sample establishes
+   neither classification.
+
+   A shadowed-unreachable report MUST identify the shadowing rule and
+   the rule or condition that cannot be reached.  It MUST NOT count the
+   path as exercised or as measured coverage.  If the record cannot
+   distinguish reachability from absence of an exercising input, it MUST
+   retain the broader implemented-unexercised annotation.
+
+   A report of implemented-unexercised SHOULD carry a machine-readable
+   reason identifying the unexercised exercise path, so that two
+   implementations can compare results without reading prose.  A single
+   token is insufficient for cross-implementation diagnosis.
+
+   implemented-unexercised reports only that the record does not
+   establish that the check can reject.  It carries no grade of failure.
+
+   A check whose rejecting or indeterminate condition is not expected to
+   arise in normal operation will hold implemented-unexercised
+   indefinitely.  This is intended.  A safety check that has never fired
+   stays implemented-unexercised.  Where a profile can construct a
+   synthetic input that drives such a check into its rejecting outcome,
+   EXR-1 is satisfied by that input, and Section 15 permits a synthetic
+   input for this purpose.
+
+
+
+
+
+
+
+
+
+
+He                         Expires 4 May 2027                  [Page 10]
+
+Internet-Draft         Verifier Exercise Evidence           October 2026
+
+
+8.  CMP-1: Coverage Domain
+
+   A result claiming completeness over a stated coverage domain,
+   including a claim of independent observation of that complete domain,
+   MUST name that domain and the mechanism by which an omission within
+   it would be revealed.  Independently checking one identified artifact
+   does not by itself claim completeness of a wider event or artifact
+   history.
+
+   A result that names neither does not support a completeness claim,
+   whatever the number of individually valid artifacts it presents.
+   Validity of disclosed artifacts is a property of those artifacts and
+   carries no information about records that were not disclosed.
+
+   A record may be absent for more than one reason: it was never
+   created, it was created but not observed, it was observed but not
+   recorded, or it was recorded and later removed.  CMP-1 requires the
+   revealing mechanism to be named; it does not require that mechanism
+   to separate these causes.  A profile whose mechanism can separate
+   them SHOULD say which it separates, because a relying party that must
+   act on the difference cannot infer it from the fact of absence.
+
+9.  CMP-2: Material-Party Detection
+
+   Where the mechanism that would reveal an omission is operated by a
+   material party, or where its inputs are selected by a material party,
+   that mechanism alone is same-party regardless of the number of
+   independently valid artifacts presented.  Unless an independent basis
+   has been appraised for this result as required below, the evaluator
+   MUST NOT report the completeness claim as satisfied.  It MUST report
+   the completeness appraisal using the outcome vocabulary of Section 6
+   and record why it remains unestablished.  Lack of an independent
+   omission-detection basis alone MUST NOT be reported as unsatisfied.
+   An unsatisfied outcome of a separately completed predicate check
+   remains reportable.
+
+   A relying party needs to tell two kinds of result apart.  A predicate
+   reported as unsatisfied asserts that its check ran and the condition
+   did not hold; for example, two authenticated occurrences can refute
+   an at-most-once predicate even if completeness of the wider record
+   set remains unknown.  A completeness appraisal reported as
+   indeterminate asserts that the available record cannot settle whether
+   an omission remains.  These are separate checks and verdicts.
+
+   CMP-2 is bounded by what counts as an independent basis.  A profile
+   with no such basis may name a domain and mechanism under CMP-1 but
+   cannot establish completeness under CMP-2.  An independent basis is a
+   constraint on the record set that was not under the sole control of a
+
+
+
+He                         Expires 4 May 2027                  [Page 11]
+
+Internet-Draft         Verifier Exercise Evidence           October 2026
+
+
+   material party when the records were produced: an append-only log
+   whose inclusion is witnessed by parties not material to the claim; a
+   counterparty-held record that must reconcile with the disclosed set;
+   or a substrate that cannot produce the effect without emitting a
+   record a material party cannot suppress.  Naming one is necessary but
+   does not establish that it constrained the record set for this
+   result.
+
+   Before reporting the completeness claim as satisfied, the deciding
+   verifier MUST establish, under the named profile, the independent
+   basis's authority, its binding to this result and coverage domain,
+   the extent of its coverage, and the relevant time.  The result MUST
+   retain evidence of those checks.  Naming a basis or describing a
+   future check does not satisfy this condition.  A basis that was
+   authoritative for a different scope, or in force at a different time,
+   has not been shown to bear on this result, and the completeness claim
+   remains unestablished.
+
+   The available exercise record MUST demonstrate, under the same check
+   revision and expectations stated in advance, both a result whose
+   completeness appraisal remains unestablished and one whose
+   completeness is verified after the required independent appraisal.  A
+   record containing only the former does not satisfy this exercise
+   condition; it does not by itself establish that the latter outcome is
+   unreachable.
+
+10.  What These Requirements Do Not Establish
+
+   These requirements make claims distinguishable.  They add nothing to
+   whether a claim is true.
+
+   Exercising a rejection path shows only that the check can return a
+   non-accepting outcome for some input.  It says nothing about whether
+   the rejection path is the right one, whether its condition is
+   correctly specified, or whether the accepting outcomes were correct.
+
+   An exercised path establishes nothing about paths that were not
+   exercised.  EXR-1 is a floor; it makes no coverage claim.
+
+   An implemented-unexercised check may be correct, well specified, and
+   simply never given an input that reaches its rejecting condition.
+
+   CMP-2 does not establish that an omission occurred.  It establishes
+   that the record as presented cannot exclude one.  A profile that
+   supplies an independent basis for excluding omission can establish
+   the completeness claim only when the deciding verifier appraises that
+   basis for this result.  The disclosed artifacts need not change.
+
+
+
+
+He                         Expires 4 May 2027                  [Page 12]
+
+Internet-Draft         Verifier Exercise Evidence           October 2026
+
+
+   These requirements apply to themselves.  A checker that classifies
+   checks under EXR-1 is itself a check, and a report that it satisfies
+   EXR-1 needs its own discriminating pair: a check that distinguishes
+   its populations and one that does not.  Appendix A supplies such
+   pairs.  Likewise, a report of CMP-2 is subject to CMP-2.  This
+   document sets no limit on how many levels of such checking a profile
+   requires.
+
+   None of these requirements reaches the correctness of an underlying
+   protocol, the honesty of any party, or the security of any
+   deployment.
+
+11.  Scope Relative to Agent Protocol and Audit Work
+
+   The protocol-facing obligation in this document is conditional.
+   Where an agent protocol, profile, or reference architecture relies on
+   or exposes a verifier result as evidence of coverage, it can require
+   the result to carry the exercise and completeness facts defined here.
+   A protocol that makes no such claim need not acquire an audit data
+   model merely because this document exists.
+
+   This document does not define an audit record, corpus-commitment
+   encoding, interaction-trace format, transport, or validation testbed.
+   Work concerned with how evidence records cross component or
+   administrative boundaries can define those mechanisms and use these
+   requirements as acceptance conditions.  A protocol or architecture
+   document can state the dependency without defining the mechanism that
+   satisfies it.
+
+   This document does not assign either obligation to a working group
+   and does not claim adoption by AgentProto, AUDIT, or any other IETF
+   group.  It states a separable requirements layer so that a group can
+   adopt, profile, reference, or decline it without treating the present
+   individual submission as a venue decision.
+
+12.  Relationship to Adjacent Work
+
+   [I-D.wadkins-agentproto-action-determinability] states in DET-4 that
+   presentation of individually valid evidence must not by itself be
+   treated as proof that all material evidence has been presented.
+   CMP-1 and CMP-2 narrow that concern to the detecting mechanism
+   itself.
+
+   [I-D.sahu-agent-action-receipts] specifies signed, hash-chained
+   receipts for agent actions.  Its Security Considerations state that
+   the chain shows that no recorded receipt was removed but says nothing
+   about actions the signer declined to record, and that a log can be
+   truncated at its end without any presented record revealing it.
+
+
+
+He                         Expires 4 May 2027                  [Page 13]
+
+Internet-Draft         Verifier Exercise Evidence           October 2026
+
+
+   CMP-1 and CMP-2 treat the same limit from the verifier's side.  A
+   result relying on such a chain names its coverage domain and the
+   mechanism that would reveal an omission.  Where the signer is a
+   material party, the chain alone does not support a verified
+   completeness claim.  The anchored head assertion that document
+   describes for detecting truncation can serve as an independent basis
+   under CMP-2 where the anchoring party is not material to the claim.
+   The two documents are complementary: one specifies the record, and
+   this one specifies what a verifier reports about it.
+
+   [I-D.bu-agentproto-security-principal-binding] Section 14 already
+   requires that a row not be reported implemented merely because a
+   carrier is emitted or a positive exchange completes: the evidence
+   must show the stated verifier decision and at least one security-
+   relevant rejection path, and Section 11 draws the same distinction
+   against a happy-path exchange.  That floor comes from that document,
+   and under its definition a row lacking such evidence already falls
+   short of implemented.
+
+   Section 33 of the same document lists as open issues which negative
+   test cases authors should provide, whether a row may claim
+   implemented status without a public or reviewable negative test
+   exercising the stated rejection path, and when same-party evidence
+   may support a row claiming independent observation.  EXR-1 and EXR-2
+   are addressed to the first two.  What they add to the existing floor
+   is that the exercising input be pinned to a revision, that a
+   discriminating pair be exhibited (a single rejecting input is
+   insufficient), and that the record name the outcome observed for each
+   declared rejection path.  A row satisfying Section 14 may still carry
+   no such record.
+
+   CMP-1 and CMP-2 address the completeness and omission subcase of the
+   third open issue.  They do not resolve that issue for every kind of
+   row.  Independently checking one scoped observation falls short of
+   establishing completeness over a domain.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+He                         Expires 4 May 2027                  [Page 14]
+
+Internet-Draft         Verifier Exercise Evidence           October 2026
+
+
+   That document's rules governing coverage denominators, and its
+   prohibition on relabelling a not-run scenario as not-applicable to
+   improve a denominator, are complementary and are deliberately not
+   restated here.  That document's implementation-status vocabulary is a
+   closed set of implemented, partial, none, and external.  implemented-
+   unexercised reports a different property on a different axis, and
+   this document does not propose it as a fifth member.  A row may
+   satisfy Principal Binding's minimum rejection-evidence requirement
+   while lacking the stronger EXR record for every declared rejection
+   path or lacking EXR's revision-pinned discriminating-pair evidence.
+   Those gaps remain explicit; an EXR record does not raise Principal
+   Binding implementation status.  A profile using both states them
+   separately.
+
+   [I-D.bradleyb-audit-decision-records] distinguishes correspondence,
+   where two records agree about what happened, from precedence, where
+   the order of decision and effect is established.  The present
+   document addresses the same shape one level down, where a check's
+   outcome is taken to establish a property the check was never shown
+   able to contradict.
+
+   [IA9-OVERLAY] argues that non-repudiation over a self-asserted
+   subject lacks a testable assertion about actor identity.  That is an
+   adjacent warning about the evidentiary force of a control.  EXR-1
+   neither implements nor derives from it; this document asks whether a
+   stated rejection path has actually been exercised.  A check that
+   could not run is also kept distinct from one that ran and established
+   an unsatisfied outcome in Section 6.
+
+   [I-D.schrock-ep-bounded-capability-receipts] requires, in its
+   treatment of action scope, that the basis for a transitivity claim be
+   classified as definition-derived, mechanically-checkable, or
+   asserted, and states that an asserted claim is profile-author
+   testimony rather than a demonstrated algebraic property.  EXR-1 makes
+   the same separation for a check's rejection path.  That section also
+   requires that missing components not be treated as successful
+   comparisons, and that an undecided comparison state why the deciding
+   verifier could not establish a result, distinguishing the case where
+   the governing profile supplies no applicable relation from the case
+   where the exact profile definition was unavailable to that verifier.
+   EXR-2 and CMP-2 apply the same discipline to the two cases treated
+   here: a result that could not be established is reported as such and
+   kept apart from a result that was established and negative.
+
+   [I-D.laurie-tmif] defines falsifiability as the design property
+   ensuring that subversion of a system's stated claims carries a high
+   risk of independent discovery, and specifies metadata by which an
+   evaluator assesses that property.  That is falsifiability of the
+
+
+
+He                         Expires 4 May 2027                  [Page 15]
+
+Internet-Draft         Verifier Exercise Evidence           October 2026
+
+
+   claims a system makes about itself.  The present document concerns a
+   different object: whether the check an evaluator applies has been
+   shown able to return its rejecting outcome at all.  The two compose.
+   A system whose claims are highly falsifiable, assessed by a check
+   that has never rejected anything, remains unverified by that check,
+   and EXR-2 requires that to be visible in the report.
+
+   The W3C Agent Conformance and Benchmarking Community Group has
+   published version 0.1 of a reporting format for conformance results
+   [W3C-ACRF].  The group describes it as a Community Group deliverable
+   outside the W3C Standards Track.  Each check in that format takes one
+   of five states: pass, fail, not-exercised, inconclusive, or void.
+   The not-exercised state records a check that never ran and is kept
+   separate from pass and fail, much as Section 6 keeps not-evaluated
+   apart from the other outcomes.  Its cause value
+   precondition-unsatisfiable records a check that cannot run because
+   the condition it tests cannot exist in any artifact the emitter may
+   produce.  The same format qualifies a result with whether the check
+   could have produced the other verdict and whether its discrimination
+   has been demonstrated, which is close to the question EXR-1 asks.
+   This document defines no mapping between the two vocabularies.
+
+   Software testing and model checking have long studied checks that
+   pass without being able to fail.  Mutation testing [DEMILLO1978]
+   seeds faults into a program and asks whether a test suite detects
+   them.  EXR-1 asks the same question of one verifier check, using a
+   discriminating pair in place of seeded faults.  Pseudo-tested methods
+   [NIEDERMAYR2016] and checked coverage [SCHULER2011] show that code a
+   test suite executes may still have behaviour that no test observes.
+   EXR-2 makes that condition reportable for each check as implemented-
+   unexercised.  Vacuity detection [BEER1997] finds a specification that
+   holds trivially because its antecedent is never satisfied, which
+   closely resembles the shadowed-unreachable path of EXR-2.  Modified
+   condition/decision coverage [HAYHURST2001] requires tests showing
+   that each condition in a decision independently affects its outcome.
+   EXR-1 asks for a narrower record, one per declared rejection path,
+   and adds revision pinning and expectations stated before outcomes,
+   which a published conformance row needs.  Project Wycheproof
+   [WYCHEPROOF] publishes negative test vectors labelled with the
+   weakness each one targets.  An EXR record can report which of a
+   verifier's own rules each such vector reached.  This document builds
+   on these established ideas and applies them to the reporting of
+   verifier results in agent protocols.
+
+
+
+
+
+
+
+
+He                         Expires 4 May 2027                  [Page 16]
+
+Internet-Draft         Verifier Exercise Evidence           October 2026
+
+
+13.  Implementation Status
+
+   This section records the status of implementations known to the
+   author at the time of writing, per [RFC7942].  It is intended to be
+   removed before publication as an RFC.
+
+   The outcome vocabulary of Section 6 draws on, and differs in places
+   from, the public implementation in [MP] at commit
+   b4ee46924ebe8fd0bee38b4986a01229e859764b.  Its dereference layer
+   separates verified, absent, unverifiable, and no_reference.  A
+   resolver that is offline, rate-limited, or not configured has not
+   shown a reference to be absent; only a completed negative lookup can
+   do that.  A root naming no reference produces no dereference verdict.
+   A separate mandatory-reference presence check may establish an
+   unsatisfied outcome from that absence, while an optional-reference
+   profile would not.  The report and policy layers carry these facts
+   into further dispositions; their labels do not map one-to-one onto
+   either the four values in Section 6 or another profile's
+   implementation statuses.  The pinned implementation does not yet
+   establish the mandatory capability-versus-skipped diagnostic
+   distinction specified here.  Its V4 weaker supported claim is
+   reported as downgraded in that layer and is outside the four check
+   outcomes.
+
+   A worked case for CMP-1 and CMP-2.  A verdict is sought over a set of
+   records in a profile that requires each root to name a reference.
+   Some references resolve, one resolver is unreachable, and one root
+   names no reference.  Reporting the resolved subset as a completeness
+   figure would claim a domain that was never covered.  The unreachable
+   dereference is indeterminate.  For the unreferenced root, the
+   dereference check was not attempted and its not-evaluated record
+   names the missing-reference reason.  Separately, the mandatory-
+   reference presence check completes and reports unsatisfied.  If
+   references were optional, their absence would not violate that
+   presence rule but would still provide no reference coverage or
+   completeness assurance.  CMP-1 names the domain and omission-
+   detection mechanism; CMP-2 does not permit a verified completeness
+   claim based solely on a material party's mechanism.  An independently
+   appraised basis would be needed for that claim.  These check verdicts
+   and the completeness appraisal remain separate; one unsettled label
+   cannot express all of them.
+
+   A discipline close to EXR-1 is in use in the public repository [MP],
+   where a declaration must name a contrasting population in which the
+   declared property is absent, and the probe must report below the
+   declared minimum on that population.  A probe that cannot tell the
+   two populations apart is refused as unfalsifiable, and that refusal
+   is reported before any other verdict, on the stated grounds that if
+
+
+
+He                         Expires 4 May 2027                  [Page 17]
+
+Internet-Draft         Verifier Exercise Evidence           October 2026
+
+
+   the probe cannot fail the other result is meaningless in both
+   directions.  A probe that reports a constant is refused on a
+   population that genuinely has the property.  That code predates this
+   document and was written without reference to EXR-1.  It shows that
+   the requirement is implementable and usable in practice.  It makes no
+   claim to implement EXR-1 as specified here.
+
+   The same repository refuses a registration that omits the declaration
+   entirely.  This matches the rule in Section 7 that an absent
+   declaration MUST NOT be treated as a statement that no rejection or
+   neither path exists.
+
+   The original four vectors in Appendix A are published in executable
+   form at the pinned commit above, with a test suite of twenty-eight
+   cases.  Three of those vectors are fixtures constructed for this
+   document.  They show that the requirements have content and that a
+   check can fail them; they say nothing about whether any deployed
+   check does.  The fourth reads a frozen artifact from an earlier
+   experiment and pins its digest.  The two additional vectors in this
+   revision are prose vectors; they are outside that pinned executable
+   suite and provide no implementation evidence.
+
+   Songbo Bu replayed the author's source and fixtures at the pinned
+   commit: twenty-eight verifier-evidence tests and thirty-eight related
+   dereference, warrant, resolver, and policy tests passed.  This is a
+   bounded source replay.  It is neither a second implementation nor a
+   conformance result.  No independently implemented CMP-1 or CMP-2
+   appraisal has been verified, and no interoperability between
+   independent implementations is claimed for any requirement in this
+   document.
+
+   Lars Kersten Kroehl published a separately authored reader for the
+   reporting format of [W3C-ACRF] at commit
+   6d8ee54b01d20a819869ceb9fcea096d59251f8c [MOLTRUST-READER] and
+   reported its run in [MOLTRUST-RUN].  The run covered the 165 report
+   objects selected under section 10 of that format at one corpus
+   digest, 41 expected to be rejected and 124 expected to be accepted.
+   The pinned reader produced 82 accept, 28 reject, and 55 cannot-tell
+   results.  Of these, 102 agreed with the expected verdict (77 accept,
+   25 reject) and 8 differed, which Kroehl attributes to defects in the
+   reader.  Section 10 of the format requires each reject member to be
+   rejected under the row that member names.  Four of the 25 agreeing
+   rejections were made under a different row, so Kroehl counts 98 of
+   the 102 agreements as conforming (77 accept, 21 reject).  Kroehl
+   published the corpus digest and the covered-member list, which makes
+   the boundary of the run inspectable.  The run does not establish that
+   the named checkers ran or that the supplied report objects describe
+   genuine underlying artifacts.
+
+
+
+He                         Expires 4 May 2027                  [Page 18]
+
+Internet-Draft         Verifier Exercise Evidence           October 2026
+
+
+   The present author reproduced that pinned run and published a bounded
+   audit at commit 635f3d57eb6f90fdf4c6945778020c34521be0a1
+   [MOLTRUST-AUDIT].  The package freezes 35 mutation scenarios,
+   including the baseline, and a separately written specification-only
+   reader.  The latter rejects 34 cases and reports 131 as cannot-tell.
+   Ten cases rejected by that reader are cannot-tell under Kroehl's
+   documented refusal policy; case-by-case adjudication finds eight
+   explicit contradictions or omissions whose mandatory-rejection policy
+   is disputed and two cases underdetermined by the source text.  The
+   audit does not promote those disagreements into reader errors.  The
+   separately written reader shares the present author's project
+   control, so it adds no second external evidence root.
+
+   Toshikatsu Oga applied EXR-1 and EXR-2 to the MUSUBI settle core and
+   froze the result at horizon-shield commit dd64d0e2 [MUSUBI-N17], also
+   described in [I-D.oga-musubi-settlement].  Among the original 123
+   vectors, every one of ten deviation codes was produced, while 18 of
+   28 underspecified reasons were produced and ten were not.  The
+   project added five vectors, yielding 128 vectors, drove two further
+   paths through an in-memory exercise script, and marked four specified
+   reasons as shadowed by earlier contract checks and therefore
+   unreachable.  The branch for more than 200000 verified headers
+   remains unexercised.  A separately written implementation reproduces
+   all 128 vectors, run by its author; nobody outside the MUSUBI project
+   has rerun the exercise script.
+
+   The MUSUBI result is an external appraisal of whether the
+   requirements in this document expose useful distinctions.  It falls
+   short of independent verification of MUSUBI: the counts are outputs
+   of the MUSUBI reference implementation, and the added vectors and
+   exercise script were produced and run within that project.  The
+   result supports the distinction among exercised, reachable-
+   unexercised, and shadowed-unreachable paths without establishing the
+   correctness or completeness of the underlying protocol.
+
+   A profile with no independent omission-detection basis can identify
+   its coverage domain but cannot demonstrate the accepting side of
+   CMP-2 for a completeness claim.  Under the final paragraph of
+   Section 9, an exercise record containing only unestablished
+   completeness appraisals does not satisfy the CMP-2 exercise
+   condition.  The worked case above illustrates the reporting
+   distinction; it makes no claim that CMP-1 or CMP-2 has been
+   implemented as specified here.
+
+
+
+
+
+
+
+
+He                         Expires 4 May 2027                  [Page 19]
+
+Internet-Draft         Verifier Exercise Evidence           October 2026
+
+
+14.  Security Considerations
+
+   The failure mode these requirements address is a system that appears
+   verified.  An unexercised check can be worse for a relying party than
+   an absent one.  A matrix row with no check is visibly empty.  A row
+   with an unexercised check shows an accepting outcome in the same
+   place, so a reviewer scanning the matrix for gaps sees none there.
+
+   An adversary who knows which checks are unexercised knows where a
+   conformance matrix will not look.  Because the property is visible
+   from a published matrix and published vectors, and because a check
+   that compares too little is often evident to an implementer, this
+   information may be more available to an adversary than to a reviewer.
+
+   Reporting implemented-unexercised discloses that an exercise path is
+   untested, and profiles should weigh that.  Leaving it unreported
+   keeps the same fact true, leaves the exposure unchanged, and removes
+   the relying party's ability to account for it.
+
+15.  Privacy Considerations
+
+   These requirements concern verifier results and test inputs.  Where
+   an exercising input is drawn from production data, publishing it to
+   satisfy EXR-1 may disclose personal data.  A profile SHOULD permit a
+   synthetic exercising input where the rejecting outcome does not
+   depend on the provenance of the input.
+
+16.  IANA Considerations
+
+   This document has no IANA actions.
+
+17.  Normative References
+
+   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", BCP 14, RFC 2119, March 1997,
+              <https://www.rfc-editor.org/info/rfc2119>.
+
+   [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
+              2119 Key Words", BCP 14, RFC 8174, May 2017,
+              <https://www.rfc-editor.org/info/rfc8174>.
+
+18.  Informative References
+
+   [RFC7942]  Sheffer, Y. and A. Farrel, "Improving Awareness of Running
+              Code: The Implementation Status Section", BCP 205,
+              RFC 7942, July 2016,
+              <https://www.rfc-editor.org/info/rfc7942>.
+
+
+
+
+He                         Expires 4 May 2027                  [Page 20]
+
+Internet-Draft         Verifier Exercise Evidence           October 2026
+
+
+   [I-D.oga-musubi-settlement]
+              Oga, T., "MUSUBI Settlement: Recomputing Whether an Agent
+              Acted Within a Signed Grant", Work in Progress, Internet-
+              Draft, draft-oga-musubi-settlement-02, 22 October 2026,
+              <https://datatracker.ietf.org/doc/html/draft-oga-musubi-
+              settlement-02>.
+
+   [MOLTRUST-READER]
+              Kroehl, L. K., "Reporting Format v0.1 Reader, frozen-run-
+              1", Git commit 6d8ee54b01d20a819869ceb9fcea096d59251f8c,
+              October 2026, <https://github.com/MoltyCel/reporting-
+              format-v01-reader/
+              tree/6d8ee54b01d20a819869ceb9fcea096d59251f8c>.
+
+   [MOLTRUST-AUDIT]
+              He, J. S., "MolTrust v0.1 Reader Audit", Git
+              commit 635f3d57eb6f90fdf4c6945778020c34521be0a1, October
+              2026, <https://github.com/Silentpartnercoding/agent-
+              security-verifier-
+              matrix/tree/635f3d57eb6f90fdf4c6945778020c34521be0a1/
+              experiments/moltrust-reader-audit-001>.
+
+   [MOLTRUST-RUN]
+              Kroehl, L. K., "Re: Proposal: a short arXiv paper on the
+              v0.1 reporting format", message to the public-agent-
+              conformance@w3.org mailing list, 18 October 2026,
+              <https://lists.w3.org/Archives/Public/public-agent-
+              conformance/2026Oct/0139.html>.
+
+   [W3C-ACRF] Arsentev, E., Ed. and S. Gilda, Ed., "Agent Conformance
+              Reporting Format v0.1", W3C Agent Conformance and
+              Benchmarking Community Group report, published on the
+              public-agent-conformance@w3.org mailing list, 30 September
+              2026, <https://lists.w3.org/Archives/Public/public-agent-
+              conformance/2026Sep/0087.html>.
+
+   [I-D.sahu-agent-action-receipts]
+              Sahu, N., "Signed, Hash-Chained Action Receipts for AI
+              Agents", Work in Progress, Internet-Draft, draft-sahu-
+              agent-action-receipts-00, 16 August 2026,
+              <https://datatracker.ietf.org/doc/draft-sahu-agent-action-
+              receipts/>.
+
+   [MUSUBI-N17]
+              Oga, T., "MUSUBI Settle Core v0 Exercise Record, N17", Git
+              commit dd64d0e2, October 2026, <https://github.com/
+              ogasurfproject-jpg/horizon-shield/tree/dd64d0e2/workers/
+              hs-ledger/nenrin/musubi-v0/settle-core-v0>.
+
+
+
+He                         Expires 4 May 2027                  [Page 21]
+
+Internet-Draft         Verifier Exercise Evidence           October 2026
+
+
+   [I-D.wadkins-agentproto-action-determinability]
+              Wadkins, D., "Independent Determinability of Agent
+              Actions", Work in Progress, Internet-Draft, draft-wadkins-
+              agentproto-action-determinability-00, September 2026,
+              <https://datatracker.ietf.org/doc/draft-wadkins-
+              agentproto-action-determinability/>.
+
+   [I-D.bu-agentproto-security-principal-binding]
+              Bu, S., "Security Principal and Verifier Binding for Agent
+              Communication Protocols", Work in Progress, Internet-
+              Draft, draft-bu-agentproto-security-principal-binding-08,
+              October 2026, <https://datatracker.ietf.org/doc/draft-bu-
+              agentproto-security-principal-binding/>.
+
+   [I-D.bradleyb-audit-decision-records]
+              B, B., "Signed Decision Records for Agent Authorization:
+              Disclosures, Entry Emission, and Ordering Evidence", Work
+              in Progress, Internet-Draft, draft-bradleyb-audit-
+              decision-records-00, September 2026,
+              <https://datatracker.ietf.org/doc/draft-bradleyb-audit-
+              decision-records/>.
+
+   [IA9-OVERLAY]
+              Murali, T. and B. B, "IA-9 Overlay: Identification and
+              Authentication of Non-Person Actors in AI Systems",
+              DOI 10.5281/zenodo.22031159, 20 August 2026,
+              <https://doi.org/10.5281/zenodo.22031159>.
+
+   [I-D.schrock-ep-bounded-capability-receipts]
+              Schrock, I., "Bounded Capability Receipts and Durable
+              Spend Control for Agent Actions", Work in Progress,
+              Internet-Draft, draft-schrock-ep-bounded-capability-
+              receipts-06, September 2026,
+              <https://datatracker.ietf.org/doc/draft-schrock-ep-
+              bounded-capability-receipts/>.
+
+   [I-D.laurie-tmif]
+              Laurie, B., Santoro, T., Anthonysamy, P., and S. de Haas,
+              "A Standard for Claiming Transparency and Falsifiability",
+              Work in Progress, Internet-Draft, draft-laurie-tmif-02,
+              September 2026,
+              <https://datatracker.ietf.org/doc/draft-laurie-tmif/>.
+
+
+
+
+
+
+
+
+
+He                         Expires 4 May 2027                  [Page 22]
+
+Internet-Draft         Verifier Exercise Evidence           October 2026
+
+
+   [DEMILLO1978]
+              DeMillo, R. A., Lipton, R. J., and F. G. Sayward, "Hints
+              on Test Data Selection: Help for the Practicing
+              Programmer", IEEE Computer Vol. 11, No. 4, pp. 34-41,
+              DOI 10.1109/C-M.1978.218136, April 1978,
+              <https://doi.org/10.1109/C-M.1978.218136>.
+
+   [NIEDERMAYR2016]
+              Niedermayr, R., Juergens, E., and S. Wagner, "Will My
+              Tests Tell Me If I Break This Code?", Proceedings of the
+              International Workshop on Continuous Software Evolution
+              and Delivery (CSED) pp. 23-29,
+              DOI 10.1145/2896941.2896944, May 2016,
+              <https://doi.org/10.1145/2896941.2896944>.
+
+   [SCHULER2011]
+              Schuler, D. and A. Zeller, "Assessing Oracle Quality with
+              Checked Coverage", Fourth IEEE International Conference on
+              Software Testing, Verification and Validation (ICST) pp.
+              90-99, DOI 10.1109/ICST.2011.32, March 2011,
+              <https://doi.org/10.1109/ICST.2011.32>.
+
+   [BEER1997] Beer, I., Ben-David, S., Eisner, C., and Y. Rodeh,
+              "Efficient Detection of Vacuity in ACTL Formulas",
+              Computer Aided Verification (CAV 1997), LNCS 1254, pp.
+              279-290, DOI 10.1007/3-540-63166-6_28, 1997,
+              <https://doi.org/10.1007/3-540-63166-6_28>.
+
+   [HAYHURST2001]
+              Hayhurst, K. J., Veerhusen, D. S., Chilenski, J. J., and
+              L. K. Rierson, "A Practical Tutorial on Modified
+              Condition/Decision Coverage", NASA TM-2001-210876, May
+              2001, <https://ntrs.nasa.gov/citations/20010057789>.
+
+   [WYCHEPROOF]
+              C2SP, "Project Wycheproof",
+              <https://github.com/C2SP/wycheproof>.
+
+   [MP]       Silentpartnercoding, "Minority Prophet: evidence and
+              registration discipline for knowledge-ledger experiments",
+              2026,
+              <https://github.com/Silentpartnercoding/minority-prophet>.
+
+
+
+
+
+
+
+
+
+He                         Expires 4 May 2027                  [Page 23]
+
+Internet-Draft         Verifier Exercise Evidence           October 2026
+
+
+Appendix A.  Negative Vectors
+
+   These vectors are stated so that a reader can construct them
+   independently.  They are illustrative; this appendix defines no
+   normative test suite.  An executable form, with a deterministic
+   machine-readable result and its source pinned by digest, is published
+   at [MP] under research/verifier-evidence.  Each vector there supplies
+   a positive population and its contrasting population and runs both a
+   check that cannot distinguish them and one that can; the evidence is
+   the pair.
+
+A.1.  Check Comparing Too Little
+
+   Construct a check whose accepting condition is evaluated over a
+   proper subset of the fields in which the defect can appear.  Supply a
+   discriminating pair: one population containing the defect, for which
+   the rejecting outcome is expected, and one without it, for which the
+   accepting outcome is expected.
+
+   Expected under EXR-1: the check returns the accepting outcome on both
+   populations, so no exercising input for the rejection path exists and
+   the check reports implemented-unexercised.  A check reading the full
+   field set returns the expected outcome on each and is exercised.
+
+A.2.  Constant Probe
+
+   Supply a probe that reports a fixed value satisfying the declared
+   minimum, and evaluate it against a contrasting population in which
+   the declared property is absent.
+
+   Expected: the probe reports the same value on both populations and is
+   refused as unfalsifiable before any other verdict is reported.
+
+A.3.  A Silent System Under a One-Sided Endpoint
+
+   Score three systems against one frozen fixture on an endpoint
+   counting only incorrect confirmations, then on a two-sided endpoint
+   adding a cost for indefinite non-confirmation.  Lower is better.
+
+
+
+
+
+
+
+
+
+
+
+
+
+He                         Expires 4 May 2027                  [Page 24]
+
+Internet-Draft         Verifier Exercise Evidence           October 2026
+
+
+     +=========================+===========+============+===========+
+     | system                  | one-sided | delay cost | two-sided |
+     +=========================+===========+============+===========+
+     | silent, never confirms  |     0.000 |      1.000 |     1.000 |
+     +-------------------------+-----------+------------+-----------+
+     | count-based, confirms   |     1.000 |      0.033 |     1.033 |
+     | on 3 or more reports    |           |            |           |
+     +-------------------------+-----------+------------+-----------+
+     | origin-aware, 2 or more |     0.000 |      0.533 |     0.533 |
+     | independent origins     |           |            |           |
+     +-------------------------+-----------+------------+-----------+
+
+                                 Table 1
+
+   The silent system attains the best available one-sided score, tying
+   with the origin-aware system, so a one-sided endpoint cannot
+   distinguish a system that never confirms from one that confirms
+   correctly.  Under the two-sided score the silent system no longer
+   ties for best and is beaten by the origin-aware system, while the
+   count-based system, having confirmed every false event, scores worse
+   than both.  The second term removes silence from the winning set.
+
+A.4.  Withheld Record Under a Completeness Claim
+
+   Where a claim asserts that an event occurred at most once, withhold
+   one of two occurrences from disclosure while leaving every disclosed
+   signature and inclusion proof valid.
+
+   Expected under CMP-1 and CMP-2: unless the deciding verifier
+   appraises an independent basis for excluding the omission in this
+   result, the evaluator reports the completeness claim as
+   unestablished.  Reporting it as satisfied is the defect.  From the
+   evaluator's disclosed record, reporting it as failed is also
+   incorrect, because that record does not establish the omission.
+
+   This vector is due to Iman Schrock.
+
+A.5.  One Outcome Token, Two Rules
+
+   Construct two inputs that produce the same non-accepting outcome
+   token through two different rules.  Publish an exercise record
+   containing only the input identifiers and shared outcome token.
+
+   Expected under EXR-1: the record does not establish which rule or
+   condition fired for either input.  A conforming record identifies the
+   governing rule or condition for each result even though the outcome
+   token is unchanged.
+
+
+
+
+He                         Expires 4 May 2027                  [Page 25]
+
+Internet-Draft         Verifier Exercise Evidence           October 2026
+
+
+A.6.  Path Shadowed by an Earlier Rule
+
+   Define a later rule that is evaluated only after an earlier rule
+   accepts, while making the later rule's stated condition imply that
+   the earlier rule rejects.  Supply inputs satisfying the later
+   condition.
+
+   Expected under EXR-2: every such input returns at the earlier rule.
+   The later path is reported shadowed-unreachable, with both rules
+   identified.  It is counted neither as exercised nor as reachable-
+   unexercised.
+
+Appendix B.  Changes from -02
+
+   *  Renamed the outcomes in Section 6 to the row-outcome names of
+      [I-D.bu-agentproto-security-principal-binding]: verified to
+      satisfied, violation to unsatisfied, and unverifiable to
+      indeterminate. not-evaluated is unchanged.  The definitions,
+      requirements, and outcome count are unchanged, and the new names
+      are used throughout, including the title of Section 5.
+
+   *  Added to Section 6 a statement of where the names come from and
+      how the dereference-layer values of the implementation in
+      Section 13 correspond to them.
+
+Appendix C.  Changes from -01
+
+   *  Defined "exercised" once, in Section 3, as a discriminating pair
+      under the current check revision, and used that definition
+      throughout.
+
+   *  Restated the opening requirement of EXR-1 as a testable
+      prohibition.
+
+   *  Corrected two cross-references in Section 13: the absent-
+      declaration rule is in Section 7, and the exercise condition for
+      completeness appraisals is the final paragraph of Section 9.
+
+   *  Stated in Section 6 that the evaluator's policy fixes the
+      direction of an outcome collapse and that the party presenting
+      evidence decides whether to trigger it.
+
+   *  Removed the claim in Section 10 that the self-application regress
+      terminates, and gave the reasoning for the claim in Section 14
+      about unexercised checks.
+
+
+
+
+
+
+He                         Expires 4 May 2027                  [Page 26]
+
+Internet-Draft         Verifier Exercise Evidence           October 2026
+
+
+   *  Added a final paragraph to Section 5: the record must let a later
+      reader establish that stated expectations preceded the outcomes
+      they govern.
+
+   *  Required in Section 6 that the record of each attempted check
+      state when the check was performed, and the issue and expiry times
+      of the evidence it relied on, and that a not-evaluated record
+      state when the record was produced.
+
+   *  Added to Section 12 a paragraph relating this document to mutation
+      testing, pseudo-tested methods, checked coverage, vacuity
+      detection, MC/DC, and Project Wycheproof.
+
+   *  Added to Section 12 a paragraph on
+      [I-D.sahu-agent-action-receipts], whose stated limit on unrecorded
+      actions and end truncation is the record-side view of CMP-1 and
+      CMP-2.
+
+   *  Added to Section 12 a paragraph on the W3C Agent Conformance
+      Reporting Format v0.1 [W3C-ACRF] and its not-exercised state.
+
+   *  Corrected the account of the Kroehl reader run in Section 13 and
+      the Acknowledgments.  The four agreeing rejections made under a
+      row other than the one the member names now carry the section 10
+      requirement of [W3C-ACRF], with Kroehl's count of 98 conforming
+      agreements and the 8 differing results.  The member selection is
+      credited to section 10 of that format, and the run report
+      [MOLTRUST-RUN] is cited.
+
+   *  Editorial tightening throughout.  No other requirement changed.
+
+Appendix D.  Changes from -00
+
+   *  Expanded exercise accounting from rejecting outcomes to declared
+      paths producing rejecting or neither outcomes, including
+      unverifiable.
+
+   *  Required the exercise record to identify the rule or condition
+      reached rather than relying on an outcome token alone.
+
+   *  Distinguished reachable-but-unexercised paths from paths made
+      unreachable by an earlier rule or structural precondition.
+
+   *  Stated the conditional protocol-facing requirement separately from
+      audit-record formats, corpus commitments, transports, and
+      testbeds.
+
+
+
+
+
+He                         Expires 4 May 2027                  [Page 27]
+
+Internet-Draft         Verifier Exercise Evidence           October 2026
+
+
+   *  Added bounded MolTrust and MUSUBI implementation evidence and its
+      limitations.
+
+Acknowledgments
+
+   Bradley B drew attention to keeping a check that could not run
+   distinct from a check that ran and failed.  His published IA-9
+   analysis is cited for the separate problem of an unauthenticated
+   subject in a control's evidence.
+
+   Iman Schrock contributed the withheld-record vector in Appendix A and
+   reviewed its attribution and outcome wording.  The coverage
+   requirements were developed separately.
+
+   Songbo Bu raised the related questions in Principal Binding
+   Section 33, reviewed this document's outcome and evidence boundaries,
+   and replayed the author's pinned source and fixtures as described in
+   Section 13.
+
+   Henri Sirkkavaara stated the reproduction bar under which a candidate
+   counts as demonstrated only when a party controlling neither end
+   reaches the same verdict using an implementation sharing no code with
+   the proposer.
+
+   Lars Kersten Kroehl supplied the frozen report-reader case,
+   identified the need to retain the rule that fired, and published the
+   corpus digest and covered-member list for the run.  The selection of
+   members follows section 10 of [W3C-ACRF], the conformance appendix
+   co-edited by Sankalp Gilda.
+
+   Toshikatsu Oga applied the EXR requirements to MUSUBI, published the
+   resulting vectors and exercise record at an immutable commit, and
+   stated the remaining unexercised and rerun limits.
+
+   Orie Steele asked that the draft state how its protocol-facing
+   requirement differs from the mechanisms and records considered in
+   audit work.  Section 11 is the author's answer; it does not imply
+   Orie's agreement with that boundary.
+
+   Acknowledgment does not imply endorsement of this document.
+
+Author's Address
+
+   James Siyuan He
+   Independent
+   Email: jsiyuanhe@gmail.com
+
+
+
+
+
+He                         Expires 4 May 2027                  [Page 28]

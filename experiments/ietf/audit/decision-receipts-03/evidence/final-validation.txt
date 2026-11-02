@@ -1,0 +1,37 @@
+$ ruff check --no-cache experiments/ietf/audit/decision-receipts-03/fixtures.py experiments/ietf/audit/decision-receipts-03/probe.py experiments/ietf/audit/decision-receipts-03/tests/test_probe.py
+All checks passed!
+
+$ ruff format --check --no-cache --line-length 100 experiments/ietf/audit/decision-receipts-03/fixtures.py experiments/ietf/audit/decision-receipts-03/probe.py experiments/ietf/audit/decision-receipts-03/tests/test_probe.py
+3 files already formatted
+
+$ bash experiments/ietf/audit/decision-receipts-03/reproduce.sh
+Looking in links: /home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/c-audit-decision-receipts/phionyx-research/experiments/ietf/audit/decision-receipts-03/.downloads
+Requirement already satisfied: cffi==2.1.1 in ./experiments/ietf/audit/decision-receipts-03/.venv/lib/python3.12/site-packages (from -r /home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/c-audit-decision-receipts/phionyx-research/experiments/ietf/audit/decision-receipts-03/requirements.lock (line 2)) (2.1.1)
+Requirement already satisfied: cryptography==50.0.2 in ./experiments/ietf/audit/decision-receipts-03/.venv/lib/python3.12/site-packages (from -r /home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/c-audit-decision-receipts/phionyx-research/experiments/ietf/audit/decision-receipts-03/requirements.lock (line 3)) (50.0.2)
+Requirement already satisfied: proofbundle==6.4.0 in ./experiments/ietf/audit/decision-receipts-03/.venv/lib/python3.12/site-packages (from -r /home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/c-audit-decision-receipts/phionyx-research/experiments/ietf/audit/decision-receipts-03/requirements.lock (line 4)) (6.4.0)
+Requirement already satisfied: pycparser==3.12 in ./experiments/ietf/audit/decision-receipts-03/.venv/lib/python3.12/site-packages (from -r /home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/c-audit-decision-receipts/phionyx-research/experiments/ietf/audit/decision-receipts-03/requirements.lock (line 5)) (3.12)
+Requirement already satisfied: rfc8785==0.1.4 in ./experiments/ietf/audit/decision-receipts-03/.venv/lib/python3.12/site-packages (from -r /home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/c-audit-decision-receipts/phionyx-research/experiments/ietf/audit/decision-receipts-03/requirements.lock (line 6)) (0.1.4)
+No broken requirements found.
+PASS: 20 recorded artifacts reproduced byte-for-byte
+9 scenarios: 6 PARTIALLY_EVALUATED, 3 NOT_EVALUATED; runtime executions observed: 0
+test_all_nine_cases_keep_unknown_axes_visible (test_probe.ReleasedAPIProbe.test_all_nine_cases_keep_unknown_axes_visible) ... ok
+test_appendix_a_payloads_and_signatures_match_published_bytes (test_probe.ReleasedAPIProbe.test_appendix_a_payloads_and_signatures_match_published_bytes) ... ok
+test_appendix_a_positive_and_negative_controls (test_probe.ReleasedAPIProbe.test_appendix_a_positive_and_negative_controls) ... ok
+test_baseline_receipt_is_not_execution_observation (test_probe.ReleasedAPIProbe.test_baseline_receipt_is_not_execution_observation) ... ok
+test_cli_vectors_and_repeated_output_are_deterministic (test_probe.ReleasedAPIProbe.test_cli_vectors_and_repeated_output_are_deterministic) ... ok
+test_evaluation_evidence_does_not_promote_deny_to_allow (test_probe.ReleasedAPIProbe.test_evaluation_evidence_does_not_promote_deny_to_allow) ... ok
+test_exact_dependency_versions (test_probe.ReleasedAPIProbe.test_exact_dependency_versions) ... ok
+test_installed_source_is_unmodified (test_probe.ReleasedAPIProbe.test_installed_source_is_unmodified) ... ok
+test_outcome_same_executor_id_control_is_rejected (test_probe.ReleasedAPIProbe.test_outcome_same_executor_id_control_is_rejected) ... ok
+test_preserved_source_bytes (test_probe.ReleasedAPIProbe.test_preserved_source_bytes) ... ok
+test_repeated_receipt_verification_is_stateless (test_probe.ReleasedAPIProbe.test_repeated_receipt_verification_is_stateless) ... ok
+test_sequence_complete_is_only_within_observed_bounds (test_probe.ReleasedAPIProbe.test_sequence_complete_is_only_within_observed_bounds) ... ok
+test_two_allow_payloads_do_not_claim_a_package_set_audit (test_probe.ReleasedAPIProbe.test_two_allow_payloads_do_not_claim_a_package_set_audit) ... ok
+test_two_outcomes_can_bind_one_allow_without_execution_evidence (test_probe.ReleasedAPIProbe.test_two_outcomes_can_bind_one_allow_without_execution_evidence) ... ok
+test_unknown_is_preserved_not_changed_to_failure (test_probe.ReleasedAPIProbe.test_unknown_is_preserved_not_changed_to_failure) ... ok
+test_wrong_key_nonce_and_expiry_are_refused (test_probe.ReleasedAPIProbe.test_wrong_key_nonce_and_expiry_are_refused) ... ok
+
+----------------------------------------------------------------------
+Ran 16 tests in 1.174s
+
+OK

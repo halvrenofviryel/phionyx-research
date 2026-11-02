@@ -1,0 +1,1283 @@
+{
+  "appendix_a": {
+    "V1-bad": {
+      "action_outcome_proven": null,
+      "anchors_ok": null,
+      "audience_ok": null,
+      "automation": {
+        "automationBlockers": [
+          "CRYPTO_NOT_OK",
+          "POLICY_NOT_EVALUATED",
+          "RECEIPT_NOT_OK"
+        ],
+        "cryptoValid": false,
+        "policyAuthorized": false,
+        "referencesResolved": null,
+        "safeForAutomation": false,
+        "structureValid": true
+      },
+      "crypto_ok": false,
+      "errors": [
+        "DSSE signature verification failed \u2014 payload is unauthenticated"
+      ],
+      "evidence_bound": null,
+      "evidence_levels": null,
+      "freshness_ok": null,
+      "lineage": null,
+      "lineage_ok": null,
+      "lineage_requirement_failed": null,
+      "nonce_ok": null,
+      "ok": false,
+      "policy_ok": null,
+      "predicate_type_ok": true,
+      "relations_policy_codes": null,
+      "relations_policy_failed": null,
+      "signer_trusted": null,
+      "structure_ok": true,
+      "subject_binding": null,
+      "subject_derived_ok": null,
+      "verified_origin": null,
+      "verified_payload_digest": null,
+      "verified_signer_pub_b64": null,
+      "warnings": []
+    },
+    "V1-good": {
+      "action_outcome_proven": null,
+      "anchors_ok": null,
+      "audience_ok": true,
+      "automation": {
+        "automationBlockers": [
+          "POLICY_NOT_EVALUATED",
+          "SIGNER_NOT_PINNED"
+        ],
+        "cryptoValid": true,
+        "policyAuthorized": false,
+        "referencesResolved": true,
+        "safeForAutomation": false,
+        "structureValid": true
+      },
+      "crypto_ok": true,
+      "errors": [],
+      "evidence_bound": null,
+      "evidence_levels": {
+        "actionOutcome.outcomeRef": {
+          "detail": "not applicable",
+          "level": null,
+          "level_name": null
+        },
+        "evidenceRefs": null
+      },
+      "freshness_ok": true,
+      "lineage": null,
+      "lineage_ok": null,
+      "lineage_requirement_failed": null,
+      "nonce_ok": true,
+      "ok": true,
+      "policy_ok": null,
+      "predicate_type_ok": true,
+      "relations_policy_codes": null,
+      "relations_policy_failed": null,
+      "signer_trusted": null,
+      "structure_ok": true,
+      "subject_binding": {
+        "matches": true,
+        "mode": "DERIVED"
+      },
+      "subject_derived_ok": true,
+      "verified_origin": "ce914aa907cc94a7073568a0a0ea9983c931d263c0e402951c8c135ad5964b59",
+      "verified_payload_digest": "b9dfd26537542632013d0df166141a788551b4987dfa33b060d5b5ebba78dfb1",
+      "verified_signer_pub_b64": "TWfs75IN1In3CNI8TnyIOUHgtwilOPGcRFQLJ670CJc=",
+      "warnings": []
+    },
+    "V2-bad": {
+      "action_outcome_proven": null,
+      "anchors_ok": null,
+      "audience_ok": true,
+      "automation": {
+        "automationBlockers": [
+          "STRUCTURE_NOT_OK",
+          "POLICY_NOT_EVALUATED",
+          "RECEIPT_NOT_OK",
+          "SIGNER_NOT_PINNED"
+        ],
+        "cryptoValid": true,
+        "policyAuthorized": false,
+        "referencesResolved": true,
+        "safeForAutomation": false,
+        "structureValid": false
+      },
+      "crypto_ok": true,
+      "errors": [
+        "payload is not RFC-8785 canonical (hash_binding fail-closed)"
+      ],
+      "evidence_bound": null,
+      "evidence_levels": {
+        "actionOutcome.outcomeRef": {
+          "detail": "not applicable",
+          "level": null,
+          "level_name": null
+        },
+        "evidenceRefs": null
+      },
+      "freshness_ok": true,
+      "lineage": null,
+      "lineage_ok": null,
+      "lineage_requirement_failed": null,
+      "nonce_ok": true,
+      "ok": false,
+      "policy_ok": null,
+      "predicate_type_ok": true,
+      "relations_policy_codes": null,
+      "relations_policy_failed": null,
+      "signer_trusted": null,
+      "structure_ok": false,
+      "subject_binding": {
+        "matches": true,
+        "mode": "DERIVED"
+      },
+      "subject_derived_ok": true,
+      "verified_origin": "cb17a5d8dff133dcf6874fc8340e7adac8c14fdbba5d41abca56f3afaab23dc6",
+      "verified_payload_digest": "646d4b2229a55c54848361030bf6d57816597a96bd7d1fb00d7da0f03b009bd2",
+      "verified_signer_pub_b64": "TWfs75IN1In3CNI8TnyIOUHgtwilOPGcRFQLJ670CJc=",
+      "warnings": []
+    },
+    "V2-good": {
+      "action_outcome_proven": null,
+      "anchors_ok": null,
+      "audience_ok": true,
+      "automation": {
+        "automationBlockers": [
+          "POLICY_NOT_EVALUATED",
+          "SIGNER_NOT_PINNED"
+        ],
+        "cryptoValid": true,
+        "policyAuthorized": false,
+        "referencesResolved": true,
+        "safeForAutomation": false,
+        "structureValid": true
+      },
+      "crypto_ok": true,
+      "errors": [],
+      "evidence_bound": null,
+      "evidence_levels": {
+        "actionOutcome.outcomeRef": {
+          "detail": "not applicable",
+          "level": null,
+          "level_name": null
+        },
+        "evidenceRefs": null
+      },
+      "freshness_ok": true,
+      "lineage": null,
+      "lineage_ok": null,
+      "lineage_requirement_failed": null,
+      "nonce_ok": true,
+      "ok": true,
+      "policy_ok": null,
+      "predicate_type_ok": true,
+      "relations_policy_codes": null,
+      "relations_policy_failed": null,
+      "signer_trusted": null,
+      "structure_ok": true,
+      "subject_binding": {
+        "matches": true,
+        "mode": "DERIVED"
+      },
+      "subject_derived_ok": true,
+      "verified_origin": "2567422ed080259cac573a8c9e5f19cac1a5fb5cf74f84ca5b00fa76a568ed07",
+      "verified_payload_digest": "ed149a1c7383842eebf8304001da9de97d130b0b15080d1315ab8fbf1274ed44",
+      "verified_signer_pub_b64": "TWfs75IN1In3CNI8TnyIOUHgtwilOPGcRFQLJ670CJc=",
+      "warnings": []
+    },
+    "V3-bad": {
+      "audience_ok": null,
+      "automation": {
+        "automationBlockers": [
+          "POLICY_NOT_EVALUATED",
+          "REFERENCES_NOT_RESOLVED",
+          "RECEIPT_NOT_OK"
+        ],
+        "cryptoValid": true,
+        "policyAuthorized": false,
+        "referencesResolved": false,
+        "safeForAutomation": false,
+        "structureValid": true
+      },
+      "crypto_ok": true,
+      "decision_bound": false,
+      "errors": [
+        "decisionRef mismatch \u2014 this outcome is bound to a DIFFERENT decision than expected (replay across decisions?, fail-closed)"
+      ],
+      "evidence_levels": {
+        "effect": {
+          "fields": [
+            {
+              "detail": "a well-formed sha256 digest object is present (attacker-choosable content, not content-checked)",
+              "level": 1,
+              "level_name": "REFERENCE_WELL_FORMED"
+            },
+            {
+              "detail": "no well-formed sha256 digest object present",
+              "level": 0,
+              "level_name": "CLAIMED"
+            }
+          ],
+          "level": 1,
+          "level_name": "REFERENCE_WELL_FORMED"
+        },
+        "receiverRefs": null
+      },
+      "execution_proven": true,
+      "executor_key_bound": null,
+      "executor_role_trusted": null,
+      "lineage": null,
+      "lineage_ok": null,
+      "lineage_requirement_failed": null,
+      "nonce_ok": null,
+      "ok": false,
+      "policy_ok": null,
+      "predicate_type_ok": true,
+      "receiver_bound": null,
+      "receiver_key_bound": null,
+      "receiver_role_trusted": null,
+      "relations_policy_codes": null,
+      "relations_policy_failed": null,
+      "role_separation_ok": true,
+      "structure_ok": true,
+      "subject_binding": {
+        "matches": true,
+        "mode": "DERIVED"
+      },
+      "subject_derived_ok": true,
+      "warnings": [
+        "DEPRECATED: execution_proven / receiver_bound are digest-presence booleans (evidence_levels REFERENCE_WELL_FORMED \u2014 attacker-choosable content), NOT a content proof. Use evidence_levels; only CONTENT_RESOLVED or stronger is a real binding. These legacy fields will be removed in the next breaking format version."
+      ]
+    },
+    "V3-decision": {
+      "action_outcome_proven": null,
+      "anchors_ok": null,
+      "audience_ok": true,
+      "automation": {
+        "automationBlockers": [
+          "POLICY_NOT_EVALUATED",
+          "SIGNER_NOT_PINNED"
+        ],
+        "cryptoValid": true,
+        "policyAuthorized": false,
+        "referencesResolved": true,
+        "safeForAutomation": false,
+        "structureValid": true
+      },
+      "crypto_ok": true,
+      "errors": [],
+      "evidence_bound": true,
+      "evidence_levels": {
+        "actionOutcome.outcomeRef": {
+          "detail": "not applicable",
+          "level": null,
+          "level_name": null
+        },
+        "evidenceRefs": {
+          "fields": [
+            {
+              "detail": "a well-formed sha256 digest object is present (attacker-choosable content, not content-checked)",
+              "level": 1,
+              "level_name": "REFERENCE_WELL_FORMED"
+            }
+          ],
+          "level": 1,
+          "level_name": "REFERENCE_WELL_FORMED"
+        }
+      },
+      "freshness_ok": true,
+      "lineage": null,
+      "lineage_ok": null,
+      "lineage_requirement_failed": null,
+      "nonce_ok": true,
+      "ok": true,
+      "policy_ok": null,
+      "predicate_type_ok": true,
+      "relations_policy_codes": null,
+      "relations_policy_failed": null,
+      "signer_trusted": null,
+      "structure_ok": true,
+      "subject_binding": {
+        "matches": true,
+        "mode": "DERIVED"
+      },
+      "subject_derived_ok": true,
+      "verified_origin": "cf85b424c8db201324854c5bbc0f2ebd79c09ca74bb8f22beb9c812bdd1e4cb9",
+      "verified_payload_digest": "0014b1c419798125c3984e85a4b322ee619a3227978840cac5f9d282b189521f",
+      "verified_signer_pub_b64": "TWfs75IN1In3CNI8TnyIOUHgtwilOPGcRFQLJ670CJc=",
+      "warnings": [
+        "DEPRECATED: action_outcome_proven / evidence_bound are digest-presence booleans (evidence_levels REFERENCE_WELL_FORMED \u2014 attacker-choosable content), NOT a content proof. Use evidence_levels; only CONTENT_RESOLVED (an evidence_resolver confirmed the bytes) is a real binding. These legacy fields will be removed in the next breaking format version."
+      ]
+    },
+    "V3-good": {
+      "audience_ok": null,
+      "automation": {
+        "automationBlockers": [
+          "POLICY_NOT_EVALUATED"
+        ],
+        "cryptoValid": true,
+        "policyAuthorized": false,
+        "referencesResolved": true,
+        "safeForAutomation": false,
+        "structureValid": true
+      },
+      "crypto_ok": true,
+      "decision_bound": true,
+      "errors": [],
+      "evidence_levels": {
+        "effect": {
+          "fields": [
+            {
+              "detail": "a well-formed sha256 digest object is present (attacker-choosable content, not content-checked)",
+              "level": 1,
+              "level_name": "REFERENCE_WELL_FORMED"
+            },
+            {
+              "detail": "no well-formed sha256 digest object present",
+              "level": 0,
+              "level_name": "CLAIMED"
+            }
+          ],
+          "level": 1,
+          "level_name": "REFERENCE_WELL_FORMED"
+        },
+        "receiverRefs": null
+      },
+      "execution_proven": true,
+      "executor_key_bound": null,
+      "executor_role_trusted": null,
+      "lineage": null,
+      "lineage_ok": null,
+      "lineage_requirement_failed": null,
+      "nonce_ok": null,
+      "ok": true,
+      "policy_ok": null,
+      "predicate_type_ok": true,
+      "receiver_bound": null,
+      "receiver_key_bound": null,
+      "receiver_role_trusted": null,
+      "relations_policy_codes": null,
+      "relations_policy_failed": null,
+      "role_separation_ok": true,
+      "structure_ok": true,
+      "subject_binding": {
+        "matches": true,
+        "mode": "DERIVED"
+      },
+      "subject_derived_ok": true,
+      "warnings": [
+        "DEPRECATED: execution_proven / receiver_bound are digest-presence booleans (evidence_levels REFERENCE_WELL_FORMED \u2014 attacker-choosable content), NOT a content proof. Use evidence_levels; only CONTENT_RESOLVED or stronger is a real binding. These legacy fields will be removed in the next breaking format version."
+      ]
+    }
+  },
+  "baseline": {
+    "approval_fixture": {
+      "action_digest_matches_fixture": true,
+      "canonical_bytes": true,
+      "classification": "LOCAL_FIXTURE_PREFLIGHT",
+      "fixture_time_bounds": true,
+      "human_authentication": "NOT_EVALUATED: the approval fixture is unsigned",
+      "identity": {
+        "actionDigest": {
+          "sha256": "dec54f771352454097310ae4bd6608c0070ebebb3955c6be013c1b3a8e310bd0"
+        },
+        "approvalId": "appr-001",
+        "session": "sess-1"
+      },
+      "package_approval_verifier": "NOT_EVALUATED: no approval-record input in receipt API",
+      "sha256": "88e5b6d69b3e4bc250a42aeffea0414d406e5f04ba4f991ee432a78231da1170"
+    },
+    "decision": {
+      "action_outcome_proven": null,
+      "anchors_ok": null,
+      "audience_ok": true,
+      "automation": {
+        "automationBlockers": [
+          "POLICY_NOT_EVALUATED",
+          "SIGNER_NOT_PINNED"
+        ],
+        "cryptoValid": true,
+        "policyAuthorized": false,
+        "referencesResolved": true,
+        "safeForAutomation": false,
+        "structureValid": true
+      },
+      "crypto_ok": true,
+      "errors": [],
+      "evidence_bound": null,
+      "evidence_levels": {
+        "actionOutcome.outcomeRef": {
+          "detail": "not applicable",
+          "level": null,
+          "level_name": null
+        },
+        "evidenceRefs": null
+      },
+      "freshness_ok": true,
+      "lineage": null,
+      "lineage_ok": null,
+      "lineage_requirement_failed": null,
+      "nonce_ok": true,
+      "ok": true,
+      "policy_ok": null,
+      "predicate_type_ok": true,
+      "relations_policy_codes": null,
+      "relations_policy_failed": null,
+      "signer_trusted": null,
+      "structure_ok": true,
+      "subject_binding": {
+        "matches": true,
+        "mode": "DERIVED"
+      },
+      "subject_derived_ok": true,
+      "verified_origin": "ce914aa907cc94a7073568a0a0ea9983c931d263c0e402951c8c135ad5964b59",
+      "verified_payload_digest": "b9dfd26537542632013d0df166141a788551b4987dfa33b060d5b5ebba78dfb1",
+      "verified_signer_pub_b64": "TWfs75IN1In3CNI8TnyIOUHgtwilOPGcRFQLJ670CJc=",
+      "warnings": []
+    },
+    "outcome": {
+      "audience_ok": null,
+      "automation": {
+        "automationBlockers": [
+          "POLICY_NOT_EVALUATED"
+        ],
+        "cryptoValid": true,
+        "policyAuthorized": false,
+        "referencesResolved": true,
+        "safeForAutomation": false,
+        "structureValid": true
+      },
+      "crypto_ok": true,
+      "decision_bound": true,
+      "errors": [],
+      "evidence_levels": {
+        "effect": {
+          "fields": [
+            {
+              "detail": "a well-formed sha256 digest object is present (attacker-choosable content, not content-checked)",
+              "level": 1,
+              "level_name": "REFERENCE_WELL_FORMED"
+            },
+            {
+              "detail": "no well-formed sha256 digest object present",
+              "level": 0,
+              "level_name": "CLAIMED"
+            }
+          ],
+          "level": 1,
+          "level_name": "REFERENCE_WELL_FORMED"
+        },
+        "receiverRefs": null
+      },
+      "execution_proven": true,
+      "executor_key_bound": null,
+      "executor_role_trusted": null,
+      "lineage": null,
+      "lineage_ok": null,
+      "lineage_requirement_failed": null,
+      "nonce_ok": null,
+      "ok": true,
+      "policy_ok": null,
+      "predicate_type_ok": true,
+      "receiver_bound": null,
+      "receiver_key_bound": null,
+      "receiver_role_trusted": null,
+      "relations_policy_codes": null,
+      "relations_policy_failed": null,
+      "role_separation_ok": true,
+      "structure_ok": true,
+      "subject_binding": {
+        "matches": true,
+        "mode": "DERIVED"
+      },
+      "subject_derived_ok": true,
+      "warnings": [
+        "DEPRECATED: execution_proven / receiver_bound are digest-presence booleans (evidence_levels REFERENCE_WELL_FORMED \u2014 attacker-choosable content), NOT a content proof. Use evidence_levels; only CONTENT_RESOLVED or stronger is a real binding. These legacy fields will be removed in the next breaking format version."
+      ]
+    }
+  },
+  "evaluation_evidence": {
+    "allow_policy_positive_control": {
+      "action_outcome_proven": null,
+      "anchors_ok": null,
+      "audience_ok": true,
+      "automation": {
+        "automationBlockers": [
+          "RECEIPT_EXPIRED"
+        ],
+        "cryptoValid": true,
+        "policyAuthorized": true,
+        "referencesResolved": true,
+        "safeForAutomation": false,
+        "structureValid": true
+      },
+      "crypto_ok": true,
+      "errors": [],
+      "evidence_bound": null,
+      "evidence_levels": {
+        "actionOutcome.outcomeRef": {
+          "detail": "not applicable",
+          "level": null,
+          "level_name": null
+        },
+        "evidenceRefs": null
+      },
+      "freshness_ok": true,
+      "lineage": null,
+      "lineage_ok": null,
+      "lineage_requirement_failed": null,
+      "nonce_ok": true,
+      "ok": true,
+      "policy_ok": true,
+      "predicate_type_ok": true,
+      "relations_policy_codes": null,
+      "relations_policy_failed": null,
+      "signer_trusted": true,
+      "structure_ok": true,
+      "subject_binding": {
+        "matches": true,
+        "mode": "DERIVED"
+      },
+      "subject_derived_ok": true,
+      "verified_origin": "ce914aa907cc94a7073568a0a0ea9983c931d263c0e402951c8c135ad5964b59",
+      "verified_payload_digest": "b9dfd26537542632013d0df166141a788551b4987dfa33b060d5b5ebba78dfb1",
+      "verified_signer_pub_b64": "TWfs75IN1In3CNI8TnyIOUHgtwilOPGcRFQLJ670CJc=",
+      "warnings": []
+    },
+    "deny_receipt": {
+      "action_outcome_proven": null,
+      "anchors_ok": null,
+      "audience_ok": true,
+      "automation": {
+        "automationBlockers": [
+          "POLICY_NOT_EVALUATED",
+          "SIGNER_NOT_PINNED"
+        ],
+        "cryptoValid": true,
+        "policyAuthorized": false,
+        "referencesResolved": true,
+        "safeForAutomation": false,
+        "structureValid": true
+      },
+      "crypto_ok": true,
+      "errors": [],
+      "evidence_bound": true,
+      "evidence_levels": {
+        "actionOutcome.outcomeRef": {
+          "detail": "not applicable",
+          "level": null,
+          "level_name": null
+        },
+        "evidenceRefs": {
+          "fields": [
+            {
+              "detail": "digest checked against actually-resolved content bytes",
+              "level": 2,
+              "level_name": "CONTENT_RESOLVED"
+            }
+          ],
+          "level": 2,
+          "level_name": "CONTENT_RESOLVED"
+        }
+      },
+      "freshness_ok": true,
+      "lineage": null,
+      "lineage_ok": null,
+      "lineage_requirement_failed": null,
+      "nonce_ok": true,
+      "ok": true,
+      "policy_ok": null,
+      "predicate_type_ok": true,
+      "relations_policy_codes": null,
+      "relations_policy_failed": null,
+      "signer_trusted": null,
+      "structure_ok": true,
+      "subject_binding": {
+        "matches": true,
+        "mode": "DERIVED"
+      },
+      "subject_derived_ok": true,
+      "verified_origin": "9366fc00c7b3890bf95c25e2c0f1b585a9dfee9c04691eb3c1756a897e0a4ad0",
+      "verified_payload_digest": "12711a4097c1e4e76b43624e2431a1e9de828da2ecb97d0a627ad2bfa431ca79",
+      "verified_signer_pub_b64": "TWfs75IN1In3CNI8TnyIOUHgtwilOPGcRFQLJ670CJc=",
+      "warnings": []
+    },
+    "deny_under_allow_only_policy": {
+      "action_outcome_proven": null,
+      "anchors_ok": null,
+      "audience_ok": true,
+      "automation": {
+        "automationBlockers": [
+          "POLICY_FAILED",
+          "RECEIPT_NOT_OK",
+          "RECEIPT_EXPIRED"
+        ],
+        "cryptoValid": true,
+        "policyAuthorized": false,
+        "referencesResolved": true,
+        "safeForAutomation": false,
+        "structureValid": true
+      },
+      "crypto_ok": true,
+      "errors": [
+        "verdict 'DENY' not allowed by policy"
+      ],
+      "evidence_bound": true,
+      "evidence_levels": {
+        "actionOutcome.outcomeRef": {
+          "detail": "not applicable",
+          "level": null,
+          "level_name": null
+        },
+        "evidenceRefs": {
+          "fields": [
+            {
+              "detail": "digest checked against actually-resolved content bytes",
+              "level": 2,
+              "level_name": "CONTENT_RESOLVED"
+            }
+          ],
+          "level": 2,
+          "level_name": "CONTENT_RESOLVED"
+        }
+      },
+      "freshness_ok": true,
+      "lineage": null,
+      "lineage_ok": null,
+      "lineage_requirement_failed": null,
+      "nonce_ok": true,
+      "ok": false,
+      "policy_ok": false,
+      "predicate_type_ok": true,
+      "relations_policy_codes": null,
+      "relations_policy_failed": null,
+      "signer_trusted": true,
+      "structure_ok": true,
+      "subject_binding": {
+        "matches": true,
+        "mode": "DERIVED"
+      },
+      "subject_derived_ok": true,
+      "verified_origin": "9366fc00c7b3890bf95c25e2c0f1b585a9dfee9c04691eb3c1756a897e0a4ad0",
+      "verified_payload_digest": "12711a4097c1e4e76b43624e2431a1e9de828da2ecb97d0a627ad2bfa431ca79",
+      "verified_signer_pub_b64": "TWfs75IN1In3CNI8TnyIOUHgtwilOPGcRFQLJ670CJc=",
+      "warnings": []
+    },
+    "fixture_preflight": {
+      "canonical_payload": true,
+      "classification": "PUBLISHED_P1_FIXTURE_PREFLIGHT",
+      "evaluation_actually_ran": "UNOBSERVED",
+      "full_SER_profile_verification": "NOT_EVALUATED: no SER-profile API found in 6.4.0",
+      "payload_matches_receipt": true,
+      "payload_sha256": "8cd849a6dcce08aee334511d7b2f31c54e478885dda1795d3c8f972dd0d4811c",
+      "receipt_sha256": "02036d1f57509858330383755ec16c532bdc58b0f2d949464488d57abc9f95e7",
+      "score_consistent": true,
+      "signature_ok": true,
+      "source_expected_result": "SER -04 Appendix A.2.1: PASS"
+    },
+    "recorded_verdict": "DENY",
+    "reference_resolution": {
+      "artifact_ok": null,
+      "content_root_ok": true,
+      "detail": ""
+    },
+    "ser_as_decision": {
+      "action_outcome_proven": null,
+      "anchors_ok": null,
+      "audience_ok": null,
+      "automation": {
+        "automationBlockers": [
+          "CRYPTO_NOT_OK",
+          "STRUCTURE_NOT_OK",
+          "POLICY_NOT_EVALUATED",
+          "RECEIPT_NOT_OK"
+        ],
+        "cryptoValid": null,
+        "policyAuthorized": false,
+        "referencesResolved": null,
+        "safeForAutomation": false,
+        "structureValid": false
+      },
+      "crypto_ok": null,
+      "errors": [
+        "DSSE payload is not a well-formed in-toto Statement: DSSE envelope.payload must be a base64 string"
+      ],
+      "evidence_bound": null,
+      "evidence_levels": null,
+      "freshness_ok": null,
+      "lineage": null,
+      "lineage_ok": null,
+      "lineage_requirement_failed": null,
+      "nonce_ok": null,
+      "ok": false,
+      "policy_ok": null,
+      "predicate_type_ok": null,
+      "relations_policy_codes": null,
+      "relations_policy_failed": null,
+      "signer_trusted": null,
+      "structure_ok": false,
+      "subject_binding": null,
+      "subject_derived_ok": null,
+      "verified_origin": null,
+      "verified_payload_digest": null,
+      "verified_signer_pub_b64": null,
+      "warnings": []
+    },
+    "wrong_content_control": {
+      "artifact_ok": null,
+      "content_root_ok": false,
+      "detail": "evidence content root != evidenceRefs[].digest (evidence content changed?)"
+    }
+  },
+  "repeat_verification": [
+    {
+      "action_outcome_proven": null,
+      "anchors_ok": null,
+      "audience_ok": true,
+      "automation": {
+        "automationBlockers": [
+          "POLICY_NOT_EVALUATED",
+          "SIGNER_NOT_PINNED"
+        ],
+        "cryptoValid": true,
+        "policyAuthorized": false,
+        "referencesResolved": true,
+        "safeForAutomation": false,
+        "structureValid": true
+      },
+      "crypto_ok": true,
+      "errors": [],
+      "evidence_bound": null,
+      "evidence_levels": {
+        "actionOutcome.outcomeRef": {
+          "detail": "not applicable",
+          "level": null,
+          "level_name": null
+        },
+        "evidenceRefs": null
+      },
+      "freshness_ok": true,
+      "lineage": null,
+      "lineage_ok": null,
+      "lineage_requirement_failed": null,
+      "nonce_ok": true,
+      "ok": true,
+      "policy_ok": null,
+      "predicate_type_ok": true,
+      "relations_policy_codes": null,
+      "relations_policy_failed": null,
+      "signer_trusted": null,
+      "structure_ok": true,
+      "subject_binding": {
+        "matches": true,
+        "mode": "DERIVED"
+      },
+      "subject_derived_ok": true,
+      "verified_origin": "ce914aa907cc94a7073568a0a0ea9983c931d263c0e402951c8c135ad5964b59",
+      "verified_payload_digest": "b9dfd26537542632013d0df166141a788551b4987dfa33b060d5b5ebba78dfb1",
+      "verified_signer_pub_b64": "TWfs75IN1In3CNI8TnyIOUHgtwilOPGcRFQLJ670CJc=",
+      "warnings": []
+    },
+    {
+      "action_outcome_proven": null,
+      "anchors_ok": null,
+      "audience_ok": true,
+      "automation": {
+        "automationBlockers": [
+          "POLICY_NOT_EVALUATED",
+          "SIGNER_NOT_PINNED"
+        ],
+        "cryptoValid": true,
+        "policyAuthorized": false,
+        "referencesResolved": true,
+        "safeForAutomation": false,
+        "structureValid": true
+      },
+      "crypto_ok": true,
+      "errors": [],
+      "evidence_bound": null,
+      "evidence_levels": {
+        "actionOutcome.outcomeRef": {
+          "detail": "not applicable",
+          "level": null,
+          "level_name": null
+        },
+        "evidenceRefs": null
+      },
+      "freshness_ok": true,
+      "lineage": null,
+      "lineage_ok": null,
+      "lineage_requirement_failed": null,
+      "nonce_ok": true,
+      "ok": true,
+      "policy_ok": null,
+      "predicate_type_ok": true,
+      "relations_policy_codes": null,
+      "relations_policy_failed": null,
+      "signer_trusted": null,
+      "structure_ok": true,
+      "subject_binding": {
+        "matches": true,
+        "mode": "DERIVED"
+      },
+      "subject_derived_ok": true,
+      "verified_origin": "ce914aa907cc94a7073568a0a0ea9983c931d263c0e402951c8c135ad5964b59",
+      "verified_payload_digest": "b9dfd26537542632013d0df166141a788551b4987dfa33b060d5b5ebba78dfb1",
+      "verified_signer_pub_b64": "TWfs75IN1In3CNI8TnyIOUHgtwilOPGcRFQLJ670CJc=",
+      "warnings": []
+    }
+  ],
+  "same_approval_two_allows": {
+    "local_inventory": {
+      "approval_identity": {
+        "actionDigest": {
+          "sha256": "dec54f771352454097310ae4bd6608c0070ebebb3955c6be013c1b3a8e310bd0"
+        },
+        "approvalId": "appr-001",
+        "session": "sess-1"
+      },
+      "classification": "LOCAL_INVENTORY_ONLY; no released section-3.5 audit hook found",
+      "consumption_scope": "local-fixtures-only; explicitly supplied by this harness",
+      "distinct_decision_payloads": 2,
+      "same_approval_bytes_referenced": true
+    },
+    "package_set_audit": "NOT_EVALUATED",
+    "verifications": [
+      {
+        "action_outcome_proven": null,
+        "anchors_ok": null,
+        "audience_ok": true,
+        "automation": {
+          "automationBlockers": [
+            "POLICY_NOT_EVALUATED",
+            "SIGNER_NOT_PINNED"
+          ],
+          "cryptoValid": true,
+          "policyAuthorized": false,
+          "referencesResolved": true,
+          "safeForAutomation": false,
+          "structureValid": true
+        },
+        "crypto_ok": true,
+        "errors": [],
+        "evidence_bound": null,
+        "evidence_levels": {
+          "actionOutcome.outcomeRef": {
+            "detail": "not applicable",
+            "level": null,
+            "level_name": null
+          },
+          "evidenceRefs": null
+        },
+        "freshness_ok": true,
+        "lineage": null,
+        "lineage_ok": null,
+        "lineage_requirement_failed": null,
+        "nonce_ok": true,
+        "ok": true,
+        "policy_ok": null,
+        "predicate_type_ok": true,
+        "relations_policy_codes": null,
+        "relations_policy_failed": null,
+        "signer_trusted": null,
+        "structure_ok": true,
+        "subject_binding": {
+          "matches": true,
+          "mode": "DERIVED"
+        },
+        "subject_derived_ok": true,
+        "verified_origin": "ce914aa907cc94a7073568a0a0ea9983c931d263c0e402951c8c135ad5964b59",
+        "verified_payload_digest": "b9dfd26537542632013d0df166141a788551b4987dfa33b060d5b5ebba78dfb1",
+        "verified_signer_pub_b64": "TWfs75IN1In3CNI8TnyIOUHgtwilOPGcRFQLJ670CJc=",
+        "warnings": []
+      },
+      {
+        "action_outcome_proven": null,
+        "anchors_ok": null,
+        "audience_ok": true,
+        "automation": {
+          "automationBlockers": [
+            "POLICY_NOT_EVALUATED",
+            "SIGNER_NOT_PINNED"
+          ],
+          "cryptoValid": true,
+          "policyAuthorized": false,
+          "referencesResolved": true,
+          "safeForAutomation": false,
+          "structureValid": true
+        },
+        "crypto_ok": true,
+        "errors": [],
+        "evidence_bound": null,
+        "evidence_levels": {
+          "actionOutcome.outcomeRef": {
+            "detail": "not applicable",
+            "level": null,
+            "level_name": null
+          },
+          "evidenceRefs": null
+        },
+        "freshness_ok": true,
+        "lineage": null,
+        "lineage_ok": null,
+        "lineage_requirement_failed": null,
+        "nonce_ok": true,
+        "ok": true,
+        "policy_ok": null,
+        "predicate_type_ok": true,
+        "relations_policy_codes": null,
+        "relations_policy_failed": null,
+        "signer_trusted": null,
+        "structure_ok": true,
+        "subject_binding": {
+          "matches": true,
+          "mode": "DERIVED"
+        },
+        "subject_derived_ok": true,
+        "verified_origin": "a1089fa8639dbbeb374974fac9a31ce8d80b6487f1ca9f6fdf48bccf2ad75fe8",
+        "verified_payload_digest": "0c9a09cacbe9cab887dbc88ee025d67767cf7434d44fbe6ead0e1abf60ab5ad8",
+        "verified_signer_pub_b64": "TWfs75IN1In3CNI8TnyIOUHgtwilOPGcRFQLJ670CJc=",
+        "warnings": []
+      }
+    ]
+  },
+  "sequence_control": {
+    "one_and_three": [
+      {
+        "complete": false,
+        "executor_id": "observer-1",
+        "gaps": [
+          2
+        ],
+        "run_id": "local-run",
+        "seqs": [
+          1,
+          3
+        ]
+      }
+    ],
+    "scope": "Only gaps between the supplied minimum and maximum; no population claim",
+    "three_only": [
+      {
+        "complete": true,
+        "executor_id": "observer-1",
+        "gaps": [],
+        "run_id": "local-run",
+        "seqs": [
+          3
+        ]
+      }
+    ],
+    "verifications": [
+      {
+        "audience_ok": null,
+        "automation": {
+          "automationBlockers": [
+            "POLICY_NOT_EVALUATED"
+          ],
+          "cryptoValid": true,
+          "policyAuthorized": false,
+          "referencesResolved": true,
+          "safeForAutomation": false,
+          "structureValid": true
+        },
+        "crypto_ok": true,
+        "decision_bound": true,
+        "errors": [],
+        "evidence_levels": {
+          "effect": {
+            "fields": [
+              {
+                "detail": "a well-formed sha256 digest object is present (attacker-choosable content, not content-checked)",
+                "level": 1,
+                "level_name": "REFERENCE_WELL_FORMED"
+              },
+              {
+                "detail": "no well-formed sha256 digest object present",
+                "level": 0,
+                "level_name": "CLAIMED"
+              }
+            ],
+            "level": 1,
+            "level_name": "REFERENCE_WELL_FORMED"
+          },
+          "receiverRefs": null
+        },
+        "execution_proven": true,
+        "executor_key_bound": null,
+        "executor_role_trusted": null,
+        "lineage": null,
+        "lineage_ok": null,
+        "lineage_requirement_failed": null,
+        "nonce_ok": null,
+        "ok": true,
+        "policy_ok": null,
+        "predicate_type_ok": true,
+        "receiver_bound": null,
+        "receiver_key_bound": null,
+        "receiver_role_trusted": null,
+        "relations_policy_codes": null,
+        "relations_policy_failed": null,
+        "role_separation_ok": true,
+        "structure_ok": true,
+        "subject_binding": {
+          "matches": true,
+          "mode": "DERIVED"
+        },
+        "subject_derived_ok": true,
+        "warnings": [
+          "DEPRECATED: execution_proven / receiver_bound are digest-presence booleans (evidence_levels REFERENCE_WELL_FORMED \u2014 attacker-choosable content), NOT a content proof. Use evidence_levels; only CONTENT_RESOLVED or stronger is a real binding. These legacy fields will be removed in the next breaking format version."
+        ]
+      },
+      {
+        "audience_ok": null,
+        "automation": {
+          "automationBlockers": [
+            "POLICY_NOT_EVALUATED"
+          ],
+          "cryptoValid": true,
+          "policyAuthorized": false,
+          "referencesResolved": true,
+          "safeForAutomation": false,
+          "structureValid": true
+        },
+        "crypto_ok": true,
+        "decision_bound": true,
+        "errors": [],
+        "evidence_levels": {
+          "effect": {
+            "fields": [
+              {
+                "detail": "a well-formed sha256 digest object is present (attacker-choosable content, not content-checked)",
+                "level": 1,
+                "level_name": "REFERENCE_WELL_FORMED"
+              },
+              {
+                "detail": "no well-formed sha256 digest object present",
+                "level": 0,
+                "level_name": "CLAIMED"
+              }
+            ],
+            "level": 1,
+            "level_name": "REFERENCE_WELL_FORMED"
+          },
+          "receiverRefs": null
+        },
+        "execution_proven": true,
+        "executor_key_bound": null,
+        "executor_role_trusted": null,
+        "lineage": null,
+        "lineage_ok": null,
+        "lineage_requirement_failed": null,
+        "nonce_ok": null,
+        "ok": true,
+        "policy_ok": null,
+        "predicate_type_ok": true,
+        "receiver_bound": null,
+        "receiver_key_bound": null,
+        "receiver_role_trusted": null,
+        "relations_policy_codes": null,
+        "relations_policy_failed": null,
+        "role_separation_ok": true,
+        "structure_ok": true,
+        "subject_binding": {
+          "matches": true,
+          "mode": "DERIVED"
+        },
+        "subject_derived_ok": true,
+        "warnings": [
+          "DEPRECATED: execution_proven / receiver_bound are digest-presence booleans (evidence_levels REFERENCE_WELL_FORMED \u2014 attacker-choosable content), NOT a content proof. Use evidence_levels; only CONTENT_RESOLVED or stronger is a real binding. These legacy fields will be removed in the next breaking format version."
+        ]
+      }
+    ]
+  },
+  "two_outcomes": {
+    "local_inventory": {
+      "classification": "LOCAL_INVENTORY_ONLY; not an upstream duplicate-execution verdict",
+      "distinct_decision_refs": 1,
+      "distinct_outcome_payloads": 2
+    },
+    "public_sequence_scan_without_sequence": [],
+    "verifications": [
+      {
+        "audience_ok": null,
+        "automation": {
+          "automationBlockers": [
+            "POLICY_NOT_EVALUATED"
+          ],
+          "cryptoValid": true,
+          "policyAuthorized": false,
+          "referencesResolved": true,
+          "safeForAutomation": false,
+          "structureValid": true
+        },
+        "crypto_ok": true,
+        "decision_bound": true,
+        "errors": [],
+        "evidence_levels": {
+          "effect": {
+            "fields": [
+              {
+                "detail": "a well-formed sha256 digest object is present (attacker-choosable content, not content-checked)",
+                "level": 1,
+                "level_name": "REFERENCE_WELL_FORMED"
+              },
+              {
+                "detail": "no well-formed sha256 digest object present",
+                "level": 0,
+                "level_name": "CLAIMED"
+              }
+            ],
+            "level": 1,
+            "level_name": "REFERENCE_WELL_FORMED"
+          },
+          "receiverRefs": null
+        },
+        "execution_proven": true,
+        "executor_key_bound": null,
+        "executor_role_trusted": null,
+        "lineage": null,
+        "lineage_ok": null,
+        "lineage_requirement_failed": null,
+        "nonce_ok": null,
+        "ok": true,
+        "policy_ok": null,
+        "predicate_type_ok": true,
+        "receiver_bound": null,
+        "receiver_key_bound": null,
+        "receiver_role_trusted": null,
+        "relations_policy_codes": null,
+        "relations_policy_failed": null,
+        "role_separation_ok": true,
+        "structure_ok": true,
+        "subject_binding": {
+          "matches": true,
+          "mode": "DERIVED"
+        },
+        "subject_derived_ok": true,
+        "warnings": [
+          "DEPRECATED: execution_proven / receiver_bound are digest-presence booleans (evidence_levels REFERENCE_WELL_FORMED \u2014 attacker-choosable content), NOT a content proof. Use evidence_levels; only CONTENT_RESOLVED or stronger is a real binding. These legacy fields will be removed in the next breaking format version."
+        ]
+      },
+      {
+        "audience_ok": null,
+        "automation": {
+          "automationBlockers": [
+            "POLICY_NOT_EVALUATED"
+          ],
+          "cryptoValid": true,
+          "policyAuthorized": false,
+          "referencesResolved": true,
+          "safeForAutomation": false,
+          "structureValid": true
+        },
+        "crypto_ok": true,
+        "decision_bound": true,
+        "errors": [],
+        "evidence_levels": {
+          "effect": {
+            "fields": [
+              {
+                "detail": "a well-formed sha256 digest object is present (attacker-choosable content, not content-checked)",
+                "level": 1,
+                "level_name": "REFERENCE_WELL_FORMED"
+              },
+              {
+                "detail": "no well-formed sha256 digest object present",
+                "level": 0,
+                "level_name": "CLAIMED"
+              }
+            ],
+            "level": 1,
+            "level_name": "REFERENCE_WELL_FORMED"
+          },
+          "receiverRefs": null
+        },
+        "execution_proven": true,
+        "executor_key_bound": null,
+        "executor_role_trusted": null,
+        "lineage": null,
+        "lineage_ok": null,
+        "lineage_requirement_failed": null,
+        "nonce_ok": null,
+        "ok": true,
+        "policy_ok": null,
+        "predicate_type_ok": true,
+        "receiver_bound": null,
+        "receiver_key_bound": null,
+        "receiver_role_trusted": null,
+        "relations_policy_codes": null,
+        "relations_policy_failed": null,
+        "role_separation_ok": true,
+        "structure_ok": true,
+        "subject_binding": {
+          "matches": true,
+          "mode": "DERIVED"
+        },
+        "subject_derived_ok": true,
+        "warnings": [
+          "DEPRECATED: execution_proven / receiver_bound are digest-presence booleans (evidence_levels REFERENCE_WELL_FORMED \u2014 attacker-choosable content), NOT a content proof. Use evidence_levels; only CONTENT_RESOLVED or stronger is a real binding. These legacy fields will be removed in the next breaking format version."
+        ]
+      }
+    ]
+  },
+  "unknown": {
+    "decision": {
+      "action_outcome_proven": null,
+      "anchors_ok": null,
+      "audience_ok": true,
+      "automation": {
+        "automationBlockers": [
+          "POLICY_NOT_EVALUATED",
+          "SIGNER_NOT_PINNED"
+        ],
+        "cryptoValid": true,
+        "policyAuthorized": false,
+        "referencesResolved": true,
+        "safeForAutomation": false,
+        "structureValid": true
+      },
+      "crypto_ok": true,
+      "errors": [],
+      "evidence_bound": null,
+      "evidence_levels": {
+        "actionOutcome.outcomeRef": {
+          "detail": "not applicable",
+          "level": null,
+          "level_name": null
+        },
+        "evidenceRefs": null
+      },
+      "freshness_ok": true,
+      "lineage": null,
+      "lineage_ok": null,
+      "lineage_requirement_failed": null,
+      "nonce_ok": true,
+      "ok": true,
+      "policy_ok": null,
+      "predicate_type_ok": true,
+      "relations_policy_codes": null,
+      "relations_policy_failed": null,
+      "signer_trusted": null,
+      "structure_ok": true,
+      "subject_binding": {
+        "matches": true,
+        "mode": "DERIVED"
+      },
+      "subject_derived_ok": true,
+      "verified_origin": "1ed70a781bba6ccd6de641498bd711fc11a8029b23929529841317b54306b09c",
+      "verified_payload_digest": "17b74aa65c90f1c7e09a98da8c50c3866a8b58e0a62a6f16bd52d7a7d99a36bb",
+      "verified_signer_pub_b64": "TWfs75IN1In3CNI8TnyIOUHgtwilOPGcRFQLJ670CJc=",
+      "warnings": []
+    },
+    "outcome_validation_errors": [
+      "status must be one of ['executed', 'failed', 'partial', 'refused'], got 'unknown'"
+    ],
+    "retry": "NOT_EVALUATED",
+    "timeout": "NOT_EVALUATED"
+  }
+}

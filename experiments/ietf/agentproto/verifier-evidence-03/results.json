@@ -1,0 +1,1456 @@
+{
+  "outcome_counts": {
+    "INDETERMINATE": 8,
+    "NOT_EVALUATED": 1,
+    "SATISFIED": 2,
+    "UNSATISFIED": 1
+  },
+  "profile": "synthetic-finite-counterparty-v1",
+  "replay_at": "2026-11-02T12:00:00Z",
+  "results": [
+    {
+      "capability_context": {
+        "attempt_requested": true,
+        "declared_capability": "SUPPORTED",
+        "evidence_ref": "plan",
+        "resolver_status": "AVAILABLE"
+      },
+      "check_performed_at": "2026-11-02T12:00:00Z",
+      "coverage_domain": {
+        "closure": "closed",
+        "id": "d-full",
+        "population": "All occurrence records in the synthetic closed counterparty index",
+        "window": {
+          "end": "2026-11-01T01:00:00Z",
+          "start": "2026-11-01T00:00:00Z"
+        }
+      },
+      "coverage_qualification": "Exactly the named finite domain; no wider history claim.",
+      "diagnostics": [
+        {
+          "code": "C_COMPLETE",
+          "detail": "Disclosed IDs cover the independently indexed finite fixture domain only; signature validity is not used for completeness."
+        }
+      ],
+      "evidence_present": [
+        {
+          "input_path": "disclosed",
+          "sha256": "351e1899ad2550f60e89d3a7733a73c5d368e86fb29051a2e1857b75b2edb21d"
+        },
+        {
+          "id": "producer-log",
+          "input_path": "mechanism",
+          "sha256": "9cc2b0320fb67e0bd943f9f21a7d4ca8721eb7b16c50b7b6f629178b60e98ad4"
+        },
+        {
+          "expires_at": "2026-11-03T00:00:00Z",
+          "id": "counterparty-index",
+          "input_path": "basis",
+          "issued_at": "2026-11-01T02:00:00Z",
+          "sha256": "eb29de143a37e02b2f0874aeee8bfda128f82efc5c6de4d824e80871b0871bdc"
+        },
+        {
+          "expires_at": "2026-11-03T00:00:00Z",
+          "id": "fixture-authority",
+          "input_path": "authority",
+          "issued_at": "2026-10-31T00:00:00Z",
+          "sha256": "b56c5be4e675c285be0577ba52a74455e465723e45da5aafc6a770138523449a"
+        },
+        {
+          "input_path": "run_binding",
+          "sha256": "a0b9046047a7bcb332fa90125ef0e06283da00fcb3da4a2ee780dfaafb60f3b8"
+        },
+        {
+          "id": "local-evaluation-plan",
+          "input_path": "plan",
+          "sha256": "7d42fb564156adde92eab9f5d10b9babe4a91c647411e15afcd392034497454d"
+        }
+      ],
+      "id": "closed_independent",
+      "material_party_control": {
+        "assurance": "Stipulated synthetic roles; not externally verified.",
+        "basis": "NON_MATERIAL_CONTROL",
+        "material_parties": [
+          "producer"
+        ],
+        "mechanism": "MATERIAL_PARTY_CONTROL"
+      },
+      "missing_or_unavailable_inputs": [],
+      "omission_detection_basis": {
+        "appraisal_checks": [
+          {
+            "check": "finite_domain",
+            "evidence_refs": [
+              "claim.domain"
+            ],
+            "passed": true
+          },
+          {
+            "check": "independent_at_production",
+            "evidence_refs": [
+              "claim.material_parties",
+              "basis"
+            ],
+            "passed": true
+          },
+          {
+            "check": "authority",
+            "evidence_refs": [
+              "authority",
+              "basis",
+              "claim.domain"
+            ],
+            "passed": true
+          },
+          {
+            "check": "state_binding",
+            "evidence_refs": [
+              "run_binding",
+              "basis"
+            ],
+            "passed": true
+          },
+          {
+            "check": "result_and_domain_binding",
+            "evidence_refs": [
+              "basis",
+              "claim.domain",
+              "result_id"
+            ],
+            "passed": true
+          },
+          {
+            "check": "coverage_window",
+            "evidence_refs": [
+              "basis.window",
+              "authority.window",
+              "claim.domain.window"
+            ],
+            "passed": true
+          },
+          {
+            "check": "issue_and_expiry",
+            "evidence_refs": [
+              "basis",
+              "authority"
+            ],
+            "passed": true
+          },
+          {
+            "check": "coverage_extent",
+            "evidence_refs": [
+              "basis.records",
+              "basis.exhaustive",
+              "disclosed"
+            ],
+            "passed": true
+          },
+          {
+            "check": "reconciliation",
+            "evidence_refs": [
+              "basis.records",
+              "disclosed"
+            ],
+            "passed": true
+          }
+        ],
+        "basis_id": "counterparty-index",
+        "kind": "exhaustive_counterparty_index",
+        "mechanism_id": "producer-log",
+        "omitted_record_ids": [],
+        "state_version": "index-v1"
+      },
+      "predicate_result": {
+        "reason": "No predicate requested.",
+        "result": "NOT_EVALUATED"
+      },
+      "record_produced_at": "2026-11-02T12:00:00Z",
+      "requirement_ids": [
+        "CMP-1",
+        "CMP-2",
+        "OUTCOME-4",
+        "OUTCOME-TIME"
+      ],
+      "result": "SATISFIED"
+    },
+    {
+      "capability_context": {
+        "attempt_requested": true,
+        "declared_capability": "SUPPORTED",
+        "evidence_ref": "plan",
+        "resolver_status": "AVAILABLE"
+      },
+      "check_performed_at": "2026-11-02T12:00:00Z",
+      "coverage_domain": {
+        "closure": "closed",
+        "id": "d-full",
+        "population": "All occurrence records in the synthetic closed counterparty index",
+        "window": {
+          "end": "2026-11-01T01:00:00Z",
+          "start": "2026-11-01T00:00:00Z"
+        }
+      },
+      "coverage_qualification": "Exactly the named finite domain; no wider history claim.",
+      "diagnostics": [
+        {
+          "code": "C_SAME_PARTY",
+          "detail": "No independent production-time constraint established; absence of one is not proof of omission."
+        }
+      ],
+      "evidence_present": [
+        {
+          "input_path": "disclosed",
+          "sha256": "351e1899ad2550f60e89d3a7733a73c5d368e86fb29051a2e1857b75b2edb21d"
+        },
+        {
+          "id": "producer-log",
+          "input_path": "mechanism",
+          "sha256": "9cc2b0320fb67e0bd943f9f21a7d4ca8721eb7b16c50b7b6f629178b60e98ad4"
+        },
+        {
+          "expires_at": "2026-11-03T00:00:00Z",
+          "id": "counterparty-index",
+          "input_path": "basis",
+          "issued_at": "2026-11-01T02:00:00Z",
+          "sha256": "665d7f7df2d5f0d5f6aecbc62a5c20f3f81f9ee2f820fdfa0fe1dd962522e91a"
+        },
+        {
+          "expires_at": "2026-11-03T00:00:00Z",
+          "id": "fixture-authority",
+          "input_path": "authority",
+          "issued_at": "2026-10-31T00:00:00Z",
+          "sha256": "734d36c101a5667780667629988a334c8abfe4557bcb5d58249ab83d10313226"
+        },
+        {
+          "input_path": "run_binding",
+          "sha256": "9ebadb43c17cb7a3fcf9173f77a6584b5c1b1fdd3e2c3eee26de7adc4e19fb86"
+        },
+        {
+          "id": "local-evaluation-plan",
+          "input_path": "plan",
+          "sha256": "7d42fb564156adde92eab9f5d10b9babe4a91c647411e15afcd392034497454d"
+        }
+      ],
+      "id": "same_party_only",
+      "material_party_control": {
+        "assurance": "Stipulated synthetic roles; not externally verified.",
+        "basis": "MATERIAL_PARTY_CONTROL",
+        "material_parties": [
+          "producer"
+        ],
+        "mechanism": "MATERIAL_PARTY_CONTROL"
+      },
+      "missing_or_unavailable_inputs": [
+        "independent basis"
+      ],
+      "omission_detection_basis": {
+        "appraisal_checks": [
+          {
+            "check": "finite_domain",
+            "evidence_refs": [
+              "claim.domain"
+            ],
+            "passed": true
+          },
+          {
+            "check": "independent_at_production",
+            "evidence_refs": [
+              "claim.material_parties",
+              "basis"
+            ],
+            "passed": false
+          }
+        ],
+        "basis_id": "counterparty-index",
+        "kind": "exhaustive_counterparty_index",
+        "mechanism_id": "producer-log",
+        "state_version": "index-v1"
+      },
+      "predicate_result": {
+        "reason": "No predicate requested.",
+        "result": "NOT_EVALUATED"
+      },
+      "record_produced_at": "2026-11-02T12:00:00Z",
+      "requirement_ids": [
+        "CMP-1",
+        "CMP-2",
+        "OUTCOME-4",
+        "OUTCOME-TIME"
+      ],
+      "result": "INDETERMINATE"
+    },
+    {
+      "capability_context": {
+        "attempt_requested": true,
+        "declared_capability": "SUPPORTED",
+        "evidence_ref": "plan",
+        "resolver_status": "AVAILABLE"
+      },
+      "check_performed_at": "2026-11-02T12:00:00Z",
+      "coverage_domain": {
+        "closure": "closed",
+        "id": "d-full",
+        "population": "All occurrence records in the synthetic closed counterparty index",
+        "window": {
+          "end": "2026-11-01T01:00:00Z",
+          "start": "2026-11-01T00:00:00Z"
+        }
+      },
+      "coverage_qualification": "Exactly the named finite domain; no wider history claim.",
+      "diagnostics": [
+        {
+          "code": "C_SAME_PARTY",
+          "detail": "No independent production-time constraint established; absence of one is not proof of omission."
+        }
+      ],
+      "evidence_present": [
+        {
+          "input_path": "disclosed",
+          "sha256": "80c3b660cee0e1a7048fb81d8c7ed65c4030bb18e080a4ca46951b4e2e26b9cc"
+        },
+        {
+          "id": "producer-log",
+          "input_path": "mechanism",
+          "sha256": "9cc2b0320fb67e0bd943f9f21a7d4ca8721eb7b16c50b7b6f629178b60e98ad4"
+        },
+        {
+          "expires_at": "2026-11-03T00:00:00Z",
+          "id": "counterparty-index",
+          "input_path": "basis",
+          "issued_at": "2026-11-01T02:00:00Z",
+          "sha256": "829a607d467e4c54421b2e8d69f7dbf05d06e4a4ac35bb18028e4d405bdc44fb"
+        },
+        {
+          "expires_at": "2026-11-03T00:00:00Z",
+          "id": "fixture-authority",
+          "input_path": "authority",
+          "issued_at": "2026-10-31T00:00:00Z",
+          "sha256": "734d36c101a5667780667629988a334c8abfe4557bcb5d58249ab83d10313226"
+        },
+        {
+          "input_path": "run_binding",
+          "sha256": "f2dabd828b284a812b2e02d0e766e3ba202b3c29aaf2e62395ee3b7449cdb62f"
+        },
+        {
+          "id": "local-evaluation-plan",
+          "input_path": "plan",
+          "sha256": "7d42fb564156adde92eab9f5d10b9babe4a91c647411e15afcd392034497454d"
+        }
+      ],
+      "id": "withheld_unobservable",
+      "material_party_control": {
+        "assurance": "Stipulated synthetic roles; not externally verified.",
+        "basis": "MATERIAL_PARTY_CONTROL",
+        "material_parties": [
+          "producer"
+        ],
+        "mechanism": "MATERIAL_PARTY_CONTROL"
+      },
+      "missing_or_unavailable_inputs": [
+        "independent basis"
+      ],
+      "omission_detection_basis": {
+        "appraisal_checks": [
+          {
+            "check": "finite_domain",
+            "evidence_refs": [
+              "claim.domain"
+            ],
+            "passed": true
+          },
+          {
+            "check": "independent_at_production",
+            "evidence_refs": [
+              "claim.material_parties",
+              "basis"
+            ],
+            "passed": false
+          }
+        ],
+        "basis_id": "counterparty-index",
+        "kind": "exhaustive_counterparty_index",
+        "mechanism_id": "producer-log",
+        "state_version": "index-v1"
+      },
+      "predicate_result": {
+        "known_disclosed_occurrences": [
+          "e1"
+        ],
+        "reason": "Only stipulated-authenticated disclosed occurrences counted; no scenario truth or signature inference.",
+        "result": "INDETERMINATE"
+      },
+      "record_produced_at": "2026-11-02T12:00:00Z",
+      "requirement_ids": [
+        "CMP-1",
+        "CMP-2",
+        "OUTCOME-4",
+        "OUTCOME-TIME"
+      ],
+      "result": "INDETERMINATE"
+    },
+    {
+      "capability_context": {
+        "attempt_requested": true,
+        "declared_capability": "SUPPORTED",
+        "evidence_ref": "plan",
+        "resolver_status": "UNAVAILABLE"
+      },
+      "check_performed_at": "2026-11-02T12:00:00Z",
+      "coverage_domain": {
+        "closure": "closed",
+        "id": "d-full",
+        "population": "All occurrence records in the synthetic closed counterparty index",
+        "window": {
+          "end": "2026-11-01T01:00:00Z",
+          "start": "2026-11-01T00:00:00Z"
+        }
+      },
+      "coverage_qualification": "Exactly the named finite domain; no wider history claim.",
+      "diagnostics": [
+        {
+          "code": "C_RESOLVER",
+          "detail": "Index lookup unavailable; no negative lookup or missing capability is inferred."
+        }
+      ],
+      "evidence_present": [
+        {
+          "input_path": "disclosed",
+          "sha256": "351e1899ad2550f60e89d3a7733a73c5d368e86fb29051a2e1857b75b2edb21d"
+        },
+        {
+          "id": "producer-log",
+          "input_path": "mechanism",
+          "sha256": "9cc2b0320fb67e0bd943f9f21a7d4ca8721eb7b16c50b7b6f629178b60e98ad4"
+        },
+        {
+          "id": "local-evaluation-plan",
+          "input_path": "plan",
+          "sha256": "a0ad29fa2f4432a82496c65389e859c319624e5622bc4cbed365cd5ae159ba07"
+        }
+      ],
+      "id": "resolver_unavailable",
+      "material_party_control": {
+        "assurance": "Stipulated synthetic roles; not externally verified.",
+        "basis": "UNKNOWN",
+        "material_parties": [
+          "producer"
+        ],
+        "mechanism": "MATERIAL_PARTY_CONTROL"
+      },
+      "missing_or_unavailable_inputs": [
+        "resolved independent index"
+      ],
+      "omission_detection_basis": {
+        "appraisal_checks": [
+          {
+            "check": "finite_domain",
+            "evidence_refs": [
+              "claim.domain"
+            ],
+            "passed": true
+          }
+        ],
+        "basis_id": null,
+        "kind": null,
+        "mechanism_id": "producer-log",
+        "state_version": null
+      },
+      "predicate_result": {
+        "reason": "No predicate requested.",
+        "result": "NOT_EVALUATED"
+      },
+      "record_produced_at": "2026-11-02T12:00:00Z",
+      "requirement_ids": [
+        "CMP-1",
+        "CMP-2",
+        "OUTCOME-4",
+        "OUTCOME-TIME"
+      ],
+      "result": "INDETERMINATE"
+    },
+    {
+      "capability_context": {
+        "attempt_requested": true,
+        "declared_capability": "SUPPORTED",
+        "evidence_ref": "plan",
+        "resolver_status": "AVAILABLE"
+      },
+      "check_performed_at": "2026-11-02T12:00:00Z",
+      "coverage_domain": {
+        "closure": "closed",
+        "id": "d-full",
+        "population": "All occurrence records in the synthetic closed counterparty index",
+        "window": {
+          "end": "2026-11-01T01:00:00Z",
+          "start": "2026-11-01T00:00:00Z"
+        }
+      },
+      "coverage_qualification": "Exactly the named finite domain; no wider history claim.",
+      "diagnostics": [
+        {
+          "code": "C_OMISSION",
+          "detail": "Appraised index exposes missing IDs: r2"
+        }
+      ],
+      "evidence_present": [
+        {
+          "input_path": "disclosed",
+          "sha256": "80c3b660cee0e1a7048fb81d8c7ed65c4030bb18e080a4ca46951b4e2e26b9cc"
+        },
+        {
+          "id": "producer-log",
+          "input_path": "mechanism",
+          "sha256": "9cc2b0320fb67e0bd943f9f21a7d4ca8721eb7b16c50b7b6f629178b60e98ad4"
+        },
+        {
+          "expires_at": "2026-11-03T00:00:00Z",
+          "id": "counterparty-index",
+          "input_path": "basis",
+          "issued_at": "2026-11-01T02:00:00Z",
+          "sha256": "eb29de143a37e02b2f0874aeee8bfda128f82efc5c6de4d824e80871b0871bdc"
+        },
+        {
+          "expires_at": "2026-11-03T00:00:00Z",
+          "id": "fixture-authority",
+          "input_path": "authority",
+          "issued_at": "2026-10-31T00:00:00Z",
+          "sha256": "b56c5be4e675c285be0577ba52a74455e465723e45da5aafc6a770138523449a"
+        },
+        {
+          "input_path": "run_binding",
+          "sha256": "a0b9046047a7bcb332fa90125ef0e06283da00fcb3da4a2ee780dfaafb60f3b8"
+        },
+        {
+          "id": "local-evaluation-plan",
+          "input_path": "plan",
+          "sha256": "7d42fb564156adde92eab9f5d10b9babe4a91c647411e15afcd392034497454d"
+        }
+      ],
+      "id": "known_omission",
+      "material_party_control": {
+        "assurance": "Stipulated synthetic roles; not externally verified.",
+        "basis": "NON_MATERIAL_CONTROL",
+        "material_parties": [
+          "producer"
+        ],
+        "mechanism": "MATERIAL_PARTY_CONTROL"
+      },
+      "missing_or_unavailable_inputs": [],
+      "omission_detection_basis": {
+        "appraisal_checks": [
+          {
+            "check": "finite_domain",
+            "evidence_refs": [
+              "claim.domain"
+            ],
+            "passed": true
+          },
+          {
+            "check": "independent_at_production",
+            "evidence_refs": [
+              "claim.material_parties",
+              "basis"
+            ],
+            "passed": true
+          },
+          {
+            "check": "authority",
+            "evidence_refs": [
+              "authority",
+              "basis",
+              "claim.domain"
+            ],
+            "passed": true
+          },
+          {
+            "check": "state_binding",
+            "evidence_refs": [
+              "run_binding",
+              "basis"
+            ],
+            "passed": true
+          },
+          {
+            "check": "result_and_domain_binding",
+            "evidence_refs": [
+              "basis",
+              "claim.domain",
+              "result_id"
+            ],
+            "passed": true
+          },
+          {
+            "check": "coverage_window",
+            "evidence_refs": [
+              "basis.window",
+              "authority.window",
+              "claim.domain.window"
+            ],
+            "passed": true
+          },
+          {
+            "check": "issue_and_expiry",
+            "evidence_refs": [
+              "basis",
+              "authority"
+            ],
+            "passed": true
+          },
+          {
+            "check": "coverage_extent",
+            "evidence_refs": [
+              "basis.records",
+              "basis.exhaustive",
+              "disclosed"
+            ],
+            "passed": true
+          },
+          {
+            "check": "reconciliation",
+            "evidence_refs": [
+              "basis.records",
+              "disclosed"
+            ],
+            "passed": false
+          }
+        ],
+        "basis_id": "counterparty-index",
+        "kind": "exhaustive_counterparty_index",
+        "mechanism_id": "producer-log",
+        "omitted_record_ids": [
+          "r2"
+        ],
+        "state_version": "index-v1"
+      },
+      "predicate_result": {
+        "reason": "No predicate requested.",
+        "result": "NOT_EVALUATED"
+      },
+      "record_produced_at": "2026-11-02T12:00:00Z",
+      "requirement_ids": [
+        "CMP-1",
+        "CMP-2",
+        "OUTCOME-4",
+        "OUTCOME-TIME"
+      ],
+      "result": "UNSATISFIED"
+    },
+    {
+      "capability_context": {
+        "attempt_requested": true,
+        "declared_capability": "SUPPORTED",
+        "evidence_ref": "plan",
+        "resolver_status": "AVAILABLE"
+      },
+      "check_performed_at": "2026-11-02T12:00:00Z",
+      "coverage_domain": {
+        "closure": "unknown",
+        "id": "d-full",
+        "population": "All occurrence records in the synthetic closed counterparty index",
+        "window": {
+          "end": "2026-11-01T01:00:00Z",
+          "start": "2026-11-01T00:00:00Z"
+        }
+      },
+      "coverage_qualification": "Exactly the named finite domain; no wider history claim.",
+      "diagnostics": [
+        {
+          "code": "C_DOMAIN_UNCLOSED",
+          "detail": "Domain not closed under local policy."
+        }
+      ],
+      "evidence_present": [
+        {
+          "input_path": "disclosed",
+          "sha256": "351e1899ad2550f60e89d3a7733a73c5d368e86fb29051a2e1857b75b2edb21d"
+        },
+        {
+          "id": "producer-log",
+          "input_path": "mechanism",
+          "sha256": "9cc2b0320fb67e0bd943f9f21a7d4ca8721eb7b16c50b7b6f629178b60e98ad4"
+        },
+        {
+          "expires_at": "2026-11-03T00:00:00Z",
+          "id": "counterparty-index",
+          "input_path": "basis",
+          "issued_at": "2026-11-01T02:00:00Z",
+          "sha256": "eb29de143a37e02b2f0874aeee8bfda128f82efc5c6de4d824e80871b0871bdc"
+        },
+        {
+          "expires_at": "2026-11-03T00:00:00Z",
+          "id": "fixture-authority",
+          "input_path": "authority",
+          "issued_at": "2026-10-31T00:00:00Z",
+          "sha256": "b56c5be4e675c285be0577ba52a74455e465723e45da5aafc6a770138523449a"
+        },
+        {
+          "input_path": "run_binding",
+          "sha256": "a0b9046047a7bcb332fa90125ef0e06283da00fcb3da4a2ee780dfaafb60f3b8"
+        },
+        {
+          "id": "local-evaluation-plan",
+          "input_path": "plan",
+          "sha256": "7d42fb564156adde92eab9f5d10b9babe4a91c647411e15afcd392034497454d"
+        }
+      ],
+      "id": "open_domain",
+      "material_party_control": {
+        "assurance": "Stipulated synthetic roles; not externally verified.",
+        "basis": "NON_MATERIAL_CONTROL",
+        "material_parties": [
+          "producer"
+        ],
+        "mechanism": "MATERIAL_PARTY_CONTROL"
+      },
+      "missing_or_unavailable_inputs": [
+        "closed coverage domain and window"
+      ],
+      "omission_detection_basis": {
+        "appraisal_checks": [
+          {
+            "check": "finite_domain",
+            "evidence_refs": [
+              "claim.domain"
+            ],
+            "passed": false
+          }
+        ],
+        "basis_id": "counterparty-index",
+        "kind": "exhaustive_counterparty_index",
+        "mechanism_id": "producer-log",
+        "state_version": "index-v1"
+      },
+      "predicate_result": {
+        "reason": "No predicate requested.",
+        "result": "NOT_EVALUATED"
+      },
+      "record_produced_at": "2026-11-02T12:00:00Z",
+      "requirement_ids": [
+        "CMP-1",
+        "CMP-2",
+        "OUTCOME-4",
+        "OUTCOME-TIME"
+      ],
+      "result": "INDETERMINATE"
+    },
+    {
+      "capability_context": {
+        "attempt_requested": true,
+        "declared_capability": "SUPPORTED",
+        "evidence_ref": "plan",
+        "resolver_status": "AVAILABLE"
+      },
+      "check_performed_at": "2026-11-02T12:00:00Z",
+      "coverage_domain": {
+        "closure": "closed",
+        "id": "d-sample",
+        "population": "Predeclared one-member sample only: r1",
+        "window": {
+          "end": "2026-11-01T01:00:00Z",
+          "start": "2026-11-01T00:00:00Z"
+        }
+      },
+      "coverage_qualification": "Complete only for this declared sample; wider population completeness NOT_EVALUATED.",
+      "diagnostics": [
+        {
+          "code": "C_COMPLETE",
+          "detail": "Disclosed IDs cover the independently indexed finite fixture domain only; signature validity is not used for completeness."
+        }
+      ],
+      "evidence_present": [
+        {
+          "input_path": "disclosed",
+          "sha256": "80c3b660cee0e1a7048fb81d8c7ed65c4030bb18e080a4ca46951b4e2e26b9cc"
+        },
+        {
+          "id": "producer-log",
+          "input_path": "mechanism",
+          "sha256": "9cc2b0320fb67e0bd943f9f21a7d4ca8721eb7b16c50b7b6f629178b60e98ad4"
+        },
+        {
+          "expires_at": "2026-11-03T00:00:00Z",
+          "id": "counterparty-index",
+          "input_path": "basis",
+          "issued_at": "2026-11-01T02:00:00Z",
+          "sha256": "835639d5ea70de612a834873f912aafd4138ef467630cfe3fbda535fe83ee44a"
+        },
+        {
+          "expires_at": "2026-11-03T00:00:00Z",
+          "id": "fixture-authority",
+          "input_path": "authority",
+          "issued_at": "2026-10-31T00:00:00Z",
+          "sha256": "dcc76d34922fb25c56ca116f9062dc6ea856762e5707e3982ea948d91c48ce4b"
+        },
+        {
+          "input_path": "run_binding",
+          "sha256": "a187b748180c5b833d6177eb63528f4d58c22fb63c238e8c4b87d446769df62f"
+        },
+        {
+          "id": "local-evaluation-plan",
+          "input_path": "plan",
+          "sha256": "7d42fb564156adde92eab9f5d10b9babe4a91c647411e15afcd392034497454d"
+        }
+      ],
+      "id": "qualified_sample",
+      "material_party_control": {
+        "assurance": "Stipulated synthetic roles; not externally verified.",
+        "basis": "NON_MATERIAL_CONTROL",
+        "material_parties": [
+          "producer"
+        ],
+        "mechanism": "MATERIAL_PARTY_CONTROL"
+      },
+      "missing_or_unavailable_inputs": [],
+      "omission_detection_basis": {
+        "appraisal_checks": [
+          {
+            "check": "finite_domain",
+            "evidence_refs": [
+              "claim.domain"
+            ],
+            "passed": true
+          },
+          {
+            "check": "independent_at_production",
+            "evidence_refs": [
+              "claim.material_parties",
+              "basis"
+            ],
+            "passed": true
+          },
+          {
+            "check": "authority",
+            "evidence_refs": [
+              "authority",
+              "basis",
+              "claim.domain"
+            ],
+            "passed": true
+          },
+          {
+            "check": "state_binding",
+            "evidence_refs": [
+              "run_binding",
+              "basis"
+            ],
+            "passed": true
+          },
+          {
+            "check": "result_and_domain_binding",
+            "evidence_refs": [
+              "basis",
+              "claim.domain",
+              "result_id"
+            ],
+            "passed": true
+          },
+          {
+            "check": "coverage_window",
+            "evidence_refs": [
+              "basis.window",
+              "authority.window",
+              "claim.domain.window"
+            ],
+            "passed": true
+          },
+          {
+            "check": "issue_and_expiry",
+            "evidence_refs": [
+              "basis",
+              "authority"
+            ],
+            "passed": true
+          },
+          {
+            "check": "coverage_extent",
+            "evidence_refs": [
+              "basis.records",
+              "basis.exhaustive",
+              "disclosed"
+            ],
+            "passed": true
+          },
+          {
+            "check": "reconciliation",
+            "evidence_refs": [
+              "basis.records",
+              "disclosed"
+            ],
+            "passed": true
+          }
+        ],
+        "basis_id": "counterparty-index",
+        "kind": "exhaustive_counterparty_index",
+        "mechanism_id": "producer-log",
+        "omitted_record_ids": [],
+        "state_version": "index-v1"
+      },
+      "predicate_result": {
+        "reason": "No predicate requested.",
+        "result": "NOT_EVALUATED"
+      },
+      "record_produced_at": "2026-11-02T12:00:00Z",
+      "requirement_ids": [
+        "CMP-1",
+        "CMP-2",
+        "OUTCOME-4",
+        "OUTCOME-TIME"
+      ],
+      "result": "SATISFIED"
+    },
+    {
+      "capability_context": {
+        "attempt_requested": true,
+        "declared_capability": "SUPPORTED",
+        "evidence_ref": "plan",
+        "resolver_status": "AVAILABLE"
+      },
+      "check_performed_at": "2026-11-02T12:00:00Z",
+      "coverage_domain": {
+        "closure": "closed",
+        "id": "d-full",
+        "population": "All occurrence records in the synthetic closed counterparty index",
+        "window": {
+          "end": "2026-11-01T01:00:00Z",
+          "start": "2026-11-01T00:00:00Z"
+        }
+      },
+      "coverage_qualification": "Exactly the named finite domain; no wider history claim.",
+      "diagnostics": [
+        {
+          "code": "C_STATE_BINDING",
+          "detail": "Detector state/version is not bound to this evaluation."
+        }
+      ],
+      "evidence_present": [
+        {
+          "input_path": "disclosed",
+          "sha256": "351e1899ad2550f60e89d3a7733a73c5d368e86fb29051a2e1857b75b2edb21d"
+        },
+        {
+          "id": "producer-log",
+          "input_path": "mechanism",
+          "sha256": "9cc2b0320fb67e0bd943f9f21a7d4ca8721eb7b16c50b7b6f629178b60e98ad4"
+        },
+        {
+          "expires_at": "2026-11-03T00:00:00Z",
+          "id": "counterparty-index",
+          "input_path": "basis",
+          "issued_at": "2026-11-01T02:00:00Z",
+          "sha256": "eb29de143a37e02b2f0874aeee8bfda128f82efc5c6de4d824e80871b0871bdc"
+        },
+        {
+          "expires_at": "2026-11-03T00:00:00Z",
+          "id": "fixture-authority",
+          "input_path": "authority",
+          "issued_at": "2026-10-31T00:00:00Z",
+          "sha256": "b56c5be4e675c285be0577ba52a74455e465723e45da5aafc6a770138523449a"
+        },
+        {
+          "id": "local-evaluation-plan",
+          "input_path": "plan",
+          "sha256": "7d42fb564156adde92eab9f5d10b9babe4a91c647411e15afcd392034497454d"
+        }
+      ],
+      "id": "unbound_detector_state",
+      "material_party_control": {
+        "assurance": "Stipulated synthetic roles; not externally verified.",
+        "basis": "NON_MATERIAL_CONTROL",
+        "material_parties": [
+          "producer"
+        ],
+        "mechanism": "MATERIAL_PARTY_CONTROL"
+      },
+      "missing_or_unavailable_inputs": [
+        "matching state version and digest"
+      ],
+      "omission_detection_basis": {
+        "appraisal_checks": [
+          {
+            "check": "finite_domain",
+            "evidence_refs": [
+              "claim.domain"
+            ],
+            "passed": true
+          },
+          {
+            "check": "independent_at_production",
+            "evidence_refs": [
+              "claim.material_parties",
+              "basis"
+            ],
+            "passed": true
+          },
+          {
+            "check": "authority",
+            "evidence_refs": [
+              "authority",
+              "basis",
+              "claim.domain"
+            ],
+            "passed": true
+          },
+          {
+            "check": "state_binding",
+            "evidence_refs": [
+              "run_binding",
+              "basis"
+            ],
+            "passed": false
+          }
+        ],
+        "basis_id": "counterparty-index",
+        "kind": "exhaustive_counterparty_index",
+        "mechanism_id": "producer-log",
+        "state_version": "index-v1"
+      },
+      "predicate_result": {
+        "reason": "No predicate requested.",
+        "result": "NOT_EVALUATED"
+      },
+      "record_produced_at": "2026-11-02T12:00:00Z",
+      "requirement_ids": [
+        "CMP-1",
+        "CMP-2",
+        "OUTCOME-4",
+        "OUTCOME-TIME"
+      ],
+      "result": "INDETERMINATE"
+    },
+    {
+      "capability_context": {
+        "attempt_requested": true,
+        "declared_capability": "SUPPORTED",
+        "evidence_ref": "plan",
+        "resolver_status": "AVAILABLE"
+      },
+      "check_performed_at": "2026-11-02T12:00:00Z",
+      "coverage_domain": {
+        "closure": "closed",
+        "id": "d-full",
+        "population": "All occurrence records in the synthetic closed counterparty index",
+        "window": {
+          "end": "2026-11-01T01:00:00Z",
+          "start": "2026-11-01T00:00:00Z"
+        }
+      },
+      "coverage_qualification": "Exactly the named finite domain; no wider history claim.",
+      "diagnostics": [
+        {
+          "code": "C_WINDOW",
+          "detail": "Anchor/authority does not cover claimed window."
+        }
+      ],
+      "evidence_present": [
+        {
+          "input_path": "disclosed",
+          "sha256": "351e1899ad2550f60e89d3a7733a73c5d368e86fb29051a2e1857b75b2edb21d"
+        },
+        {
+          "id": "producer-log",
+          "input_path": "mechanism",
+          "sha256": "9cc2b0320fb67e0bd943f9f21a7d4ca8721eb7b16c50b7b6f629178b60e98ad4"
+        },
+        {
+          "expires_at": "2026-11-03T00:00:00Z",
+          "id": "counterparty-index",
+          "input_path": "basis",
+          "issued_at": "2026-11-01T02:00:00Z",
+          "sha256": "db01bed0af805b12b088b38c3af18cea58c421102f33a523e020f2ea1056ee5b"
+        },
+        {
+          "expires_at": "2026-11-03T00:00:00Z",
+          "id": "fixture-authority",
+          "input_path": "authority",
+          "issued_at": "2026-10-31T00:00:00Z",
+          "sha256": "b56c5be4e675c285be0577ba52a74455e465723e45da5aafc6a770138523449a"
+        },
+        {
+          "input_path": "run_binding",
+          "sha256": "708c3683bcb79be493bb6bf671ecf1972285e84345f78ac1a6f049b6488a8fa3"
+        },
+        {
+          "id": "local-evaluation-plan",
+          "input_path": "plan",
+          "sha256": "7d42fb564156adde92eab9f5d10b9babe4a91c647411e15afcd392034497454d"
+        }
+      ],
+      "id": "anchor_outside_window",
+      "material_party_control": {
+        "assurance": "Stipulated synthetic roles; not externally verified.",
+        "basis": "NON_MATERIAL_CONTROL",
+        "material_parties": [
+          "producer"
+        ],
+        "mechanism": "MATERIAL_PARTY_CONTROL"
+      },
+      "missing_or_unavailable_inputs": [
+        "independent coverage for the entire declared window"
+      ],
+      "omission_detection_basis": {
+        "appraisal_checks": [
+          {
+            "check": "finite_domain",
+            "evidence_refs": [
+              "claim.domain"
+            ],
+            "passed": true
+          },
+          {
+            "check": "independent_at_production",
+            "evidence_refs": [
+              "claim.material_parties",
+              "basis"
+            ],
+            "passed": true
+          },
+          {
+            "check": "authority",
+            "evidence_refs": [
+              "authority",
+              "basis",
+              "claim.domain"
+            ],
+            "passed": true
+          },
+          {
+            "check": "state_binding",
+            "evidence_refs": [
+              "run_binding",
+              "basis"
+            ],
+            "passed": true
+          },
+          {
+            "check": "result_and_domain_binding",
+            "evidence_refs": [
+              "basis",
+              "claim.domain",
+              "result_id"
+            ],
+            "passed": true
+          },
+          {
+            "check": "coverage_window",
+            "evidence_refs": [
+              "basis.window",
+              "authority.window",
+              "claim.domain.window"
+            ],
+            "passed": false
+          }
+        ],
+        "basis_id": "counterparty-index",
+        "kind": "exhaustive_counterparty_index",
+        "mechanism_id": "producer-log",
+        "state_version": "index-v1"
+      },
+      "predicate_result": {
+        "reason": "No predicate requested.",
+        "result": "NOT_EVALUATED"
+      },
+      "record_produced_at": "2026-11-02T12:00:00Z",
+      "requirement_ids": [
+        "CMP-1",
+        "CMP-2",
+        "OUTCOME-4",
+        "OUTCOME-TIME"
+      ],
+      "result": "INDETERMINATE"
+    },
+    {
+      "capability_context": {
+        "attempt_requested": true,
+        "declared_capability": "SUPPORTED",
+        "evidence_ref": "plan",
+        "resolver_status": "AVAILABLE"
+      },
+      "coverage_domain": null,
+      "coverage_qualification": "Only supplied artifact validity discussed; no completeness assertion.",
+      "diagnostics": [
+        {
+          "code": "C_NO_CLAIM",
+          "detail": "No completeness claim to appraise."
+        }
+      ],
+      "evidence_present": [
+        {
+          "input_path": "disclosed",
+          "sha256": "351e1899ad2550f60e89d3a7733a73c5d368e86fb29051a2e1857b75b2edb21d"
+        },
+        {
+          "id": "producer-log",
+          "input_path": "mechanism",
+          "sha256": "9cc2b0320fb67e0bd943f9f21a7d4ca8721eb7b16c50b7b6f629178b60e98ad4"
+        },
+        {
+          "expires_at": "2026-11-03T00:00:00Z",
+          "id": "counterparty-index",
+          "input_path": "basis",
+          "issued_at": "2026-11-01T02:00:00Z",
+          "sha256": "eb29de143a37e02b2f0874aeee8bfda128f82efc5c6de4d824e80871b0871bdc"
+        },
+        {
+          "expires_at": "2026-11-03T00:00:00Z",
+          "id": "fixture-authority",
+          "input_path": "authority",
+          "issued_at": "2026-10-31T00:00:00Z",
+          "sha256": "b56c5be4e675c285be0577ba52a74455e465723e45da5aafc6a770138523449a"
+        },
+        {
+          "input_path": "run_binding",
+          "sha256": "a0b9046047a7bcb332fa90125ef0e06283da00fcb3da4a2ee780dfaafb60f3b8"
+        },
+        {
+          "id": "local-evaluation-plan",
+          "input_path": "plan",
+          "sha256": "7d42fb564156adde92eab9f5d10b9babe4a91c647411e15afcd392034497454d"
+        }
+      ],
+      "id": "no_completeness_claim",
+      "material_party_control": {
+        "assurance": "Stipulated synthetic roles; not externally verified.",
+        "basis": "NON_MATERIAL_CONTROL",
+        "material_parties": [],
+        "mechanism": "NON_MATERIAL_CONTROL"
+      },
+      "missing_or_unavailable_inputs": [],
+      "omission_detection_basis": {
+        "appraisal_checks": [],
+        "basis_id": "counterparty-index",
+        "kind": "exhaustive_counterparty_index",
+        "mechanism_id": "producer-log",
+        "state_version": "index-v1"
+      },
+      "predicate_result": {
+        "reason": "No predicate requested.",
+        "result": "NOT_EVALUATED"
+      },
+      "record_produced_at": "2026-11-02T12:00:00Z",
+      "requirement_ids": [
+        "CMP-1",
+        "CMP-2",
+        "OUTCOME-4",
+        "OUTCOME-TIME"
+      ],
+      "result": "NOT_EVALUATED"
+    },
+    {
+      "capability_context": {
+        "attempt_requested": true,
+        "declared_capability": "SUPPORTED",
+        "evidence_ref": "plan",
+        "resolver_status": "AVAILABLE"
+      },
+      "check_performed_at": "2026-11-02T12:00:00Z",
+      "coverage_domain": {
+        "closure": "closed",
+        "id": "d-full",
+        "population": "All occurrence records in the synthetic closed counterparty index",
+        "window": {
+          "end": "2026-11-01T01:00:00Z",
+          "start": "2026-11-01T00:00:00Z"
+        }
+      },
+      "coverage_qualification": "Exactly the named finite domain; no wider history claim.",
+      "diagnostics": [
+        {
+          "code": "C_SAME_PARTY",
+          "detail": "No independent production-time constraint established; absence of one is not proof of omission."
+        }
+      ],
+      "evidence_present": [
+        {
+          "input_path": "disclosed",
+          "sha256": "351e1899ad2550f60e89d3a7733a73c5d368e86fb29051a2e1857b75b2edb21d"
+        },
+        {
+          "id": "producer-log",
+          "input_path": "mechanism",
+          "sha256": "9cc2b0320fb67e0bd943f9f21a7d4ca8721eb7b16c50b7b6f629178b60e98ad4"
+        },
+        {
+          "expires_at": "2026-11-03T00:00:00Z",
+          "id": "counterparty-index",
+          "input_path": "basis",
+          "issued_at": "2026-11-01T02:00:00Z",
+          "sha256": "cdd92e019fa4f4fcaeff1a33e9ccd666ece021429244101f38e8ab4d18daef31"
+        },
+        {
+          "expires_at": "2026-11-03T00:00:00Z",
+          "id": "fixture-authority",
+          "input_path": "authority",
+          "issued_at": "2026-10-31T00:00:00Z",
+          "sha256": "b56c5be4e675c285be0577ba52a74455e465723e45da5aafc6a770138523449a"
+        },
+        {
+          "input_path": "run_binding",
+          "sha256": "c1fdd5dc700d2c6e526d8d988a6cc9229925baadf54325139168ba140e7de3d0"
+        },
+        {
+          "id": "local-evaluation-plan",
+          "input_path": "plan",
+          "sha256": "7d42fb564156adde92eab9f5d10b9babe4a91c647411e15afcd392034497454d"
+        }
+      ],
+      "id": "material_input_selection",
+      "material_party_control": {
+        "assurance": "Stipulated synthetic roles; not externally verified.",
+        "basis": "MATERIAL_PARTY_CONTROL",
+        "material_parties": [
+          "producer"
+        ],
+        "mechanism": "MATERIAL_PARTY_CONTROL"
+      },
+      "missing_or_unavailable_inputs": [
+        "independent basis"
+      ],
+      "omission_detection_basis": {
+        "appraisal_checks": [
+          {
+            "check": "finite_domain",
+            "evidence_refs": [
+              "claim.domain"
+            ],
+            "passed": true
+          },
+          {
+            "check": "independent_at_production",
+            "evidence_refs": [
+              "claim.material_parties",
+              "basis"
+            ],
+            "passed": false
+          }
+        ],
+        "basis_id": "counterparty-index",
+        "kind": "exhaustive_counterparty_index",
+        "mechanism_id": "producer-log",
+        "state_version": "index-v1"
+      },
+      "predicate_result": {
+        "reason": "No predicate requested.",
+        "result": "NOT_EVALUATED"
+      },
+      "record_produced_at": "2026-11-02T12:00:00Z",
+      "requirement_ids": [
+        "CMP-1",
+        "CMP-2",
+        "OUTCOME-4",
+        "OUTCOME-TIME"
+      ],
+      "result": "INDETERMINATE"
+    },
+    {
+      "capability_context": {
+        "attempt_requested": true,
+        "declared_capability": "SUPPORTED",
+        "evidence_ref": "plan",
+        "resolver_status": "AVAILABLE"
+      },
+      "check_performed_at": "2026-11-02T12:00:00Z",
+      "coverage_domain": {
+        "closure": "closed",
+        "id": "d-full",
+        "population": "All occurrence records in the synthetic closed counterparty index",
+        "window": {
+          "end": "2026-11-01T01:00:00Z",
+          "start": "2026-11-01T00:00:00Z"
+        }
+      },
+      "coverage_qualification": "Exactly the named finite domain; no wider history claim.",
+      "diagnostics": [
+        {
+          "code": "C_SAME_PARTY",
+          "detail": "No independent production-time constraint established; absence of one is not proof of omission."
+        }
+      ],
+      "evidence_present": [
+        {
+          "input_path": "disclosed",
+          "sha256": "351e1899ad2550f60e89d3a7733a73c5d368e86fb29051a2e1857b75b2edb21d"
+        },
+        {
+          "id": "producer-log",
+          "input_path": "mechanism",
+          "sha256": "9cc2b0320fb67e0bd943f9f21a7d4ca8721eb7b16c50b7b6f629178b60e98ad4"
+        },
+        {
+          "expires_at": "2026-11-03T00:00:00Z",
+          "id": "counterparty-index",
+          "input_path": "basis",
+          "issued_at": "2026-11-01T02:00:00Z",
+          "sha256": "665d7f7df2d5f0d5f6aecbc62a5c20f3f81f9ee2f820fdfa0fe1dd962522e91a"
+        },
+        {
+          "expires_at": "2026-11-03T00:00:00Z",
+          "id": "fixture-authority",
+          "input_path": "authority",
+          "issued_at": "2026-10-31T00:00:00Z",
+          "sha256": "734d36c101a5667780667629988a334c8abfe4557bcb5d58249ab83d10313226"
+        },
+        {
+          "input_path": "run_binding",
+          "sha256": "9ebadb43c17cb7a3fcf9173f77a6584b5c1b1fdd3e2c3eee26de7adc4e19fb86"
+        },
+        {
+          "id": "local-evaluation-plan",
+          "input_path": "plan",
+          "sha256": "7d42fb564156adde92eab9f5d10b9babe4a91c647411e15afcd392034497454d"
+        }
+      ],
+      "id": "two_disclosed_predicate",
+      "material_party_control": {
+        "assurance": "Stipulated synthetic roles; not externally verified.",
+        "basis": "MATERIAL_PARTY_CONTROL",
+        "material_parties": [
+          "producer"
+        ],
+        "mechanism": "MATERIAL_PARTY_CONTROL"
+      },
+      "missing_or_unavailable_inputs": [
+        "independent basis"
+      ],
+      "omission_detection_basis": {
+        "appraisal_checks": [
+          {
+            "check": "finite_domain",
+            "evidence_refs": [
+              "claim.domain"
+            ],
+            "passed": true
+          },
+          {
+            "check": "independent_at_production",
+            "evidence_refs": [
+              "claim.material_parties",
+              "basis"
+            ],
+            "passed": false
+          }
+        ],
+        "basis_id": "counterparty-index",
+        "kind": "exhaustive_counterparty_index",
+        "mechanism_id": "producer-log",
+        "state_version": "index-v1"
+      },
+      "predicate_result": {
+        "known_disclosed_occurrences": [
+          "e1",
+          "e2"
+        ],
+        "reason": "Only stipulated-authenticated disclosed occurrences counted; no scenario truth or signature inference.",
+        "result": "UNSATISFIED"
+      },
+      "record_produced_at": "2026-11-02T12:00:00Z",
+      "requirement_ids": [
+        "CMP-1",
+        "CMP-2",
+        "OUTCOME-4",
+        "OUTCOME-TIME"
+      ],
+      "result": "INDETERMINATE"
+    }
+  ],
+  "vector_count": 12
+}

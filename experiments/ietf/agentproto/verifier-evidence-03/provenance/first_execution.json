@@ -1,0 +1,35 @@
+{
+  "started_at_utc": "2026-11-02T16:27:30.984668+00:00",
+  "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+  "executable": "/usr/bin/python3",
+  "pre_run_commitment_sha256": "90d2de42ca8729ca4673bdff124d8769e50cdd3f90c4559e34010d0b20cec072",
+  "vector_run": {
+    "exit_code": 0,
+    "stderr": ""
+  },
+  "tests": {
+    "command": [
+      "/usr/bin/python3",
+      "-m",
+      "pytest",
+      "-c",
+      "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/a-agentproto-completeness/phionyx-research/experiments/ietf/agentproto/verifier-evidence-03/pytest.ini",
+      "--confcutdir=/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/a-agentproto-completeness/phionyx-research/experiments/ietf/agentproto/verifier-evidence-03",
+      "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/a-agentproto-completeness/phionyx-research/experiments/ietf/agentproto/verifier-evidence-03/tests",
+      "-q",
+      "-p",
+      "pytest_cov",
+      "--cov=src",
+      "--cov-branch",
+      "--cov-report=term-missing",
+      "--cov-report=json:/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/a-agentproto-completeness/phionyx-research/experiments/ietf/agentproto/verifier-evidence-03/provenance/coverage.json",
+      "--cov-fail-under=80",
+      "-o",
+      "cache_dir=/tmp/agentproto-pytest-cache"
+    ],
+    "exit_code": 0,
+    "stdout": "...........................................................              [100%]\n================================ tests coverage ================================\n_______________ coverage: platform linux, python 3.12.3-final-0 ________________\n\nName              Stmts   Miss Branch BrPart  Cover   Missing\n-------------------------------------------------------------\nsrc/appraise.py     132      0     68      0   100%\nsrc/run.py           13     13      2      0     0%   3-31\n-------------------------------------------------------------\nTOTAL               145     13     70      0    93%\nCoverage JSON written to file /home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/a-agentproto-completeness/phionyx-research/experiments/ietf/agentproto/verifier-evidence-03/provenance/coverage.json\nRequired test coverage of 80% reached. Total coverage: 93.02%\n59 passed in 0.18s\n",
+    "stderr": ""
+  },
+  "finished_at_utc": "2026-11-02T16:27:31.473183+00:00"
+}

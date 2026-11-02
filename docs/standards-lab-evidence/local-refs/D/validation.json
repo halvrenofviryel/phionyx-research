@@ -1,0 +1,110 @@
+{
+  "kind": "NON-NORMATIVE first-party local regression evidence",
+  "recorded_utc": "2026-11-02T16:26:23Z",
+  "worktree": "/home/toygar/.codex/worktrees/a4cd/ai-runtime-evidence-protocol",
+  "branch": "codex/airep-v02-evidence-explain",
+  "base_commit": "075aff5610731736405951ecf3b7c4bfc3cc0f07",
+  "runtime": {
+    "python": "3.12.3",
+    "node": "v20.19.6"
+  },
+  "rules": "No AGENTS.md was found in the worktree or applicable checked parent paths. CONTRIBUTING.md and DEVELOPMENT_PROCESS.md were read.",
+  "runs": [
+    {
+      "label": "sandbox",
+      "command": "python3 scripts/check_beta.py --out /tmp/airep-explain-beta-check",
+      "results_path": "/tmp/airep-explain-beta-check/results.json",
+      "results_sha256": "b936bfb400638abc05693c46cb61a3deaea1403f2af764e55361b5ee8b807231",
+      "source_basis_path": "/tmp/airep-explain-beta-check/source-basis.json",
+      "source_basis_sha256": "78dad285310396f542ab91913bd26e780f0a46f5e32fc441e57fca286a8d1c30",
+      "commands": 56,
+      "passed": 47,
+      "failed_logs": [
+        "22.log",
+        "23.log",
+        "24.log",
+        "25.log",
+        "26.log",
+        "47.log",
+        "48.log",
+        "54.log",
+        "55.log"
+      ],
+      "complete_logs_and_commands": "Retained in the named local output directory; individual log digests are in results.json."
+    },
+    {
+      "label": "approved-before-final-context-fix",
+      "command": "python3 scripts/check_beta.py --out /tmp/airep-explain-beta-check-approved",
+      "results_path": "/tmp/airep-explain-beta-check-approved/results.json",
+      "results_sha256": "4352c4ce95fd5ca2239db94f04dfb83bc2f8eba770ac437571136ea9968549aa",
+      "source_basis_path": "/tmp/airep-explain-beta-check-approved/source-basis.json",
+      "source_basis_sha256": "78dad285310396f542ab91913bd26e780f0a46f5e32fc441e57fca286a8d1c30",
+      "commands": 56,
+      "passed": 56,
+      "failed_logs": [],
+      "complete_logs_and_commands": "Retained in the named local output directory; individual log digests are in results.json."
+    },
+    {
+      "label": "final",
+      "command": "python3 scripts/check_beta.py --out /tmp/airep-explain-beta-check-final",
+      "results_path": "/tmp/airep-explain-beta-check-final/results.json",
+      "results_sha256": "d3faccdfc09b34734a7e6e2e9331c385fabee63a68c12ecf4eb197afafed554f",
+      "source_basis_path": "/tmp/airep-explain-beta-check-final/source-basis.json",
+      "source_basis_sha256": "9de6f277c4c3b76aca3ef9f10d8fc3ea48155d3c328ec6890a316e1ae7e262ef",
+      "commands": 56,
+      "passed": 56,
+      "failed_logs": [],
+      "complete_logs_and_commands": "Retained in the named local output directory; individual log digests are in results.json."
+    }
+  ],
+  "final_source_digests": [
+    {
+      "path": "tools/airep_v02/explain.py",
+      "sha256": "176952c4bb098b558719736e0ec067a5d8572135732c4e4c77eee479d190bb89"
+    },
+    {
+      "path": "tools/airep_v02/__main__.py",
+      "sha256": "c73f4e9e89a62bc4db778d27a6b49a888d64b0adb25fc92d1dd0554b17b6e7b2"
+    },
+    {
+      "path": "tools/airep_v02/README.md",
+      "sha256": "2c882b7ea62349a50d2d83ad1ef8ea8a6a3cdc0d43a8faef5711d9ed206d42f9"
+    },
+    {
+      "path": "tests/v02/test_explain.py",
+      "sha256": "0add25bba70eb08731cd41c38e2ab5e5f90827e7f8cda9e8048d1a00ba7e2302"
+    },
+    {
+      "path": "examples/v02/EXPLAIN.md",
+      "sha256": "ab8338f3528eecd855a1ea0a96a8c1cd8a5c40052d53021b9ef30bc893b54767"
+    }
+  ],
+  "test_counts": {
+    "v02": 73,
+    "v01_pytest": 124,
+    "lighteval": 19,
+    "hermes": 6,
+    "demo_rendering": 2
+  },
+  "new_explain_tests": 14,
+  "additional_checks": {
+    "make demo-test": "PASS (2 tests)",
+    "make demo": "PASS on authorized retry; initial sandbox run failed on Node spawnSync EPERM",
+    "documented_explain_commands": "PASS: authenticated complete lifecycle text and missing-receipt JSON retained under /tmp/airep-explain-example",
+    "source_basis": "30 pinned raw-byte hashes rechecked against base Git blobs",
+    "git diff --check": "PASS",
+    "frozen_history": "1919 historical files preserved; zero failures in check_beta_docs.py",
+    "unchanged_paths": "No diff under spec/, EXTERNAL_EVIDENCE.md, examples/v02/fixtures/, or the existing reconcile.py and verify.py."
+  },
+  "sandbox_qualification": "First CI attempt had 9 failed commands, including Node spawnSync EPERM and dependent empty-output/exit-code failures. It remains retained. Authorized reruns completed 56/56 with no weakened gates.",
+  "not_run": [
+    "Optional --with-v01-typescript npm registry job; unrelated to this feature and not part of the standard beta invocation."
+  ],
+  "semantic_limits": [
+    "The native reconciler has no separate enforcement predicate or relying-party acceptance-policy evaluator. Both rows have source_status null and NON-NORMATIVE explanatory_status NOT_EVALUATED.",
+    "Application pause execution can be reported while effect is MISSING; no enforcement truth or desired-effect inference is added.",
+    "No evaluated intended-target inventory/window is available; coverage stays NOT_EVALUATED.",
+    "Signatures, admission and structural reconciliation do not establish event truth, full population coverage or independent third-party validation."
+  ],
+  "scope": "Local only. No schema, wire version, assurance-class, reconciliation-semantic or frozen v0.1 change. No push, PR, issue, release or external publication."
+}

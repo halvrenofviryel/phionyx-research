@@ -1,0 +1,952 @@
+
+
+
+
+Network Working Group                                        D. O. Watts
+Internet-Draft                                       GoodShyt Group Inc.
+Intended status: Experimental                            30 October 2026
+Expires: 3 May 2027
+
+
+    Deterministic Conformance Profile and Test Vectors for Evidence
+                         Qualification Receipts
+                     draft-watts-eqr-conformance-05
+
+Abstract
+
+   This document defines a deterministic conformance profile and test-
+   vector corpus for Evidence Qualification Receipts (EQRs).  The
+   profile, named eqr-core-1, makes receipt conformance mechanically
+   reproducible: strict JSON structure, SHA-256 digest encoding, UTC
+   timestamp handling, evidence-reference integrity, requirement-state
+   derivation, and three-valued PASS, FAIL, or INDETERMINATE results are
+   checked by a closed algorithm.  The profile is intentionally narrow.
+   Conformance does not establish that evidence is true, that a
+   proposition is scientifically valid, that an issuer is trustworthy,
+   or that an action is authorized.  The goal is interoperable
+   verification of receipt semantics, not promotion of conformance into
+   substantive truth.
+
+Status of This Memo
+
+   This Internet-Draft is submitted in full conformance with the
+   provisions of BCP 78 and BCP 79.
+
+   Internet-Drafts are working documents of the Internet Engineering
+   Task Force (IETF).  Note that other groups may also distribute
+   working documents as Internet-Drafts.  The list of current Internet-
+   Drafts is at https://datatracker.ietf.org/drafts/current/.
+
+   Internet-Drafts are draft documents valid for a maximum of six months
+   and may be updated, replaced, or obsoleted by other documents at any
+   time.  It is inappropriate to use Internet-Drafts as reference
+   material or to cite them other than as "work in progress."
+
+   This Internet-Draft will expire on 3 May 2027.
+
+Copyright Notice
+
+   Copyright (c) 2026 IETF Trust and the persons identified as the
+   document authors.  All rights reserved.
+
+
+
+
+
+Watts                      Expires 3 May 2027                   [Page 1]
+
+Internet-Draft               EQR Conformance                October 2026
+
+
+   This document is subject to BCP 78 and the IETF Trust's Legal
+   Provisions Relating to IETF Documents (https://trustee.ietf.org/
+   license-info) in effect on the date of publication of this document.
+   Please review these documents carefully, as they describe your rights
+   and restrictions with respect to this document.  Code Components
+   extracted from this document must include Revised BSD License text as
+   described in Section 4.e of the Trust Legal Provisions and are
+   provided without warranty as described in the Revised BSD License.
+
+Table of Contents
+
+   1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   3
+   2.  Conventions and Terminology . . . . . . . . . . . . . . . . .   3
+   3.  The eqr-core-1 Profile  . . . . . . . . . . . . . . . . . . .   3
+     3.1.  Required Members  . . . . . . . . . . . . . . . . . . . .   4
+     3.2.  Requirement States  . . . . . . . . . . . . . . . . . . .   4
+   4.  Deterministic Status Derivation . . . . . . . . . . . . . . .   5
+   5.  Time and Freshness Rules  . . . . . . . . . . . . . . . . . .   5
+   6.  Deterministic Processing Order  . . . . . . . . . . . . . . .   5
+   7.  Append-Only Supersession  . . . . . . . . . . . . . . . . . .   6
+   8.  Conformance Outcome . . . . . . . . . . . . . . . . . . . . .   6
+   9.  Deterministic Verifier Result . . . . . . . . . . . . . . . .   6
+   10. Conformance Claim Levels  . . . . . . . . . . . . . . . . . .   7
+   11. Conformance Claim Report  . . . . . . . . . . . . . . . . . .   7
+   12. Normative Test Vectors  . . . . . . . . . . . . . . . . . . .   8
+   13. Conformance Artifact Set  . . . . . . . . . . . . . . . . . .   9
+   14. Falsifiability and Limits . . . . . . . . . . . . . . . . . .  10
+   15. Relationship to Other Work  . . . . . . . . . . . . . . . . .  10
+   16. Changes from -01  . . . . . . . . . . . . . . . . . . . . . .  10
+   17. Changes from -00  . . . . . . . . . . . . . . . . . . . . . .  11
+   18. Conformance Manifest and Execution Evidence . . . . . . . . .  11
+   19. Independent Reproduction Protocol . . . . . . . . . . . . . .  12
+   20. Negative Tests and False-Positive Resistance  . . . . . . . .  12
+   21. Append-Only Corrections and Reproducibility History . . . . .  12
+   22. Additional Security and Misrepresentation Considerations  . .  13
+   23. Changes from -02  . . . . . . . . . . . . . . . . . . . . . .  13
+   24. Security Considerations . . . . . . . . . . . . . . . . . . .  13
+   25. Privacy Considerations  . . . . . . . . . . . . . . . . . . .  13
+   26. IANA Considerations . . . . . . . . . . . . . . . . . . . . .  14
+   27. Supplemental Negative-Test Resistance and Bounded Failure . .  14
+   28. Changes from -03  . . . . . . . . . . . . . . . . . . . . . .  14
+   29. Normative References  . . . . . . . . . . . . . . . . . . . .  15
+   30. Informative References  . . . . . . . . . . . . . . . . . . .  15
+   Appendix A.  Changes since -04  . . . . . . . . . . . . . . . . .  16
+   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .  16
+
+
+
+
+
+
+Watts                      Expires 3 May 2027                   [Page 2]
+
+Internet-Draft               EQR Conformance                October 2026
+
+
+1.  Introduction
+
+   Evidence Qualification Receipts are described in [I-D.watts-eqr].
+   Their central requirement is that unresolved required evidence remain
+   distinguishable from both satisfied and failed evidence, and that
+   qualification remain distinct from authorization.  That architectural
+   distinction is useful only if independent implementations derive the
+   same status from the same declared requirement states.
+
+   This document therefore defines a strict conformance profile, eqr-
+   core-1, plus executable test vectors.  The profile does not attempt
+   to determine whether evidence corresponds to reality.  It determines
+   whether an EQR object is structurally and semantically self-
+   consistent under a fully specified finite rule set.
+
+   A receipt can be conformant and still contain evidence from an issuer
+   a relying party does not trust.  A conformant PASS result is not
+   permission to execute an action.
+
+2.  Conventions and Terminology
+
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
+   "OPTIONAL" in this document are to be interpreted as described in
+   BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
+   capitals, as shown here.
+
+   Conformance  Agreement with the finite syntactic and semantic rules
+      of this profile.
+
+   Substantive validity  Whether the underlying evidence and proposition
+      are actually correct.  This document does not establish it.
+
+   Requirement state  One of satisfied, failed, missing, unresolved, or
+      stale.
+
+   Derived status  The PASS, FAIL, or INDETERMINATE result computed from
+      the requirement states.
+
+3.  The eqr-core-1 Profile
+
+   An eqr-core-1 object is a JSON object as defined by [RFC8259].
+   Duplicate JSON member names MUST cause non-conformance.
+
+   SHA-256 is the only digest algorithm in this profile [RFC6234].
+   Digest values MUST be exactly 32 octets represented using unpadded
+   base64url [RFC4648].  A producer that hashes a JSON object MUST first
+   apply the JSON Canonicalization Scheme [RFC8785].
+
+
+
+Watts                      Expires 3 May 2027                   [Page 3]
+
+Internet-Draft               EQR Conformance                October 2026
+
+
+   All timestamps in this profile MUST be UTC Internet timestamps ending
+   in Z and conforming to [RFC3339].
+
+3.1.  Required Members
+
+   The profile requires exactly the following top-level members:
+
+   *  version, whose value is "1";
+
+   *  profile_id, whose value is "eqr-core-1";
+
+   *  receipt_id and issuer;
+
+   *  issued_at, expires_at, and evaluation_time;
+
+   *  profile and claim SHA-256 digest objects;
+
+   *  requirements;
+
+   *  evaluation;
+
+   *  evidence; and
+
+   *  supersedes, which can be null.
+
+   The strict member set is intentional for this conformance profile.
+   Other EQR profiles can define extensions.
+
+3.2.  Requirement States
+
+   Each requirement has a unique id, one state, and an optional array of
+   evidence_ids.  The only states are:
+
+   *  satisfied;
+
+   *  failed;
+
+   *  missing;
+
+   *  unresolved; and
+
+   *  stale.
+
+   A satisfied requirement MUST name at least one evidence object.
+   Every named evidence identifier MUST resolve within the same receipt.
+   Evidence used by a satisfied requirement MUST NOT be stale at
+   evaluation_time.
+
+
+
+
+Watts                      Expires 3 May 2027                   [Page 4]
+
+Internet-Draft               EQR Conformance                October 2026
+
+
+4.  Deterministic Status Derivation
+
+   The status derivation function is:
+
+   def derive_status(requirements):
+       if not requirements:
+           return "indeterminate"
+
+       states = [r["state"] for r in requirements]
+
+       if any(s == "failed" for s in states):
+           return "fail"
+
+       if all(s == "satisfied" for s in states):
+           return "pass"
+
+       return "indeterminate"
+
+   FAIL has precedence over missing or unresolved information.  PASS is
+   possible only for a non-empty requirement set in which every
+   requirement is satisfied.  In every other valid case the result is
+   INDETERMINATE.
+
+   The receipt's declared evaluation.status MUST equal the derived
+   status.  A mismatch is non-conformant; a verifier MUST NOT rewrite
+   the declaration to make it conform.
+
+5.  Time and Freshness Rules
+
+   expires_at MUST be later than issued_at.  evaluation_time MUST fall
+   within the inclusive receipt validity interval.
+
+   An evidence object has a fresh_until timestamp.  A requirement
+   declared satisfied is non-conformant if any evidence object it relies
+   on has fresh_until earlier than evaluation_time.
+
+   This rule checks self-consistency only.  It does not establish that
+   the chosen freshness interval is appropriate for a relying party's
+   risk or policy.
+
+6.  Deterministic Processing Order
+
+   An implementation can perform checks in any internal order, but its
+   externally observable result MUST be equivalent to the following
+   logical sequence:
+
+   1.  strict JSON parsing, including rejection of duplicate member
+       names;
+
+
+
+Watts                      Expires 3 May 2027                   [Page 5]
+
+Internet-Draft               EQR Conformance                October 2026
+
+
+   2.  top-level and nested shape validation;
+
+   3.  profile, version, digest, and timestamp validation;
+
+   4.  evidence identifier and freshness validation;
+
+   5.  requirement-state and evidence-reference validation;
+
+   6.  deterministic status derivation;
+
+   7.  declared-status equality check; and
+
+   8.  supersession self-reference check.
+
+   A later semantic check MUST NOT convert an earlier non-conformant
+   input into a conformant qualification result.  Implementations can
+   report diagnostics from the earliest detected error or aggregate
+   diagnostics, but they must agree on the conformance Boolean and, for
+   conformant inputs, the derived status.
+
+7.  Append-Only Supersession
+
+   supersedes can identify a predecessor receipt.  It MUST NOT equal the
+   current receipt_id.  This profile does not mutate predecessor state.
+   New evidence is represented by a new receipt.
+
+8.  Conformance Outcome
+
+   A verifier returns two logically separate outputs:
+
+   *  *conformant*: whether the object satisfies this profile; and
+
+   *  *derived_status*: pass, fail, or indeterminate when the object is
+      conformant.
+
+   Non-conformance MUST NOT be reported as PASS, FAIL, or INDETERMINATE.
+   Those values describe evidence qualification semantics, not parser or
+   profile validity.
+
+9.  Deterministic Verifier Result
+
+   A verifier implementation claiming eqr-core-1 semantic conformance
+   MUST expose, directly or through an equivalent API, the following
+   logical result:
+
+
+
+
+
+
+
+Watts                      Expires 3 May 2027                   [Page 6]
+
+Internet-Draft               EQR Conformance                October 2026
+
+
+   {
+     "profile_id": "eqr-core-1",
+     "conformant": true,
+     "derived_status": "pass"
+   }
+
+   conformant is a Boolean.  derived_status is one of pass, fail, or
+   indeterminate only when conformant is true.  For a non-conformant
+   object, a verifier MUST NOT assign a qualification status; the
+   logical value of derived_status is null or absent.
+
+   Implementations MAY expose additional diagnostic reason codes.
+   Diagnostic strings are not evidence status and are not part of the
+   qualification lattice defined by this document.
+
+10.  Conformance Claim Levels
+
+   To prevent overbroad or false-positive conformance claims, this
+   document distinguishes four claim levels.  An implementation MUST NOT
+   claim a stronger level merely because a weaker level has passed.
+
+   Syntax Conformance  The input is accepted under the strict JSON and
+      field constraints of this profile.
+
+   Semantic Conformance  The implementation derives PASS, FAIL, and
+      INDETERMINATE exactly as specified and enforces the evidence-
+      reference, time, digest, and supersession rules.
+
+   Vector-Profile Conformance  The implementation produces the expected
+      conformance Boolean and derived status for every normative vector
+      identified by the declared vector-corpus digest.
+
+   Independent Reproduction  A separately implemented verifier, under
+      independently controlled source and execution conditions,
+      reproduces the declared vector-profile results.  Running two code
+      paths in the same package or environment is not sufficient by
+      itself.
+
+   Syntax Conformance does not imply Semantic Conformance.  Semantic
+   Conformance does not imply complete Vector-Profile Conformance.
+   Complete Vector-Profile Conformance does not imply Independent
+   Reproduction.
+
+11.  Conformance Claim Report
+
+   A published claim of complete Vector-Profile Conformance SHOULD
+   identify:
+
+
+
+
+Watts                      Expires 3 May 2027                   [Page 7]
+
+Internet-Draft               EQR Conformance                October 2026
+
+
+   *  the profile identifier;
+
+   *  the exact SHA-256 digest of the vector corpus;
+
+   *  the implementation name and version or source digest;
+
+   *  the execution environment sufficient to reproduce the test;
+
+   *  the number of vectors attempted, passed, and failed; and
+
+   *  whether the result is local execution evidence or independent
+      reproduction.
+
+   A report MUST NOT omit failed vectors while claiming complete vector-
+   profile conformance.  A report for a different vector-corpus digest
+   is a different conformance claim.
+
+   {
+     "profile_id": "eqr-core-1",
+     "vector_corpus_sha256":
+       "8d8832b5de8c12393f47be3a7067ecd69edfc26822441595318e72e77ea923df",
+     "implementation": {
+       "name": "example-verifier",
+       "version": "1.0"
+     },
+     "execution": {
+       "attempted": 21,
+       "passed": 21,
+       "failed": 0,
+       "independent_reproduction": false
+     }
+   }
+
+   The example report is non-normative.  In particular, setting
+   independent_reproduction to true is a provenance assertion that
+   requires evidence external to the conformance algorithm itself.
+
+12.  Normative Test Vectors
+
+   The companion corpus contains twenty-one vectors covering valid PASS,
+   FAIL, and INDETERMINATE cases plus malformed or internally
+   inconsistent inputs.  The SHA-256 digest of the UTF-8 vector file
+   eqr-core-1-vectors.json in the author's published package is:
+
+   8d8832b5de8c12393f47be3a7067ecd69edfc26822441595318e72e77ea923df
+
+
+
+
+
+
+Watts                      Expires 3 May 2027                   [Page 8]
+
+Internet-Draft               EQR Conformance                October 2026
+
+
+   The corpus includes empty requirements, FAIL precedence, missing and
+   stale evidence, duplicate requirement identifiers, a raw JSON
+   duplicate-member case, unsupported hash algorithms, invalid digest
+   encodings, expired receipts, unknown evidence references, invalid
+   state values, self-supersession, and declared-status mismatch.
+
+   An implementation claiming conformance to the vector profile MUST
+   produce the expected conformance Boolean and derived status for every
+   vector.  Failure of one vector is sufficient to reject a claim of
+   complete vector-profile conformance.
+
+13.  Conformance Artifact Set
+
+   The author-maintained conformance package for this revision contains
+   the normative vector corpus, a JSON Schema, an executable reference
+   verifier, a separately written local oracle, and machine-readable
+   execution reports.  These artifacts are provided to make
+   implementation disagreements observable and reproducible.
+
+   +=====================+================================================================+
+   |Artifact             |SHA-256                                                         |
+   +=====================+================================================================+
+   |eqr-core-            |8d8832b5de8c12393f47be3a7067ecd69edfc26822441595318e72e77ea923df|
+   |1-vectors.json       |                                                                |
+   +---------------------+----------------------------------------------------------------+
+   |eqr-core-            |afab606203e72f52d8e61407b96b707a43ab4e139664d639e749e4b8b1e5a26d|
+   |1.schema.json        |                                                                |
+   +---------------------+----------------------------------------------------------------+
+   |eqr_core1_verifier.py|ae8b6cf1fb3608b45cad4c58fd4c73598c1616cf763aa529477275409f57655d|
+   +---------------------+----------------------------------------------------------------+
+   |eqr_core1_oracle2.py |c0b188798bcfb031e3639e51e1922454acee32993945c68f42cd98311766a8a3|
+   +---------------------+----------------------------------------------------------------+
+
+                         Table 1: Artifact digests
+
+   In the author's local execution environment, the primary vector
+   runner produced 21/21 passing vectors with 0 failures.  The second
+   local oracle agreed with the primary verifier on 20/20 object-based
+   comparisons, and 7/7 expected-conformant object vectors validated
+   against the JSON Schema.
+
+   These local results are implementation evidence only.  They are not
+   independent reproduction and do not establish substantive validity of
+   any evidence, proposition, authorization decision, or deployment.
+
+
+
+
+
+
+
+Watts                      Expires 3 May 2027                   [Page 9]
+
+Internet-Draft               EQR Conformance                October 2026
+
+
+14.  Falsifiability and Limits
+
+   This specification is intentionally falsifiable at the implementation
+   layer.  If two purportedly conformant implementations produce
+   different outputs for the same normative vector, at least one
+   implementation is non-conformant or the specification is ambiguous
+   and requires revision.
+
+   Passing all vectors does not establish truth of the evidence,
+   scientific validity of the proposition, honesty of the issuer,
+   appropriateness of the profile, authorization to act, successful
+   execution, or safety.  Those are different claims requiring different
+   evidence.
+
+   A single normative vector for which a claimed complete Vector-Profile
+   Conformance implementation produces the wrong conformance Boolean or
+   wrong derived status is a sufficient counterexample to that
+   implementation's complete conformance claim.  A single independently
+   reproduced disagreement between reasonable implementations can also
+   indicate an ambiguity in this specification and should be treated as
+   a specification defect until resolved.
+
+15.  Relationship to Other Work
+
+   This document is a conformance companion to [I-D.watts-eqr] and
+   follows the non-collapse distinction described in
+   [I-D.watts-noncollapse].  It does not replace executor-side action/
+   evidence processing such as [I-D.schrock-aeb], evidence challenge
+   protocols such as [I-D.schrock-aec], claim-preserving evidence
+   exchange such as [I-D.abak-claim-preservation], or runtime
+   conformance receipts such as [I-D.correctover-ccs].
+
+16.  Changes from -01
+
+   Revision -02 keeps the eqr-core-1 data model, status lattice, and
+   normative vector-corpus digest unchanged.  It adds explicit
+   conformance claim levels, a canonical logical verifier result, a
+   reproducible conformance-claim report, and deterministic processing-
+   order requirements.  These additions are intended to prevent a
+   parser-only success, partial vector run, or same-environment cross-
+   check from being presented as complete or independently reproduced
+   conformance.
+
+   Revision -02 also refreshes the informative Correctover CCS citation
+   to revision -10.  No scientific truth, authorization, issuer trust,
+   or independent-reproduction claim is added by this revision.
+
+
+
+
+
+Watts                      Expires 3 May 2027                  [Page 10]
+
+Internet-Draft               EQR Conformance                October 2026
+
+
+17.  Changes from -00
+
+   Revision -01 preserves the eqr-core-1 status-derivation semantics and
+   the published vector-corpus digest.  It adds explicit documentation
+   of the raw duplicate-JSON-member test, publishes additional artifact
+   digests, records local dual-oracle and JSON-Schema cross-check
+   results, and more clearly separates local conformance evidence from
+   independent reproduction or substantive truth.
+
+18.  Conformance Manifest and Execution Evidence
+
+   A vector-profile conformance claim MUST identify the exact vector
+   corpus SHA-256 digest, profile identifier, implementation source or
+   binary digest, runner identity, runtime and operating-system
+   versions, invocation, UTC execution time, attempted-vector count,
+   pass count, fail count, and individual vector outcomes.  A claim MUST
+   NOT assert complete vector-profile conformance if any normative
+   vector was skipped, omitted, or failed.  The manifest is an evidence
+   record, not a cryptographic attestation unless independently signed
+   and authenticated.
+
+   The report's independent_reproduction field MUST be false unless the
+   claimant has separately documented independent control of the
+   implementation, test execution, and signing keys, if any.  A self-
+   declared true value is not proof of independence.
+
+   {
+     "profile_id": "eqr-core-1",
+     "vector_corpus_sha256":
+       "8d8832b5de8c12393f47be3a7067ecd69edfc26822441595318e72e77ea923df",
+     "implementation_sha256": "<64-lowercase-hex-digest>",
+     "environment": {
+       "runtime": "<version>",
+       "os": "<version>"
+     },
+     "execution": {
+       "timestamp_utc": "<RFC3339-UTC>",
+       "command": "<invocation>",
+       "attempted": 21,
+       "passed": 21,
+       "failed": 0,
+       "skipped": 0,
+       "individual_results": "<per-vector-results>"
+     },
+     "independent_reproduction": false
+   }
+
+
+
+
+
+Watts                      Expires 3 May 2027                  [Page 11]
+
+Internet-Draft               EQR Conformance                October 2026
+
+
+   The placeholder strings in this example are illustrative, not valid
+   digest or timestamp values.  This manifest is a reporting template,
+   not a newly registered protocol message.
+
+19.  Independent Reproduction Protocol
+
+   Independent reproduction requires an implementer other than the
+   original author to acquire the normative corpus with its expected
+   digest, implement the specified rules without copying the supplied
+   verifier, execute all vectors in an independently controlled
+   environment, and report per-vector outcomes and environment
+   provenance.  The reviewer SHOULD derive expected outputs from the
+   specification before consulting the corpus answers.  The reviewer
+   MUST distinguish independently obtained results from copied reference
+   outputs.
+
+   Disagreement on the conformance Boolean or on the derived status of a
+   conformant object is a reproducible counterexample to at least one
+   implementation's claim, or evidence of specification ambiguity.
+   Diagnostic strings and the order of diagnostic discovery are non-
+   normative and need not match.
+
+20.  Negative Tests and False-Positive Resistance
+
+   Complete vector-profile claims include both expected-conformant and
+   expected-nonconformant cases.  Negative tests cover duplicate JSON
+   member names, invalid encodings, unknown evidence references, expired
+   receipts, stale supporting evidence, missing requirements,
+   contradictory declared status, and unauthorized promotion of an
+   INDETERMINATE result to PASS.  A test runner MUST count rejection of
+   an expected-invalid input as a successful negative test; it MUST NOT
+   count acceptance of such an input as success.
+
+   Every vector's expected conformance Boolean and derived status are
+   compared independently.  An expected-nonconformant input has no
+   derived qualification status; a diagnostic reason string is
+   informative only.
+
+21.  Append-Only Corrections and Reproducibility History
+
+   A corrected receipt or execution report is a new record with a new
+   identifier and a reference to its predecessor.  Producers MUST NOT
+   silently overwrite or relabel the original record when presenting a
+   historical verification chain.  A receipt's supersedes field remains
+   governed by the frozen eqr-core-1 rules; this section adds no new
+   validation condition to the core profile.
+
+
+
+
+
+Watts                      Expires 3 May 2027                  [Page 12]
+
+Internet-Draft               EQR Conformance                October 2026
+
+
+   Each published revision of a vector corpus requires its own digest
+   and conformance report.  A new draft revision alone does not imply a
+   changed vector corpus.
+
+22.  Additional Security and Misrepresentation Considerations
+
+   A forged or replayed conformant receipt can satisfy the syntax and
+   semantic profile while being untrustworthy or unauthorized.  A
+   relying party must independently apply issuer authentication, anti-
+   replay policy, evidence trust, revocation, and action authorization
+   as appropriate.  Digest equality is not proof of issuer identity or
+   provenance.  Expiration and freshness checks are local self-
+   consistency conditions, not a complete replay defense.
+
+   Reviewers should treat unverified claims of independently controlled
+   implementations, signing keys, or test infrastructure as
+   unsubstantiated.  Conformance and independent reproduction are
+   distinct from empirical validation and operational safety.
+
+23.  Changes from -02
+
+   Revision -03 adds a conformance-manifest reporting template,
+   independent reproduction protocol, negative-test completeness rules,
+   append-only correction guidance, and additional replay/forgery/
+   misrepresentation analysis.  It does not change the eqr-core-1
+   schema, deterministic status derivation, or normative test-vector
+   corpus digest.
+
+24.  Security Considerations
+
+   Strict parsing prevents duplicate-member substitution and status
+   laundering through ambiguous JSON.  Digest and timestamp checks
+   prevent several classes of malformed or stale self-consistency
+   claims, but this profile provides no key management, issuer
+   authentication, revocation, trust-anchor selection, or policy
+   decision.
+
+   A malicious issuer can create a perfectly conformant receipt
+   containing false evidence.  Therefore conformant MUST NOT be
+   interpreted as truthful, trusted, authorized, or safe.
+
+25.  Privacy Considerations
+
+   Evidence identifiers and digests can still act as correlators.
+   Implementations should minimize externally exposed evidence metadata
+   and avoid placing sensitive plaintext into receipts when a scoped
+   digest or protected reference is sufficient.
+
+
+
+
+Watts                      Expires 3 May 2027                  [Page 13]
+
+Internet-Draft               EQR Conformance                October 2026
+
+
+26.  IANA Considerations
+
+   This document has no IANA actions.  The string eqr-core-1 is a
+   profile label defined by this experimental document and is not an
+   IANA registration.
+
+27.  Supplemental Negative-Test Resistance and Bounded Failure
+
+   An eqr-core-1 verifier is not permitted to promote malformed
+   structures, unknown evidence, or contradictory states to a successful
+   qualification.  The corresponding conformance outcome for a non-
+   conformant input has no derived qualification status.  An unhandled
+   parser or type exception does not count as a successful negative-test
+   rejection in operational conformance reports.
+
+   This revision provides a separate, non-normative supplemental
+   adversarial corpus with 15 tests, including unhashable identifiers,
+   malformed references, and non-JSON numeric constants.  It does not
+   replace or change the frozen 21-vector normative corpus identified in
+   Section 12, and no previous local or independent outcome is inferred
+   from these new cases.
+
+   The SHA-256 digest of the accompanying development test corpus, eqr-
+   negative-supplement-v0.1.json, is:
+
+   a8d53b68bd9373d4ab94c0d5728909991492ff88615ca813bbd609e06d9a134b
+
+   Implementers SHOULD reject unhashable identifier and evidence-
+   reference values cleanly and record the counterexample, rather than
+   raising an uncaught exception that prevents a complete report.
+   Negative tests are satisfied only if the verifier rejects input and
+   does not assign PASS, FAIL, or INDETERMINATE; this is a conformance-
+   model test, not a demonstration that the supplied evidence is true or
+   an action is authorized.
+
+28.  Changes from -03
+
+   Revision -04 retains the full -03 specification and references and
+   leaves the eqr-core-1 wire format, status lattice, and frozen
+   normative vector digest unchanged.  It adds the bounded-failure
+   discussion and a separately identified non-normative negative test
+   supplement.  RFCXML author metadata and citation context are
+   preserved from the author-held nits-fixed -03 source; root
+   submissionType is omitted to avoid claiming a stream absent in the
+   Datatracker record, and the document date reflects this staging
+   exercise.  This is a candidate for review and not an approved
+   submission.
+
+
+
+
+Watts                      Expires 3 May 2027                  [Page 14]
+
+Internet-Draft               EQR Conformance                October 2026
+
+
+29.  Normative References
+
+   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", BCP 14, RFC 2119, March 1997,
+              <https://www.rfc-editor.org/info/rfc2119>.
+
+   [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
+              2119 Key Words", BCP 14, RFC 8174, May 2017,
+              <https://www.rfc-editor.org/info/rfc8174>.
+
+   [RFC8259]  Bray, T., "The JavaScript Object Notation (JSON) Data
+              Interchange Format", STD 90, RFC 8259, December 2017,
+              <https://www.rfc-editor.org/info/rfc8259>.
+
+   [RFC8785]  Rundgren, A., Jordan, B., and S. Erdtman, "JSON
+              Canonicalization Scheme (JCS)", RFC 8785, June 2020,
+              <https://www.rfc-editor.org/info/rfc8785>.
+
+   [RFC3339]  Klyne, G. and C. Newman, "Date and Time on the Internet:
+              Timestamps", RFC 3339, July 2002,
+              <https://www.rfc-editor.org/info/rfc3339>.
+
+   [RFC4648]  Josefsson, S., "The Base16, Base32, and Base64 Data
+              Encodings", RFC 4648, October 2006,
+              <https://www.rfc-editor.org/info/rfc4648>.
+
+   [RFC6234]  Eastlake, D. and T. Hansen, "US Secure Hash Algorithms
+              (SHA and SHA-based HMAC and HKDF)", RFC 6234, May 2011,
+              <https://www.rfc-editor.org/info/rfc6234>.
+
+30.  Informative References
+
+   [I-D.watts-eqr]
+              Watts, D., "Evidence-Bounded Authorization for Agentic
+              Systems: Evidence Qualification Receipts", Work in
+              Progress, Internet-Draft, draft-watts-agent-evidence-
+              boundary-00, September 2026,
+              <https://datatracker.ietf.org/doc/draft-watts-agent-
+              evidence-boundary/>.
+
+   [I-D.watts-noncollapse]
+              Watts, D. O., "Non-Collapse Requirements for Evidence-
+              Bearing Agent Systems", Work in Progress, Internet-Draft,
+              draft-watts-agent-noncollapse-requirements-00, October
+              2026, <https://datatracker.ietf.org/doc/draft-watts-agent-
+              noncollapse-requirements/>.
+
+
+
+
+
+Watts                      Expires 3 May 2027                  [Page 15]
+
+Internet-Draft               EQR Conformance                October 2026
+
+
+   [I-D.schrock-aeb]
+              Schrock, I., "The Action Evidence Boundary for
+              Consequential Agent Effects", Work in Progress, Internet-
+              Draft, draft-schrock-action-evidence-boundary-07,
+              September 2026, <https://datatracker.ietf.org/doc/draft-
+              schrock-action-evidence-boundary/>.
+
+   [I-D.schrock-aec]
+              Schrock, I., "An Authorization Evidence Challenge for
+              High-Risk Agent Actions", Work in Progress, Internet-
+              Draft, draft-schrock-ae-challenge-08, September 2026,
+              <https://datatracker.ietf.org/doc/draft-schrock-ae-
+              challenge/>.
+
+   [I-D.abak-claim-preservation]
+              Abak, A. T., "Claim-Preserving Exchange of AI Evaluation
+              Evidence", Work in Progress, Internet-Draft, draft-abak-
+              ai-evaluation-claim-preservation-00, September 2026,
+              <https://datatracker.ietf.org/doc/draft-abak-ai-
+              evaluation-claim-preservation/>.
+
+   [I-D.correctover-ccs]
+              Wang, G., "Correctover Conformance Shape (CCS): Runtime
+              Verification for AI Agent Tool Calls", Work in Progress,
+              Internet-Draft, draft-correctover-ccs-10, October 2026,
+              <https://datatracker.ietf.org/doc/draft-correctover-ccs/>.
+
+Appendix A.  Changes since -04
+
+   This section is to be removed before publishing as an RFC.
+
+   Editorial and tooling-conformance changes only; no technical content
+   was changed.
+
+   *  Added submissionType="IETF" to <rfc>
+
+   *  Replaced Requirements Language paragraph with the exact BCP 14
+      (RFC 8174) boilerplate (idnits)
+
+   *  Normalized author metadata (full name with ASCII form, initials,
+      organization GoodShyt Group Inc., San Francisco CA postal, email,
+      ORCID URI)
+
+   *  Updated document date and revision number.
+
+Author's Address
+
+
+
+
+
+Watts                      Expires 3 May 2027                  [Page 16]
+
+Internet-Draft               EQR Conformance                October 2026
+
+
+   Deonté O'dell Watts
+   GoodShyt Group Inc.
+   San Francisco, CA
+   United States of America
+   Email: deonte@goodshyt.fun
+   URI:   https://orcid.org/0009-0005-8586-3650
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Watts                      Expires 3 May 2027                  [Page 17]

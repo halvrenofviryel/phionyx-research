@@ -1,0 +1,32 @@
+$ ruff check --no-cache experiments/ietf/audit/decision-receipts-04/probe.py experiments/ietf/audit/decision-receipts-04/check_frozen.py experiments/ietf/audit/decision-receipts-04/tests/test_probe04.py
+All checks passed!
+
+$ ruff format --check --no-cache --line-length 100 experiments/ietf/audit/decision-receipts-04/probe.py experiments/ietf/audit/decision-receipts-04/check_frozen.py experiments/ietf/audit/decision-receipts-04/tests/test_probe04.py
+3 files already formatted
+
+$ bash experiments/ietf/audit/decision-receipts-04/reproduce.sh
+No broken requirements found.
+PASS: 56 frozen -03 files byte-identical
+PASS: 33 frozen -04 artifacts reproduced byte-for-byte without normalization
+PASS: 56 frozen -03 files byte-identical
+test_all_seven_base_payloads_and_signatures_match_04 (test_probe04.FailureVectors04.test_all_seven_base_payloads_and_signatures_match_04) ... ok
+test_approval_reissue_and_consumption_fixtures_are_exact_bytes_only (test_probe04.FailureVectors04.test_approval_reissue_and_consumption_fixtures_are_exact_bytes_only) ... ok
+test_cross_process_outputs_are_byte_identical_without_normalization (test_probe04.FailureVectors04.test_cross_process_outputs_are_byte_identical_without_normalization) ... ok
+test_duplicate_members_and_boolean_controls_reach_cli_unchanged (test_probe04.FailureVectors04.test_duplicate_members_and_boolean_controls_reach_cli_unchanged) ... ok
+test_eight_new_payload_hashes_and_signatures_match_04 (test_probe04.FailureVectors04.test_eight_new_payload_hashes_and_signatures_match_04) ... ok
+test_exact_dependency_and_unmodified_module_pins (test_probe04.FailureVectors04.test_exact_dependency_and_unmodified_module_pins) ... ok
+test_expected_inputs_are_separate_from_cli_inputs (test_probe04.FailureVectors04.test_expected_inputs_are_separate_from_cli_inputs) ... ok
+test_f4_f5_preserve_exact_base_envelope_bytes (test_probe04.FailureVectors04.test_f4_f5_preserve_exact_base_envelope_bytes) ... ok
+test_f7_is_missing_effect_with_supplied_effect_bytes_not_bad_status (test_probe04.FailureVectors04.test_f7_is_missing_effect_with_supplied_effect_bytes_not_bad_status) ... ok
+test_f9_approval_lifetime_violation_exists_independently_of_audit_time (test_probe04.FailureVectors04.test_f9_approval_lifetime_violation_exists_independently_of_audit_time) ... ok
+test_prior_experiment_remains_frozen (test_probe04.FailureVectors04.test_prior_experiment_remains_frozen) ... ok
+test_source_pins (test_probe04.FailureVectors04.test_source_pins) ... ok
+test_ten_cli_exits_and_crypto_results (test_probe04.FailureVectors04.test_ten_cli_exits_and_crypto_results) ... ok
+
+----------------------------------------------------------------------
+Ran 13 tests in 2.382s
+
+OK
+
+$ experiments/ietf/audit/decision-receipts-03/.venv/bin/python experiments/ietf/audit/decision-receipts-04/check_frozen.py --all-local
+PASS: 3054 frozen -03 files byte-identical

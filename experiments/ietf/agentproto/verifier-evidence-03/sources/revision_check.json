@@ -1,0 +1,9 @@
+{
+  "expected_revision": "03",
+  "observed_revision": "03",
+  "delta": "NONE: current revision is the requested -03; no newer scope adopted.",
+  "base_commit": "69bc8cfd282e9a0a45e34b1fcf6106b1ab618f9d",
+  "origin_main_after_fetch": "69bc8cfd282e9a0a45e34b1fcf6106b1ab618f9d",
+  "base_changed": false,
+  "remote_note": "Fetch pruned the old remote branch; origin/HEAD became dangling. Local branch and fixed HEAD remain unchanged."
+}

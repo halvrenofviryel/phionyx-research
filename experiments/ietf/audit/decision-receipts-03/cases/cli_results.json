@@ -1,0 +1,152 @@
+[
+  {
+    "command": [
+      "proofbundle",
+      "decision",
+      "verify",
+      "fixtures/V1-good.json",
+      "--pub",
+      "TWfs75IN1In3CNI8TnyIOUHgtwilOPGcRFQLJ670CJc=",
+      "--strict",
+      "--json",
+      "--aud",
+      "observer-1",
+      "--nonce",
+      "dec-0001",
+      "--verification-time",
+      "2026-10-15T09:01:00Z"
+    ],
+    "exit_code": 0,
+    "stderr": "",
+    "stdout": "{\n  \"ok\": true,\n  \"crypto_ok\": true,\n  \"structure_ok\": true,\n  \"predicate_type_ok\": true,\n  \"signer_trusted\": null,\n  \"policy_ok\": null,\n  \"evidence_bound\": null,\n  \"audience_ok\": true,\n  \"nonce_ok\": true,\n  \"freshness_ok\": true,\n  \"anchors_ok\": null,\n  \"action_outcome_proven\": null,\n  \"subject_binding\": {\n    \"mode\": \"DERIVED\",\n    \"matches\": true\n  },\n  \"subject_derived_ok\": null,\n  \"automation\": {\n    \"cryptoValid\": true,\n    \"structureValid\": true,\n    \"policyAuthorized\": false,\n    \"referencesResolved\": true,\n    \"safeForAutomation\": false,\n    \"automationBlockers\": [\n      \"POLICY_NOT_EVALUATED\",\n      \"SIGNER_NOT_PINNED\"\n    ]\n  },\n  \"evidence_levels\": {\n    \"actionOutcome.outcomeRef\": {\n      \"level\": null,\n      \"level_name\": null,\n      \"detail\": \"not applicable\"\n    },\n    \"evidenceRefs\": null\n  },\n  \"lineage\": null,\n  \"relations_policy_codes\": null,\n  \"warnings\": [],\n  \"errors\": [],\n  \"verification_time\": {\n    \"mode\": \"HISTORICAL\",\n    \"time\": \"2026-10-15T09:01:00Z\",\n    \"current_policy_status\": \"NOT_EVALUATED\",\n    \"historical_policy_status\": \"NOT_EVALUATED\"\n  }\n}\n",
+    "vector": "V1-good"
+  },
+  {
+    "command": [
+      "proofbundle",
+      "decision",
+      "verify",
+      "fixtures/V1-bad.json",
+      "--pub",
+      "TWfs75IN1In3CNI8TnyIOUHgtwilOPGcRFQLJ670CJc=",
+      "--strict",
+      "--json",
+      "--aud",
+      "observer-1",
+      "--nonce",
+      "dec-0001",
+      "--verification-time",
+      "2026-10-15T09:01:00Z"
+    ],
+    "exit_code": 1,
+    "stderr": "",
+    "stdout": "{\n  \"ok\": false,\n  \"crypto_ok\": false,\n  \"structure_ok\": true,\n  \"predicate_type_ok\": true,\n  \"signer_trusted\": null,\n  \"policy_ok\": null,\n  \"evidence_bound\": null,\n  \"audience_ok\": null,\n  \"nonce_ok\": null,\n  \"freshness_ok\": null,\n  \"anchors_ok\": null,\n  \"action_outcome_proven\": null,\n  \"subject_binding\": null,\n  \"subject_derived_ok\": null,\n  \"automation\": {\n    \"cryptoValid\": false,\n    \"structureValid\": true,\n    \"policyAuthorized\": false,\n    \"referencesResolved\": null,\n    \"safeForAutomation\": false,\n    \"automationBlockers\": [\n      \"CRYPTO_NOT_OK\",\n      \"POLICY_NOT_EVALUATED\",\n      \"RECEIPT_NOT_OK\"\n    ]\n  },\n  \"evidence_levels\": null,\n  \"lineage\": null,\n  \"relations_policy_codes\": null,\n  \"warnings\": [],\n  \"errors\": [\n    \"DSSE signature verification failed \\u2014 payload is unauthenticated\"\n  ],\n  \"verification_time\": {\n    \"mode\": \"HISTORICAL\",\n    \"time\": \"2026-10-15T09:01:00Z\",\n    \"current_policy_status\": \"NOT_EVALUATED\",\n    \"historical_policy_status\": \"NOT_EVALUATED\"\n  }\n}\n",
+    "vector": "V1-bad"
+  },
+  {
+    "command": [
+      "proofbundle",
+      "decision",
+      "verify",
+      "fixtures/V2-good.json",
+      "--pub",
+      "TWfs75IN1In3CNI8TnyIOUHgtwilOPGcRFQLJ670CJc=",
+      "--strict",
+      "--json",
+      "--aud",
+      "observer-1",
+      "--nonce",
+      "dec-0002",
+      "--verification-time",
+      "2026-10-15T09:06:00Z"
+    ],
+    "exit_code": 0,
+    "stderr": "",
+    "stdout": "{\n  \"ok\": true,\n  \"crypto_ok\": true,\n  \"structure_ok\": true,\n  \"predicate_type_ok\": true,\n  \"signer_trusted\": null,\n  \"policy_ok\": null,\n  \"evidence_bound\": null,\n  \"audience_ok\": true,\n  \"nonce_ok\": true,\n  \"freshness_ok\": true,\n  \"anchors_ok\": null,\n  \"action_outcome_proven\": null,\n  \"subject_binding\": {\n    \"mode\": \"DERIVED\",\n    \"matches\": true\n  },\n  \"subject_derived_ok\": null,\n  \"automation\": {\n    \"cryptoValid\": true,\n    \"structureValid\": true,\n    \"policyAuthorized\": false,\n    \"referencesResolved\": true,\n    \"safeForAutomation\": false,\n    \"automationBlockers\": [\n      \"POLICY_NOT_EVALUATED\",\n      \"SIGNER_NOT_PINNED\"\n    ]\n  },\n  \"evidence_levels\": {\n    \"actionOutcome.outcomeRef\": {\n      \"level\": null,\n      \"level_name\": null,\n      \"detail\": \"not applicable\"\n    },\n    \"evidenceRefs\": null\n  },\n  \"lineage\": null,\n  \"relations_policy_codes\": null,\n  \"warnings\": [],\n  \"errors\": [],\n  \"verification_time\": {\n    \"mode\": \"HISTORICAL\",\n    \"time\": \"2026-10-15T09:06:00Z\",\n    \"current_policy_status\": \"NOT_EVALUATED\",\n    \"historical_policy_status\": \"NOT_EVALUATED\"\n  }\n}\n",
+    "vector": "V2-good"
+  },
+  {
+    "command": [
+      "proofbundle",
+      "decision",
+      "verify",
+      "fixtures/V2-bad.json",
+      "--pub",
+      "TWfs75IN1In3CNI8TnyIOUHgtwilOPGcRFQLJ670CJc=",
+      "--strict",
+      "--json",
+      "--aud",
+      "observer-1",
+      "--nonce",
+      "dec-0002",
+      "--verification-time",
+      "2026-10-15T09:06:00Z"
+    ],
+    "exit_code": 2,
+    "stderr": "",
+    "stdout": "{\n  \"ok\": false,\n  \"crypto_ok\": true,\n  \"structure_ok\": false,\n  \"predicate_type_ok\": true,\n  \"signer_trusted\": null,\n  \"policy_ok\": null,\n  \"evidence_bound\": null,\n  \"audience_ok\": true,\n  \"nonce_ok\": true,\n  \"freshness_ok\": true,\n  \"anchors_ok\": null,\n  \"action_outcome_proven\": null,\n  \"subject_binding\": {\n    \"mode\": \"DERIVED\",\n    \"matches\": true\n  },\n  \"subject_derived_ok\": null,\n  \"automation\": {\n    \"cryptoValid\": true,\n    \"structureValid\": false,\n    \"policyAuthorized\": false,\n    \"referencesResolved\": true,\n    \"safeForAutomation\": false,\n    \"automationBlockers\": [\n      \"STRUCTURE_NOT_OK\",\n      \"POLICY_NOT_EVALUATED\",\n      \"RECEIPT_NOT_OK\",\n      \"SIGNER_NOT_PINNED\"\n    ]\n  },\n  \"evidence_levels\": {\n    \"actionOutcome.outcomeRef\": {\n      \"level\": null,\n      \"level_name\": null,\n      \"detail\": \"not applicable\"\n    },\n    \"evidenceRefs\": null\n  },\n  \"lineage\": null,\n  \"relations_policy_codes\": null,\n  \"warnings\": [],\n  \"errors\": [\n    \"payload is not RFC-8785 canonical (hash_binding fail-closed)\"\n  ],\n  \"verification_time\": {\n    \"mode\": \"HISTORICAL\",\n    \"time\": \"2026-10-15T09:06:00Z\",\n    \"current_policy_status\": \"NOT_EVALUATED\",\n    \"historical_policy_status\": \"NOT_EVALUATED\"\n  }\n}\n",
+    "vector": "V2-bad"
+  },
+  {
+    "command": [
+      "proofbundle",
+      "decision",
+      "verify",
+      "fixtures/V3-decision.json",
+      "--pub",
+      "TWfs75IN1In3CNI8TnyIOUHgtwilOPGcRFQLJ670CJc=",
+      "--strict",
+      "--json",
+      "--aud",
+      "observer-1",
+      "--nonce",
+      "dec-0003",
+      "--verification-time",
+      "2026-10-15T09:11:00Z"
+    ],
+    "exit_code": 0,
+    "stderr": "",
+    "stdout": "{\n  \"ok\": true,\n  \"crypto_ok\": true,\n  \"structure_ok\": true,\n  \"predicate_type_ok\": true,\n  \"signer_trusted\": null,\n  \"policy_ok\": null,\n  \"evidence_bound\": true,\n  \"audience_ok\": true,\n  \"nonce_ok\": true,\n  \"freshness_ok\": true,\n  \"anchors_ok\": null,\n  \"action_outcome_proven\": null,\n  \"subject_binding\": {\n    \"mode\": \"DERIVED\",\n    \"matches\": true\n  },\n  \"subject_derived_ok\": null,\n  \"automation\": {\n    \"cryptoValid\": true,\n    \"structureValid\": true,\n    \"policyAuthorized\": false,\n    \"referencesResolved\": true,\n    \"safeForAutomation\": false,\n    \"automationBlockers\": [\n      \"POLICY_NOT_EVALUATED\",\n      \"SIGNER_NOT_PINNED\"\n    ]\n  },\n  \"evidence_levels\": {\n    \"actionOutcome.outcomeRef\": {\n      \"level\": null,\n      \"level_name\": null,\n      \"detail\": \"not applicable\"\n    },\n    \"evidenceRefs\": {\n      \"level\": 1,\n      \"level_name\": \"REFERENCE_WELL_FORMED\",\n      \"fields\": [\n        {\n          \"level\": 1,\n          \"level_name\": \"REFERENCE_WELL_FORMED\",\n          \"detail\": \"a well-formed sha256 digest object is present (attacker-choosable content, not content-checked)\"\n        }\n      ]\n    }\n  },\n  \"lineage\": null,\n  \"relations_policy_codes\": null,\n  \"warnings\": [\n    \"DEPRECATED: action_outcome_proven / evidence_bound are digest-presence booleans (evidence_levels REFERENCE_WELL_FORMED \\u2014 attacker-choosable content), NOT a content proof. Use evidence_levels; only CONTENT_RESOLVED (an evidence_resolver confirmed the bytes) is a real binding. These legacy fields will be removed in the next breaking format version.\"\n  ],\n  \"errors\": [],\n  \"verification_time\": {\n    \"mode\": \"HISTORICAL\",\n    \"time\": \"2026-10-15T09:11:00Z\",\n    \"current_policy_status\": \"NOT_EVALUATED\",\n    \"historical_policy_status\": \"NOT_EVALUATED\"\n  }\n}\n",
+    "vector": "V3-decision"
+  },
+  {
+    "command": [
+      "proofbundle",
+      "outcome",
+      "verify",
+      "fixtures/V3-good.json",
+      "--pub",
+      "4hDsi5TCL+A+9SB7k2l4EkY7XePUheE+zE9mBazt2Fs=",
+      "--strict",
+      "--json",
+      "--expected-decision-ref",
+      "0014b1c419798125c3984e85a4b322ee619a3227978840cac5f9d282b189521f",
+      "--decision-maker-id",
+      "gate-1"
+    ],
+    "exit_code": 0,
+    "stderr": "",
+    "stdout": "{\n  \"ok\": true,\n  \"crypto_ok\": true,\n  \"structure_ok\": true,\n  \"predicate_type_ok\": true,\n  \"decision_bound\": true,\n  \"role_separation_ok\": true,\n  \"execution_proven\": true,\n  \"audience_ok\": null,\n  \"nonce_ok\": null,\n  \"subject_binding\": {\n    \"mode\": \"DERIVED\",\n    \"matches\": true\n  },\n  \"subject_derived_ok\": null,\n  \"automation\": {\n    \"cryptoValid\": true,\n    \"structureValid\": true,\n    \"policyAuthorized\": false,\n    \"referencesResolved\": true,\n    \"safeForAutomation\": false,\n    \"automationBlockers\": [\n      \"POLICY_NOT_EVALUATED\"\n    ]\n  },\n  \"evidence_levels\": {\n    \"effect\": {\n      \"level\": 1,\n      \"level_name\": \"REFERENCE_WELL_FORMED\",\n      \"fields\": [\n        {\n          \"level\": 1,\n          \"level_name\": \"REFERENCE_WELL_FORMED\",\n          \"detail\": \"a well-formed sha256 digest object is present (attacker-choosable content, not content-checked)\"\n        },\n        {\n          \"level\": 0,\n          \"level_name\": \"CLAIMED\",\n          \"detail\": \"no well-formed sha256 digest object present\"\n        }\n      ]\n    },\n    \"receiverRefs\": null\n  },\n  \"executor_role_trusted\": null,\n  \"receiver_bound\": null,\n  \"receiver_role_trusted\": null,\n  \"lineage\": null,\n  \"policy_ok\": null,\n  \"relations_policy_codes\": null,\n  \"warnings\": [\n    \"DEPRECATED: execution_proven / receiver_bound are digest-presence booleans (evidence_levels REFERENCE_WELL_FORMED \\u2014 attacker-choosable content), NOT a content proof. Use evidence_levels; only CONTENT_RESOLVED or stronger is a real binding. These legacy fields will be removed in the next breaking format version.\"\n  ],\n  \"errors\": []\n}\n",
+    "vector": "V3-good"
+  },
+  {
+    "command": [
+      "proofbundle",
+      "outcome",
+      "verify",
+      "fixtures/V3-bad.json",
+      "--pub",
+      "4hDsi5TCL+A+9SB7k2l4EkY7XePUheE+zE9mBazt2Fs=",
+      "--strict",
+      "--json",
+      "--expected-decision-ref",
+      "0014b1c419798125c3984e85a4b322ee619a3227978840cac5f9d282b189521f",
+      "--decision-maker-id",
+      "gate-1"
+    ],
+    "exit_code": 2,
+    "stderr": "",
+    "stdout": "{\n  \"ok\": false,\n  \"crypto_ok\": true,\n  \"structure_ok\": true,\n  \"predicate_type_ok\": true,\n  \"decision_bound\": false,\n  \"role_separation_ok\": true,\n  \"execution_proven\": true,\n  \"audience_ok\": null,\n  \"nonce_ok\": null,\n  \"subject_binding\": {\n    \"mode\": \"DERIVED\",\n    \"matches\": true\n  },\n  \"subject_derived_ok\": null,\n  \"automation\": {\n    \"cryptoValid\": true,\n    \"structureValid\": true,\n    \"policyAuthorized\": false,\n    \"referencesResolved\": false,\n    \"safeForAutomation\": false,\n    \"automationBlockers\": [\n      \"POLICY_NOT_EVALUATED\",\n      \"REFERENCES_NOT_RESOLVED\",\n      \"RECEIPT_NOT_OK\"\n    ]\n  },\n  \"evidence_levels\": {\n    \"effect\": {\n      \"level\": 1,\n      \"level_name\": \"REFERENCE_WELL_FORMED\",\n      \"fields\": [\n        {\n          \"level\": 1,\n          \"level_name\": \"REFERENCE_WELL_FORMED\",\n          \"detail\": \"a well-formed sha256 digest object is present (attacker-choosable content, not content-checked)\"\n        },\n        {\n          \"level\": 0,\n          \"level_name\": \"CLAIMED\",\n          \"detail\": \"no well-formed sha256 digest object present\"\n        }\n      ]\n    },\n    \"receiverRefs\": null\n  },\n  \"executor_role_trusted\": null,\n  \"receiver_bound\": null,\n  \"receiver_role_trusted\": null,\n  \"lineage\": null,\n  \"policy_ok\": null,\n  \"relations_policy_codes\": null,\n  \"warnings\": [\n    \"DEPRECATED: execution_proven / receiver_bound are digest-presence booleans (evidence_levels REFERENCE_WELL_FORMED \\u2014 attacker-choosable content), NOT a content proof. Use evidence_levels; only CONTENT_RESOLVED or stronger is a real binding. These legacy fields will be removed in the next breaking format version.\"\n  ],\n  \"errors\": [\n    \"decisionRef mismatch \\u2014 this outcome is bound to a DIFFERENT decision than expected (replay across decisions?, fail-closed)\"\n  ]\n}\n",
+    "vector": "V3-bad"
+  }
+]

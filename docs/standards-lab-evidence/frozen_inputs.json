@@ -1,0 +1,742 @@
+{
+  "files": [
+    {
+      "task": "S0",
+      "path": "research/standards-reentry/2026-11-02/BASELINE.md",
+      "sha256": "c1aff0ba28f0fcf48e528cafb0d13653d1df02634cb3c3b56008bd75f18afebd",
+      "source_worktree_match": true
+    },
+    {
+      "task": "S0",
+      "path": "research/standards-reentry/2026-11-02/SOURCE_SHA256SUMS.txt",
+      "sha256": "2d5c73640f78080ac83715174a0852334aeafe78f5bd6078792268d0e47125e8",
+      "source_worktree_match": true
+    },
+    {
+      "task": "S0",
+      "path": "research/standards-reentry/2026-11-02/baseline.json",
+      "sha256": "9c201c0cc39952f84536f780b6c6dbc5541ee33d951478b5451fc3323ecce16d",
+      "source_worktree_match": true
+    },
+    {
+      "task": "A",
+      "path": "experiments/ietf/agentproto/verifier-evidence-03/README.md",
+      "sha256": "6bdd26422192e72522a8230c435ff5a6e3125204b14aeb8eebce053ad04a6121",
+      "source_worktree_match": true
+    },
+    {
+      "task": "A",
+      "path": "experiments/ietf/agentproto/verifier-evidence-03/REPRODUCE.md",
+      "sha256": "cfab4286b065c95adbefcec137e5a8f8e1c9e22a11fbfcfe5344feb56b0fad02",
+      "source_worktree_match": true
+    },
+    {
+      "task": "A",
+      "path": "experiments/ietf/agentproto/verifier-evidence-03/REQUIREMENTS.md",
+      "sha256": "ceac6a25c4702b60a0a219e280e06741b7c99e49e6b8b25d6ed655f278d1e799",
+      "source_worktree_match": true
+    },
+    {
+      "task": "A",
+      "path": "experiments/ietf/agentproto/verifier-evidence-03/RESULTS.md",
+      "sha256": "62d85e38dcbaf98d00a53c49b4f2538323d739b3f15ceab003f099ad0396772c",
+      "source_worktree_match": true
+    },
+    {
+      "task": "A",
+      "path": "experiments/ietf/agentproto/verifier-evidence-03/provenance/coverage.json",
+      "sha256": "2b0291e8db96886a995492751a52cb06f6e8809f0458ea87288254e808075ba2",
+      "source_worktree_match": true
+    },
+    {
+      "task": "A",
+      "path": "experiments/ietf/agentproto/verifier-evidence-03/provenance/first_execution.json",
+      "sha256": "c35d1fe7b6bced8ff615d02d30df8dae7cc7ff6e795d6e3ce9fc1ae15218dd9e",
+      "source_worktree_match": true
+    },
+    {
+      "task": "A",
+      "path": "experiments/ietf/agentproto/verifier-evidence-03/provenance/git_initial.json",
+      "sha256": "2df70dae81e8f3b1f3eb7ebcf4ac69aaa3e3fe574ad921a0892bd4b8f9a96d78",
+      "source_worktree_match": true
+    },
+    {
+      "task": "A",
+      "path": "experiments/ietf/agentproto/verifier-evidence-03/provenance/pre_run_commitment.json",
+      "sha256": "90d2de42ca8729ca4673bdff124d8769e50cdd3f90c4559e34010d0b20cec072",
+      "source_worktree_match": true
+    },
+    {
+      "task": "A",
+      "path": "experiments/ietf/agentproto/verifier-evidence-03/provenance/requirements_freeze.json",
+      "sha256": "5e08e1c74b790df1615a5a380b7c92c0e084aeeed57bf0b5837fb8c94361ae15",
+      "source_worktree_match": true
+    },
+    {
+      "task": "A",
+      "path": "experiments/ietf/agentproto/verifier-evidence-03/pytest.ini",
+      "sha256": "6a96ba0e2d5a8296fb90f474da9d2f0173d3e41eba18965513f711104155f913",
+      "source_worktree_match": true
+    },
+    {
+      "task": "A",
+      "path": "experiments/ietf/agentproto/verifier-evidence-03/reproduce.py",
+      "sha256": "e435915a9b03fcf56448d16fb884dae433bfa3b67b19586a69f922b6ab15bfa2",
+      "source_worktree_match": true
+    },
+    {
+      "task": "A",
+      "path": "experiments/ietf/agentproto/verifier-evidence-03/requirements.json",
+      "sha256": "5271bc2ac444ac8ce4ad845c03f5fbb349a182d19cae0c0f0b124e665da9d75e",
+      "source_worktree_match": true
+    },
+    {
+      "task": "A",
+      "path": "experiments/ietf/agentproto/verifier-evidence-03/results.json",
+      "sha256": "6ee32f19f69e8eece702c9cab20abba08c1f524c5dc9d365a717f18863af88c4",
+      "source_worktree_match": true
+    },
+    {
+      "task": "A",
+      "path": "experiments/ietf/agentproto/verifier-evidence-03/run_record.json",
+      "sha256": "f34d9a3ddfffe7f61de77e83601341a7515d2390432525712a4deb3f801b31bd",
+      "source_worktree_match": true
+    },
+    {
+      "task": "A",
+      "path": "experiments/ietf/agentproto/verifier-evidence-03/run_record.sha256",
+      "sha256": "0c741cf92bcb56f1c0c51aceac7abf2e95ce5a85354ee73cc82cb7bba2d71ea9",
+      "source_worktree_match": true
+    },
+    {
+      "task": "A",
+      "path": "experiments/ietf/agentproto/verifier-evidence-03/sources/current-datatracker.json",
+      "sha256": "68d2f16394ebf5eb147bada903402e04fa0a87efeb4339ff4d75a6c892bf1853",
+      "source_worktree_match": true
+    },
+    {
+      "task": "A",
+      "path": "experiments/ietf/agentproto/verifier-evidence-03/sources/draft-he-agentproto-verifier-evidence-03.txt",
+      "sha256": "c64cb2fd988476a56f82bdc4386a652c5841f7b3723941bffea44e73208ef600",
+      "source_worktree_match": true
+    },
+    {
+      "task": "A",
+      "path": "experiments/ietf/agentproto/verifier-evidence-03/sources/manifest.json",
+      "sha256": "761d6417f57222ef295456b6f9c7950ac4e9a60ca9633efb0d3072b5e6b2a630",
+      "source_worktree_match": true
+    },
+    {
+      "task": "A",
+      "path": "experiments/ietf/agentproto/verifier-evidence-03/sources/revision_check.json",
+      "sha256": "c5ed028c4ce019228b346e64326dfb2d34b723f57ca4c0b0178315d92b2eaecb",
+      "source_worktree_match": true
+    },
+    {
+      "task": "A",
+      "path": "experiments/ietf/agentproto/verifier-evidence-03/sources/sandbox-unavailable.json",
+      "sha256": "ea729bc8be737015138c99e6bc16ac4ff91c4306b2199468f41e0ee0fdc6bc57",
+      "source_worktree_match": true
+    },
+    {
+      "task": "A",
+      "path": "experiments/ietf/agentproto/verifier-evidence-03/sources/unread_implementation_links.json",
+      "sha256": "4a32ff20f7e1ae5214a6fa0a203d7a6fe9ceb48fded90969c1df7f18097e442d",
+      "source_worktree_match": true
+    },
+    {
+      "task": "A",
+      "path": "experiments/ietf/agentproto/verifier-evidence-03/src/appraise.py",
+      "sha256": "e89a0a24a0092cab086041ced2c3bbd50415342b791f9d580144566e66a4299e",
+      "source_worktree_match": true
+    },
+    {
+      "task": "A",
+      "path": "experiments/ietf/agentproto/verifier-evidence-03/src/run.py",
+      "sha256": "97250fddb0eef40974a42ca60321a23136e4bfd495f4dc46cb0102cb77d84cb6",
+      "source_worktree_match": true
+    },
+    {
+      "task": "A",
+      "path": "experiments/ietf/agentproto/verifier-evidence-03/tests/conftest.py",
+      "sha256": "a2e4ab4d3cc7a9ffcb539cdf4db364a76e923dfd287ee36ae357b68fefb288cb",
+      "source_worktree_match": true
+    },
+    {
+      "task": "A",
+      "path": "experiments/ietf/agentproto/verifier-evidence-03/tests/test_appraise.py",
+      "sha256": "a66f6f4c9c93357ac8271a2584bcedd00ab97b3f5ff0935d0f6c6fb1603a8966",
+      "source_worktree_match": true
+    },
+    {
+      "task": "A",
+      "path": "experiments/ietf/agentproto/verifier-evidence-03/tests/test_fault_injection.py",
+      "sha256": "aa5d9a43acccb488d7190ffb8ae869e14881fbaa919c584763c7329e956c6e66",
+      "source_worktree_match": true
+    },
+    {
+      "task": "A",
+      "path": "experiments/ietf/agentproto/verifier-evidence-03/vectors/completeness_vectors.json",
+      "sha256": "8f9a0612cb8252407b3f9248a893ba55f28c8649907d72bd0f23d726dbf740d8",
+      "source_worktree_match": true
+    },
+    {
+      "task": "C",
+      "path": "experiments/ietf/audit/decision-receipts-03/.gitignore",
+      "sha256": "3936c569c6ed3c1257d1f0c638f958defd2d3c6a33b31f4973b777037ecbb52e",
+      "source_worktree_match": true
+    },
+    {
+      "task": "C",
+      "path": "experiments/ietf/audit/decision-receipts-03/README.md",
+      "sha256": "aaa020a93987397fba57c452336c5d34c9be2d89b7928f630973f75c6aeab315",
+      "source_worktree_match": true
+    },
+    {
+      "task": "C",
+      "path": "experiments/ietf/audit/decision-receipts-03/REPRODUCE.md",
+      "sha256": "b5451fa2b4f75d0ef9266caa32bb93e6cef18640721830a4c31edfaf307c73ba",
+      "source_worktree_match": true
+    },
+    {
+      "task": "C",
+      "path": "experiments/ietf/audit/decision-receipts-03/RESULTS.md",
+      "sha256": "c8b1aca4f19560d0ac80d371b50be8e8a4314093b88ebe6d7c706d05050a6775",
+      "source_worktree_match": true
+    },
+    {
+      "task": "C",
+      "path": "experiments/ietf/audit/decision-receipts-03/SOURCES.md",
+      "sha256": "2dbd4340287aa0aee194ed8b4c4b2cbf8672265ffd4971ea5062bf1aea54e019",
+      "source_worktree_match": true
+    },
+    {
+      "task": "C",
+      "path": "experiments/ietf/audit/decision-receipts-03/cases/api_results.json",
+      "sha256": "8063381e3b804ef898d15ea7113221b0bcca55f1a37ca288727c56a4e1273964",
+      "source_worktree_match": true
+    },
+    {
+      "task": "C",
+      "path": "experiments/ietf/audit/decision-receipts-03/cases/cli_results.json",
+      "sha256": "b25ad95745561b866f95ae38c678de93e2e0b37a09c085ae46a720a2024837f0",
+      "source_worktree_match": true
+    },
+    {
+      "task": "C",
+      "path": "experiments/ietf/audit/decision-receipts-03/cases/fixtures/SER-P1.payload.json",
+      "sha256": "8cd849a6dcce08aee334511d7b2f31c54e478885dda1795d3c8f972dd0d4811c",
+      "source_worktree_match": true
+    },
+    {
+      "task": "C",
+      "path": "experiments/ietf/audit/decision-receipts-03/cases/fixtures/SER-P1.receipt.json",
+      "sha256": "02036d1f57509858330383755ec16c532bdc58b0f2d949464488d57abc9f95e7",
+      "source_worktree_match": true
+    },
+    {
+      "task": "C",
+      "path": "experiments/ietf/audit/decision-receipts-03/cases/fixtures/V1-bad.json",
+      "sha256": "a8ecb45f5eeff1ed32b750ced5490855b0793a3f9fb9b29e053dc45b586d783d",
+      "source_worktree_match": true
+    },
+    {
+      "task": "C",
+      "path": "experiments/ietf/audit/decision-receipts-03/cases/fixtures/V1-good.json",
+      "sha256": "cce69757bdd3426f505db28b635cb9ab738bc47cd7ec5c497578ebcd062ae7a5",
+      "source_worktree_match": true
+    },
+    {
+      "task": "C",
+      "path": "experiments/ietf/audit/decision-receipts-03/cases/fixtures/V2-bad.json",
+      "sha256": "afa39fd7086e4c5af7ef5c7b8cf0ceeaedcb0af26a07ac8082efeb4874b0f424",
+      "source_worktree_match": true
+    },
+    {
+      "task": "C",
+      "path": "experiments/ietf/audit/decision-receipts-03/cases/fixtures/V2-good.json",
+      "sha256": "3e3b7d575b712ada2c813ee98fd3b0c80d788e2558444a34338510c9978fa47a",
+      "source_worktree_match": true
+    },
+    {
+      "task": "C",
+      "path": "experiments/ietf/audit/decision-receipts-03/cases/fixtures/V3-bad.json",
+      "sha256": "2a0fe3ab106095df99e1ee41b938e04678973b7a4fed14c0482f63eca6472d05",
+      "source_worktree_match": true
+    },
+    {
+      "task": "C",
+      "path": "experiments/ietf/audit/decision-receipts-03/cases/fixtures/V3-decision.json",
+      "sha256": "b28dc232b4bb98044a962714c99f1343df3e136246e434bf0f7fdd72dbb925ed",
+      "source_worktree_match": true
+    },
+    {
+      "task": "C",
+      "path": "experiments/ietf/audit/decision-receipts-03/cases/fixtures/V3-good.json",
+      "sha256": "436fb6f6f19cecbd67df9f468556807eab5003ddb8eb60c8b9c2f708e3e9bb66",
+      "source_worktree_match": true
+    },
+    {
+      "task": "C",
+      "path": "experiments/ietf/audit/decision-receipts-03/cases/fixtures/approval.json",
+      "sha256": "88e5b6d69b3e4bc250a42aeffea0414d406e5f04ba4f991ee432a78231da1170",
+      "source_worktree_match": true
+    },
+    {
+      "task": "C",
+      "path": "experiments/ietf/audit/decision-receipts-03/cases/fixtures/baseline-outcome.json",
+      "sha256": "2a7197010bc36334db4a2e85ac80356ad4a88fd3b5305072eaa86c875d7cbe8c",
+      "source_worktree_match": true
+    },
+    {
+      "task": "C",
+      "path": "experiments/ietf/audit/decision-receipts-03/cases/fixtures/deny-with-evaluation.json",
+      "sha256": "147ce04aea4ca9ce2dd215e7ce3f4c2c2d56b547db3841f08105fb6638867615",
+      "source_worktree_match": true
+    },
+    {
+      "task": "C",
+      "path": "experiments/ietf/audit/decision-receipts-03/cases/fixtures/second-allow.json",
+      "sha256": "d286260f3a2b4c7865b45378c3639532fc683e5293f541bdf7595576737dd7b3",
+      "source_worktree_match": true
+    },
+    {
+      "task": "C",
+      "path": "experiments/ietf/audit/decision-receipts-03/cases/fixtures/second-outcome.json",
+      "sha256": "f5735546dc0d2a07a305a8d61e3d9e95e8551bff28f04140d0d98eec601e6a18",
+      "source_worktree_match": true
+    },
+    {
+      "task": "C",
+      "path": "experiments/ietf/audit/decision-receipts-03/cases/fixtures/sequence-1.json",
+      "sha256": "f9c10ac7b00ec687f584be594de0450b07f43a46f8e6d3fbd3556a25ce49a1a5",
+      "source_worktree_match": true
+    },
+    {
+      "task": "C",
+      "path": "experiments/ietf/audit/decision-receipts-03/cases/fixtures/sequence-3.json",
+      "sha256": "1953f892951834de5071b591305aa9372e259b56945e1a1622dd41b62b945cb3",
+      "source_worktree_match": true
+    },
+    {
+      "task": "C",
+      "path": "experiments/ietf/audit/decision-receipts-03/cases/fixtures/unknown-decision.json",
+      "sha256": "3d81aea0f52a88c3e7bb6976dac1706de9d554941cf3876464a5773eb514c758",
+      "source_worktree_match": true
+    },
+    {
+      "task": "C",
+      "path": "experiments/ietf/audit/decision-receipts-03/cases/scenario_results.json",
+      "sha256": "14ba2faebfa2e0efc11d8738a0f0e9c21acceea9eb5eb6e7403ca08d57cdbc8f",
+      "source_worktree_match": true
+    },
+    {
+      "task": "C",
+      "path": "experiments/ietf/audit/decision-receipts-03/evidence/api-inventory.json",
+      "sha256": "2f5244caa2e231ae55662823a515b604767bb797915a1e54ae8581c9688c6b63",
+      "source_worktree_match": true
+    },
+    {
+      "task": "C",
+      "path": "experiments/ietf/audit/decision-receipts-03/evidence/api_results.original.json",
+      "sha256": "e7bb0a6c7e43b024a2125df5eb499b31890af43ea30d6f717c96023959bbba09",
+      "source_worktree_match": true
+    },
+    {
+      "task": "C",
+      "path": "experiments/ietf/audit/decision-receipts-03/evidence/draft-section-comparison.json",
+      "sha256": "1e122d4d833a1587608cca1f3b599dd738c5990bc0f5c8f6490963b77825d9b9",
+      "source_worktree_match": true
+    },
+    {
+      "task": "C",
+      "path": "experiments/ietf/audit/decision-receipts-03/evidence/final-validation.json",
+      "sha256": "265227270d2848512fd2e7d2b1c8c8ce1f2cf3a57ceb91a68f8b62a4c6133237",
+      "source_worktree_match": true
+    },
+    {
+      "task": "C",
+      "path": "experiments/ietf/audit/decision-receipts-03/evidence/final-validation.txt",
+      "sha256": "fcdb9847237882fa719dbab6ad549e2843125bfc359da9adc44c6f73a85e7b73",
+      "source_worktree_match": true
+    },
+    {
+      "task": "C",
+      "path": "experiments/ietf/audit/decision-receipts-03/evidence/pip-install-report.json",
+      "sha256": "4aed3c286df6c047e3777de24a62f35c7496fa2cd8c7c4c8525745082e6e51b2",
+      "source_worktree_match": true
+    },
+    {
+      "task": "C",
+      "path": "experiments/ietf/audit/decision-receipts-03/evidence/wheel-tag-source-comparison.json",
+      "sha256": "246907834d1b68342be6efcf4fe9c31e7855908cb94becfa84e98b99131f8599",
+      "source_worktree_match": true
+    },
+    {
+      "task": "C",
+      "path": "experiments/ietf/audit/decision-receipts-03/fixtures.py",
+      "sha256": "d8d28a80d1d7f93a7cfaa23b2d43f80efd1ea428f3ad7a0baabdea4de213c769",
+      "source_worktree_match": true
+    },
+    {
+      "task": "C",
+      "path": "experiments/ietf/audit/decision-receipts-03/probe.py",
+      "sha256": "5ada4d3370a1afc9cb540c7c72152d3d7297422731496c1c6cbe0b1bd17a8f4b",
+      "source_worktree_match": true
+    },
+    {
+      "task": "C",
+      "path": "experiments/ietf/audit/decision-receipts-03/reproduce.sh",
+      "sha256": "44b6f24587c27a2deda7896c1e8a2673eef9bd8936e821dc8e7d0623d039d183",
+      "source_worktree_match": true
+    },
+    {
+      "task": "C",
+      "path": "experiments/ietf/audit/decision-receipts-03/requirements.lock",
+      "sha256": "8a114907ca5f1c9e54bb0c8da9eb5c7586be31b285268fda74d824b6e4ec76c5",
+      "source_worktree_match": true
+    },
+    {
+      "task": "C",
+      "path": "experiments/ietf/audit/decision-receipts-03/requirements.md",
+      "sha256": "0296a41af6509a414c893fc9a689d03f0f329e6e78c1bf7fc779c2bc61ffb107",
+      "source_worktree_match": true
+    },
+    {
+      "task": "C",
+      "path": "experiments/ietf/audit/decision-receipts-03/run_record.json",
+      "sha256": "5b770c4edc9af2aa1cedc3d0b74e24cfb006eab98538b8799902612888ae3bc5",
+      "source_worktree_match": true
+    },
+    {
+      "task": "C",
+      "path": "experiments/ietf/audit/decision-receipts-03/sources/action-outcome.md",
+      "sha256": "b773bb642da9902a28e369620e9dba904645848b35079063036edee48390411e",
+      "source_worktree_match": true
+    },
+    {
+      "task": "C",
+      "path": "experiments/ietf/audit/decision-receipts-03/sources/datatracker-document.json",
+      "sha256": "95acdfe207f5ddc516de8ec8e18b197a7cc3f191a2ce114ab94a85c8326e5fbe",
+      "source_worktree_match": true
+    },
+    {
+      "task": "C",
+      "path": "experiments/ietf/audit/decision-receipts-03/sources/decision-receipt.md",
+      "sha256": "06d6527fcf08a03dc9002d42574f8b723e0491a7d127cf8f16b03d1225444cb6",
+      "source_worktree_match": true
+    },
+    {
+      "task": "C",
+      "path": "experiments/ietf/audit/decision-receipts-03/sources/draft-00-to-03.normalized.diff",
+      "sha256": "1787f959e71c205241c661dcac5eb151b96e5985a74260588c846be4fdb289de",
+      "source_worktree_match": true
+    },
+    {
+      "task": "C",
+      "path": "experiments/ietf/audit/decision-receipts-03/sources/draft-gruszka-audit-decision-receipts-00.txt",
+      "sha256": "427a7f6958c9c4f169136e980989bc55de707e24a52e9b55fc60d25430f1eefa",
+      "source_worktree_match": true
+    },
+    {
+      "task": "C",
+      "path": "experiments/ietf/audit/decision-receipts-03/sources/draft-gruszka-audit-decision-receipts-03.txt",
+      "sha256": "c0aae84b82108a3bd40cbbbee33df13c760b5c2e943a205e9efca4c623438245",
+      "source_worktree_match": true
+    },
+    {
+      "task": "C",
+      "path": "experiments/ietf/audit/decision-receipts-03/sources/draft-gruszka-signed-evaluation-receipts-04.txt",
+      "sha256": "d60c3dd95aefb8019a5f1c0ce041d8c4eb1d4571302766944bfbc92b91c1e358",
+      "source_worktree_match": true
+    },
+    {
+      "task": "C",
+      "path": "experiments/ietf/audit/decision-receipts-03/sources/ietf-corrected-tlp-5.html",
+      "sha256": "559024f7a8aac775fc2f61d9cf4b5959894c55414039011dccf29e7a87258026",
+      "source_worktree_match": true
+    },
+    {
+      "task": "C",
+      "path": "experiments/ietf/audit/decision-receipts-03/sources/manifest.json",
+      "sha256": "9ccc5bd36e3eb57974c65744adc8dd06c00ce1e30fc98e94c0e18b0d1b7033b5",
+      "source_worktree_match": true
+    },
+    {
+      "task": "C",
+      "path": "experiments/ietf/audit/decision-receipts-03/sources/preview-README.md",
+      "sha256": "64716c068a2311886d689a1180ceff3a993db8a3f9c11814a31f2764e7d5fbb0",
+      "source_worktree_match": true
+    },
+    {
+      "task": "C",
+      "path": "experiments/ietf/audit/decision-receipts-03/sources/proofbundle-6.4.0-pypi.json",
+      "sha256": "bbeff23d3fd63c215ab2c0c9991e9821eebb4f9a71ae984ac52fbcd2550c9095",
+      "source_worktree_match": true
+    },
+    {
+      "task": "C",
+      "path": "experiments/ietf/audit/decision-receipts-03/sources/proofbundle-preview-LICENSE",
+      "sha256": "e498a26fa5825cc7e7bd2544f97090059bd3743db5ae070c2685a86a0e555cb1",
+      "source_worktree_match": true
+    },
+    {
+      "task": "C",
+      "path": "experiments/ietf/audit/decision-receipts-03/sources/proofbundle-preview-commit.json",
+      "sha256": "9f03813f6283f9fd952c0c7727cf1b497243e29abcc4b4a4a8937bf6805b4e10",
+      "source_worktree_match": true
+    },
+    {
+      "task": "C",
+      "path": "experiments/ietf/audit/decision-receipts-03/sources/proofbundle-release-LICENSE",
+      "sha256": "e498a26fa5825cc7e7bd2544f97090059bd3743db5ae070c2685a86a0e555cb1",
+      "source_worktree_match": true
+    },
+    {
+      "task": "C",
+      "path": "experiments/ietf/audit/decision-receipts-03/sources/proofbundle-release-tree.json",
+      "sha256": "3aac560ae9ceaf372458d9f776c1a2a426fbd2082cc05f95c2f7d1f49a3210b6",
+      "source_worktree_match": true
+    },
+    {
+      "task": "C",
+      "path": "experiments/ietf/audit/decision-receipts-03/sources/proofbundle-v6.4.0-ref.json",
+      "sha256": "b4ec976f10b034b77160b114773721923c692f0d1e38e8af98669c3f762ffdaa",
+      "source_worktree_match": true
+    },
+    {
+      "task": "C",
+      "path": "experiments/ietf/audit/decision-receipts-03/sources/proofbundle-v6.4.0-tag.json",
+      "sha256": "6b4c02ba19ee770855dfee3deb7ae0c21e558129d51bf0f6024ae3ed1173e7fd",
+      "source_worktree_match": true
+    },
+    {
+      "task": "C",
+      "path": "experiments/ietf/audit/decision-receipts-03/tests/test_probe.py",
+      "sha256": "bd266e00b31a196f8295dd33575cbbea67caba29a643774a08d0a159abd95572",
+      "source_worktree_match": true
+    },
+    {
+      "task": "E",
+      "path": "experiments/ietf/claim-preservation/ser04/CP_REQUIREMENTS.md",
+      "sha256": "df31f1351623526551f026f2b3353939760eedda0b56bcc95561ff75ffd1c401",
+      "source_worktree_match": true
+    },
+    {
+      "task": "E",
+      "path": "experiments/ietf/claim-preservation/ser04/PROPOSED_CP_01_CHANGES.md",
+      "sha256": "f69de49be4c30922f67572eb6510ad188d6e46d244553825aadfe1116f062f9b",
+      "source_worktree_match": true
+    },
+    {
+      "task": "E",
+      "path": "experiments/ietf/claim-preservation/ser04/README.md",
+      "sha256": "ca72fd7eb8ad521818b690543aca0b084c580ed5debf770d4159794ecddca7ea",
+      "source_worktree_match": true
+    },
+    {
+      "task": "E",
+      "path": "experiments/ietf/claim-preservation/ser04/RESULTS.md",
+      "sha256": "1661144567f707cb0dca7537967778f29434a7749bf7d6f91adfa2a27257d761",
+      "source_worktree_match": true
+    },
+    {
+      "task": "E",
+      "path": "experiments/ietf/claim-preservation/ser04/SOURCE_PINS.json",
+      "sha256": "651c1317d4f7967ec072db0b3095f173f5a296251f0aa58728cede6e60e78dcd",
+      "source_worktree_match": true
+    },
+    {
+      "task": "E",
+      "path": "experiments/ietf/claim-preservation/ser04/fixtures/M1.dsse.json",
+      "sha256": "d96e0b9635949045a6f7c7b29eac8c163f6fad0d6d0bff446beeff601e45fed0",
+      "source_worktree_match": true
+    },
+    {
+      "task": "E",
+      "path": "experiments/ietf/claim-preservation/ser04/fixtures/MANIFEST.json",
+      "sha256": "855402909f05831e87787f207b72a9ec62d81d8247fa9481679c51d887945f06",
+      "source_worktree_match": true
+    },
+    {
+      "task": "E",
+      "path": "experiments/ietf/claim-preservation/ser04/fixtures/N13.receipt.json",
+      "sha256": "31a34194edd90bade6568a3cb00dbb983dabab9efccfd7a8b38650bd3e8d5201",
+      "source_worktree_match": true
+    },
+    {
+      "task": "E",
+      "path": "experiments/ietf/claim-preservation/ser04/fixtures/N14.receipt.json",
+      "sha256": "8966f27c5f2566d986b0ab7821060ea0c901504fe984d450dfc7f8ca7d1c27e1",
+      "source_worktree_match": true
+    },
+    {
+      "task": "E",
+      "path": "experiments/ietf/claim-preservation/ser04/fixtures/N7.receipt.json",
+      "sha256": "18b1b6dc631cf0f00d8b0d2c237b28a67b12c2d7088ae0313a2fb27760f96bdd",
+      "source_worktree_match": true
+    },
+    {
+      "task": "E",
+      "path": "experiments/ietf/claim-preservation/ser04/fixtures/P1.receipt.json",
+      "sha256": "02036d1f57509858330383755ec16c532bdc58b0f2d949464488d57abc9f95e7",
+      "source_worktree_match": true
+    },
+    {
+      "task": "E",
+      "path": "experiments/ietf/claim-preservation/ser04/fixtures/P10.receipt.json",
+      "sha256": "75d4029e2470131e8e88d8ec129efd7b9d15092b668bf0ecb7b32eea3361b7ed",
+      "source_worktree_match": true
+    },
+    {
+      "task": "E",
+      "path": "experiments/ietf/claim-preservation/ser04/fixtures/P2.receipt.json",
+      "sha256": "2405d1783d1803ddea207c027622fba40b3e82161686505ee96988e306e17278",
+      "source_worktree_match": true
+    },
+    {
+      "task": "E",
+      "path": "experiments/ietf/claim-preservation/ser04/fixtures/P4.receipt.json",
+      "sha256": "c2a7943f0ea3de6e9da88c11925b1e112d32f697a403f07fcfbc3776bca10e72",
+      "source_worktree_match": true
+    },
+    {
+      "task": "E",
+      "path": "experiments/ietf/claim-preservation/ser04/fixtures/P6.receipt.json",
+      "sha256": "2c8144d50b4cc42a712d84e4d0417e52b0d8cbc484ad8e6d8d4b36a429b94ec1",
+      "source_worktree_match": true
+    },
+    {
+      "task": "E",
+      "path": "experiments/ietf/claim-preservation/ser04/fixtures/scenarios.json",
+      "sha256": "dae86f6b1a10af31908521c78cef4ffe39099c9add5b7112a30652fda2639c33",
+      "source_worktree_match": true
+    },
+    {
+      "task": "E",
+      "path": "experiments/ietf/claim-preservation/ser04/mapping_profile.json",
+      "sha256": "93e903ff16f22d8c87a4d859f81d497065362c4b6e2957cb7c05942337f6535a",
+      "source_worktree_match": true
+    },
+    {
+      "task": "E",
+      "path": "experiments/ietf/claim-preservation/ser04/results.json",
+      "sha256": "268f25f1b333f17f4d8702dc1eac168b0f8ac141b6c9cb03a57adadb01e17327",
+      "source_worktree_match": true
+    },
+    {
+      "task": "E",
+      "path": "experiments/ietf/claim-preservation/ser04/run_record.json",
+      "sha256": "0c778be5f681c364f579835e1b0a1d0f85e8aa073f1475a169ab4c81d004f4ef",
+      "source_worktree_match": true
+    },
+    {
+      "task": "E",
+      "path": "experiments/ietf/claim-preservation/ser04/sources/draft-abak-ai-evaluation-claim-preservation-00.txt",
+      "sha256": "9088079da04ed23fdead8a54894ac70bcf6ff26ce4834c815e4dc6961986de54",
+      "source_worktree_match": true
+    },
+    {
+      "task": "E",
+      "path": "experiments/ietf/claim-preservation/ser04/sources/draft-abak-ai-evaluation-claim-preservation-metadata.json",
+      "sha256": "5ef1980c985c7aa433b3b711671f76ca23e6eddab9178027f8247ad631550aee",
+      "source_worktree_match": true
+    },
+    {
+      "task": "E",
+      "path": "experiments/ietf/claim-preservation/ser04/sources/draft-gruszka-evaluation-receipt-mappings-04.txt",
+      "sha256": "aa24f2d4c6b51509aba836c3786d6eb32711c8638ae0621cd4a6a7a54c978c25",
+      "source_worktree_match": true
+    },
+    {
+      "task": "E",
+      "path": "experiments/ietf/claim-preservation/ser04/sources/draft-gruszka-evaluation-receipt-mappings-metadata.json",
+      "sha256": "5cdf3e45b241954f705eb61912ef9f8ef03a4cd83f435ce618738d1b31e272f4",
+      "source_worktree_match": true
+    },
+    {
+      "task": "E",
+      "path": "experiments/ietf/claim-preservation/ser04/sources/draft-gruszka-signed-evaluation-receipts-04.txt",
+      "sha256": "d60c3dd95aefb8019a5f1c0ce041d8c4eb1d4571302766944bfbc92b91c1e358",
+      "source_worktree_match": true
+    },
+    {
+      "task": "E",
+      "path": "experiments/ietf/claim-preservation/ser04/sources/draft-gruszka-signed-evaluation-receipts-metadata.json",
+      "sha256": "2d8b1fd5b1e7bb8a94489fb2067db9696b49ec9f95340287d6d00c063039c331",
+      "source_worktree_match": true
+    },
+    {
+      "task": "E",
+      "path": "experiments/ietf/claim-preservation/ser04/sources/draft-watts-eqr-conformance-05.txt",
+      "sha256": "18a46eeabe9cd942e410f5ba2258d2eaf61c8d7fe4f425ee3f5eb63fbd753c5d",
+      "source_worktree_match": true
+    },
+    {
+      "task": "E",
+      "path": "experiments/ietf/claim-preservation/ser04/sources/draft-watts-eqr-conformance-metadata.json",
+      "sha256": "13b1ecddae865b9bef69d4cb03ee403741ce7dceab888483f96bcac18b2fc886",
+      "source_worktree_match": true
+    },
+    {
+      "task": "E",
+      "path": "experiments/ietf/claim-preservation/ser04/sources/proofbundle-LICENSE",
+      "sha256": "e498a26fa5825cc7e7bd2544f97090059bd3743db5ae070c2685a86a0e555cb1",
+      "source_worktree_match": true
+    },
+    {
+      "task": "E",
+      "path": "experiments/ietf/claim-preservation/ser04/sources/proofbundle-ser-README.md",
+      "sha256": "3e62cfb55f72de3c6d199eff08ed76e1059ce24aef486ab481b044ef38cb49e9",
+      "source_worktree_match": true
+    },
+    {
+      "task": "E",
+      "path": "experiments/ietf/claim-preservation/ser04/sources/proofbundle-ser-tree.json",
+      "sha256": "53adf96addd887a747937ce4500929d5560a3daac72b5a399e0bd59fa9caacb3",
+      "source_worktree_match": true
+    },
+    {
+      "task": "E",
+      "path": "experiments/ietf/claim-preservation/ser04/sources/proofbundle-ser-vectors.json",
+      "sha256": "1ea8a75bd9f16f284d75b3dfe2b4c9d8888fcc9c137bbc1fb106c04613612819",
+      "source_worktree_match": true
+    },
+    {
+      "task": "E",
+      "path": "experiments/ietf/claim-preservation/ser04/sources/ser-v1-test-vectors.json",
+      "sha256": "710cb8abab7ca51cf61b85c5610018f9a153add4c3db4f71b2d597e57b1671d1",
+      "source_worktree_match": true
+    },
+    {
+      "task": "E",
+      "path": "experiments/ietf/claim-preservation/ser04/src/acquire_sources.py",
+      "sha256": "dcbda1772754d9b2343bf3a385552aca85875fbe36766c4c0ad61767f149fa33",
+      "source_worktree_match": true
+    },
+    {
+      "task": "E",
+      "path": "experiments/ietf/claim-preservation/ser04/src/experiment.py",
+      "sha256": "410f388dcaf896d1d9adafb3323911d37a810e5f7024912a40ad204ae1b75b8a",
+      "source_worktree_match": true
+    },
+    {
+      "task": "E",
+      "path": "experiments/ietf/claim-preservation/ser04/src/profile.py",
+      "sha256": "63f9b6624e15cf2406cb37293697cf9811d96151d49616d846b0a6eb589b586f",
+      "source_worktree_match": true
+    },
+    {
+      "task": "E",
+      "path": "experiments/ietf/claim-preservation/ser04/src/run.py",
+      "sha256": "c4537eda91bdb0e7f2567d3078c02b5d52e6a313308ca462502ed55317ce9bb6",
+      "source_worktree_match": true
+    },
+    {
+      "task": "E",
+      "path": "experiments/ietf/claim-preservation/ser04/tests/test_profile.py",
+      "sha256": "2d24114ccb17eb046b436e72367d504855119ddc9abe0c59dc66c1ec10e8aa70",
+      "source_worktree_match": true
+    }
+  ]
+}

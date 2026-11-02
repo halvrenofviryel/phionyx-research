@@ -1,0 +1,286 @@
+{
+  "original_commit": "ecaff138be0fd833848b6f27267e555e6b31e7f6",
+  "parent_commit": "02a44a812699f853ea65fffa21320e7cc8ddb6c7",
+  "integration_commit": "23f6b9dea1da6d229ce0acf646822d23d3f5c497",
+  "verified_at_utc": "2026-11-02T17:56:01.755938+00:00",
+  "files": [
+    {
+      "path": "experiments/ietf/audit/decision-receipts-04/.gitignore",
+      "sha256": "b259746f103bc8f58ea51dcc8835b7afccacd3c764052a5c00f74d31e621ae97",
+      "bytes": 33
+    },
+    {
+      "path": "experiments/ietf/audit/decision-receipts-04/DELTA.md",
+      "sha256": "dbc98456ef6b9a366d769bd5535c1d3997366cecad9d9539354647f65ebac7d1",
+      "bytes": 4206
+    },
+    {
+      "path": "experiments/ietf/audit/decision-receipts-04/README.md",
+      "sha256": "fd369c679ea6254478f70deb106765876568ccbde1c30fbb30ccc25fe6e37cbd",
+      "bytes": 1934
+    },
+    {
+      "path": "experiments/ietf/audit/decision-receipts-04/REPRODUCE.md",
+      "sha256": "c71852f624276c846206698687bb905d065314cfd6db446d11b219bd5ea0ceba",
+      "bytes": 3004
+    },
+    {
+      "path": "experiments/ietf/audit/decision-receipts-04/RESULTS.md",
+      "sha256": "704425fd87da17df11d4aefee279a5bb0fd876841aaa9aa76ea5eb06dc212756",
+      "bytes": 5936
+    },
+    {
+      "path": "experiments/ietf/audit/decision-receipts-04/cases/fixtures/C01.envelope.json",
+      "sha256": "365157c6b9f2fcdede9c4397f2e6499c87ac232f5624dd3b5b938eeb6d28b609",
+      "bytes": 5127
+    },
+    {
+      "path": "experiments/ietf/audit/decision-receipts-04/cases/fixtures/C02.envelope.json",
+      "sha256": "c377fc9aeb1090253b0d0b99f42e4f80da9d27721b06e428955025746bc30d0c",
+      "bytes": 2735
+    },
+    {
+      "path": "experiments/ietf/audit/decision-receipts-04/cases/fixtures/C03.envelope.json",
+      "sha256": "dcf31c65be798755cc0fab4afc27d5daf16b1f1d808b4a1a15ee2101bf2ccb5b",
+      "bytes": 2678
+    },
+    {
+      "path": "experiments/ietf/audit/decision-receipts-04/cases/fixtures/C04.envelope.json",
+      "sha256": "7e88fa9606fa6020fe0b84aeea7f0188346a894dabe24d478fce48a8edf14314",
+      "bytes": 2670
+    },
+    {
+      "path": "experiments/ietf/audit/decision-receipts-04/cases/fixtures/F1.envelope.json",
+      "sha256": "24bde2a7f9f5f0032f140ea07bd479bd8f825159be11beb912e0d6f76e01f5f9",
+      "bytes": 2658
+    },
+    {
+      "path": "experiments/ietf/audit/decision-receipts-04/cases/fixtures/F1.payload.json",
+      "sha256": "c20b86e4fa3753555a3e84dc87e2efe574f5094544612c6fc91ccf4f68707063",
+      "bytes": 1816
+    },
+    {
+      "path": "experiments/ietf/audit/decision-receipts-04/cases/fixtures/F10.envelope.json",
+      "sha256": "4069c22d741d9f4a08bc41d53664324f345dc58f88d2ff6211171749fe2b1c40",
+      "bytes": 2674
+    },
+    {
+      "path": "experiments/ietf/audit/decision-receipts-04/cases/fixtures/F10.payload.json",
+      "sha256": "c299b48e0a0596f8c8eb252beef0138c7d1133f113cdc03150abb6cb41bcdcce",
+      "bytes": 1829
+    },
+    {
+      "path": "experiments/ietf/audit/decision-receipts-04/cases/fixtures/F2.envelope.json",
+      "sha256": "00d970f4f5f52ee2a3386b3348cd18ef69625da13ecc484f695968e5bc863ba1",
+      "bytes": 2642
+    },
+    {
+      "path": "experiments/ietf/audit/decision-receipts-04/cases/fixtures/F2.payload.json",
+      "sha256": "f9015e5fbcce4da86a56e5facfc812f629b62e6c29afa5f7172d037e6b880978",
+      "bytes": 1805
+    },
+    {
+      "path": "experiments/ietf/audit/decision-receipts-04/cases/fixtures/F3.envelope.json",
+      "sha256": "2feee5b306c5a3c9fc42cb3d29b5371be682e8cb2bec9fd987d958f9fb5e727e",
+      "bytes": 2590
+    },
+    {
+      "path": "experiments/ietf/audit/decision-receipts-04/cases/fixtures/F3.payload.json",
+      "sha256": "506905bbeeb5205b82aa707a6e3a9ec4f27f6f7213b8dc864d5083063c2f460a",
+      "bytes": 1765
+    },
+    {
+      "path": "experiments/ietf/audit/decision-receipts-04/cases/fixtures/F4.envelope.json",
+      "sha256": "cce69757bdd3426f505db28b635cb9ab738bc47cd7ec5c497578ebcd062ae7a5",
+      "bytes": 2717
+    },
+    {
+      "path": "experiments/ietf/audit/decision-receipts-04/cases/fixtures/F4.payload.json",
+      "sha256": "b9dfd26537542632013d0df166141a788551b4987dfa33b060d5b5ebba78dfb1",
+      "bytes": 1829
+    },
+    {
+      "path": "experiments/ietf/audit/decision-receipts-04/cases/fixtures/F5.envelope.json",
+      "sha256": "3e3b7d575b712ada2c813ee98fd3b0c80d788e2558444a34338510c9978fa47a",
+      "bytes": 2633
+    },
+    {
+      "path": "experiments/ietf/audit/decision-receipts-04/cases/fixtures/F5.payload.json",
+      "sha256": "ed149a1c7383842eebf8304001da9de97d130b0b15080d1315ab8fbf1274ed44",
+      "bytes": 1765
+    },
+    {
+      "path": "experiments/ietf/audit/decision-receipts-04/cases/fixtures/F6.envelope.json",
+      "sha256": "b19b8c6792b3180feb21ea4955f5c8b2fcdc152cade4dced4b3f7a37a4a6c9b9",
+      "bytes": 1162
+    },
+    {
+      "path": "experiments/ietf/audit/decision-receipts-04/cases/fixtures/F6.payload.json",
+      "sha256": "400e251d35ce2d833d22eb8699b2300a565801056bc2cccd461842957107bd69",
+      "bytes": 695
+    },
+    {
+      "path": "experiments/ietf/audit/decision-receipts-04/cases/fixtures/F7.envelope.json",
+      "sha256": "345dffde216e10cb92a7c194aeb2b4dd5fab38852dd38f5475dbfeb5e32b662d",
+      "bytes": 1034
+    },
+    {
+      "path": "experiments/ietf/audit/decision-receipts-04/cases/fixtures/F7.payload.json",
+      "sha256": "b277133a0cd9e0ceea68313a8896280a89fd24c1743b1e056dcec5d10e10c6ad",
+      "bytes": 600
+    },
+    {
+      "path": "experiments/ietf/audit/decision-receipts-04/cases/fixtures/F8.envelope.json",
+      "sha256": "dff66906ab4b78cd8f6c1c058c4b4473419ecfa52e72b2d14f4b33cacbe3f3f9",
+      "bytes": 1162
+    },
+    {
+      "path": "experiments/ietf/audit/decision-receipts-04/cases/fixtures/F8.payload.json",
+      "sha256": "bbe81b4cf255b9444de8ead2773fc9a859f4c2b9f8288822209fac0653fb9888",
+      "bytes": 694
+    },
+    {
+      "path": "experiments/ietf/audit/decision-receipts-04/cases/fixtures/F9.envelope.json",
+      "sha256": "8916dc723844c4dfb2163d7b401336fd03d5f8477174d9c489fc16fd543a1360",
+      "bytes": 2674
+    },
+    {
+      "path": "experiments/ietf/audit/decision-receipts-04/cases/fixtures/F9.payload.json",
+      "sha256": "8271acb7293138eea0a48e52ee0dfd99c063b1139f353c8b26c9cdbe56975151",
+      "bytes": 1829
+    },
+    {
+      "path": "experiments/ietf/audit/decision-receipts-04/cases/fixtures/P01.envelope.json",
+      "sha256": "1629e75a550adb030270e3ab6c1058c17f9d5dbf0311da9c7a70ded15f426875",
+      "bytes": 2674
+    },
+    {
+      "path": "experiments/ietf/audit/decision-receipts-04/cases/fixtures/P02.envelope.json",
+      "sha256": "a681da710880d031b09f9832508b11dde38cc7637640f19c5e92c2812af69a99",
+      "bytes": 1162
+    },
+    {
+      "path": "experiments/ietf/audit/decision-receipts-04/cases/inputs/a1.txt",
+      "sha256": "dec54f771352454097310ae4bd6608c0070ebebb3955c6be013c1b3a8e310bd0",
+      "bytes": 50
+    },
+    {
+      "path": "experiments/ietf/audit/decision-receipts-04/cases/inputs/a2.txt",
+      "sha256": "5a7549948a1441addb710f5ada59e06dbce25cc5a59accf14f140379f47adb5b",
+      "bytes": 42
+    },
+    {
+      "path": "experiments/ietf/audit/decision-receipts-04/cases/inputs/ap.json",
+      "sha256": "88e5b6d69b3e4bc250a42aeffea0414d406e5f04ba4f991ee432a78231da1170",
+      "bytes": 231
+    },
+    {
+      "path": "experiments/ietf/audit/decision-receipts-04/cases/inputs/ap2.json",
+      "sha256": "37ec7f3fa06f086626268a6c818ba5b5af7fd16ba292735ce964a83c42c0357c",
+      "bytes": 231
+    },
+    {
+      "path": "experiments/ietf/audit/decision-receipts-04/cases/inputs/c1.json",
+      "sha256": "f13fce72c54f1872232c0339fa98b33ffe5142f72481cd31e378bc6a680b6f6a",
+      "bytes": 139
+    },
+    {
+      "path": "experiments/ietf/audit/decision-receipts-04/cases/inputs/e3.json",
+      "sha256": "d3d824cf55168298c0f651244853ec9d9620ea09087abe899243ceb8f9df3a6d",
+      "bytes": 93
+    },
+    {
+      "path": "experiments/ietf/audit/decision-receipts-04/cases/results.json",
+      "sha256": "8aa29dd0dd45cd3a1090691bb00359557e7c5904d2fc24997e7f0cee3232fcde",
+      "bytes": 49337
+    },
+    {
+      "path": "experiments/ietf/audit/decision-receipts-04/check_frozen.py",
+      "sha256": "b604d2ab51f7ab777caf1c3c6014b0180c57c3ef91a3e6ab91bf4dceb4971f93",
+      "bytes": 1353
+    },
+    {
+      "path": "experiments/ietf/audit/decision-receipts-04/evidence/final-validation.json",
+      "sha256": "ebcca06bbcf9dc0440a31015625e8a7f24ad64e502a3001d9c12e886f1d15486",
+      "bytes": 1479
+    },
+    {
+      "path": "experiments/ietf/audit/decision-receipts-04/evidence/final-validation.txt",
+      "sha256": "ee91114d3273b5320b4360625bfba4811957f0b087331f646057bc3965feb4db",
+      "bytes": 2884
+    },
+    {
+      "path": "experiments/ietf/audit/decision-receipts-04/evidence/frozen-03-all-files.json",
+      "sha256": "7b3f0fab4feb9477e69ba3fe68c5dc95e41a1ea8cddaeaccddcf5cc2ef13916f",
+      "bytes": 489425
+    },
+    {
+      "path": "experiments/ietf/audit/decision-receipts-04/evidence/frozen-03-tracked.json",
+      "sha256": "f71fffc99693abc9a4ea1f21d290d3db50f5118d0a6d4254b5b730ef613f43e2",
+      "bytes": 8197
+    },
+    {
+      "path": "experiments/ietf/audit/decision-receipts-04/evidence/package-pin.json",
+      "sha256": "4146b3076f91da3356ab0d5bea90c172b2ac5997a6b7a39493f8c9439c6d7592",
+      "bytes": 8966
+    },
+    {
+      "path": "experiments/ietf/audit/decision-receipts-04/evidence/section-comparison.json",
+      "sha256": "216883c2196870ce83ad73cf098da9cd9829bd577051b58a2173857075868e44",
+      "bytes": 1526
+    },
+    {
+      "path": "experiments/ietf/audit/decision-receipts-04/probe.py",
+      "sha256": "deb3fca65fd9ee2b0395a9cb0f94c2e29c7cd610f804edb3d44857e6b8262d42",
+      "bytes": 16780
+    },
+    {
+      "path": "experiments/ietf/audit/decision-receipts-04/reproduce.sh",
+      "sha256": "07a5469ec9b983e2c89a6c0a53f0b9bcd23e9e30b32562d9231ef5db8a22ce42",
+      "bytes": 1810
+    },
+    {
+      "path": "experiments/ietf/audit/decision-receipts-04/requirements.lock",
+      "sha256": "8a114907ca5f1c9e54bb0c8da9eb5c7586be31b285268fda74d824b6e4ec76c5",
+      "bytes": 537
+    },
+    {
+      "path": "experiments/ietf/audit/decision-receipts-04/run_record.json",
+      "sha256": "a2e5728aae78fa7d80ab4c3937ea51b045f62c1c021368b32536caf3f0a011e0",
+      "bytes": 4336
+    },
+    {
+      "path": "experiments/ietf/audit/decision-receipts-04/sources/draft-03-to-04.normalized.diff",
+      "sha256": "c3c6b7859d22d7879659e823dec20c89facb52089454c3a5d2beb2b279f80513",
+      "bytes": 66447
+    },
+    {
+      "path": "experiments/ietf/audit/decision-receipts-04/sources/draft-gruszka-audit-decision-receipts-03.txt",
+      "sha256": "c0aae84b82108a3bd40cbbbee33df13c760b5c2e943a205e9efca4c623438245",
+      "bytes": 80358
+    },
+    {
+      "path": "experiments/ietf/audit/decision-receipts-04/sources/draft-gruszka-audit-decision-receipts-04.txt",
+      "sha256": "f5065d91493fb15a4995f85ffd1a71911d01bc9c8b063b1938521e1bfc05c826",
+      "bytes": 127824
+    },
+    {
+      "path": "experiments/ietf/audit/decision-receipts-04/sources/manifest.json",
+      "sha256": "dfa3f965716a80b59a1d4e33c77d4aa48eb3dcfc892c604d67c0fedabe1fbfde",
+      "bytes": 1255
+    },
+    {
+      "path": "experiments/ietf/audit/decision-receipts-04/sources/proofbundle-6.4.0-pypi.json",
+      "sha256": "bbeff23d3fd63c215ab2c0c9991e9821eebb4f9a71ae984ac52fbcd2550c9095",
+      "bytes": 21341
+    },
+    {
+      "path": "experiments/ietf/audit/decision-receipts-04/tests/test_probe04.py",
+      "sha256": "b72b8f6294720bba592dc464924be71d125470cdfe436d95ed6ccfb1c2568b5a",
+      "bytes": 8867
+    }
+  ],
+  "exact_git_blobs_verified": 55,
+  "C03_unchanged": true,
+  "approval_granted": false
+}

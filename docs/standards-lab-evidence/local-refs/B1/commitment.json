@@ -1,0 +1,1 @@
+{"algorithm":"SHA-256","byte_length":23758,"canonicalization":"ACDER-CJSON-1","challenge_id":"acder02-sealed-20261102-b1","envelope_schema":"acder02-expected-envelope-v1","public_inputs_sha256":"def095c2efe235be958a978dce7a886ce407dc5c98a88c84bbeeafe27a6be248","schema":"acder02-commitment-v1","sha256":"804c65c50dea4064f5e3d411c469a0089bb0ca9a061713c23793b572868193f8"}

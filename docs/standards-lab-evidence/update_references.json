@@ -1,0 +1,561 @@
+{
+  "schema": "g-local-reference-update-1",
+  "checked_at_utc": "2026-11-02T17:36:49.480566+00:00",
+  "approval_granted": false,
+  "update_base_commit": "ef35030b823c37bc373e0718ace59c394dad2944",
+  "performed_checks": "Exact commit/worktree bytes, SHA-256, complete archive-member inventory, archived JSON boundaries, H2 checksum ledger/paragraph map/XML checks. No demo, integration tests, CI or rendering rerun.",
+  "source_worktrees_before_and_after": {
+    "F": {
+      "head": "84fe0aa9f29034aa6b873c0e83d689dc821bb398",
+      "status_porcelain": ""
+    },
+    "H2": {
+      "head": "9e4524a1f4312c25b88af9444a7740662104b09a",
+      "status_porcelain": ""
+    }
+  },
+  "F": {
+    "repository": "halvrenofviryel/ai-runtime-evidence-protocol",
+    "local_checkout": "/home/toygar/.codex/worktrees/dd94/ai-runtime-evidence-protocol",
+    "commit": "84fe0aa9f29034aa6b873c0e83d689dc821bb398",
+    "parent_commit": "0130fcf8e7d70a0f9c4f977957e5de76ca8ef689",
+    "publication_status": "UNPUBLISHED",
+    "status": "COMPLETE_LOCAL_DEMO_REFERENCE_ONLY",
+    "evidence_class": "SAME_USER_CONTROLLED_LOCAL_SYNTHETIC_DEMO",
+    "artifacts": [
+      {
+        "path": "integrations/scitt-claim-boundaries/README.md",
+        "local_path": "/home/toygar/.codex/worktrees/dd94/ai-runtime-evidence-protocol/integrations/scitt-claim-boundaries/README.md",
+        "sha256": "e424b042704f8a6cbde85ed10a3db9ca0ccda0cdc06f03c2aecbaab8fa0d7d6f",
+        "bytes": 8544,
+        "commit": "84fe0aa9f29034aa6b873c0e83d689dc821bb398",
+        "verified_against_exact_git_blob": true
+      },
+      {
+        "path": "integrations/scitt-claim-boundaries/RESULTS.md",
+        "local_path": "/home/toygar/.codex/worktrees/dd94/ai-runtime-evidence-protocol/integrations/scitt-claim-boundaries/RESULTS.md",
+        "sha256": "247db84121c8972f851ed04cfa1fc8f4b2c48e66b7deff01c4e4a757f6c2f5d8",
+        "bytes": 5134,
+        "commit": "84fe0aa9f29034aa6b873c0e83d689dc821bb398",
+        "verified_against_exact_git_blob": true
+      },
+      {
+        "path": "integrations/scitt-claim-boundaries/SOURCE_PINS.json",
+        "local_path": "/home/toygar/.codex/worktrees/dd94/ai-runtime-evidence-protocol/integrations/scitt-claim-boundaries/SOURCE_PINS.json",
+        "sha256": "46826c49072e6077465ce392f9f1af268b251fcb9ac477bde8f6090cae0fe8ae",
+        "bytes": 2475,
+        "commit": "84fe0aa9f29034aa6b873c0e83d689dc821bb398",
+        "verified_against_exact_git_blob": true
+      },
+      {
+        "path": "integrations/scitt-claim-boundaries/adapter.py",
+        "local_path": "/home/toygar/.codex/worktrees/dd94/ai-runtime-evidence-protocol/integrations/scitt-claim-boundaries/adapter.py",
+        "sha256": "3ad6a0703306d733f6108f298b782929687e4780575dfe7b8f0d3ea3306b772a",
+        "bytes": 6466,
+        "commit": "84fe0aa9f29034aa6b873c0e83d689dc821bb398",
+        "verified_against_exact_git_blob": true
+      },
+      {
+        "path": "integrations/scitt-claim-boundaries/demo.py",
+        "local_path": "/home/toygar/.codex/worktrees/dd94/ai-runtime-evidence-protocol/integrations/scitt-claim-boundaries/demo.py",
+        "sha256": "242ff189a3b6db88464c8a3d900cc9b86cca72fefbddf6dfdc655790b8454ade",
+        "bytes": 2418,
+        "commit": "84fe0aa9f29034aa6b873c0e83d689dc821bb398",
+        "verified_against_exact_git_blob": true
+      },
+      {
+        "path": "integrations/scitt-claim-boundaries/evidence.tar.gz",
+        "local_path": "/home/toygar/.codex/worktrees/dd94/ai-runtime-evidence-protocol/integrations/scitt-claim-boundaries/evidence.tar.gz",
+        "sha256": "2f6a3457e3d17206e0e9c43a79f7026e678f0385066b8838434c0d65112180b6",
+        "bytes": 120723,
+        "commit": "84fe0aa9f29034aa6b873c0e83d689dc821bb398",
+        "verified_against_exact_git_blob": true
+      },
+      {
+        "path": "integrations/scitt-claim-boundaries/fixtures/agent-execution-projection.json",
+        "local_path": "/home/toygar/.codex/worktrees/dd94/ai-runtime-evidence-protocol/integrations/scitt-claim-boundaries/fixtures/agent-execution-projection.json",
+        "sha256": "ffef0b5563a697d9f7ecc2020420db8ba2dc1abb30076322a0adb7c0a70bd8fb",
+        "bytes": 584,
+        "commit": "84fe0aa9f29034aa6b873c0e83d689dc821bb398",
+        "verified_against_exact_git_blob": true
+      },
+      {
+        "path": "integrations/scitt-claim-boundaries/fixtures/assumed-registered.json",
+        "local_path": "/home/toygar/.codex/worktrees/dd94/ai-runtime-evidence-protocol/integrations/scitt-claim-boundaries/fixtures/assumed-registered.json",
+        "sha256": "bed1a999f6d3a4cf68aa6e70bf782358369080c61c90d8c339eeadd9f18e9d0a",
+        "bytes": 893,
+        "commit": "84fe0aa9f29034aa6b873c0e83d689dc821bb398",
+        "verified_against_exact_git_blob": true
+      },
+      {
+        "path": "integrations/scitt-claim-boundaries/fixtures/bindings.json",
+        "local_path": "/home/toygar/.codex/worktrees/dd94/ai-runtime-evidence-protocol/integrations/scitt-claim-boundaries/fixtures/bindings.json",
+        "sha256": "c0e552bf23884a95f515ec6db3db1adf553951c7997137db293bb78789d4d289",
+        "bytes": 909,
+        "commit": "84fe0aa9f29034aa6b873c0e83d689dc821bb398",
+        "verified_against_exact_git_blob": true
+      },
+      {
+        "path": "integrations/scitt-claim-boundaries/fixtures/composed-reports.json",
+        "local_path": "/home/toygar/.codex/worktrees/dd94/ai-runtime-evidence-protocol/integrations/scitt-claim-boundaries/fixtures/composed-reports.json",
+        "sha256": "b5e8ac7c65084a86379ec1961c7678a0f2d828ba05670515e794778ee3012a83",
+        "bytes": 999,
+        "commit": "84fe0aa9f29034aa6b873c0e83d689dc821bb398",
+        "verified_against_exact_git_blob": true
+      },
+      {
+        "path": "integrations/scitt-claim-boundaries/fixtures/composed.airep.json",
+        "local_path": "/home/toygar/.codex/worktrees/dd94/ai-runtime-evidence-protocol/integrations/scitt-claim-boundaries/fixtures/composed.airep.json",
+        "sha256": "2352daee8cd47547919b2b624915f10b656457b0cffc2bc860e4e5f3d144bb8a",
+        "bytes": 7142,
+        "commit": "84fe0aa9f29034aa6b873c0e83d689dc821bb398",
+        "verified_against_exact_git_blob": true
+      },
+      {
+        "path": "integrations/scitt-claim-boundaries/fixtures/enforcement-observation.json",
+        "local_path": "/home/toygar/.codex/worktrees/dd94/ai-runtime-evidence-protocol/integrations/scitt-claim-boundaries/fixtures/enforcement-observation.json",
+        "sha256": "8d2ea2001b285ea959adf4249c503c90f09465a1dcc5b6049bf01ad7e528f110",
+        "bytes": 528,
+        "commit": "84fe0aa9f29034aa6b873c0e83d689dc821bb398",
+        "verified_against_exact_git_blob": true
+      },
+      {
+        "path": "integrations/scitt-claim-boundaries/fixtures/independence.json",
+        "local_path": "/home/toygar/.codex/worktrees/dd94/ai-runtime-evidence-protocol/integrations/scitt-claim-boundaries/fixtures/independence.json",
+        "sha256": "b124ee583faee01755d531a71ff98db2e7adddc92e87ca243cb42b3748031951",
+        "bytes": 131,
+        "commit": "84fe0aa9f29034aa6b873c0e83d689dc821bb398",
+        "verified_against_exact_git_blob": true
+      },
+      {
+        "path": "integrations/scitt-claim-boundaries/fixtures/issuer-only.airep.json",
+        "local_path": "/home/toygar/.codex/worktrees/dd94/ai-runtime-evidence-protocol/integrations/scitt-claim-boundaries/fixtures/issuer-only.airep.json",
+        "sha256": "e41bae0269aeb2475bdf9506afe271305034aace555198149c9b1fbccac73723",
+        "bytes": 2996,
+        "commit": "84fe0aa9f29034aa6b873c0e83d689dc821bb398",
+        "verified_against_exact_git_blob": true
+      },
+      {
+        "path": "integrations/scitt-claim-boundaries/fixtures/local-statement.json",
+        "local_path": "/home/toygar/.codex/worktrees/dd94/ai-runtime-evidence-protocol/integrations/scitt-claim-boundaries/fixtures/local-statement.json",
+        "sha256": "c2939aed70f2194e152593a30be0d8b2854471be788e92a7fac7ef6fe3aaa5b7",
+        "bytes": 307,
+        "commit": "84fe0aa9f29034aa6b873c0e83d689dc821bb398",
+        "verified_against_exact_git_blob": true
+      },
+      {
+        "path": "integrations/scitt-claim-boundaries/fixtures/measurement-uncheckable.json",
+        "local_path": "/home/toygar/.codex/worktrees/dd94/ai-runtime-evidence-protocol/integrations/scitt-claim-boundaries/fixtures/measurement-uncheckable.json",
+        "sha256": "29e1fb00fc8267ae6a1d164eacb6cc523f522257da3c0d0fdd72f2e1534c05de",
+        "bytes": 1040,
+        "commit": "84fe0aa9f29034aa6b873c0e83d689dc821bb398",
+        "verified_against_exact_git_blob": true
+      },
+      {
+        "path": "integrations/scitt-claim-boundaries/fixtures/revocation.json",
+        "local_path": "/home/toygar/.codex/worktrees/dd94/ai-runtime-evidence-protocol/integrations/scitt-claim-boundaries/fixtures/revocation.json",
+        "sha256": "67267c40ca39c51a32679548c64af11f1d70e69abf45140a306d6d6e231826c9",
+        "bytes": 219,
+        "commit": "84fe0aa9f29034aa6b873c0e83d689dc821bb398",
+        "verified_against_exact_git_blob": true
+      },
+      {
+        "path": "integrations/scitt-claim-boundaries/fixtures/uncheckable-measurement.json",
+        "local_path": "/home/toygar/.codex/worktrees/dd94/ai-runtime-evidence-protocol/integrations/scitt-claim-boundaries/fixtures/uncheckable-measurement.json",
+        "sha256": "dae1867553c65fa5a0632a352307b45c2c72d8590807dab86f31d48494b9607c",
+        "bytes": 951,
+        "commit": "84fe0aa9f29034aa6b873c0e83d689dc821bb398",
+        "verified_against_exact_git_blob": true
+      },
+      {
+        "path": "integrations/scitt-claim-boundaries/run_record.json",
+        "local_path": "/home/toygar/.codex/worktrees/dd94/ai-runtime-evidence-protocol/integrations/scitt-claim-boundaries/run_record.json",
+        "sha256": "f007834e1ede1b66129632710b7e81e7c59d45edfaed870e6a4004eebef8e17e",
+        "bytes": 34892,
+        "commit": "84fe0aa9f29034aa6b873c0e83d689dc821bb398",
+        "verified_against_exact_git_blob": true
+      },
+      {
+        "path": "integrations/scitt-claim-boundaries/tests/test_boundaries.py",
+        "local_path": "/home/toygar/.codex/worktrees/dd94/ai-runtime-evidence-protocol/integrations/scitt-claim-boundaries/tests/test_boundaries.py",
+        "sha256": "bbc516269259ff09bf45a93b261b221de46c74d531139d3e712d134fec836273",
+        "bytes": 12693,
+        "commit": "84fe0aa9f29034aa6b873c0e83d689dc821bb398",
+        "verified_against_exact_git_blob": true
+      }
+    ],
+    "snapshots": [
+      {
+        "path": "integrations/scitt-claim-boundaries/README.md",
+        "local_path": "/home/toygar/.codex/worktrees/dd94/ai-runtime-evidence-protocol/integrations/scitt-claim-boundaries/README.md",
+        "snapshot_path": "docs/standards-lab-evidence/local-refs/F/README.md",
+        "sha256": "e424b042704f8a6cbde85ed10a3db9ca0ccda0cdc06f03c2aecbaab8fa0d7d6f",
+        "bytes": 8544
+      },
+      {
+        "path": "integrations/scitt-claim-boundaries/RESULTS.md",
+        "local_path": "/home/toygar/.codex/worktrees/dd94/ai-runtime-evidence-protocol/integrations/scitt-claim-boundaries/RESULTS.md",
+        "snapshot_path": "docs/standards-lab-evidence/local-refs/F/RESULTS.md",
+        "sha256": "247db84121c8972f851ed04cfa1fc8f4b2c48e66b7deff01c4e4a757f6c2f5d8",
+        "bytes": 5134
+      },
+      {
+        "path": "integrations/scitt-claim-boundaries/run_record.json",
+        "local_path": "/home/toygar/.codex/worktrees/dd94/ai-runtime-evidence-protocol/integrations/scitt-claim-boundaries/run_record.json",
+        "snapshot_path": "docs/standards-lab-evidence/local-refs/F/run_record.json",
+        "sha256": "f007834e1ede1b66129632710b7e81e7c59d45edfaed870e6a4004eebef8e17e",
+        "bytes": 34892
+      },
+      {
+        "path": "integrations/scitt-claim-boundaries/SOURCE_PINS.json",
+        "local_path": "/home/toygar/.codex/worktrees/dd94/ai-runtime-evidence-protocol/integrations/scitt-claim-boundaries/SOURCE_PINS.json",
+        "snapshot_path": "docs/standards-lab-evidence/local-refs/F/SOURCE_PINS.json",
+        "sha256": "46826c49072e6077465ce392f9f1af268b251fcb9ac477bde8f6090cae0fe8ae",
+        "bytes": 2475
+      }
+    ],
+    "archive_sha256": "2f6a3457e3d17206e0e9c43a79f7026e678f0385066b8838434c0d65112180b6",
+    "archive_members_verified": 138,
+    "archived_scenarios": [
+      {
+        "path": "demo/assumed-registered.json",
+        "sha256": "761577bea70fe4bc204dc30542ba934988d0e7ee5f2ea86048cd4ac618a3972e",
+        "scenario": "assumed-registered",
+        "external_evaluations": {
+          "scitt_statement_signature": "NOT_EVALUATED",
+          "scitt_registration_receipt": "NOT_EVALUATED",
+          "scitt_identity_binding": "NOT_EVALUATED",
+          "capsule_conformance": "NOT_EVALUATED",
+          "agent_execution_evidence_verification": "NOT_EVALUATED",
+          "enforcement_sidecar": "NOT_EVALUATED"
+        },
+        "fixture_premise_performed_verification": false
+      },
+      {
+        "path": "demo/composed-reports.json",
+        "sha256": "6cca89e3a28f2337cb929eb6e2d185f45b8f06f6cffb157cc961986662b332c1",
+        "scenario": "composed-reports",
+        "external_evaluations": {
+          "scitt_statement_signature": "NOT_EVALUATED",
+          "scitt_registration_receipt": "NOT_EVALUATED",
+          "scitt_identity_binding": "NOT_EVALUATED",
+          "capsule_conformance": "NOT_EVALUATED",
+          "agent_execution_evidence_verification": "NOT_EVALUATED",
+          "enforcement_sidecar": "NOT_EVALUATED"
+        },
+        "fixture_premise_performed_verification": false
+      },
+      {
+        "path": "demo/uncheckable-measurement.json",
+        "sha256": "999ece88359a16325120f8dcfc693831fdc7ade1192c469188ee9ac7a8c1830f",
+        "scenario": "uncheckable-measurement",
+        "external_evaluations": {
+          "scitt_statement_signature": "NOT_EVALUATED",
+          "scitt_registration_receipt": "NOT_EVALUATED",
+          "scitt_identity_binding": "NOT_EVALUATED",
+          "capsule_conformance": "NOT_EVALUATED",
+          "agent_execution_evidence_verification": "NOT_EVALUATED",
+          "enforcement_sidecar": "NOT_EVALUATED"
+        },
+        "fixture_premise_performed_verification": false
+      }
+    ],
+    "reported_tests": {
+      "integration": 15,
+      "v02": 73,
+      "final_beta_commands": 56
+    },
+    "tests_rerun_in_G": false,
+    "SCITT_signature_registration_identity_verification": "NOT_EVALUATED",
+    "non_claims": [
+      "Not a SCITT compatibility, interoperability or conformance result.",
+      "Local synthetic scenarios and test-key AIREP checks do not establish event truth, real independent observers or a complete history."
+    ]
+  },
+  "D": {
+    "repository": "halvrenofviryel/ai-runtime-evidence-protocol",
+    "commit": "0130fcf8e7d70a0f9c4f977957e5de76ca8ef689",
+    "artifacts": [
+      {
+        "path": "examples/v02/EXPLAIN.md",
+        "commit": "0130fcf8e7d70a0f9c4f977957e5de76ca8ef689",
+        "sha256": "ab8338f3528eecd855a1ea0a96a8c1cd8a5c40052d53021b9ef30bc893b54767",
+        "bytes": 5611
+      },
+      {
+        "path": "reports/explain/source-basis.json",
+        "commit": "0130fcf8e7d70a0f9c4f977957e5de76ca8ef689",
+        "sha256": "6d00c376e6ccd2710e51d4e87e1b10f01d71ee691ec7b56077e47ebb906f4f6a",
+        "bytes": 14955
+      },
+      {
+        "path": "reports/explain/validation.json",
+        "commit": "0130fcf8e7d70a0f9c4f977957e5de76ca8ef689",
+        "sha256": "031ac7a31bc329e5c1bcd19f382cc21075adad528aeb8255c150884415d94169",
+        "bytes": 5420
+      },
+      {
+        "path": "tests/v02/test_explain.py",
+        "commit": "0130fcf8e7d70a0f9c4f977957e5de76ca8ef689",
+        "sha256": "0add25bba70eb08731cd41c38e2ab5e5f90827e7f8cda9e8048d1a00ba7e2302",
+        "bytes": 11713
+      },
+      {
+        "path": "tools/airep_v02/README.md",
+        "commit": "0130fcf8e7d70a0f9c4f977957e5de76ca8ef689",
+        "sha256": "2c882b7ea62349a50d2d83ad1ef8ea8a6a3cdc0d43a8faef5711d9ed206d42f9",
+        "bytes": 3065
+      },
+      {
+        "path": "tools/airep_v02/__main__.py",
+        "commit": "0130fcf8e7d70a0f9c4f977957e5de76ca8ef689",
+        "sha256": "c73f4e9e89a62bc4db778d27a6b49a888d64b0adb25fc92d1dd0554b17b6e7b2",
+        "bytes": 6779
+      },
+      {
+        "path": "tools/airep_v02/explain.py",
+        "commit": "0130fcf8e7d70a0f9c4f977957e5de76ca8ef689",
+        "sha256": "176952c4bb098b558719736e0ec067a5d8572135732c4e4c77eee479d190bb89",
+        "bytes": 7480
+      }
+    ]
+  },
+  "H2": {
+    "repository": "halvrenofviryel/phionyx-research",
+    "local_checkout": "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/h2-claim-preservation-candidate/phionyx-research",
+    "commit": "9e4524a1f4312c25b88af9444a7740662104b09a",
+    "publication_status": "UNPUBLISHED",
+    "status": "COMPLETE_LOCAL_CANDIDATE_REFERENCE_ONLY",
+    "user_approval_required": true,
+    "candidate_directory": "standards/ietf/ai-evaluation-claim-preservation/candidate/01/",
+    "artifacts": [
+      {
+        "path": "standards/ietf/ai-evaluation-claim-preservation/candidate/01/ARTIFACT_SHA256SUMS",
+        "local_path": "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/h2-claim-preservation-candidate/phionyx-research/standards/ietf/ai-evaluation-claim-preservation/candidate/01/ARTIFACT_SHA256SUMS",
+        "sha256": "2628a019ed14fa4b8b08b5c291a0c4326925958c388496f9c4b6b6935f725139",
+        "bytes": 2657,
+        "commit": "9e4524a1f4312c25b88af9444a7740662104b09a",
+        "verified_against_exact_git_blob": true
+      },
+      {
+        "path": "standards/ietf/ai-evaluation-claim-preservation/candidate/01/CLAIM_PRESERVATION_01_CHANGE_CANDIDATE.md",
+        "local_path": "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/h2-claim-preservation-candidate/phionyx-research/standards/ietf/ai-evaluation-claim-preservation/candidate/01/CLAIM_PRESERVATION_01_CHANGE_CANDIDATE.md",
+        "sha256": "bac80d276e348c69e4bddfce7750193ae5c2650bd3a62e9ed1a538b6a743859c",
+        "bytes": 27906,
+        "commit": "9e4524a1f4312c25b88af9444a7740662104b09a",
+        "verified_against_exact_git_blob": true
+      },
+      {
+        "path": "standards/ietf/ai-evaluation-claim-preservation/candidate/01/CP_00_TO_01.patch",
+        "local_path": "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/h2-claim-preservation-candidate/phionyx-research/standards/ietf/ai-evaluation-claim-preservation/candidate/01/CP_00_TO_01.patch",
+        "sha256": "b328de9bac5c3db70a71409620f091230a8ea69fcdc33e0b3176b7cf8a152d06",
+        "bytes": 16354,
+        "commit": "9e4524a1f4312c25b88af9444a7740662104b09a",
+        "verified_against_exact_git_blob": true
+      },
+      {
+        "path": "standards/ietf/ai-evaluation-claim-preservation/candidate/01/EVIDENCE_PINS.json",
+        "local_path": "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/h2-claim-preservation-candidate/phionyx-research/standards/ietf/ai-evaluation-claim-preservation/candidate/01/EVIDENCE_PINS.json",
+        "sha256": "b6489682b36b71b1bb258ccd92fcf3bdf84562848641103c4cc5913e867da6b1",
+        "bytes": 10085,
+        "commit": "9e4524a1f4312c25b88af9444a7740662104b09a",
+        "verified_against_exact_git_blob": true
+      },
+      {
+        "path": "standards/ietf/ai-evaluation-claim-preservation/candidate/01/PARAGRAPH_EVIDENCE.json",
+        "local_path": "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/h2-claim-preservation-candidate/phionyx-research/standards/ietf/ai-evaluation-claim-preservation/candidate/01/PARAGRAPH_EVIDENCE.json",
+        "sha256": "6b84d653fe707c2d5b5310e6ad166c73d8e42386d6a2610aca0bffb0762eaf83",
+        "bytes": 44533,
+        "commit": "9e4524a1f4312c25b88af9444a7740662104b09a",
+        "verified_against_exact_git_blob": true
+      },
+      {
+        "path": "standards/ietf/ai-evaluation-claim-preservation/candidate/01/RUN_RECORD.json",
+        "local_path": "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/h2-claim-preservation-candidate/phionyx-research/standards/ietf/ai-evaluation-claim-preservation/candidate/01/RUN_RECORD.json",
+        "sha256": "eb088964155a89a6eeadcbff51d4db1fe254e21d52f04e28edef1daab44262d3",
+        "bytes": 11866,
+        "commit": "9e4524a1f4312c25b88af9444a7740662104b09a",
+        "verified_against_exact_git_blob": true
+      },
+      {
+        "path": "standards/ietf/ai-evaluation-claim-preservation/candidate/01/SOURCE_PINS.json",
+        "local_path": "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/h2-claim-preservation-candidate/phionyx-research/standards/ietf/ai-evaluation-claim-preservation/candidate/01/SOURCE_PINS.json",
+        "sha256": "00419166690ca2b5606173e866c51cab70c9341168866e64b145488188bdb7b1",
+        "bytes": 13815,
+        "commit": "9e4524a1f4312c25b88af9444a7740662104b09a",
+        "verified_against_exact_git_blob": true
+      },
+      {
+        "path": "standards/ietf/ai-evaluation-claim-preservation/candidate/01/SUBMISSION_NOTE_DRAFT.md",
+        "local_path": "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/h2-claim-preservation-candidate/phionyx-research/standards/ietf/ai-evaluation-claim-preservation/candidate/01/SUBMISSION_NOTE_DRAFT.md",
+        "sha256": "9d47cada81184f868cd446eda0437ef69201f4d634ac9156b8b57249b8adc51b",
+        "bytes": 1296,
+        "commit": "9e4524a1f4312c25b88af9444a7740662104b09a",
+        "verified_against_exact_git_blob": true
+      },
+      {
+        "path": "standards/ietf/ai-evaluation-claim-preservation/candidate/01/VALIDATION.md",
+        "local_path": "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/h2-claim-preservation-candidate/phionyx-research/standards/ietf/ai-evaluation-claim-preservation/candidate/01/VALIDATION.md",
+        "sha256": "22d3bdd78fe28646347fa662f4f5652ab876951b8428874168800f6a7e506997",
+        "bytes": 4216,
+        "commit": "9e4524a1f4312c25b88af9444a7740662104b09a",
+        "verified_against_exact_git_blob": true
+      },
+      {
+        "path": "standards/ietf/ai-evaluation-claim-preservation/candidate/01/draft-abak-ai-evaluation-claim-preservation-01.html",
+        "local_path": "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/h2-claim-preservation-candidate/phionyx-research/standards/ietf/ai-evaluation-claim-preservation/candidate/01/draft-abak-ai-evaluation-claim-preservation-01.html",
+        "sha256": "0f8cf75c6c2a3d95205fc14ebe750166d306d3cbf0959fed6b807b4c7ac23986",
+        "bytes": 156296,
+        "commit": "9e4524a1f4312c25b88af9444a7740662104b09a",
+        "verified_against_exact_git_blob": true
+      },
+      {
+        "path": "standards/ietf/ai-evaluation-claim-preservation/candidate/01/draft-abak-ai-evaluation-claim-preservation-01.txt",
+        "local_path": "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/h2-claim-preservation-candidate/phionyx-research/standards/ietf/ai-evaluation-claim-preservation/candidate/01/draft-abak-ai-evaluation-claim-preservation-01.txt",
+        "sha256": "3932bee52c44f3794b9aeaa5b185916d9ef2b9482f2c719f8ef9b682e77a98cc",
+        "bytes": 74048,
+        "commit": "9e4524a1f4312c25b88af9444a7740662104b09a",
+        "verified_against_exact_git_blob": true
+      },
+      {
+        "path": "standards/ietf/ai-evaluation-claim-preservation/candidate/01/draft-abak-ai-evaluation-claim-preservation-01.xml",
+        "local_path": "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/h2-claim-preservation-candidate/phionyx-research/standards/ietf/ai-evaluation-claim-preservation/candidate/01/draft-abak-ai-evaluation-claim-preservation-01.xml",
+        "sha256": "f779689c4c6f5f7b8fabfedbc25948352e3c6df7290b522add7d90f8a4bc0f0d",
+        "bytes": 74469,
+        "commit": "9e4524a1f4312c25b88af9444a7740662104b09a",
+        "verified_against_exact_git_blob": true
+      },
+      {
+        "path": "standards/ietf/ai-evaluation-claim-preservation/candidate/01/sources/cp-referencedby.html",
+        "local_path": "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/h2-claim-preservation-candidate/phionyx-research/standards/ietf/ai-evaluation-claim-preservation/candidate/01/sources/cp-referencedby.html",
+        "sha256": "c9d44ed7a0d04ce5c4c6d8b5cd9eff685a5b40da527fcdb68453cad3a3080cd3",
+        "bytes": 28020,
+        "commit": "9e4524a1f4312c25b88af9444a7740662104b09a",
+        "verified_against_exact_git_blob": true
+      },
+      {
+        "path": "standards/ietf/ai-evaluation-claim-preservation/candidate/01/sources/draft-abak-ai-evaluation-claim-preservation-00.txt",
+        "local_path": "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/h2-claim-preservation-candidate/phionyx-research/standards/ietf/ai-evaluation-claim-preservation/candidate/01/sources/draft-abak-ai-evaluation-claim-preservation-00.txt",
+        "sha256": "9088079da04ed23fdead8a54894ac70bcf6ff26ce4834c815e4dc6961986de54",
+        "bytes": 64625,
+        "commit": "9e4524a1f4312c25b88af9444a7740662104b09a",
+        "verified_against_exact_git_blob": true
+      },
+      {
+        "path": "standards/ietf/ai-evaluation-claim-preservation/candidate/01/sources/draft-abak-ai-evaluation-claim-preservation-00.xml",
+        "local_path": "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/h2-claim-preservation-candidate/phionyx-research/standards/ietf/ai-evaluation-claim-preservation/candidate/01/sources/draft-abak-ai-evaluation-claim-preservation-00.xml",
+        "sha256": "89d100be479211bde3eb1d073e9bf2b7181a93af51252fe3b932627773764406",
+        "bytes": 64732,
+        "commit": "9e4524a1f4312c25b88af9444a7740662104b09a",
+        "verified_against_exact_git_blob": true
+      },
+      {
+        "path": "standards/ietf/ai-evaluation-claim-preservation/candidate/01/sources/draft-abak-ai-evaluation-claim-preservation-metadata.json",
+        "local_path": "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/h2-claim-preservation-candidate/phionyx-research/standards/ietf/ai-evaluation-claim-preservation/candidate/01/sources/draft-abak-ai-evaluation-claim-preservation-metadata.json",
+        "sha256": "5ef1980c985c7aa433b3b711671f76ca23e6eddab9178027f8247ad631550aee",
+        "bytes": 1880,
+        "commit": "9e4524a1f4312c25b88af9444a7740662104b09a",
+        "verified_against_exact_git_blob": true
+      },
+      {
+        "path": "standards/ietf/ai-evaluation-claim-preservation/candidate/01/sources/draft-gruszka-evaluation-receipt-mappings-04.txt",
+        "local_path": "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/h2-claim-preservation-candidate/phionyx-research/standards/ietf/ai-evaluation-claim-preservation/candidate/01/sources/draft-gruszka-evaluation-receipt-mappings-04.txt",
+        "sha256": "aa24f2d4c6b51509aba836c3786d6eb32711c8638ae0621cd4a6a7a54c978c25",
+        "bytes": 163444,
+        "commit": "9e4524a1f4312c25b88af9444a7740662104b09a",
+        "verified_against_exact_git_blob": true
+      },
+      {
+        "path": "standards/ietf/ai-evaluation-claim-preservation/candidate/01/sources/draft-gruszka-evaluation-receipt-mappings-metadata.json",
+        "local_path": "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/h2-claim-preservation-candidate/phionyx-research/standards/ietf/ai-evaluation-claim-preservation/candidate/01/sources/draft-gruszka-evaluation-receipt-mappings-metadata.json",
+        "sha256": "5cdf3e45b241954f705eb61912ef9f8ef03a4cd83f435ce618738d1b31e272f4",
+        "bytes": 1856,
+        "commit": "9e4524a1f4312c25b88af9444a7740662104b09a",
+        "verified_against_exact_git_blob": true
+      },
+      {
+        "path": "standards/ietf/ai-evaluation-claim-preservation/candidate/01/sources/draft-gruszka-signed-evaluation-receipts-04.txt",
+        "local_path": "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/h2-claim-preservation-candidate/phionyx-research/standards/ietf/ai-evaluation-claim-preservation/candidate/01/sources/draft-gruszka-signed-evaluation-receipts-04.txt",
+        "sha256": "d60c3dd95aefb8019a5f1c0ce041d8c4eb1d4571302766944bfbc92b91c1e358",
+        "bytes": 109277,
+        "commit": "9e4524a1f4312c25b88af9444a7740662104b09a",
+        "verified_against_exact_git_blob": true
+      },
+      {
+        "path": "standards/ietf/ai-evaluation-claim-preservation/candidate/01/sources/draft-gruszka-signed-evaluation-receipts-metadata.json",
+        "local_path": "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/h2-claim-preservation-candidate/phionyx-research/standards/ietf/ai-evaluation-claim-preservation/candidate/01/sources/draft-gruszka-signed-evaluation-receipts-metadata.json",
+        "sha256": "2d8b1fd5b1e7bb8a94489fb2067db9696b49ec9f95340287d6d00c063039c331",
+        "bytes": 1629,
+        "commit": "9e4524a1f4312c25b88af9444a7740662104b09a",
+        "verified_against_exact_git_blob": true
+      },
+      {
+        "path": "standards/ietf/ai-evaluation-claim-preservation/candidate/01/sources/draft-watts-eqr-conformance-05.txt",
+        "local_path": "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/h2-claim-preservation-candidate/phionyx-research/standards/ietf/ai-evaluation-claim-preservation/candidate/01/sources/draft-watts-eqr-conformance-05.txt",
+        "sha256": "18a46eeabe9cd942e410f5ba2258d2eaf61c8d7fe4f425ee3f5eb63fbd753c5d",
+        "bytes": 35288,
+        "commit": "9e4524a1f4312c25b88af9444a7740662104b09a",
+        "verified_against_exact_git_blob": true
+      },
+      {
+        "path": "standards/ietf/ai-evaluation-claim-preservation/candidate/01/sources/draft-watts-eqr-conformance-metadata.json",
+        "local_path": "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/h2-claim-preservation-candidate/phionyx-research/standards/ietf/ai-evaluation-claim-preservation/candidate/01/sources/draft-watts-eqr-conformance-metadata.json",
+        "sha256": "13b1ecddae865b9bef69d4cb03ee403741ce7dceab888483f96bcac18b2fc886",
+        "bytes": 1749,
+        "commit": "9e4524a1f4312c25b88af9444a7740662104b09a",
+        "verified_against_exact_git_blob": true
+      },
+      {
+        "path": "standards/ietf/ai-evaluation-claim-preservation/candidate/01/sources/proofbundle-LICENSE",
+        "local_path": "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/h2-claim-preservation-candidate/phionyx-research/standards/ietf/ai-evaluation-claim-preservation/candidate/01/sources/proofbundle-LICENSE",
+        "sha256": "e498a26fa5825cc7e7bd2544f97090059bd3743db5ae070c2685a86a0e555cb1",
+        "bytes": 1071,
+        "commit": "9e4524a1f4312c25b88af9444a7740662104b09a",
+        "verified_against_exact_git_blob": true
+      },
+      {
+        "path": "standards/ietf/ai-evaluation-claim-preservation/candidate/01/sources/proofbundle-ser-README.md",
+        "local_path": "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/h2-claim-preservation-candidate/phionyx-research/standards/ietf/ai-evaluation-claim-preservation/candidate/01/sources/proofbundle-ser-README.md",
+        "sha256": "3e62cfb55f72de3c6d199eff08ed76e1059ce24aef486ab481b044ef38cb49e9",
+        "bytes": 3012,
+        "commit": "9e4524a1f4312c25b88af9444a7740662104b09a",
+        "verified_against_exact_git_blob": true
+      },
+      {
+        "path": "standards/ietf/ai-evaluation-claim-preservation/candidate/01/sources/proofbundle-ser-vectors.json",
+        "local_path": "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/h2-claim-preservation-candidate/phionyx-research/standards/ietf/ai-evaluation-claim-preservation/candidate/01/sources/proofbundle-ser-vectors.json",
+        "sha256": "1ea8a75bd9f16f284d75b3dfe2b4c9d8888fcc9c137bbc1fb106c04613612819",
+        "bytes": 55375,
+        "commit": "9e4524a1f4312c25b88af9444a7740662104b09a",
+        "verified_against_exact_git_blob": true
+      },
+      {
+        "path": "standards/ietf/ai-evaluation-claim-preservation/candidate/01/sources/ser-v1-test-vectors.json",
+        "local_path": "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/h2-claim-preservation-candidate/phionyx-research/standards/ietf/ai-evaluation-claim-preservation/candidate/01/sources/ser-v1-test-vectors.json",
+        "sha256": "710cb8abab7ca51cf61b85c5610018f9a153add4c3db4f71b2d597e57b1671d1",
+        "bytes": 232309,
+        "commit": "9e4524a1f4312c25b88af9444a7740662104b09a",
+        "verified_against_exact_git_blob": true
+      }
+    ],
+    "informative_change_groups": 3,
+    "normative_changes": 0,
+    "paragraphs": 13,
+    "normative_sections_compared": 12,
+    "BCP14_elements_unchanged": true,
+    "paragraph_xml_mapping": "MATCH",
+    "rendering_rerun_in_G": false,
+    "candidate_files_copied_to_G": false,
+    "non_claims": [
+      "Local CP-01 candidate only; not submitted, not public evidence of adoption.",
+      "No normative change or new conformance finding; E 48 cells and 80 observations remain separate."
+    ]
+  },
+  "B2_B3": {
+    "status": "PENDING",
+    "enforced_isolation": "NOT_ESTABLISHED",
+    "private_answers_or_builder_context": "NOT_ACCESSED"
+  },
+  "source_code_copied_to_research": false,
+  "A_C_E_tests_rerun_in_update": false
+}

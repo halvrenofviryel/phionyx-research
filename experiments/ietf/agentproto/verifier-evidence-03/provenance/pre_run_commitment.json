@@ -1,0 +1,19 @@
+{
+  "created_at_utc": "2026-11-02T16:27:30.984220+00:00",
+  "inputs_sha256": {
+    "REQUIREMENTS.md": "ceac6a25c4702b60a0a219e280e06741b7c99e49e6b8b25d6ed655f278d1e799",
+    "requirements.json": "5271bc2ac444ac8ce4ad845c03f5fbb349a182d19cae0c0f0b124e665da9d75e",
+    "vectors/completeness_vectors.json": "8f9a0612cb8252407b3f9248a893ba55f28c8649907d72bd0f23d726dbf740d8",
+    "pytest.ini": "6a96ba0e2d5a8296fb90f474da9d2f0173d3e41eba18965513f711104155f913",
+    "reproduce.py": "e435915a9b03fcf56448d16fb884dae433bfa3b67b19586a69f922b6ab15bfa2",
+    "provenance/requirements_freeze.json": "5e08e1c74b790df1615a5a380b7c92c0e084aeeed57bf0b5837fb8c94361ae15",
+    "src/appraise.py": "e89a0a24a0092cab086041ced2c3bbd50415342b791f9d580144566e66a4299e",
+    "src/run.py": "97250fddb0eef40974a42ca60321a23136e4bfd495f4dc46cb0102cb77d84cb6",
+    "tests/conftest.py": "a2e4ab4d3cc7a9ffcb539cdf4db364a76e923dfd287ee36ae357b68fefb288cb",
+    "tests/test_appraise.py": "a66f6f4c9c93357ac8271a2584bcedd00ab97b3f5ff0935d0f6c6fb1603a8966",
+    "tests/test_fault_injection.py": "aa5d9a43acccb488d7190ffb8ae869e14881fbaa919c584763c7329e956c6e66"
+  },
+  "author_implementation_inspected": false,
+  "external_timestamp_or_publication": false,
+  "claim": "Local preparation order only; not an independent chronology or EXR-1 conformance proof."
+}
