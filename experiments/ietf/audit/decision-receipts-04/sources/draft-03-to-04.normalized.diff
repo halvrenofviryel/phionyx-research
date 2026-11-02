@@ -1,0 +1,1089 @@
+--- -03 (pagination/blank lines removed)
+
++++ -04 (pagination/blank lines removed)
+
+@@ -3,7 +3,7 @@
+
+ Expires: 6 May 2027
+  Decision Receipts for Approvals, Declined Actions and Executed Actions
+                          in Agent Audit Records
+-                draft-gruszka-audit-decision-receipts-03
++                draft-gruszka-audit-decision-receipts-04
+ Abstract
+    The architecture for auditing agent delegation and interactions
+    proposed for the AUDIT effort names Interaction Records, Action
+@@ -62,30 +62,34 @@
+
+    3.  Offline Verification  . . . . . . . . . . . . . . . . . . . .  10
+      3.1.  Inputs  . . . . . . . . . . . . . . . . . . . . . . . . .  10
+      3.2.  Decision Receipt  . . . . . . . . . . . . . . . . . . . .  10
+-     3.3.  Checks per Case . . . . . . . . . . . . . . . . . . . . .  12
+-     3.4.  Outcome Receipt . . . . . . . . . . . . . . . . . . . . .  12
+-     3.5.  Checks over a Set of Receipts . . . . . . . . . . . . . .  14
+-     3.6.  What a Pass Shows . . . . . . . . . . . . . . . . . . . .  14
+-     3.7.  Registering a Receipt with a Transparency Service . . . .  14
+-   4.  Approvals Are Honoured At Most Once . . . . . . . . . . . . .  16
+-   5.  Implementation Status . . . . . . . . . . . . . . . . . . . .  17
+-   6.  Relation to Other Work  . . . . . . . . . . . . . . . . . . .  19
+-   7.  Security Considerations . . . . . . . . . . . . . . . . . . .  20
+-   8.  Privacy Considerations  . . . . . . . . . . . . . . . . . . .  22
+-   9.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  22
+-   10. References  . . . . . . . . . . . . . . . . . . . . . . . . .  22
+-     10.1.  Normative References . . . . . . . . . . . . . . . . . .  22
+-     10.2.  Informative References . . . . . . . . . . . . . . . . .  24
+-   Appendix A.  Test Vectors . . . . . . . . . . . . . . . . . . . .  25
+-     A.1.  Test Keys and Inputs  . . . . . . . . . . . . . . . . . .  25
+-     A.2.  Statements  . . . . . . . . . . . . . . . . . . . . . . .  27
+-     A.3.  Results . . . . . . . . . . . . . . . . . . . . . . . . .  30
+-   Appendix B.  Changes  . . . . . . . . . . . . . . . . . . . . . .  31
+-     B.1.  Changes from -02  . . . . . . . . . . . . . . . . . . . .  31
+-     B.2.  Changes from -01 to -02 . . . . . . . . . . . . . . . . .  32
+-     B.3.  Changes from -00 to -01 . . . . . . . . . . . . . . . . .  32
+-   Acknowledgments . . . . . . . . . . . . . . . . . . . . . . . . .  33
+-   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .  33
++     3.3.  Checks per Case . . . . . . . . . . . . . . . . . . . . .  13
++     3.4.  Outcome Receipt . . . . . . . . . . . . . . . . . . . . .  13
++     3.5.  Checks over a Set of Receipts . . . . . . . . . . . . . .  15
++     3.6.  What a Pass Shows . . . . . . . . . . . . . . . . . . . .  15
++     3.7.  Registering a Receipt with a Transparency Service . . . .  15
++     3.8.  Field Rules . . . . . . . . . . . . . . . . . . . . . . .  17
++   4.  Approvals Are Honoured At Most Once . . . . . . . . . . . . .  23
++   5.  Implementation Status . . . . . . . . . . . . . . . . . . . .  24
++   6.  Relation to Other Work  . . . . . . . . . . . . . . . . . . .  27
++   7.  Security Considerations . . . . . . . . . . . . . . . . . . .  28
++   8.  Privacy Considerations  . . . . . . . . . . . . . . . . . . .  30
++   9.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  30
++   10. References  . . . . . . . . . . . . . . . . . . . . . . . . .  30
++     10.1.  Normative References . . . . . . . . . . . . . . . . . .  30
++     10.2.  Informative References . . . . . . . . . . . . . . . . .  31
++   Appendix A.  Test Vectors . . . . . . . . . . . . . . . . . . . .  34
++     A.1.  Test Keys and Inputs  . . . . . . . . . . . . . . . . . .  34
++     A.2.  Statements  . . . . . . . . . . . . . . . . . . . . . . .  36
++     A.3.  Results . . . . . . . . . . . . . . . . . . . . . . . . .  39
++     A.4.  Signed Statements for Registration  . . . . . . . . . . .  41
++     A.5.  Failure Vectors . . . . . . . . . . . . . . . . . . . . .  45
++   Appendix B.  Changes  . . . . . . . . . . . . . . . . . . . . . .  48
++     B.1.  Changes from -03  . . . . . . . . . . . . . . . . . . . .  49
++     B.2.  Changes from -02  . . . . . . . . . . . . . . . . . . . .  49
++     B.3.  Changes from -01 to -02 . . . . . . . . . . . . . . . . .  50
++     B.4.  Changes from -00 to -01 . . . . . . . . . . . . . . . . .  50
++   Acknowledgments . . . . . . . . . . . . . . . . . . . . . . . . .  50
++   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .  50
+ 1.  Introduction
+    The architecture of [AUDIT-ARCH] asks that auditing link user intent,
+    delegation, authorization and execution, and treats authorization as
+@@ -370,9 +374,10 @@
+
+    approval record bytes.  Inputs or evidence whose bytes are not
+    checked remain digest references, not verified contents.
+ 3.2.  Decision Receipt
+-   1.   Envelope.  Parse the envelope as a JSON object with the members
+-        payload, payloadType and signatures. payloadType MUST be
+-        application/vnd.in-toto+json.
++   1.   Envelope.  The envelope MUST be valid UTF-8 and parse as one
++        JSON object with no duplicate member names in any object.  It
++        MUST contain payload, payloadType and signatures. payloadType
++        MUST be application/vnd.in-toto+json.
+    2.   Payload bytes.  Decode payload as base64 [RFC4648] into the
+         payload bytes P.
+    3.   Signature.  Form PAE = "DSSEv1" SP LEN(type) SP type SP LEN(P)
+@@ -391,13 +396,13 @@
+
+         MUST have one entry whose digest.sha256 is SHA-256 over the
+         [RFC8785] serialization of predicate.
+    7.   Members. predicate MUST be a JSON object satisfying the field
+-        constraints of the strict v0.1 form in [PB-DECISION].  It MUST
+-        contain schemaVersion, decisionId, decisionType, decidedAt,
+-        decisionMaker, agent, principal, proposedAction, inputSnapshot,
+-        policyBoundary (with policyDigest), evidenceRefs, decision,
+-        notChecked, decisionChangeConditions, privacy and validity.
+-        Other predicate members are limited to recordedAt,
+-        delegationRefs, actionOutcome and traceContext.
++        rules of Section 3.8.  It MUST contain schemaVersion,
++        decisionId, decisionType, decidedAt, decisionMaker, agent,
++        principal, proposedAction, inputSnapshot, policyBoundary (with
++        policyDigest), evidenceRefs, decision, notChecked,
++        decisionChangeConditions, privacy and validity.  Other predicate
++        members are limited to recordedAt, delegationRefs, actionOutcome
++        and traceContext.
+         decisionMaker, agent, principal, proposedAction, policyBoundary,
+         decision, privacy and validity MUST be objects. decisionId,
+         decisionMaker.id, agent.id and principal.id MUST be non-empty
+@@ -412,6 +417,34 @@
+
+         value is 64 lowercase hexadecimal digits.  A null is allowed
+         only where the applicable field rules or Section 3.3 explicitly
+         permit it.
++        The digests of a decision receipt are the members listed below,
++        each with its full path in predicate, where [] stands for each
++        entry of an array.
++        *  agent.configurationDigest
++        *  principal.authnContextRef.digest
++        *  proposedAction.target.digest
++        *  proposedAction.parametersDigest
++        *  proposedAction.parametersSchemaRef.digest
++        *  inputSnapshot[].digest
++        *  policyBoundary.policyDigest
++        *  evidenceRefs[].digest
++        *  evidenceRefs[].artifactDigest
++        *  actionOutcome.outcomeRef.digest
++        The timestamps of a decision receipt are the members listed
++        below.
++        *  decidedAt
++        *  recordedAt
++        *  policyBoundary.validFrom
++        *  policyBoundary.validUntil
++        *  actionOutcome.performedAt
++        *  validity.expiresAt
++        actionOutcome.outcomeRef is an object whose member digest is a
++        digest; it is not itself a digest. evidenceRefs[].typedDigest,
++        where present, is not a digest in this sense either.  It MUST be
++        an object whose members are type, digestAlgorithm and digest and
++        optionally purpose; type and purpose MUST be non-empty strings,
++        digestAlgorithm MUST be jcs-sha256-v1, and digest MUST be 64
++        lowercase hexadecimal digits.
+    8.   Signer. decisionMaker.id MUST be the identifier the trust policy
+         binds to the key of step 3.
+    9.   Validity. validity MUST carry a non-empty array of non-empty
+@@ -426,9 +459,10 @@
+
+    Case 1, approval.
+       decision.verdict MUST be ALLOW and decision.reasonCodes MUST
+       contain user_approval. inputSnapshot MUST contain exactly one
+-      entry named "approval record".  The approval record bytes A MUST
+-      be supplied, MUST hash to that entry's digest, and MUST be their
+-      own [RFC8785] serialization.
++      entry whose name is "approval record"; it may contain other
++      entries.  The approval record bytes A MUST be supplied, MUST hash
++      to that entry's digest, and MUST be their own [RFC8785]
++      serialization.
+       A MUST be a JSON object containing approvalId, approver, session,
+       actionDigest, approvedAt and validUntil. approvalId, approver and
+       session MUST be non-empty strings. actionDigest MUST have the
+@@ -453,9 +487,9 @@
+
+        the outcome receipt type, with a subject derived from predicate
+        as in step 6 of Section 3.2.
+    3.  Members. predicate MUST be a JSON object satisfying the field
+-       constraints of [PB-OUTCOME].  It MUST contain schemaVersion,
+-       outcomeId, decisionRef, executor, requestedActionDigest, status
+-       and performedAt.  Other predicate members are limited to
++       rules of Section 3.8.  It MUST contain schemaVersion, outcomeId,
++       decisionRef, executor, requestedActionDigest, status and
++       performedAt.  Other predicate members are limited to
+        effectDigest, actualActionDigest, responseDigest, policyPurpose,
+        receiverRefs, sequence, recordedAt, limitations, traceContext and
+        validity.
+@@ -467,6 +501,20 @@
+
+        Each non-null digest MUST be an object with exactly one member,
+        sha256, whose value is 64 lowercase hexadecimal digits.  A null
+        is allowed only where the applicable field rules permit it.
++       The digests of an outcome receipt are the members listed below,
++       each with its full path in predicate, where [] stands for each
++       entry of an array.
++       *  decisionRef
++       *  requestedActionDigest
++       *  actualActionDigest
++       *  responseDigest
++       *  effectDigest
++       *  receiverRefs[].digest
++       *  receiverRefs[].artifactDigest
++       The timestamps of an outcome receipt are the members listed
++       below.
++       *  performedAt
++       *  recordedAt
+    4.  Binding. decisionRef.sha256 MUST equal the content root R of the
+        decision receipt that passed Section 3.2, and
+        requestedActionDigest MUST equal its parametersDigest.
+@@ -500,16 +548,19 @@
+
+    reuse one ALLOW receipt without producing another decision receipt.
+ 3.6.  What a Pass Shows
+    A pass shows that the holder of the decision maker's key signed
+-   exactly these payload bytes, that they name the action, approval,
+-   inputs and evidence by the digests checked, and, for Case 3, that the
+-   holder of a different key, which the trust policy permits to attest
+-   the expected executor.id, signed an outcome with status executed
+-   bound to that decision.  It does not show that the signer's
+-   statements are true, that the approval came from the named person,
+-   that the outcome signer observed the boundary, that no other receipt
+-   exists, or that the keys were not misused.  Those questions belong to
+-   the trust policy, to signed approvals, to observers and to
+-   transparency registration (Section 3.7).
++   exactly these payload bytes.  Where action bytes are supplied under
++   Section 3.1, their SHA-256 matches
++   proposedAction.parametersDigest.sha256.  In Case 1, the SHA-256 of
++   the required approval record bytes matches the digest.sha256 value of
++   the unique inputSnapshot entry whose name is "approval record".  For
++   Case 3, a pass also shows that the holder of a different key, which
++   the trust policy permits to attest the expected executor.id, signed
++   an outcome with status executed bound to that decision.  It does not
++   show that the signer's statements are true, that the approval came
++   from the named person, that the outcome signer observed the boundary,
++   that no other receipt exists, or that the keys were not misused.
++   Those questions belong to the trust policy, to signed approvals, to
++   observers and to transparency registration (Section 3.7).
+ 3.7.  Registering a Receipt with a Transparency Service
+    This section is informative.  It describes how the receipts of this
+    document can be registered with a Transparency Service under
+@@ -527,6 +578,8 @@
+
+    content type; that belongs to a deployment's profile and to the
+    Registration Policy of the Transparency Service (Section 5.1.1 of
+    [RFC9943]).
++   Appendix A.4 gives one example Signed Statement for each of the two
++   ways, with a SCITT Receipt for each.
+    Issuer.  The Issuer of the Signed Statement is the entity identified
+    by its iss Claim, whose key signs the COSE_Sign1 (Sections 3 and 6 of
+    [RFC9943]).  It can be the decision maker or the outcome signer, or
+@@ -580,6 +633,305 @@
+
+    on the Signed Statement; this does not dispense with the binding just
+    described.  The signatures of the decision maker and of the outcome
+    signer are checked by Section 3 in either case.
++3.8.  Field Rules
++   Step 7 of Section 3.2 and step 3 of Section 3.4 apply the rules of
++   this section.  Table 4 lists every member of the predicate of a
++   decision receipt that this document admits, and Table 5 every member
++   of the predicate of an outcome receipt, each with its full path in
++   predicate, where [] stands for each entry of an array.  The rules
++   follow the strict v0.1 form of [PB-DECISION] and [PB-OUTCOME] and
++   their machine schemas, restricted to the members this document
++   admits; where Section 3.2 is stricter, the table gives the stricter
++   rule.  This section states these rules itself, and its tables follow
++   those documents as they stand at commit
++   e1fec86351b216af369a2e6ac106dcc41aaf4b4c of [PB-REPO], where the
++   machine schemas are the same as in version 6.4.0.
++   In the column Type, a digest is an object with exactly one member,
++   sha256, whose value is 64 lowercase hexadecimal digits; a timestamp
++   is an [RFC3339] UTC timestamp with a trailing "Z"; typedDigest has
++   the form given in step 7 of Section 3.2; a string is any JSON string,
++   and a non-empty string has at least one character; a boolean is one
++   of the JSON values true or false; any value is any JSON value.  The
++   type object admits only the members listed for it, and the type open
++   object admits any members.  The type names preActionAuthorization and
++   outcome allow only the JSON strings "preActionAuthorization" and
++   "outcome", respectively.  The type "0.1." and one or more digits
++   means a string consisting of "0.1." followed by one or more ASCII
++   decimal digits.  The notes (1) to (4) follow the tables.
++   Required yes means that the member MUST be present whenever the
++   object or array entry that contains it is present.  Null yes means
++   that the member may be null.  Everywhere else a null is not allowed,
++   also inside an open object and in an array of any values.  A member
++   that the table does not list for an object that is not open is not
++   allowed, at the top level of predicate as well.
++   +=============================+======================+========+====+
++   | Member                      |Type                  |Required|Null|
++   +=============================+======================+========+====+
++   | schemaVersion               |"0.1." and one or more|yes     |no  |
++   |                             |digits                |        |    |
++   +-----------------------------+----------------------+--------+----+
++   | decisionId                  |non-empty string      |yes     |no  |
++   +-----------------------------+----------------------+--------+----+
++   | decisionType                |preActionAuthorization|yes     |no  |
++   +-----------------------------+----------------------+--------+----+
++   | decidedAt                   |timestamp             |yes     |no  |
++   +-----------------------------+----------------------+--------+----+
++   | recordedAt                  |timestamp             |no      |no  |
++   +-----------------------------+----------------------+--------+----+
++   | decisionMaker               |object                |yes     |no  |
++   +-----------------------------+----------------------+--------+----+
++   | decisionMaker.id            |non-empty string      |yes     |no  |
++   +-----------------------------+----------------------+--------+----+
++   | decisionMaker.version       |any value             |no      |yes |
++   +-----------------------------+----------------------+--------+----+
++   | agent                       |object                |yes     |no  |
++   +-----------------------------+----------------------+--------+----+
++   | agent.id                    |non-empty string      |yes     |no  |
++   +-----------------------------+----------------------+--------+----+
++   | agent.version               |string                |no      |no  |
++   +-----------------------------+----------------------+--------+----+
++   | agent.configurationDigest   |digest                |no      |no  |
++   +-----------------------------+----------------------+--------+----+
++   | principal                   |object                |yes     |no  |
++   +-----------------------------+----------------------+--------+----+
++   | principal.id                |non-empty string      |yes     |no  |
++   +-----------------------------+----------------------+--------+----+
++   | principal.authnContextRef   |object                |no      |no  |
++   +-----------------------------+----------------------+--------+----+
++   | principal.authnContextRef.  |string                |no      |no  |
++   | uri                         |                      |        |    |
++   +-----------------------------+----------------------+--------+----+
++   | principal.authnContextRef.  |digest                |no      |no  |
++   | digest                      |                      |        |    |
++   +-----------------------------+----------------------+--------+----+
++   | delegationRefs              |array of any values   |no      |no  |
++   +-----------------------------+----------------------+--------+----+
++   | proposedAction              |object                |yes     |no  |
++   +-----------------------------+----------------------+--------+----+
++   | proposedAction.actionType   |string                |yes     |no  |
++   +-----------------------------+----------------------+--------+----+
++   | proposedAction.target       |object                |no      |no  |
++   +-----------------------------+----------------------+--------+----+
++   | proposedAction.target.name  |string                |no      |no  |
++   +-----------------------------+----------------------+--------+----+
++   | proposedAction.target.uri   |string                |no      |no  |
++   +-----------------------------+----------------------+--------+----+
++   | proposedAction.target.      |digest                |no      |no  |
++   | digest                      |                      |        |    |
++   +-----------------------------+----------------------+--------+----+
++   | proposedAction.method       |string                |no      |no  |
++   +-----------------------------+----------------------+--------+----+
++   | proposedAction.             |digest                |(1)     |no  |
++   | parametersDigest            |                      |        |    |
++   +-----------------------------+----------------------+--------+----+
++   | proposedAction.             |open object           |(1)     |no  |
++   | parametersRef               |                      |        |    |
++   +-----------------------------+----------------------+--------+----+
++   | proposedAction.             |object                |no      |no  |
++   | parametersSchemaRef         |                      |        |    |
++   +-----------------------------+----------------------+--------+----+
++   | proposedAction.             |string                |no      |no  |
++   | parametersSchemaRef.uri     |                      |        |    |
++   +-----------------------------+----------------------+--------+----+
++   | proposedAction.             |digest                |no      |no  |
++   | parametersSchemaRef.digest  |                      |        |    |
++   +-----------------------------+----------------------+--------+----+
++   | inputSnapshot               |array of objects      |yes     |no  |
++   +-----------------------------+----------------------+--------+----+
++   | inputSnapshot[].name        |string                |no      |no  |
++   +-----------------------------+----------------------+--------+----+
++   | inputSnapshot[].uri         |string                |no      |no  |
++   +-----------------------------+----------------------+--------+----+
++   | inputSnapshot[].digest      |digest                |yes     |no  |
++   +-----------------------------+----------------------+--------+----+
++   | inputSnapshot[].mediaType   |string                |no      |no  |
++   +-----------------------------+----------------------+--------+----+
++   | policyBoundary              |object                |yes     |no  |
++   +-----------------------------+----------------------+--------+----+
++   | policyBoundary.             |non-empty string      |yes     |no  |
++   | policyEngine                |                      |        |    |
++   +-----------------------------+----------------------+--------+----+
++   | policyBoundary.policyId     |non-empty string      |yes     |no  |
++   +-----------------------------+----------------------+--------+----+
++   | policyBoundary.             |non-empty string      |yes     |no  |
++   | decisionPath                |                      |        |    |
++   +-----------------------------+----------------------+--------+----+
++   | policyBoundary.             |digest                |yes     |no  |
++   | policyDigest                |                      |        |    |
++   +-----------------------------+----------------------+--------+----+
++   | policyBoundary.             |string                |no      |no  |
++   | bundleRevision              |                      |        |    |
++   +-----------------------------+----------------------+--------+----+
++   | policyBoundary.validFrom    |timestamp             |no      |no  |
++   +-----------------------------+----------------------+--------+----+
++   | policyBoundary.validUntil   |timestamp             |no      |no  |
++   +-----------------------------+----------------------+--------+----+
++   | evidenceRefs                |array of objects      |yes     |no  |
++   +-----------------------------+----------------------+--------+----+
++   | evidenceRefs[].relation     |string                |yes     |no  |
++   +-----------------------------+----------------------+--------+----+
++   | evidenceRefs[].digest       |digest                |yes     |no  |
++   +-----------------------------+----------------------+--------+----+
++   | evidenceRefs[].             |digest                |no      |no  |
++   | artifactDigest              |                      |        |    |
++   +-----------------------------+----------------------+--------+----+
++   | evidenceRefs[].uri          |string                |no      |no  |
++   +-----------------------------+----------------------+--------+----+
++   | evidenceRefs[].             |string                |no      |no  |
++   | predicateType               |                      |        |    |
++   +-----------------------------+----------------------+--------+----+
++   | evidenceRefs[].typedDigest  |typedDigest           |no      |no  |
++   +-----------------------------+----------------------+--------+----+
++   | decision                    |object                |yes     |no  |
++   +-----------------------------+----------------------+--------+----+
++   | decision.verdict            |(2)                   |yes     |no  |
++   +-----------------------------+----------------------+--------+----+
++   | decision.reasonCodes        |non-empty array of    |yes     |no  |
++   |                             |non-empty strings     |        |    |
++   +-----------------------------+----------------------+--------+----+
++   | decision.                   |string                |no      |no  |
++   | humanReadableSummary        |                      |        |    |
++   +-----------------------------+----------------------+--------+----+
++   | decision.obligations        |array of any values   |no      |no  |
++   +-----------------------------+----------------------+--------+----+
++   | decision.allowedScope       |array of any values   |no      |no  |
++   +-----------------------------+----------------------+--------+----+
++   | notChecked                  |array of objects or   |yes     |no  |
++   |                             |strings               |        |    |
++   +-----------------------------+----------------------+--------+----+
++   | notChecked[].field          |string                |no      |no  |
++   +-----------------------------+----------------------+--------+----+
++   | notChecked[].reason         |string                |no      |no  |
++   +-----------------------------+----------------------+--------+----+
++   | notChecked[].impact         |string                |no      |no  |
++   +-----------------------------+----------------------+--------+----+
++   | decisionChangeConditions    |array of objects      |yes     |no  |
++   +-----------------------------+----------------------+--------+----+
++   | decisionChangeConditions[]. |string                |no      |no  |
++   | conditionType               |                      |        |    |
++   +-----------------------------+----------------------+--------+----+
++   | decisionChangeConditions[]. |string                |no      |no  |
++   | description                 |                      |        |    |
++   +-----------------------------+----------------------+--------+----+
++   | decisionChangeConditions[]. |string                |no      |no  |
++   | requiredEvidenceType        |                      |        |    |
++   +-----------------------------+----------------------+--------+----+
++   | actionOutcome               |object                |no      |no  |
++   +-----------------------------+----------------------+--------+----+
++   | actionOutcome.status        |(3)                   |no      |no  |
++   +-----------------------------+----------------------+--------+----+
++   | actionOutcome.performedAt   |timestamp             |no      |yes |
++   +-----------------------------+----------------------+--------+----+
++   | actionOutcome.outcomeRef    |object                |no      |yes |
++   +-----------------------------+----------------------+--------+----+
++   | actionOutcome.outcomeRef.   |string                |no      |no  |
++   | uri                         |                      |        |    |
++   +-----------------------------+----------------------+--------+----+
++   | actionOutcome.outcomeRef.   |digest                |no      |no  |
++   | digest                      |                      |        |    |
++   +-----------------------------+----------------------+--------+----+
++   | traceContext                |open object           |no      |no  |
++   +-----------------------------+----------------------+--------+----+
++   | privacy                     |object                |yes     |no  |
++   +-----------------------------+----------------------+--------+----+
++   | privacy.rawInputsIncluded   |boolean               |yes     |no  |
++   +-----------------------------+----------------------+--------+----+
++   | privacy.redactionProfile    |string                |no      |no  |
++   +-----------------------------+----------------------+--------+----+
++   | privacy.erased              |array of any values   |no      |no  |
++   +-----------------------------+----------------------+--------+----+
++   | privacy.masked              |array of any values   |no      |no  |
++   +-----------------------------+----------------------+--------+----+
++   | validity                    |object                |yes     |no  |
++   +-----------------------------+----------------------+--------+----+
++   | validity.audience           |non-empty array of    |yes     |no  |
++   |                             |non-empty strings     |        |    |
++   +-----------------------------+----------------------+--------+----+
++   | validity.nonce              |non-empty string      |yes     |no  |
++   +-----------------------------+----------------------+--------+----+
++   | validity.expiresAt          |timestamp             |yes     |no  |
++   +-----------------------------+----------------------+--------+----+
++         Table 4: Members of the predicate of a decision receipt
++     +===========================+================+==========+======+
++     | Member                    | Type           | Required | Null |
++     +===========================+================+==========+======+
++     | schemaVersion             | "0.1." and one | yes      | no   |
++     |                           | or more digits |          |      |
++     +---------------------------+----------------+----------+------+
++     | outcomeId                 | non-empty      | yes      | no   |
++     |                           | string         |          |      |
++     +---------------------------+----------------+----------+------+
++     | decisionRef               | digest         | yes      | no   |
++     +---------------------------+----------------+----------+------+
++     | executor                  | object         | yes      | no   |
++     +---------------------------+----------------+----------+------+
++     | executor.id               | non-empty      | yes      | no   |
++     |                           | string         |          |      |
++     +---------------------------+----------------+----------+------+
++     | executor.keyId            | string         | no       | no   |
++     +---------------------------+----------------+----------+------+
++     | requestedActionDigest     | digest         | yes      | no   |
++     +---------------------------+----------------+----------+------+
++     | status                    | (4)            | yes      | no   |
++     +---------------------------+----------------+----------+------+
++     | performedAt               | timestamp      | yes      | no   |
++     +---------------------------+----------------+----------+------+
++     | effectDigest              | digest         | no       | no   |
++     +---------------------------+----------------+----------+------+
++     | actualActionDigest        | digest         | no       | no   |
++     +---------------------------+----------------+----------+------+
++     | responseDigest            | digest         | no       | no   |
++     +---------------------------+----------------+----------+------+
++     | policyPurpose             | outcome        | no       | no   |
++     +---------------------------+----------------+----------+------+
++     | receiverRefs              | array of       | no       | no   |
++     |                           | objects        |          |      |
++     +---------------------------+----------------+----------+------+
++     | receiverRefs[].relation   | non-empty      | yes      | no   |
++     |                           | string         |          |      |
++     +---------------------------+----------------+----------+------+
++     | receiverRefs[].digest     | digest         | yes      | no   |
++     +---------------------------+----------------+----------+------+
++     | receiverRefs[].receiverId | string         | no       | no   |
++     +---------------------------+----------------+----------+------+
++     | receiverRefs[].           | string         | no       | no   |
++     | receiverKeyId             |                |          |      |
++     +---------------------------+----------------+----------+------+
++     | receiverRefs[].           | digest         | no       | no   |
++     | artifactDigest            |                |          |      |
++     +---------------------------+----------------+----------+------+
++     | sequence                  | object         | no       | no   |
++     +---------------------------+----------------+----------+------+
++     | sequence.runId            | non-empty      | yes      | no   |
++     |                           | string         |          |      |
++     +---------------------------+----------------+----------+------+
++     | sequence.seq              | integer, 0 or  | yes      | no   |
++     |                           | more           |          |      |
++     +---------------------------+----------------+----------+------+
++     | recordedAt                | timestamp      | no       | no   |
++     +---------------------------+----------------+----------+------+
++     | limitations               | array of       | no       | no   |
++     |                           | strings        |          |      |
++     +---------------------------+----------------+----------+------+
++     | traceContext              | object         | no       | no   |
++     +---------------------------+----------------+----------+------+
++     | traceContext.traceparent  | string         | no       | no   |
++     +---------------------------+----------------+----------+------+
++     | validity                  | object         | no       | no   |
++     +---------------------------+----------------+----------+------+
++     | validity.audience         | array of any   | no       | no   |
++     |                           | values         |          |      |
++     +---------------------------+----------------+----------+------+
++     | validity.nonce            | string         | no       | no   |
++     +---------------------------+----------------+----------+------+
++         Table 5: Members of the predicate of an outcome receipt
++   The notes of the tables are as follows. (1) proposedAction MUST carry
++   parametersDigest, parametersRef or both. (2) decision.verdict is
++   ALLOW, DENY, REFUSE, ESCALATE, DEFER or OBSERVE. (3)
++   actionOutcome.status is notAttempted, blocked, refused, attempted,
++   executed, failed or unknown. (4) status is executed, refused, failed
++   or partial.  Section 3.3 adds rules per case, and steps 8 to 10 of
++   Section 3.2 and steps 4 to 7 of Section 3.4 add rules across members.
+ 4.  Approvals Are Honoured At Most Once
+    An approval in Case 1 frees one action once.  For live use, the
+    relying party MUST apply the time bounds of Section 3.3 with its own
+@@ -649,15 +1001,15 @@
+
+    own use of the approval and allowing the command.  These are
+    observations of the source and runbook, not a live Agent Guard
+    execution measured for this document.
+-   The test vectors of Appendix A were produced with proofbundle 6.4.0
+-   from PyPI and test keys, not by Agent Guard.  For an approval, the
+-   inspected pilot writes released_by_owner among its reason codes where
+-   the vectors write user_approval.  It does not put the approval
+-   record's digest into inputSnapshot, may add the digest of configured
+-   closing rules there, sets no traceContext or actionOutcome, and
+-   leaves evidenceRefs empty.  The vectors therefore do not demonstrate
+-   that the preview produces Case 1 receipts conforming to this
+-   document.
++   The seven DSSE test vectors described in Appendix A.3 were produced
++   with proofbundle 6.4.0 from PyPI and test keys, not by Agent Guard.
++   For an approval, the inspected pilot writes released_by_owner among
++   its reason codes where those vectors write user_approval.  It does
++   not put the approval record's digest into inputSnapshot, may add the
++   digest of configured closing rules there, sets no traceContext or
++   actionOutcome, and leaves evidenceRefs empty.  Those vectors
++   therefore do not demonstrate that the preview produces Case 1
++   receipts conforming to this document.
+    At the inspected commit, the signing service keeps its record of
+    honoured approvals without eviction and refuses a new approval when
+    the record holds 4096.  The runbook has an operator rotate a full
+@@ -831,25 +1183,29 @@
+
+    accuracy may be available through other means, such as the TSA
+    policy; its absence does not establish zero uncertainty.
+ 8.  Privacy Considerations
+-   The receipts of this document carry digests of action bytes, approval
+-   records and effects instead of their content, and state
+-   rawInputsIncluded false.  A digest of a short or predictable input,
+-   such as a command line, can be found by trying candidate inputs; a
+-   deployment that must hide such inputs keeps the receipts as private
+-   as the inputs, or adds a secret salt to the digested bytes.
+-   Identifiers such as principal.id, agent.id and traceContext link a
+-   person's actions across services, as Section 9 of [AUDIT-ARCH]
+-   describes; pairwise or opaque identifiers reduce that linkage.
+-   Registering a receipt reveals that a decision took place at a time,
+-   even when only its content root is registered.  Where the envelope
+-   bytes are the payload of a registered Signed Statement (Section 3.7),
+-   readers of that payload can read the receipt with its identifiers and
+-   digests.  Registering a Statement over the content root avoids
+-   including the receipt's envelope bytes in that Statement, but the
+-   Signed Statement still carries its Issuer and Subject Claims and the
+-   Transparency Service records the Registration time (Sections 6 and 7
+-   of [RFC9943]).  Access to the registered data and any detached
+-   payload depends on the Transparency Service and any Adjacent
++   The example receipts in Appendix A carry digests of action bytes,
++   approval records and effects rather than those bytes, and the example
++   decision receipts set privacy.rawInputsIncluded to false.  The field
++   rules of Section 3.8 allow that member to be true and permit raw
++   content in other admitted members, such as a decision receipt's open
++   traceContext object.  A successful check under Section 3 does not
++   establish that raw inputs are absent.  A digest of a short or
++   predictable input, such as a command line, can be found by trying
++   candidate inputs; a deployment that must hide such inputs keeps the
++   receipts as private as the inputs, or adds a secret salt to the
++   digested bytes.  Identifiers such as principal.id, agent.id and
++   traceContext link a person's actions across services, as Section 9 of
++   [AUDIT-ARCH] describes; pairwise or opaque identifiers reduce that
++   linkage.  Registering a receipt reveals that a decision took place at
++   a time, even when only its content root is registered.  Where the
++   envelope bytes are the payload of a registered Signed Statement
++   (Section 3.7), readers of that payload can read the receipt with its
++   identifiers and digests.  Registering a Statement over the content
++   root avoids including the receipt's envelope bytes in that Statement,
++   but the Signed Statement still carries its Issuer and Subject Claims
++   and the Transparency Service records the Registration time (Sections
++   6 and 7 of [RFC9943]).  Access to the registered data and any
++   detached payload depends on the Transparency Service and any Adjacent
+    Services; Issuers and Clients assess their privacy and security
+    posture before registration (Section 8 of [RFC9943]).
+ 9.  IANA Considerations
+@@ -865,18 +1221,6 @@
+
+               layer, v1 (release v1.2.0)", 18 March 2026,
+               <https://github.com/in-
+               toto/attestation/blob/v1.2.0/spec/v1/statement.md>.
+-   [PB-DECISION]
+-              proofbundle project, "Decision Receipt predicate decision-
+-              receipt/v0.1", proofbundle, tag v6.4.0, docs/predicates/
+-              decision-receipt.md, October 2026,
+-              <https://github.com/b7n0de/proofbundle/blob/v6.4.0/docs/
+-              predicates/decision-receipt.md>.
+-   [PB-OUTCOME]
+-              proofbundle project, "Action Outcome predicate action-
+-              outcome/v0.1", proofbundle, tag v6.4.0, docs/predicates/
+-              action-outcome.md, October 2026,
+-              <https://github.com/b7n0de/proofbundle/blob/v6.4.0/docs/
+-              predicates/action-outcome.md>.
+    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
+               Requirement Levels", BCP 14, RFC 2119,
+               DOI 10.17487/RFC2119, March 1997,
+@@ -928,10 +1272,22 @@
+
+    [JCS-JS]   Erdtman, S., "canonicalize 2.1.0, a JavaScript
+               implementation of RFC 8785", 18 March 2025,
+               <https://www.npmjs.com/package/canonicalize/v/2.1.0>.
++   [PB-DECISION]
++              proofbundle project, "Decision Receipt predicate decision-
++              receipt/v0.1", proofbundle, tag v6.4.0, docs/predicates/
++              decision-receipt.md, October 2026,
++              <https://github.com/b7n0de/proofbundle/blob/v6.4.0/docs/
++              predicates/decision-receipt.md>.
++   [PB-OUTCOME]
++              proofbundle project, "Action Outcome predicate action-
++              outcome/v0.1", proofbundle, tag v6.4.0, docs/predicates/
++              action-outcome.md, October 2026,
++              <https://github.com/b7n0de/proofbundle/blob/v6.4.0/docs/
++              predicates/action-outcome.md>.
+    [PB-PYPI]  Python Package Index, "proofbundle 6.4.0", 28 October
+               2026, <https://pypi.org/project/proofbundle/6.4.0/>.
+-   [PB-REPO]  proofbundle project, "proofbundle source repository",
+-              2026, <https://github.com/b7n0de/proofbundle>.
++   [PB-REPO]  proofbundle project, "proofbundle source repository", 2
++              November 2026, <https://github.com/b7n0de/proofbundle>.
+    [RFC3161]  Adams, C., Cain, P., Pinkas, D., and R. Zuccherato,
+               "Internet X.509 Public Key Infrastructure Time-Stamp
+               Protocol (TSP)", RFC 3161, DOI 10.17487/RFC3161, August
+@@ -940,11 +1296,43 @@
+
+               Code: The Implementation Status Section", BCP 205,
+               RFC 7942, DOI 10.17487/RFC7942, July 2016,
+               <https://www.rfc-editor.org/info/rfc7942>.
++   [RFC8949]  Bormann, C. and P. Hoffman, "Concise Binary Object
++              Representation (CBOR)", STD 94, RFC 8949,
++              DOI 10.17487/RFC8949, December 2020,
++              <https://www.rfc-editor.org/info/rfc8949>.
++   [RFC9052]  Schaad, J., "CBOR Object Signing and Encryption (COSE):
++              Structures and Process", STD 96, RFC 9052,
++              DOI 10.17487/RFC9052, August 2022,
++              <https://www.rfc-editor.org/info/rfc9052>.
++   [RFC9053]  Schaad, J., "CBOR Object Signing and Encryption (COSE):
++              Initial Algorithms", RFC 9053, DOI 10.17487/RFC9053,
++              August 2022, <https://www.rfc-editor.org/info/rfc9053>.
++   [RFC9162]  Laurie, B., Messeri, E., and R. Stradling, "Certificate
++              Transparency Version 2.0", RFC 9162, DOI 10.17487/RFC9162,
++              December 2021, <https://www.rfc-editor.org/info/rfc9162>.
++   [RFC9597]  Looker, T. and M.B. Jones, "CBOR Web Token (CWT) Claims in
++              COSE Headers", RFC 9597, DOI 10.17487/RFC9597, June 2024,
++              <https://www.rfc-editor.org/info/rfc9597>.
++   [RFC9679]  Isobe, K., Tschofenig, H., and O. Steele, "CBOR Object
++              Signing and Encryption (COSE) Key Thumbprint", RFC 9679,
++              DOI 10.17487/RFC9679, December 2024,
++              <https://www.rfc-editor.org/info/rfc9679>.
++   [RFC9942]  Steele, O., Birkholz, H., Delignat-Lavaud, A., and C.
++              Fournet, "CBOR Object Signing and Encryption (COSE)
++              Receipts", RFC 9942, DOI 10.17487/RFC9942, June 2026,
++              <https://www.rfc-editor.org/info/rfc9942>.
+    [RFC9943]  Birkholz, H., Delignat-Lavaud, A., Fournet, C., Deshpande,
+               Y., and S. Lasker, "An Architecture for Trustworthy and
+               Transparent Digital Supply Chains", RFC 9943,
+               DOI 10.17487/RFC9943, June 2026,
+               <https://www.rfc-editor.org/info/rfc9943>.
++   [RFC9995]  Steele, O., Lasker, S., and H. Birkholz, "CBOR Object
++              Signing and Encryption (COSE) Hash Envelope", RFC 9995,
++              DOI 10.17487/RFC9995, July 2026,
++              <https://www.rfc-editor.org/info/rfc9995>.
++   [SCITT-COSE]
++              Action State Group, "scitt-cose 0.5.0", 21 October 2026,
++              <https://pypi.org/project/scitt-cose/0.5.0/>.
+    [SER]      Gruszka, K., "Signed Evaluation Receipts", Work in
+               Progress, Internet-Draft, draft-gruszka-signed-evaluation-
+               receipts-04, 26 October 2026,
+@@ -962,8 +1350,9 @@
+
+               <https://datatracker.ietf.org/doc/html/draft-wright-
+               verdict-record-01>.
+ Appendix A.  Test Vectors
+-   The vectors were generated with proofbundle 6.4.0 from PyPI and are
+-   for testing only.  Each key seed is SHA-256 over a public ASCII
++   The seven DSSE vectors described in Appendix A.3 were generated with
++   proofbundle 6.4.0 from PyPI.  All vectors and keys in this appendix
++   are for testing only.  Each key seed is SHA-256 over a public ASCII
+    label, so that every byte can be rebuilt; these keys MUST NOT be used
+    for any real receipt.  Ed25519 is deterministic, so the signatures
+    below follow from the seeds and the payloads.
+@@ -1210,9 +1599,340 @@
+
+    no floating-point numbers and no characters outside ASCII, which
+    keeps these serializations equal.  The payload of V2-bad differs from
+    all of them, as intended.
++   Each result is that of one procedure.  V1-good is judged by
++   Section 3.2 with Case 1 of Section 3.3, using a1 and ap; V1-bad fails
++   at step 3 of Section 3.2, before any check of Case 1.  V2-good is
++   judged by Section 3.2 with Case 2, using a2; V2-bad fails at step 4
++   of Section 3.2.  V3-good is judged as Case 3, by Section 3.2 for
++   V3-decision and Section 3.4 for V3-good, with e3 as effect bytes and
++   forge:agent-42-bot as expected executor.id; V3-bad fails at step 4 of
++   Section 3.4.  V3-decision passes under both readings, by Section 3.2
++   alone and as Case 3 together with V3-good.  Case 3 is the reading
++   that applies, because V3-decision is the decision of an executed
++   action; the exit code of proofbundle decision verify reflects
++   Section 3.2 alone.
++A.4.  Signed Statements for Registration
++   This appendix gives one Signed Statement for each way of registration
++   in Section 3.7, both for V2-good.  Statement A carries the envelope
++   bytes as its payload.  Statement B is made over the content root and
++   uses, as one example of a profile, the COSE Hash Envelope of
++   [RFC9995] with a detached payload; other profiles are possible.
++   These Signed Statements were built from the specifications cited
++   here, not with proofbundle.  The SCITT Receipts for A and B at the
++   end of this appendix were generated for illustration with the library
++   scitt-cose 0.5.0 [SCITT-COSE], and no Transparency Service issued
++   them.
++   The envelope bytes are the serialization under [RFC8785] of the
++   V2-good envelope of Appendix A.3, 2590 bytes with SHA-256
++   0e60fbbf36ddc6691cdf0fb2b1faea70d23d02d0da7653f449ec60f2f820e71e.
++   The test key issuer-1 of the Issuer is built like the keys of
++   Appendix A.1 and given by its label, Ed25519 seed (hex) and public
++   key (base64).  Its kid is the COSE Key Thumbprint of [RFC9679] with
++   SHA-256 over the required parameters kty 1 (OKP), crv 6 (Ed25519) and
++   x.
++   issuer-1
++   draft-gruszka-audit-decision-receipts test key issuer-1
++   cce9d25f7abceebfb8d50ce46c19b948d354906ecdbe6b72d53973bed5614e30
++   fS1sCQ+XTgtuMzxOnSRz0IMbzm+iFb6bVcB6lEMy8e8=
++   kid
++   f823e78e15df312ae66be2b2d4a8c035873f68d22abb1b2f52fcc6708cce62b0
++   Both Signed Statements are COSE_Sign1 messages of [RFC9052] with tag
++   18, an empty unprotected header and an EdDSA (-8) signature of
++   [RFC9053] by issuer-1 over the Sig_structure of Section 4.4 of
++   [RFC9052].  Their CBOR uses the core deterministic encoding of
++   Section 4.2.1 of [RFC8949].  The protected headers carry the CWT
++   Claims (label 15) of [RFC9597] with iss "https://issuer-1.example"
++   and sub "decision:dec-0002", the subject name of V2-good.  They are
++   shown below in diagnostic notation, with kid standing for the value
++   above.
++   A  {1: -8, 3: "application/json", 4: kid,
++       15: {1: "https://issuer-1.example", 2: "decision:dec-0002"}}
++   B  {1: -8, 4: kid,
++       15: {1: "https://issuer-1.example", 2: "decision:dec-0002"},
++       258: -16, 259: "application/vnd.in-toto+json"}
++   In B, label 258 (payload_hash_alg) is -16 (SHA-256) and label 259
++   (payload_preimage_content_type) is the payloadType of the envelope,
++   whose decoded payload is the preimage.  B carries no content type
++   (label 3), as Section 4 of [RFC9995] requires for a Hash Envelope.
++   A is encoded as the bytes given below, followed by the envelope
++   bytes, the two bytes 0x58 0x40 and the signature.  B has a detached
++   payload, the content root R(V2-good) of Appendix A.3, and is given in
++   full.
++   A, 2768 bytes, SHA-256
++   ec0255d32b2e96aee414728dfa10995f4742849e9d71bb4d8710223765062517
++   bytes before the payload, 112 bytes
++   d2845868a4012703706170706c69636174696f6e2f6a736f6e045820f823e78e
++   15df312ae66be2b2d4a8c035873f68d22abb1b2f52fcc6708cce62b00fa20178
++   1868747470733a2f2f6973737565722d312e6578616d706c6502716465636973
++   696f6e3a6465632d30303032a0590a1e
++   signature
++   16181711ba8148149489c7a52f4c97ac44dfd91b83bcbab4ba2f048ef3da6612
++   52a508a3aecbe32f3e531e8cf8023fa381a10e51e1a5de468196a21ab208e40c
++   B, 195 bytes, SHA-256
++   3a814dfc59ddbe6da6f0ab7950db07801b3c60e917808febad5978c0ec90e83b
++   d284587ba50127045820f823e78e15df312ae66be2b2d4a8c035873f68d22abb
++   1b2f52fcc6708cce62b00fa201781868747470733a2f2f6973737565722d312e
++   6578616d706c6502716465636973696f6e3a6465632d303030321901022f1901
++   03781c6170706c69636174696f6e2f766e642e696e2d746f746f2b6a736f6ea0
++   f65840caec06ad5338ad0b9479190cd34c92eca213074ccfa02fcda1c5af70d8
++   3342e3d93819b07b983e8771ebf8c201fe95cc30bdded5a8c6da658d494c3fb2
++   4cb603
++   A verifier that holds the issuer-1 key decodes each Signed Statement,
++   checks that alg is EdDSA, that kid is the thumbprint of that key and
++   that iss is as expected, and verifies the signature, for B over the
++   detached payload.  Both pass.  Two counterexamples fail at the
++   signature.  In the first, the byte at offset 12 of the envelope bytes
++   in A, the first character "e" of the base64 payload, is replaced by
++   "f".  In the second, B is checked with a detached payload whose first
++   byte is 0xec instead of 0xed.  The binding of Section 3.7 then holds
++   for V2-good.  The payload of A equals its envelope bytes, and the
++   payload of B equals its content root and differs from R(V2-bad).  On
++   those envelope bytes, proofbundle 6.4.0 decision verify with the
++   arguments of Appendix A.3 exits 0.
++   For these Receipts, a local registration in the manner of Section 6.3
++   of [RFC9943] first verified the Issuer signature of each Signed
++   Statement, for B over the detached payload, and checked that its
++   protected header carries kid and CWT Claims with iss and sub
++   (Section 6 of [RFC9943]).  It accepted A and then B as the two
++   entries of a Merkle Tree of [RFC9162], each entry being the bytes of
++   the Signed Statement.  Neither [RFC9942] nor [RFC9943] defines what a
++   Transparency Service takes as an entry; the bytes of the Signed
++   Statement are the choice of this example, and other services enter,
++   for example, a hash of them.  It rejected A with the changed byte, B
++   with the changed detached payload, and a variant of A without sub.
++   The Receipts are COSE_Sign1 messages of [RFC9942] with vds 1
++   (RFC9162_SHA256), a detached payload, the root of that tree, and an
++   EdDSA signature by the test key receipt-issuer-1, built like the keys
++   of Appendix A.1.  Their CWT Claims carry the iss given below and the
++   sub of the Signed Statement, and their kid is the COSE Key Thumbprint
++   of the receipt-issuer-1 key.  Both Signed Statements have the same
++   sub and both Receipts sign the same root, so the two Receipts share
++   their protected header and signature and differ only in their
++   inclusion proofs.  Their protected header keeps the label order in
++   which scitt-cose writes it (395, 15, 4, 1), not the deterministic
++   order of Section 4.2.1 of [RFC8949]; the signature covers the bytes
++   as given.
++   receipt-issuer-1
++   draft-gruszka-audit-decision-receipts test key receipt-issuer-1
++   b71a939bfbc162586fffa8b45a0d89d312e7102297906c3174fa6efab2b497fd
++   WpbTJ2CMpw5ELCFLr7kLdAjpZInhGIUzQQ5lzCXs0po=
++   kid
++   4277c54764b34816bb1836860d570849105f452369e4e5c741f5891d9fb25040
++   iss
++   https://receipt-issuer-1.example
++   root, tree size 2
++   f541c1ee787f59133666bd6907cb0174abb2460d8fdcce8deec05beb1a7ddd6d
++   Receipt for A, leaf index 0, 216 bytes, SHA-256
++   1525b5ab39b77b0283825673bb7ee6ec699b9940ab4730d2118d66fd1a7cfce8
++   d2845862a419018b010fa201782068747470733a2f2f726563656970742d6973
++   737565722d312e6578616d706c6502716465636973696f6e3a6465632d303030
++   320458204277c54764b34816bb1836860d570849105f452369e4e5c741f5891d
++   9fb250400127a119018ca120815826830200815820047d8ac95c86ec315a5419
++   b62eeeb68a6b7d94b0654ea372d72ec5ee418a9710f658400682628ba41d0364
++   9206c1a7c7294f1f878b44208bb37b08027319a196906f67d4b0ad8d70bce9cd
++   36d141c289bc3ba0a7933bceb71af802e7b2db2a28d6db0b
++   Receipt for B, leaf index 1, 216 bytes, SHA-256
++   50a0ed768b8e9482f0d4f3f821109fbe7704b4235ca56e7c5a8c5a4f5ae36a21
++   d2845862a419018b010fa201782068747470733a2f2f726563656970742d6973
++   737565722d312e6578616d706c6502716465636973696f6e3a6465632d303030
++   320458204277c54764b34816bb1836860d570849105f452369e4e5c741f5891d
++   9fb250400127a119018ca12081582683020181582031277502318f2fb4197043
++   c51cb6895267e7c48d48ab55aa0c2370745b1cdcf9f658400682628ba41d0364
++   9206c1a7c7294f1f878b44208bb37b08027319a196906f67d4b0ad8d70bce9cd
++   36d141c289bc3ba0a7933bceb71af802e7b2db2a28d6db0b
++   A verifier computes the leaf hash, SHA-256 over the byte 0x00
++   followed by the entry (Section 2.1.1 of [RFC9162]), applies the
++   inclusion path of the Receipt to obtain the root (Section 2.1.3.2 of
++   [RFC9162]), and verifies the signature over that root with the
++   receipt-issuer-1 key (Section 5.2.1 of [RFC9942]).  Both Receipts
++   pass.  Four counterexamples fail at the signature, namely A with the
++   Receipt for B, B with the Receipt for A, the Receipt for A with one
++   byte of its inclusion path changed, and the Receipt for A checked
++   with the issuer-1 key instead of the receipt-issuer-1 key.
++A.5.  Failure Vectors
++   Each vector below defines a failing test case based on a passing
++   vector of Appendix A.3 and names its expected first failing check for
++   the stated inputs and procedure.  For F10, receipt verification
++   passes and the relying party refuses the approval under Section 4.
++   The payloads are derived as in Appendix A.2, where a line "remove P"
++   removes the member at path P, and signed with the test keys of
++   Appendix A.1.  F4 and F5 reuse the envelopes of V1-good and V2-good
++   and differ from them only in an input of the verifier.  These vectors
++   were generated from the definitions in this document, not with
++   proofbundle.
++   The approval record ap2 is ap with a later validUntil, and c1 is the
++   consumption state of a relying party that has honoured ap, as an
++   array of approval identities.  Both are the [RFC8785] serialization
++   of the JSON value shown.
++   ap2, 231 bytes, SHA-256
++   37ec7f3fa06f086626268a6c818ba5b5af7fd16ba292735ce964a83c42c0357c
++   {
++    "actionDigest": {
++     "sha256": SHA-256(a1)
++    },
++    "approvalId": "appr-001",
++    "approvedAt": "2026-10-15T09:00:00Z",
++    "approver": "user-123",
++    "session": "sess-1",
++    "validUntil": "2026-10-15T09:30:00Z"
++   }
++   c1, 139 bytes, SHA-256
++   f13fce72c54f1872232c0339fa98b33ffe5142f72481cd31e378bc6a680b6f6a
++   [
++    {
++     "actionDigest": {
++      "sha256": SHA-256(a1)
++     },
++     "approvalId": "appr-001",
++     "session": "sess-1"
++    }
++   ]
++   The decision vectors are checked like their base vectors in
++   Appendix A.3, by Section 3.2 with Case 1 of Section 3.3 using a1 and
++   ap, or with Case 2 using a2, with expected audience observer-1 and
++   the decisionId as expected nonce.  F5 is checked with a1 instead of
++   a2.  F10 is checked with ap2, and then by a relying party under
++   Section 4 that holds c1.  F6 to F8 are checked by Section 3.4 against
++   V3-decision at T 2026-10-15T09:11:00Z, with e3 as effect bytes and
++   forge:agent-42-bot as expected executor.id.
++   F1, from V1-good
++   agent = null
++   F2, from V2-good
++   policyBoundary.validFrom = "2026-10-15T09:00:00+00:00"
++   F3, from V2-good
++   decisionMaker.id = "gate-2"
++   F6, from V3-good
++   executor.id = "forge:another-actor"
++   F7, from V3-good
++   status = "refused"
++   remove effectDigest
++   F8, from V3-good
++   performedAt = "2026-10-15T09:09:59Z"
++   F9, from V1-good
++   validity.expiresAt = "2026-10-15T10:00:00Z"
++   F10, from V1-good
++   decidedAt = "2026-10-15T09:20:00Z"
++   decisionId = "dec-0004"
++   inputSnapshot[1].digest.sha256 = SHA-256(ap2)
++   validity.expiresAt = "2026-10-15T09:25:00Z"
++   validity.nonce = "dec-0004"
++   Each block gives the vector, the evaluation time T, the step at which
++   it fails, the exit code of the proofbundle 6.4.0 command line
++   interface for the command of Appendix A.3, and, for a new payload,
++   its size and signer, the SHA-256 of the payload bytes and the
++   signature in base64 on two lines.
++   F1, T 2026-10-15T09:01:00Z, fails at step 7 of 3.2, exit 2
++   1816 bytes, signed by gate-1
++   c20b86e4fa3753555a3e84dc87e2efe574f5094544612c6fc91ccf4f68707063
++   TeDLj3n16X9LrDWZGsPSM1YTwCx37OuCrXj/rYp4ayMX
++   X4EMk9ymbLAjBUZliV3KqqA4E0MEPXA6EYArYoThAQ==
++   F2, T 2026-10-15T09:06:00Z, fails at step 7 of 3.2, exit 2
++   1805 bytes, signed by gate-1
++   f9015e5fbcce4da86a56e5facfc812f629b62e6c29afa5f7172d037e6b880978
++   bPEAg3NIdR7cKMu7egfmj1xWPs4r27HumGAG6z95uKVk
++   +iQwNWltjZBCDc5PJiBDVv3hb+ufBliTWf08CluRAA==
++   F3, T 2026-10-15T09:06:00Z, fails at step 8 of 3.2, exit 0
++   1765 bytes, signed by gate-1
++   506905bbeeb5205b82aa707a6e3a9ec4f27f6f7213b8dc864d5083063c2f460a
++   qGm1ojfaW3hFVuUV5q+H+t1zYQRVA9NPIWnTup1w22Xd
++   dNAtygYVZ3qA7Wcame3kZsd14kmp+o+4Az0/FDNOAg==
++   F4, the envelope of V1-good unchanged,
++   T 2026-10-15T09:05:05Z, fails at step 9 of 3.2, exit 2
++   F5, the envelope of V2-good with a1 as action bytes,
++   T 2026-10-15T09:06:00Z, fails at step 10 of 3.2, exit 0
++   F6, T 2026-10-15T09:11:00Z, fails at step 5 of 3.4, exit 0
++   695 bytes, signed by observer-1
++   400e251d35ce2d833d22eb8699b2300a565801056bc2cccd461842957107bd69
++   gNh8vj8l4Ke040Yos21Vhd6uThtQYLsPVkRBJ4sXu+/C
++   n4LaMY2xoO4RzoI/AMU4LY8GAlwelUVCab+FLjGuBw==
++   F7, T 2026-10-15T09:11:00Z, fails at step 6 of 3.4, exit 0
++   600 bytes, signed by observer-1
++   b277133a0cd9e0ceea68313a8896280a89fd24c1743b1e056dcec5d10e10c6ad
++   EhhyqWKqst02TtQfDvlLWyVgQrQao7fPywh0elGXrH0k
++   uZXQxMACzjGGbX+69BoygBO3/T7SHHLtmPAB5X3bBQ==
++   F8, T 2026-10-15T09:11:00Z, fails at step 7 of 3.4, exit 0
++   694 bytes, signed by observer-1
++   bbe81b4cf255b9444de8ead2773fc9a859f4c2b9f8288822209fac0653fb9888
++   B+PLo64p+ESIWVfdIk7FR6RuANsst7kgsep1K6+g92eU
++   Luty4HseuWJL2laTX+tkc0aM1ztineO5Q3rA9XTtAg==
++   F9, T 2026-10-15T09:16:00Z, fails at Case 1 of 3.3, exit 0
++   1829 bytes, signed by gate-1
++   8271acb7293138eea0a48e52ee0dfd99c063b1139f353c8b26c9cdbe56975151
++   hIPtCWefKjWx+MlTv7nUxCuq9v+JjapYccXx9rawMxw8
++   JcxybehAGp8d8MozhTzAjZ5BZgmzvKBkEXECTfQPCA==
++   F10, T 2026-10-15T09:21:00Z, fails at Section 4, exit 0
++   1829 bytes, signed by gate-1
++   c299b48e0a0596f8c8eb252beef0138c7d1133f113cdc03150abb6cb41bcdcce
++   qCHm6JNGoxXAdFPXKud8ojxef8wh+m9BrGHbYD/1miqG
++   1YGcYAZ/XRFO8+el6D8RirkB313aOUqZo6YwBAUYAw==
++          +========+================+======+===================+
++          | Vector | Fails at       | Exit | proofbundle 6.4.0 |
++          +========+================+======+===================+
++          | F1     | step 7 of 3.2  | 2    | rejects           |
++          +--------+----------------+------+-------------------+
++          | F2     | step 7 of 3.2  | 2    | rejects           |
++          +--------+----------------+------+-------------------+
++          | F3     | step 8 of 3.2  | 0    | accepts           |
++          +--------+----------------+------+-------------------+
++          | F4     | step 9 of 3.2  | 2    | rejects           |
++          +--------+----------------+------+-------------------+
++          | F5     | step 10 of 3.2 | 0    | accepts           |
++          +--------+----------------+------+-------------------+
++          | F6     | step 5 of 3.4  | 0    | accepts           |
++          +--------+----------------+------+-------------------+
++          | F7     | step 6 of 3.4  | 0    | accepts           |
++          +--------+----------------+------+-------------------+
++          | F8     | step 7 of 3.4  | 0    | accepts           |
++          +--------+----------------+------+-------------------+
++          | F9     | Case 1 of 3.3  | 0    | accepts           |
++          +--------+----------------+------+-------------------+
++          | F10    | Section 4      | 0    | accepts           |
++          +--------+----------------+------+-------------------+
++              Table 6: Failure vectors and proofbundle 6.4.0
++   The proofbundle 6.4.0 commands used here receive no action bytes,
++   effect bytes, expected executor.id or consumption state, and no
++   expected decisionMaker.id.  They reject F1, F2 and F4 and return exit
++   code 0 for the other seven command-line inputs.  The procedures
++   specified here reject F3, F5, F6, F7, F8 and F9.  F10 instead passes
++   receipt verification and is refused by the relying party under
++   Section 4 with c1; its acceptance by these commands does not test
++   consumption-state enforcement.  F9 shows why checking only the
++   decision's expiry is insufficient.  At the stated T of 09:16 the
++   decision passes step 9 of Section 3.2, while the approval expired at
++   09:15.  Its validity.expiresAt exceeds the validUntil of ap, so the
++   Case 1 time-bound condition of Section 3.3 is violated independently
++   of T.
+ Appendix B.  Changes
+    This section is to be removed before publication.
+-B.1.  Changes from -02
++B.1.  Changes from -03
++   New Appendix A.4 gives one example Signed Statement for each way of
++   registration in Section 3.7, signed with a new test key, and a SCITT
++   Receipt for each, generated with a library for illustration, and
++   Section 3.7 points to it.  The informative references add RFC 8949,
++   RFC 9052, RFC 9053, RFC 9162, RFC 9597, RFC 9679, RFC 9942, RFC 9995
++   and scitt-cose.
++   Section 3.2 step 7 and Section 3.4 step 3 list by full path the
++   members that are digests and timestamps, and step 7 gives the form of
++   evidenceRefs[].typedDigest.  Appendix A.3 names the procedure that
++   decides each vector.  Appendix A.4 states that the entry of the tree
++   is the choice of the example.  New Appendix A.5 gives failure vectors
++   for steps 7 to 10 of Section 3.2, Case 1 of Section 3.3, steps 5 to 7
++   of Section 3.4 and Section 4.
++   New Section 3.8 gives the field rules of both predicates as tables,
++   step 7 of Section 3.2 and step 3 of Section 3.4 refer to it, and
++   [PB-DECISION] and [PB-OUTCOME] are informative references.  The field
++   rules distinguish JSON booleans from string literals.  Step 1 of
++   Section 3.2 rejects duplicate member names in DSSE envelopes.
++   Appendix A.5 identifies the first failing check for each stated test
++   procedure, distinguishes the relying-party check for F10, and
++   explains that F9 violates the Case 1 time-bound condition
++   independently of T.  Section 5 and Appendix A distinguish the
++   provenance of the seven DSSE vectors from that of the new examples.
++   Section 8 clarifies that the field rules do not establish the absence
++   of raw inputs.  Case 1 of Section 3.3 allows inputSnapshot entries
++   other than the approval record, and Section 3.6 states which digests
++   a pass checks against bytes.
++B.2.  Changes from -02
+    Section 6 adds, for [GILDA] and [IZMAYLOV], what this document does
+    differently.
+    The paragraph on clocks in Section 7 adds that a time-stamp token
+@@ -1223,7 +1943,7 @@
+
+    Section 7 adds a paragraph on finding missing outcome receipts
+    through the sequence member of [PB-OUTCOME], and on boundary records
+    for decisions.
+-B.2.  Changes from -01 to -02
++B.3.  Changes from -01 to -02
+    The submissionType attribute is removed from the rfc element.
+    The Abstract states that the document describes, informatively, how a
+    receipt can be registered with a Transparency Service under RFC 9943
+@@ -1235,7 +1955,7 @@
+
+    Section 8 describes what each way of registration in Section 3.7
+    reveals and distinguishes access to the registered Signed Statement
+    from access to a detached payload.
+-B.3.  Changes from -00 to -01
++B.4.  Changes from -00 to -01
+    Added Section 3.7, an informative description of how a decision or
+    outcome receipt can be registered with a Transparency Service under
+    [RFC9943], what a SCITT Receipt then shows and what it does not.

@@ -1,0 +1,779 @@
+{
+  "SCITT_A4": "NOT_EVALUATED: source delta only; no COSE or transparency verification",
+  "base_compatibility": [
+    {
+      "matches_04_A3": true,
+      "payload_bytes": 1829,
+      "payload_sha256": "b9dfd26537542632013d0df166141a788551b4987dfa33b060d5b5ebba78dfb1",
+      "seven_vector_suite_rerun": false,
+      "signature_b64": "GkvzPjklV5ZbtomNRXbS4+O4MIOSw8xGmA0diAEYKEm0s4Q9qLkL1j7+e5RZnT9l56tfB2utDoNycACsSvSoDw==",
+      "vector": "V1-good"
+    },
+    {
+      "matches_04_A3": true,
+      "payload_bytes": 1829,
+      "payload_sha256": "69eb87fb33a29153182b0e0c89a444023cc00c82fe7c8db1c7e0893363b2c926",
+      "seven_vector_suite_rerun": false,
+      "signature_b64": "GkvzPjklV5ZbtomNRXbS4+O4MIOSw8xGmA0diAEYKEm0s4Q9qLkL1j7+e5RZnT9l56tfB2utDoNycACsSvSoDw==",
+      "vector": "V1-bad"
+    },
+    {
+      "matches_04_A3": true,
+      "payload_bytes": 1765,
+      "payload_sha256": "ed149a1c7383842eebf8304001da9de97d130b0b15080d1315ab8fbf1274ed44",
+      "seven_vector_suite_rerun": false,
+      "signature_b64": "66CUa1kz6aOm6gbdctRg4l97fW8x185nxpsB5rkCFj+aHZVjRjc5hDnQu6v4J/bHzaufyHhPCPdM6XUAWiylAQ==",
+      "vector": "V2-good"
+    },
+    {
+      "matches_04_A3": true,
+      "payload_bytes": 1866,
+      "payload_sha256": "646d4b2229a55c54848361030bf6d57816597a96bd7d1fb00d7da0f03b009bd2",
+      "seven_vector_suite_rerun": false,
+      "signature_b64": "2yjE3MxaVXdureYhh50+d3XdDAsJDhW3nacud4WCbzBMR/NLHyxeqIvbsDKQTabl+X+5O4CSXu17rA7lFYN0Cw==",
+      "vector": "V2-bad"
+    },
+    {
+      "matches_04_A3": true,
+      "payload_bytes": 1827,
+      "payload_sha256": "0014b1c419798125c3984e85a4b322ee619a3227978840cac5f9d282b189521f",
+      "seven_vector_suite_rerun": false,
+      "signature_b64": "DDLIUtX6uk5A3AqcvYP9f9zYeHJAWNTrdBZwpXmEQq4yu0bivvsiNEjx4u2Kw2U6Mr11lcWoRZnSo1w5MX2PCA==",
+      "vector": "V3-decision"
+    },
+    {
+      "matches_04_A3": true,
+      "payload_bytes": 694,
+      "payload_sha256": "f0ff90cf25e2db1e989fa79869d4b3b46899112e8c2269d9a18a64b751aa7274",
+      "seven_vector_suite_rerun": false,
+      "signature_b64": "MCUgSY+fGUO2cm5DnxBVKEC/BBSyeS359aj2rYowwkHTj+CskAgraX5TirUBic2i2KyUUaxBYMMdVafhu3tcAQ==",
+      "vector": "V3-good"
+    },
+    {
+      "matches_04_A3": true,
+      "payload_bytes": 694,
+      "payload_sha256": "48be708cf3f959556323474f4a5c9193b417d2bfea5c88bb852daf00b64827b4",
+      "seven_vector_suite_rerun": false,
+      "signature_b64": "uEgT4TFv7jEgmH7pwJcPBEEZM+n2wGjic6U6yYWOU3DhTa0tMuimQ8q4Ha1lgw4zWNR9YBag4GmVt9SdsfzwCQ==",
+      "vector": "V3-bad"
+    }
+  ],
+  "controls": [
+    {
+      "description": "duplicate root payload member (identical values)",
+      "draft_expected": "REJECT at 3.2 step 1",
+      "envelope_sha256": "365157c6b9f2fcdede9c4397f2e6499c87ac232f5624dd3b5b938eeb6d28b609",
+      "id": "C01",
+      "measured_cli": {
+        "command": [
+          "proofbundle",
+          "decision",
+          "verify",
+          "fixtures/C01.envelope.json",
+          "--pub",
+          "TWfs75IN1In3CNI8TnyIOUHgtwilOPGcRFQLJ670CJc=",
+          "--strict",
+          "--json",
+          "--aud",
+          "observer-1",
+          "--nonce",
+          "dec-0001",
+          "--verification-time",
+          "2026-10-15T09:01:00Z"
+        ],
+        "exit_code": 2,
+        "stderr": "ERROR: duplicate JSON key 'payload' \u2014 rejected fail-closed (a duplicated key parses differently across JSON implementations; parser-differential guard, WP-C1)\n",
+        "stdout": ""
+      }
+    },
+    {
+      "description": "duplicate nested signature keyid member (identical values)",
+      "draft_expected": "REJECT at 3.2 step 1",
+      "envelope_sha256": "c377fc9aeb1090253b0d0b99f42e4f80da9d27721b06e428955025746bc30d0c",
+      "id": "C02",
+      "measured_cli": {
+        "command": [
+          "proofbundle",
+          "decision",
+          "verify",
+          "fixtures/C02.envelope.json",
+          "--pub",
+          "TWfs75IN1In3CNI8TnyIOUHgtwilOPGcRFQLJ670CJc=",
+          "--strict",
+          "--json",
+          "--aud",
+          "observer-1",
+          "--nonce",
+          "dec-0001",
+          "--verification-time",
+          "2026-10-15T09:01:00Z"
+        ],
+        "exit_code": 2,
+        "stderr": "ERROR: duplicate JSON key 'keyid' \u2014 rejected fail-closed (a duplicated key parses differently across JSON implementations; parser-differential guard, WP-C1)\n",
+        "stdout": ""
+      }
+    },
+    {
+      "description": "rawInputsIncluded='false' (not JSON boolean)",
+      "draft_expected": "REJECT at 3.2 step 7 / 3.8 boolean type",
+      "envelope_sha256": "dcf31c65be798755cc0fab4afc27d5daf16b1f1d808b4a1a15ee2101bf2ccb5b",
+      "id": "C03",
+      "measured_cli": {
+        "command": [
+          "proofbundle",
+          "decision",
+          "verify",
+          "fixtures/C03.envelope.json",
+          "--pub",
+          "TWfs75IN1In3CNI8TnyIOUHgtwilOPGcRFQLJ670CJc=",
+          "--strict",
+          "--json",
+          "--aud",
+          "observer-1",
+          "--nonce",
+          "dec-0001",
+          "--verification-time",
+          "2026-10-15T09:01:00Z"
+        ],
+        "exit_code": 2,
+        "stderr": "",
+        "stdout": "{\n  \"ok\": false,\n  \"crypto_ok\": true,\n  \"structure_ok\": false,\n  \"predicate_type_ok\": true,\n  \"signer_trusted\": null,\n  \"policy_ok\": null,\n  \"evidence_bound\": null,\n  \"audience_ok\": true,\n  \"nonce_ok\": true,\n  \"freshness_ok\": true,\n  \"anchors_ok\": null,\n  \"action_outcome_proven\": null,\n  \"subject_binding\": {\n    \"mode\": \"DERIVED\",\n    \"matches\": true\n  },\n  \"subject_derived_ok\": null,\n  \"automation\": {\n    \"cryptoValid\": true,\n    \"structureValid\": false,\n    \"policyAuthorized\": false,\n    \"referencesResolved\": true,\n    \"safeForAutomation\": false,\n    \"automationBlockers\": [\n      \"STRUCTURE_NOT_OK\",\n      \"POLICY_NOT_EVALUATED\",\n      \"RECEIPT_NOT_OK\",\n      \"SIGNER_NOT_PINNED\"\n    ]\n  },\n  \"evidence_levels\": {\n    \"actionOutcome.outcomeRef\": {\n      \"level\": null,\n      \"level_name\": null,\n      \"detail\": \"not applicable\"\n    },\n    \"evidenceRefs\": null\n  },\n  \"lineage\": null,\n  \"relations_policy_codes\": null,\n  \"warnings\": [],\n  \"errors\": [\n    \"privacy.rawInputsIncluded: must be boolean, got 'false'\"\n  ],\n  \"verification_time\": {\n    \"mode\": \"HISTORICAL\",\n    \"time\": \"2026-10-15T09:01:00Z\",\n    \"current_policy_status\": \"NOT_EVALUATED\",\n    \"historical_policy_status\": \"NOT_EVALUATED\"\n  }\n}\n"
+      }
+    },
+    {
+      "description": "rawInputsIncluded=0 (not JSON boolean)",
+      "draft_expected": "REJECT at 3.2 step 7 / 3.8 boolean type",
+      "envelope_sha256": "7e88fa9606fa6020fe0b84aeea7f0188346a894dabe24d478fce48a8edf14314",
+      "id": "C04",
+      "measured_cli": {
+        "command": [
+          "proofbundle",
+          "decision",
+          "verify",
+          "fixtures/C04.envelope.json",
+          "--pub",
+          "TWfs75IN1In3CNI8TnyIOUHgtwilOPGcRFQLJ670CJc=",
+          "--strict",
+          "--json",
+          "--aud",
+          "observer-1",
+          "--nonce",
+          "dec-0001",
+          "--verification-time",
+          "2026-10-15T09:01:00Z"
+        ],
+        "exit_code": 2,
+        "stderr": "",
+        "stdout": "{\n  \"ok\": false,\n  \"crypto_ok\": true,\n  \"structure_ok\": false,\n  \"predicate_type_ok\": true,\n  \"signer_trusted\": null,\n  \"policy_ok\": null,\n  \"evidence_bound\": null,\n  \"audience_ok\": true,\n  \"nonce_ok\": true,\n  \"freshness_ok\": true,\n  \"anchors_ok\": null,\n  \"action_outcome_proven\": null,\n  \"subject_binding\": {\n    \"mode\": \"DERIVED\",\n    \"matches\": true\n  },\n  \"subject_derived_ok\": null,\n  \"automation\": {\n    \"cryptoValid\": true,\n    \"structureValid\": false,\n    \"policyAuthorized\": false,\n    \"referencesResolved\": true,\n    \"safeForAutomation\": false,\n    \"automationBlockers\": [\n      \"STRUCTURE_NOT_OK\",\n      \"POLICY_NOT_EVALUATED\",\n      \"RECEIPT_NOT_OK\",\n      \"SIGNER_NOT_PINNED\"\n    ]\n  },\n  \"evidence_levels\": {\n    \"actionOutcome.outcomeRef\": {\n      \"level\": null,\n      \"level_name\": null,\n      \"detail\": \"not applicable\"\n    },\n    \"evidenceRefs\": null\n  },\n  \"lineage\": null,\n  \"relations_policy_codes\": null,\n  \"warnings\": [],\n  \"errors\": [\n    \"privacy.rawInputsIncluded: must be boolean, got 0\"\n  ],\n  \"verification_time\": {\n    \"mode\": \"HISTORICAL\",\n    \"time\": \"2026-10-15T09:01:00Z\",\n    \"current_policy_status\": \"NOT_EVALUATED\",\n    \"historical_policy_status\": \"NOT_EVALUATED\"\n  }\n}\n"
+      }
+    },
+    {
+      "description": "positive CLI control: V1-good",
+      "draft_expected": "PASS under Appendix A.3 stated inputs",
+      "envelope_sha256": "1629e75a550adb030270e3ab6c1058c17f9d5dbf0311da9c7a70ded15f426875",
+      "id": "P01",
+      "measured_cli": {
+        "command": [
+          "proofbundle",
+          "decision",
+          "verify",
+          "fixtures/P01.envelope.json",
+          "--pub",
+          "TWfs75IN1In3CNI8TnyIOUHgtwilOPGcRFQLJ670CJc=",
+          "--strict",
+          "--json",
+          "--aud",
+          "observer-1",
+          "--nonce",
+          "dec-0001",
+          "--verification-time",
+          "2026-10-15T09:01:00Z"
+        ],
+        "exit_code": 0,
+        "stderr": "",
+        "stdout": "{\n  \"ok\": true,\n  \"crypto_ok\": true,\n  \"structure_ok\": true,\n  \"predicate_type_ok\": true,\n  \"signer_trusted\": null,\n  \"policy_ok\": null,\n  \"evidence_bound\": null,\n  \"audience_ok\": true,\n  \"nonce_ok\": true,\n  \"freshness_ok\": true,\n  \"anchors_ok\": null,\n  \"action_outcome_proven\": null,\n  \"subject_binding\": {\n    \"mode\": \"DERIVED\",\n    \"matches\": true\n  },\n  \"subject_derived_ok\": null,\n  \"automation\": {\n    \"cryptoValid\": true,\n    \"structureValid\": true,\n    \"policyAuthorized\": false,\n    \"referencesResolved\": true,\n    \"safeForAutomation\": false,\n    \"automationBlockers\": [\n      \"POLICY_NOT_EVALUATED\",\n      \"SIGNER_NOT_PINNED\"\n    ]\n  },\n  \"evidence_levels\": {\n    \"actionOutcome.outcomeRef\": {\n      \"level\": null,\n      \"level_name\": null,\n      \"detail\": \"not applicable\"\n    },\n    \"evidenceRefs\": null\n  },\n  \"lineage\": null,\n  \"relations_policy_codes\": null,\n  \"warnings\": [],\n  \"errors\": [],\n  \"verification_time\": {\n    \"mode\": \"HISTORICAL\",\n    \"time\": \"2026-10-15T09:01:00Z\",\n    \"current_policy_status\": \"NOT_EVALUATED\",\n    \"historical_policy_status\": \"NOT_EVALUATED\"\n  }\n}\n"
+      }
+    },
+    {
+      "description": "positive CLI control: V3-good",
+      "draft_expected": "PASS under Appendix A.3 stated inputs",
+      "envelope_sha256": "a681da710880d031b09f9832508b11dde38cc7637640f19c5e92c2812af69a99",
+      "id": "P02",
+      "measured_cli": {
+        "command": [
+          "proofbundle",
+          "outcome",
+          "verify",
+          "fixtures/P02.envelope.json",
+          "--pub",
+          "4hDsi5TCL+A+9SB7k2l4EkY7XePUheE+zE9mBazt2Fs=",
+          "--strict",
+          "--json",
+          "--expected-decision-ref",
+          "0014b1c419798125c3984e85a4b322ee619a3227978840cac5f9d282b189521f",
+          "--decision-maker-id",
+          "gate-1"
+        ],
+        "exit_code": 0,
+        "stderr": "",
+        "stdout": "{\n  \"ok\": true,\n  \"crypto_ok\": true,\n  \"structure_ok\": true,\n  \"predicate_type_ok\": true,\n  \"decision_bound\": true,\n  \"role_separation_ok\": true,\n  \"execution_proven\": true,\n  \"audience_ok\": null,\n  \"nonce_ok\": null,\n  \"subject_binding\": {\n    \"mode\": \"DERIVED\",\n    \"matches\": true\n  },\n  \"subject_derived_ok\": null,\n  \"automation\": {\n    \"cryptoValid\": true,\n    \"structureValid\": true,\n    \"policyAuthorized\": false,\n    \"referencesResolved\": true,\n    \"safeForAutomation\": false,\n    \"automationBlockers\": [\n      \"POLICY_NOT_EVALUATED\"\n    ]\n  },\n  \"evidence_levels\": {\n    \"effect\": {\n      \"level\": 1,\n      \"level_name\": \"REFERENCE_WELL_FORMED\",\n      \"fields\": [\n        {\n          \"level\": 1,\n          \"level_name\": \"REFERENCE_WELL_FORMED\",\n          \"detail\": \"a well-formed sha256 digest object is present (attacker-choosable content, not content-checked)\"\n        },\n        {\n          \"level\": 0,\n          \"level_name\": \"CLAIMED\",\n          \"detail\": \"no well-formed sha256 digest object present\"\n        }\n      ]\n    },\n    \"receiverRefs\": null\n  },\n  \"executor_role_trusted\": null,\n  \"receiver_bound\": null,\n  \"receiver_role_trusted\": null,\n  \"lineage\": null,\n  \"policy_ok\": null,\n  \"relations_policy_codes\": null,\n  \"warnings\": [\n    \"DEPRECATED: execution_proven / receiver_bound are digest-presence booleans (evidence_levels REFERENCE_WELL_FORMED \\u2014 attacker-choosable content), NOT a content proof. Use evidence_levels; only CONTENT_RESOLVED or stronger is a real binding. These legacy fields will be removed in the next breaking format version.\"\n  ],\n  \"errors\": []\n}\n"
+      }
+    }
+  ],
+  "effect_observation": "UNOBSERVED",
+  "input_hashes": {
+    "a1.txt": {
+      "bytes": 50,
+      "sha256": "dec54f771352454097310ae4bd6608c0070ebebb3955c6be013c1b3a8e310bd0"
+    },
+    "a2.txt": {
+      "bytes": 42,
+      "sha256": "5a7549948a1441addb710f5ada59e06dbce25cc5a59accf14f140379f47adb5b"
+    },
+    "ap.json": {
+      "bytes": 231,
+      "sha256": "88e5b6d69b3e4bc250a42aeffea0414d406e5f04ba4f991ee432a78231da1170"
+    },
+    "ap2.json": {
+      "bytes": 231,
+      "sha256": "37ec7f3fa06f086626268a6c818ba5b5af7fd16ba292735ce964a83c42c0357c"
+    },
+    "c1.json": {
+      "bytes": 139,
+      "sha256": "f13fce72c54f1872232c0339fa98b33ffe5142f72481cd31e378bc6a680b6f6a"
+    },
+    "e3.json": {
+      "bytes": 93,
+      "sha256": "d3d824cf55168298c0f651244853ec9d9620ea09087abe899243ceb8f9df3a6d"
+    }
+  },
+  "package": "proofbundle==6.4.0",
+  "runtime_execution": "NOT_EVALUATED",
+  "target": "draft-gruszka-audit-decision-receipts-04",
+  "vectors": [
+    {
+      "base_vector": "V1-good",
+      "consumption_enforcement": "NOT_APPLICABLE",
+      "definition": "agent is null instead of a required object",
+      "draft_expectation": {
+        "author_reported_cli_exit": 2,
+        "first_failing_check": "3.2 step 7",
+        "provenance": "AUTHOR_SPECIFIED, Appendix A.5; not a local full draft verifier",
+        "receipt_procedure": "REJECT",
+        "relying_party": "NOT_APPLICABLE"
+      },
+      "envelope_sha256": "24bde2a7f9f5f0032f140ea07bd479bd8f825159be11beb912e0d6f76e01f5f9",
+      "expected_inputs_for_draft_procedure": {
+        "action_bytes": "a1.txt",
+        "approval_bytes": "ap.json",
+        "consumption_state_bytes": null,
+        "decision_ref": null,
+        "effect_bytes": null,
+        "evaluation_time": "2026-10-15T09:01:00Z",
+        "expected_audience": "observer-1",
+        "expected_decisionMaker.id": "gate-1",
+        "expected_executor.id": null,
+        "expected_nonce": "dec-0001"
+      },
+      "full_draft_procedure_execution": "NOT_EVALUATED",
+      "id": "F1",
+      "measured_cli": {
+        "command": [
+          "proofbundle",
+          "decision",
+          "verify",
+          "fixtures/F1.envelope.json",
+          "--pub",
+          "TWfs75IN1In3CNI8TnyIOUHgtwilOPGcRFQLJ670CJc=",
+          "--strict",
+          "--json",
+          "--aud",
+          "observer-1",
+          "--nonce",
+          "dec-0001",
+          "--verification-time",
+          "2026-10-15T09:01:00Z"
+        ],
+        "exit_code": 2,
+        "stderr": "",
+        "stdout": "{\n  \"ok\": false,\n  \"crypto_ok\": true,\n  \"structure_ok\": false,\n  \"predicate_type_ok\": true,\n  \"signer_trusted\": null,\n  \"policy_ok\": null,\n  \"evidence_bound\": null,\n  \"audience_ok\": true,\n  \"nonce_ok\": true,\n  \"freshness_ok\": true,\n  \"anchors_ok\": null,\n  \"action_outcome_proven\": null,\n  \"subject_binding\": {\n    \"mode\": \"DERIVED\",\n    \"matches\": true\n  },\n  \"subject_derived_ok\": null,\n  \"automation\": {\n    \"cryptoValid\": true,\n    \"structureValid\": false,\n    \"policyAuthorized\": false,\n    \"referencesResolved\": true,\n    \"safeForAutomation\": false,\n    \"automationBlockers\": [\n      \"STRUCTURE_NOT_OK\",\n      \"POLICY_NOT_EVALUATED\",\n      \"RECEIPT_NOT_OK\",\n      \"SIGNER_NOT_PINNED\"\n    ]\n  },\n  \"evidence_levels\": {\n    \"actionOutcome.outcomeRef\": {\n      \"level\": null,\n      \"level_name\": null,\n      \"detail\": \"not applicable\"\n    },\n    \"evidenceRefs\": null\n  },\n  \"lineage\": null,\n  \"relations_policy_codes\": null,\n  \"warnings\": [],\n  \"errors\": [\n    \"agent must be a JSON object\"\n  ],\n  \"verification_time\": {\n    \"mode\": \"HISTORICAL\",\n    \"time\": \"2026-10-15T09:01:00Z\",\n    \"current_policy_status\": \"NOT_EVALUATED\",\n    \"historical_policy_status\": \"NOT_EVALUATED\"\n  }\n}\n"
+      },
+      "payload_bytes": 1816,
+      "payload_sha256": "c20b86e4fa3753555a3e84dc87e2efe574f5094544612c6fc91ccf4f68707063",
+      "scope_limit": "No action/effect bytes, approval or consumption inputs in these commands. No expected decisionMaker.id policy is supplied; outcome --decision-maker-id checks inequality, not expected executor.id. No full cross-record time check.",
+      "signature_b64": "TeDLj3n16X9LrDWZGsPSM1YTwCx37OuCrXj/rYp4ayMXX4EMk9ymbLAjBUZliV3KqqA4E0MEPXA6EYArYoThAQ==",
+      "signature_verified": true
+    },
+    {
+      "base_vector": "V2-good",
+      "consumption_enforcement": "NOT_APPLICABLE",
+      "definition": "policyBoundary.validFrom uses +00:00 rather than trailing Z",
+      "draft_expectation": {
+        "author_reported_cli_exit": 2,
+        "first_failing_check": "3.2 step 7",
+        "provenance": "AUTHOR_SPECIFIED, Appendix A.5; not a local full draft verifier",
+        "receipt_procedure": "REJECT",
+        "relying_party": "NOT_APPLICABLE"
+      },
+      "envelope_sha256": "00d970f4f5f52ee2a3386b3348cd18ef69625da13ecc484f695968e5bc863ba1",
+      "expected_inputs_for_draft_procedure": {
+        "action_bytes": "a2.txt",
+        "approval_bytes": null,
+        "consumption_state_bytes": null,
+        "decision_ref": null,
+        "effect_bytes": null,
+        "evaluation_time": "2026-10-15T09:06:00Z",
+        "expected_audience": "observer-1",
+        "expected_decisionMaker.id": "gate-1",
+        "expected_executor.id": null,
+        "expected_nonce": "dec-0002"
+      },
+      "full_draft_procedure_execution": "NOT_EVALUATED",
+      "id": "F2",
+      "measured_cli": {
+        "command": [
+          "proofbundle",
+          "decision",
+          "verify",
+          "fixtures/F2.envelope.json",
+          "--pub",
+          "TWfs75IN1In3CNI8TnyIOUHgtwilOPGcRFQLJ670CJc=",
+          "--strict",
+          "--json",
+          "--aud",
+          "observer-1",
+          "--nonce",
+          "dec-0002",
+          "--verification-time",
+          "2026-10-15T09:06:00Z"
+        ],
+        "exit_code": 2,
+        "stderr": "",
+        "stdout": "{\n  \"ok\": false,\n  \"crypto_ok\": true,\n  \"structure_ok\": false,\n  \"predicate_type_ok\": true,\n  \"signer_trusted\": null,\n  \"policy_ok\": null,\n  \"evidence_bound\": null,\n  \"audience_ok\": true,\n  \"nonce_ok\": true,\n  \"freshness_ok\": true,\n  \"anchors_ok\": null,\n  \"action_outcome_proven\": null,\n  \"subject_binding\": {\n    \"mode\": \"DERIVED\",\n    \"matches\": true\n  },\n  \"subject_derived_ok\": null,\n  \"automation\": {\n    \"cryptoValid\": true,\n    \"structureValid\": false,\n    \"policyAuthorized\": false,\n    \"referencesResolved\": true,\n    \"safeForAutomation\": false,\n    \"automationBlockers\": [\n      \"STRUCTURE_NOT_OK\",\n      \"POLICY_NOT_EVALUATED\",\n      \"RECEIPT_NOT_OK\",\n      \"SIGNER_NOT_PINNED\"\n    ]\n  },\n  \"evidence_levels\": {\n    \"actionOutcome.outcomeRef\": {\n      \"level\": null,\n      \"level_name\": null,\n      \"detail\": \"not applicable\"\n    },\n    \"evidenceRefs\": null\n  },\n  \"lineage\": null,\n  \"relations_policy_codes\": null,\n  \"warnings\": [],\n  \"errors\": [\n    \"policyBoundary.validFrom: must be rfc3339z, got '2026-10-15T09:00:00+00:00'\"\n  ],\n  \"verification_time\": {\n    \"mode\": \"HISTORICAL\",\n    \"time\": \"2026-10-15T09:06:00Z\",\n    \"current_policy_status\": \"NOT_EVALUATED\",\n    \"historical_policy_status\": \"NOT_EVALUATED\"\n  }\n}\n"
+      },
+      "payload_bytes": 1805,
+      "payload_sha256": "f9015e5fbcce4da86a56e5facfc812f629b62e6c29afa5f7172d037e6b880978",
+      "scope_limit": "No action/effect bytes, approval or consumption inputs in these commands. No expected decisionMaker.id policy is supplied; outcome --decision-maker-id checks inequality, not expected executor.id. No full cross-record time check.",
+      "signature_b64": "bPEAg3NIdR7cKMu7egfmj1xWPs4r27HumGAG6z95uKVk+iQwNWltjZBCDc5PJiBDVv3hb+ufBliTWf08CluRAA==",
+      "signature_verified": true
+    },
+    {
+      "base_vector": "V2-good",
+      "consumption_enforcement": "NOT_APPLICABLE",
+      "definition": "decisionMaker.id is gate-2 but expected identity for the pinned key is gate-1",
+      "draft_expectation": {
+        "author_reported_cli_exit": 0,
+        "first_failing_check": "3.2 step 8",
+        "provenance": "AUTHOR_SPECIFIED, Appendix A.5; not a local full draft verifier",
+        "receipt_procedure": "REJECT",
+        "relying_party": "NOT_APPLICABLE"
+      },
+      "envelope_sha256": "2feee5b306c5a3c9fc42cb3d29b5371be682e8cb2bec9fd987d958f9fb5e727e",
+      "expected_inputs_for_draft_procedure": {
+        "action_bytes": "a2.txt",
+        "approval_bytes": null,
+        "consumption_state_bytes": null,
+        "decision_ref": null,
+        "effect_bytes": null,
+        "evaluation_time": "2026-10-15T09:06:00Z",
+        "expected_audience": "observer-1",
+        "expected_decisionMaker.id": "gate-1",
+        "expected_executor.id": null,
+        "expected_nonce": "dec-0002"
+      },
+      "full_draft_procedure_execution": "NOT_EVALUATED",
+      "id": "F3",
+      "measured_cli": {
+        "command": [
+          "proofbundle",
+          "decision",
+          "verify",
+          "fixtures/F3.envelope.json",
+          "--pub",
+          "TWfs75IN1In3CNI8TnyIOUHgtwilOPGcRFQLJ670CJc=",
+          "--strict",
+          "--json",
+          "--aud",
+          "observer-1",
+          "--nonce",
+          "dec-0002",
+          "--verification-time",
+          "2026-10-15T09:06:00Z"
+        ],
+        "exit_code": 0,
+        "stderr": "",
+        "stdout": "{\n  \"ok\": true,\n  \"crypto_ok\": true,\n  \"structure_ok\": true,\n  \"predicate_type_ok\": true,\n  \"signer_trusted\": null,\n  \"policy_ok\": null,\n  \"evidence_bound\": null,\n  \"audience_ok\": true,\n  \"nonce_ok\": true,\n  \"freshness_ok\": true,\n  \"anchors_ok\": null,\n  \"action_outcome_proven\": null,\n  \"subject_binding\": {\n    \"mode\": \"DERIVED\",\n    \"matches\": true\n  },\n  \"subject_derived_ok\": null,\n  \"automation\": {\n    \"cryptoValid\": true,\n    \"structureValid\": true,\n    \"policyAuthorized\": false,\n    \"referencesResolved\": true,\n    \"safeForAutomation\": false,\n    \"automationBlockers\": [\n      \"POLICY_NOT_EVALUATED\",\n      \"SIGNER_NOT_PINNED\"\n    ]\n  },\n  \"evidence_levels\": {\n    \"actionOutcome.outcomeRef\": {\n      \"level\": null,\n      \"level_name\": null,\n      \"detail\": \"not applicable\"\n    },\n    \"evidenceRefs\": null\n  },\n  \"lineage\": null,\n  \"relations_policy_codes\": null,\n  \"warnings\": [],\n  \"errors\": [],\n  \"verification_time\": {\n    \"mode\": \"HISTORICAL\",\n    \"time\": \"2026-10-15T09:06:00Z\",\n    \"current_policy_status\": \"NOT_EVALUATED\",\n    \"historical_policy_status\": \"NOT_EVALUATED\"\n  }\n}\n"
+      },
+      "payload_bytes": 1765,
+      "payload_sha256": "506905bbeeb5205b82aa707a6e3a9ec4f27f6f7213b8dc864d5083063c2f460a",
+      "scope_limit": "No action/effect bytes, approval or consumption inputs in these commands. No expected decisionMaker.id policy is supplied; outcome --decision-maker-id checks inequality, not expected executor.id. No full cross-record time check.",
+      "signature_b64": "qGm1ojfaW3hFVuUV5q+H+t1zYQRVA9NPIWnTup1w22XddNAtygYVZ3qA7Wcame3kZsd14kmp+o+4Az0/FDNOAg==",
+      "signature_verified": true
+    },
+    {
+      "base_vector": "V1-good",
+      "consumption_enforcement": "NOT_APPLICABLE",
+      "definition": "T equals expiresAt; expiry comparison is strict",
+      "draft_expectation": {
+        "author_reported_cli_exit": 2,
+        "first_failing_check": "3.2 step 9",
+        "provenance": "AUTHOR_SPECIFIED, Appendix A.5; not a local full draft verifier",
+        "receipt_procedure": "REJECT",
+        "relying_party": "NOT_APPLICABLE"
+      },
+      "envelope_sha256": "cce69757bdd3426f505db28b635cb9ab738bc47cd7ec5c497578ebcd062ae7a5",
+      "expected_inputs_for_draft_procedure": {
+        "action_bytes": "a1.txt",
+        "approval_bytes": "ap.json",
+        "consumption_state_bytes": null,
+        "decision_ref": null,
+        "effect_bytes": null,
+        "evaluation_time": "2026-10-15T09:05:05Z",
+        "expected_audience": "observer-1",
+        "expected_decisionMaker.id": "gate-1",
+        "expected_executor.id": null,
+        "expected_nonce": "dec-0001"
+      },
+      "full_draft_procedure_execution": "NOT_EVALUATED",
+      "id": "F4",
+      "measured_cli": {
+        "command": [
+          "proofbundle",
+          "decision",
+          "verify",
+          "fixtures/F4.envelope.json",
+          "--pub",
+          "TWfs75IN1In3CNI8TnyIOUHgtwilOPGcRFQLJ670CJc=",
+          "--strict",
+          "--json",
+          "--aud",
+          "observer-1",
+          "--nonce",
+          "dec-0001",
+          "--verification-time",
+          "2026-10-15T09:05:05Z"
+        ],
+        "exit_code": 2,
+        "stderr": "",
+        "stdout": "{\n  \"ok\": false,\n  \"crypto_ok\": true,\n  \"structure_ok\": true,\n  \"predicate_type_ok\": true,\n  \"signer_trusted\": null,\n  \"policy_ok\": null,\n  \"evidence_bound\": null,\n  \"audience_ok\": true,\n  \"nonce_ok\": true,\n  \"freshness_ok\": false,\n  \"anchors_ok\": null,\n  \"action_outcome_proven\": null,\n  \"subject_binding\": {\n    \"mode\": \"DERIVED\",\n    \"matches\": true\n  },\n  \"subject_derived_ok\": null,\n  \"automation\": {\n    \"cryptoValid\": true,\n    \"structureValid\": true,\n    \"policyAuthorized\": false,\n    \"referencesResolved\": true,\n    \"safeForAutomation\": false,\n    \"automationBlockers\": [\n      \"POLICY_NOT_EVALUATED\",\n      \"RECEIPT_NOT_OK\",\n      \"SIGNER_NOT_PINNED\"\n    ]\n  },\n  \"evidence_levels\": {\n    \"actionOutcome.outcomeRef\": {\n      \"level\": null,\n      \"level_name\": null,\n      \"detail\": \"not applicable\"\n    },\n    \"evidenceRefs\": null\n  },\n  \"lineage\": null,\n  \"relations_policy_codes\": null,\n  \"warnings\": [],\n  \"errors\": [\n    \"decision receipt is expired: validity.expiresAt is at or before the evaluation time (fail-closed)\"\n  ],\n  \"verification_time\": {\n    \"mode\": \"HISTORICAL\",\n    \"time\": \"2026-10-15T09:05:05Z\",\n    \"current_policy_status\": \"NOT_EVALUATED\",\n    \"historical_policy_status\": \"NOT_EVALUATED\"\n  }\n}\n"
+      },
+      "payload_bytes": 1829,
+      "payload_sha256": "b9dfd26537542632013d0df166141a788551b4987dfa33b060d5b5ebba78dfb1",
+      "scope_limit": "No action/effect bytes, approval or consumption inputs in these commands. No expected decisionMaker.id policy is supplied; outcome --decision-maker-id checks inequality, not expected executor.id. No full cross-record time check.",
+      "signature_b64": "GkvzPjklV5ZbtomNRXbS4+O4MIOSw8xGmA0diAEYKEm0s4Q9qLkL1j7+e5RZnT9l56tfB2utDoNycACsSvSoDw==",
+      "signature_verified": true
+    },
+    {
+      "base_vector": "V2-good",
+      "consumption_enforcement": "NOT_APPLICABLE",
+      "definition": "supplied action a1 does not match the digest of a2 in V2-good",
+      "draft_expectation": {
+        "author_reported_cli_exit": 0,
+        "first_failing_check": "3.2 step 10",
+        "provenance": "AUTHOR_SPECIFIED, Appendix A.5; not a local full draft verifier",
+        "receipt_procedure": "REJECT",
+        "relying_party": "NOT_APPLICABLE"
+      },
+      "envelope_sha256": "3e3b7d575b712ada2c813ee98fd3b0c80d788e2558444a34338510c9978fa47a",
+      "expected_inputs_for_draft_procedure": {
+        "action_bytes": "a1.txt",
+        "approval_bytes": null,
+        "consumption_state_bytes": null,
+        "decision_ref": null,
+        "effect_bytes": null,
+        "evaluation_time": "2026-10-15T09:06:00Z",
+        "expected_audience": "observer-1",
+        "expected_decisionMaker.id": "gate-1",
+        "expected_executor.id": null,
+        "expected_nonce": "dec-0002"
+      },
+      "full_draft_procedure_execution": "NOT_EVALUATED",
+      "id": "F5",
+      "measured_cli": {
+        "command": [
+          "proofbundle",
+          "decision",
+          "verify",
+          "fixtures/F5.envelope.json",
+          "--pub",
+          "TWfs75IN1In3CNI8TnyIOUHgtwilOPGcRFQLJ670CJc=",
+          "--strict",
+          "--json",
+          "--aud",
+          "observer-1",
+          "--nonce",
+          "dec-0002",
+          "--verification-time",
+          "2026-10-15T09:06:00Z"
+        ],
+        "exit_code": 0,
+        "stderr": "",
+        "stdout": "{\n  \"ok\": true,\n  \"crypto_ok\": true,\n  \"structure_ok\": true,\n  \"predicate_type_ok\": true,\n  \"signer_trusted\": null,\n  \"policy_ok\": null,\n  \"evidence_bound\": null,\n  \"audience_ok\": true,\n  \"nonce_ok\": true,\n  \"freshness_ok\": true,\n  \"anchors_ok\": null,\n  \"action_outcome_proven\": null,\n  \"subject_binding\": {\n    \"mode\": \"DERIVED\",\n    \"matches\": true\n  },\n  \"subject_derived_ok\": null,\n  \"automation\": {\n    \"cryptoValid\": true,\n    \"structureValid\": true,\n    \"policyAuthorized\": false,\n    \"referencesResolved\": true,\n    \"safeForAutomation\": false,\n    \"automationBlockers\": [\n      \"POLICY_NOT_EVALUATED\",\n      \"SIGNER_NOT_PINNED\"\n    ]\n  },\n  \"evidence_levels\": {\n    \"actionOutcome.outcomeRef\": {\n      \"level\": null,\n      \"level_name\": null,\n      \"detail\": \"not applicable\"\n    },\n    \"evidenceRefs\": null\n  },\n  \"lineage\": null,\n  \"relations_policy_codes\": null,\n  \"warnings\": [],\n  \"errors\": [],\n  \"verification_time\": {\n    \"mode\": \"HISTORICAL\",\n    \"time\": \"2026-10-15T09:06:00Z\",\n    \"current_policy_status\": \"NOT_EVALUATED\",\n    \"historical_policy_status\": \"NOT_EVALUATED\"\n  }\n}\n"
+      },
+      "payload_bytes": 1765,
+      "payload_sha256": "ed149a1c7383842eebf8304001da9de97d130b0b15080d1315ab8fbf1274ed44",
+      "scope_limit": "No action/effect bytes, approval or consumption inputs in these commands. No expected decisionMaker.id policy is supplied; outcome --decision-maker-id checks inequality, not expected executor.id. No full cross-record time check.",
+      "signature_b64": "66CUa1kz6aOm6gbdctRg4l97fW8x185nxpsB5rkCFj+aHZVjRjc5hDnQu6v4J/bHzaufyHhPCPdM6XUAWiylAQ==",
+      "signature_verified": true
+    },
+    {
+      "base_vector": "V3-good",
+      "consumption_enforcement": "NOT_APPLICABLE",
+      "definition": "executor.id differs from the expected forge:agent-42-bot",
+      "draft_expectation": {
+        "author_reported_cli_exit": 0,
+        "first_failing_check": "3.4 step 5",
+        "provenance": "AUTHOR_SPECIFIED, Appendix A.5; not a local full draft verifier",
+        "receipt_procedure": "REJECT",
+        "relying_party": "NOT_APPLICABLE"
+      },
+      "envelope_sha256": "b19b8c6792b3180feb21ea4955f5c8b2fcdc152cade4dced4b3f7a37a4a6c9b9",
+      "expected_inputs_for_draft_procedure": {
+        "action_bytes": null,
+        "approval_bytes": null,
+        "consumption_state_bytes": null,
+        "decision_ref": "0014b1c419798125c3984e85a4b322ee619a3227978840cac5f9d282b189521f",
+        "effect_bytes": "e3.json",
+        "evaluation_time": "2026-10-15T09:11:00Z",
+        "expected_audience": null,
+        "expected_decisionMaker.id": "gate-1",
+        "expected_executor.id": "forge:agent-42-bot",
+        "expected_nonce": null
+      },
+      "full_draft_procedure_execution": "NOT_EVALUATED",
+      "id": "F6",
+      "measured_cli": {
+        "command": [
+          "proofbundle",
+          "outcome",
+          "verify",
+          "fixtures/F6.envelope.json",
+          "--pub",
+          "4hDsi5TCL+A+9SB7k2l4EkY7XePUheE+zE9mBazt2Fs=",
+          "--strict",
+          "--json",
+          "--expected-decision-ref",
+          "0014b1c419798125c3984e85a4b322ee619a3227978840cac5f9d282b189521f",
+          "--decision-maker-id",
+          "gate-1"
+        ],
+        "exit_code": 0,
+        "stderr": "",
+        "stdout": "{\n  \"ok\": true,\n  \"crypto_ok\": true,\n  \"structure_ok\": true,\n  \"predicate_type_ok\": true,\n  \"decision_bound\": true,\n  \"role_separation_ok\": true,\n  \"execution_proven\": true,\n  \"audience_ok\": null,\n  \"nonce_ok\": null,\n  \"subject_binding\": {\n    \"mode\": \"DERIVED\",\n    \"matches\": true\n  },\n  \"subject_derived_ok\": null,\n  \"automation\": {\n    \"cryptoValid\": true,\n    \"structureValid\": true,\n    \"policyAuthorized\": false,\n    \"referencesResolved\": true,\n    \"safeForAutomation\": false,\n    \"automationBlockers\": [\n      \"POLICY_NOT_EVALUATED\"\n    ]\n  },\n  \"evidence_levels\": {\n    \"effect\": {\n      \"level\": 1,\n      \"level_name\": \"REFERENCE_WELL_FORMED\",\n      \"fields\": [\n        {\n          \"level\": 1,\n          \"level_name\": \"REFERENCE_WELL_FORMED\",\n          \"detail\": \"a well-formed sha256 digest object is present (attacker-choosable content, not content-checked)\"\n        },\n        {\n          \"level\": 0,\n          \"level_name\": \"CLAIMED\",\n          \"detail\": \"no well-formed sha256 digest object present\"\n        }\n      ]\n    },\n    \"receiverRefs\": null\n  },\n  \"executor_role_trusted\": null,\n  \"receiver_bound\": null,\n  \"receiver_role_trusted\": null,\n  \"lineage\": null,\n  \"policy_ok\": null,\n  \"relations_policy_codes\": null,\n  \"warnings\": [\n    \"DEPRECATED: execution_proven / receiver_bound are digest-presence booleans (evidence_levels REFERENCE_WELL_FORMED \\u2014 attacker-choosable content), NOT a content proof. Use evidence_levels; only CONTENT_RESOLVED or stronger is a real binding. These legacy fields will be removed in the next breaking format version.\"\n  ],\n  \"errors\": []\n}\n"
+      },
+      "payload_bytes": 695,
+      "payload_sha256": "400e251d35ce2d833d22eb8699b2300a565801056bc2cccd461842957107bd69",
+      "scope_limit": "No action/effect bytes, approval or consumption inputs in these commands. No expected decisionMaker.id policy is supplied; outcome --decision-maker-id checks inequality, not expected executor.id. No full cross-record time check.",
+      "signature_b64": "gNh8vj8l4Ke040Yos21Vhd6uThtQYLsPVkRBJ4sXu+/Cn4LaMY2xoO4RzoI/AMU4LY8GAlwelUVCab+FLjGuBw==",
+      "signature_verified": true
+    },
+    {
+      "base_vector": "V3-good",
+      "consumption_enforcement": "NOT_APPLICABLE",
+      "definition": "effect bytes e3 are supplied but effectDigest is absent (status is refused)",
+      "draft_expectation": {
+        "author_reported_cli_exit": 0,
+        "first_failing_check": "3.4 step 6",
+        "provenance": "AUTHOR_SPECIFIED, Appendix A.5; not a local full draft verifier",
+        "receipt_procedure": "REJECT",
+        "relying_party": "NOT_APPLICABLE"
+      },
+      "envelope_sha256": "345dffde216e10cb92a7c194aeb2b4dd5fab38852dd38f5475dbfeb5e32b662d",
+      "expected_inputs_for_draft_procedure": {
+        "action_bytes": null,
+        "approval_bytes": null,
+        "consumption_state_bytes": null,
+        "decision_ref": "0014b1c419798125c3984e85a4b322ee619a3227978840cac5f9d282b189521f",
+        "effect_bytes": "e3.json",
+        "evaluation_time": "2026-10-15T09:11:00Z",
+        "expected_audience": null,
+        "expected_decisionMaker.id": "gate-1",
+        "expected_executor.id": "forge:agent-42-bot",
+        "expected_nonce": null
+      },
+      "full_draft_procedure_execution": "NOT_EVALUATED",
+      "id": "F7",
+      "measured_cli": {
+        "command": [
+          "proofbundle",
+          "outcome",
+          "verify",
+          "fixtures/F7.envelope.json",
+          "--pub",
+          "4hDsi5TCL+A+9SB7k2l4EkY7XePUheE+zE9mBazt2Fs=",
+          "--strict",
+          "--json",
+          "--expected-decision-ref",
+          "0014b1c419798125c3984e85a4b322ee619a3227978840cac5f9d282b189521f",
+          "--decision-maker-id",
+          "gate-1"
+        ],
+        "exit_code": 0,
+        "stderr": "",
+        "stdout": "{\n  \"ok\": true,\n  \"crypto_ok\": true,\n  \"structure_ok\": true,\n  \"predicate_type_ok\": true,\n  \"decision_bound\": true,\n  \"role_separation_ok\": true,\n  \"execution_proven\": null,\n  \"audience_ok\": null,\n  \"nonce_ok\": null,\n  \"subject_binding\": {\n    \"mode\": \"DERIVED\",\n    \"matches\": true\n  },\n  \"subject_derived_ok\": null,\n  \"automation\": {\n    \"cryptoValid\": true,\n    \"structureValid\": true,\n    \"policyAuthorized\": false,\n    \"referencesResolved\": true,\n    \"safeForAutomation\": false,\n    \"automationBlockers\": [\n      \"POLICY_NOT_EVALUATED\"\n    ]\n  },\n  \"evidence_levels\": {\n    \"effect\": {\n      \"level\": null,\n      \"level_name\": null,\n      \"fields\": [\n        {\n          \"level\": null,\n          \"level_name\": null,\n          \"detail\": \"not applicable\"\n        },\n        {\n          \"level\": null,\n          \"level_name\": null,\n          \"detail\": \"not applicable\"\n        }\n      ]\n    },\n    \"receiverRefs\": null\n  },\n  \"executor_role_trusted\": null,\n  \"receiver_bound\": null,\n  \"receiver_role_trusted\": null,\n  \"lineage\": null,\n  \"policy_ok\": null,\n  \"relations_policy_codes\": null,\n  \"warnings\": [],\n  \"errors\": []\n}\n"
+      },
+      "payload_bytes": 600,
+      "payload_sha256": "b277133a0cd9e0ceea68313a8896280a89fd24c1743b1e056dcec5d10e10c6ad",
+      "scope_limit": "No action/effect bytes, approval or consumption inputs in these commands. No expected decisionMaker.id policy is supplied; outcome --decision-maker-id checks inequality, not expected executor.id. No full cross-record time check.",
+      "signature_b64": "EhhyqWKqst02TtQfDvlLWyVgQrQao7fPywh0elGXrH0kuZXQxMACzjGGbX+69BoygBO3/T7SHHLtmPAB5X3bBQ==",
+      "signature_verified": true
+    },
+    {
+      "base_vector": "V3-good",
+      "consumption_enforcement": "NOT_APPLICABLE",
+      "definition": "performedAt is earlier than V3-decision.decidedAt",
+      "draft_expectation": {
+        "author_reported_cli_exit": 0,
+        "first_failing_check": "3.4 step 7",
+        "provenance": "AUTHOR_SPECIFIED, Appendix A.5; not a local full draft verifier",
+        "receipt_procedure": "REJECT",
+        "relying_party": "NOT_APPLICABLE"
+      },
+      "envelope_sha256": "dff66906ab4b78cd8f6c1c058c4b4473419ecfa52e72b2d14f4b33cacbe3f3f9",
+      "expected_inputs_for_draft_procedure": {
+        "action_bytes": null,
+        "approval_bytes": null,
+        "consumption_state_bytes": null,
+        "decision_ref": "0014b1c419798125c3984e85a4b322ee619a3227978840cac5f9d282b189521f",
+        "effect_bytes": "e3.json",
+        "evaluation_time": "2026-10-15T09:11:00Z",
+        "expected_audience": null,
+        "expected_decisionMaker.id": "gate-1",
+        "expected_executor.id": "forge:agent-42-bot",
+        "expected_nonce": null
+      },
+      "full_draft_procedure_execution": "NOT_EVALUATED",
+      "id": "F8",
+      "measured_cli": {
+        "command": [
+          "proofbundle",
+          "outcome",
+          "verify",
+          "fixtures/F8.envelope.json",
+          "--pub",
+          "4hDsi5TCL+A+9SB7k2l4EkY7XePUheE+zE9mBazt2Fs=",
+          "--strict",
+          "--json",
+          "--expected-decision-ref",
+          "0014b1c419798125c3984e85a4b322ee619a3227978840cac5f9d282b189521f",
+          "--decision-maker-id",
+          "gate-1"
+        ],
+        "exit_code": 0,
+        "stderr": "",
+        "stdout": "{\n  \"ok\": true,\n  \"crypto_ok\": true,\n  \"structure_ok\": true,\n  \"predicate_type_ok\": true,\n  \"decision_bound\": true,\n  \"role_separation_ok\": true,\n  \"execution_proven\": true,\n  \"audience_ok\": null,\n  \"nonce_ok\": null,\n  \"subject_binding\": {\n    \"mode\": \"DERIVED\",\n    \"matches\": true\n  },\n  \"subject_derived_ok\": null,\n  \"automation\": {\n    \"cryptoValid\": true,\n    \"structureValid\": true,\n    \"policyAuthorized\": false,\n    \"referencesResolved\": true,\n    \"safeForAutomation\": false,\n    \"automationBlockers\": [\n      \"POLICY_NOT_EVALUATED\"\n    ]\n  },\n  \"evidence_levels\": {\n    \"effect\": {\n      \"level\": 1,\n      \"level_name\": \"REFERENCE_WELL_FORMED\",\n      \"fields\": [\n        {\n          \"level\": 1,\n          \"level_name\": \"REFERENCE_WELL_FORMED\",\n          \"detail\": \"a well-formed sha256 digest object is present (attacker-choosable content, not content-checked)\"\n        },\n        {\n          \"level\": 0,\n          \"level_name\": \"CLAIMED\",\n          \"detail\": \"no well-formed sha256 digest object present\"\n        }\n      ]\n    },\n    \"receiverRefs\": null\n  },\n  \"executor_role_trusted\": null,\n  \"receiver_bound\": null,\n  \"receiver_role_trusted\": null,\n  \"lineage\": null,\n  \"policy_ok\": null,\n  \"relations_policy_codes\": null,\n  \"warnings\": [\n    \"DEPRECATED: execution_proven / receiver_bound are digest-presence booleans (evidence_levels REFERENCE_WELL_FORMED \\u2014 attacker-choosable content), NOT a content proof. Use evidence_levels; only CONTENT_RESOLVED or stronger is a real binding. These legacy fields will be removed in the next breaking format version.\"\n  ],\n  \"errors\": []\n}\n"
+      },
+      "payload_bytes": 694,
+      "payload_sha256": "bbe81b4cf255b9444de8ead2773fc9a859f4c2b9f8288822209fac0653fb9888",
+      "scope_limit": "No action/effect bytes, approval or consumption inputs in these commands. No expected decisionMaker.id policy is supplied; outcome --decision-maker-id checks inequality, not expected executor.id. No full cross-record time check.",
+      "signature_b64": "B+PLo64p+ESIWVfdIk7FR6RuANsst7kgsep1K6+g92eULuty4HseuWJL2laTX+tkc0aM1ztineO5Q3rA9XTtAg==",
+      "signature_verified": true
+    },
+    {
+      "base_vector": "V1-good",
+      "consumption_enforcement": "NOT_APPLICABLE",
+      "definition": "receipt expiresAt exceeds ap.validUntil; approval is also expired at T",
+      "draft_expectation": {
+        "author_reported_cli_exit": 0,
+        "first_failing_check": "3.3 Case 1",
+        "provenance": "AUTHOR_SPECIFIED, Appendix A.5; not a local full draft verifier",
+        "receipt_procedure": "REJECT",
+        "relying_party": "NOT_APPLICABLE"
+      },
+      "envelope_sha256": "8916dc723844c4dfb2163d7b401336fd03d5f8477174d9c489fc16fd543a1360",
+      "expected_inputs_for_draft_procedure": {
+        "action_bytes": "a1.txt",
+        "approval_bytes": "ap.json",
+        "consumption_state_bytes": null,
+        "decision_ref": null,
+        "effect_bytes": null,
+        "evaluation_time": "2026-10-15T09:16:00Z",
+        "expected_audience": "observer-1",
+        "expected_decisionMaker.id": "gate-1",
+        "expected_executor.id": null,
+        "expected_nonce": "dec-0001"
+      },
+      "full_draft_procedure_execution": "NOT_EVALUATED",
+      "id": "F9",
+      "measured_cli": {
+        "command": [
+          "proofbundle",
+          "decision",
+          "verify",
+          "fixtures/F9.envelope.json",
+          "--pub",
+          "TWfs75IN1In3CNI8TnyIOUHgtwilOPGcRFQLJ670CJc=",
+          "--strict",
+          "--json",
+          "--aud",
+          "observer-1",
+          "--nonce",
+          "dec-0001",
+          "--verification-time",
+          "2026-10-15T09:16:00Z"
+        ],
+        "exit_code": 0,
+        "stderr": "",
+        "stdout": "{\n  \"ok\": true,\n  \"crypto_ok\": true,\n  \"structure_ok\": true,\n  \"predicate_type_ok\": true,\n  \"signer_trusted\": null,\n  \"policy_ok\": null,\n  \"evidence_bound\": null,\n  \"audience_ok\": true,\n  \"nonce_ok\": true,\n  \"freshness_ok\": true,\n  \"anchors_ok\": null,\n  \"action_outcome_proven\": null,\n  \"subject_binding\": {\n    \"mode\": \"DERIVED\",\n    \"matches\": true\n  },\n  \"subject_derived_ok\": null,\n  \"automation\": {\n    \"cryptoValid\": true,\n    \"structureValid\": true,\n    \"policyAuthorized\": false,\n    \"referencesResolved\": true,\n    \"safeForAutomation\": false,\n    \"automationBlockers\": [\n      \"POLICY_NOT_EVALUATED\",\n      \"SIGNER_NOT_PINNED\"\n    ]\n  },\n  \"evidence_levels\": {\n    \"actionOutcome.outcomeRef\": {\n      \"level\": null,\n      \"level_name\": null,\n      \"detail\": \"not applicable\"\n    },\n    \"evidenceRefs\": null\n  },\n  \"lineage\": null,\n  \"relations_policy_codes\": null,\n  \"warnings\": [],\n  \"errors\": [],\n  \"verification_time\": {\n    \"mode\": \"HISTORICAL\",\n    \"time\": \"2026-10-15T09:16:00Z\",\n    \"current_policy_status\": \"NOT_EVALUATED\",\n    \"historical_policy_status\": \"NOT_EVALUATED\"\n  }\n}\n"
+      },
+      "payload_bytes": 1829,
+      "payload_sha256": "8271acb7293138eea0a48e52ee0dfd99c063b1139f353c8b26c9cdbe56975151",
+      "scope_limit": "No action/effect bytes, approval or consumption inputs in these commands. No expected decisionMaker.id policy is supplied; outcome --decision-maker-id checks inequality, not expected executor.id. No full cross-record time check.",
+      "signature_b64": "hIPtCWefKjWx+MlTv7nUxCuq9v+JjapYccXx9rawMxw8JcxybehAGp8d8MozhTzAjZ5BZgmzvKBkEXECTfQPCA==",
+      "signature_verified": true
+    },
+    {
+      "base_vector": "V1-good",
+      "consumption_enforcement": "NOT_EVALUATED",
+      "definition": "author supplies c1 as prior consumed state; no consumption hook is exercised here",
+      "draft_expectation": {
+        "author_reported_cli_exit": 0,
+        "first_failing_check": "4 (relying party, after receipt verification)",
+        "provenance": "AUTHOR_SPECIFIED, Appendix A.5; not a local full draft verifier",
+        "receipt_procedure": "PASS",
+        "relying_party": "REFUSE"
+      },
+      "envelope_sha256": "4069c22d741d9f4a08bc41d53664324f345dc58f88d2ff6211171749fe2b1c40",
+      "expected_inputs_for_draft_procedure": {
+        "action_bytes": "a1.txt",
+        "approval_bytes": "ap2.json",
+        "consumption_state_bytes": "c1.json",
+        "decision_ref": null,
+        "effect_bytes": null,
+        "evaluation_time": "2026-10-15T09:21:00Z",
+        "expected_audience": "observer-1",
+        "expected_decisionMaker.id": "gate-1",
+        "expected_executor.id": null,
+        "expected_nonce": "dec-0004"
+      },
+      "full_draft_procedure_execution": "NOT_EVALUATED",
+      "id": "F10",
+      "measured_cli": {
+        "command": [
+          "proofbundle",
+          "decision",
+          "verify",
+          "fixtures/F10.envelope.json",
+          "--pub",
+          "TWfs75IN1In3CNI8TnyIOUHgtwilOPGcRFQLJ670CJc=",
+          "--strict",
+          "--json",
+          "--aud",
+          "observer-1",
+          "--nonce",
+          "dec-0004",
+          "--verification-time",
+          "2026-10-15T09:21:00Z"
+        ],
+        "exit_code": 0,
+        "stderr": "",
+        "stdout": "{\n  \"ok\": true,\n  \"crypto_ok\": true,\n  \"structure_ok\": true,\n  \"predicate_type_ok\": true,\n  \"signer_trusted\": null,\n  \"policy_ok\": null,\n  \"evidence_bound\": null,\n  \"audience_ok\": true,\n  \"nonce_ok\": true,\n  \"freshness_ok\": true,\n  \"anchors_ok\": null,\n  \"action_outcome_proven\": null,\n  \"subject_binding\": {\n    \"mode\": \"DERIVED\",\n    \"matches\": true\n  },\n  \"subject_derived_ok\": null,\n  \"automation\": {\n    \"cryptoValid\": true,\n    \"structureValid\": true,\n    \"policyAuthorized\": false,\n    \"referencesResolved\": true,\n    \"safeForAutomation\": false,\n    \"automationBlockers\": [\n      \"POLICY_NOT_EVALUATED\",\n      \"SIGNER_NOT_PINNED\"\n    ]\n  },\n  \"evidence_levels\": {\n    \"actionOutcome.outcomeRef\": {\n      \"level\": null,\n      \"level_name\": null,\n      \"detail\": \"not applicable\"\n    },\n    \"evidenceRefs\": null\n  },\n  \"lineage\": null,\n  \"relations_policy_codes\": null,\n  \"warnings\": [],\n  \"errors\": [],\n  \"verification_time\": {\n    \"mode\": \"HISTORICAL\",\n    \"time\": \"2026-10-15T09:21:00Z\",\n    \"current_policy_status\": \"NOT_EVALUATED\",\n    \"historical_policy_status\": \"NOT_EVALUATED\"\n  }\n}\n"
+      },
+      "payload_bytes": 1829,
+      "payload_sha256": "c299b48e0a0596f8c8eb252beef0138c7d1133f113cdc03150abb6cb41bcdcce",
+      "scope_limit": "No action/effect bytes, approval or consumption inputs in these commands. No expected decisionMaker.id policy is supplied; outcome --decision-maker-id checks inequality, not expected executor.id. No full cross-record time check.",
+      "signature_b64": "qCHm6JNGoxXAdFPXKud8ojxef8wh+m9BrGHbYD/1miqG1YGcYAZ/XRFO8+el6D8RirkB313aOUqZo6YwBAUYAw==",
+      "signature_verified": true
+    }
+  ]
+}

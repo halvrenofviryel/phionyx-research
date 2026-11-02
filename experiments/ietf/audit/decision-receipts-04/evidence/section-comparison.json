@@ -1,0 +1,37 @@
+[
+  {
+    "section": "3.1.  Inputs",
+    "comparison": "pagination removed; whitespace normalized",
+    "equal": true,
+    "03_sha256": "cade9337d77028c6f7b5a9544e0d192aeb61de129b7ef271a2667954280327bc",
+    "04_sha256": "cade9337d77028c6f7b5a9544e0d192aeb61de129b7ef271a2667954280327bc"
+  },
+  {
+    "section": "3.5.  Checks over a Set of Receipts",
+    "comparison": "pagination removed; whitespace normalized",
+    "equal": true,
+    "03_sha256": "2994ca233150759a29c504ab17cbb70afa029fb3a1c568e58710ea6158fdc522",
+    "04_sha256": "2994ca233150759a29c504ab17cbb70afa029fb3a1c568e58710ea6158fdc522"
+  },
+  {
+    "section": "4.  Approvals Are Honoured At Most Once",
+    "comparison": "pagination removed; whitespace normalized",
+    "equal": true,
+    "03_sha256": "f8074000dc1fe6b25b321b5ebb1a42dd021a0aa41445d6f21713eab3c921607a",
+    "04_sha256": "f8074000dc1fe6b25b321b5ebb1a42dd021a0aa41445d6f21713eab3c921607a"
+  },
+  {
+    "section": "A.1.  Test Keys and Inputs",
+    "comparison": "pagination removed; whitespace normalized",
+    "equal": true,
+    "03_sha256": "b15312e8a0ec7158f41da0b5c081cda1647ca57a835ba21770910f6b60f8175d",
+    "04_sha256": "b15312e8a0ec7158f41da0b5c081cda1647ca57a835ba21770910f6b60f8175d"
+  },
+  {
+    "section": "A.2.  Statements",
+    "comparison": "pagination removed; whitespace normalized",
+    "equal": true,
+    "03_sha256": "4c1bf386432852dbf3890acff7523b3bd79d34557cdd4ec4d301c65ec8763b1e",
+    "04_sha256": "4c1bf386432852dbf3890acff7523b3bd79d34557cdd4ec4d301c65ec8763b1e"
+  }
+]

@@ -1,0 +1,103 @@
+{
+  "recorded_at_utc": "2026-11-02T17:39:01.819332+00:00",
+  "repository_root": "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/c-audit-decision-receipts/phionyx-research",
+  "branch": "codex/audit-decision-receipts-probe",
+  "base_commit": "02a44a812699f853ea65fffa21320e7cc8ddb6c7",
+  "initial_worktree_status": "CLEAN: git status --porcelain=v1 produced no output before new path creation",
+  "target": "draft-gruszka-audit-decision-receipts-04",
+  "newer_revisions": "OUT_OF_SCOPE: target fixed to -04 for this run",
+  "frozen_previous_experiment": "decision-receipts-03 at 02a44a812699f853ea65fffa21320e7cc8ddb6c7",
+  "frozen_file_counts": {
+    "all_files_including_ignored": 3054,
+    "tracked": 56
+  },
+  "fetch_attempts": [
+    {
+      "command": "git fetch --all --prune",
+      "sandbox": "default",
+      "exit_code": 128,
+      "result": "UNAVAILABLE: Could not resolve host: github.com"
+    },
+    {
+      "command": "git fetch --all --prune",
+      "sandbox": "approved read-only network escalation",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "scope_limits": [
+    "No edits under decision-receipts-03",
+    "No public writes or outreach",
+    "No SCITT/COSE execution",
+    "No simulated consumption enforcement",
+    "No automatic next task"
+  ],
+  "base_after_fetch": "02a44a812699f853ea65fffa21320e7cc8ddb6c7",
+  "remote_refs_after_fetch": "refs/remotes/origin/dependabot/github_actions/actions/checkout-7 92599921904417e0fcd82c0de148cbc575c555a3\nrefs/remotes/origin/dependabot/github_actions/actions/setup-python-7 b9451b16b25275230b75025271d62f539661b532\nrefs/remotes/origin/dependabot/github_actions/softprops/action-gh-release-3.0.3 138fcb869e7aef3848e91903fc7351b0669eed4c\nrefs/remotes/origin/docs/claim-realignment aba36e1d544baeea39056f22d1fad6408d036f1f\nrefs/remotes/origin/main 69bc8cfd282e9a0a45e34b1fcf6106b1ab618f9d\n",
+  "sources_manifest": "sources/manifest.json",
+  "package_pin": "evidence/package-pin.json",
+  "environment": {
+    "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+    "dependency_lock": "requirements.lock",
+    "dependency_strategy": "Read-only reuse of frozen -03 venv; independent fresh -04 venv reproduction also passed",
+    "upstream_modifications": false
+  },
+  "source_status": {
+    "04_sha256": "f5065d91493fb15a4995f85ffd1a71911d01bc9c8b063b1938521e1bfc05c826",
+    "03_sha256": "c0aae84b82108a3bd40cbbbee33df13c760b5c2e943a205e9efca4c623438245",
+    "03_equals_previous_frozen_copy": true,
+    "source_delta": "DELTA.md",
+    "SCITT_A4": "SOURCE_DELTA_ONLY; NOT_EVALUATED"
+  },
+  "results": {
+    "vectors": {
+      "F1": 2,
+      "F2": 2,
+      "F3": 0,
+      "F4": 2,
+      "F5": 0,
+      "F6": 0,
+      "F7": 0,
+      "F8": 0,
+      "F9": 0,
+      "F10": 0
+    },
+    "negative_controls": {
+      "C01": 2,
+      "C02": 2,
+      "C03": 2,
+      "C04": 2
+    },
+    "positive_controls": {
+      "P01": 0,
+      "P02": 0
+    },
+    "F10_consumption_enforcement": "NOT_EVALUATED",
+    "draft_procedure_expected_results": "AUTHOR_SPECIFIED; no full local draft verifier",
+    "output_normalization": "NONE; full raw CLI stdout/stderr captured",
+    "runtime_and_effect": "No runtime execution; effect UNOBSERVED"
+  },
+  "tests": {
+    "status": "PASS",
+    "unittest_count": 13,
+    "new_vector_cli_count": 10,
+    "negative_control_cli_count": 4,
+    "positive_control_cli_count": 2,
+    "frozen_artifact_count": 33,
+    "cross_process_determinism": "PASS",
+    "fresh_04_venv_reproduction": "PASS",
+    "frozen_03_tracked_files": 56,
+    "frozen_03_all_local_files": 3054,
+    "commands": [
+      "bash experiments/ietf/audit/decision-receipts-04/reproduce.sh",
+      "PROBE_USE_NEW_VENV=1 bash experiments/ietf/audit/decision-receipts-04/reproduce.sh"
+    ],
+    "rules": "Existing repo CONTRIBUTING.md and previously inspected local rules apply; no AGENTS.md found; no policy/schema edits",
+    "final_validation": "evidence/final-validation.json",
+    "final_log": "evidence/final-validation.txt",
+    "lint": "PASS: ruff check and format --check",
+    "final_03_preservation": "PASS: all 3054 local files byte-identical and same file inventory"
+  },
+  "result_commit": "Read with git log -1 --format=%H -- experiments/ietf/audit/decision-receipts-04; not embedded to avoid self-referential hash"
+}

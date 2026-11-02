@@ -1,0 +1,29 @@
+[
+  {
+    "path": "draft-gruszka-audit-decision-receipts-03.txt",
+    "url": "https://www.ietf.org/archive/id/draft-gruszka-audit-decision-receipts-03.txt",
+    "resolved_url": "https://www.ietf.org/archive/id/draft-gruszka-audit-decision-receipts-03.txt",
+    "accessed_at_utc": "2026-11-02T17:39:24.890083+00:00",
+    "http_status": 200,
+    "bytes": 80358,
+    "sha256": "c0aae84b82108a3bd40cbbbee33df13c760b5c2e943a205e9efca4c623438245"
+  },
+  {
+    "path": "draft-gruszka-audit-decision-receipts-04.txt",
+    "url": "https://www.ietf.org/archive/id/draft-gruszka-audit-decision-receipts-04.txt",
+    "resolved_url": "https://www.ietf.org/archive/id/draft-gruszka-audit-decision-receipts-04.txt",
+    "accessed_at_utc": "2026-11-02T17:39:25.402045+00:00",
+    "http_status": 200,
+    "bytes": 127824,
+    "sha256": "f5065d91493fb15a4995f85ffd1a71911d01bc9c8b063b1938521e1bfc05c826"
+  },
+  {
+    "path": "proofbundle-6.4.0-pypi.json",
+    "url": "https://pypi.org/pypi/proofbundle/6.4.0/json",
+    "resolved_url": "https://pypi.org/pypi/proofbundle/6.4.0/json",
+    "accessed_at_utc": "2026-11-02T17:39:32.550692+00:00",
+    "http_status": 200,
+    "bytes": 21341,
+    "sha256": "bbeff23d3fd63c215ab2c0c9991e9821eebb4f9a71ae984ac52fbcd2550c9095"
+  }
+]
