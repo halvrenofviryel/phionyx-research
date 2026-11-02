@@ -1,0 +1,51 @@
+{
+  "acder_bounded": {
+    "applicable_kinds": [
+      "envelope_integrity",
+      "issuer_dispatched",
+      "receiver_receipt",
+      "all_required_delivery",
+      "enforcement_applied",
+      "execution_observed",
+      "effect_observed",
+      "ordering",
+      "population_complete",
+      "complete_mediation",
+      "semantic_preservation"
+    ],
+    "rule": "Requirement-derived bounded evidence profile above. No full standard, production, real-world truth or external independence claim."
+  },
+  "integrity_only": {
+    "applicable_kinds": [
+      "envelope_integrity"
+    ],
+    "nonclaims": [
+      "authenticity",
+      "authority",
+      "delivery",
+      "enforcement",
+      "execution",
+      "effect",
+      "completeness"
+    ],
+    "rule": "Hash exact named payload bytes; SUPPORTED on all matches, REFUTED on a mismatch. All other query kinds NOT_APPLICABLE."
+  },
+  "naive_ack": {
+    "applicable_kinds": [
+      "receiver_receipt",
+      "all_required_delivery",
+      "enforcement_applied",
+      "effect_observed"
+    ],
+    "nonclaims": [
+      "integrity",
+      "issuer dispatch",
+      "execution",
+      "ordering",
+      "population completeness",
+      "deployment mediation",
+      "semantic preservation"
+    ],
+    "rule": "Any payload for the same instruction_id with kind transport_ack or receiver_observation and outcome ACCEPTED/QUEUED/RECEIVED yields SUPPORTED, ignoring target, content, boundary, authority, enforcement and effect bindings. For a population query, any successful ACK for an included instruction suffices. Otherwise INDETERMINATE/NOT_SUPPORTED, never REFUTED solely for absent ACK. Conditions empty; this deliberately loses qualifications."
+  }
+}

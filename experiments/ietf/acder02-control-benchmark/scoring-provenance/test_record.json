@@ -1,0 +1,29 @@
+{
+  "schema": "k1-scorer-contract-tests-v1",
+  "recorded_at_utc": "2026-11-02T20:26:53.520038+00:00",
+  "argv": [
+    "python3",
+    "-B",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "evidence/standards_third_wave_2026-11-02/k1-scoring",
+    "-p",
+    "test_*.py",
+    "-v"
+  ],
+  "cwd": "/home/toygar/Documents/ChatGPT/STRATEJIK_PLAN",
+  "python": "3.12.3",
+  "exit_code": 0,
+  "stdout": "",
+  "stderr": "test_actual_subprocess_loader_and_first_result_preservation (test_score.CLITests.test_actual_subprocess_loader_and_first_result_preservation) ... ok\ntest_duplicate_json_keys_rejected (test_score.CLITests.test_duplicate_json_keys_rejected) ... ok\ntest_loader_does_not_open_neighbor_subtree (test_score.CLITests.test_loader_does_not_open_neighbor_subtree) ... ok\ntest_loader_refuses_case_identity_or_claim_inventory_mismatch (test_score.CLITests.test_loader_refuses_case_identity_or_claim_inventory_mismatch) ... ok\ntest_missing_claim_fails_without_output_artifact (test_score.CLITests.test_missing_claim_fails_without_output_artifact) ... ok\ntest_non_object_author_file_is_an_input_error (test_score.CLITests.test_non_object_author_file_is_an_input_error) ... ok\ntest_aggregate_prose_unscored_and_counts_type_sensitive (test_score.MetricTests.test_aggregate_prose_unscored_and_counts_type_sensitive) ... ok\ntest_ambiguity_and_latent_types_are_explicit (test_score.MetricTests.test_ambiguity_and_latent_types_are_explicit) ... ok\ntest_ambiguity_excludes_only_one_claim_not_structural_case (test_score.MetricTests.test_ambiguity_excludes_only_one_claim_not_structural_case) ... ok\ntest_condition_order_is_not_a_difference (test_score.MetricTests.test_condition_order_is_not_a_difference) ... ok\ntest_fixed_applicability_prevents_na_denominator_escape (test_score.MetricTests.test_fixed_applicability_prevents_na_denominator_escape) ... ok\ntest_fixed_nonapplicability_and_integrity_are_distinct (test_score.MetricTests.test_fixed_nonapplicability_and_integrity_are_distinct) ... ok\ntest_frozen_numerators_distinguish_epistemic_and_latent_errors (test_score.MetricTests.test_frozen_numerators_distinguish_epistemic_and_latent_errors) ... ok\ntest_input_objects_are_not_mutated (test_score.MetricTests.test_input_objects_are_not_mutated) ... ok\ntest_missing_duplicate_unknown_and_malformed_claims_fail_closed (test_score.MetricTests.test_missing_duplicate_unknown_and_malformed_claims_fail_closed) ... ok\ntest_no_truth_is_not_false_and_unknown_is_not_semantic_error (test_score.MetricTests.test_no_truth_is_not_false_and_unknown_is_not_semantic_error) ... ok\ntest_qualification_and_conditions_scored_independently (test_score.MetricTests.test_qualification_and_conditions_scored_independently) ... ok\ntest_split_kind_and_total_partitions (test_score.MetricTests.test_split_kind_and_total_partitions) ... ok\ntest_structural_missing_fields_and_wrong_target_remain_visible (test_score.MetricTests.test_structural_missing_fields_and_wrong_target_remain_visible) ... ok\ntest_subset_of_comparators_is_explicitly_incomplete (test_score.MetricTests.test_subset_of_comparators_is_explicitly_incomplete) ... ok\n\n----------------------------------------------------------------------\nRan 20 tests in 0.187s\n\nOK\n",
+  "source_sha256": {
+    "score.py": "b4cf28a5ddbb4776ce2b520ee452537f913cb3c9e41165391a1fa22b385d5df2",
+    "test_score.py": "7bd7a2317b61daf4f5d636897930b9ea7791b10061176887bec996b1129ecff7"
+  },
+  "fixture_scope": "Invented unit fixtures only; no author case/oracle/latent content read",
+  "benchmark_execution": false,
+  "comparator_execution": false,
+  "holdout_read": false
+}

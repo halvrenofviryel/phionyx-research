@@ -1,0 +1,66 @@
+{
+  "schema": "acder-benchmark-logic-freeze-v1",
+  "recorded_utc": "2026-11-02T20:33:24.399952+00:00",
+  "benchmark_prereg_commit": "9a1d931156b0e8f92bde0fe9fc65a32b3958f02c",
+  "data_freeze_commit": "b17eced04bb30f7687a654cbc7426a94c04d142d",
+  "author_data_commit": "c6123b4309801c0bf007c0a3d95f6c2bc0820ac5",
+  "holdout_content_opened": false,
+  "holdout_comparators_run": false,
+  "development_cases_seen": 12,
+  "development_claims_seen": 53,
+  "prefreeze_test_count": 44,
+  "files": [
+    {
+      "path": "reproduce.py",
+      "sha256": "e8a6c21b6c7229a1e2a70b7fd3ef71fd098f724c49ef3c743b65f60cc47d5d4e"
+    },
+    {
+      "path": "PROFILE.json",
+      "sha256": "8c27cd685289028261ff5c035a6d9643c58412954bff8ebee7ffaa485c9e8a54"
+    },
+    {
+      "path": "SCENARIO_SELECTION.json",
+      "sha256": "8cf277d7d7edf246a497394ef33c01ac32a98735d9402bbb6602c51add948b7b"
+    },
+    {
+      "path": "BENCHMARK_PROTOCOL.md",
+      "sha256": "183565d841f282211f214fbef8f4371faf63e5853df9a100f827bb8a283e49de"
+    },
+    {
+      "path": "CONTRACT.md",
+      "sha256": "57cd437e03e184aebc83de33835c8408b503d2d1ab27f1dc05f871613f75fafc"
+    },
+    {
+      "path": "EVIDENCE_SCHEMA.json",
+      "sha256": "9bbc6511814bd24a3ff1b31cf1a260a7c87f0b8dc2afd64dcfcf4f45ecbbd555"
+    },
+    {
+      "path": "CLAIM_OUTPUT_SCHEMA.json",
+      "sha256": "fd47e4a3d517748a17358112cea45bdd6116b6cca970798b91b01327adaf687c"
+    },
+    {
+      "path": "baselines/contracts.json",
+      "sha256": "6fbce0d3e333d19ab8ca25725609a9625ed5fe5ee2e5c22db292061dbd1cac31"
+    },
+    {
+      "path": "src/evaluate.py",
+      "sha256": "3d14d8c60a3510af66bf17d4245bc99cbb8bef159b8a18f3fe8ec2305e4231bd"
+    },
+    {
+      "path": "src/isolated_run.py",
+      "sha256": "7ae54cfc472041ba60200dca6f6ca7db4c764a3648ecd27dc9f32320f732552b"
+    },
+    {
+      "path": "src/score.py",
+      "sha256": "c933f252c676d99d2c86ed1586813d70407bc1bc325c44c61abb4612377863f9"
+    },
+    {
+      "path": "tests/test_evaluate.py",
+      "sha256": "ce53dad723b130ddb3e972b6164913db380e6433f610abe6d1f7990200d6a1ce"
+    },
+    {
+      "path": "tests/test_score.py",
+      "sha256": "1069a25ee7694c4a30ecbbfc9c3c018f4b26542fb46b057d1911b108f4ebf7c2"
+    }
+  ]
+}
