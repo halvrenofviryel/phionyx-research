@@ -1,0 +1,82 @@
+[
+  {
+    "path": "fixtures/P1.receipt.json",
+    "sha256": "02036d1f57509858330383755ec16c532bdc58b0f2d949464488d57abc9f95e7",
+    "provenance": "external_exact_extraction",
+    "source": "ser-v1-vectors",
+    "selector": "vectors[id=P1].bytes[label=Receipt].hex",
+    "published_crypto_expectation": "PASS",
+    "crypto_executed_here": false
+  },
+  {
+    "path": "fixtures/P2.receipt.json",
+    "sha256": "2405d1783d1803ddea207c027622fba40b3e82161686505ee96988e306e17278",
+    "provenance": "external_exact_extraction",
+    "source": "ser-v1-vectors",
+    "selector": "vectors[id=P2].bytes[label=Receipt].hex",
+    "published_crypto_expectation": "PASS",
+    "crypto_executed_here": false
+  },
+  {
+    "path": "fixtures/P4.receipt.json",
+    "sha256": "c2a7943f0ea3de6e9da88c11925b1e112d32f697a403f07fcfbc3776bca10e72",
+    "provenance": "external_exact_extraction",
+    "source": "ser-v1-vectors",
+    "selector": "vectors[id=P4].bytes[label=Receipt].hex",
+    "published_crypto_expectation": "PASS",
+    "crypto_executed_here": false
+  },
+  {
+    "path": "fixtures/P6.receipt.json",
+    "sha256": "2c8144d50b4cc42a712d84e4d0417e52b0d8cbc484ad8e6d8d4b36a429b94ec1",
+    "provenance": "external_exact_extraction",
+    "source": "ser-v1-vectors",
+    "selector": "vectors[id=P6].bytes[label=Receipt].hex",
+    "published_crypto_expectation": "PASS",
+    "crypto_executed_here": false
+  },
+  {
+    "path": "fixtures/P10.receipt.json",
+    "sha256": "75d4029e2470131e8e88d8ec129efd7b9d15092b668bf0ecb7b32eea3361b7ed",
+    "provenance": "external_exact_extraction",
+    "source": "ser-v1-vectors",
+    "selector": "vectors[id=P10].bytes[label=Receipt].hex",
+    "published_crypto_expectation": "PASS",
+    "crypto_executed_here": false
+  },
+  {
+    "path": "fixtures/N7.receipt.json",
+    "sha256": "18b1b6dc631cf0f00d8b0d2c237b28a67b12c2d7088ae0313a2fb27760f96bdd",
+    "provenance": "external_exact_extraction",
+    "source": "ser-v1-vectors",
+    "selector": "vectors[id=N7].bytes[label=Receipt].hex",
+    "published_crypto_expectation": "FAIL",
+    "crypto_executed_here": false
+  },
+  {
+    "path": "fixtures/N13.receipt.json",
+    "sha256": "31a34194edd90bade6568a3cb00dbb983dabab9efccfd7a8b38650bd3e8d5201",
+    "provenance": "external_exact_extraction",
+    "source": "ser-v1-vectors",
+    "selector": "vectors[id=N13].bytes[label=Receipt].hex",
+    "published_crypto_expectation": "FAIL",
+    "crypto_executed_here": false
+  },
+  {
+    "path": "fixtures/N14.receipt.json",
+    "sha256": "8966f27c5f2566d986b0ab7821060ea0c901504fe984d450dfc7f8ca7d1c27e1",
+    "provenance": "external_exact_extraction",
+    "source": "ser-v1-vectors",
+    "selector": "vectors[id=N14].bytes[label=Receipt].hex",
+    "published_crypto_expectation": "FAIL",
+    "crypto_executed_here": false
+  },
+  {
+    "path": "fixtures/M1.dsse.json",
+    "sha256": "d96e0b9635949045a6f7c7b29eac8c163f6fad0d6d0bff446beeff601e45fed0",
+    "provenance": "external_exact_extraction",
+    "source": "draft-gruszka-evaluation-receipt-mappings-04",
+    "selector": "Appendix A.4 envelope hex",
+    "crypto_executed_here": false
+  }
+]

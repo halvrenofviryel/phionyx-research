@@ -1,0 +1,160 @@
+{
+  "id": "cp-ser04-local/1",
+  "status": "NON_NORMATIVE_INTERNAL_EXPERIMENT",
+  "implementation": "src/profile.py; exact bytes hashed in results.json",
+  "authority": {
+    "CP": "draft-abak-ai-evaluation-claim-preservation-00 sections 4, 5 and Appendix A",
+    "SER": "draft-gruszka-signed-evaluation-receipts-04",
+    "mappings": "draft-gruszka-evaluation-receipt-mappings-04",
+    "EQR": "draft-watts-eqr-conformance-05 CONTEXT ONLY"
+  },
+  "representations": {
+    "SER": "Exact supplied receipt -> internal analysis",
+    "DSSE": "Section 4.1, exact B and selected signature -> internal analysis",
+    "DIGEST_ONLY": "Section 5.1 typed JSON reference, no candidate receipt supplied",
+    "DIGEST_RESOLVED": "Section 5.1 typed JSON reference plus matching candidate supplied"
+  },
+  "selector": {
+    "syntax": "RFC6901 on decoded B",
+    "unit": "whole B (empty pointer); exact B SHA-256 and explicit cardinality one",
+    "multiple_records": "reject unless exactly one candidate matches; do not deduplicate attempts"
+  },
+  "digest_rules": {
+    "receipt_citation": "SHA-256 over extracted B, as-transmitted, no reserialization",
+    "local_binding": "SHA-256 over source/output exact bytes plus explicitly named local JSON encoding of the tuple",
+    "signature_binding": "Not inferred from any digest"
+  },
+  "claim_scope": "Limited observable distinctions in these cases, not whole-requirement or format conformance",
+  "labels": {
+    "PRESERVED": "The stated bounded distinction/negative behavior survived in observed output. Does not establish truth or full conformance.",
+    "QUALIFIED_LOSS": "A known claim-relevant distinction from the test input is unavailable after the specified hop; the harness reports the limit.",
+    "UNESTABLISHED": "Available source/verification inputs do not establish the requested distinction or stronger claim. Never a measured failure.",
+    "NOT_APPLICABLE": "The native scenario cannot occur in valid SER, or no reliance event was supplied; refusal/absence checked, not counted as support."
+  },
+  "unknown_policy": "Do not infer execution, completeness, criteria chronology, custody, authority, identity or zero uncertainty. Unknown schema/member/version rejects semantic acceptance; retain opaque digest evidence only.",
+  "numeric_policy": "Exact decimal strings and bounded exact integer n; no float conversions. One decimal ROUND_HALF_UP only as an explicit local presentation derivation; no comparison against derived value attributed to source.",
+  "crypto_policy": "Ed25519/COSE/SCITT verification NOT_EVALUATED. Published crypto expectations are not local results. Two later-auth probes use a public test-only HMAC-SHA256 key and are not signatures or SER verification.",
+  "limits": {
+    "max_input_bytes": 65536,
+    "max_JSON_depth": 32,
+    "network_during_reproduction": false
+  },
+  "requirements": [
+    {
+      "id": "R-CP-1",
+      "title": "Source and Mapping Identity",
+      "source_section": "4.1",
+      "derived_obligation": "Identify source snapshots, selectors, interpretation rules, converter and profile; bind material mapping information to the actual source and output. Distinguish digest byte selections.",
+      "scenarios": [
+        "CP-T18"
+      ]
+    },
+    {
+      "id": "R-CP-2",
+      "title": "Unambiguous Result Selection",
+      "source_section": "4.2",
+      "derived_obligation": "Select a unique result and its task/metric/attempt/population context under a declared syntax. Do not resolve ambiguity by choosing a favorable record.",
+      "scenarios": [
+        "CP-T04",
+        "CP-T19"
+      ]
+    },
+    {
+      "id": "R-CP-3",
+      "title": "Execution, Observation, and Assessment",
+      "source_section": "4.3",
+      "derived_obligation": "Keep execution, observation and criterion assessment distinct. Omitted criterion information is not explicit absence; missing/error/invalid/non-execution is neither measured success nor failure.",
+      "scenarios": [
+        "CP-T01",
+        "CP-T02",
+        "CP-T05"
+      ]
+    },
+    {
+      "id": "R-CP-4",
+      "title": "Values, Units, and Numerical Transformations",
+      "source_section": "4.4",
+      "derived_obligation": "Preserve exact numeric meaning, units and uncertainty when supplied. Mark rounding and other transformations; a rounded display cannot establish the original threshold comparison.",
+      "scenarios": [
+        "CP-T08"
+      ]
+    },
+    {
+      "id": "R-CP-5",
+      "title": "Criteria, New Judgments, and Chronology",
+      "source_section": "4.5",
+      "derived_obligation": "Attribute source criteria and later judgments separately. Chronology needs supporting evidence; timestamps and digest commitments alone do not establish pre-run criteria.",
+      "scenarios": [
+        "CP-T03",
+        "CP-T15"
+      ]
+    },
+    {
+      "id": "R-CP-6",
+      "title": "Coverage, Aggregation, and Attempts",
+      "source_section": "4.6",
+      "derived_obligation": "Keep population accounting, missing portions, retries and aggregation rules. Supplied records do not establish the full set of actual attempts.",
+      "scenarios": [
+        "CP-T06",
+        "CP-T07"
+      ]
+    },
+    {
+      "id": "R-CP-7",
+      "title": "Qualified Identity and Evaluation Context",
+      "source_section": "4.7",
+      "derived_obligation": "Distinguish declared names and commitments from verified executed identities and context. Carry the strength, scope and verification basis of evidence.",
+      "scenarios": [
+        "CP-T09"
+      ]
+    },
+    {
+      "id": "R-CP-8",
+      "title": "Evidence Availability and Digest Knowledge",
+      "source_section": "4.8",
+      "derived_obligation": "Distinguish actor-scoped availability from reported, recomputed or unavailable digests. Do not fabricate bytes, custody, reasons or existence.",
+      "scenarios": [
+        "CP-T10",
+        "CP-T11"
+      ]
+    },
+    {
+      "id": "R-CP-9",
+      "title": "Loss, Conflict, and Multi-Hop Preservation",
+      "source_section": "4.9",
+      "derived_obligation": "Track copied assertions, derivations, conflicts and losses across hops. Later authentication cannot recover discarded qualifications or certify a complete loss inventory.",
+      "scenarios": [
+        "CP-T12",
+        "CP-T16"
+      ]
+    },
+    {
+      "id": "R-CP-10",
+      "title": "Typed Verification and Bounded Consumption",
+      "source_section": "4.10",
+      "derived_obligation": "Type verification by actor/procedure/inputs and keep structural, digest, signature and substantive checks distinct. Bound processing and keep unsupported claims unestablished.",
+      "scenarios": [
+        "CP-T13",
+        "CP-T20"
+      ]
+    },
+    {
+      "id": "R-CP-11",
+      "title": "Separate Reliance and Downstream Decisions",
+      "source_section": "4.11",
+      "derived_obligation": "Do not invent a governance/control event from export. Actual reliance records need separate attribution, policy, subjects and inputs; they alone establish neither authority nor effect.",
+      "scenarios": [
+        "CP-T14"
+      ]
+    },
+    {
+      "id": "R-CP-12",
+      "title": "Versioned Mappings and Verification Evidence",
+      "source_section": "4.12",
+      "derived_obligation": "Version supported semantics and unknown-value policy; report concrete negative/ambiguous fixtures and observed behavior. Same-author testing is not independent interoperability.",
+      "scenarios": [
+        "CP-T17"
+      ]
+    }
+  ]
+}

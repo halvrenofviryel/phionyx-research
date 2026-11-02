@@ -1,0 +1,162 @@
+{
+  "sources": [
+    {
+      "id": "draft-abak-ai-evaluation-claim-preservation-00",
+      "url": "https://www.ietf.org/archive/id/draft-abak-ai-evaluation-claim-preservation-00.txt",
+      "role": "experiment_authority",
+      "accessed_at_utc": "2026-11-02T16:16:04.056461+00:00",
+      "resolved_url": "https://www.ietf.org/archive/id/draft-abak-ai-evaluation-claim-preservation-00.txt",
+      "status": "AVAILABLE",
+      "path": "sources/draft-abak-ai-evaluation-claim-preservation-00.txt",
+      "bytes": 64625,
+      "sha256": "9088079da04ed23fdead8a54894ac70bcf6ff26ce4834c815e4dc6961986de54"
+    },
+    {
+      "id": "draft-abak-ai-evaluation-claim-preservation-metadata",
+      "url": "https://datatracker.ietf.org/api/v1/doc/document/draft-abak-ai-evaluation-claim-preservation/?format=json",
+      "role": "latest_revision_discovery",
+      "accessed_at_utc": "2026-11-02T16:16:04.304651+00:00",
+      "resolved_url": "https://datatracker.ietf.org/api/v1/doc/document/draft-abak-ai-evaluation-claim-preservation/?format=json",
+      "status": "AVAILABLE",
+      "path": "sources/draft-abak-ai-evaluation-claim-preservation-metadata.json",
+      "bytes": 1880,
+      "sha256": "5ef1980c985c7aa433b3b711671f76ca23e6eddab9178027f8247ad631550aee",
+      "expected_revision": "00",
+      "observed_latest_revision": "00",
+      "revision_difference": "NONE"
+    },
+    {
+      "id": "draft-gruszka-signed-evaluation-receipts-04",
+      "url": "https://www.ietf.org/archive/id/draft-gruszka-signed-evaluation-receipts-04.txt",
+      "role": "experiment_authority",
+      "accessed_at_utc": "2026-11-02T16:16:04.602495+00:00",
+      "resolved_url": "https://www.ietf.org/archive/id/draft-gruszka-signed-evaluation-receipts-04.txt",
+      "status": "AVAILABLE",
+      "path": "sources/draft-gruszka-signed-evaluation-receipts-04.txt",
+      "bytes": 109277,
+      "sha256": "d60c3dd95aefb8019a5f1c0ce041d8c4eb1d4571302766944bfbc92b91c1e358"
+    },
+    {
+      "id": "draft-gruszka-signed-evaluation-receipts-metadata",
+      "url": "https://datatracker.ietf.org/api/v1/doc/document/draft-gruszka-signed-evaluation-receipts/?format=json",
+      "role": "latest_revision_discovery",
+      "accessed_at_utc": "2026-11-02T16:16:04.848303+00:00",
+      "resolved_url": "https://datatracker.ietf.org/api/v1/doc/document/draft-gruszka-signed-evaluation-receipts/?format=json",
+      "status": "AVAILABLE",
+      "path": "sources/draft-gruszka-signed-evaluation-receipts-metadata.json",
+      "bytes": 1629,
+      "sha256": "2d8b1fd5b1e7bb8a94489fb2067db9696b49ec9f95340287d6d00c063039c331",
+      "expected_revision": "04",
+      "observed_latest_revision": "04",
+      "revision_difference": "NONE"
+    },
+    {
+      "id": "draft-gruszka-evaluation-receipt-mappings-04",
+      "url": "https://www.ietf.org/archive/id/draft-gruszka-evaluation-receipt-mappings-04.txt",
+      "role": "experiment_authority",
+      "accessed_at_utc": "2026-11-02T16:16:05.108600+00:00",
+      "resolved_url": "https://www.ietf.org/archive/id/draft-gruszka-evaluation-receipt-mappings-04.txt",
+      "status": "AVAILABLE",
+      "path": "sources/draft-gruszka-evaluation-receipt-mappings-04.txt",
+      "bytes": 163444,
+      "sha256": "aa24f2d4c6b51509aba836c3786d6eb32711c8638ae0621cd4a6a7a54c978c25"
+    },
+    {
+      "id": "draft-gruszka-evaluation-receipt-mappings-metadata",
+      "url": "https://datatracker.ietf.org/api/v1/doc/document/draft-gruszka-evaluation-receipt-mappings/?format=json",
+      "role": "latest_revision_discovery",
+      "accessed_at_utc": "2026-11-02T16:16:05.391912+00:00",
+      "resolved_url": "https://datatracker.ietf.org/api/v1/doc/document/draft-gruszka-evaluation-receipt-mappings/?format=json",
+      "status": "AVAILABLE",
+      "path": "sources/draft-gruszka-evaluation-receipt-mappings-metadata.json",
+      "bytes": 1856,
+      "sha256": "5cdf3e45b241954f705eb61912ef9f8ef03a4cd83f435ce618738d1b31e272f4",
+      "expected_revision": "04",
+      "observed_latest_revision": "04",
+      "revision_difference": "NONE"
+    },
+    {
+      "id": "draft-watts-eqr-conformance-05",
+      "url": "https://www.ietf.org/archive/id/draft-watts-eqr-conformance-05.txt",
+      "role": "context_only",
+      "accessed_at_utc": "2026-11-02T16:16:05.667183+00:00",
+      "resolved_url": "https://www.ietf.org/archive/id/draft-watts-eqr-conformance-05.txt",
+      "status": "AVAILABLE",
+      "path": "sources/draft-watts-eqr-conformance-05.txt",
+      "bytes": 35288,
+      "sha256": "18a46eeabe9cd942e410f5ba2258d2eaf61c8d7fe4f425ee3f5eb63fbd753c5d"
+    },
+    {
+      "id": "draft-watts-eqr-conformance-metadata",
+      "url": "https://datatracker.ietf.org/api/v1/doc/document/draft-watts-eqr-conformance/?format=json",
+      "role": "latest_revision_discovery",
+      "accessed_at_utc": "2026-11-02T16:16:05.845823+00:00",
+      "resolved_url": "https://datatracker.ietf.org/api/v1/doc/document/draft-watts-eqr-conformance/?format=json",
+      "status": "AVAILABLE",
+      "path": "sources/draft-watts-eqr-conformance-metadata.json",
+      "bytes": 1749,
+      "sha256": "13b1ecddae865b9bef69d4cb03ee403741ce7dceab888483f96bcac18b2fc886",
+      "expected_revision": "05",
+      "observed_latest_revision": "05",
+      "revision_difference": "NONE"
+    },
+    {
+      "id": "ser-v1-vectors",
+      "url": "https://signed-evidence.org/eval-receipt/v1/test-vectors.json",
+      "role": "external_test_vectors",
+      "accessed_at_utc": "2026-11-02T16:17:17.685570+00:00",
+      "resolved_url": "https://signed-evidence.org/eval-receipt/v1/test-vectors.json",
+      "status": "AVAILABLE",
+      "path": "sources/ser-v1-test-vectors.json",
+      "bytes": 232309,
+      "sha256": "710cb8abab7ca51cf61b85c5610018f9a153add4c3db4f71b2d597e57b1671d1"
+    },
+    {
+      "id": "proofbundle-ser-tree",
+      "url": "https://api.github.com/repos/b7n0de/proofbundle/git/trees/a339424e07fd58fa261d8ca3f41af5de4dcbf751?recursive=1",
+      "role": "artifact_discovery",
+      "accessed_at_utc": "2026-11-02T16:17:18.184518+00:00",
+      "resolved_url": "https://api.github.com/repos/b7n0de/proofbundle/git/trees/a339424e07fd58fa261d8ca3f41af5de4dcbf751?recursive=1",
+      "status": "AVAILABLE",
+      "path": "sources/proofbundle-ser-tree.json",
+      "bytes": 519883,
+      "sha256": "53adf96addd887a747937ce4500929d5560a3daac72b5a399e0bd59fa9caacb3"
+    },
+    {
+      "id": "proofbundle-ser-vectors.json",
+      "url": "https://raw.githubusercontent.com/b7n0de/proofbundle/a339424e07fd58fa261d8ca3f41af5de4dcbf751/tests/fixtures/signed_eval_receipt/draft1_vectors.json",
+      "role": "external_fixture_provenance",
+      "accessed_at_utc": "2026-11-02T16:17:40.541611+00:00",
+      "resolved_url": "https://raw.githubusercontent.com/b7n0de/proofbundle/a339424e07fd58fa261d8ca3f41af5de4dcbf751/tests/fixtures/signed_eval_receipt/draft1_vectors.json",
+      "status": "AVAILABLE",
+      "path": "sources/proofbundle-ser-vectors.json",
+      "bytes": 55375,
+      "sha256": "1ea8a75bd9f16f284d75b3dfe2b4c9d8888fcc9c137bbc1fb106c04613612819",
+      "commit": "a339424e07fd58fa261d8ca3f41af5de4dcbf751"
+    },
+    {
+      "id": "proofbundle-ser-README.md",
+      "url": "https://raw.githubusercontent.com/b7n0de/proofbundle/a339424e07fd58fa261d8ca3f41af5de4dcbf751/tests/fixtures/signed_eval_receipt/README.md",
+      "role": "external_fixture_provenance",
+      "accessed_at_utc": "2026-11-02T16:17:42.088128+00:00",
+      "resolved_url": "https://raw.githubusercontent.com/b7n0de/proofbundle/a339424e07fd58fa261d8ca3f41af5de4dcbf751/tests/fixtures/signed_eval_receipt/README.md",
+      "status": "AVAILABLE",
+      "path": "sources/proofbundle-ser-README.md",
+      "bytes": 3012,
+      "sha256": "3e62cfb55f72de3c6d199eff08ed76e1059ce24aef486ab481b044ef38cb49e9",
+      "commit": "a339424e07fd58fa261d8ca3f41af5de4dcbf751"
+    },
+    {
+      "id": "proofbundle-LICENSE",
+      "url": "https://raw.githubusercontent.com/b7n0de/proofbundle/a339424e07fd58fa261d8ca3f41af5de4dcbf751/LICENSE",
+      "role": "external_fixture_provenance",
+      "accessed_at_utc": "2026-11-02T16:17:43.187306+00:00",
+      "resolved_url": "https://raw.githubusercontent.com/b7n0de/proofbundle/a339424e07fd58fa261d8ca3f41af5de4dcbf751/LICENSE",
+      "status": "AVAILABLE",
+      "path": "sources/proofbundle-LICENSE",
+      "bytes": 1071,
+      "sha256": "e498a26fa5825cc7e7bd2544f97090059bd3743db5ae070c2685a86a0e555cb1",
+      "commit": "a339424e07fd58fa261d8ca3f41af5de4dcbf751"
+    }
+  ]
+}

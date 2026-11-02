@@ -1,0 +1,123 @@
+{
+  "recorded_at_utc": "2026-11-02T16:22:07.106125+00:00",
+  "workspace": "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/e-claim-preservation-ser/phionyx-research",
+  "branch": "codex/claim-preservation-ser04-mapping",
+  "base_commit": "69bc8cfd282e9a0a45e34b1fcf6106b1ab618f9d",
+  "initial_git_status_porcelain": "",
+  "initial_clean": true,
+  "git_root_verified": "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/e-claim-preservation-ser/phionyx-research",
+  "fetch": {
+    "command": "git fetch --all --prune",
+    "exit_code": 0,
+    "base_unchanged": true,
+    "output": "From https://github.com/halvrenofviryel/phionyx-research\n - [deleted] (none) -> origin/codex/acde-01-independent-assessment\n (refs/remotes/origin/HEAD has become dangling)\n * [new branch] dependabot/github_actions/actions/checkout-7 -> origin/dependabot/github_actions/actions/checkout-7\n * [new branch] dependabot/github_actions/actions/setup-python-7 -> origin/dependabot/github_actions/actions/setup-python-7\n * [new branch] dependabot/github_actions/softprops/action-gh-release-3.0.3 -> origin/dependabot/github_actions/softprops/action-gh-release-3.0.3\n * [new branch] docs/claim-realignment -> origin/docs/claim-realignment",
+    "time_precision": "Observed before first source access; exact fetch UTC not separately captured"
+  },
+  "source_access": {
+    "sandbox_attempt": "UNAVAILABLE: DNS resolution error",
+    "escalated_read_only": "AVAILABLE"
+  },
+  "python": "3.12.3",
+  "platform": "Linux-6.11.0-29-generic-x86_64-with-glibc2.39",
+  "git_version": "git version 2.43.0",
+  "scope": "Local non-normative experiment only; no push or submission",
+  "commit_record": "Result commit is the commit containing this record; not embedded to avoid self-reference.",
+  "validation_at_utc": "2026-11-02T16:41:24.825785+00:00",
+  "validation": [
+    {
+      "command": [
+        "coverage",
+        "run",
+        "--source=experiments/ietf/claim-preservation/ser04/src",
+        "--omit=*/acquire_sources.py,*/run.py",
+        "experiments/ietf/claim-preservation/ser04/src/run.py",
+        "--check"
+      ],
+      "exit_code": 0,
+      "stdout": "{\"matrix_cells\": 48, \"matrix_counts\": {\"NOT_APPLICABLE\": 4, \"PRESERVED\": 17, \"QUALIFIED_LOSS\": 10, \"UNESTABLISHED\": 17}, \"outputs\": \"MATCH\", \"scenario_counts\": {\"NOT_APPLICABLE\": 16, \"PRESERVED\": 34, \"QUALIFIED_LOSS\": 17, \"UNESTABLISHED\": 13}, \"scenario_routes\": 80, \"tests\": 30}\n",
+      "stderr": "..............................\n----------------------------------------------------------------------\nRan 30 tests in 0.203s\n\nOK\n"
+    },
+    {
+      "command": [
+        "coverage",
+        "report",
+        "--show-missing",
+        "--fail-under=80"
+      ],
+      "exit_code": 0,
+      "stdout": "Name                                                          Stmts   Miss   Cover   Missing\n--------------------------------------------------------------------------------------------\nexperiments/ietf/claim-preservation/ser04/src/experiment.py     190      4  97.89%   124, 362, 367, 394\nexperiments/ietf/claim-preservation/ser04/src/profile.py        266      9  96.62%   136, 138, 158, 160, 217, 224, 228, 378-379\n--------------------------------------------------------------------------------------------\nTOTAL                                                           456     13  97.15%\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "coverage",
+        "json",
+        "-o",
+        "/tmp/e-claim-preservation-ser-coverage.json"
+      ],
+      "exit_code": 0,
+      "stdout": "Wrote JSON report to /tmp/e-claim-preservation-ser-coverage.json\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "ruff",
+        "check",
+        "experiments/ietf/claim-preservation/ser04/src",
+        "experiments/ietf/claim-preservation/ser04/tests"
+      ],
+      "exit_code": 0,
+      "stdout": "All checks passed!\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "ruff",
+        "format",
+        "--check",
+        "--line-length",
+        "100",
+        "experiments/ietf/claim-preservation/ser04/src",
+        "experiments/ietf/claim-preservation/ser04/tests"
+      ],
+      "exit_code": 0,
+      "stdout": "5 files already formatted\n",
+      "stderr": ""
+    }
+  ],
+  "unit_tests": 30,
+  "scenario_routes": 80,
+  "requirement_matrix_cells": 48,
+  "matrix_counts": {
+    "NOT_APPLICABLE": 4,
+    "PRESERVED": 17,
+    "QUALIFIED_LOSS": 10,
+    "UNESTABLISHED": 17
+  },
+  "scenario_counts": {
+    "NOT_APPLICABLE": 16,
+    "PRESERVED": 34,
+    "QUALIFIED_LOSS": 17,
+    "UNESTABLISHED": 13
+  },
+  "coverage": {
+    "covered_lines": 443,
+    "num_statements": 456,
+    "percent_covered": 97.14912280701755,
+    "percent_covered_display": "97.15",
+    "missing_lines": 13,
+    "excluded_lines": 2,
+    "percent_statements_covered": 97.14912280701755,
+    "percent_statements_covered_display": "97.15"
+  },
+  "coverage_scope": "src/profile.py and src/experiment.py only; acquisition utility and CLI excluded",
+  "reproduce_command": "python3 experiments/ietf/claim-preservation/ser04/src/run.py --check",
+  "applicable_rules": {
+    "AGENTS_md": "No AGENTS.md found in repository or checked ancestor directories",
+    "CONTRIBUTING_md": "Read; stdlib implementation, deterministic tests, Ruff checks, scoped documentation"
+  },
+  "latest_revision_difference": "NONE for CP-00, SER-04, mappings-04 and EQR-05",
+  "full_repository_tests": "NOT_RUN: isolated additive experiment, no existing code or schemas modified",
+  "crypto_verification": "SER Ed25519 / COSE / SCITT NOT_EVALUATED; local HMAC-only carrier probes executed",
+  "external_execution": "proofbundle code NOT_EXECUTED; all 66 reconstructed receipt byte strings matched pinned public vectors"
+}
