@@ -1,90 +1,78 @@
-# Publication review — local candidate only
+# Publication review — local approval units
 
-**Recommendation: READY_FOR_USER_REVIEW for the A/C/E Standards Lab documentation
-package. `approval_granted=false`. Publication is not authorized.** The complete
-B2/B3/F-dependent program remains **HOLD**; those missing results do not block
-review of the bounded A/C/E index. This task does not request or record approval.
+**READY_FOR_USER_REVIEW; `approval_granted=false`; UNPUBLISHED.** The first proposed
+publication is the bounded phionyx-research S0/A/C03/E + Standards Lab package,
+with C04 added only after its separate result is supplied and verified. B2/B3
+remain HOLD because enforced isolation and comparison results are absent.
 
-Reviewed content commit: `0d19ae374cb8348db1d062d460c010d841ad6f06` (UNPUBLISHED).
+The exact content commit, parent chain, file sizes and SHA-256 inventory are in
+[publication_review.json](publication_review.json). Its enclosing metadata commit
+is resolved with `git log -1 --format=%H -- docs/publication_review.json` rather than
+self-embedded. This review does not grant or request publication approval.
 
-The machine-readable [publication_review.json](publication_review.json) is the exact
-file/digest/commit inventory. It records the reviewed content commit separately
-from the later commit carrying this review metadata. No commit hash is embedded
-in its own content. The final task response supplies the enclosing review commit;
-locally it is also `git log -1 --format=%H -- docs/publication_review.json`.
+## Separate approval units
 
-## Proposed destination and concrete scope
+| Unit | Concrete scope and destination | Review recommendation | Publication state |
+|---|---|---|---|
+| **U1 — research Lab** | `halvrenofviryel/phionyx-research`: unchanged S0/A/C03/E prerequisites; Lab index and evidence; bounded root README and portfolio corrections; separately verified C04 addendum when supplied | READY_FOR_USER_REVIEW; first scoped publication candidate | HOLD until explicit approval of exact content and destination |
+| **U2 — I outreach** | Separate local branch `codex/standards-lab-outreach-review`; each proposed message has its own file, destination, digest, evidence and non-claims | Draft preparation follows the G freeze; final inventory identifies its separate commit | HOLD; no public result URL or send approval. AUDIT additionally awaits C04 |
+| **U3 — AIREP D/F** | `halvrenofviryel/ai-runtime-evidence-protocol`; D `0130fcf8e7d70a0f9c4f977957e5de76ca8ef689`, F `84fe0aa9f29034aa6b873c0e83d689dc821bb398`, exact 7/20 changed-file inventories | READY_FOR_USER_REVIEW as a separate implementation candidate | HOLD outside U1; no D/F code copied into research |
+| **U4 — H2 CP-01** | Separate candidate at `9e4524a1f4312c25b88af9444a7740662104b09a`; 26 files including XML/TXT/HTML/patch/paragraph map | READY_FOR_USER_REVIEW as a separate unpublished ID candidate | HOLD for separate ID approval; no H2 files merged or submitted |
 
-Only after a new explicit user approval of the target and exact commit: the
-`halvrenofviryel/phionyx-research` GitHub repository, documentation under `docs/`,
-the root `README.md` and `portfolio.yaml`, and the unchanged prerequisite S0/A/C/E
-content listed below. `codex/standards-lab-consolidation` is the local review branch;
-no remote branch, PR, release, website, announcement or submission is created here.
-These are proposed destinations, not accessible public evidence for this package.
+The first publication branch must contain **no I outreach files or I commit in its
+ancestry**. Use the exact U1 commit and parent inventory, never an arbitrary current
+HEAD. D/F report snapshots in Lab are attributed references; U3 implementation
+publication is a separate decision. H1 is a separate pending source/result reference;
+the coordinator's provisional scoped NO-GO is not a completed G measurement.
 
-| Candidate content | What would become visible | Recommendation |
+## Human-readable change review
+
+| Area | Before | After |
 |---|---|---|
-| [STANDARDS_LAB.md](STANDARDS_LAB.md), [standards_lab.json](standards_lab.json) | Three reproducible local experiments, original/integration provenance, source/run digests, D/B1 references and honest pending states | READY_FOR_USER_REVIEW |
-| [STANDARDS_PORTFOLIO_DELTA.md](STANDARDS_PORTFOLIO_DELTA.md) | Six-repository audit, 10 finding groups, scoped publication checks and exact cross-repository patch plans | READY_FOR_USER_REVIEW; plans do not authorize those edits |
-| [README.md](../README.md), [portfolio.yaml](../portfolio.yaml) | One prominent Lab link; bounded AIREP/RGE/version/signing corrections; v0.2 format identifier added with no stronger validation flag | READY_FOR_USER_REVIEW |
-| [standards-lab-evidence/](standards-lab-evidence/) | Raw public-source snapshots and retrieval limitations, byte-preservation inventory, A/C/E replay logs, metadata-only D/B1 snapshots, reproducible index/integrity helpers | READY_FOR_USER_REVIEW; retains original source notices, no relicensing inferred |
-| [PUBLICATION_REVIEW.md](PUBLICATION_REVIEW.md), [publication_review.json](publication_review.json) | Review scope, exact content commit, hashes, non-claims and missing inputs | READY_FOR_USER_REVIEW; approval remains false |
-| B2/B3/F results, a combined interop or whole-program success claim | No completed frozen inputs available | HOLD |
-| D implementation and B1 full solver/builder package | Not integrated here; only explicitly attributed public metadata snapshots are in G | HOLD for any publication through this G package; requires separate concrete review |
-| Cross-repository/Zenodo patches, I-stage communications, IETF draft changes | Plans only; no candidate outbound message required | HOLD; outside this task |
+| Lab references | F missing; no H2 inventory | F completed same-user-controlled local demo, all SCITT axes NOT_EVALUATED; H2 separate informative candidate with exact artifact inventory |
+| Revision freshness | Earlier acquisition found decision-receipts -03 | Later coordinator observation and exact -04 byte/hash check recorded; frozen C03 is explicitly revision-specific; C04 pending, AUDIT HOLD |
+| Missing work | B2/B3/F pending | B2/B3 still absent with enforced isolation NOT_ESTABLISHED; C04 and H1 awaiting separate results; F no longer pending |
+| G index/evidence | Original A/C/E replay and D/B1 references | Updated generator, offline checks, F archive ledger inspection, H2 XML/paragraph checks; original experiment bytes and logs retained |
+| Initial README/registry changes | Generic/legacy AIREP and signing descriptions | One Lab link; bounded AIREP/RGE/signing descriptions; only `v0.2` added to portfolio format versions |
+| Publication scope | One general local documentation review | Four separately inventoried approval units; first U1 scope excludes outreach ancestry and D/F/H2 implementations |
 
-Prerequisite unpublished integration commits (already present before G) are
-`5478e8b107552468e440d9f709c18fd780502293` (S0),
-`95139b50ddd6263f7845537879250eca3994a77d` (A),
-`36b1214b72acafd784dcbd7b17cc6d2eb3de93dc` (C), and
-`275b871349721a8c917691d457c4a6270fe1028f` (E / preparation base).
-Their original experiment commits are separately recorded in the Lab. A future
-publication review must include these ancestors because the new index's relative
-links depend on their contents. The exact proposed committed-path inventory is in
-the JSON; it excludes venvs, wheel caches, regenerated outputs and private B1 data.
+Review commands from this clone:
 
-## Diff and validation
+```sh
+git diff --stat 69bc8cfd282e9a0a45e34b1fcf6106b1ab618f9d <U1_CONTENT_COMMIT>
+git diff ef35030b823c37bc373e0718ace59c394dad2944 <U1_CONTENT_COMMIT> -- docs/STANDARDS_LAB.md docs/standards-lab-evidence/build_index.py
+python3 -B docs/standards-lab-evidence/verify_index.py
+```
 
-G adds the index, delta, review and supporting provenance files. The root README
-adds one Lab entry and narrows outdated/unconditional claims without rewriting
-the project narrative. The registry only adds `v0.2` to format identifiers. No
-runtime implementation, original experiment artifact, published draft, normative
-schema, frozen AIREP v0.1 content or AIREP EXTERNAL_EVIDENCE entry is changed.
+Replace the explicit commit placeholder from the JSON; it is not a public artifact
+URL. Exact prerequisite original/integration commits are retained in the Lab and JSON.
 
-[Validation](standards-lab-evidence/validation.json) and
-[replay logs](standards-lab-evidence/replay_results.json) record:
+## Validation and limits
 
-- A: **59 tests**, 12 vectors, frozen output byte-identical.
-- C: **16 tests**, hash-locked offline install, 7 CLI vectors and **20 byte-identical
-  artifacts**. These are API/CLI observations, not executed runtime scenarios.
-- E: **30 tests**, JSON/Markdown outputs match, 48 requirement×route cells and
-  80 scenario×route observations remain separate.
-- 123 S0/A/C/E frozen files match both the preparation-base bytes and source
-  worktree comparison; source/run-record hashes, pending states and local links
-  are mechanically checked. The existing local claim-lint self-test and research
-  README check pass. This is **105 experiment tests**, not a full SDK or portfolio CI pass.
+The original [replay record](standards-lab-evidence/replay_results.json) retains
+**A 59 + C03 16 + E 30 = 105 passing tests** and byte-identical outputs. Those suites
+were not redundantly rerun for this documentation update. The
+[update checks](standards-lab-evidence/update_validation.json) verify the generated
+index, source/run digests, local links, pending states and **123 unchanged frozen
+S0/A/C/E files**. Authored whitespace checks pass; immutable source whitespace is
+retained with its original [record](standards-lab-evidence/whitespace_check.json).
 
-The full staged whitespace check reports only unchanged raw-source formatting
-([record](standards-lab-evidence/whitespace_check.json)); authored-path whitespace
-checks pass. Raw source bytes were preserved rather than normalized.
+[Exact F/H2 inspection](standards-lab-evidence/update_references.json) verifies F's
+20 committed files and all 138 archive-member hashes, including three archived
+scenario ledgers. F reports 15 integration tests, 73 v0.2 tests and final 56/56 beta
+commands; **G did not rerun those tests**. SCITT signature, registration and identity
+verification remain **NOT_EVALUATED**. H2's 26 files and 13 paragraph anchors match;
+12 normative sections and BCP14 elements are unchanged: **three informative groups,
+zero normative changes**. G did not rerender H2 or copy its candidate files.
 
-D is report/commit-byte inspection only, not a G rerun. B1 public metadata is
-hashed only; private expected results, builder history and full tests are not
-accessed. The full live-portfolio lint, unrelated runtime suites and full external
-implementations were not run. One raw GitHub release-metadata GET returned 403;
-connector text confirmed the release status but is not claimed as raw HTTP bytes.
+A positive results depend on stipulated exhaustive-index and synthetic party/control,
+scope and time premises. C03 has six partial and three unevaluated scenarios, with
+all execution/effect axes **UNOBSERVED**. E keeps its 48 requirement×route cells
+separate from 80 scenario×route observations; SER Ed25519/COSE/SCITT verification is
+NOT_EVALUATED. B1 private answers and builder history were not accessed. Same-UID
+permissions do not establish B2 blindness or an independent evidence root.
 
-## Claims that must travel with any approved publication
-
-A's positive verdicts depend on synthetic exhaustive-index and party-control
-premises. C has 6 partial and 3 unevaluated scenarios; **every execution/effect
-axis is UNOBSERVED**. E's matrix judgments are bounded semantic observations;
-SER cryptographic/COSE/SCITT verification is **NOT_EVALUATED**. D is first-party
-regression, B1 is preparation, and B2/B3/F are **PENDING**. No internal Codex run
-is third-party independent evidence or IETF conformance. There is no new
-same-version external AIREP producer/consumer result, complete deployment
-population, event-truth proof, safety certification, WG adoption or endorsement.
-
-No push to any remote, PR/issue, release/hosting, email/list/comment or
-Internet-Draft submission occurred. A subsequent approval must identify the exact
-content, destination, commit and validation state; this document grants none.
+No independent third-party validation, full IETF conformance, adoption, endorsement,
+event truth, actual-population completeness or safety certification is established.
+No push, PR/issue, release/hosting, external message, submission, new task or automation
+was performed. Every approval flag remains false.
