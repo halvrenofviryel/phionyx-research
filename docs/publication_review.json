@@ -1,6 +1,6 @@
 {
   "schema": "local-publication-review-2",
-  "recorded_at_utc": "2026-11-02T18:04:00.047541+00:00",
+  "recorded_at_utc": "2026-11-02T18:06:44.191048+00:00",
   "approval_granted": false,
   "approval_requested_in_G": false,
   "recommendation": "READY_FOR_USER_REVIEW",
@@ -1584,56 +1584,62 @@
       "status": "READY_FOR_USER_REVIEW",
       "publication_recommendation": "HOLD",
       "approval_granted": false,
-      "commit": "25b561b72eae296cdf57fbb7d3fdabe102a2f9ea",
+      "commit": "234107060379375607acda06b42a2ebb342247e7",
       "branch": "codex/standards-lab-outreach-review",
       "files": [
         {
           "path": "docs/outreach/2026-11/OUTREACH_DECISION_MATRIX.md",
-          "sha256": "4b1b8f687e5c72f5afc780b4e317f79dd317955ec63955404cf04c9356297e99",
-          "bytes": 4423,
-          "commit": "25b561b72eae296cdf57fbb7d3fdabe102a2f9ea"
+          "sha256": "36612c7a2fbf9b623e425bac414e6085a350b3d27bb5da5642658c042c72dd89",
+          "bytes": 4474,
+          "commit": "234107060379375607acda06b42a2ebb342247e7"
         },
         {
           "path": "docs/outreach/2026-11/agentproto-completeness.md",
           "sha256": "7a774e62bdee886dcbe03a67a9a0990d2d91af2a469898d6e785f351e3f23306",
           "bytes": 1651,
-          "commit": "25b561b72eae296cdf57fbb7d3fdabe102a2f9ea"
+          "commit": "234107060379375607acda06b42a2ebb342247e7"
         },
         {
           "path": "docs/outreach/2026-11/audit-decision-receipts.md",
-          "sha256": "c37ecfdb7d9b371d36d979474ab00cc2c2ddf2d93ce3f68de2de8d32a82795e5",
-          "bytes": 1716,
-          "commit": "25b561b72eae296cdf57fbb7d3fdabe102a2f9ea"
+          "sha256": "d1fe31f179e837711c39d61690380af0bbc5acb743a7449334966ba836a83091",
+          "bytes": 1898,
+          "commit": "234107060379375607acda06b42a2ebb342247e7"
         },
         {
           "path": "docs/outreach/2026-11/build_review.py",
-          "sha256": "782a6caf166997341c4aca18527407fecdf59a18af4f784144064de81aba2e7a",
-          "bytes": 10675,
-          "commit": "25b561b72eae296cdf57fbb7d3fdabe102a2f9ea"
+          "sha256": "c2a67369812ebf8ddd3cf9f0e46c707ff228edb6f7a76f7f0cb20f74a07760b7",
+          "bytes": 10856,
+          "commit": "234107060379375607acda06b42a2ebb342247e7"
+        },
+        {
+          "path": "docs/outreach/2026-11/c04_disposition.json",
+          "sha256": "01b36b579d8419df51086ad1adbe115e720ac796c77ea519b3f9958878087899",
+          "bytes": 1403,
+          "commit": "234107060379375607acda06b42a2ebb342247e7"
         },
         {
           "path": "docs/outreach/2026-11/outreach_manifest.json",
-          "sha256": "2375b843f7bc2221faf875f9989ed5c5bd7969c6ca263d94def752ac6a07fec2",
-          "bytes": 8822,
-          "commit": "25b561b72eae296cdf57fbb7d3fdabe102a2f9ea"
+          "sha256": "c40b502ef4d86228d792fcb795975fe14cfab8a30b64852e01a41f9f75fa9d3c",
+          "bytes": 10409,
+          "commit": "234107060379375607acda06b42a2ebb342247e7"
         },
         {
           "path": "docs/outreach/2026-11/public-claim-preservation.md",
           "sha256": "4fceb2bbffd1280bad7bd589ecea60d435657180003a0a2b88031b313caa4a82",
           "bytes": 1811,
-          "commit": "25b561b72eae296cdf57fbb7d3fdabe102a2f9ea"
+          "commit": "234107060379375607acda06b42a2ebb342247e7"
         },
         {
           "path": "docs/outreach/2026-11/validation.json",
-          "sha256": "a5897fd3d0dfa85ca1d2bfbc32e0cca22c1a10c0a91c031237585c7cb09ad118",
+          "sha256": "d911d08b8d9339b33a9a1cdef5cc71d571147317eb1d906ae72db30c6efe296d",
           "bytes": 967,
-          "commit": "25b561b72eae296cdf57fbb7d3fdabe102a2f9ea"
+          "commit": "234107060379375607acda06b42a2ebb342247e7"
         },
         {
           "path": "docs/outreach/2026-11/verify_outreach.py",
           "sha256": "417d829ef1d34b1d0eca83c9889fe5f877f67d3f4e04d7772374ac78de172137",
           "bytes": 3088,
-          "commit": "25b561b72eae296cdf57fbb7d3fdabe102a2f9ea"
+          "commit": "234107060379375607acda06b42a2ebb342247e7"
         }
       ],
       "reason": "Editorial review only; each destination requires separate approval and real public artifact URL. AUDIT is NO_OUTREACH_NOW / HOLD: C04 adds no new bug or technical question.",
@@ -3647,8 +3653,8 @@
     },
     {
       "path": "docs/PUBLICATION_REVIEW.md",
-      "sha256": "c75fc957d0eb4bfa70989441127309aa539499bd95243e4bd041325080a6eb44",
-      "bytes": 7552
+      "sha256": "721ee456f450a9c954cc69245e90a88f01aae19608c872b541cfbe96b5ff5409",
+      "bytes": 8429
     }
   ],
   "self_inventory_boundary": "This JSON has no self-hash. Its exact bytes are identified by the enclosing metadata commit. Human review and PR drafts are hashed above.",

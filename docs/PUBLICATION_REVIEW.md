@@ -19,6 +19,14 @@ self-embedded. This review does not grant or request publication approval.
 | **U3 — AIREP D/F** | `halvrenofviryel/ai-runtime-evidence-protocol`; D `0130fcf8e7d70a0f9c4f977957e5de76ca8ef689`, F `84fe0aa9f29034aa6b873c0e83d689dc821bb398`, exact 7/20 changed-file inventories | READY_FOR_USER_REVIEW as a separate implementation candidate | HOLD outside U1; no D/F code copied into research |
 | **U4 — H2 CP-01** | Separate candidate at `9e4524a1f4312c25b88af9444a7740662104b09a`; 26 files including XML/TXT/HTML/patch/paragraph map | READY_FOR_USER_REVIEW as a separate unpublished ID candidate | HOLD for separate ID approval; no H2 files merged or submitted |
 
+The final I review commit is `234107060379375607acda06b42a2ebb342247e7`:
+three message bodies of **132 / 134 / 139 words**, with at most one technical
+question each. AgentProto and the public E note are editorial SEND-CANDIDATE;
+all delivery is HOLD. AUDIT is NO_OUTREACH_NOW / HOLD. SCITT and GitHub issue
+messages were not drafted because no new substantive question or defect exists.
+The I matrix and all nine files are separately hashed in U2; no public result URL
+or remote draft is asserted.
+
 The first publication branch must contain **no I outreach files or I commit in its
 ancestry**. Use the exact U1 commit and parent inventory, never an arbitrary current
 HEAD. D/F report snapshots in Lab are attributed references; U3 implementation
@@ -48,7 +56,13 @@ identifies the enclosing metadata commit.
 git diff --stat 69bc8cfd282e9a0a45e34b1fcf6106b1ab618f9d <U1_CONTENT_COMMIT>
 git diff ef35030b823c37bc373e0718ace59c394dad2944 <U1_CONTENT_COMMIT> -- docs/STANDARDS_LAB.md docs/standards-lab-evidence/build_index.py
 python3 -B docs/standards-lab-evidence/verify_index.py
+python3 -B docs/standards-lab-evidence/verify_review.py
 ```
+
+The default review command checks U1 and explicitly reports U2 as METADATA_ONLY.
+Only the coordination clone's `--with-local-approval-units` mode reads I Git
+objects and checks their ancestry. A U1-only checkout does not require I objects
+or the non-ancestor original C04 commit. Source references remain metadata there.
 
 Replace the explicit commit placeholder from the JSON; it is not a public artifact
 URL. Exact prerequisite original/integration commits are retained in the Lab and JSON.
