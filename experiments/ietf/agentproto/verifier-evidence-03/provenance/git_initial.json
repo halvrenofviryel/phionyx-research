@@ -1,0 +1,24 @@
+{
+  "started_at_utc": "2026-11-02T16:15:21.338205+00:00",
+  "base_commit": "69bc8cfd282e9a0a45e34b1fcf6106b1ab618f9d",
+  "branch": "codex/agentproto-verifier-evidence-03",
+  "pre_fetch_status": "",
+  "remote_urls": "origin\thttps://github.com/halvrenofviryel/phionyx-research.git (fetch)\norigin\thttps://github.com/halvrenofviryel/phionyx-research.git (push)\n",
+  "fetch_command": "git fetch --all --prune",
+  "fetch_returncode": 0,
+  "fetch_stdout": "",
+  "fetch_stderr": "From https://github.com/halvrenofviryel/phionyx-research\n - [deleted]         (none)                 -> origin/codex/acde-01-independent-assessment\n   (refs/remotes/origin/HEAD has become dangling)\n * [new branch]      dependabot/github_actions/actions/checkout-7 -> origin/dependabot/github_actions/actions/checkout-7\n * [new branch]      dependabot/github_actions/actions/setup-python-7 -> origin/dependabot/github_actions/actions/setup-python-7\n * [new branch]      dependabot/github_actions/softprops/action-gh-release-3.0.3 -> origin/dependabot/github_actions/softprops/action-gh-release-3.0.3\n * [new branch]      docs/claim-realignment -> origin/docs/claim-realignment\n",
+  "finished_at_utc": "2026-11-02T16:15:48.300089+00:00",
+  "post_fetch_head": "69bc8cfd282e9a0a45e34b1fcf6106b1ab618f9d",
+  "remote_refs": "refs/remotes/origin/dependabot/github_actions/actions/checkout-7 92599921904417e0fcd82c0de148cbc575c555a3\nrefs/remotes/origin/dependabot/github_actions/actions/setup-python-7 b9451b16b25275230b75025271d62f539661b532\nrefs/remotes/origin/dependabot/github_actions/softprops/action-gh-release-3.0.3 138fcb869e7aef3848e91903fc7351b0669eed4c\nrefs/remotes/origin/docs/claim-realignment aba36e1d544baeea39056f22d1fad6408d036f1f\nrefs/remotes/origin/main 69bc8cfd282e9a0a45e34b1fcf6106b1ab618f9d\n",
+  "sandbox_fetch_attempt": {
+    "started_at_utc": "2026-11-02T16:15:21.338205+00:00",
+    "finished_at_utc": "2026-11-02T16:15:21.355819+00:00",
+    "fetch_returncode": 128,
+    "fetch_stdout": "",
+    "fetch_stderr": "fatal: unable to access 'https://github.com/halvrenofviryel/phionyx-research.git/': Could not resolve host: github.com\n"
+  },
+  "retry_started_at_utc": "2026-11-02T16:15:47.530982+00:00",
+  "post_fetch_status": "",
+  "fetch_status": "AVAILABLE"
+}

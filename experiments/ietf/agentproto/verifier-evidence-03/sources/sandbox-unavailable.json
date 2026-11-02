@@ -1,0 +1,16 @@
+[
+  {
+    "path": "current-datatracker.json",
+    "url": "https://datatracker.ietf.org/api/v1/doc/document/draft-he-agentproto-verifier-evidence/",
+    "accessed_at_utc": "2026-11-02T16:15:21.487209+00:00",
+    "status": "UNAVAILABLE",
+    "error": "<urlopen error [Errno -3] Temporary failure in name resolution>"
+  },
+  {
+    "path": "draft-he-agentproto-verifier-evidence-03.txt",
+    "url": "https://www.ietf.org/archive/id/draft-he-agentproto-verifier-evidence-03.txt",
+    "accessed_at_utc": "2026-11-02T16:15:21.500622+00:00",
+    "status": "UNAVAILABLE",
+    "error": "<urlopen error [Errno -3] Temporary failure in name resolution>"
+  }
+]
