@@ -7,14 +7,14 @@
       "sha256": "bfb3e39f43a1e40bae09c3e42bedac738a2547c427d947967ffacfe244492942"
     },
     {
-      "byte_length": 3230,
+      "byte_length": 3220,
       "path": "EXPERIMENT_CATALOG.json",
-      "sha256": "36f0f240aade75127cbac536c34ba4b6ca15c41fa1167946499dbb50927e159d"
+      "sha256": "e49d18593122babd949909131827669326f041df6d608f6c1b3aa5495d56ea79"
     },
     {
-      "byte_length": 1713,
+      "byte_length": 1712,
       "path": "EXTERNAL_RUN_SUBMISSION_TEMPLATE.json",
-      "sha256": "cf1bbb024af5c3c4c00bbef9a77faa8b8584194e6c9c2a7157d90670dd39aed8"
+      "sha256": "428651c0af8f2c7f4a1865b28091556852d79213198c450b94be0a3e174f6849"
     },
     {
       "byte_length": 1045,
@@ -852,9 +852,9 @@
       "sha256": "46e9cb9657ee76a2fba65609c82f9a47d61a611b06f9307af2f28f3ef218f01d"
     },
     {
-      "byte_length": 3425,
+      "byte_length": 4096,
       "path": "test_runner.py",
-      "sha256": "c7ab03b88fd2acb5df70de4dee9b3f72a7e4bdc76b514b6d541c7b6fd1114d6a"
+      "sha256": "4df6dac7e3c1ba85e98e8c0b815de75385dc3218ce9244c3288ed16125c7171f"
     },
     {
       "byte_length": 5410,

@@ -16,6 +16,16 @@ class PackageTests(unittest.TestCase):
     def test_real_package_hashes(self):
         self.assertGreater(len(run.verify_package(run.PACKAGE)['files']), 60)
 
+    def test_external_template_is_blank_and_role_names_are_documented(self):
+        template = run.load(run.PACKAGE / 'EXTERNAL_RUN_SUBMISSION_TEMPLATE.json')
+        checklist = (run.PACKAGE / 'role-and-independence-checklist.md').read_text()
+        self.assertIsNone(template['role_requested'])
+        self.assertEqual(template['review_decision']['classification'], 'NOT_EVALUATED')
+        self.assertFalse(template['public_permissions']['permission_to_cite_identity'])
+        self.assertFalse(template['public_permissions']['permission_to_publish_artifacts'])
+        for role in template['role_values']:
+            self.assertIn('| ' + role + ' |', checklist)
+
     def test_corrupt_source_bundle_rejected_before_execution(self):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)

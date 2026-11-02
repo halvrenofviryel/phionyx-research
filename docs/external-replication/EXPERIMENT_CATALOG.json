@@ -21,7 +21,7 @@
         "release": "v0.2.0-beta.1",
         "wire_version": "0.2"
       },
-      "readiness": "READY_FOR_LOCAL_SELF_SERVICE_VALIDATION",
+      "readiness": "SELF_SERVICE_LOCAL_REFERENCE_READY",
       "role": "AUTHOR_SIDE_REFERENCE",
       "source_commit": "ea1f39a6da72639a73e601918a6c8bc87bff1d77",
       "tests_expected": 28,
@@ -48,7 +48,7 @@
         "stop-before-start": 0,
         "stop-during-action": 1
       },
-      "readiness": "READY_FOR_LOCAL_SELF_SERVICE_VALIDATION",
+      "readiness": "SELF_SERVICE_LOCAL_REFERENCE_READY",
       "role": "AUTHOR_SIDE_REFERENCE",
       "runtime": "langgraph==1.2.19",
       "source_commit": "76ecce0b378a6b391850795abf45fb6aca8e1d6b",
