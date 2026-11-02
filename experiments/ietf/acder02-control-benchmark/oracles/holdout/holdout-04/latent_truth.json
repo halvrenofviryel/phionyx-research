@@ -1,0 +1,21 @@
+{
+  "case_id": "holdout-04",
+  "claim_truth": {
+    "q-all": true,
+    "q-integrity": true,
+    "q-issuer": true,
+    "q-receipt": true
+  },
+  "latent_facts": [
+    {
+      "fact": "target actually received exact instruction",
+      "value": true
+    },
+    {
+      "fact": "retained record lacks a required structural binding",
+      "value": true
+    }
+  ],
+  "schema": "acder02-synthetic-latent-truth-v1",
+  "status": "Authored synthetic scenario specification, not measured runtime ground truth."
+}

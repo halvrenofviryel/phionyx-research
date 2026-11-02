@@ -1,0 +1,211 @@
+{
+  "schema": "acder-holdout-release-v1",
+  "logic_freeze_commit": "9c4989243d3c319d236ebb81b584711d0f7f5153",
+  "author_data_commit": "c6123b4309801c0bf007c0a3d95f6c2bc0820ac5",
+  "first_holdout_file_access_utc": "2026-11-02T20:34:12.295733+00:00",
+  "evaluator_changed_after_release": false,
+  "scorer_changed_after_release": false,
+  "oracle_changed_after_freeze": false,
+  "paths": [
+    {
+      "author_path": "holdout/authoring_recipe.py",
+      "published_path": "author-provenance/authoring_recipe.py",
+      "sha256": "43352e889cca9c3ae3c750822b58eb731dece2196cf63a412d44cc6b901d8cdb"
+    },
+    {
+      "author_path": "holdout/holdout-01/evidence.json",
+      "published_path": "scenarios/holdout/holdout-01/evidence.json",
+      "sha256": "84cdcac97d2e9662948f8987c33df20593d00eb56cba9ca1c9d51ab977d399a9"
+    },
+    {
+      "author_path": "holdout/holdout-01/latent_truth.json",
+      "published_path": "oracles/holdout/holdout-01/latent_truth.json",
+      "sha256": "e2e34fc00a176634e7ae4ee86bc573214520bf0ed0aedf40636e6557a4ca6396"
+    },
+    {
+      "author_path": "holdout/holdout-01/oracle.json",
+      "published_path": "oracles/holdout/holdout-01/oracle.json",
+      "sha256": "4b1966b2b344416119f433b09a36e5bb4c2afc4560f9548d9a430e29fad9f8f7"
+    },
+    {
+      "author_path": "holdout/holdout-02/evidence.json",
+      "published_path": "scenarios/holdout/holdout-02/evidence.json",
+      "sha256": "b3e1458483e5dabc78363428ce408dc1043887c5d2c130580a8bf357de63d38b"
+    },
+    {
+      "author_path": "holdout/holdout-02/latent_truth.json",
+      "published_path": "oracles/holdout/holdout-02/latent_truth.json",
+      "sha256": "ee55681c5de16f2188770d2c35dd71b8fc6211f34e6f7963ab91e0134611d80f"
+    },
+    {
+      "author_path": "holdout/holdout-02/oracle.json",
+      "published_path": "oracles/holdout/holdout-02/oracle.json",
+      "sha256": "87e0b67d5062f1167f8844c70d6cf7c2c115c61a7e657139313512205353cd23"
+    },
+    {
+      "author_path": "holdout/holdout-03/evidence.json",
+      "published_path": "scenarios/holdout/holdout-03/evidence.json",
+      "sha256": "67d27d86b41740c1870bc809fd24d9e33b8d4e31dc9f620b896e3ade934a920a"
+    },
+    {
+      "author_path": "holdout/holdout-03/latent_truth.json",
+      "published_path": "oracles/holdout/holdout-03/latent_truth.json",
+      "sha256": "693eb6419824237aa50f398a629fdf07dfba426c640eb728552474a422cb663d"
+    },
+    {
+      "author_path": "holdout/holdout-03/oracle.json",
+      "published_path": "oracles/holdout/holdout-03/oracle.json",
+      "sha256": "69e091dbd2976bf8bd535439f86f5ac4f20c821a47fe397c5ff94fa15d3d9857"
+    },
+    {
+      "author_path": "holdout/holdout-04/evidence.json",
+      "published_path": "scenarios/holdout/holdout-04/evidence.json",
+      "sha256": "8eb7f7a709e39743848289b805f1f8411a692a9a5f5e11fdbb7847e26bc4de4a"
+    },
+    {
+      "author_path": "holdout/holdout-04/latent_truth.json",
+      "published_path": "oracles/holdout/holdout-04/latent_truth.json",
+      "sha256": "4a51de765fafb753488ccbdcb3b157d33f56618aa32de3f218644a8ff3330bff"
+    },
+    {
+      "author_path": "holdout/holdout-04/oracle.json",
+      "published_path": "oracles/holdout/holdout-04/oracle.json",
+      "sha256": "16cd312cff564ee09314f1dfb51d9184647615a293a271f405a5ca44ea8b7faa"
+    },
+    {
+      "author_path": "holdout/holdout-05/evidence.json",
+      "published_path": "scenarios/holdout/holdout-05/evidence.json",
+      "sha256": "f8e929a3df1eccbe871a1f307aaed60dceb9ffb85073856c64ea55bd57720c23"
+    },
+    {
+      "author_path": "holdout/holdout-05/latent_truth.json",
+      "published_path": "oracles/holdout/holdout-05/latent_truth.json",
+      "sha256": "3a774814593695d3a23f1e2924e3a6654e2256ef484d7df1e0042a8b15a39579"
+    },
+    {
+      "author_path": "holdout/holdout-05/oracle.json",
+      "published_path": "oracles/holdout/holdout-05/oracle.json",
+      "sha256": "354aa67ceb7efcde24d625c43eb6941852810b0590d8b48a8d22c659e7d7e8d2"
+    },
+    {
+      "author_path": "holdout/holdout-06/evidence.json",
+      "published_path": "scenarios/holdout/holdout-06/evidence.json",
+      "sha256": "e15db8395f4fc06c26f6a8bf2a8f6cad51fbfc6448f61e4dcb6edbb74b4edc4a"
+    },
+    {
+      "author_path": "holdout/holdout-06/latent_truth.json",
+      "published_path": "oracles/holdout/holdout-06/latent_truth.json",
+      "sha256": "be92ad9f8218c6044e46d7e056ed48fb83871e92d50dfbdf8e5101fe90f74bad"
+    },
+    {
+      "author_path": "holdout/holdout-06/oracle.json",
+      "published_path": "oracles/holdout/holdout-06/oracle.json",
+      "sha256": "567afafb419e7a23ccc2966b9aa43a4856526e353673440d7b66bb037e848ab0"
+    },
+    {
+      "author_path": "holdout/holdout-07/evidence.json",
+      "published_path": "scenarios/holdout/holdout-07/evidence.json",
+      "sha256": "17d4f9d7077402539d446d21f9f91db6f4470274e479587e59b5472edf1fb220"
+    },
+    {
+      "author_path": "holdout/holdout-07/latent_truth.json",
+      "published_path": "oracles/holdout/holdout-07/latent_truth.json",
+      "sha256": "361d0cfcc5bcc97ed58ca44e4e39fca7d2f15758789d1daa2f264a575bd14d11"
+    },
+    {
+      "author_path": "holdout/holdout-07/oracle.json",
+      "published_path": "oracles/holdout/holdout-07/oracle.json",
+      "sha256": "fdefebff0fadb87880e81f6bf5f7c0b87a4753d189bffee2aaa6fa623afbda5e"
+    },
+    {
+      "author_path": "holdout/holdout-07/signature.bin",
+      "published_path": "oracles/holdout/holdout-07/signature.bin",
+      "sha256": "f9d209668f7be1c4df9f69b54749e0ae11786869e68340b369edb4d918e09876"
+    },
+    {
+      "author_path": "holdout/holdout-07/signature_verification.json",
+      "published_path": "oracles/holdout/holdout-07/signature_verification.json",
+      "sha256": "4ca105d21e924dff6f1ee561fdf9421a5077972b3c09537266e5d3b93a396378"
+    },
+    {
+      "author_path": "holdout/holdout-07/signed_payload.bin",
+      "published_path": "oracles/holdout/holdout-07/signed_payload.bin",
+      "sha256": "367442440c6811174844b70b0c9baee447535ae7c0d3012c04b14c7658bc7957"
+    },
+    {
+      "author_path": "holdout/holdout-08/evidence.json",
+      "published_path": "scenarios/holdout/holdout-08/evidence.json",
+      "sha256": "e749ed74c89768869d0fbf990b26bc185ae7b5abb9c26d840d9a2cbbce1e361f"
+    },
+    {
+      "author_path": "holdout/holdout-08/latent_truth.json",
+      "published_path": "oracles/holdout/holdout-08/latent_truth.json",
+      "sha256": "bc11d3c49f03cafd7b4d64208b979b1fcef0bb92c01cefbe1e3d27990ceb6ea0"
+    },
+    {
+      "author_path": "holdout/holdout-08/oracle.json",
+      "published_path": "oracles/holdout/holdout-08/oracle.json",
+      "sha256": "cc828a02dab1764734f687276193934ca835262440aa84c24d1e5e5b2e340e94"
+    },
+    {
+      "author_path": "holdout/holdout-09/evidence.json",
+      "published_path": "scenarios/holdout/holdout-09/evidence.json",
+      "sha256": "c536c41d68be6a63afae651d66993033b163b5286da2ecc4f43d9f84b4667cab"
+    },
+    {
+      "author_path": "holdout/holdout-09/latent_truth.json",
+      "published_path": "oracles/holdout/holdout-09/latent_truth.json",
+      "sha256": "f6995fd832ded66fa7c4b72ec3079066d92fbf9349f31cf6cdd4f1d848bcecf3"
+    },
+    {
+      "author_path": "holdout/holdout-09/oracle.json",
+      "published_path": "oracles/holdout/holdout-09/oracle.json",
+      "sha256": "5eb09db89cca8debfbfce1dc6d3fb13a45c85d63ed8fc218ca79a2d6f9d66b75"
+    },
+    {
+      "author_path": "holdout/holdout-10/evidence.json",
+      "published_path": "scenarios/holdout/holdout-10/evidence.json",
+      "sha256": "e5cdb3dd0c4addc35e4a8004f7b5befe9424bb7acaa2951b223004f7ab582b11"
+    },
+    {
+      "author_path": "holdout/holdout-10/latent_truth.json",
+      "published_path": "oracles/holdout/holdout-10/latent_truth.json",
+      "sha256": "91db8f75872288a1edba0fa949d5d92891c825a9bc35db9eb480759a774f4ca1"
+    },
+    {
+      "author_path": "holdout/holdout-10/oracle.json",
+      "published_path": "oracles/holdout/holdout-10/oracle.json",
+      "sha256": "e4f0e0265304433b1f35e61dce3c8a384582201ee8586d71e79d387a11573cc7"
+    },
+    {
+      "author_path": "holdout/holdout-11/evidence.json",
+      "published_path": "scenarios/holdout/holdout-11/evidence.json",
+      "sha256": "e9acf371b6745e77f94a97e00d58dc6178adcdee2c83da2f89a8c1df1039a935"
+    },
+    {
+      "author_path": "holdout/holdout-11/latent_truth.json",
+      "published_path": "oracles/holdout/holdout-11/latent_truth.json",
+      "sha256": "86a452d4f5d139a50372d802d543f7bd30d3d5c5fff56190d89ad956e3d51b25"
+    },
+    {
+      "author_path": "holdout/holdout-11/oracle.json",
+      "published_path": "oracles/holdout/holdout-11/oracle.json",
+      "sha256": "ad9e2c50615fc4e7f9444dca31f97e31f48288de58495294392d544f6a2e1484"
+    },
+    {
+      "author_path": "holdout/holdout-12/evidence.json",
+      "published_path": "scenarios/holdout/holdout-12/evidence.json",
+      "sha256": "f558834df108cf1ec35e615a17d01e6d847a8d5e529fd2e2fe09d00b171a008b"
+    },
+    {
+      "author_path": "holdout/holdout-12/latent_truth.json",
+      "published_path": "oracles/holdout/holdout-12/latent_truth.json",
+      "sha256": "ba412e9c585133027536407d2e2dde612ad08e3986799446b82718d568b5ea36"
+    },
+    {
+      "author_path": "holdout/holdout-12/oracle.json",
+      "published_path": "oracles/holdout/holdout-12/oracle.json",
+      "sha256": "3e9d9c0531453900e96fa040586d105d715e2d5445504a53f58c578ba8694da1"
+    }
+  ]
+}

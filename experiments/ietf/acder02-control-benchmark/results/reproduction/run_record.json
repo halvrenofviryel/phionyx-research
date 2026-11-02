@@ -1,0 +1,372 @@
+{
+  "finished_utc": "2026-11-02T20:36:43.617812+00:00",
+  "freeze": {
+    "author_data_commit": "c6123b4309801c0bf007c0a3d95f6c2bc0820ac5",
+    "benchmark_prereg_commit": "9a1d931156b0e8f92bde0fe9fc65a32b3958f02c",
+    "data_freeze_commit": "b17eced04bb30f7687a654cbc7426a94c04d142d",
+    "development_cases_seen": 12,
+    "development_claims_seen": 53,
+    "files": [
+      {
+        "path": "reproduce.py",
+        "sha256": "e8a6c21b6c7229a1e2a70b7fd3ef71fd098f724c49ef3c743b65f60cc47d5d4e"
+      },
+      {
+        "path": "PROFILE.json",
+        "sha256": "8c27cd685289028261ff5c035a6d9643c58412954bff8ebee7ffaa485c9e8a54"
+      },
+      {
+        "path": "SCENARIO_SELECTION.json",
+        "sha256": "8cf277d7d7edf246a497394ef33c01ac32a98735d9402bbb6602c51add948b7b"
+      },
+      {
+        "path": "BENCHMARK_PROTOCOL.md",
+        "sha256": "183565d841f282211f214fbef8f4371faf63e5853df9a100f827bb8a283e49de"
+      },
+      {
+        "path": "CONTRACT.md",
+        "sha256": "57cd437e03e184aebc83de33835c8408b503d2d1ab27f1dc05f871613f75fafc"
+      },
+      {
+        "path": "EVIDENCE_SCHEMA.json",
+        "sha256": "9bbc6511814bd24a3ff1b31cf1a260a7c87f0b8dc2afd64dcfcf4f45ecbbd555"
+      },
+      {
+        "path": "CLAIM_OUTPUT_SCHEMA.json",
+        "sha256": "fd47e4a3d517748a17358112cea45bdd6116b6cca970798b91b01327adaf687c"
+      },
+      {
+        "path": "baselines/contracts.json",
+        "sha256": "6fbce0d3e333d19ab8ca25725609a9625ed5fe5ee2e5c22db292061dbd1cac31"
+      },
+      {
+        "path": "src/evaluate.py",
+        "sha256": "3d14d8c60a3510af66bf17d4245bc99cbb8bef159b8a18f3fe8ec2305e4231bd"
+      },
+      {
+        "path": "src/isolated_run.py",
+        "sha256": "7ae54cfc472041ba60200dca6f6ca7db4c764a3648ecd27dc9f32320f732552b"
+      },
+      {
+        "path": "src/score.py",
+        "sha256": "c933f252c676d99d2c86ed1586813d70407bc1bc325c44c61abb4612377863f9"
+      },
+      {
+        "path": "tests/test_evaluate.py",
+        "sha256": "ce53dad723b130ddb3e972b6164913db380e6433f610abe6d1f7990200d6a1ce"
+      },
+      {
+        "path": "tests/test_score.py",
+        "sha256": "1069a25ee7694c4a30ecbbfc9c3c018f4b26542fb46b057d1911b108f4ebf7c2"
+      }
+    ],
+    "holdout_comparators_run": false,
+    "holdout_content_opened": false,
+    "prefreeze_test_count": 44,
+    "recorded_utc": "2026-11-02T20:33:24.399952+00:00",
+    "schema": "acder-benchmark-logic-freeze-v1"
+  },
+  "measurements": [
+    {
+      "argv": [
+        "bwrap",
+        "--unshare-all",
+        "--die-with-parent",
+        "--new-session",
+        "--ro-bind",
+        "/usr",
+        "/usr",
+        "--symlink",
+        "usr/bin",
+        "/bin",
+        "--symlink",
+        "usr/lib",
+        "/lib",
+        "--symlink",
+        "usr/lib64",
+        "/lib64",
+        "--proc",
+        "/proc",
+        "--dev",
+        "/dev",
+        "--tmpfs",
+        "/tmp",
+        "--dir",
+        "/home",
+        "--ro-bind",
+        "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/k1-control-failure-benchmark/phionyx-research/experiments/ietf/acder02-control-benchmark/src/evaluate.py",
+        "/evaluate.py",
+        "--ro-bind",
+        "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/k1-control-failure-benchmark/phionyx-research/experiments/ietf/acder02-control-benchmark/PROFILE.json",
+        "/profile.json",
+        "--ro-bind",
+        "/tmp/k1-evidence-only-lr01agc2/input",
+        "/input",
+        "--bind",
+        "/tmp/phionyx-k1-complete-replay/development",
+        "/output",
+        "--clearenv",
+        "--setenv",
+        "PATH",
+        "/usr/bin",
+        "--setenv",
+        "PYTHONDONTWRITEBYTECODE",
+        "1",
+        "--chdir",
+        "/tmp",
+        "/usr/bin/python3",
+        "-B",
+        "/evaluate.py",
+        "--evidence-dir",
+        "/input",
+        "--profile",
+        "/profile.json",
+        "--output",
+        "/output/predictions.json"
+      ],
+      "code_sha256": "3d14d8c60a3510af66bf17d4245bc99cbb8bef159b8a18f3fe8ec2305e4231bd",
+      "evidence_count": 12,
+      "finished_utc": "2026-11-02T20:36:43.196950+00:00",
+      "input_hashes": [
+        {
+          "path": "scenarios/development/dev-01/evidence.json",
+          "sha256": "da7eb2376524904ed0a57f4ff5daa84c80827936e4b2b1a7b214d47fb4ed28a1"
+        },
+        {
+          "path": "scenarios/development/dev-02/evidence.json",
+          "sha256": "ab1256d001e4489f3e3f3608f3c8ead6201b4b4f67d0c900cd0843729b0285c6"
+        },
+        {
+          "path": "scenarios/development/dev-03/evidence.json",
+          "sha256": "a8e11d2bd1de8ba4d04d07af1ff890d06d92e8d63b27a4fa72f54f16c7a5dcd6"
+        },
+        {
+          "path": "scenarios/development/dev-04/evidence.json",
+          "sha256": "82e31d869082817125efd542ae5bd16f0f2aa6eee1b3dfa2e151a9179c3afbf6"
+        },
+        {
+          "path": "scenarios/development/dev-05/evidence.json",
+          "sha256": "78da3c78ed8fad596b7e1a9cbf2c4a4767d193550e357fd625f9f9037b33439d"
+        },
+        {
+          "path": "scenarios/development/dev-06/evidence.json",
+          "sha256": "0386444b9c7c7657f18f219e903c1d6f4cbba944262d6bfc606a5117299ec94c"
+        },
+        {
+          "path": "scenarios/development/dev-07/evidence.json",
+          "sha256": "ead1fa39a22e96f57c8dbffbbe4cc782bc4ab0935524ae7aad92a41b10ef00f2"
+        },
+        {
+          "path": "scenarios/development/dev-08/evidence.json",
+          "sha256": "c08992273a973bf70b38da4d8431b115ff3861c4925e117b851730fd8c695c55"
+        },
+        {
+          "path": "scenarios/development/dev-09/evidence.json",
+          "sha256": "768c01c3a7d2535e1f37b696ee5f823ec232e07fe87ba0a22c5d56b7d6f04f3a"
+        },
+        {
+          "path": "scenarios/development/dev-10/evidence.json",
+          "sha256": "bc7101a4d9b216543b77b9977b6cabbd2eef6eb9f7a9305b3aa4e799230938db"
+        },
+        {
+          "path": "scenarios/development/dev-11/evidence.json",
+          "sha256": "d13a37cd327f52ac167711aeae9a88a8d11e903f819ff52c5a0c57c30e45cbd8"
+        },
+        {
+          "path": "scenarios/development/dev-12/evidence.json",
+          "sha256": "73580ed98553dd8836e1b4a5df65f2e9b1a19aaae4a52e44322e9c23b070ab01"
+        }
+      ],
+      "network": "unshared; no external interface",
+      "oracle_mounted": false,
+      "predictions_sha256": "95aaaa7957a8b720d9dde006e9c499af09851ebe0533cad5acc1dd3d5e5fe790",
+      "profile_sha256": "8c27cd685289028261ff5c035a6d9643c58412954bff8ebee7ffaa485c9e8a54",
+      "returncode": 0,
+      "schema": "acder-benchmark-isolated-run-v1",
+      "split": "development",
+      "started_utc": "2026-11-02T20:36:43.129095+00:00"
+    },
+    {
+      "argv": [
+        "bwrap",
+        "--unshare-all",
+        "--die-with-parent",
+        "--new-session",
+        "--ro-bind",
+        "/usr",
+        "/usr",
+        "--symlink",
+        "usr/bin",
+        "/bin",
+        "--symlink",
+        "usr/lib",
+        "/lib",
+        "--symlink",
+        "usr/lib64",
+        "/lib64",
+        "--proc",
+        "/proc",
+        "--dev",
+        "/dev",
+        "--tmpfs",
+        "/tmp",
+        "--dir",
+        "/home",
+        "--ro-bind",
+        "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/k1-control-failure-benchmark/phionyx-research/experiments/ietf/acder02-control-benchmark/src/evaluate.py",
+        "/evaluate.py",
+        "--ro-bind",
+        "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/k1-control-failure-benchmark/phionyx-research/experiments/ietf/acder02-control-benchmark/PROFILE.json",
+        "/profile.json",
+        "--ro-bind",
+        "/tmp/k1-evidence-only-n6jexn_7/input",
+        "/input",
+        "--bind",
+        "/tmp/phionyx-k1-complete-replay/holdout",
+        "/output",
+        "--clearenv",
+        "--setenv",
+        "PATH",
+        "/usr/bin",
+        "--setenv",
+        "PYTHONDONTWRITEBYTECODE",
+        "1",
+        "--chdir",
+        "/tmp",
+        "/usr/bin/python3",
+        "-B",
+        "/evaluate.py",
+        "--evidence-dir",
+        "/input",
+        "--profile",
+        "/profile.json",
+        "--output",
+        "/output/predictions.json"
+      ],
+      "code_sha256": "3d14d8c60a3510af66bf17d4245bc99cbb8bef159b8a18f3fe8ec2305e4231bd",
+      "evidence_count": 12,
+      "finished_utc": "2026-11-02T20:36:43.267769+00:00",
+      "input_hashes": [
+        {
+          "path": "scenarios/holdout/holdout-01/evidence.json",
+          "sha256": "84cdcac97d2e9662948f8987c33df20593d00eb56cba9ca1c9d51ab977d399a9"
+        },
+        {
+          "path": "scenarios/holdout/holdout-02/evidence.json",
+          "sha256": "b3e1458483e5dabc78363428ce408dc1043887c5d2c130580a8bf357de63d38b"
+        },
+        {
+          "path": "scenarios/holdout/holdout-03/evidence.json",
+          "sha256": "67d27d86b41740c1870bc809fd24d9e33b8d4e31dc9f620b896e3ade934a920a"
+        },
+        {
+          "path": "scenarios/holdout/holdout-04/evidence.json",
+          "sha256": "8eb7f7a709e39743848289b805f1f8411a692a9a5f5e11fdbb7847e26bc4de4a"
+        },
+        {
+          "path": "scenarios/holdout/holdout-05/evidence.json",
+          "sha256": "f8e929a3df1eccbe871a1f307aaed60dceb9ffb85073856c64ea55bd57720c23"
+        },
+        {
+          "path": "scenarios/holdout/holdout-06/evidence.json",
+          "sha256": "e15db8395f4fc06c26f6a8bf2a8f6cad51fbfc6448f61e4dcb6edbb74b4edc4a"
+        },
+        {
+          "path": "scenarios/holdout/holdout-07/evidence.json",
+          "sha256": "17d4f9d7077402539d446d21f9f91db6f4470274e479587e59b5472edf1fb220"
+        },
+        {
+          "path": "scenarios/holdout/holdout-08/evidence.json",
+          "sha256": "e749ed74c89768869d0fbf990b26bc185ae7b5abb9c26d840d9a2cbbce1e361f"
+        },
+        {
+          "path": "scenarios/holdout/holdout-09/evidence.json",
+          "sha256": "c536c41d68be6a63afae651d66993033b163b5286da2ecc4f43d9f84b4667cab"
+        },
+        {
+          "path": "scenarios/holdout/holdout-10/evidence.json",
+          "sha256": "e5cdb3dd0c4addc35e4a8004f7b5befe9424bb7acaa2951b223004f7ab582b11"
+        },
+        {
+          "path": "scenarios/holdout/holdout-11/evidence.json",
+          "sha256": "e9acf371b6745e77f94a97e00d58dc6178adcdee2c83da2f89a8c1df1039a935"
+        },
+        {
+          "path": "scenarios/holdout/holdout-12/evidence.json",
+          "sha256": "f558834df108cf1ec35e615a17d01e6d847a8d5e529fd2e2fe09d00b171a008b"
+        }
+      ],
+      "network": "unshared; no external interface",
+      "oracle_mounted": false,
+      "predictions_sha256": "9206cbea999903aa5879110f9318badb33fcc4f8a6074e3e19eeba9b62f4d97f",
+      "profile_sha256": "8c27cd685289028261ff5c035a6d9643c58412954bff8ebee7ffaa485c9e8a54",
+      "returncode": 0,
+      "schema": "acder-benchmark-isolated-run-v1",
+      "split": "holdout",
+      "started_utc": "2026-11-02T20:36:43.200691+00:00"
+    }
+  ],
+  "output_hashes": [
+    {
+      "path": "development/boundary.json",
+      "sha256": "fad317beaf097b20ac41d00d26100c3e6730180f3c55e590911380f6218a7cd9"
+    },
+    {
+      "path": "development/boundary.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "development/evaluator.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "development/predictions.json",
+      "sha256": "95aaaa7957a8b720d9dde006e9c499af09851ebe0533cad5acc1dd3d5e5fe790"
+    },
+    {
+      "path": "development/run_record.json",
+      "sha256": "ba62c69b6f7e6a16736c2bfe1cc63b1c24bca29b1bb9e6450e4749b1960bbcb1"
+    },
+    {
+      "path": "holdout/boundary.json",
+      "sha256": "770ce140fd0d54ca7466a749fe02a841939269e6e3c64f33d625f7cfb6e79a58"
+    },
+    {
+      "path": "holdout/boundary.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "holdout/evaluator.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "holdout/predictions.json",
+      "sha256": "9206cbea999903aa5879110f9318badb33fcc4f8a6074e3e19eeba9b62f4d97f"
+    },
+    {
+      "path": "holdout/run_record.json",
+      "sha256": "22cde53dee097409c8db7b7181b1d2cd6b099d8be1f4e6bb9b1c2fe88f390318"
+    },
+    {
+      "path": "predictions.json",
+      "sha256": "aec429adc91a918c309764b2c37be1189aa09d0156b048c2bb2beec273030867"
+    },
+    {
+      "path": "score.json",
+      "sha256": "3d1f4100c15ab1a889441f1795e7102c4f35a9a6a640da2a6c23975ed4d77abe"
+    },
+    {
+      "path": "tests.txt",
+      "sha256": "2531cf62744d3675c9ff2fe46696dcf97e853edb1e08da0a36f7a416aad722d5"
+    }
+  ],
+  "platform": "Linux-6.11.0-29-generic-x86_64-with-glibc2.39",
+  "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+  "schema": "acder-benchmark-reproduction-v1",
+  "scope": "Same-owner frozen synthetic benchmark; no external implementation or operational safety claim",
+  "scored_claim_rows": 321,
+  "semantic_sha256": "f73be47c6b2e61411b4c18466e0bb7ed85fce06aa415dc7ef23b3b86a397aacb",
+  "started_utc": "2026-11-02T20:36:43.125795+00:00",
+  "status": "REPRODUCED_FROZEN_RESULT",
+  "tests_returncode": 0
+}

@@ -1,0 +1,13 @@
+{
+  "author_bundle_manifest_files_verified": 99,
+  "relocated_data_files_verified": 79,
+  "frozen_code_unchanged": true,
+  "author_bundle_commit": "c6123b4309801c0bf007c0a3d95f6c2bc0820ac5",
+  "root_author_validation": "PASS",
+  "initial_checkout_note": "Bundle contains named branch but no HEAD symbolic ref; initial no-checkout clone failed validation before reading cases. Explicit checkout corrected infrastructure only. Original failed log retained.",
+  "validation_mapping": "Disposable clone mounted at historical author root in a fresh network namespace; original author repo never modified.",
+  "root_validation_environment_difference": "Regenerated validation record records system jsonschema4.10.3 rather than original4.25.1; counts and checks PASS. Original99 bundle blobs unchanged.",
+  "root_reproduction": "REPRODUCED_FROZEN_RESULT",
+  "semantic_sha256": "f73be47c6b2e61411b4c18466e0bb7ed85fce06aa415dc7ef23b3b86a397aacb",
+  "recorded_utc": "2026-11-02T20:38:40.984159+00:00"
+}

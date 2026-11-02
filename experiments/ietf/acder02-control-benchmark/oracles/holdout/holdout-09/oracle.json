@@ -1,0 +1,190 @@
+{
+  "case_id": "holdout-09",
+  "claims": [
+    {
+      "ambiguity_reason": null,
+      "ambiguous": false,
+      "claim_id": "q-integrity",
+      "conditions": [],
+      "draft_clauses": [
+        "5.2",
+        "5.13"
+      ],
+      "evidence_basis": [
+        "record:r-issuer",
+        "record:r-receiver",
+        "record:r-enforcement",
+        "record:r-entry",
+        "record:r-effect-later"
+      ],
+      "justified_state": "SUPPORTED",
+      "kind": "envelope_integrity",
+      "known_nonclaims": [
+        "event truth",
+        "authority",
+        "execution",
+        "effect"
+      ],
+      "latent_truth_ref": "latent_truth.json#/claim_truth/q-integrity",
+      "missing_evidence": [],
+      "qualification": "FULLY_SUPPORTED",
+      "rationale": "Each referenced envelope contains the exact payload UTF-8 bytes whose SHA256 is stated. This is a byte-integrity statement, not validation of the event assertion."
+    },
+    {
+      "ambiguity_reason": null,
+      "ambiguous": false,
+      "claim_id": "q-execution",
+      "conditions": [],
+      "draft_clauses": [
+        "5.9",
+        "9.4"
+      ],
+      "evidence_basis": [
+        "record:r-entry"
+      ],
+      "justified_state": "SUPPORTED",
+      "kind": "execution_observed",
+      "known_nonclaims": [
+        "completion",
+        "external effect",
+        "reversal"
+      ],
+      "latent_truth_ref": "latent_truth.json#/claim_truth/q-execution",
+      "missing_evidence": [],
+      "qualification": "FULLY_SUPPORTED",
+      "rationale": "The bound observation establishes only that operation-earlier crossed provider-entry. Completion and consequential effects are not implied."
+    },
+    {
+      "ambiguity_reason": null,
+      "ambiguous": false,
+      "claim_id": "q-order",
+      "conditions": [],
+      "draft_clauses": [
+        "5.9",
+        "9.4"
+      ],
+      "evidence_basis": [
+        "record:r-entry",
+        "record:r-enforcement"
+      ],
+      "justified_state": "REFUTED",
+      "kind": "ordering",
+      "known_nonclaims": [
+        "completion",
+        "absence of earlier effect"
+      ],
+      "latent_truth_ref": "latent_truth.json#/claim_truth/q-order",
+      "missing_evidence": [],
+      "qualification": "NOT_SUPPORTED",
+      "rationale": "The same accepted clock positively shows entry after activation, contradicting the requested before relationship."
+    },
+    {
+      "ambiguity_reason": null,
+      "ambiguous": false,
+      "claim_id": "q-effect-later",
+      "conditions": [],
+      "draft_clauses": [
+        "4.5",
+        "5.7",
+        "9.4"
+      ],
+      "evidence_basis": [
+        "record:r-effect-later"
+      ],
+      "justified_state": "SUPPORTED",
+      "kind": "effect_observed",
+      "known_nonclaims": [
+        "unobserved operations",
+        "all deployment paths",
+        "reversal of prior effect"
+      ],
+      "latent_truth_ref": "latent_truth.json#/claim_truth/q-effect-later",
+      "missing_evidence": [],
+      "qualification": "FULLY_SUPPORTED",
+      "rationale": "The witness observation matches exactly the later operation, predicate and window."
+    },
+    {
+      "ambiguity_reason": null,
+      "ambiguous": false,
+      "claim_id": "q-effect-earlier",
+      "conditions": [
+        "effect_scope_mismatch"
+      ],
+      "draft_clauses": [
+        "4.5",
+        "5.7",
+        "9.4"
+      ],
+      "evidence_basis": [
+        "record:r-effect-later",
+        "record:r-entry"
+      ],
+      "justified_state": "REFUTED",
+      "kind": "effect_observed",
+      "known_nonclaims": [
+        "unobserved operations",
+        "all deployment paths",
+        "reversal of prior effect"
+      ],
+      "latent_truth_ref": "latent_truth.json#/claim_truth/q-effect-earlier",
+      "missing_evidence": [
+        "matching predicate/operation/window observation"
+      ],
+      "qualification": "NOT_SUPPORTED",
+      "rationale": "A native provider-entry observation for this exact operation occurs inside the requested same-clock no-entry window and positively contradicts that predicate. The different operation effect observation cannot override it."
+    }
+  ],
+  "derivation": "Independent author judgments from -02 clauses, frozen profile and visible evidence; not evaluator output.",
+  "reconciliation": {
+    "aggregate_claim": {
+      "conditions": [],
+      "qualification": "FULLY_SUPPORTED"
+    },
+    "draft_clauses": [
+      "5.4",
+      "5.10",
+      "5.11",
+      "6.1",
+      "6.2",
+      "6.4",
+      "6.5",
+      "6.6"
+    ],
+    "instruction_accounting": {
+      "all_excluded": 0,
+      "target_resolution_unclosed": 0,
+      "terminal_empty": 0,
+      "total": 1,
+      "with_obligations": 1
+    },
+    "obligation_counts": {
+      "CONFIRMED": 1,
+      "CONFLICT": 0,
+      "EXPLICIT_FAILURE": 0,
+      "INDETERMINATE": 0,
+      "INVALID": 0,
+      "SUBSTITUTION": 0,
+      "UNCONFIRMED": 0,
+      "total": 1
+    },
+    "obligations": [
+      {
+        "disposition": "CONFIRMED",
+        "instruction_id": "instruction-beta",
+        "target_id": "ep-b"
+      }
+    ],
+    "rationale": "Delivery remains confirmed; ordering and operation-specific effects do not inherit that result.",
+    "receiver_record_counts": {
+      "conflict": 0,
+      "duplicate": 0,
+      "invalid": 0,
+      "matched": 1,
+      "orphan": 0,
+      "substitution": 0,
+      "total": 1
+    },
+    "structural_result": "PASS"
+  },
+  "schema": "acder02-control-benchmark-oracle-v1"
+}

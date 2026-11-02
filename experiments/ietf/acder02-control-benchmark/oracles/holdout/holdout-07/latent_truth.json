@@ -1,0 +1,26 @@
+{
+  "case_id": "holdout-07",
+  "claim_truth": {
+    "q-all": true,
+    "q-effect": false,
+    "q-enforcement": false,
+    "q-integrity": true,
+    "q-receipt": true
+  },
+  "latent_facts": [
+    {
+      "fact": "receipt was signed with synthetic local Ed25519 key",
+      "value": true
+    },
+    {
+      "fact": "control applied but no enforcement evidence exposed",
+      "value": false
+    },
+    {
+      "fact": "requested effect occurred",
+      "value": false
+    }
+  ],
+  "schema": "acder02-synthetic-latent-truth-v1",
+  "status": "Authored synthetic scenario specification, not measured runtime ground truth."
+}

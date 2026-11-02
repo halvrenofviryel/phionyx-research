@@ -1,0 +1,138 @@
+{
+  "case_id": "holdout-03",
+  "instructions": [
+    {
+      "content_sha256": "84d78ca7ef777d5e8b8db72bfdbef78e7120e64227d1d6085f3adf6fb5c6d03c",
+      "content_utf8": "{\"control\":\"revoke\",\"task\":\"task-holdout-03\"}",
+      "identity_scope": "scope-holdout-03",
+      "instruction_id": "instruction-beta",
+      "resolution": {
+        "candidates": [],
+        "coverage": {
+          "evidence_refs": [],
+          "status": "INDETERMINATE"
+        },
+        "excluded": [],
+        "status": "UNCLOSED"
+      }
+    }
+  ],
+  "population": {
+    "cutoff": {
+      "clock_id": "mono",
+      "time": 10
+    },
+    "exclusion_rule": {
+      "evidence_available": true,
+      "frozen_time": 0,
+      "permitted_inputs": [
+        "issuer_metadata",
+        "target_resolution"
+      ],
+      "rule_id": "target-exclusion-v1",
+      "version": "1"
+    },
+    "included_instruction_ids": [
+      "instruction-beta"
+    ],
+    "inclusion_rule": {
+      "evidence_available": true,
+      "frozen_time": 0,
+      "permitted_inputs": [
+        "instruction_id"
+      ],
+      "rule_id": "issuer-inclusion-v1",
+      "version": "1"
+    },
+    "manifest_id": "manifest-holdout-03",
+    "manifest_instruction_ids": [
+      "instruction-beta"
+    ]
+  },
+  "profile_id": "acder02-control-benchmark-v1",
+  "queries": [
+    {
+      "claim_id": "q-integrity",
+      "kind": "envelope_integrity",
+      "scope": {
+        "clock_id": "mono",
+        "cutoff": 10,
+        "target_id": "ep-b"
+      },
+      "subject": {
+        "record_ids": [
+          "r-issuer",
+          "r-receiver"
+        ]
+      }
+    },
+    {
+      "claim_id": "q-issuer",
+      "kind": "issuer_dispatched",
+      "scope": {
+        "clock_id": "mono",
+        "cutoff": 10,
+        "target_id": "ep-b"
+      },
+      "subject": {
+        "instruction_id": "instruction-beta"
+      }
+    },
+    {
+      "claim_id": "q-receipt",
+      "kind": "receiver_receipt",
+      "scope": {
+        "boundary_id": "target-entry",
+        "clock_id": "mono",
+        "cutoff": 10,
+        "target_id": "ep-b"
+      },
+      "subject": {
+        "instruction_id": "instruction-beta"
+      }
+    },
+    {
+      "claim_id": "q-all",
+      "kind": "all_required_delivery",
+      "scope": {
+        "clock_id": "mono",
+        "cutoff": 10,
+        "population_scope": "manifest",
+        "target_id": "ep-b",
+        "target_ids": [
+          "ep-b"
+        ]
+      },
+      "subject": {
+        "instruction_ids": [
+          "instruction-beta"
+        ]
+      }
+    },
+    {
+      "claim_id": "q-mediation",
+      "kind": "complete_mediation",
+      "scope": {
+        "clock_id": "mono",
+        "cutoff": 10,
+        "target_id": "ep-b"
+      },
+      "subject": {
+        "instruction_id": "instruction-beta"
+      }
+    }
+  ],
+  "records": [
+    {
+      "payload_sha256": "4908cc4c843908c4b872256d54431bfed61cbae36aa382ee29fef40fcecc85fc",
+      "payload_utf8": "{\"attempt_id\":\"attempt-1\",\"boundary_id\":\"issuer-egress\",\"clock_id\":\"mono\",\"content_sha256\":\"84d78ca7ef777d5e8b8db72bfdbef78e7120e64227d1d6085f3adf6fb5c6d03c\",\"identity_scope\":\"scope-holdout-03\",\"instruction_id\":\"instruction-beta\",\"kind\":\"issuer_emission\",\"observer_id\":\"issuer\",\"outcome\":\"EMITTED\",\"resolution_ref\":\"instruction-beta#resolution\",\"target_ids\":[\"ep-b\"],\"time\":1}",
+      "record_id": "r-issuer"
+    },
+    {
+      "payload_sha256": "97db5ad8752b92896043530a83faf4abbddda7c13cb4925561e24be7607d8d80",
+      "payload_utf8": "{\"attempt_id\":\"attempt-1\",\"boundary_id\":\"target-entry\",\"clock_id\":\"mono\",\"content_sha256\":\"84d78ca7ef777d5e8b8db72bfdbef78e7120e64227d1d6085f3adf6fb5c6d03c\",\"identity_scope\":\"scope-holdout-03\",\"instruction_id\":\"instruction-beta\",\"kind\":\"receiver_observation\",\"observer_id\":\"ep-b\",\"outcome\":\"RECEIVED\",\"target_id\":\"ep-b\",\"time\":3}",
+      "record_id": "r-receiver"
+    }
+  ],
+  "schema": "acder02-control-benchmark-evidence-v1"
+}

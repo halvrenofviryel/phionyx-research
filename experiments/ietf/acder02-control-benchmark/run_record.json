@@ -1,0 +1,102 @@
+{
+  "schema": "acder02-control-benchmark-run-v1",
+  "base_commit": "652e008d18805a1c69492a688e621df91f143287",
+  "logic_freeze_commit": "9c4989243d3c319d236ebb81b584711d0f7f5153",
+  "author_data_commit": "c6123b4309801c0bf007c0a3d95f6c2bc0820ac5",
+  "case_counts": {
+    "development": 12,
+    "holdout": 12,
+    "total": 24
+  },
+  "claim_counts": {
+    "development": 53,
+    "holdout": 54,
+    "total": 107,
+    "comparator_rows": 321
+  },
+  "first_holdout_predictions_sha256": "9206cbea999903aa5879110f9318badb33fcc4f8a6074e3e19eeba9b62f4d97f",
+  "combined_score_sha256": "3d1f4100c15ab1a889441f1795e7102c4f35a9a6a640da2a6c23975ed4d77abe",
+  "semantic_score_sha256": "f73be47c6b2e61411b4c18466e0bb7ed85fce06aa415dc7ef23b3b86a397aacb",
+  "test_count": 44,
+  "test_exit": 0,
+  "holdout_condition_discrepancies": 2,
+  "post_holdout_logic_changes": false,
+  "oracle_changes_after_freeze": false,
+  "source": {
+    "schema": "acder-control-benchmark-source-pins-v1",
+    "draft": {
+      "url": "https://www.ietf.org/archive/id/draft-abak-agent-control-delivery-evidence-02.txt",
+      "revision": "draft-abak-agent-control-delivery-evidence-02",
+      "sha256": "fe3baeb08c8e0979ca64efece098c972827fab483debe0b2bcbfd697bb714782",
+      "bytes": 123860,
+      "retrieved_at_utc": "2026-11-02T20:04:34.985110+00:00"
+    },
+    "base_commit": "652e008d18805a1c69492a688e621df91f143287",
+    "initial_worktree_clean": true,
+    "user_plan_sha256": "9a8e82d94ebbc474cbf301af4a9fadfb19b352d25427c68b804995e66806ccfe",
+    "B3": {
+      "freeze_commit": "b733e060523b04a554a813321abc4e5ef71fda72",
+      "comparison_commit": "9caa50a8561c0bd3b580029010c96fcd25c3d585",
+      "results_used_for_new_test_design": false,
+      "artifacts": [
+        {
+          "path": "freeze.json",
+          "sha256": "7531b225bc90b79d44a8557c0d263ac80bb0cea17f478bcd98c8364405afeb0c",
+          "bytes": 11897
+        },
+        {
+          "path": "comparison/comparison.json",
+          "sha256": "6b95c82daa77ed5bc8ba099ac179a70ce12751be737be9c17bf05581130279cf",
+          "bytes": 3790
+        },
+        {
+          "path": "public/commitment.json",
+          "sha256": "cda835db77dc737694786bb73cee63977cff468279edfba1c62ea05a7f6aa7c7",
+          "bytes": 370
+        },
+        {
+          "path": "solver/solver_results.json",
+          "sha256": "19604777f6a2080a302e92ab805ba34bb42a9c6572bf567b0c5ffdf312daddae",
+          "bytes": 23462
+        },
+        {
+          "path": "solver/freeze_manifest.json",
+          "sha256": "84ba09ca7ce8383fb018ff2e7f9e1bc7bae400a6eaf249720aa0a43b901c5310",
+          "bytes": 1546
+        },
+        {
+          "path": "RESULTS.md",
+          "sha256": "1bd265e6f90c34e76f560d7a7a58aff4915e7481bdde8b6bb67a16a85fcac0aa",
+          "bytes": 6023
+        }
+      ],
+      "hash_only_read_for_new_benchmark_provenance": true
+    },
+    "pilot": {
+      "commit": "8f27f70ed542d1382e915626b69a1c9850284fc9",
+      "status": "frozen prior study; not new evaluation holdout"
+    }
+  },
+  "environment": {
+    "python": "3.12.3",
+    "platform": "Linux-6.11.0-29-generic-x86_64-with-glibc2.39",
+    "bwrap": "bubblewrap 0.9.0"
+  },
+  "evidence": [
+    "results/development-01",
+    "results/development-02",
+    "results/development-03",
+    "results/holdout-first",
+    "results/reproduction",
+    "results/ARITHMETIC_AUDIT.json",
+    "results/root-validation.json"
+  ],
+  "decision": {
+    "bounded_result_review": "GO",
+    "exact_condition_equivalence": "HOLD",
+    "public_publication": "HOLD_PENDING_EXPLICIT_APPROVAL",
+    "external_evidence": "NOT_EVALUATED"
+  },
+  "reproduction_command": "python3 -B reproduce.py --out /tmp/acder02-benchmark-replay",
+  "recorded_utc": "2026-11-02T20:40:20.652601+00:00"
+}

@@ -1,0 +1,4650 @@
+{
+  "acder_bounded": [
+    {
+      "aggregate_claim": {
+        "conditions": [],
+        "fact": "The declared bounded population has the reported structural reconciliation result under this profile and cutoff.",
+        "qualification": "FULLY_SUPPORTED",
+        "scope": {
+          "cutoff": {
+            "clock_id": "mono",
+            "time": 10
+          },
+          "instruction_ids": [
+            "instruction-beta"
+          ],
+          "manifest_id": "manifest-holdout-01",
+          "profile_id": "acder02-control-benchmark-v1",
+          "target_sets": {
+            "instruction-beta": [
+              "ep-b"
+            ]
+          }
+        }
+      },
+      "case_id": "holdout-01",
+      "claims": [
+        {
+          "claim_id": "q-integrity",
+          "conditions": [],
+          "evidence_refs": [
+            "record:r-ack",
+            "record:r-issuer"
+          ],
+          "kind": "envelope_integrity",
+          "qualification": "FULLY_SUPPORTED",
+          "reason_codes": [
+            "PAYLOAD_BYTES_ONLY"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "SUPPORTED",
+          "subject": {
+            "record_ids": [
+              "r-issuer",
+              "r-ack"
+            ]
+          }
+        },
+        {
+          "claim_id": "q-issuer",
+          "conditions": [],
+          "evidence_refs": [
+            "record:r-issuer"
+          ],
+          "kind": "issuer_dispatched",
+          "qualification": "FULLY_SUPPORTED",
+          "reason_codes": [
+            "BOUNDED_EVIDENCE"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "SUPPORTED",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        },
+        {
+          "claim_id": "q-receipt",
+          "conditions": [
+            "missing_receiver_observation"
+          ],
+          "evidence_refs": [],
+          "kind": "receiver_receipt",
+          "qualification": "NOT_SUPPORTED",
+          "reason_codes": [
+            "MANDATORY_EVIDENCE_MISSING"
+          ],
+          "scope": {
+            "boundary_id": "target-entry",
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "INDETERMINATE",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        },
+        {
+          "claim_id": "q-enforcement",
+          "conditions": [
+            "missing_enforcement_observation"
+          ],
+          "evidence_refs": [],
+          "kind": "enforcement_applied",
+          "qualification": "NOT_SUPPORTED",
+          "reason_codes": [
+            "MANDATORY_EVIDENCE_MISSING"
+          ],
+          "scope": {
+            "boundary_id": "target-entry",
+            "clock_id": "mono",
+            "cutoff": 10,
+            "effective_time": 5,
+            "target_id": "ep-b"
+          },
+          "state": "INDETERMINATE",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        },
+        {
+          "claim_id": "q-effect",
+          "conditions": [
+            "missing_effect_observation"
+          ],
+          "evidence_refs": [],
+          "kind": "effect_observed",
+          "qualification": "NOT_SUPPORTED",
+          "reason_codes": [
+            "MANDATORY_EVIDENCE_MISSING"
+          ],
+          "scope": {
+            "boundary_id": "runtime-state",
+            "clock_id": "mono",
+            "cutoff": 10,
+            "operation_id": "operation-main",
+            "predicate_id": "no_provider_entry",
+            "target_id": "ep-b",
+            "window": [
+              6,
+              9
+            ]
+          },
+          "state": "INDETERMINATE",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        }
+      ],
+      "instruction_accounting": {
+        "all_excluded": 0,
+        "target_resolution_unclosed": 0,
+        "terminal_empty": 0,
+        "total": 1,
+        "with_obligations": 1
+      },
+      "obligation_counts": {
+        "CONFIRMED": 0,
+        "CONFLICT": 0,
+        "EXPLICIT_FAILURE": 0,
+        "INDETERMINATE": 0,
+        "INVALID": 0,
+        "SUBSTITUTION": 0,
+        "UNCONFIRMED": 1,
+        "total": 1
+      },
+      "obligations": [
+        {
+          "disposition": "UNCONFIRMED",
+          "instruction_id": "instruction-beta",
+          "target_id": "ep-b"
+        }
+      ],
+      "receiver_record_counts": {
+        "conflict": 0,
+        "duplicate": 0,
+        "invalid": 0,
+        "matched": 0,
+        "orphan": 0,
+        "substitution": 0,
+        "total": 0
+      },
+      "structural_result": "INCONCLUSIVE"
+    },
+    {
+      "aggregate_claim": {
+        "conditions": [],
+        "fact": "The declared bounded population has the reported structural reconciliation result under this profile and cutoff.",
+        "qualification": "FULLY_SUPPORTED",
+        "scope": {
+          "cutoff": {
+            "clock_id": "mono",
+            "time": 10
+          },
+          "instruction_ids": [
+            "instruction-beta"
+          ],
+          "manifest_id": "manifest-holdout-02",
+          "profile_id": "acder02-control-benchmark-v1",
+          "target_sets": {
+            "instruction-beta": [
+              "ep-b"
+            ]
+          }
+        }
+      },
+      "case_id": "holdout-02",
+      "claims": [
+        {
+          "claim_id": "q-integrity",
+          "conditions": [],
+          "evidence_refs": [
+            "record:r-enforcement",
+            "record:r-receiver"
+          ],
+          "kind": "envelope_integrity",
+          "qualification": "FULLY_SUPPORTED",
+          "reason_codes": [
+            "PAYLOAD_BYTES_ONLY"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "SUPPORTED",
+          "subject": {
+            "record_ids": [
+              "r-receiver",
+              "r-enforcement"
+            ]
+          }
+        },
+        {
+          "claim_id": "q-issuer",
+          "conditions": [
+            "missing_issuer_observation"
+          ],
+          "evidence_refs": [],
+          "kind": "issuer_dispatched",
+          "qualification": "NOT_SUPPORTED",
+          "reason_codes": [
+            "MANDATORY_EVIDENCE_MISSING"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "INDETERMINATE",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        },
+        {
+          "claim_id": "q-receipt",
+          "conditions": [],
+          "evidence_refs": [
+            "record:r-receiver"
+          ],
+          "kind": "receiver_receipt",
+          "qualification": "FULLY_SUPPORTED",
+          "reason_codes": [
+            "BOUNDED_EVIDENCE"
+          ],
+          "scope": {
+            "boundary_id": "target-entry",
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "SUPPORTED",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        },
+        {
+          "claim_id": "q-all",
+          "conditions": [
+            "missing_issuer_observation"
+          ],
+          "evidence_refs": [
+            "record:r-receiver"
+          ],
+          "kind": "all_required_delivery",
+          "qualification": "NOT_SUPPORTED",
+          "reason_codes": [
+            "BOUNDED_EVIDENCE"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "population_scope": "manifest",
+            "target_id": "ep-b",
+            "target_ids": [
+              "ep-b"
+            ]
+          },
+          "state": "INDETERMINATE",
+          "subject": {
+            "instruction_ids": [
+              "instruction-beta"
+            ]
+          }
+        },
+        {
+          "claim_id": "q-enforcement",
+          "conditions": [],
+          "evidence_refs": [
+            "record:r-enforcement"
+          ],
+          "kind": "enforcement_applied",
+          "qualification": "FULLY_SUPPORTED",
+          "reason_codes": [
+            "BOUNDED_EVIDENCE"
+          ],
+          "scope": {
+            "boundary_id": "target-entry",
+            "clock_id": "mono",
+            "cutoff": 10,
+            "effective_time": 5,
+            "target_id": "ep-b"
+          },
+          "state": "SUPPORTED",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        }
+      ],
+      "instruction_accounting": {
+        "all_excluded": 0,
+        "target_resolution_unclosed": 0,
+        "terminal_empty": 0,
+        "total": 1,
+        "with_obligations": 1
+      },
+      "obligation_counts": {
+        "CONFIRMED": 0,
+        "CONFLICT": 0,
+        "EXPLICIT_FAILURE": 0,
+        "INDETERMINATE": 1,
+        "INVALID": 0,
+        "SUBSTITUTION": 0,
+        "UNCONFIRMED": 0,
+        "total": 1
+      },
+      "obligations": [
+        {
+          "disposition": "INDETERMINATE",
+          "instruction_id": "instruction-beta",
+          "target_id": "ep-b"
+        }
+      ],
+      "receiver_record_counts": {
+        "conflict": 0,
+        "duplicate": 0,
+        "invalid": 0,
+        "matched": 1,
+        "orphan": 0,
+        "substitution": 0,
+        "total": 1
+      },
+      "structural_result": "INCONCLUSIVE"
+    },
+    {
+      "aggregate_claim": {
+        "conditions": [],
+        "fact": "The declared bounded population has the reported structural reconciliation result under this profile and cutoff.",
+        "qualification": "FULLY_SUPPORTED",
+        "scope": {
+          "cutoff": {
+            "clock_id": "mono",
+            "time": 10
+          },
+          "instruction_ids": [
+            "instruction-beta"
+          ],
+          "manifest_id": "manifest-holdout-03",
+          "profile_id": "acder02-control-benchmark-v1",
+          "target_sets": {
+            "instruction-beta": []
+          }
+        }
+      },
+      "case_id": "holdout-03",
+      "claims": [
+        {
+          "claim_id": "q-integrity",
+          "conditions": [],
+          "evidence_refs": [
+            "record:r-issuer",
+            "record:r-receiver"
+          ],
+          "kind": "envelope_integrity",
+          "qualification": "FULLY_SUPPORTED",
+          "reason_codes": [
+            "PAYLOAD_BYTES_ONLY"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "SUPPORTED",
+          "subject": {
+            "record_ids": [
+              "r-issuer",
+              "r-receiver"
+            ]
+          }
+        },
+        {
+          "claim_id": "q-issuer",
+          "conditions": [],
+          "evidence_refs": [
+            "record:r-issuer"
+          ],
+          "kind": "issuer_dispatched",
+          "qualification": "FULLY_SUPPORTED",
+          "reason_codes": [
+            "BOUNDED_EVIDENCE"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "SUPPORTED",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        },
+        {
+          "claim_id": "q-receipt",
+          "conditions": [],
+          "evidence_refs": [
+            "record:r-receiver"
+          ],
+          "kind": "receiver_receipt",
+          "qualification": "FULLY_SUPPORTED",
+          "reason_codes": [
+            "BOUNDED_EVIDENCE"
+          ],
+          "scope": {
+            "boundary_id": "target-entry",
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "SUPPORTED",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        },
+        {
+          "claim_id": "q-all",
+          "conditions": [
+            "unclosed_target_resolution"
+          ],
+          "evidence_refs": [],
+          "kind": "all_required_delivery",
+          "qualification": "NOT_SUPPORTED",
+          "reason_codes": [
+            "BOUNDED_EVIDENCE"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "population_scope": "manifest",
+            "target_id": "ep-b",
+            "target_ids": [
+              "ep-b"
+            ]
+          },
+          "state": "INDETERMINATE",
+          "subject": {
+            "instruction_ids": [
+              "instruction-beta"
+            ]
+          }
+        },
+        {
+          "claim_id": "q-mediation",
+          "conditions": [
+            "coverage_indeterminate",
+            "unclosed_target_resolution"
+          ],
+          "evidence_refs": [],
+          "kind": "complete_mediation",
+          "qualification": "NOT_SUPPORTED",
+          "reason_codes": [
+            "BOUNDED_EVIDENCE"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "INDETERMINATE",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        }
+      ],
+      "instruction_accounting": {
+        "all_excluded": 0,
+        "target_resolution_unclosed": 1,
+        "terminal_empty": 0,
+        "total": 1,
+        "with_obligations": 0
+      },
+      "obligation_counts": {
+        "CONFIRMED": 0,
+        "CONFLICT": 0,
+        "EXPLICIT_FAILURE": 0,
+        "INDETERMINATE": 0,
+        "INVALID": 0,
+        "SUBSTITUTION": 0,
+        "UNCONFIRMED": 0,
+        "total": 0
+      },
+      "obligations": [],
+      "receiver_record_counts": {
+        "conflict": 0,
+        "duplicate": 0,
+        "invalid": 0,
+        "matched": 0,
+        "orphan": 1,
+        "substitution": 0,
+        "total": 1
+      },
+      "structural_result": "INCONCLUSIVE"
+    },
+    {
+      "aggregate_claim": {
+        "conditions": [],
+        "fact": "The declared bounded population has the reported structural reconciliation result under this profile and cutoff.",
+        "qualification": "FULLY_SUPPORTED",
+        "scope": {
+          "cutoff": {
+            "clock_id": "mono",
+            "time": 10
+          },
+          "instruction_ids": [
+            "instruction-beta"
+          ],
+          "manifest_id": "manifest-holdout-04",
+          "profile_id": "acder02-control-benchmark-v1",
+          "target_sets": {
+            "instruction-beta": [
+              "ep-b"
+            ]
+          }
+        }
+      },
+      "case_id": "holdout-04",
+      "claims": [
+        {
+          "claim_id": "q-integrity",
+          "conditions": [],
+          "evidence_refs": [
+            "record:r-issuer",
+            "record:r-receiver"
+          ],
+          "kind": "envelope_integrity",
+          "qualification": "FULLY_SUPPORTED",
+          "reason_codes": [
+            "PAYLOAD_BYTES_ONLY"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "SUPPORTED",
+          "subject": {
+            "record_ids": [
+              "r-issuer",
+              "r-receiver"
+            ]
+          }
+        },
+        {
+          "claim_id": "q-issuer",
+          "conditions": [],
+          "evidence_refs": [
+            "record:r-issuer"
+          ],
+          "kind": "issuer_dispatched",
+          "qualification": "FULLY_SUPPORTED",
+          "reason_codes": [
+            "BOUNDED_EVIDENCE"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "SUPPORTED",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        },
+        {
+          "claim_id": "q-receipt",
+          "conditions": [
+            "invalid_receiver_record"
+          ],
+          "evidence_refs": [],
+          "kind": "receiver_receipt",
+          "qualification": "NOT_SUPPORTED",
+          "reason_codes": [
+            "MANDATORY_EVIDENCE_MISSING"
+          ],
+          "scope": {
+            "boundary_id": "target-entry",
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "INDETERMINATE",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        },
+        {
+          "claim_id": "q-all",
+          "conditions": [
+            "invalid_receiver_record"
+          ],
+          "evidence_refs": [],
+          "kind": "all_required_delivery",
+          "qualification": "NOT_SUPPORTED",
+          "reason_codes": [
+            "BOUNDED_EVIDENCE"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "population_scope": "manifest",
+            "target_id": "ep-b",
+            "target_ids": [
+              "ep-b"
+            ]
+          },
+          "state": "INDETERMINATE",
+          "subject": {
+            "instruction_ids": [
+              "instruction-beta"
+            ]
+          }
+        }
+      ],
+      "instruction_accounting": {
+        "all_excluded": 0,
+        "target_resolution_unclosed": 0,
+        "terminal_empty": 0,
+        "total": 1,
+        "with_obligations": 1
+      },
+      "obligation_counts": {
+        "CONFIRMED": 0,
+        "CONFLICT": 0,
+        "EXPLICIT_FAILURE": 0,
+        "INDETERMINATE": 0,
+        "INVALID": 1,
+        "SUBSTITUTION": 0,
+        "UNCONFIRMED": 0,
+        "total": 1
+      },
+      "obligations": [
+        {
+          "disposition": "INVALID",
+          "instruction_id": "instruction-beta",
+          "target_id": "ep-b"
+        }
+      ],
+      "receiver_record_counts": {
+        "conflict": 0,
+        "duplicate": 0,
+        "invalid": 1,
+        "matched": 0,
+        "orphan": 0,
+        "substitution": 0,
+        "total": 1
+      },
+      "structural_result": "FAIL"
+    },
+    {
+      "aggregate_claim": {
+        "conditions": [],
+        "fact": "The declared bounded population has the reported structural reconciliation result under this profile and cutoff.",
+        "qualification": "FULLY_SUPPORTED",
+        "scope": {
+          "cutoff": {
+            "clock_id": "mono",
+            "time": 10
+          },
+          "instruction_ids": [
+            "instruction-beta"
+          ],
+          "manifest_id": "manifest-holdout-05",
+          "profile_id": "acder02-control-benchmark-v1",
+          "target_sets": {
+            "instruction-beta": [
+              "ep-b"
+            ]
+          }
+        }
+      },
+      "case_id": "holdout-05",
+      "claims": [
+        {
+          "claim_id": "q-integrity",
+          "conditions": [],
+          "evidence_refs": [
+            "record:r-issuer",
+            "record:r-receiver"
+          ],
+          "kind": "envelope_integrity",
+          "qualification": "FULLY_SUPPORTED",
+          "reason_codes": [
+            "PAYLOAD_BYTES_ONLY"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "SUPPORTED",
+          "subject": {
+            "record_ids": [
+              "r-issuer",
+              "r-receiver"
+            ]
+          }
+        },
+        {
+          "claim_id": "q-issuer",
+          "conditions": [],
+          "evidence_refs": [
+            "record:r-issuer"
+          ],
+          "kind": "issuer_dispatched",
+          "qualification": "FULLY_SUPPORTED",
+          "reason_codes": [
+            "BOUNDED_EVIDENCE"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "SUPPORTED",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        },
+        {
+          "claim_id": "q-receipt",
+          "conditions": [
+            "missing_receiver_observation"
+          ],
+          "evidence_refs": [],
+          "kind": "receiver_receipt",
+          "qualification": "NOT_SUPPORTED",
+          "reason_codes": [
+            "MANDATORY_EVIDENCE_MISSING"
+          ],
+          "scope": {
+            "boundary_id": "target-entry",
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "INDETERMINATE",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        },
+        {
+          "claim_id": "q-all",
+          "conditions": [
+            "unconfirmed_required_target"
+          ],
+          "evidence_refs": [],
+          "kind": "all_required_delivery",
+          "qualification": "NOT_SUPPORTED",
+          "reason_codes": [
+            "BOUNDED_EVIDENCE"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "population_scope": "manifest",
+            "target_id": "ep-b",
+            "target_ids": [
+              "ep-b"
+            ]
+          },
+          "state": "INDETERMINATE",
+          "subject": {
+            "instruction_ids": [
+              "instruction-beta"
+            ]
+          }
+        }
+      ],
+      "instruction_accounting": {
+        "all_excluded": 0,
+        "target_resolution_unclosed": 0,
+        "terminal_empty": 0,
+        "total": 1,
+        "with_obligations": 1
+      },
+      "obligation_counts": {
+        "CONFIRMED": 0,
+        "CONFLICT": 0,
+        "EXPLICIT_FAILURE": 0,
+        "INDETERMINATE": 0,
+        "INVALID": 0,
+        "SUBSTITUTION": 0,
+        "UNCONFIRMED": 1,
+        "total": 1
+      },
+      "obligations": [
+        {
+          "disposition": "UNCONFIRMED",
+          "instruction_id": "instruction-beta",
+          "target_id": "ep-b"
+        }
+      ],
+      "receiver_record_counts": {
+        "conflict": 0,
+        "duplicate": 0,
+        "invalid": 0,
+        "matched": 0,
+        "orphan": 1,
+        "substitution": 0,
+        "total": 1
+      },
+      "structural_result": "INCONCLUSIVE"
+    },
+    {
+      "aggregate_claim": {
+        "conditions": [],
+        "fact": "The declared bounded population has the reported structural reconciliation result under this profile and cutoff.",
+        "qualification": "FULLY_SUPPORTED",
+        "scope": {
+          "cutoff": {
+            "clock_id": "mono",
+            "time": 10
+          },
+          "instruction_ids": [
+            "instruction-beta"
+          ],
+          "manifest_id": "manifest-holdout-06",
+          "profile_id": "acder02-control-benchmark-v1",
+          "target_sets": {
+            "instruction-beta": [
+              "ep-a",
+              "ep-b"
+            ]
+          }
+        }
+      },
+      "case_id": "holdout-06",
+      "claims": [
+        {
+          "claim_id": "q-integrity",
+          "conditions": [],
+          "evidence_refs": [
+            "record:r-issuer",
+            "record:r-receiver"
+          ],
+          "kind": "envelope_integrity",
+          "qualification": "FULLY_SUPPORTED",
+          "reason_codes": [
+            "PAYLOAD_BYTES_ONLY"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "SUPPORTED",
+          "subject": {
+            "record_ids": [
+              "r-issuer",
+              "r-receiver"
+            ]
+          }
+        },
+        {
+          "claim_id": "q-receipt",
+          "conditions": [],
+          "evidence_refs": [
+            "record:r-receiver"
+          ],
+          "kind": "receiver_receipt",
+          "qualification": "FULLY_SUPPORTED",
+          "reason_codes": [
+            "BOUNDED_EVIDENCE"
+          ],
+          "scope": {
+            "boundary_id": "target-entry",
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "SUPPORTED",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        },
+        {
+          "claim_id": "q-all",
+          "conditions": [
+            "outcome_adaptive_exclusion",
+            "unconfirmed_required_target"
+          ],
+          "evidence_refs": [
+            "record:r-receiver"
+          ],
+          "kind": "all_required_delivery",
+          "qualification": "NOT_SUPPORTED",
+          "reason_codes": [
+            "BOUNDED_EVIDENCE"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "population_scope": "manifest",
+            "target_id": "ep-b",
+            "target_ids": [
+              "ep-b",
+              "ep-a"
+            ]
+          },
+          "state": "INDETERMINATE",
+          "subject": {
+            "instruction_ids": [
+              "instruction-beta"
+            ]
+          }
+        },
+        {
+          "claim_id": "q-population",
+          "conditions": [],
+          "evidence_refs": [
+            "input:population"
+          ],
+          "kind": "population_complete",
+          "qualification": "FULLY_SUPPORTED",
+          "reason_codes": [
+            "BOUNDED_EVIDENCE"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "SUPPORTED",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        }
+      ],
+      "instruction_accounting": {
+        "all_excluded": 0,
+        "target_resolution_unclosed": 0,
+        "terminal_empty": 0,
+        "total": 1,
+        "with_obligations": 1
+      },
+      "obligation_counts": {
+        "CONFIRMED": 1,
+        "CONFLICT": 0,
+        "EXPLICIT_FAILURE": 0,
+        "INDETERMINATE": 0,
+        "INVALID": 0,
+        "SUBSTITUTION": 0,
+        "UNCONFIRMED": 1,
+        "total": 2
+      },
+      "obligations": [
+        {
+          "disposition": "UNCONFIRMED",
+          "instruction_id": "instruction-beta",
+          "target_id": "ep-a"
+        },
+        {
+          "disposition": "CONFIRMED",
+          "instruction_id": "instruction-beta",
+          "target_id": "ep-b"
+        }
+      ],
+      "receiver_record_counts": {
+        "conflict": 0,
+        "duplicate": 0,
+        "invalid": 0,
+        "matched": 1,
+        "orphan": 0,
+        "substitution": 0,
+        "total": 1
+      },
+      "structural_result": "FAIL"
+    },
+    {
+      "aggregate_claim": {
+        "conditions": [],
+        "fact": "The declared bounded population has the reported structural reconciliation result under this profile and cutoff.",
+        "qualification": "FULLY_SUPPORTED",
+        "scope": {
+          "cutoff": {
+            "clock_id": "mono",
+            "time": 10
+          },
+          "instruction_ids": [
+            "instruction-beta"
+          ],
+          "manifest_id": "manifest-holdout-07",
+          "profile_id": "acder02-control-benchmark-v1",
+          "target_sets": {
+            "instruction-beta": [
+              "ep-b"
+            ]
+          }
+        }
+      },
+      "case_id": "holdout-07",
+      "claims": [
+        {
+          "claim_id": "q-integrity",
+          "conditions": [],
+          "evidence_refs": [
+            "record:r-issuer",
+            "record:r-receiver"
+          ],
+          "kind": "envelope_integrity",
+          "qualification": "FULLY_SUPPORTED",
+          "reason_codes": [
+            "PAYLOAD_BYTES_ONLY"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "SUPPORTED",
+          "subject": {
+            "record_ids": [
+              "r-issuer",
+              "r-receiver"
+            ]
+          }
+        },
+        {
+          "claim_id": "q-receipt",
+          "conditions": [],
+          "evidence_refs": [
+            "record:r-receiver"
+          ],
+          "kind": "receiver_receipt",
+          "qualification": "FULLY_SUPPORTED",
+          "reason_codes": [
+            "BOUNDED_EVIDENCE"
+          ],
+          "scope": {
+            "boundary_id": "target-entry",
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "SUPPORTED",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        },
+        {
+          "claim_id": "q-all",
+          "conditions": [],
+          "evidence_refs": [
+            "record:r-receiver"
+          ],
+          "kind": "all_required_delivery",
+          "qualification": "FULLY_SUPPORTED",
+          "reason_codes": [
+            "BOUNDED_EVIDENCE"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "population_scope": "manifest",
+            "target_id": "ep-b",
+            "target_ids": [
+              "ep-b"
+            ]
+          },
+          "state": "SUPPORTED",
+          "subject": {
+            "instruction_ids": [
+              "instruction-beta"
+            ]
+          }
+        },
+        {
+          "claim_id": "q-enforcement",
+          "conditions": [
+            "missing_enforcement_observation"
+          ],
+          "evidence_refs": [],
+          "kind": "enforcement_applied",
+          "qualification": "NOT_SUPPORTED",
+          "reason_codes": [
+            "MANDATORY_EVIDENCE_MISSING"
+          ],
+          "scope": {
+            "boundary_id": "target-entry",
+            "clock_id": "mono",
+            "cutoff": 10,
+            "effective_time": 5,
+            "target_id": "ep-b"
+          },
+          "state": "INDETERMINATE",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        },
+        {
+          "claim_id": "q-effect",
+          "conditions": [
+            "missing_effect_observation"
+          ],
+          "evidence_refs": [],
+          "kind": "effect_observed",
+          "qualification": "NOT_SUPPORTED",
+          "reason_codes": [
+            "MANDATORY_EVIDENCE_MISSING"
+          ],
+          "scope": {
+            "boundary_id": "runtime-state",
+            "clock_id": "mono",
+            "cutoff": 10,
+            "operation_id": "operation-main",
+            "predicate_id": "no_provider_entry",
+            "target_id": "ep-b",
+            "window": [
+              6,
+              9
+            ]
+          },
+          "state": "INDETERMINATE",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        }
+      ],
+      "instruction_accounting": {
+        "all_excluded": 0,
+        "target_resolution_unclosed": 0,
+        "terminal_empty": 0,
+        "total": 1,
+        "with_obligations": 1
+      },
+      "obligation_counts": {
+        "CONFIRMED": 1,
+        "CONFLICT": 0,
+        "EXPLICIT_FAILURE": 0,
+        "INDETERMINATE": 0,
+        "INVALID": 0,
+        "SUBSTITUTION": 0,
+        "UNCONFIRMED": 0,
+        "total": 1
+      },
+      "obligations": [
+        {
+          "disposition": "CONFIRMED",
+          "instruction_id": "instruction-beta",
+          "target_id": "ep-b"
+        }
+      ],
+      "receiver_record_counts": {
+        "conflict": 0,
+        "duplicate": 0,
+        "invalid": 0,
+        "matched": 1,
+        "orphan": 0,
+        "substitution": 0,
+        "total": 1
+      },
+      "structural_result": "PASS"
+    },
+    {
+      "aggregate_claim": {
+        "conditions": [],
+        "fact": "The declared bounded population has the reported structural reconciliation result under this profile and cutoff.",
+        "qualification": "FULLY_SUPPORTED",
+        "scope": {
+          "cutoff": {
+            "clock_id": "mono",
+            "time": 10
+          },
+          "instruction_ids": [
+            "instruction-beta"
+          ],
+          "manifest_id": "manifest-holdout-08",
+          "profile_id": "acder02-control-benchmark-v1",
+          "target_sets": {
+            "instruction-beta": [
+              "ep-b"
+            ]
+          }
+        }
+      },
+      "case_id": "holdout-08",
+      "claims": [
+        {
+          "claim_id": "q-integrity",
+          "conditions": [],
+          "evidence_refs": [
+            "record:r-enforcement",
+            "record:r-issuer",
+            "record:r-receiver"
+          ],
+          "kind": "envelope_integrity",
+          "qualification": "FULLY_SUPPORTED",
+          "reason_codes": [
+            "PAYLOAD_BYTES_ONLY"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "SUPPORTED",
+          "subject": {
+            "record_ids": [
+              "r-issuer",
+              "r-receiver",
+              "r-enforcement"
+            ]
+          }
+        },
+        {
+          "claim_id": "q-receipt",
+          "conditions": [],
+          "evidence_refs": [
+            "record:r-receiver"
+          ],
+          "kind": "receiver_receipt",
+          "qualification": "FULLY_SUPPORTED",
+          "reason_codes": [
+            "BOUNDED_EVIDENCE"
+          ],
+          "scope": {
+            "boundary_id": "target-entry",
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "SUPPORTED",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        },
+        {
+          "claim_id": "q-enforcement",
+          "conditions": [],
+          "evidence_refs": [
+            "record:r-enforcement"
+          ],
+          "kind": "enforcement_applied",
+          "qualification": "FULLY_SUPPORTED",
+          "reason_codes": [
+            "BOUNDED_EVIDENCE"
+          ],
+          "scope": {
+            "boundary_id": "target-entry",
+            "clock_id": "mono",
+            "cutoff": 10,
+            "effective_time": 5,
+            "target_id": "ep-b"
+          },
+          "state": "SUPPORTED",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        },
+        {
+          "claim_id": "q-effect",
+          "conditions": [
+            "missing_effect_observation"
+          ],
+          "evidence_refs": [],
+          "kind": "effect_observed",
+          "qualification": "NOT_SUPPORTED",
+          "reason_codes": [
+            "MANDATORY_EVIDENCE_MISSING"
+          ],
+          "scope": {
+            "boundary_id": "runtime-state",
+            "clock_id": "mono",
+            "cutoff": 10,
+            "operation_id": "operation-main",
+            "predicate_id": "no_provider_entry",
+            "target_id": "ep-b",
+            "window": [
+              6,
+              9
+            ]
+          },
+          "state": "INDETERMINATE",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        },
+        {
+          "claim_id": "q-mediation",
+          "conditions": [],
+          "evidence_refs": [
+            "record:r-receiver"
+          ],
+          "kind": "complete_mediation",
+          "qualification": "FULLY_SUPPORTED",
+          "reason_codes": [
+            "BOUNDED_EVIDENCE"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "deployment_scope": "synthetic-node",
+            "target_id": "ep-b",
+            "target_ids": [
+              "ep-b"
+            ]
+          },
+          "state": "SUPPORTED",
+          "subject": {
+            "instruction_ids": [
+              "instruction-beta"
+            ]
+          }
+        }
+      ],
+      "instruction_accounting": {
+        "all_excluded": 0,
+        "target_resolution_unclosed": 0,
+        "terminal_empty": 0,
+        "total": 1,
+        "with_obligations": 1
+      },
+      "obligation_counts": {
+        "CONFIRMED": 1,
+        "CONFLICT": 0,
+        "EXPLICIT_FAILURE": 0,
+        "INDETERMINATE": 0,
+        "INVALID": 0,
+        "SUBSTITUTION": 0,
+        "UNCONFIRMED": 0,
+        "total": 1
+      },
+      "obligations": [
+        {
+          "disposition": "CONFIRMED",
+          "instruction_id": "instruction-beta",
+          "target_id": "ep-b"
+        }
+      ],
+      "receiver_record_counts": {
+        "conflict": 0,
+        "duplicate": 0,
+        "invalid": 0,
+        "matched": 1,
+        "orphan": 0,
+        "substitution": 0,
+        "total": 1
+      },
+      "structural_result": "PASS"
+    },
+    {
+      "aggregate_claim": {
+        "conditions": [],
+        "fact": "The declared bounded population has the reported structural reconciliation result under this profile and cutoff.",
+        "qualification": "FULLY_SUPPORTED",
+        "scope": {
+          "cutoff": {
+            "clock_id": "mono",
+            "time": 10
+          },
+          "instruction_ids": [
+            "instruction-beta"
+          ],
+          "manifest_id": "manifest-holdout-09",
+          "profile_id": "acder02-control-benchmark-v1",
+          "target_sets": {
+            "instruction-beta": [
+              "ep-b"
+            ]
+          }
+        }
+      },
+      "case_id": "holdout-09",
+      "claims": [
+        {
+          "claim_id": "q-integrity",
+          "conditions": [],
+          "evidence_refs": [
+            "record:r-effect-later",
+            "record:r-enforcement",
+            "record:r-entry",
+            "record:r-issuer",
+            "record:r-receiver"
+          ],
+          "kind": "envelope_integrity",
+          "qualification": "FULLY_SUPPORTED",
+          "reason_codes": [
+            "PAYLOAD_BYTES_ONLY"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "SUPPORTED",
+          "subject": {
+            "record_ids": [
+              "r-issuer",
+              "r-receiver",
+              "r-enforcement",
+              "r-entry",
+              "r-effect-later"
+            ]
+          }
+        },
+        {
+          "claim_id": "q-execution",
+          "conditions": [],
+          "evidence_refs": [
+            "record:r-entry"
+          ],
+          "kind": "execution_observed",
+          "qualification": "FULLY_SUPPORTED",
+          "reason_codes": [
+            "BOUNDED_EVIDENCE"
+          ],
+          "scope": {
+            "boundary_id": "provider-entry",
+            "clock_id": "mono",
+            "cutoff": 10,
+            "operation_id": "operation-earlier",
+            "target_id": "ep-b"
+          },
+          "state": "SUPPORTED",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        },
+        {
+          "claim_id": "q-order",
+          "conditions": [],
+          "evidence_refs": [
+            "record:r-enforcement",
+            "record:r-entry"
+          ],
+          "kind": "ordering",
+          "qualification": "NOT_SUPPORTED",
+          "reason_codes": [
+            "BOUNDED_EVIDENCE"
+          ],
+          "scope": {
+            "after_record_id": "r-enforcement",
+            "before_record_id": "r-entry",
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "REFUTED",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        },
+        {
+          "claim_id": "q-effect-later",
+          "conditions": [],
+          "evidence_refs": [
+            "record:r-effect-later"
+          ],
+          "kind": "effect_observed",
+          "qualification": "FULLY_SUPPORTED",
+          "reason_codes": [
+            "BOUNDED_EVIDENCE"
+          ],
+          "scope": {
+            "boundary_id": "runtime-state",
+            "clock_id": "mono",
+            "cutoff": 10,
+            "operation_id": "operation-later",
+            "predicate_id": "no_provider_entry",
+            "target_id": "ep-b",
+            "window": [
+              6,
+              9
+            ]
+          },
+          "state": "SUPPORTED",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        },
+        {
+          "claim_id": "q-effect-earlier",
+          "conditions": [
+            "effect_scope_mismatch"
+          ],
+          "evidence_refs": [
+            "record:r-entry"
+          ],
+          "kind": "effect_observed",
+          "qualification": "NOT_SUPPORTED",
+          "reason_codes": [
+            "POSITIVE_COUNTEREXAMPLE_WITHIN_EXACT_WINDOW"
+          ],
+          "scope": {
+            "boundary_id": "runtime-state",
+            "clock_id": "mono",
+            "cutoff": 10,
+            "operation_id": "operation-earlier",
+            "predicate_id": "no_provider_entry",
+            "target_id": "ep-b",
+            "window": [
+              6,
+              9
+            ]
+          },
+          "state": "REFUTED",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        }
+      ],
+      "instruction_accounting": {
+        "all_excluded": 0,
+        "target_resolution_unclosed": 0,
+        "terminal_empty": 0,
+        "total": 1,
+        "with_obligations": 1
+      },
+      "obligation_counts": {
+        "CONFIRMED": 1,
+        "CONFLICT": 0,
+        "EXPLICIT_FAILURE": 0,
+        "INDETERMINATE": 0,
+        "INVALID": 0,
+        "SUBSTITUTION": 0,
+        "UNCONFIRMED": 0,
+        "total": 1
+      },
+      "obligations": [
+        {
+          "disposition": "CONFIRMED",
+          "instruction_id": "instruction-beta",
+          "target_id": "ep-b"
+        }
+      ],
+      "receiver_record_counts": {
+        "conflict": 0,
+        "duplicate": 0,
+        "invalid": 0,
+        "matched": 1,
+        "orphan": 0,
+        "substitution": 0,
+        "total": 1
+      },
+      "structural_result": "PASS"
+    },
+    {
+      "aggregate_claim": {
+        "conditions": [],
+        "fact": "The declared bounded population has the reported structural reconciliation result under this profile and cutoff.",
+        "qualification": "FULLY_SUPPORTED",
+        "scope": {
+          "cutoff": {
+            "clock_id": "mono",
+            "time": 10
+          },
+          "instruction_ids": [
+            "instruction-beta"
+          ],
+          "manifest_id": "manifest-holdout-10",
+          "profile_id": "acder02-control-benchmark-v1",
+          "target_sets": {
+            "instruction-beta": [
+              "ep-b"
+            ]
+          }
+        }
+      },
+      "case_id": "holdout-10",
+      "claims": [
+        {
+          "claim_id": "q-integrity",
+          "conditions": [],
+          "evidence_refs": [
+            "record:r-deadline",
+            "record:r-issuer"
+          ],
+          "kind": "envelope_integrity",
+          "qualification": "FULLY_SUPPORTED",
+          "reason_codes": [
+            "PAYLOAD_BYTES_ONLY"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "SUPPORTED",
+          "subject": {
+            "record_ids": [
+              "r-issuer",
+              "r-deadline"
+            ]
+          }
+        },
+        {
+          "claim_id": "q-issuer",
+          "conditions": [],
+          "evidence_refs": [
+            "record:r-issuer"
+          ],
+          "kind": "issuer_dispatched",
+          "qualification": "FULLY_SUPPORTED",
+          "reason_codes": [
+            "BOUNDED_EVIDENCE"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "SUPPORTED",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        },
+        {
+          "claim_id": "q-receipt",
+          "conditions": [
+            "missing_receiver_observation"
+          ],
+          "evidence_refs": [],
+          "kind": "receiver_receipt",
+          "qualification": "NOT_SUPPORTED",
+          "reason_codes": [
+            "MANDATORY_EVIDENCE_MISSING"
+          ],
+          "scope": {
+            "boundary_id": "target-entry",
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "INDETERMINATE",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        },
+        {
+          "claim_id": "q-all",
+          "conditions": [
+            "unconfirmed_required_target"
+          ],
+          "evidence_refs": [],
+          "kind": "all_required_delivery",
+          "qualification": "NOT_SUPPORTED",
+          "reason_codes": [
+            "BOUNDED_EVIDENCE"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "population_scope": "manifest",
+            "target_id": "ep-b",
+            "target_ids": [
+              "ep-b"
+            ]
+          },
+          "state": "INDETERMINATE",
+          "subject": {
+            "instruction_ids": [
+              "instruction-beta"
+            ]
+          }
+        }
+      ],
+      "instruction_accounting": {
+        "all_excluded": 0,
+        "target_resolution_unclosed": 0,
+        "terminal_empty": 0,
+        "total": 1,
+        "with_obligations": 1
+      },
+      "obligation_counts": {
+        "CONFIRMED": 0,
+        "CONFLICT": 0,
+        "EXPLICIT_FAILURE": 0,
+        "INDETERMINATE": 0,
+        "INVALID": 0,
+        "SUBSTITUTION": 0,
+        "UNCONFIRMED": 1,
+        "total": 1
+      },
+      "obligations": [
+        {
+          "disposition": "UNCONFIRMED",
+          "instruction_id": "instruction-beta",
+          "target_id": "ep-b"
+        }
+      ],
+      "receiver_record_counts": {
+        "conflict": 0,
+        "duplicate": 0,
+        "invalid": 0,
+        "matched": 0,
+        "orphan": 0,
+        "substitution": 0,
+        "total": 0
+      },
+      "structural_result": "INCONCLUSIVE"
+    },
+    {
+      "aggregate_claim": {
+        "conditions": [],
+        "fact": "The declared bounded population has the reported structural reconciliation result under this profile and cutoff.",
+        "qualification": "FULLY_SUPPORTED",
+        "scope": {
+          "cutoff": {
+            "clock_id": "mono",
+            "time": 10
+          },
+          "instruction_ids": [
+            "instruction-beta",
+            "instruction-omitted"
+          ],
+          "manifest_id": "manifest-holdout-11",
+          "profile_id": "acder02-control-benchmark-v1",
+          "target_sets": {
+            "instruction-beta": [
+              "ep-b"
+            ],
+            "instruction-omitted": []
+          }
+        }
+      },
+      "case_id": "holdout-11",
+      "claims": [
+        {
+          "claim_id": "q-integrity",
+          "conditions": [],
+          "evidence_refs": [
+            "record:r-issuer",
+            "record:r-receiver"
+          ],
+          "kind": "envelope_integrity",
+          "qualification": "FULLY_SUPPORTED",
+          "reason_codes": [
+            "PAYLOAD_BYTES_ONLY"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "SUPPORTED",
+          "subject": {
+            "record_ids": [
+              "r-issuer",
+              "r-receiver"
+            ]
+          }
+        },
+        {
+          "claim_id": "q-receipt",
+          "conditions": [],
+          "evidence_refs": [
+            "record:r-receiver"
+          ],
+          "kind": "receiver_receipt",
+          "qualification": "FULLY_SUPPORTED",
+          "reason_codes": [
+            "BOUNDED_EVIDENCE"
+          ],
+          "scope": {
+            "boundary_id": "target-entry",
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "SUPPORTED",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        },
+        {
+          "claim_id": "q-population",
+          "conditions": [
+            "population_members_missing"
+          ],
+          "evidence_refs": [
+            "input:population"
+          ],
+          "kind": "population_complete",
+          "qualification": "NOT_SUPPORTED",
+          "reason_codes": [
+            "BOUNDED_EVIDENCE"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "REFUTED",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        },
+        {
+          "claim_id": "q-all",
+          "conditions": [
+            "missing_instruction_metadata",
+            "population_members_missing"
+          ],
+          "evidence_refs": [
+            "record:r-receiver"
+          ],
+          "kind": "all_required_delivery",
+          "qualification": "NOT_SUPPORTED",
+          "reason_codes": [
+            "BOUNDED_EVIDENCE"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "population_scope": "manifest",
+            "target_id": "ep-b",
+            "target_ids": [
+              "ep-b"
+            ]
+          },
+          "state": "INDETERMINATE",
+          "subject": {
+            "instruction_ids": [
+              "instruction-beta",
+              "instruction-omitted"
+            ]
+          }
+        }
+      ],
+      "instruction_accounting": {
+        "all_excluded": 0,
+        "target_resolution_unclosed": 1,
+        "terminal_empty": 0,
+        "total": 2,
+        "with_obligations": 1
+      },
+      "obligation_counts": {
+        "CONFIRMED": 1,
+        "CONFLICT": 0,
+        "EXPLICIT_FAILURE": 0,
+        "INDETERMINATE": 0,
+        "INVALID": 0,
+        "SUBSTITUTION": 0,
+        "UNCONFIRMED": 0,
+        "total": 1
+      },
+      "obligations": [
+        {
+          "disposition": "CONFIRMED",
+          "instruction_id": "instruction-beta",
+          "target_id": "ep-b"
+        }
+      ],
+      "receiver_record_counts": {
+        "conflict": 0,
+        "duplicate": 0,
+        "invalid": 0,
+        "matched": 1,
+        "orphan": 0,
+        "substitution": 0,
+        "total": 1
+      },
+      "structural_result": "FAIL"
+    },
+    {
+      "aggregate_claim": {
+        "conditions": [],
+        "fact": "The declared bounded population has the reported structural reconciliation result under this profile and cutoff.",
+        "qualification": "FULLY_SUPPORTED",
+        "scope": {
+          "cutoff": {
+            "clock_id": "mono",
+            "time": 10
+          },
+          "instruction_ids": [
+            "instruction-beta"
+          ],
+          "manifest_id": "manifest-holdout-12",
+          "profile_id": "acder02-control-benchmark-v1",
+          "target_sets": {
+            "instruction-beta": [
+              "ep-b"
+            ]
+          }
+        }
+      },
+      "case_id": "holdout-12",
+      "claims": [
+        {
+          "claim_id": "q-integrity",
+          "conditions": [],
+          "evidence_refs": [
+            "record:r-ack",
+            "record:r-enforcement",
+            "record:r-issuer",
+            "record:r-receiver",
+            "record:r-transform"
+          ],
+          "kind": "envelope_integrity",
+          "qualification": "FULLY_SUPPORTED",
+          "reason_codes": [
+            "PAYLOAD_BYTES_ONLY"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "SUPPORTED",
+          "subject": {
+            "record_ids": [
+              "r-issuer",
+              "r-receiver",
+              "r-enforcement",
+              "r-transform",
+              "r-ack"
+            ]
+          }
+        },
+        {
+          "claim_id": "q-receipt",
+          "conditions": [],
+          "evidence_refs": [
+            "record:r-receiver"
+          ],
+          "kind": "receiver_receipt",
+          "qualification": "FULLY_SUPPORTED",
+          "reason_codes": [
+            "BOUNDED_EVIDENCE"
+          ],
+          "scope": {
+            "boundary_id": "target-entry",
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "SUPPORTED",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        },
+        {
+          "claim_id": "q-enforcement",
+          "conditions": [
+            "source_state_does_not_establish_applied"
+          ],
+          "evidence_refs": [
+            "record:r-enforcement"
+          ],
+          "kind": "enforcement_applied",
+          "qualification": "NOT_SUPPORTED",
+          "reason_codes": [
+            "BOUNDED_EVIDENCE"
+          ],
+          "scope": {
+            "boundary_id": "target-entry",
+            "clock_id": "mono",
+            "cutoff": 10,
+            "effective_time": 5,
+            "target_id": "ep-b"
+          },
+          "state": "REFUTED",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        },
+        {
+          "claim_id": "q-semantics",
+          "conditions": [
+            "semantic_mapping_not_lossless"
+          ],
+          "evidence_refs": [
+            "record:r-transform"
+          ],
+          "kind": "semantic_preservation",
+          "qualification": "NOT_SUPPORTED",
+          "reason_codes": [
+            "BOUNDED_EVIDENCE"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b",
+            "transformation_record_id": "r-transform"
+          },
+          "state": "REFUTED",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        }
+      ],
+      "instruction_accounting": {
+        "all_excluded": 0,
+        "target_resolution_unclosed": 0,
+        "terminal_empty": 0,
+        "total": 1,
+        "with_obligations": 1
+      },
+      "obligation_counts": {
+        "CONFIRMED": 1,
+        "CONFLICT": 0,
+        "EXPLICIT_FAILURE": 0,
+        "INDETERMINATE": 0,
+        "INVALID": 0,
+        "SUBSTITUTION": 0,
+        "UNCONFIRMED": 0,
+        "total": 1
+      },
+      "obligations": [
+        {
+          "disposition": "CONFIRMED",
+          "instruction_id": "instruction-beta",
+          "target_id": "ep-b"
+        }
+      ],
+      "receiver_record_counts": {
+        "conflict": 0,
+        "duplicate": 0,
+        "invalid": 0,
+        "matched": 1,
+        "orphan": 0,
+        "substitution": 0,
+        "total": 1
+      },
+      "structural_result": "PASS"
+    }
+  ],
+  "integrity_only": [
+    {
+      "case_id": "holdout-01",
+      "claims": [
+        {
+          "claim_id": "q-integrity",
+          "conditions": [],
+          "evidence_refs": [
+            "record:r-ack",
+            "record:r-issuer"
+          ],
+          "kind": "envelope_integrity",
+          "qualification": "FULLY_SUPPORTED",
+          "reason_codes": [
+            "PAYLOAD_BYTES_ONLY"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "SUPPORTED",
+          "subject": {
+            "record_ids": [
+              "r-issuer",
+              "r-ack"
+            ]
+          }
+        },
+        {
+          "claim_id": "q-issuer",
+          "conditions": [],
+          "evidence_refs": [],
+          "kind": "issuer_dispatched",
+          "qualification": null,
+          "reason_codes": [
+            "OUTSIDE_DECLARED_CONTRACT"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "NOT_APPLICABLE",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        },
+        {
+          "claim_id": "q-receipt",
+          "conditions": [],
+          "evidence_refs": [],
+          "kind": "receiver_receipt",
+          "qualification": null,
+          "reason_codes": [
+            "OUTSIDE_DECLARED_CONTRACT"
+          ],
+          "scope": {
+            "boundary_id": "target-entry",
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "NOT_APPLICABLE",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        },
+        {
+          "claim_id": "q-enforcement",
+          "conditions": [],
+          "evidence_refs": [],
+          "kind": "enforcement_applied",
+          "qualification": null,
+          "reason_codes": [
+            "OUTSIDE_DECLARED_CONTRACT"
+          ],
+          "scope": {
+            "boundary_id": "target-entry",
+            "clock_id": "mono",
+            "cutoff": 10,
+            "effective_time": 5,
+            "target_id": "ep-b"
+          },
+          "state": "NOT_APPLICABLE",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        },
+        {
+          "claim_id": "q-effect",
+          "conditions": [],
+          "evidence_refs": [],
+          "kind": "effect_observed",
+          "qualification": null,
+          "reason_codes": [
+            "OUTSIDE_DECLARED_CONTRACT"
+          ],
+          "scope": {
+            "boundary_id": "runtime-state",
+            "clock_id": "mono",
+            "cutoff": 10,
+            "operation_id": "operation-main",
+            "predicate_id": "no_provider_entry",
+            "target_id": "ep-b",
+            "window": [
+              6,
+              9
+            ]
+          },
+          "state": "NOT_APPLICABLE",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "holdout-02",
+      "claims": [
+        {
+          "claim_id": "q-integrity",
+          "conditions": [],
+          "evidence_refs": [
+            "record:r-enforcement",
+            "record:r-receiver"
+          ],
+          "kind": "envelope_integrity",
+          "qualification": "FULLY_SUPPORTED",
+          "reason_codes": [
+            "PAYLOAD_BYTES_ONLY"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "SUPPORTED",
+          "subject": {
+            "record_ids": [
+              "r-receiver",
+              "r-enforcement"
+            ]
+          }
+        },
+        {
+          "claim_id": "q-issuer",
+          "conditions": [],
+          "evidence_refs": [],
+          "kind": "issuer_dispatched",
+          "qualification": null,
+          "reason_codes": [
+            "OUTSIDE_DECLARED_CONTRACT"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "NOT_APPLICABLE",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        },
+        {
+          "claim_id": "q-receipt",
+          "conditions": [],
+          "evidence_refs": [],
+          "kind": "receiver_receipt",
+          "qualification": null,
+          "reason_codes": [
+            "OUTSIDE_DECLARED_CONTRACT"
+          ],
+          "scope": {
+            "boundary_id": "target-entry",
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "NOT_APPLICABLE",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        },
+        {
+          "claim_id": "q-all",
+          "conditions": [],
+          "evidence_refs": [],
+          "kind": "all_required_delivery",
+          "qualification": null,
+          "reason_codes": [
+            "OUTSIDE_DECLARED_CONTRACT"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "population_scope": "manifest",
+            "target_id": "ep-b",
+            "target_ids": [
+              "ep-b"
+            ]
+          },
+          "state": "NOT_APPLICABLE",
+          "subject": {
+            "instruction_ids": [
+              "instruction-beta"
+            ]
+          }
+        },
+        {
+          "claim_id": "q-enforcement",
+          "conditions": [],
+          "evidence_refs": [],
+          "kind": "enforcement_applied",
+          "qualification": null,
+          "reason_codes": [
+            "OUTSIDE_DECLARED_CONTRACT"
+          ],
+          "scope": {
+            "boundary_id": "target-entry",
+            "clock_id": "mono",
+            "cutoff": 10,
+            "effective_time": 5,
+            "target_id": "ep-b"
+          },
+          "state": "NOT_APPLICABLE",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "holdout-03",
+      "claims": [
+        {
+          "claim_id": "q-integrity",
+          "conditions": [],
+          "evidence_refs": [
+            "record:r-issuer",
+            "record:r-receiver"
+          ],
+          "kind": "envelope_integrity",
+          "qualification": "FULLY_SUPPORTED",
+          "reason_codes": [
+            "PAYLOAD_BYTES_ONLY"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "SUPPORTED",
+          "subject": {
+            "record_ids": [
+              "r-issuer",
+              "r-receiver"
+            ]
+          }
+        },
+        {
+          "claim_id": "q-issuer",
+          "conditions": [],
+          "evidence_refs": [],
+          "kind": "issuer_dispatched",
+          "qualification": null,
+          "reason_codes": [
+            "OUTSIDE_DECLARED_CONTRACT"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "NOT_APPLICABLE",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        },
+        {
+          "claim_id": "q-receipt",
+          "conditions": [],
+          "evidence_refs": [],
+          "kind": "receiver_receipt",
+          "qualification": null,
+          "reason_codes": [
+            "OUTSIDE_DECLARED_CONTRACT"
+          ],
+          "scope": {
+            "boundary_id": "target-entry",
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "NOT_APPLICABLE",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        },
+        {
+          "claim_id": "q-all",
+          "conditions": [],
+          "evidence_refs": [],
+          "kind": "all_required_delivery",
+          "qualification": null,
+          "reason_codes": [
+            "OUTSIDE_DECLARED_CONTRACT"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "population_scope": "manifest",
+            "target_id": "ep-b",
+            "target_ids": [
+              "ep-b"
+            ]
+          },
+          "state": "NOT_APPLICABLE",
+          "subject": {
+            "instruction_ids": [
+              "instruction-beta"
+            ]
+          }
+        },
+        {
+          "claim_id": "q-mediation",
+          "conditions": [],
+          "evidence_refs": [],
+          "kind": "complete_mediation",
+          "qualification": null,
+          "reason_codes": [
+            "OUTSIDE_DECLARED_CONTRACT"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "NOT_APPLICABLE",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "holdout-04",
+      "claims": [
+        {
+          "claim_id": "q-integrity",
+          "conditions": [],
+          "evidence_refs": [
+            "record:r-issuer",
+            "record:r-receiver"
+          ],
+          "kind": "envelope_integrity",
+          "qualification": "FULLY_SUPPORTED",
+          "reason_codes": [
+            "PAYLOAD_BYTES_ONLY"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "SUPPORTED",
+          "subject": {
+            "record_ids": [
+              "r-issuer",
+              "r-receiver"
+            ]
+          }
+        },
+        {
+          "claim_id": "q-issuer",
+          "conditions": [],
+          "evidence_refs": [],
+          "kind": "issuer_dispatched",
+          "qualification": null,
+          "reason_codes": [
+            "OUTSIDE_DECLARED_CONTRACT"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "NOT_APPLICABLE",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        },
+        {
+          "claim_id": "q-receipt",
+          "conditions": [],
+          "evidence_refs": [],
+          "kind": "receiver_receipt",
+          "qualification": null,
+          "reason_codes": [
+            "OUTSIDE_DECLARED_CONTRACT"
+          ],
+          "scope": {
+            "boundary_id": "target-entry",
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "NOT_APPLICABLE",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        },
+        {
+          "claim_id": "q-all",
+          "conditions": [],
+          "evidence_refs": [],
+          "kind": "all_required_delivery",
+          "qualification": null,
+          "reason_codes": [
+            "OUTSIDE_DECLARED_CONTRACT"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "population_scope": "manifest",
+            "target_id": "ep-b",
+            "target_ids": [
+              "ep-b"
+            ]
+          },
+          "state": "NOT_APPLICABLE",
+          "subject": {
+            "instruction_ids": [
+              "instruction-beta"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "holdout-05",
+      "claims": [
+        {
+          "claim_id": "q-integrity",
+          "conditions": [],
+          "evidence_refs": [
+            "record:r-issuer",
+            "record:r-receiver"
+          ],
+          "kind": "envelope_integrity",
+          "qualification": "FULLY_SUPPORTED",
+          "reason_codes": [
+            "PAYLOAD_BYTES_ONLY"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "SUPPORTED",
+          "subject": {
+            "record_ids": [
+              "r-issuer",
+              "r-receiver"
+            ]
+          }
+        },
+        {
+          "claim_id": "q-issuer",
+          "conditions": [],
+          "evidence_refs": [],
+          "kind": "issuer_dispatched",
+          "qualification": null,
+          "reason_codes": [
+            "OUTSIDE_DECLARED_CONTRACT"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "NOT_APPLICABLE",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        },
+        {
+          "claim_id": "q-receipt",
+          "conditions": [],
+          "evidence_refs": [],
+          "kind": "receiver_receipt",
+          "qualification": null,
+          "reason_codes": [
+            "OUTSIDE_DECLARED_CONTRACT"
+          ],
+          "scope": {
+            "boundary_id": "target-entry",
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "NOT_APPLICABLE",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        },
+        {
+          "claim_id": "q-all",
+          "conditions": [],
+          "evidence_refs": [],
+          "kind": "all_required_delivery",
+          "qualification": null,
+          "reason_codes": [
+            "OUTSIDE_DECLARED_CONTRACT"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "population_scope": "manifest",
+            "target_id": "ep-b",
+            "target_ids": [
+              "ep-b"
+            ]
+          },
+          "state": "NOT_APPLICABLE",
+          "subject": {
+            "instruction_ids": [
+              "instruction-beta"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "holdout-06",
+      "claims": [
+        {
+          "claim_id": "q-integrity",
+          "conditions": [],
+          "evidence_refs": [
+            "record:r-issuer",
+            "record:r-receiver"
+          ],
+          "kind": "envelope_integrity",
+          "qualification": "FULLY_SUPPORTED",
+          "reason_codes": [
+            "PAYLOAD_BYTES_ONLY"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "SUPPORTED",
+          "subject": {
+            "record_ids": [
+              "r-issuer",
+              "r-receiver"
+            ]
+          }
+        },
+        {
+          "claim_id": "q-receipt",
+          "conditions": [],
+          "evidence_refs": [],
+          "kind": "receiver_receipt",
+          "qualification": null,
+          "reason_codes": [
+            "OUTSIDE_DECLARED_CONTRACT"
+          ],
+          "scope": {
+            "boundary_id": "target-entry",
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "NOT_APPLICABLE",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        },
+        {
+          "claim_id": "q-all",
+          "conditions": [],
+          "evidence_refs": [],
+          "kind": "all_required_delivery",
+          "qualification": null,
+          "reason_codes": [
+            "OUTSIDE_DECLARED_CONTRACT"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "population_scope": "manifest",
+            "target_id": "ep-b",
+            "target_ids": [
+              "ep-b",
+              "ep-a"
+            ]
+          },
+          "state": "NOT_APPLICABLE",
+          "subject": {
+            "instruction_ids": [
+              "instruction-beta"
+            ]
+          }
+        },
+        {
+          "claim_id": "q-population",
+          "conditions": [],
+          "evidence_refs": [],
+          "kind": "population_complete",
+          "qualification": null,
+          "reason_codes": [
+            "OUTSIDE_DECLARED_CONTRACT"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "NOT_APPLICABLE",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "holdout-07",
+      "claims": [
+        {
+          "claim_id": "q-integrity",
+          "conditions": [],
+          "evidence_refs": [
+            "record:r-issuer",
+            "record:r-receiver"
+          ],
+          "kind": "envelope_integrity",
+          "qualification": "FULLY_SUPPORTED",
+          "reason_codes": [
+            "PAYLOAD_BYTES_ONLY"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "SUPPORTED",
+          "subject": {
+            "record_ids": [
+              "r-issuer",
+              "r-receiver"
+            ]
+          }
+        },
+        {
+          "claim_id": "q-receipt",
+          "conditions": [],
+          "evidence_refs": [],
+          "kind": "receiver_receipt",
+          "qualification": null,
+          "reason_codes": [
+            "OUTSIDE_DECLARED_CONTRACT"
+          ],
+          "scope": {
+            "boundary_id": "target-entry",
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "NOT_APPLICABLE",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        },
+        {
+          "claim_id": "q-all",
+          "conditions": [],
+          "evidence_refs": [],
+          "kind": "all_required_delivery",
+          "qualification": null,
+          "reason_codes": [
+            "OUTSIDE_DECLARED_CONTRACT"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "population_scope": "manifest",
+            "target_id": "ep-b",
+            "target_ids": [
+              "ep-b"
+            ]
+          },
+          "state": "NOT_APPLICABLE",
+          "subject": {
+            "instruction_ids": [
+              "instruction-beta"
+            ]
+          }
+        },
+        {
+          "claim_id": "q-enforcement",
+          "conditions": [],
+          "evidence_refs": [],
+          "kind": "enforcement_applied",
+          "qualification": null,
+          "reason_codes": [
+            "OUTSIDE_DECLARED_CONTRACT"
+          ],
+          "scope": {
+            "boundary_id": "target-entry",
+            "clock_id": "mono",
+            "cutoff": 10,
+            "effective_time": 5,
+            "target_id": "ep-b"
+          },
+          "state": "NOT_APPLICABLE",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        },
+        {
+          "claim_id": "q-effect",
+          "conditions": [],
+          "evidence_refs": [],
+          "kind": "effect_observed",
+          "qualification": null,
+          "reason_codes": [
+            "OUTSIDE_DECLARED_CONTRACT"
+          ],
+          "scope": {
+            "boundary_id": "runtime-state",
+            "clock_id": "mono",
+            "cutoff": 10,
+            "operation_id": "operation-main",
+            "predicate_id": "no_provider_entry",
+            "target_id": "ep-b",
+            "window": [
+              6,
+              9
+            ]
+          },
+          "state": "NOT_APPLICABLE",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "holdout-08",
+      "claims": [
+        {
+          "claim_id": "q-integrity",
+          "conditions": [],
+          "evidence_refs": [
+            "record:r-enforcement",
+            "record:r-issuer",
+            "record:r-receiver"
+          ],
+          "kind": "envelope_integrity",
+          "qualification": "FULLY_SUPPORTED",
+          "reason_codes": [
+            "PAYLOAD_BYTES_ONLY"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "SUPPORTED",
+          "subject": {
+            "record_ids": [
+              "r-issuer",
+              "r-receiver",
+              "r-enforcement"
+            ]
+          }
+        },
+        {
+          "claim_id": "q-receipt",
+          "conditions": [],
+          "evidence_refs": [],
+          "kind": "receiver_receipt",
+          "qualification": null,
+          "reason_codes": [
+            "OUTSIDE_DECLARED_CONTRACT"
+          ],
+          "scope": {
+            "boundary_id": "target-entry",
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "NOT_APPLICABLE",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        },
+        {
+          "claim_id": "q-enforcement",
+          "conditions": [],
+          "evidence_refs": [],
+          "kind": "enforcement_applied",
+          "qualification": null,
+          "reason_codes": [
+            "OUTSIDE_DECLARED_CONTRACT"
+          ],
+          "scope": {
+            "boundary_id": "target-entry",
+            "clock_id": "mono",
+            "cutoff": 10,
+            "effective_time": 5,
+            "target_id": "ep-b"
+          },
+          "state": "NOT_APPLICABLE",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        },
+        {
+          "claim_id": "q-effect",
+          "conditions": [],
+          "evidence_refs": [],
+          "kind": "effect_observed",
+          "qualification": null,
+          "reason_codes": [
+            "OUTSIDE_DECLARED_CONTRACT"
+          ],
+          "scope": {
+            "boundary_id": "runtime-state",
+            "clock_id": "mono",
+            "cutoff": 10,
+            "operation_id": "operation-main",
+            "predicate_id": "no_provider_entry",
+            "target_id": "ep-b",
+            "window": [
+              6,
+              9
+            ]
+          },
+          "state": "NOT_APPLICABLE",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        },
+        {
+          "claim_id": "q-mediation",
+          "conditions": [],
+          "evidence_refs": [],
+          "kind": "complete_mediation",
+          "qualification": null,
+          "reason_codes": [
+            "OUTSIDE_DECLARED_CONTRACT"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "deployment_scope": "synthetic-node",
+            "target_id": "ep-b",
+            "target_ids": [
+              "ep-b"
+            ]
+          },
+          "state": "NOT_APPLICABLE",
+          "subject": {
+            "instruction_ids": [
+              "instruction-beta"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "holdout-09",
+      "claims": [
+        {
+          "claim_id": "q-integrity",
+          "conditions": [],
+          "evidence_refs": [
+            "record:r-effect-later",
+            "record:r-enforcement",
+            "record:r-entry",
+            "record:r-issuer",
+            "record:r-receiver"
+          ],
+          "kind": "envelope_integrity",
+          "qualification": "FULLY_SUPPORTED",
+          "reason_codes": [
+            "PAYLOAD_BYTES_ONLY"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "SUPPORTED",
+          "subject": {
+            "record_ids": [
+              "r-issuer",
+              "r-receiver",
+              "r-enforcement",
+              "r-entry",
+              "r-effect-later"
+            ]
+          }
+        },
+        {
+          "claim_id": "q-execution",
+          "conditions": [],
+          "evidence_refs": [],
+          "kind": "execution_observed",
+          "qualification": null,
+          "reason_codes": [
+            "OUTSIDE_DECLARED_CONTRACT"
+          ],
+          "scope": {
+            "boundary_id": "provider-entry",
+            "clock_id": "mono",
+            "cutoff": 10,
+            "operation_id": "operation-earlier",
+            "target_id": "ep-b"
+          },
+          "state": "NOT_APPLICABLE",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        },
+        {
+          "claim_id": "q-order",
+          "conditions": [],
+          "evidence_refs": [],
+          "kind": "ordering",
+          "qualification": null,
+          "reason_codes": [
+            "OUTSIDE_DECLARED_CONTRACT"
+          ],
+          "scope": {
+            "after_record_id": "r-enforcement",
+            "before_record_id": "r-entry",
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "NOT_APPLICABLE",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        },
+        {
+          "claim_id": "q-effect-later",
+          "conditions": [],
+          "evidence_refs": [],
+          "kind": "effect_observed",
+          "qualification": null,
+          "reason_codes": [
+            "OUTSIDE_DECLARED_CONTRACT"
+          ],
+          "scope": {
+            "boundary_id": "runtime-state",
+            "clock_id": "mono",
+            "cutoff": 10,
+            "operation_id": "operation-later",
+            "predicate_id": "no_provider_entry",
+            "target_id": "ep-b",
+            "window": [
+              6,
+              9
+            ]
+          },
+          "state": "NOT_APPLICABLE",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        },
+        {
+          "claim_id": "q-effect-earlier",
+          "conditions": [],
+          "evidence_refs": [],
+          "kind": "effect_observed",
+          "qualification": null,
+          "reason_codes": [
+            "OUTSIDE_DECLARED_CONTRACT"
+          ],
+          "scope": {
+            "boundary_id": "runtime-state",
+            "clock_id": "mono",
+            "cutoff": 10,
+            "operation_id": "operation-earlier",
+            "predicate_id": "no_provider_entry",
+            "target_id": "ep-b",
+            "window": [
+              6,
+              9
+            ]
+          },
+          "state": "NOT_APPLICABLE",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "holdout-10",
+      "claims": [
+        {
+          "claim_id": "q-integrity",
+          "conditions": [],
+          "evidence_refs": [
+            "record:r-deadline",
+            "record:r-issuer"
+          ],
+          "kind": "envelope_integrity",
+          "qualification": "FULLY_SUPPORTED",
+          "reason_codes": [
+            "PAYLOAD_BYTES_ONLY"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "SUPPORTED",
+          "subject": {
+            "record_ids": [
+              "r-issuer",
+              "r-deadline"
+            ]
+          }
+        },
+        {
+          "claim_id": "q-issuer",
+          "conditions": [],
+          "evidence_refs": [],
+          "kind": "issuer_dispatched",
+          "qualification": null,
+          "reason_codes": [
+            "OUTSIDE_DECLARED_CONTRACT"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "NOT_APPLICABLE",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        },
+        {
+          "claim_id": "q-receipt",
+          "conditions": [],
+          "evidence_refs": [],
+          "kind": "receiver_receipt",
+          "qualification": null,
+          "reason_codes": [
+            "OUTSIDE_DECLARED_CONTRACT"
+          ],
+          "scope": {
+            "boundary_id": "target-entry",
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "NOT_APPLICABLE",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        },
+        {
+          "claim_id": "q-all",
+          "conditions": [],
+          "evidence_refs": [],
+          "kind": "all_required_delivery",
+          "qualification": null,
+          "reason_codes": [
+            "OUTSIDE_DECLARED_CONTRACT"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "population_scope": "manifest",
+            "target_id": "ep-b",
+            "target_ids": [
+              "ep-b"
+            ]
+          },
+          "state": "NOT_APPLICABLE",
+          "subject": {
+            "instruction_ids": [
+              "instruction-beta"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "holdout-11",
+      "claims": [
+        {
+          "claim_id": "q-integrity",
+          "conditions": [],
+          "evidence_refs": [
+            "record:r-issuer",
+            "record:r-receiver"
+          ],
+          "kind": "envelope_integrity",
+          "qualification": "FULLY_SUPPORTED",
+          "reason_codes": [
+            "PAYLOAD_BYTES_ONLY"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "SUPPORTED",
+          "subject": {
+            "record_ids": [
+              "r-issuer",
+              "r-receiver"
+            ]
+          }
+        },
+        {
+          "claim_id": "q-receipt",
+          "conditions": [],
+          "evidence_refs": [],
+          "kind": "receiver_receipt",
+          "qualification": null,
+          "reason_codes": [
+            "OUTSIDE_DECLARED_CONTRACT"
+          ],
+          "scope": {
+            "boundary_id": "target-entry",
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "NOT_APPLICABLE",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        },
+        {
+          "claim_id": "q-population",
+          "conditions": [],
+          "evidence_refs": [],
+          "kind": "population_complete",
+          "qualification": null,
+          "reason_codes": [
+            "OUTSIDE_DECLARED_CONTRACT"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "NOT_APPLICABLE",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        },
+        {
+          "claim_id": "q-all",
+          "conditions": [],
+          "evidence_refs": [],
+          "kind": "all_required_delivery",
+          "qualification": null,
+          "reason_codes": [
+            "OUTSIDE_DECLARED_CONTRACT"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "population_scope": "manifest",
+            "target_id": "ep-b",
+            "target_ids": [
+              "ep-b"
+            ]
+          },
+          "state": "NOT_APPLICABLE",
+          "subject": {
+            "instruction_ids": [
+              "instruction-beta",
+              "instruction-omitted"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "holdout-12",
+      "claims": [
+        {
+          "claim_id": "q-integrity",
+          "conditions": [],
+          "evidence_refs": [
+            "record:r-ack",
+            "record:r-enforcement",
+            "record:r-issuer",
+            "record:r-receiver",
+            "record:r-transform"
+          ],
+          "kind": "envelope_integrity",
+          "qualification": "FULLY_SUPPORTED",
+          "reason_codes": [
+            "PAYLOAD_BYTES_ONLY"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "SUPPORTED",
+          "subject": {
+            "record_ids": [
+              "r-issuer",
+              "r-receiver",
+              "r-enforcement",
+              "r-transform",
+              "r-ack"
+            ]
+          }
+        },
+        {
+          "claim_id": "q-receipt",
+          "conditions": [],
+          "evidence_refs": [],
+          "kind": "receiver_receipt",
+          "qualification": null,
+          "reason_codes": [
+            "OUTSIDE_DECLARED_CONTRACT"
+          ],
+          "scope": {
+            "boundary_id": "target-entry",
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "NOT_APPLICABLE",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        },
+        {
+          "claim_id": "q-enforcement",
+          "conditions": [],
+          "evidence_refs": [],
+          "kind": "enforcement_applied",
+          "qualification": null,
+          "reason_codes": [
+            "OUTSIDE_DECLARED_CONTRACT"
+          ],
+          "scope": {
+            "boundary_id": "target-entry",
+            "clock_id": "mono",
+            "cutoff": 10,
+            "effective_time": 5,
+            "target_id": "ep-b"
+          },
+          "state": "NOT_APPLICABLE",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        },
+        {
+          "claim_id": "q-semantics",
+          "conditions": [],
+          "evidence_refs": [],
+          "kind": "semantic_preservation",
+          "qualification": null,
+          "reason_codes": [
+            "OUTSIDE_DECLARED_CONTRACT"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b",
+            "transformation_record_id": "r-transform"
+          },
+          "state": "NOT_APPLICABLE",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        }
+      ]
+    }
+  ],
+  "naive_ack": [
+    {
+      "case_id": "holdout-01",
+      "claims": [
+        {
+          "claim_id": "q-integrity",
+          "conditions": [],
+          "evidence_refs": [],
+          "kind": "envelope_integrity",
+          "qualification": null,
+          "reason_codes": [
+            "OUTSIDE_DECLARED_CONTRACT"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "NOT_APPLICABLE",
+          "subject": {
+            "record_ids": [
+              "r-issuer",
+              "r-ack"
+            ]
+          }
+        },
+        {
+          "claim_id": "q-issuer",
+          "conditions": [],
+          "evidence_refs": [],
+          "kind": "issuer_dispatched",
+          "qualification": null,
+          "reason_codes": [
+            "OUTSIDE_DECLARED_CONTRACT"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "NOT_APPLICABLE",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        },
+        {
+          "claim_id": "q-receipt",
+          "conditions": [],
+          "evidence_refs": [
+            "record:r-ack"
+          ],
+          "kind": "receiver_receipt",
+          "qualification": "FULLY_SUPPORTED",
+          "reason_codes": [
+            "EXPLICIT_NAIVE_ACK_PROMOTION"
+          ],
+          "scope": {
+            "boundary_id": "target-entry",
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "SUPPORTED",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        },
+        {
+          "claim_id": "q-enforcement",
+          "conditions": [],
+          "evidence_refs": [
+            "record:r-ack"
+          ],
+          "kind": "enforcement_applied",
+          "qualification": "FULLY_SUPPORTED",
+          "reason_codes": [
+            "EXPLICIT_NAIVE_ACK_PROMOTION"
+          ],
+          "scope": {
+            "boundary_id": "target-entry",
+            "clock_id": "mono",
+            "cutoff": 10,
+            "effective_time": 5,
+            "target_id": "ep-b"
+          },
+          "state": "SUPPORTED",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        },
+        {
+          "claim_id": "q-effect",
+          "conditions": [],
+          "evidence_refs": [
+            "record:r-ack"
+          ],
+          "kind": "effect_observed",
+          "qualification": "FULLY_SUPPORTED",
+          "reason_codes": [
+            "EXPLICIT_NAIVE_ACK_PROMOTION"
+          ],
+          "scope": {
+            "boundary_id": "runtime-state",
+            "clock_id": "mono",
+            "cutoff": 10,
+            "operation_id": "operation-main",
+            "predicate_id": "no_provider_entry",
+            "target_id": "ep-b",
+            "window": [
+              6,
+              9
+            ]
+          },
+          "state": "SUPPORTED",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "holdout-02",
+      "claims": [
+        {
+          "claim_id": "q-integrity",
+          "conditions": [],
+          "evidence_refs": [],
+          "kind": "envelope_integrity",
+          "qualification": null,
+          "reason_codes": [
+            "OUTSIDE_DECLARED_CONTRACT"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "NOT_APPLICABLE",
+          "subject": {
+            "record_ids": [
+              "r-receiver",
+              "r-enforcement"
+            ]
+          }
+        },
+        {
+          "claim_id": "q-issuer",
+          "conditions": [],
+          "evidence_refs": [],
+          "kind": "issuer_dispatched",
+          "qualification": null,
+          "reason_codes": [
+            "OUTSIDE_DECLARED_CONTRACT"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "NOT_APPLICABLE",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        },
+        {
+          "claim_id": "q-receipt",
+          "conditions": [],
+          "evidence_refs": [
+            "record:r-receiver"
+          ],
+          "kind": "receiver_receipt",
+          "qualification": "FULLY_SUPPORTED",
+          "reason_codes": [
+            "EXPLICIT_NAIVE_ACK_PROMOTION"
+          ],
+          "scope": {
+            "boundary_id": "target-entry",
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "SUPPORTED",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        },
+        {
+          "claim_id": "q-all",
+          "conditions": [],
+          "evidence_refs": [
+            "record:r-receiver"
+          ],
+          "kind": "all_required_delivery",
+          "qualification": "FULLY_SUPPORTED",
+          "reason_codes": [
+            "EXPLICIT_NAIVE_ACK_PROMOTION"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "population_scope": "manifest",
+            "target_id": "ep-b",
+            "target_ids": [
+              "ep-b"
+            ]
+          },
+          "state": "SUPPORTED",
+          "subject": {
+            "instruction_ids": [
+              "instruction-beta"
+            ]
+          }
+        },
+        {
+          "claim_id": "q-enforcement",
+          "conditions": [],
+          "evidence_refs": [
+            "record:r-receiver"
+          ],
+          "kind": "enforcement_applied",
+          "qualification": "FULLY_SUPPORTED",
+          "reason_codes": [
+            "EXPLICIT_NAIVE_ACK_PROMOTION"
+          ],
+          "scope": {
+            "boundary_id": "target-entry",
+            "clock_id": "mono",
+            "cutoff": 10,
+            "effective_time": 5,
+            "target_id": "ep-b"
+          },
+          "state": "SUPPORTED",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "holdout-03",
+      "claims": [
+        {
+          "claim_id": "q-integrity",
+          "conditions": [],
+          "evidence_refs": [],
+          "kind": "envelope_integrity",
+          "qualification": null,
+          "reason_codes": [
+            "OUTSIDE_DECLARED_CONTRACT"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "NOT_APPLICABLE",
+          "subject": {
+            "record_ids": [
+              "r-issuer",
+              "r-receiver"
+            ]
+          }
+        },
+        {
+          "claim_id": "q-issuer",
+          "conditions": [],
+          "evidence_refs": [],
+          "kind": "issuer_dispatched",
+          "qualification": null,
+          "reason_codes": [
+            "OUTSIDE_DECLARED_CONTRACT"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "NOT_APPLICABLE",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        },
+        {
+          "claim_id": "q-receipt",
+          "conditions": [],
+          "evidence_refs": [
+            "record:r-receiver"
+          ],
+          "kind": "receiver_receipt",
+          "qualification": "FULLY_SUPPORTED",
+          "reason_codes": [
+            "EXPLICIT_NAIVE_ACK_PROMOTION"
+          ],
+          "scope": {
+            "boundary_id": "target-entry",
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "SUPPORTED",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        },
+        {
+          "claim_id": "q-all",
+          "conditions": [],
+          "evidence_refs": [
+            "record:r-receiver"
+          ],
+          "kind": "all_required_delivery",
+          "qualification": "FULLY_SUPPORTED",
+          "reason_codes": [
+            "EXPLICIT_NAIVE_ACK_PROMOTION"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "population_scope": "manifest",
+            "target_id": "ep-b",
+            "target_ids": [
+              "ep-b"
+            ]
+          },
+          "state": "SUPPORTED",
+          "subject": {
+            "instruction_ids": [
+              "instruction-beta"
+            ]
+          }
+        },
+        {
+          "claim_id": "q-mediation",
+          "conditions": [],
+          "evidence_refs": [],
+          "kind": "complete_mediation",
+          "qualification": null,
+          "reason_codes": [
+            "OUTSIDE_DECLARED_CONTRACT"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "NOT_APPLICABLE",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "holdout-04",
+      "claims": [
+        {
+          "claim_id": "q-integrity",
+          "conditions": [],
+          "evidence_refs": [],
+          "kind": "envelope_integrity",
+          "qualification": null,
+          "reason_codes": [
+            "OUTSIDE_DECLARED_CONTRACT"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "NOT_APPLICABLE",
+          "subject": {
+            "record_ids": [
+              "r-issuer",
+              "r-receiver"
+            ]
+          }
+        },
+        {
+          "claim_id": "q-issuer",
+          "conditions": [],
+          "evidence_refs": [],
+          "kind": "issuer_dispatched",
+          "qualification": null,
+          "reason_codes": [
+            "OUTSIDE_DECLARED_CONTRACT"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "NOT_APPLICABLE",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        },
+        {
+          "claim_id": "q-receipt",
+          "conditions": [],
+          "evidence_refs": [
+            "record:r-receiver"
+          ],
+          "kind": "receiver_receipt",
+          "qualification": "FULLY_SUPPORTED",
+          "reason_codes": [
+            "EXPLICIT_NAIVE_ACK_PROMOTION"
+          ],
+          "scope": {
+            "boundary_id": "target-entry",
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "SUPPORTED",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        },
+        {
+          "claim_id": "q-all",
+          "conditions": [],
+          "evidence_refs": [
+            "record:r-receiver"
+          ],
+          "kind": "all_required_delivery",
+          "qualification": "FULLY_SUPPORTED",
+          "reason_codes": [
+            "EXPLICIT_NAIVE_ACK_PROMOTION"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "population_scope": "manifest",
+            "target_id": "ep-b",
+            "target_ids": [
+              "ep-b"
+            ]
+          },
+          "state": "SUPPORTED",
+          "subject": {
+            "instruction_ids": [
+              "instruction-beta"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "holdout-05",
+      "claims": [
+        {
+          "claim_id": "q-integrity",
+          "conditions": [],
+          "evidence_refs": [],
+          "kind": "envelope_integrity",
+          "qualification": null,
+          "reason_codes": [
+            "OUTSIDE_DECLARED_CONTRACT"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "NOT_APPLICABLE",
+          "subject": {
+            "record_ids": [
+              "r-issuer",
+              "r-receiver"
+            ]
+          }
+        },
+        {
+          "claim_id": "q-issuer",
+          "conditions": [],
+          "evidence_refs": [],
+          "kind": "issuer_dispatched",
+          "qualification": null,
+          "reason_codes": [
+            "OUTSIDE_DECLARED_CONTRACT"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "NOT_APPLICABLE",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        },
+        {
+          "claim_id": "q-receipt",
+          "conditions": [],
+          "evidence_refs": [
+            "record:r-receiver"
+          ],
+          "kind": "receiver_receipt",
+          "qualification": "FULLY_SUPPORTED",
+          "reason_codes": [
+            "EXPLICIT_NAIVE_ACK_PROMOTION"
+          ],
+          "scope": {
+            "boundary_id": "target-entry",
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "SUPPORTED",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        },
+        {
+          "claim_id": "q-all",
+          "conditions": [],
+          "evidence_refs": [
+            "record:r-receiver"
+          ],
+          "kind": "all_required_delivery",
+          "qualification": "FULLY_SUPPORTED",
+          "reason_codes": [
+            "EXPLICIT_NAIVE_ACK_PROMOTION"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "population_scope": "manifest",
+            "target_id": "ep-b",
+            "target_ids": [
+              "ep-b"
+            ]
+          },
+          "state": "SUPPORTED",
+          "subject": {
+            "instruction_ids": [
+              "instruction-beta"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "holdout-06",
+      "claims": [
+        {
+          "claim_id": "q-integrity",
+          "conditions": [],
+          "evidence_refs": [],
+          "kind": "envelope_integrity",
+          "qualification": null,
+          "reason_codes": [
+            "OUTSIDE_DECLARED_CONTRACT"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "NOT_APPLICABLE",
+          "subject": {
+            "record_ids": [
+              "r-issuer",
+              "r-receiver"
+            ]
+          }
+        },
+        {
+          "claim_id": "q-receipt",
+          "conditions": [],
+          "evidence_refs": [
+            "record:r-receiver"
+          ],
+          "kind": "receiver_receipt",
+          "qualification": "FULLY_SUPPORTED",
+          "reason_codes": [
+            "EXPLICIT_NAIVE_ACK_PROMOTION"
+          ],
+          "scope": {
+            "boundary_id": "target-entry",
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "SUPPORTED",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        },
+        {
+          "claim_id": "q-all",
+          "conditions": [],
+          "evidence_refs": [
+            "record:r-receiver"
+          ],
+          "kind": "all_required_delivery",
+          "qualification": "FULLY_SUPPORTED",
+          "reason_codes": [
+            "EXPLICIT_NAIVE_ACK_PROMOTION"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "population_scope": "manifest",
+            "target_id": "ep-b",
+            "target_ids": [
+              "ep-b",
+              "ep-a"
+            ]
+          },
+          "state": "SUPPORTED",
+          "subject": {
+            "instruction_ids": [
+              "instruction-beta"
+            ]
+          }
+        },
+        {
+          "claim_id": "q-population",
+          "conditions": [],
+          "evidence_refs": [],
+          "kind": "population_complete",
+          "qualification": null,
+          "reason_codes": [
+            "OUTSIDE_DECLARED_CONTRACT"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "NOT_APPLICABLE",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "holdout-07",
+      "claims": [
+        {
+          "claim_id": "q-integrity",
+          "conditions": [],
+          "evidence_refs": [],
+          "kind": "envelope_integrity",
+          "qualification": null,
+          "reason_codes": [
+            "OUTSIDE_DECLARED_CONTRACT"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "NOT_APPLICABLE",
+          "subject": {
+            "record_ids": [
+              "r-issuer",
+              "r-receiver"
+            ]
+          }
+        },
+        {
+          "claim_id": "q-receipt",
+          "conditions": [],
+          "evidence_refs": [
+            "record:r-receiver"
+          ],
+          "kind": "receiver_receipt",
+          "qualification": "FULLY_SUPPORTED",
+          "reason_codes": [
+            "EXPLICIT_NAIVE_ACK_PROMOTION"
+          ],
+          "scope": {
+            "boundary_id": "target-entry",
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "SUPPORTED",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        },
+        {
+          "claim_id": "q-all",
+          "conditions": [],
+          "evidence_refs": [
+            "record:r-receiver"
+          ],
+          "kind": "all_required_delivery",
+          "qualification": "FULLY_SUPPORTED",
+          "reason_codes": [
+            "EXPLICIT_NAIVE_ACK_PROMOTION"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "population_scope": "manifest",
+            "target_id": "ep-b",
+            "target_ids": [
+              "ep-b"
+            ]
+          },
+          "state": "SUPPORTED",
+          "subject": {
+            "instruction_ids": [
+              "instruction-beta"
+            ]
+          }
+        },
+        {
+          "claim_id": "q-enforcement",
+          "conditions": [],
+          "evidence_refs": [
+            "record:r-receiver"
+          ],
+          "kind": "enforcement_applied",
+          "qualification": "FULLY_SUPPORTED",
+          "reason_codes": [
+            "EXPLICIT_NAIVE_ACK_PROMOTION"
+          ],
+          "scope": {
+            "boundary_id": "target-entry",
+            "clock_id": "mono",
+            "cutoff": 10,
+            "effective_time": 5,
+            "target_id": "ep-b"
+          },
+          "state": "SUPPORTED",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        },
+        {
+          "claim_id": "q-effect",
+          "conditions": [],
+          "evidence_refs": [
+            "record:r-receiver"
+          ],
+          "kind": "effect_observed",
+          "qualification": "FULLY_SUPPORTED",
+          "reason_codes": [
+            "EXPLICIT_NAIVE_ACK_PROMOTION"
+          ],
+          "scope": {
+            "boundary_id": "runtime-state",
+            "clock_id": "mono",
+            "cutoff": 10,
+            "operation_id": "operation-main",
+            "predicate_id": "no_provider_entry",
+            "target_id": "ep-b",
+            "window": [
+              6,
+              9
+            ]
+          },
+          "state": "SUPPORTED",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "holdout-08",
+      "claims": [
+        {
+          "claim_id": "q-integrity",
+          "conditions": [],
+          "evidence_refs": [],
+          "kind": "envelope_integrity",
+          "qualification": null,
+          "reason_codes": [
+            "OUTSIDE_DECLARED_CONTRACT"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "NOT_APPLICABLE",
+          "subject": {
+            "record_ids": [
+              "r-issuer",
+              "r-receiver",
+              "r-enforcement"
+            ]
+          }
+        },
+        {
+          "claim_id": "q-receipt",
+          "conditions": [],
+          "evidence_refs": [
+            "record:r-receiver"
+          ],
+          "kind": "receiver_receipt",
+          "qualification": "FULLY_SUPPORTED",
+          "reason_codes": [
+            "EXPLICIT_NAIVE_ACK_PROMOTION"
+          ],
+          "scope": {
+            "boundary_id": "target-entry",
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "SUPPORTED",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        },
+        {
+          "claim_id": "q-enforcement",
+          "conditions": [],
+          "evidence_refs": [
+            "record:r-receiver"
+          ],
+          "kind": "enforcement_applied",
+          "qualification": "FULLY_SUPPORTED",
+          "reason_codes": [
+            "EXPLICIT_NAIVE_ACK_PROMOTION"
+          ],
+          "scope": {
+            "boundary_id": "target-entry",
+            "clock_id": "mono",
+            "cutoff": 10,
+            "effective_time": 5,
+            "target_id": "ep-b"
+          },
+          "state": "SUPPORTED",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        },
+        {
+          "claim_id": "q-effect",
+          "conditions": [],
+          "evidence_refs": [
+            "record:r-receiver"
+          ],
+          "kind": "effect_observed",
+          "qualification": "FULLY_SUPPORTED",
+          "reason_codes": [
+            "EXPLICIT_NAIVE_ACK_PROMOTION"
+          ],
+          "scope": {
+            "boundary_id": "runtime-state",
+            "clock_id": "mono",
+            "cutoff": 10,
+            "operation_id": "operation-main",
+            "predicate_id": "no_provider_entry",
+            "target_id": "ep-b",
+            "window": [
+              6,
+              9
+            ]
+          },
+          "state": "SUPPORTED",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        },
+        {
+          "claim_id": "q-mediation",
+          "conditions": [],
+          "evidence_refs": [],
+          "kind": "complete_mediation",
+          "qualification": null,
+          "reason_codes": [
+            "OUTSIDE_DECLARED_CONTRACT"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "deployment_scope": "synthetic-node",
+            "target_id": "ep-b",
+            "target_ids": [
+              "ep-b"
+            ]
+          },
+          "state": "NOT_APPLICABLE",
+          "subject": {
+            "instruction_ids": [
+              "instruction-beta"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "holdout-09",
+      "claims": [
+        {
+          "claim_id": "q-integrity",
+          "conditions": [],
+          "evidence_refs": [],
+          "kind": "envelope_integrity",
+          "qualification": null,
+          "reason_codes": [
+            "OUTSIDE_DECLARED_CONTRACT"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "NOT_APPLICABLE",
+          "subject": {
+            "record_ids": [
+              "r-issuer",
+              "r-receiver",
+              "r-enforcement",
+              "r-entry",
+              "r-effect-later"
+            ]
+          }
+        },
+        {
+          "claim_id": "q-execution",
+          "conditions": [],
+          "evidence_refs": [],
+          "kind": "execution_observed",
+          "qualification": null,
+          "reason_codes": [
+            "OUTSIDE_DECLARED_CONTRACT"
+          ],
+          "scope": {
+            "boundary_id": "provider-entry",
+            "clock_id": "mono",
+            "cutoff": 10,
+            "operation_id": "operation-earlier",
+            "target_id": "ep-b"
+          },
+          "state": "NOT_APPLICABLE",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        },
+        {
+          "claim_id": "q-order",
+          "conditions": [],
+          "evidence_refs": [],
+          "kind": "ordering",
+          "qualification": null,
+          "reason_codes": [
+            "OUTSIDE_DECLARED_CONTRACT"
+          ],
+          "scope": {
+            "after_record_id": "r-enforcement",
+            "before_record_id": "r-entry",
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "NOT_APPLICABLE",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        },
+        {
+          "claim_id": "q-effect-later",
+          "conditions": [],
+          "evidence_refs": [
+            "record:r-receiver"
+          ],
+          "kind": "effect_observed",
+          "qualification": "FULLY_SUPPORTED",
+          "reason_codes": [
+            "EXPLICIT_NAIVE_ACK_PROMOTION"
+          ],
+          "scope": {
+            "boundary_id": "runtime-state",
+            "clock_id": "mono",
+            "cutoff": 10,
+            "operation_id": "operation-later",
+            "predicate_id": "no_provider_entry",
+            "target_id": "ep-b",
+            "window": [
+              6,
+              9
+            ]
+          },
+          "state": "SUPPORTED",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        },
+        {
+          "claim_id": "q-effect-earlier",
+          "conditions": [],
+          "evidence_refs": [
+            "record:r-receiver"
+          ],
+          "kind": "effect_observed",
+          "qualification": "FULLY_SUPPORTED",
+          "reason_codes": [
+            "EXPLICIT_NAIVE_ACK_PROMOTION"
+          ],
+          "scope": {
+            "boundary_id": "runtime-state",
+            "clock_id": "mono",
+            "cutoff": 10,
+            "operation_id": "operation-earlier",
+            "predicate_id": "no_provider_entry",
+            "target_id": "ep-b",
+            "window": [
+              6,
+              9
+            ]
+          },
+          "state": "SUPPORTED",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "holdout-10",
+      "claims": [
+        {
+          "claim_id": "q-integrity",
+          "conditions": [],
+          "evidence_refs": [],
+          "kind": "envelope_integrity",
+          "qualification": null,
+          "reason_codes": [
+            "OUTSIDE_DECLARED_CONTRACT"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "NOT_APPLICABLE",
+          "subject": {
+            "record_ids": [
+              "r-issuer",
+              "r-deadline"
+            ]
+          }
+        },
+        {
+          "claim_id": "q-issuer",
+          "conditions": [],
+          "evidence_refs": [],
+          "kind": "issuer_dispatched",
+          "qualification": null,
+          "reason_codes": [
+            "OUTSIDE_DECLARED_CONTRACT"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "NOT_APPLICABLE",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        },
+        {
+          "claim_id": "q-receipt",
+          "conditions": [],
+          "evidence_refs": [],
+          "kind": "receiver_receipt",
+          "qualification": "NOT_SUPPORTED",
+          "reason_codes": [
+            "EXPLICIT_NAIVE_ACK_PROMOTION"
+          ],
+          "scope": {
+            "boundary_id": "target-entry",
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "INDETERMINATE",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        },
+        {
+          "claim_id": "q-all",
+          "conditions": [],
+          "evidence_refs": [],
+          "kind": "all_required_delivery",
+          "qualification": "NOT_SUPPORTED",
+          "reason_codes": [
+            "EXPLICIT_NAIVE_ACK_PROMOTION"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "population_scope": "manifest",
+            "target_id": "ep-b",
+            "target_ids": [
+              "ep-b"
+            ]
+          },
+          "state": "INDETERMINATE",
+          "subject": {
+            "instruction_ids": [
+              "instruction-beta"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "holdout-11",
+      "claims": [
+        {
+          "claim_id": "q-integrity",
+          "conditions": [],
+          "evidence_refs": [],
+          "kind": "envelope_integrity",
+          "qualification": null,
+          "reason_codes": [
+            "OUTSIDE_DECLARED_CONTRACT"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "NOT_APPLICABLE",
+          "subject": {
+            "record_ids": [
+              "r-issuer",
+              "r-receiver"
+            ]
+          }
+        },
+        {
+          "claim_id": "q-receipt",
+          "conditions": [],
+          "evidence_refs": [
+            "record:r-receiver"
+          ],
+          "kind": "receiver_receipt",
+          "qualification": "FULLY_SUPPORTED",
+          "reason_codes": [
+            "EXPLICIT_NAIVE_ACK_PROMOTION"
+          ],
+          "scope": {
+            "boundary_id": "target-entry",
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "SUPPORTED",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        },
+        {
+          "claim_id": "q-population",
+          "conditions": [],
+          "evidence_refs": [],
+          "kind": "population_complete",
+          "qualification": null,
+          "reason_codes": [
+            "OUTSIDE_DECLARED_CONTRACT"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "NOT_APPLICABLE",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        },
+        {
+          "claim_id": "q-all",
+          "conditions": [],
+          "evidence_refs": [
+            "record:r-receiver"
+          ],
+          "kind": "all_required_delivery",
+          "qualification": "FULLY_SUPPORTED",
+          "reason_codes": [
+            "EXPLICIT_NAIVE_ACK_PROMOTION"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "population_scope": "manifest",
+            "target_id": "ep-b",
+            "target_ids": [
+              "ep-b"
+            ]
+          },
+          "state": "SUPPORTED",
+          "subject": {
+            "instruction_ids": [
+              "instruction-beta",
+              "instruction-omitted"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "case_id": "holdout-12",
+      "claims": [
+        {
+          "claim_id": "q-integrity",
+          "conditions": [],
+          "evidence_refs": [],
+          "kind": "envelope_integrity",
+          "qualification": null,
+          "reason_codes": [
+            "OUTSIDE_DECLARED_CONTRACT"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "NOT_APPLICABLE",
+          "subject": {
+            "record_ids": [
+              "r-issuer",
+              "r-receiver",
+              "r-enforcement",
+              "r-transform",
+              "r-ack"
+            ]
+          }
+        },
+        {
+          "claim_id": "q-receipt",
+          "conditions": [],
+          "evidence_refs": [
+            "record:r-ack",
+            "record:r-receiver"
+          ],
+          "kind": "receiver_receipt",
+          "qualification": "FULLY_SUPPORTED",
+          "reason_codes": [
+            "EXPLICIT_NAIVE_ACK_PROMOTION"
+          ],
+          "scope": {
+            "boundary_id": "target-entry",
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b"
+          },
+          "state": "SUPPORTED",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        },
+        {
+          "claim_id": "q-enforcement",
+          "conditions": [],
+          "evidence_refs": [
+            "record:r-ack",
+            "record:r-receiver"
+          ],
+          "kind": "enforcement_applied",
+          "qualification": "FULLY_SUPPORTED",
+          "reason_codes": [
+            "EXPLICIT_NAIVE_ACK_PROMOTION"
+          ],
+          "scope": {
+            "boundary_id": "target-entry",
+            "clock_id": "mono",
+            "cutoff": 10,
+            "effective_time": 5,
+            "target_id": "ep-b"
+          },
+          "state": "SUPPORTED",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        },
+        {
+          "claim_id": "q-semantics",
+          "conditions": [],
+          "evidence_refs": [],
+          "kind": "semantic_preservation",
+          "qualification": null,
+          "reason_codes": [
+            "OUTSIDE_DECLARED_CONTRACT"
+          ],
+          "scope": {
+            "clock_id": "mono",
+            "cutoff": 10,
+            "target_id": "ep-b",
+            "transformation_record_id": "r-transform"
+          },
+          "state": "NOT_APPLICABLE",
+          "subject": {
+            "instruction_id": "instruction-beta"
+          }
+        }
+      ]
+    }
+  ]
+}
