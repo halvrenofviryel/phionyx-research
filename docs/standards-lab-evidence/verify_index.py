@@ -35,12 +35,13 @@ def check():
     assert lab["base_commit"] == BASE
     assert lab["counts"] == {
         "integrated_experiments": 3,
-        "completed_result_references": 1,
+        "completed_result_references": 2,
+        "separate_editorial_candidates": 1,
         "preparation_packages": 1,
-        "pending_results": 3,
+        "pending_results": 4,
         "third_party_validations_added": 0,
     }
-    assert {p["id"] for p in lab["pending"]} == {"B2", "B3", "F"}
+    assert {p["id"] for p in lab["pending"]} == {"B2", "B3", "C04", "H1"}
     for pending in lab["pending"]:
         assert pending["status"] == "PENDING" and pending["result"] == "NOT_EVALUATED"
         assert pending["commit"] is None and not pending["counted_as_success"]
@@ -48,7 +49,9 @@ def check():
     assert len(frozen) == 123
     for row in frozen:
         assert sha(row["path"]) == row["sha256"], row["path"]
-        blob = subprocess.check_output(["git", "show", BASE + ":" + row["path"]], cwd=ROOT)
+        blob = subprocess.check_output(
+            ["git", "show", BASE + ":" + row["path"]], cwd=ROOT
+        )
         assert hashlib.sha256(blob).hexdigest() == row["sha256"]
     exp = {e["id"]: e for e in lab["experiments"]}
     assert set(exp) == {"A", "C", "E"}
@@ -104,44 +107,105 @@ def check():
         if matches:
             assert all(r["sha256"] == row["sha256"] for r in matches)
         else:
-            b1 = load("docs/standards-lab-evidence/local-refs/B1/challenge_manifest.json")
-            assert name == b1["draft_revision"] + ".txt" and row["sha256"] == b1["draft_sha256"]
+            b1 = load(
+                "docs/standards-lab-evidence/local-refs/B1/challenge_manifest.json"
+            )
+            assert (
+                name == b1["draft_revision"] + ".txt"
+                and row["sha256"] == b1["draft_sha256"]
+            )
+    revision = load("docs/standards-lab-evidence/audit04_discovery.json")
+    assert sha(revision["path"]) == revision["expected_sha256"] == revision["sha256"]
+    assert (
+        revision["C04_experiment"] == "PENDING"
+        and revision["C04_tests_in_G"] == "NOT_RUN"
+    )
+    assert exp["C"]["revision_update"] == revision
     local = load("docs/standards-lab-evidence/local_references.json")
     assert local["private_expected_results"] == "NOT_ACCESSED"
     assert local["B1_builder_history"] == "NOT_ACCESSED"
     for row in local["references"]:
         assert sha(row["snapshot_path"]) == row["sha256"]
         assert row["publication_status"] == "UNPUBLISHED"
+    update = load("docs/standards-lab-evidence/update_references.json")
+    refs = {row["id"]: row for row in lab["references"]}
+    assert set(refs) == {"D", "B1", "F", "H2"}
+    assert refs["F"]["status"] == "COMPLETE_LOCAL_DEMO_REFERENCE_ONLY"
+    assert (
+        refs["F"]["observed_result"][
+            "SCITT_signature_registration_identity_verification"
+        ]
+        == "NOT_EVALUATED"
+    )
+    assert (
+        refs["F"]["original_experiment_commit"]
+        == "84fe0aa9f29034aa6b873c0e83d689dc821bb398"
+    )
+    assert refs["F"]["parent_commit"] == refs["D"]["original_experiment_commit"]
+    assert update["F"]["archive_members_verified"] == 138
+    assert update["F"]["tests_rerun_in_G"] is False
+    for row in update["F"]["snapshots"]:
+        assert sha(row["snapshot_path"]) == row["sha256"]
+    assert (
+        refs["H2"]["original_experiment_commit"]
+        == "9e4524a1f4312c25b88af9444a7740662104b09a"
+    )
+    assert refs["H2"]["observed_result"]["normative_changes"] == 0
+    assert refs["H2"]["candidate_files_copied_to_G"] is False
+    assert update["H2"]["BCP14_elements_unchanged"] is True
+    assert len(refs["H2"]["artifacts"]) == 26
+    assert update["B2_B3"]["enforced_isolation"] == "NOT_ESTABLISHED"
+    assert not (ROOT / "integrations/scitt-claim-boundaries").exists()
+    assert not (
+        ROOT / "standards/ietf/ai-evaluation-claim-preservation/candidate/01"
+    ).exists()
+    # A derived index must agree with its builder, excluding the generation clock.
+    import runpy
+
+    rebuilt = runpy.run_path(str(OUT / "build_index.py"))["build"]()
+    assert {k: v for k, v in lab.items() if k != "generated_at_utc"} == {
+        k: v for k, v in rebuilt.items() if k != "generated_at_utc"
+    }
     logs = load("docs/standards-lab-evidence/replay_results.json")
     assert len(logs["runs"]) == 3
     assert all(r["exit_code"] == 0 for r in logs["runs"])
     lint = load("docs/standards-lab-evidence/claim_lint.json")
     assert lint["self_test"] == "PASS" and lint["current_findings"] == []
     review = load("docs/publication_review.json")
-    assert review["approval_granted"] is False and review["whole_program_status"] == "HOLD"
-    assert set(review["missing_inputs"]) == {"B2", "B3", "F"}
+    assert (
+        review["approval_granted"] is False and review["whole_program_status"] == "HOLD"
+    )
+    assert set(review["missing_inputs"]) == {"B2", "B3", "C04", "H1"}
     links = []
     docs = [
         "docs/STANDARDS_LAB.md",
         "docs/STANDARDS_PORTFOLIO_DELTA.md",
         "docs/PUBLICATION_REVIEW.md",
     ]
-    unpublished = [r["original_experiment_commit"] for r in lab["experiments"] + lab["references"]]
+    unpublished = [
+        r["original_experiment_commit"] for r in lab["experiments"] + lab["references"]
+    ]
     unpublished += [r["integration_commit"] for r in lab["experiments"]]
     for name in docs:
         text = (ROOT / name).read_text()
-        assert not re.search(r"https://github\.com/[^\s)]+/(?:" + "|".join(unpublished) + ")", text)
+        assert not re.search(
+            r"https://github\.com/[^\s)]+/(?:" + "|".join(unpublished) + ")", text
+        )
         for target in re.findall(r"\]\(([^)]+)\)", text):
             if re.match(r"[a-zA-Z]+:", target) or target.startswith("#"):
                 continue
             path = unquote(target.split("#")[0])
             assert (ROOT / name).parent.joinpath(path).exists(), (name, target)
             links.append([name, target])
-    assert (ROOT / "README.md").read_text().count("[Standards Lab](docs/STANDARDS_LAB.md)") == 1
+    assert (ROOT / "README.md").read_text().count(
+        "[Standards Lab](docs/STANDARDS_LAB.md)"
+    ) == 1
     changed = subprocess.check_output(
         ["git", "diff", "--name-only", BASE], cwd=ROOT, text=True
     ).splitlines()
-    assert all(p in {"README.md", "portfolio.yaml"} or p.startswith("docs/") for p in changed)
+    assert all(
+        p in {"README.md", "portfolio.yaml"} or p.startswith("docs/") for p in changed
+    )
     subprocess.run(
         [
             "git",
@@ -164,11 +228,15 @@ def check():
         "frozen_files_checked_against_base": len(frozen),
         "experiment_artifact_digests": digest_count,
         "source_snapshots_hashed": source_count,
-        "draft_revisions_reacquired_and_matching": 7,
-        "local_reference_snapshots_hashed": 7,
+        "prior_draft_revisions_reacquired_and_matching": 7,
+        "new_revision_bytes_verified": "decision-receipts-04; separate C04 evaluation NOT_RUN",
+        "local_reference_snapshots_hashed": 11,
+        "F_archive_member_check": "138 hashes verified by collect_update_refs.py; runtime not rerun",
+        "H2_artifact_check": "26 exact-commit files, 13 paragraph anchors and 12 normative sections checked; rendering not rerun",
         "relative_document_links_checked": len(links),
-        "pending_states": "B2/B3/F retained",
-        "replay_tests": {"A": 59, "C": 16, "E": 30, "total": 105},
+        "pending_states": "B2/B3 retained with enforced isolation NOT_ESTABLISHED; C04 pending, AUDIT outreach HOLD",
+        "prior_replay_tests": {"A": 59, "C": 16, "E": 30, "total": 105},
+        "runtime_tests_rerun_in_update": 0,
         "claim_lint_self_test": "PASS",
         "local_research_README_claim_lint": "PASS",
         "full_live_portfolio_lint": "NOT_RUN",
@@ -184,10 +252,12 @@ def check():
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "--record", action="store_true", help="Explicitly update the G validation record"
+        "--record",
+        action="store_true",
+        help="Explicitly update the G validation record",
     )
     args = parser.parse_args()
     result = check()
     if args.record:
-        (OUT / "validation.json").write_text(json.dumps(result, indent=2) + "\n")
+        (OUT / "update_validation.json").write_text(json.dumps(result, indent=2) + "\n")
     print(json.dumps(result, indent=2))

@@ -1,0 +1,2856 @@
+
+
+
+
+Network Working Group                                         K. Gruszka
+Internet-Draft                                                    b7n0de
+Intended status: Informational                           2 November 2026
+Expires: 6 May 2027
+
+
+ Decision Receipts for Approvals, Declined Actions and Executed Actions
+                         in Agent Audit Records
+                draft-gruszka-audit-decision-receipts-04
+
+Abstract
+
+   The architecture for auditing agent delegation and interactions
+   proposed for the AUDIT effort names Interaction Records, Action
+   Records and Authorization Transition Records, and leaves their
+   encoding open.  This document shows how an existing signed record,
+   the decision receipt of the open-source proofbundle project, together
+   with its companion outcome receipt, gives three such records exact
+   bytes, a signature and digest bindings that a third party can check
+   offline.  The three cases are a human approval, a declined action and
+   an executed action with its result.  For each case the document maps
+   the receipt members onto the record types of the architecture, states
+   what the receipt adds and what it does not show, and gives an offline
+   verification procedure.  It states one requirement for approvals,
+   that an approval is honoured at most once, also after the record of
+   consumed approvals is rotated.  Test vectors for all three cases,
+   each with a counterexample, are included.  The document also
+   describes, informatively, how a receipt can be registered with a
+   Transparency Service under RFC 9943 and what a SCITT Receipt then
+   shows and does not show.  This document defines no new format,
+   predicate or registry.
+
+Status of This Memo
+
+   This Internet-Draft is submitted in full conformance with the
+   provisions of BCP 78 and BCP 79.
+
+   Internet-Drafts are working documents of the Internet Engineering
+   Task Force (IETF).  Note that other groups may also distribute
+   working documents as Internet-Drafts.  The list of current Internet-
+   Drafts is at https://datatracker.ietf.org/drafts/current/.
+
+   Internet-Drafts are draft documents valid for a maximum of six months
+   and may be updated, replaced, or obsoleted by other documents at any
+   time.  It is inappropriate to use Internet-Drafts as reference
+   material or to cite them other than as "work in progress."
+
+   This Internet-Draft will expire on 6 May 2027.
+
+
+
+Gruszka                    Expires 6 May 2027                   [Page 1]
+
+Internet-Draft           AUDIT Decision Receipts           November 2026
+
+
+Copyright Notice
+
+   Copyright (c) 2026 IETF Trust and the persons identified as the
+   document authors.  All rights reserved.
+
+   This document is subject to BCP 78 and the IETF Trust's Legal
+   Provisions Relating to IETF Documents (https://trustee.ietf.org/
+   license-info) in effect on the date of publication of this document.
+   Please review these documents carefully, as they describe your rights
+   and restrictions with respect to this document.  Code Components
+   extracted from this document must include Revised BSD License text as
+   described in Section 4.e of the Trust Legal Provisions and are
+   provided without warranty as described in the Revised BSD License.
+
+Table of Contents
+
+   1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   3
+     1.1.  Requirements Language . . . . . . . . . . . . . . . . . .   4
+     1.2.  Terms . . . . . . . . . . . . . . . . . . . . . . . . . .   4
+   2.  Mapping the Three Cases onto AUDIT Records  . . . . . . . . .   4
+     2.1.  Case 1, a Human Approval  . . . . . . . . . . . . . . . .   5
+     2.2.  Case 2, a Declined Action . . . . . . . . . . . . . . . .   6
+     2.3.  Case 3, an Executed Action and Its Result . . . . . . . .   6
+     2.4.  What the Receipt Adds . . . . . . . . . . . . . . . . . .   7
+     2.5.  What the Receipt Does Not Do  . . . . . . . . . . . . . .   8
+     2.6.  Evaluation Receipts Are Evidence, Never Authorization . .   9
+     2.7.  Observations for the Architecture . . . . . . . . . . . .   9
+   3.  Offline Verification  . . . . . . . . . . . . . . . . . . . .  10
+     3.1.  Inputs  . . . . . . . . . . . . . . . . . . . . . . . . .  10
+     3.2.  Decision Receipt  . . . . . . . . . . . . . . . . . . . .  10
+     3.3.  Checks per Case . . . . . . . . . . . . . . . . . . . . .  13
+     3.4.  Outcome Receipt . . . . . . . . . . . . . . . . . . . . .  13
+     3.5.  Checks over a Set of Receipts . . . . . . . . . . . . . .  15
+     3.6.  What a Pass Shows . . . . . . . . . . . . . . . . . . . .  15
+     3.7.  Registering a Receipt with a Transparency Service . . . .  15
+     3.8.  Field Rules . . . . . . . . . . . . . . . . . . . . . . .  17
+   4.  Approvals Are Honoured At Most Once . . . . . . . . . . . . .  23
+   5.  Implementation Status . . . . . . . . . . . . . . . . . . . .  24
+   6.  Relation to Other Work  . . . . . . . . . . . . . . . . . . .  27
+   7.  Security Considerations . . . . . . . . . . . . . . . . . . .  28
+   8.  Privacy Considerations  . . . . . . . . . . . . . . . . . . .  30
+   9.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  30
+   10. References  . . . . . . . . . . . . . . . . . . . . . . . . .  30
+     10.1.  Normative References . . . . . . . . . . . . . . . . . .  30
+     10.2.  Informative References . . . . . . . . . . . . . . . . .  31
+   Appendix A.  Test Vectors . . . . . . . . . . . . . . . . . . . .  34
+     A.1.  Test Keys and Inputs  . . . . . . . . . . . . . . . . . .  34
+     A.2.  Statements  . . . . . . . . . . . . . . . . . . . . . . .  36
+
+
+
+Gruszka                    Expires 6 May 2027                   [Page 2]
+
+Internet-Draft           AUDIT Decision Receipts           November 2026
+
+
+     A.3.  Results . . . . . . . . . . . . . . . . . . . . . . . . .  39
+     A.4.  Signed Statements for Registration  . . . . . . . . . . .  41
+     A.5.  Failure Vectors . . . . . . . . . . . . . . . . . . . . .  45
+   Appendix B.  Changes  . . . . . . . . . . . . . . . . . . . . . .  48
+     B.1.  Changes from -03  . . . . . . . . . . . . . . . . . . . .  49
+     B.2.  Changes from -02  . . . . . . . . . . . . . . . . . . . .  49
+     B.3.  Changes from -01 to -02 . . . . . . . . . . . . . . . . .  50
+     B.4.  Changes from -00 to -01 . . . . . . . . . . . . . . . . .  50
+   Acknowledgments . . . . . . . . . . . . . . . . . . . . . . . . .  50
+   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .  50
+
+1.  Introduction
+
+   The architecture of [AUDIT-ARCH] asks that auditing link user intent,
+   delegation, authorization and execution, and treats authorization as
+   a state that changes over time.  Three of its four record types (its
+   Section 5) matter here.  Interaction Records capture user-facing
+   events such as approvals and refusals, Action Records capture events
+   at the boundary where an action took effect, and Authorization
+   Transition Records capture changes in permission state.  Its field
+   names are placeholders (its Section 7), and a canonical data model is
+   a work item (WI-1).
+
+   An Auditor in that architecture does not trust the Agent (its
+   Section 8), so a record helps only when a third party can check it.
+   That needs exact bytes, a signature over them and bindings to inputs
+   and evidence by digest.  This document shows that the decision
+   receipt of proofbundle [PB-DECISION], an in-toto Statement
+   [INTOTO-STATEMENT] in a DSSE envelope [DSSE], signed with Ed25519
+   [RFC8032] over a payload in the serialization of [RFC8785], supplies
+   them together with its companion outcome receipt [PB-OUTCOME].  It
+   does so for three cases that Agent Guard, the gate of the proofbundle
+   plugin for two coding agent hosts, produces (Section 5):
+
+   1.  a human approval of one action (an Interaction Record of an
+       approval and an Authorization Transition Record with the trigger
+       user_approval);
+
+   2.  a declined action, with its reason and without an effect;
+
+   3.  an executed action with its result (an Action Record).
+
+   The document maps and verifies.  It does not propose the decision
+   receipt as the data model of the architecture and does not change the
+   receipts it describes.  The mapping of Section 2 follows revision -01
+   of [AUDIT-ARCH]; a later revision of the architecture can change it.
+
+
+
+
+
+Gruszka                    Expires 6 May 2027                   [Page 3]
+
+Internet-Draft           AUDIT Decision Receipts           November 2026
+
+
+1.1.  Requirements Language
+
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
+   "OPTIONAL" in this document are to be interpreted as described in
+   BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
+   capitals, as shown here.
+
+   In this document, these key words apply to a verifier in Section 2.6
+   and in the procedure of Section 3, to an Auditor that performs the
+   checks of Section 3.5, to a relying party that lets an action run
+   because of an approval in Section 4, and to the use of the test keys
+   of Appendix A.
+
+1.2.  Terms
+
+   Decision receipt, outcome receipt:  A DSSE envelope whose payload is
+      an in-toto Statement v1 with the predicate type
+      https://b7n0de.com/proofbundle/predicates/decision-receipt/v0.1 or
+      https://b7n0de.com/proofbundle/predicates/action-outcome/v0.1.
+   Payload bytes:  The bytes obtained by base64 decoding the payload
+      member of the envelope.  A DSSE signature covers the pre-
+      authentication encoding of payloadType and these bytes.
+   Content root:  SHA-256 [RFC6234] over the payload bytes.  Other
+      digests commit to the byte strings identified by their respective
+      fields.
+   Approval record:  The record of one human act that approves one
+      action (Section 2.1).
+   Relying party:  The component that lets an action run because of a
+      decision.
+   Consumption record:  The durable record in which a relying party
+      notes each approval it has honoured.
+
+2.  Mapping the Three Cases onto AUDIT Records
+
+   All decision receipts here use the decisionType
+   preActionAuthorization and carry validity with audience, nonce and
+   expiresAt.  A decision receipt is the gate's signed view of an event;
+   the human act itself is the approval record, bound by digest.  In the
+   tables, IR stands for Interaction Record, ATR for Authorization
+   Transition Record and AR for Action Record, followed by a placeholder
+   field of the architecture.  The fields common to all cases map as
+   follows.
+
+   event_id                  decisionId (outcomeId in an outcome
+                             receipt)
+   trace_id, parent_id       traceContext.traceId, traceContext.parentId
+   timestamp                 decidedAt (performedAt in an outcome
+
+
+
+Gruszka                    Expires 6 May 2027                   [Page 4]
+
+Internet-Draft           AUDIT Decision Receipts           November 2026
+
+
+                             receipt)
+   actor, on_behalf_of       agent.id, principal.id
+   action                    proposedAction (actionType, target, method)
+   exact action bytes        proposedAction.parametersDigest
+   authorization.expires_at  validity.expiresAt
+   delegation_chain          none (delegationRefs is not used here)
+   record signer             decisionMaker.id, bound to the key by a
+                             trust policy
+
+2.1.  Case 1, a Human Approval
+
+   A gate asks a person before an action and records the answer.  An
+   earlier receipt for the same request, such as one with the verdict
+   ESCALATE, is a separate record; this receipt does not reference it.
+   After the answer the gate decides ALLOW for exactly the approved
+   action.  The approval record carries approvalId, approver, session,
+   actionDigest (SHA-256 of the approved action bytes), approvedAt and
+   validUntil.  The decision receipt names it in inputSnapshot under the
+   name "approval record".
+
+   +================+=================================================+
+   | Record, field  | Decision receipt                                |
+   +================+=================================================+
+   | IR, approval   | approval record, by its digest in inputSnapshot |
+   +----------------+-------------------------------------------------+
+   | IR, actor      | approver in the approval record, equal to       |
+   |                | principal.id                                    |
+   +----------------+-------------------------------------------------+
+   | ATR,           | not recorded in this receipt; preceding state   |
+   | previous_state | must be established separately                  |
+   +----------------+-------------------------------------------------+
+   | ATR, new_state | verdict ALLOW for parametersDigest              |
+   +----------------+-------------------------------------------------+
+   | ATR, trigger   | reasonCodes contains user_approval              |
+   +----------------+-------------------------------------------------+
+   | ATR, actor     | approver in the approval record                 |
+   +----------------+-------------------------------------------------+
+
+                             Table 1: Case 1
+
+   The scope of the new state is one action, identified by its bytes.  A
+   second action, even one with the same name and target, needs a new
+   approval.
+
+
+
+
+
+
+
+
+Gruszka                    Expires 6 May 2027                   [Page 5]
+
+Internet-Draft           AUDIT Decision Receipts           November 2026
+
+
+2.2.  Case 2, a Declined Action
+
+   A gate declines an action because a rule or a person says no.  The
+   receipt records the verdict DENY with its reasons.  It may say in
+   actionOutcome that the call was blocked, which is the decision
+   maker's own statement.
+
+         +=========+============================================+
+         | Record, | Decision receipt                           |
+         | field   |                                            |
+         +=========+============================================+
+         | IR,     | verdict DENY or REFUSE                     |
+         | refusal |                                            |
+         +---------+--------------------------------------------+
+         | reason  | reasonCodes                                |
+         +---------+--------------------------------------------+
+         | action  | proposedAction with parametersDigest       |
+         +---------+--------------------------------------------+
+         | no      | actionOutcome.status blocked (self-        |
+         | effect  | asserted); no outcome with status executed |
+         |         | names this decision in the supplied set    |
+         +---------+--------------------------------------------+
+         | ATR     | none; the state is unchanged               |
+         +---------+--------------------------------------------+
+
+                             Table 2: Case 2
+
+   A receipt cannot prove that something did not happen.  An observer at
+   the boundary can separately report that it observed no effect.  The
+   check in Section 3.5 detects a conflicting executed outcome in the
+   supplied set; it does not establish absence of an effect.
+
+2.3.  Case 3, an Executed Action and Its Result
+
+   A gate allows an action, the action runs, and an executor or an
+   observer at the boundary records what happened in an outcome receipt
+   signed with its own key.  The outcome receipt names the decision by
+   its content root in decisionRef.
+
+
+
+
+
+
+
+
+
+
+
+
+
+Gruszka                    Expires 6 May 2027                   [Page 6]
+
+Internet-Draft           AUDIT Decision Receipts           November 2026
+
+
+   +===============+==================================================+
+   | Record, field | Outcome and decision receipt                     |
+   +===============+==================================================+
+   | AR, event_id  | outcomeId                                        |
+   +---------------+--------------------------------------------------+
+   | AR, parent_id | traceContext.parentId of the referenced decision |
+   +---------------+--------------------------------------------------+
+   | decision      | decisionRef, the content root of the decision    |
+   | binding       |                                                  |
+   +---------------+--------------------------------------------------+
+   | AR, timestamp | performedAt                                      |
+   +---------------+--------------------------------------------------+
+   | AR, actor     | executor.id                                      |
+   +---------------+--------------------------------------------------+
+   | AR, action    | requestedActionDigest, equal to parametersDigest |
+   +---------------+--------------------------------------------------+
+   | result        | status executed, effectDigest                    |
+   +---------------+--------------------------------------------------+
+   | authorization | the decision (ALLOW, validity.expiresAt)         |
+   +---------------+--------------------------------------------------+
+   | evidence      | evidenceRefs of the decision                     |
+   +---------------+--------------------------------------------------+
+
+                             Table 3: Case 3
+
+   The architecture asks that Action Records be produced at the boundary
+   where the action took effect.  Its WI-1-3 distinguishes the
+   Recorder's signing identity from the recorded Agent's identity where
+   they are operationally separate.  Section 3.4 checks that the outcome
+   and decision use different keys and that executor.id differs from
+   decisionMaker.id.  Those checks alone do not establish operational
+   separation or that the outcome signer observed the boundary.
+
+2.4.  What the Receipt Adds
+
+   *  Exact bytes.  The payload is its own serialization under
+      [RFC8785].  A verifier uses the received payload bytes for the
+      signature input and content root.  Canonical serialization is used
+      to check equality and to derive the predicate's subject digest,
+      never to repair or replace the received payload.
+
+   *  A signature.  Ed25519 over the DSSE pre-authentication encoding of
+      the payload type and the payload bytes.
+
+
+
+
+
+
+
+
+Gruszka                    Expires 6 May 2027                   [Page 7]
+
+Internet-Draft           AUDIT Decision Receipts           November 2026
+
+
+   *  Binding by digest.  The action bytes (parametersDigest), the
+      approval record and other inputs (inputSnapshot), the policy
+      (policyBoundary.policyDigest), evidence (evidenceRefs), the
+      decision itself (decisionRef in the outcome) and the observed
+      effect (effectDigest) are named by SHA-256.
+
+   *  Stated limits.  The member notChecked lists what the decision
+      maker did not check, and decisionChangeConditions lists what would
+      change the decision.
+
+2.5.  What the Receipt Does Not Do
+
+   *  It does not show that a decision was correct, safe or lawful.
+
+   *  It does not authenticate the approval.  The approval record in
+      this document is not signed by the person it names.  A deployment
+      can additionally cite a separately signed approval in
+      inputSnapshot.  Validating that signature and establishing its
+      correspondence to the approval record require rules beyond this
+      document.  The signed approvals of [IZMAYLOV] are one possible
+      source of such evidence.
+
+   *  It does not show that an effect happened.  An outcome receipt
+      shows that its signer stated an effect with a given digest.  A
+      digest that cannot be resolved to bytes shows only that a value
+      was written.
+
+   *  It does not register anything.  Transparency in the sense of
+      [RFC9943] needs a separate registration and a SCITT Receipt;
+      Section 3.7 describes how a receipt of this document can be
+      registered.
+
+   *  It does not detect a receipt that was never written, unless an
+      observer or a sequence counter is added.
+
+   *  Its times are the signer's clock.
+
+   *  It is not an access token.  A verified ALLOW is a record of a
+      decision, and the executing system makes its own authorization
+      check.
+
+
+
+
+
+
+
+
+
+
+
+Gruszka                    Expires 6 May 2027                   [Page 8]
+
+Internet-Draft           AUDIT Decision Receipts           November 2026
+
+
+2.6.  Evaluation Receipts Are Evidence, Never Authorization
+
+   A decision may rest on an evaluation result, such as a test suite
+   that passed.  A Signed Evaluation Receipt [SER] records such a
+   result.  It appears in a decision receipt only as an entry of
+   evidenceRefs whose digest is the receipt digest, SHA-256 over its
+   payload bytes, as in [SER-MAPPINGS].  A verifier MUST NOT treat a
+   valid Signed Evaluation Receipt, or its presence in evidenceRefs, as
+   permission for an action.  In the records of this document only a
+   decision receipt with the verdict ALLOW, from a key the relying party
+   trusts for decisions, records a permission.
+
+2.7.  Observations for the Architecture
+
+   This section is informative.  At the places below, the mapping of
+   this section needed a reading of revision -01 of [AUDIT-ARCH].  They
+   are offered as observations and questions, not as requirements.
+
+   *  Evidence for a human approval.  Section 3 of [AUDIT-ARCH]
+      associates Interaction Records with the User; Section 3.1 says
+      that user-facing systems produce records of prompts and approvals,
+      and Section 4.2 has the Auditing Service sign records under its
+      own identity.  In Case 1, the gate's decision receipt binds an
+      approval record that names a person but is not signed by that
+      person (Section 2.1 and Section 2.5).  What evidence is needed to
+      bind such a record to that person's act of approval, and when is
+      the person's own signature required?
+
+   *  Previous state.  The Authorization Transition Record of
+      Section 7.4 of [AUDIT-ARCH], and its work item WI-1-4 (Section 6
+      of [AUDIT-ARCH]), carries a previous state, a new state, a trigger
+      and an actor in one record.  A decision receipt records only the
+      new state for one action and leaves the previous state to other
+      records (Section 2.1).  Section 5 of [AUDIT-ARCH] reconstructs
+      authorization from the ordered sequence of such records; is a
+      record without the previous state enough for that?
+
+   *  Binding an Action Record to its authorization.  In Section 7.2 of
+      [AUDIT-ARCH] the parent_id of an Action Record references the
+      Interaction Record that motivated the action, and the
+      authorization appears as scope and expiry.  The outcome receipt of
+      Case 3 names the decision receipt by its content root in
+      decisionRef and takes parent_id from that decision (Section 2.3).
+      The examples of [AUDIT-ARCH] have no member that binds an Action
+      Record to the authorizing decision by digest.
+
+
+
+
+
+
+Gruszka                    Expires 6 May 2027                   [Page 9]
+
+Internet-Draft           AUDIT Decision Receipts           November 2026
+
+
+   *  Refusals before execution.  Section 5 of [AUDIT-ARCH] includes
+      model responses and agent-to-agent dialogue among Interaction
+      Records.  Its work item WI-1-2 (Section 6 of [AUDIT-ARCH]) also
+      includes system events and does not preclude profiles for non-
+      conversational interactions.  In Case 2, a gate can decline a
+      proposed action under a rule before execution (Section 2.2).  When
+      such a denial is internal to a workflow and is not part of a
+      conversation, is it an Interaction Record, an Action Record of an
+      attempted request, or a different event type?
+
+   *  Who records an action.  Section 3 of [AUDIT-ARCH] has Action
+      Records generated by the Agent, while Section 5 of [AUDIT-ARCH]
+      places them at the boundary where the action took effect.  Its
+      work item WI-1-3 (Section 6 of [AUDIT-ARCH]) already distinguishes
+      the Recorder's signing identity from the recorded Agent's identity
+      where they are operationally separated.  In Case 3 the outcome
+      signer can be an observer that attests the executor's identifier
+      (Section 3.1 and Section 3.4).  How should an Action Record and
+      the Auditor's trust policy identify the Recorder separately from
+      the actor whose action is recorded?
+
+3.  Offline Verification
+
+   The procedure below needs no network access.  Each step either passes
+   or ends the procedure with a failure named by the step.  A later step
+   never repairs an earlier failure.
+
+3.1.  Inputs
+
+   The verifier needs the envelope bytes of each receipt and the Ed25519
+   public keys selected by its trust policy for the decision signer and,
+   for Case 3, the outcome signer.  It also needs the expected
+   decisionMaker.id and, for Case 3, the expected executor.id whose
+   assertion that policy permits under the outcome-signing key.  An
+   outcome signer may be an observer rather than the executor.
+
+   The verifier supplies an evaluation time T in UTC; it does not take T
+   from a receipt.  Expected audience and nonce and the action and
+   effect byte strings are optional inputs.  Case 1 requires the
+   approval record bytes.  Inputs or evidence whose bytes are not
+   checked remain digest references, not verified contents.
+
+3.2.  Decision Receipt
+
+   1.   Envelope.  The envelope MUST be valid UTF-8 and parse as one
+        JSON object with no duplicate member names in any object.  It
+        MUST contain payload, payloadType and signatures. payloadType
+        MUST be application/vnd.in-toto+json.
+
+
+
+Gruszka                    Expires 6 May 2027                  [Page 10]
+
+Internet-Draft           AUDIT Decision Receipts           November 2026
+
+
+   2.   Payload bytes.  Decode payload as base64 [RFC4648] into the
+        payload bytes P.
+
+   3.   Signature.  Form PAE = "DSSEv1" SP LEN(type) SP type SP LEN(P)
+        SP P, where SP is one space, LEN is the length in bytes as ASCII
+        decimal without leading zeros, and type is the payloadType.  At
+        least one entry of signatures MUST carry a base64 sig that
+        verifies as an Ed25519 signature over PAE under the expected
+        key.  The keyid member is not used to select a key.
+
+   4.   Canonical form.  P MUST be valid UTF-8 and parse as one JSON
+        value with no duplicate member names.  The serialization of the
+        parsed value under [RFC8785] MUST be byte for byte equal to P.
+        A verifier MUST NOT continue with a re-serialized form.
+
+   5.   Content root.  Compute R = SHA-256(P).
+
+   6.   Statement. _type MUST be https://in-toto.io/Statement/v1 and
+        predicateType the decision receipt type of Section 1.2. subject
+        MUST have one entry whose digest.sha256 is SHA-256 over the
+        [RFC8785] serialization of predicate.
+
+   7.   Members. predicate MUST be a JSON object satisfying the field
+        rules of Section 3.8.  It MUST contain schemaVersion,
+        decisionId, decisionType, decidedAt, decisionMaker, agent,
+        principal, proposedAction, inputSnapshot, policyBoundary (with
+        policyDigest), evidenceRefs, decision, notChecked,
+        decisionChangeConditions, privacy and validity.  Other predicate
+        members are limited to recordedAt, delegationRefs, actionOutcome
+        and traceContext.
+
+        decisionMaker, agent, principal, proposedAction, policyBoundary,
+        decision, privacy and validity MUST be objects. decisionId,
+        decisionMaker.id, agent.id and principal.id MUST be non-empty
+        strings. inputSnapshot, evidenceRefs, notChecked and
+        decisionChangeConditions MUST be arrays. decision.reasonCodes
+        MUST be a non-empty array of non-empty strings.
+
+        schemaVersion MUST consist of "0.1." followed by one or more
+        ASCII decimal digits. decisionType MUST be
+        preActionAuthorization.  Every timestamp, when non-null, MUST be
+        an [RFC3339] UTC timestamp with a trailing "Z".  Every non-null
+        digest MUST be an object with exactly one member, sha256, whose
+        value is 64 lowercase hexadecimal digits.  A null is allowed
+        only where the applicable field rules or Section 3.3 explicitly
+        permit it.
+
+
+
+
+
+Gruszka                    Expires 6 May 2027                  [Page 11]
+
+Internet-Draft           AUDIT Decision Receipts           November 2026
+
+
+        The digests of a decision receipt are the members listed below,
+        each with its full path in predicate, where [] stands for each
+        entry of an array.
+
+        *  agent.configurationDigest
+        *  principal.authnContextRef.digest
+        *  proposedAction.target.digest
+        *  proposedAction.parametersDigest
+        *  proposedAction.parametersSchemaRef.digest
+        *  inputSnapshot[].digest
+        *  policyBoundary.policyDigest
+        *  evidenceRefs[].digest
+        *  evidenceRefs[].artifactDigest
+        *  actionOutcome.outcomeRef.digest
+
+        The timestamps of a decision receipt are the members listed
+        below.
+
+        *  decidedAt
+        *  recordedAt
+        *  policyBoundary.validFrom
+        *  policyBoundary.validUntil
+        *  actionOutcome.performedAt
+        *  validity.expiresAt
+
+        actionOutcome.outcomeRef is an object whose member digest is a
+        digest; it is not itself a digest. evidenceRefs[].typedDigest,
+        where present, is not a digest in this sense either.  It MUST be
+        an object whose members are type, digestAlgorithm and digest and
+        optionally purpose; type and purpose MUST be non-empty strings,
+        digestAlgorithm MUST be jcs-sha256-v1, and digest MUST be 64
+        lowercase hexadecimal digits.
+
+   8.   Signer. decisionMaker.id MUST be the identifier the trust policy
+        binds to the key of step 3.
+
+   9.   Validity. validity MUST carry a non-empty array of non-empty
+        audience strings, a non-empty nonce string and an expiresAt
+        timestamp. decidedAt MUST NOT be later than T, and T MUST be
+        strictly earlier than expiresAt.  Where an expected audience is
+        given, audience MUST contain it; where an expected nonce is
+        given, nonce MUST equal it.
+
+   10.  Action bytes.  Where the action bytes are given, their SHA-256
+        MUST equal proposedAction.parametersDigest.sha256.
+
+
+
+
+
+
+Gruszka                    Expires 6 May 2027                  [Page 12]
+
+Internet-Draft           AUDIT Decision Receipts           November 2026
+
+
+3.3.  Checks per Case
+
+   Case 1, approval.
+      decision.verdict MUST be ALLOW and decision.reasonCodes MUST
+      contain user_approval. inputSnapshot MUST contain exactly one
+      entry whose name is "approval record"; it may contain other
+      entries.  The approval record bytes A MUST be supplied, MUST hash
+      to that entry's digest, and MUST be their own [RFC8785]
+      serialization.
+
+      A MUST be a JSON object containing approvalId, approver, session,
+      actionDigest, approvedAt and validUntil. approvalId, approver and
+      session MUST be non-empty strings. actionDigest MUST have the
+      digest form of Section 3.2 and MUST equal
+      proposedAction.parametersDigest. approver MUST equal principal.id.
+      approvedAt and validUntil MUST be [RFC3339] UTC timestamps with a
+      trailing "Z".  The bounds approvedAt <= decidedAt <= T <
+      validity.expiresAt <= validUntil MUST hold.
+
+   Case 2, declined.
+      decision.verdict MUST be DENY or REFUSE.  Where actionOutcome is
+      present, its status MUST be notAttempted, blocked or refused, and
+      performedAt and outcomeRef MUST be absent or null.
+
+   Case 3, executed.
+      decision.verdict MUST be ALLOW.  The outcome receipt MUST have
+      status executed and MUST pass Section 3.4 against this decision.
+
+3.4.  Outcome Receipt
+
+   1.  Apply steps 1 to 5 of Section 3.2 separately to the outcome
+       envelope with the expected outcome-signing key, obtaining payload
+       bytes Q.  Retain the decision receipt's content root R for the
+       binding check below.
+
+   2.  _type MUST be https://in-toto.io/Statement/v1 and predicateType
+       the outcome receipt type, with a subject derived from predicate
+       as in step 6 of Section 3.2.
+
+   3.  Members. predicate MUST be a JSON object satisfying the field
+       rules of Section 3.8.  It MUST contain schemaVersion, outcomeId,
+       decisionRef, executor, requestedActionDigest, status and
+       performedAt.  Other predicate members are limited to
+       effectDigest, actualActionDigest, responseDigest, policyPurpose,
+       receiverRefs, sequence, recordedAt, limitations, traceContext and
+       validity.
+
+
+
+
+
+Gruszka                    Expires 6 May 2027                  [Page 13]
+
+Internet-Draft           AUDIT Decision Receipts           November 2026
+
+
+       schemaVersion MUST consist of "0.1." followed by one or more
+       ASCII decimal digits. outcomeId MUST be a non-empty string.
+       executor MUST be an object with a non-empty id string. status
+       MUST be executed, refused, failed or partial.  Each non-null
+       timestamp MUST be an [RFC3339] UTC timestamp with a trailing "Z".
+       Each non-null digest MUST be an object with exactly one member,
+       sha256, whose value is 64 lowercase hexadecimal digits.  A null
+       is allowed only where the applicable field rules permit it.
+
+       The digests of an outcome receipt are the members listed below,
+       each with its full path in predicate, where [] stands for each
+       entry of an array.
+
+       *  decisionRef
+       *  requestedActionDigest
+       *  actualActionDigest
+       *  responseDigest
+       *  effectDigest
+       *  receiverRefs[].digest
+       *  receiverRefs[].artifactDigest
+
+       The timestamps of an outcome receipt are the members listed
+       below.
+
+       *  performedAt
+       *  recordedAt
+
+   4.  Binding. decisionRef.sha256 MUST equal the content root R of the
+       decision receipt that passed Section 3.2, and
+       requestedActionDigest MUST equal its parametersDigest.
+
+   5.  Identity and separation. executor.id MUST equal the expected
+       executor identifier supplied under Section 3.1.  The verifier's
+       trust policy MUST permit the outcome-signing key to attest that
+       identifier.  That key MUST differ from the decision maker's key,
+       and executor.id MUST differ from decisionMaker.id.  These checks
+       do not establish that the two keys are controlled by
+       operationally independent parties.
+
+   6.  Result. status executed MUST come with a non-null effectDigest.
+       Where effect bytes are supplied, effectDigest MUST be present and
+       their SHA-256 MUST equal effectDigest.sha256.
+
+   7.  Time. performedAt MUST NOT be earlier than the decision's
+       decidedAt and MUST be strictly earlier than its
+       validity.expiresAt.
+
+
+
+
+
+Gruszka                    Expires 6 May 2027                  [Page 14]
+
+Internet-Draft           AUDIT Decision Receipts           November 2026
+
+
+3.5.  Checks over a Set of Receipts
+
+   An Auditor that holds the receipts and approval records of a run can
+   check two properties that no single receipt shows.  The Auditor MUST
+   obtain the relying party's consumption scope from its audit context
+   or trust policy; that scope is not inferred from an approvalId alone.
+   First, within that scope, no two distinct ALLOW decision payloads,
+   identified by different content roots, may cite approval records with
+   the same identity (approvalId, actionDigest and session).  Such a
+   pair violates Section 4; additional copies or signatures of one
+   payload do not.
+
+   Second, no outcome receipt with status executed may name, in
+   decisionRef, the content root of a receipt with the verdict DENY or
+   REFUSE.  Both checks are only as complete as the set of receipts the
+   Auditor holds.  The first check does not detect two executions that
+   reuse one ALLOW receipt without producing another decision receipt.
+
+3.6.  What a Pass Shows
+
+   A pass shows that the holder of the decision maker's key signed
+   exactly these payload bytes.  Where action bytes are supplied under
+   Section 3.1, their SHA-256 matches
+   proposedAction.parametersDigest.sha256.  In Case 1, the SHA-256 of
+   the required approval record bytes matches the digest.sha256 value of
+   the unique inputSnapshot entry whose name is "approval record".  For
+   Case 3, a pass also shows that the holder of a different key, which
+   the trust policy permits to attest the expected executor.id, signed
+   an outcome with status executed bound to that decision.  It does not
+   show that the signer's statements are true, that the approval came
+   from the named person, that the outcome signer observed the boundary,
+   that no other receipt exists, or that the keys were not misused.
+   Those questions belong to the trust policy, to signed approvals, to
+   observers and to transparency registration (Section 3.7).
+
+3.7.  Registering a Receipt with a Transparency Service
+
+   This section is informative.  It describes how the receipts of this
+   document can be registered with a Transparency Service under
+   [RFC9943].  It defines no format, predicate type, media type or
+   registry and adds no requirement to those of [RFC9943].
+
+   Registration.  In SCITT a Signed Statement is a COSE_Sign1 message
+   whose protected header carries CWT Claims with an Issuer Claim and a
+   Subject Claim (Section 6 of [RFC9943]).  A decision receipt or an
+   outcome receipt can be registered in two ways.  Its envelope bytes
+   can be the payload of a Signed Statement.  Or, as Section 6.2 of
+   [RFC9943] allows for Statements too large or too sensitive to send to
+
+
+
+Gruszka                    Expires 6 May 2027                  [Page 15]
+
+Internet-Draft           AUDIT Decision Receipts           November 2026
+
+
+   a Transparency Service, the Signed Statement can be made over a hash,
+   here the content root of the receipt.  This document does not define
+   how a Signed Statement indicates the hash, its algorithm or its
+   content type; that belongs to a deployment's profile and to the
+   Registration Policy of the Transparency Service (Section 5.1.1 of
+   [RFC9943]).
+
+   Appendix A.4 gives one example Signed Statement for each of the two
+   ways, with a SCITT Receipt for each.
+
+   Issuer.  The Issuer of the Signed Statement is the entity identified
+   by its iss Claim, whose key signs the COSE_Sign1 (Sections 3 and 6 of
+   [RFC9943]).  It can be the decision maker or the outcome signer, or
+   another party such as the Auditing Service of Section 4.2 of
+   [AUDIT-ARCH].  The Client that registers a Signed Statement need not
+   be its Issuer (Section 7 of [RFC9943]).  The Issuer's COSE signature
+   is separate from the DSSE signature of the receipt.  The COSE
+   signature authenticates the Signed Statement's protected header and
+   payload.  The DSSE signature covers the pre-authentication encoding
+   of the receipt's payloadType and decoded payload bytes, not the DSSE
+   envelope as a whole.  Section 3.2 or Section 3.4 checks that DSSE
+   signature and its signer.
+
+   What a SCITT Receipt shows.  During Registration the Transparency
+   Service verifies the Issuer's signature and applies its Registration
+   Policy (Sections 5.1.1.1 and 6.3 of [RFC9943]).  It registers the
+   Signed Statement before it releases a Receipt (Section 6.3 of
+   [RFC9943]), and the Receipt demonstrates inclusion of the Signed
+   Statement in the Verifiable Data Structure of the Transparency
+   Service and can be verified without online access to it (Section 4 of
+   [RFC9943]).  The Transparency Service records the Registration time
+   when it adds the Signed Statement (Section 7 of [RFC9943]).
+
+   What it does not show.  Registering a Statement proves only that it
+   was produced by an Issuer, not that it is accurate (Section 9.2 of
+   [RFC9943]).  Issuers can register some Statements and not others
+   (Section 9.3 of [RFC9943]), so a Receipt for one receipt says nothing
+   about a receipt that was never registered.  The Subject Claim lets
+   Relying Parties identify the Transparent Statements registered for a
+   Subject (Section 3 of [RFC9943]), not receipts that were never
+   registered.  Unless the Registration Policy says otherwise, the order
+   of the Verifiable Data Structure need not be the order of issuance
+   (Section 9.1 of [RFC9943]).  A Receipt does not change what the
+   checks of Section 3 show, and it does not make an ALLOW an
+   authorization.
+
+
+
+
+
+
+Gruszka                    Expires 6 May 2027                  [Page 16]
+
+Internet-Draft           AUDIT Decision Receipts           November 2026
+
+
+   Verification.  A verifier checks the SCITT Receipt for the particular
+   Signed Statement, including its inclusion proof, using the
+   verification key of a Receipt Issuer it trusts and the verification
+   rules for the applicable Verifiable Data Structure (Sections 7 and
+   7.1 of [RFC9943]).  It establishes the binding from the registered
+   Signed Statement to the envelope bytes or content root used in the
+   following checks.  If the Signed Statement's COSE payload is detached
+   and this binding depends on the Issuer's signature, it verifies that
+   signature.  It then applies Section 3 of this document to the
+   receipt.  Where the envelope bytes are the Signed Statement's
+   payload, it checks those bytes; where the Signed Statement is made
+   over the content root, it checks an envelope whose computed content
+   root equals the registered value.  This latter comparison binds the
+   decoded DSSE payload, not the envelope bytes or the DSSE signature,
+   and does not establish that the DSSE signature existed when the
+   content root was registered.  Section 7.1 of [RFC9943] permits
+   verification of a Receipt without rechecking the Issuer's signature
+   on the Signed Statement; this does not dispense with the binding just
+   described.  The signatures of the decision maker and of the outcome
+   signer are checked by Section 3 in either case.
+
+3.8.  Field Rules
+
+   Step 7 of Section 3.2 and step 3 of Section 3.4 apply the rules of
+   this section.  Table 4 lists every member of the predicate of a
+   decision receipt that this document admits, and Table 5 every member
+   of the predicate of an outcome receipt, each with its full path in
+   predicate, where [] stands for each entry of an array.  The rules
+   follow the strict v0.1 form of [PB-DECISION] and [PB-OUTCOME] and
+   their machine schemas, restricted to the members this document
+   admits; where Section 3.2 is stricter, the table gives the stricter
+   rule.  This section states these rules itself, and its tables follow
+   those documents as they stand at commit
+   e1fec86351b216af369a2e6ac106dcc41aaf4b4c of [PB-REPO], where the
+   machine schemas are the same as in version 6.4.0.
+
+   In the column Type, a digest is an object with exactly one member,
+   sha256, whose value is 64 lowercase hexadecimal digits; a timestamp
+   is an [RFC3339] UTC timestamp with a trailing "Z"; typedDigest has
+   the form given in step 7 of Section 3.2; a string is any JSON string,
+   and a non-empty string has at least one character; a boolean is one
+   of the JSON values true or false; any value is any JSON value.  The
+   type object admits only the members listed for it, and the type open
+   object admits any members.  The type names preActionAuthorization and
+   outcome allow only the JSON strings "preActionAuthorization" and
+   "outcome", respectively.  The type "0.1." and one or more digits
+   means a string consisting of "0.1." followed by one or more ASCII
+   decimal digits.  The notes (1) to (4) follow the tables.
+
+
+
+Gruszka                    Expires 6 May 2027                  [Page 17]
+
+Internet-Draft           AUDIT Decision Receipts           November 2026
+
+
+   Required yes means that the member MUST be present whenever the
+   object or array entry that contains it is present.  Null yes means
+   that the member may be null.  Everywhere else a null is not allowed,
+   also inside an open object and in an array of any values.  A member
+   that the table does not list for an object that is not open is not
+   allowed, at the top level of predicate as well.
+
+   +=============================+======================+========+====+
+   | Member                      |Type                  |Required|Null|
+   +=============================+======================+========+====+
+   | schemaVersion               |"0.1." and one or more|yes     |no  |
+   |                             |digits                |        |    |
+   +-----------------------------+----------------------+--------+----+
+   | decisionId                  |non-empty string      |yes     |no  |
+   +-----------------------------+----------------------+--------+----+
+   | decisionType                |preActionAuthorization|yes     |no  |
+   +-----------------------------+----------------------+--------+----+
+   | decidedAt                   |timestamp             |yes     |no  |
+   +-----------------------------+----------------------+--------+----+
+   | recordedAt                  |timestamp             |no      |no  |
+   +-----------------------------+----------------------+--------+----+
+   | decisionMaker               |object                |yes     |no  |
+   +-----------------------------+----------------------+--------+----+
+   | decisionMaker.id            |non-empty string      |yes     |no  |
+   +-----------------------------+----------------------+--------+----+
+   | decisionMaker.version       |any value             |no      |yes |
+   +-----------------------------+----------------------+--------+----+
+   | agent                       |object                |yes     |no  |
+   +-----------------------------+----------------------+--------+----+
+   | agent.id                    |non-empty string      |yes     |no  |
+   +-----------------------------+----------------------+--------+----+
+   | agent.version               |string                |no      |no  |
+   +-----------------------------+----------------------+--------+----+
+   | agent.configurationDigest   |digest                |no      |no  |
+   +-----------------------------+----------------------+--------+----+
+   | principal                   |object                |yes     |no  |
+   +-----------------------------+----------------------+--------+----+
+   | principal.id                |non-empty string      |yes     |no  |
+   +-----------------------------+----------------------+--------+----+
+   | principal.authnContextRef   |object                |no      |no  |
+   +-----------------------------+----------------------+--------+----+
+   | principal.authnContextRef.  |string                |no      |no  |
+   | uri                         |                      |        |    |
+   +-----------------------------+----------------------+--------+----+
+   | principal.authnContextRef.  |digest                |no      |no  |
+   | digest                      |                      |        |    |
+   +-----------------------------+----------------------+--------+----+
+   | delegationRefs              |array of any values   |no      |no  |
+
+
+
+Gruszka                    Expires 6 May 2027                  [Page 18]
+
+Internet-Draft           AUDIT Decision Receipts           November 2026
+
+
+   +-----------------------------+----------------------+--------+----+
+   | proposedAction              |object                |yes     |no  |
+   +-----------------------------+----------------------+--------+----+
+   | proposedAction.actionType   |string                |yes     |no  |
+   +-----------------------------+----------------------+--------+----+
+   | proposedAction.target       |object                |no      |no  |
+   +-----------------------------+----------------------+--------+----+
+   | proposedAction.target.name  |string                |no      |no  |
+   +-----------------------------+----------------------+--------+----+
+   | proposedAction.target.uri   |string                |no      |no  |
+   +-----------------------------+----------------------+--------+----+
+   | proposedAction.target.      |digest                |no      |no  |
+   | digest                      |                      |        |    |
+   +-----------------------------+----------------------+--------+----+
+   | proposedAction.method       |string                |no      |no  |
+   +-----------------------------+----------------------+--------+----+
+   | proposedAction.             |digest                |(1)     |no  |
+   | parametersDigest            |                      |        |    |
+   +-----------------------------+----------------------+--------+----+
+   | proposedAction.             |open object           |(1)     |no  |
+   | parametersRef               |                      |        |    |
+   +-----------------------------+----------------------+--------+----+
+   | proposedAction.             |object                |no      |no  |
+   | parametersSchemaRef         |                      |        |    |
+   +-----------------------------+----------------------+--------+----+
+   | proposedAction.             |string                |no      |no  |
+   | parametersSchemaRef.uri     |                      |        |    |
+   +-----------------------------+----------------------+--------+----+
+   | proposedAction.             |digest                |no      |no  |
+   | parametersSchemaRef.digest  |                      |        |    |
+   +-----------------------------+----------------------+--------+----+
+   | inputSnapshot               |array of objects      |yes     |no  |
+   +-----------------------------+----------------------+--------+----+
+   | inputSnapshot[].name        |string                |no      |no  |
+   +-----------------------------+----------------------+--------+----+
+   | inputSnapshot[].uri         |string                |no      |no  |
+   +-----------------------------+----------------------+--------+----+
+   | inputSnapshot[].digest      |digest                |yes     |no  |
+   +-----------------------------+----------------------+--------+----+
+   | inputSnapshot[].mediaType   |string                |no      |no  |
+   +-----------------------------+----------------------+--------+----+
+   | policyBoundary              |object                |yes     |no  |
+   +-----------------------------+----------------------+--------+----+
+   | policyBoundary.             |non-empty string      |yes     |no  |
+   | policyEngine                |                      |        |    |
+   +-----------------------------+----------------------+--------+----+
+   | policyBoundary.policyId     |non-empty string      |yes     |no  |
+   +-----------------------------+----------------------+--------+----+
+
+
+
+Gruszka                    Expires 6 May 2027                  [Page 19]
+
+Internet-Draft           AUDIT Decision Receipts           November 2026
+
+
+   | policyBoundary.             |non-empty string      |yes     |no  |
+   | decisionPath                |                      |        |    |
+   +-----------------------------+----------------------+--------+----+
+   | policyBoundary.             |digest                |yes     |no  |
+   | policyDigest                |                      |        |    |
+   +-----------------------------+----------------------+--------+----+
+   | policyBoundary.             |string                |no      |no  |
+   | bundleRevision              |                      |        |    |
+   +-----------------------------+----------------------+--------+----+
+   | policyBoundary.validFrom    |timestamp             |no      |no  |
+   +-----------------------------+----------------------+--------+----+
+   | policyBoundary.validUntil   |timestamp             |no      |no  |
+   +-----------------------------+----------------------+--------+----+
+   | evidenceRefs                |array of objects      |yes     |no  |
+   +-----------------------------+----------------------+--------+----+
+   | evidenceRefs[].relation     |string                |yes     |no  |
+   +-----------------------------+----------------------+--------+----+
+   | evidenceRefs[].digest       |digest                |yes     |no  |
+   +-----------------------------+----------------------+--------+----+
+   | evidenceRefs[].             |digest                |no      |no  |
+   | artifactDigest              |                      |        |    |
+   +-----------------------------+----------------------+--------+----+
+   | evidenceRefs[].uri          |string                |no      |no  |
+   +-----------------------------+----------------------+--------+----+
+   | evidenceRefs[].             |string                |no      |no  |
+   | predicateType               |                      |        |    |
+   +-----------------------------+----------------------+--------+----+
+   | evidenceRefs[].typedDigest  |typedDigest           |no      |no  |
+   +-----------------------------+----------------------+--------+----+
+   | decision                    |object                |yes     |no  |
+   +-----------------------------+----------------------+--------+----+
+   | decision.verdict            |(2)                   |yes     |no  |
+   +-----------------------------+----------------------+--------+----+
+   | decision.reasonCodes        |non-empty array of    |yes     |no  |
+   |                             |non-empty strings     |        |    |
+   +-----------------------------+----------------------+--------+----+
+   | decision.                   |string                |no      |no  |
+   | humanReadableSummary        |                      |        |    |
+   +-----------------------------+----------------------+--------+----+
+   | decision.obligations        |array of any values   |no      |no  |
+   +-----------------------------+----------------------+--------+----+
+   | decision.allowedScope       |array of any values   |no      |no  |
+   +-----------------------------+----------------------+--------+----+
+   | notChecked                  |array of objects or   |yes     |no  |
+   |                             |strings               |        |    |
+   +-----------------------------+----------------------+--------+----+
+   | notChecked[].field          |string                |no      |no  |
+   +-----------------------------+----------------------+--------+----+
+
+
+
+Gruszka                    Expires 6 May 2027                  [Page 20]
+
+Internet-Draft           AUDIT Decision Receipts           November 2026
+
+
+   | notChecked[].reason         |string                |no      |no  |
+   +-----------------------------+----------------------+--------+----+
+   | notChecked[].impact         |string                |no      |no  |
+   +-----------------------------+----------------------+--------+----+
+   | decisionChangeConditions    |array of objects      |yes     |no  |
+   +-----------------------------+----------------------+--------+----+
+   | decisionChangeConditions[]. |string                |no      |no  |
+   | conditionType               |                      |        |    |
+   +-----------------------------+----------------------+--------+----+
+   | decisionChangeConditions[]. |string                |no      |no  |
+   | description                 |                      |        |    |
+   +-----------------------------+----------------------+--------+----+
+   | decisionChangeConditions[]. |string                |no      |no  |
+   | requiredEvidenceType        |                      |        |    |
+   +-----------------------------+----------------------+--------+----+
+   | actionOutcome               |object                |no      |no  |
+   +-----------------------------+----------------------+--------+----+
+   | actionOutcome.status        |(3)                   |no      |no  |
+   +-----------------------------+----------------------+--------+----+
+   | actionOutcome.performedAt   |timestamp             |no      |yes |
+   +-----------------------------+----------------------+--------+----+
+   | actionOutcome.outcomeRef    |object                |no      |yes |
+   +-----------------------------+----------------------+--------+----+
+   | actionOutcome.outcomeRef.   |string                |no      |no  |
+   | uri                         |                      |        |    |
+   +-----------------------------+----------------------+--------+----+
+   | actionOutcome.outcomeRef.   |digest                |no      |no  |
+   | digest                      |                      |        |    |
+   +-----------------------------+----------------------+--------+----+
+   | traceContext                |open object           |no      |no  |
+   +-----------------------------+----------------------+--------+----+
+   | privacy                     |object                |yes     |no  |
+   +-----------------------------+----------------------+--------+----+
+   | privacy.rawInputsIncluded   |boolean               |yes     |no  |
+   +-----------------------------+----------------------+--------+----+
+   | privacy.redactionProfile    |string                |no      |no  |
+   +-----------------------------+----------------------+--------+----+
+   | privacy.erased              |array of any values   |no      |no  |
+   +-----------------------------+----------------------+--------+----+
+   | privacy.masked              |array of any values   |no      |no  |
+   +-----------------------------+----------------------+--------+----+
+   | validity                    |object                |yes     |no  |
+   +-----------------------------+----------------------+--------+----+
+   | validity.audience           |non-empty array of    |yes     |no  |
+   |                             |non-empty strings     |        |    |
+   +-----------------------------+----------------------+--------+----+
+   | validity.nonce              |non-empty string      |yes     |no  |
+   +-----------------------------+----------------------+--------+----+
+
+
+
+Gruszka                    Expires 6 May 2027                  [Page 21]
+
+Internet-Draft           AUDIT Decision Receipts           November 2026
+
+
+   | validity.expiresAt          |timestamp             |yes     |no  |
+   +-----------------------------+----------------------+--------+----+
+
+         Table 4: Members of the predicate of a decision receipt
+
+     +===========================+================+==========+======+
+     | Member                    | Type           | Required | Null |
+     +===========================+================+==========+======+
+     | schemaVersion             | "0.1." and one | yes      | no   |
+     |                           | or more digits |          |      |
+     +---------------------------+----------------+----------+------+
+     | outcomeId                 | non-empty      | yes      | no   |
+     |                           | string         |          |      |
+     +---------------------------+----------------+----------+------+
+     | decisionRef               | digest         | yes      | no   |
+     +---------------------------+----------------+----------+------+
+     | executor                  | object         | yes      | no   |
+     +---------------------------+----------------+----------+------+
+     | executor.id               | non-empty      | yes      | no   |
+     |                           | string         |          |      |
+     +---------------------------+----------------+----------+------+
+     | executor.keyId            | string         | no       | no   |
+     +---------------------------+----------------+----------+------+
+     | requestedActionDigest     | digest         | yes      | no   |
+     +---------------------------+----------------+----------+------+
+     | status                    | (4)            | yes      | no   |
+     +---------------------------+----------------+----------+------+
+     | performedAt               | timestamp      | yes      | no   |
+     +---------------------------+----------------+----------+------+
+     | effectDigest              | digest         | no       | no   |
+     +---------------------------+----------------+----------+------+
+     | actualActionDigest        | digest         | no       | no   |
+     +---------------------------+----------------+----------+------+
+     | responseDigest            | digest         | no       | no   |
+     +---------------------------+----------------+----------+------+
+     | policyPurpose             | outcome        | no       | no   |
+     +---------------------------+----------------+----------+------+
+     | receiverRefs              | array of       | no       | no   |
+     |                           | objects        |          |      |
+     +---------------------------+----------------+----------+------+
+     | receiverRefs[].relation   | non-empty      | yes      | no   |
+     |                           | string         |          |      |
+     +---------------------------+----------------+----------+------+
+     | receiverRefs[].digest     | digest         | yes      | no   |
+     +---------------------------+----------------+----------+------+
+     | receiverRefs[].receiverId | string         | no       | no   |
+     +---------------------------+----------------+----------+------+
+     | receiverRefs[].           | string         | no       | no   |
+
+
+
+Gruszka                    Expires 6 May 2027                  [Page 22]
+
+Internet-Draft           AUDIT Decision Receipts           November 2026
+
+
+     | receiverKeyId             |                |          |      |
+     +---------------------------+----------------+----------+------+
+     | receiverRefs[].           | digest         | no       | no   |
+     | artifactDigest            |                |          |      |
+     +---------------------------+----------------+----------+------+
+     | sequence                  | object         | no       | no   |
+     +---------------------------+----------------+----------+------+
+     | sequence.runId            | non-empty      | yes      | no   |
+     |                           | string         |          |      |
+     +---------------------------+----------------+----------+------+
+     | sequence.seq              | integer, 0 or  | yes      | no   |
+     |                           | more           |          |      |
+     +---------------------------+----------------+----------+------+
+     | recordedAt                | timestamp      | no       | no   |
+     +---------------------------+----------------+----------+------+
+     | limitations               | array of       | no       | no   |
+     |                           | strings        |          |      |
+     +---------------------------+----------------+----------+------+
+     | traceContext              | object         | no       | no   |
+     +---------------------------+----------------+----------+------+
+     | traceContext.traceparent  | string         | no       | no   |
+     +---------------------------+----------------+----------+------+
+     | validity                  | object         | no       | no   |
+     +---------------------------+----------------+----------+------+
+     | validity.audience         | array of any   | no       | no   |
+     |                           | values         |          |      |
+     +---------------------------+----------------+----------+------+
+     | validity.nonce            | string         | no       | no   |
+     +---------------------------+----------------+----------+------+
+
+         Table 5: Members of the predicate of an outcome receipt
+
+   The notes of the tables are as follows. (1) proposedAction MUST carry
+   parametersDigest, parametersRef or both. (2) decision.verdict is
+   ALLOW, DENY, REFUSE, ESCALATE, DEFER or OBSERVE. (3)
+   actionOutcome.status is notAttempted, blocked, refused, attempted,
+   executed, failed or unknown. (4) status is executed, refused, failed
+   or partial.  Section 3.3 adds rules per case, and steps 8 to 10 of
+   Section 3.2 and steps 4 to 7 of Section 3.4 add rules across members.
+
+4.  Approvals Are Honoured At Most Once
+
+   An approval in Case 1 frees one action once.  For live use, the
+   relying party MUST apply the time bounds of Section 3.3 with its own
+   current time as T.  A historical audit time MUST NOT make an expired
+   approval usable.  A relying party that lets an action run because of
+   an approval:
+
+
+
+
+Gruszka                    Expires 6 May 2027                  [Page 23]
+
+Internet-Draft           AUDIT Decision Receipts           November 2026
+
+
+   1.  MUST honour each approval at most once;
+
+   2.  MUST key its consumption state by the identity of the approval
+       (approvalId, actionDigest and session), not by the bytes of one
+       copy of the approval record.  Copies or reissues with other
+       metadata count as the same approval and MUST NOT extend its
+       original validUntil.  Extending that validity requires a new
+       approval act and a new approvalId;
+
+   3.  MUST mark the approval as consumed durably before it either
+       allows the action to run or releases a signed ALLOW that cites
+       the approval;
+
+   4.  MUST treat an approval recorded as consumed in any current,
+       rotated, archived or compacted representation as consumed for as
+       long as item 6 requires that state to be retained;
+
+   5.  MUST NOT honour an approval unless it can consult a complete,
+       durable view of the consumption state required by this section.
+       Rotation, archiving or compaction MAY replace earlier generations
+       if all entries still required by item 6 are preserved.  Missing
+       or unreadable state whose required entries have not been
+       preserved elsewhere MUST cause refusal;
+
+   6.  MAY drop an entry only after the approval's original validUntil,
+       plus the clock skew it allows, has passed and no copy of that
+       approval can still be honoured.
+
+   Rotation is the step where this requirement is most easily lost.  A
+   record that is full is moved aside so that new approvals can be
+   written; if the relying party then reads only the new generation,
+   approvals of the old one may become usable again.  Items 4 and 5
+   preserve the consumed state without requiring a particular storage
+   format.  A decision receipt for Case 1 binds the approval record by
+   digest, so Section 3.5 can expose distinct ALLOW decisions for the
+   same approval identity.  Preventing reuse of an approval or of an
+   already issued ALLOW remains the relying party's duty.
+
+5.  Implementation Status
+
+   This section is given per [RFC7942] and is to be removed by the RFC
+   Editor before publication.
+
+   proofbundle 6.4.0 is on PyPI [PB-PYPI] with the classifier
+   "Development Status :: 4 - Beta"; its tag v6.4.0 is commit
+   699545521ec5ef479bb84e61fe7461fc79ed558c of [PB-REPO].  There the
+   decision receipt predicate is described as shipped since version
+   2.1.0 and the outcome predicate as experimental.  In the seven
+
+
+
+Gruszka                    Expires 6 May 2027                  [Page 24]
+
+Internet-Draft           AUDIT Decision Receipts           November 2026
+
+
+   command line runs reported in Appendix A, the four passing vectors
+   returned exit code 0, the invalid signature of V1-bad returned 1, and
+   the non-canonical payload of V2-bad and the decision binding mismatch
+   of V3-bad each returned 2.  These results do not specify the command
+   line interface's complete exit-code contract.
+
+   Agent Guard is the name used here for the preview in plugins/
+   proofbundle of the same repository, inspected at commit
+   8bb289c8b41d32c54734155fc00756231093bc2a.  This inspected revision is
+   not the release tag v6.4.0.  Its public README names the preview the
+   proofbundle plugin for Claude Code and Codex.
+
+   In the inspected code, the configured receipt pilot uses a separate
+   signing service for preActionAuthorization decisions with verdict
+   ALLOW, DENY or ESCALATE for the writes it supports.  An observer
+   signs outcome receipts for effects it matches to decisions.  The
+   runbook assigns the observer to an operator account separate from the
+   agent session.  The approval path requires an explicit operator
+   configuration and is not enabled under Codex.  It binds an approval
+   to the command bytes and its session.  Its time check accepts the
+   approval from 60 seconds before the recorded answer, to allow for
+   clock skew, through 15 minutes after it.  For a write covered by the
+   receipt pilot, the hook obtains a signed ALLOW before recording its
+   own use of the approval and allowing the command.  These are
+   observations of the source and runbook, not a live Agent Guard
+   execution measured for this document.
+
+   The seven DSSE test vectors described in Appendix A.3 were produced
+   with proofbundle 6.4.0 from PyPI and test keys, not by Agent Guard.
+   For an approval, the inspected pilot writes released_by_owner among
+   its reason codes where those vectors write user_approval.  It does
+   not put the approval record's digest into inputSnapshot, may add the
+   digest of configured closing rules there, sets no traceContext or
+   actionOutcome, and leaves evidenceRefs empty.  Those vectors
+   therefore do not demonstrate that the preview produces Case 1
+   receipts conforming to this document.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Gruszka                    Expires 6 May 2027                  [Page 25]
+
+Internet-Draft           AUDIT Decision Receipts           November 2026
+
+
+   At the inspected commit, the signing service keeps its record of
+   honoured approvals without eviction and refuses a new approval when
+   the record holds 4096.  The runbook has an operator rotate a full
+   record, with the service stopped, by copying it into the folder
+   honoured-releases of the records and then removing it.  The service
+   treats an approval named in the current record or in any file of that
+   folder as honoured, before its decision and again under its lock
+   before it releases the signature.  If that folder or a file in it is
+   a symbolic link, is owned by an account other than root or the
+   service's own, or is writable by another account, or if a file there
+   does not read as a record, the service releases no signature in the
+   configuration in which it honours approvals.
+
+   The hook keeps its own record of the approvals it has used, keyed by
+   an identity that excludes the answer time, and treats a copy of a
+   used approval as used whatever answer time it carries.  When the
+   record holds 1024 uses, the hook removes only uses recorded more than
+   15 minutes and 60 seconds earlier, after which the copy that was used
+   is no longer within its window, and keeps a digest of each removed
+   identity, which it does not remove; a copy of such an identity is
+   refused.  If the record is still full, would exceed 512 KiB, contains
+   a field the hook does not know, or cannot be read or written, the
+   hook does not honour the approval.
+
+   In both layers the validity window is taken from the answer time of
+   the copy in use, and neither keeps an original validity per identity.
+   For an identity that has not yet been used, a copy with a later
+   answer time therefore opens a later window; item 2 of Section 4 does
+   not permit that.
+
+   At the earlier commit ba8466d1a04334a5d83b3eaa12e30a464cc9d686, the
+   signing service did not read archived records and the hook removed
+   its oldest use without checking that entry's age; both were gaps
+   relative to Section 4.
+
+   No conformance of Agent Guard to Section 4 and no enforcement of
+   single use in a running host is claimed from these source-level
+   observations.
+
+   The separate Go checker supplied with the vectors and the proofbundle
+   6.4.0 command line interface agree on acceptance or rejection of all
+   seven vectors.  This comparison does not establish complete
+   equivalence of the verifiers, conformance of Agent Guard to Sections
+   3 and 4, or enforcement of single use in a running host.  No later
+   implementation revision is assessed here.
+
+   This information is given per [RFC7942] and does not constitute
+   endorsement.
+
+
+
+Gruszka                    Expires 6 May 2027                  [Page 26]
+
+Internet-Draft           AUDIT Decision Receipts           November 2026
+
+
+6.  Relation to Other Work
+
+   [GILDA] defines one in-toto predicate type, signed in DSSE with
+   [RFC8785] canonical bytes, that carries an authorization decision and
+   the observed effect together with a derived agreement between them,
+   and offers it as a data model for AUDIT records.  This document keeps
+   decision and outcome in two receipts signed under different keys and
+   maps three cases onto the architecture; the consumption-state input
+   that [GILDA] names concerns the same kind of state as Section 4.
+   [GILDA] lets records carry a sequence number, so that a record
+   withheld from a party that holds a later record of the same series
+   can be detected (Section 6.3 of [GILDA]); the decision receipts of
+   this document carry no such member (Section 3.2).  [GILDA] also
+   derives the agreement between decision and effect inside one record
+   (Section 5.3 of [GILDA]), where this document compares two receipts
+   through decisionRef (Section 3.4).
+
+   [IZMAYLOV] specifies permissions that a principal signs with a
+   passkey and action receipts signed by the agent, linked to earlier
+   receipts and appended to a log by a recorder.  It also defines a
+   passkey-signed approval of one action.  Such an approval could supply
+   additional evidence for Case 1.  Citing it by digest does not replace
+   the approval record or the checks of Section 3.3; this document
+   defines no mapping from that format to the approval record.  In
+   [IZMAYLOV] each action receipt carries its place in a chain; every
+   receipt after the first also names the preceding receipt by digest.
+   It is signed with the agent's keys or, for a helper, with the keys in
+   the to member of its delegation (Section 6 of [IZMAYLOV]).  Here the
+   decision maker signs a decision receipt and the executor or an
+   observer signs an outcome receipt (Section 3.1); a verifier checks
+   that executor.id differs from decisionMaker.id (Section 3.4).
+   Section 3.2 does not define a chain of decision receipts.
+
+   [WRIGHT] defines a verdict record that states a result on a claim and
+   cites its evidence by digest, in any receipt format.  A decision or
+   outcome receipt of this document can be such evidence, and a verdict
+   record can state the result of the procedure of Section 3.
+
+   [BIRKHOLZ] defines a data format for agent conversation records
+   protected by COSE signatures, which [AUDIT-ARCH] names as a candidate
+   for Interaction Records.  A signed conversation record can be cited
+   by digest as additional input.  Establishing which entry records a
+   human approval and how it corresponds to the action, approver,
+   session and validity of Case 1 requires a mapping not defined here.
+   The approval record and the checks of Section 3.3 still apply.
+
+
+
+
+
+
+Gruszka                    Expires 6 May 2027                  [Page 27]
+
+Internet-Draft           AUDIT Decision Receipts           November 2026
+
+
+   SCITT [RFC9943] registers Signed Statements with a Transparency
+   Service, which returns Receipts.  Section 3.7 describes how a
+   decision or outcome receipt can be registered and what a Receipt then
+   shows.
+
+7.  Security Considerations
+
+   Key binding.  A receipt is only as trustworthy as the verifier's
+   choice of keys and its policy for the identities those keys may
+   attest.  Section 3.2 checks decisionMaker.id; Section 3.4 checks the
+   expected executor.id under the outcome-signing key.  An observer's
+   signature over an executor identifier is not the executor's own
+   signature.  A key held in the recorded Agent's process gives an
+   Auditor that does not trust that Agent little assurance.  The
+   inspected Agent Guard design uses separate service accounts as
+   described in Section 5.
+
+   Key compromise.  Whoever holds the signing key of a decision maker or
+   of an outcome signer can produce receipts with any decidedAt or
+   performedAt, since these times come from the signer's clock, as the
+   paragraph on clocks below says.  A check under Section 3 does not
+   tell such a receipt from one signed before the key was compromised or
+   replaced.  Which keys are accepted for which identity and for which
+   period is set by the verifier's trust policy, not by this document;
+   [RFC9943] likewise leaves revocation strategies for compromised keys
+   out of its scope (Section 9.4.2 of [RFC9943]).  A time anchor outside
+   the signer helps, if it was set before the compromise.  Where the
+   envelope bytes are the payload of a registered Signed Statement
+   (Section 3.7), a Receipt for it shows that the DSSE signature existed
+   when that Signed Statement was registered, and the Transparency
+   Service records the Registration time (Section 7 of [RFC9943]).
+   Where the Signed Statement is made over the content root, the
+   comparison binds the decoded DSSE payload, not the envelope bytes or
+   the DSSE signature, and does not establish that the DSSE signature
+   existed when the content root was registered (Section 3.7).  The
+   rules of Section 4 keep a relying party from honouring one approval
+   more than once; they do not prevent the holder of a compromised
+   decision maker key from signing receipts that cite approvals with new
+   identities.
+
+   Exact bytes.  A verifier that re-serializes a payload before checking
+   it can be led to accept bytes that were never signed, or to compute
+   another content root.  Step 4 refuses such payloads, and vector
+   V2-bad tests it.
+
+   Replay.  An ALLOW for one action must not free another, and an
+   outcome that names another decision must not count as the result of
+   this one. parametersDigest binds the action bytes, validity binds
+
+
+
+Gruszka                    Expires 6 May 2027                  [Page 28]
+
+Internet-Draft           AUDIT Decision Receipts           November 2026
+
+
+   audience, nonce and expiry, decisionRef binds the outcome, and
+   Section 4 requires the relying party to prevent reuse of an approval.
+   V1-bad tests rejection of changed payload bytes under an unchanged
+   signature.  V3-bad tests rejection of an outcome bound to a different
+   decision.  The seven vectors do not test consumption-state retention
+   or rotation.
+
+   Self-assertion. actionOutcome in a decision receipt and an outcome
+   receipt whose effect cannot be resolved are statements of their
+   signers.  A digest that is present but cannot be resolved to bytes
+   was chosen by the signer.
+
+   Suppression.  A decision maker can fail to write a receipt for a
+   decision it does not want seen.  Independent observers at the
+   boundary, as the architecture requires for Action Records, reduce
+   this risk.  Registration with a Transparency Service helps address
+   selective registration when Relying Parties accept a Signed Statement
+   only if they can discover and verify a Receipt for that Signed
+   Statement from a Transparency Service they trust (Sections 7.1 and
+   9.3 of [RFC9943]).  This document does not ensure that a receipt is
+   produced for every decision.  A SCITT Receipt shows inclusion of the
+   registered Signed Statement, not that every receipt was registered
+   (Section 3.7).  Completeness presupposes an expectation of which
+   receipts ought to exist, and this document does not define that
+   expectation.
+
+   Gaps.  For outcome receipts, [PB-OUTCOME] defines an optional member
+   sequence, with a run identifier and a counter that an executor can
+   opt into (its sections 4 and 7); Section 3.4 admits that member.  A
+   verifier that holds numbered outcome receipts of a run can report a
+   gap in the numbers it has.  Such a gap can reflect withholding or
+   delivery delay; the numbers alone do not establish its cause.  Those
+   sequence numbers alone do not show whether receipts above the highest
+   observed number have been withheld, and a run without the member
+   leaves no such trace (compare Section 6.3 of [GILDA]).  The profile
+   of Section 3.2 defines no sequence counter or chain of decision
+   receipts.  Records that a Service or Tool emits at the boundary where
+   an action took effect (Section 4.1 of [AUDIT-ARCH]) can expose an
+   effect for which the Auditor has no matching decision receipt.
+
+
+
+
+
+
+
+
+
+
+
+
+Gruszka                    Expires 6 May 2027                  [Page 29]
+
+Internet-Draft           AUDIT Decision Receipts           November 2026
+
+
+   Clocks. decidedAt and performedAt come from the signers' clocks.
+   Ordering against outside events needs a timestamp or a transparency
+   registration.  A verified time-stamp token under [RFC3161] for a hash
+   of the envelope bytes is, like a registration (Section 3.7), an
+   anchor outside the signer for a verifier that trusts the time-
+   stamping authority.  It supports the assertion that those bytes
+   existed no later than genTime plus the applicable accuracy
+   (Section 2.4.2 of [RFC3161]).  If the accuracy field is absent, the
+   accuracy may be available through other means, such as the TSA
+   policy; its absence does not establish zero uncertainty.
+
+8.  Privacy Considerations
+
+   The example receipts in Appendix A carry digests of action bytes,
+   approval records and effects rather than those bytes, and the example
+   decision receipts set privacy.rawInputsIncluded to false.  The field
+   rules of Section 3.8 allow that member to be true and permit raw
+   content in other admitted members, such as a decision receipt's open
+   traceContext object.  A successful check under Section 3 does not
+   establish that raw inputs are absent.  A digest of a short or
+   predictable input, such as a command line, can be found by trying
+   candidate inputs; a deployment that must hide such inputs keeps the
+   receipts as private as the inputs, or adds a secret salt to the
+   digested bytes.  Identifiers such as principal.id, agent.id and
+   traceContext link a person's actions across services, as Section 9 of
+   [AUDIT-ARCH] describes; pairwise or opaque identifiers reduce that
+   linkage.  Registering a receipt reveals that a decision took place at
+   a time, even when only its content root is registered.  Where the
+   envelope bytes are the payload of a registered Signed Statement
+   (Section 3.7), readers of that payload can read the receipt with its
+   identifiers and digests.  Registering a Statement over the content
+   root avoids including the receipt's envelope bytes in that Statement,
+   but the Signed Statement still carries its Issuer and Subject Claims
+   and the Transparency Service records the Registration time (Sections
+   6 and 7 of [RFC9943]).  Access to the registered data and any
+   detached payload depends on the Transparency Service and any Adjacent
+   Services; Issuers and Clients assess their privacy and security
+   posture before registration (Section 8 of [RFC9943]).
+
+9.  IANA Considerations
+
+   This document has no IANA actions.
+
+10.  References
+
+10.1.  Normative References
+
+
+
+
+
+Gruszka                    Expires 6 May 2027                  [Page 30]
+
+Internet-Draft           AUDIT Decision Receipts           November 2026
+
+
+   [DSSE]     Secure Systems Lab, "DSSE: Dead Simple Signing Envelope,
+              protocol specification, version 1.0.2", 28 May 2024,
+              <https://github.com/secure-systems-lab/dsse/blob/v1.0.2/
+              protocol.md>.
+
+   [INTOTO-STATEMENT]
+              in-toto project, "in-toto Attestation Framework: Statement
+              layer, v1 (release v1.2.0)", 18 March 2026,
+              <https://github.com/in-
+              toto/attestation/blob/v1.2.0/spec/v1/statement.md>.
+
+   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", BCP 14, RFC 2119,
+              DOI 10.17487/RFC2119, March 1997,
+              <https://www.rfc-editor.org/info/rfc2119>.
+
+   [RFC3339]  Klyne, G. and C. Newman, "Date and Time on the Internet:
+              Timestamps", RFC 3339, DOI 10.17487/RFC3339, July 2002,
+              <https://www.rfc-editor.org/info/rfc3339>.
+
+   [RFC4648]  Josefsson, S., "The Base16, Base32, and Base64 Data
+              Encodings", RFC 4648, DOI 10.17487/RFC4648, October 2006,
+              <https://www.rfc-editor.org/info/rfc4648>.
+
+   [RFC6234]  Eastlake 3rd, D. and T. Hansen, "US Secure Hash Algorithms
+              (SHA and SHA-based HMAC and HKDF)", RFC 6234,
+              DOI 10.17487/RFC6234, May 2011,
+              <https://www.rfc-editor.org/info/rfc6234>.
+
+   [RFC8032]  Josefsson, S. and I. Liusvaara, "Edwards-Curve Digital
+              Signature Algorithm (EdDSA)", RFC 8032,
+              DOI 10.17487/RFC8032, January 2017,
+              <https://www.rfc-editor.org/info/rfc8032>.
+
+   [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
+              2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
+              May 2017, <https://www.rfc-editor.org/info/rfc8174>.
+
+   [RFC8785]  Rundgren, A., Jordan, B., and S. Erdtman, "JSON
+              Canonicalization Scheme (JCS)", RFC 8785,
+              DOI 10.17487/RFC8785, June 2020,
+              <https://www.rfc-editor.org/info/rfc8785>.
+
+10.2.  Informative References
+
+   [AUDIT-ARCH]
+              Kuehlewind, M. and H. Birkholz, "An Architecture for
+              Auditing Agent Delegation and Interactions", Work in
+
+
+
+Gruszka                    Expires 6 May 2027                  [Page 31]
+
+Internet-Draft           AUDIT Decision Receipts           November 2026
+
+
+              Progress, Internet-Draft, draft-kuehlewind-audit-
+              architecture-01, 7 September 2026,
+              <https://datatracker.ietf.org/doc/html/draft-kuehlewind-
+              audit-architecture-01>.
+
+   [BIRKHOLZ] Birkholz, H., Heldt, T., and O. Steele, "Verifiable Agent
+              Conversation Records", Work in Progress, Internet-Draft,
+              draft-birkholz-verifiable-agent-conversations-01, 31
+              August 2026, <https://datatracker.ietf.org/doc/html/draft-
+              birkholz-verifiable-agent-conversations-01>.
+
+   [GILDA]    Gilda, S., "An Audit Record Format for AI Agent
+              Authorization Decisions", Work in Progress, Internet-
+              Draft, draft-gilda-audit-agent-audit-record-03, 29 October
+              2026, <https://datatracker.ietf.org/doc/html/draft-gilda-
+              audit-agent-audit-record-03>.
+
+   [IZMAYLOV] Izmaylov, P., "Signed Permissions and Action Receipts for
+              Automated Agents", Work in Progress, Internet-Draft,
+              draft-izmaylov-agent-permission-receipts-01, 24 October
+              2026, <https://datatracker.ietf.org/doc/html/draft-
+              izmaylov-agent-permission-receipts-01>.
+
+   [JCS-JS]   Erdtman, S., "canonicalize 2.1.0, a JavaScript
+              implementation of RFC 8785", 18 March 2025,
+              <https://www.npmjs.com/package/canonicalize/v/2.1.0>.
+
+   [PB-DECISION]
+              proofbundle project, "Decision Receipt predicate decision-
+              receipt/v0.1", proofbundle, tag v6.4.0, docs/predicates/
+              decision-receipt.md, October 2026,
+              <https://github.com/b7n0de/proofbundle/blob/v6.4.0/docs/
+              predicates/decision-receipt.md>.
+
+   [PB-OUTCOME]
+              proofbundle project, "Action Outcome predicate action-
+              outcome/v0.1", proofbundle, tag v6.4.0, docs/predicates/
+              action-outcome.md, October 2026,
+              <https://github.com/b7n0de/proofbundle/blob/v6.4.0/docs/
+              predicates/action-outcome.md>.
+
+   [PB-PYPI]  Python Package Index, "proofbundle 6.4.0", 28 October
+              2026, <https://pypi.org/project/proofbundle/6.4.0/>.
+
+   [PB-REPO]  proofbundle project, "proofbundle source repository", 2
+              November 2026, <https://github.com/b7n0de/proofbundle>.
+
+
+
+
+
+Gruszka                    Expires 6 May 2027                  [Page 32]
+
+Internet-Draft           AUDIT Decision Receipts           November 2026
+
+
+   [RFC3161]  Adams, C., Cain, P., Pinkas, D., and R. Zuccherato,
+              "Internet X.509 Public Key Infrastructure Time-Stamp
+              Protocol (TSP)", RFC 3161, DOI 10.17487/RFC3161, August
+              2001, <https://www.rfc-editor.org/info/rfc3161>.
+
+   [RFC7942]  Sheffer, Y. and A. Farrel, "Improving Awareness of Running
+              Code: The Implementation Status Section", BCP 205,
+              RFC 7942, DOI 10.17487/RFC7942, July 2016,
+              <https://www.rfc-editor.org/info/rfc7942>.
+
+   [RFC8949]  Bormann, C. and P. Hoffman, "Concise Binary Object
+              Representation (CBOR)", STD 94, RFC 8949,
+              DOI 10.17487/RFC8949, December 2020,
+              <https://www.rfc-editor.org/info/rfc8949>.
+
+   [RFC9052]  Schaad, J., "CBOR Object Signing and Encryption (COSE):
+              Structures and Process", STD 96, RFC 9052,
+              DOI 10.17487/RFC9052, August 2022,
+              <https://www.rfc-editor.org/info/rfc9052>.
+
+   [RFC9053]  Schaad, J., "CBOR Object Signing and Encryption (COSE):
+              Initial Algorithms", RFC 9053, DOI 10.17487/RFC9053,
+              August 2022, <https://www.rfc-editor.org/info/rfc9053>.
+
+   [RFC9162]  Laurie, B., Messeri, E., and R. Stradling, "Certificate
+              Transparency Version 2.0", RFC 9162, DOI 10.17487/RFC9162,
+              December 2021, <https://www.rfc-editor.org/info/rfc9162>.
+
+   [RFC9597]  Looker, T. and M.B. Jones, "CBOR Web Token (CWT) Claims in
+              COSE Headers", RFC 9597, DOI 10.17487/RFC9597, June 2024,
+              <https://www.rfc-editor.org/info/rfc9597>.
+
+   [RFC9679]  Isobe, K., Tschofenig, H., and O. Steele, "CBOR Object
+              Signing and Encryption (COSE) Key Thumbprint", RFC 9679,
+              DOI 10.17487/RFC9679, December 2024,
+              <https://www.rfc-editor.org/info/rfc9679>.
+
+   [RFC9942]  Steele, O., Birkholz, H., Delignat-Lavaud, A., and C.
+              Fournet, "CBOR Object Signing and Encryption (COSE)
+              Receipts", RFC 9942, DOI 10.17487/RFC9942, June 2026,
+              <https://www.rfc-editor.org/info/rfc9942>.
+
+   [RFC9943]  Birkholz, H., Delignat-Lavaud, A., Fournet, C., Deshpande,
+              Y., and S. Lasker, "An Architecture for Trustworthy and
+              Transparent Digital Supply Chains", RFC 9943,
+              DOI 10.17487/RFC9943, June 2026,
+              <https://www.rfc-editor.org/info/rfc9943>.
+
+
+
+
+Gruszka                    Expires 6 May 2027                  [Page 33]
+
+Internet-Draft           AUDIT Decision Receipts           November 2026
+
+
+   [RFC9995]  Steele, O., Lasker, S., and H. Birkholz, "CBOR Object
+              Signing and Encryption (COSE) Hash Envelope", RFC 9995,
+              DOI 10.17487/RFC9995, July 2026,
+              <https://www.rfc-editor.org/info/rfc9995>.
+
+   [SCITT-COSE]
+              Action State Group, "scitt-cose 0.5.0", 21 October 2026,
+              <https://pypi.org/project/scitt-cose/0.5.0/>.
+
+   [SER]      Gruszka, K., "Signed Evaluation Receipts", Work in
+              Progress, Internet-Draft, draft-gruszka-signed-evaluation-
+              receipts-04, 26 October 2026,
+              <https://datatracker.ietf.org/doc/html/draft-gruszka-
+              signed-evaluation-receipts-04>.
+
+   [SER-MAPPINGS]
+              Gruszka, K., "Citing Signed Evaluation Receipts from
+              Existing Envelopes", Work in Progress, Internet-Draft,
+              draft-gruszka-evaluation-receipt-mappings-04, 26 October
+              2026, <https://datatracker.ietf.org/doc/html/draft-
+              gruszka-evaluation-receipt-mappings-04>.
+
+   [WRIGHT]   Wright, D., "Verdict Records: Results on Claims that Cite
+              Receipts as Evidence", Work in Progress, Internet-Draft,
+              draft-wright-verdict-record-01, 1 November 2026,
+              <https://datatracker.ietf.org/doc/html/draft-wright-
+              verdict-record-01>.
+
+Appendix A.  Test Vectors
+
+   The seven DSSE vectors described in Appendix A.3 were generated with
+   proofbundle 6.4.0 from PyPI.  All vectors and keys in this appendix
+   are for testing only.  Each key seed is SHA-256 over a public ASCII
+   label, so that every byte can be rebuilt; these keys MUST NOT be used
+   for any real receipt.  Ed25519 is deterministic, so the signatures
+   below follow from the seeds and the payloads.
+
+A.1.  Test Keys and Inputs
+
+   Each key is given by its label, Ed25519 seed (hex), public key
+   (base64) and keyid.  The key labelled gate-1 signs the decision
+   receipts; the key labelled observer-1 signs the outcome receipts.
+   For these tests, the trust policy accepts decisionMaker.id gate-1
+   under the gate-1 key and permits the observer-1 key to attest
+   executor.id forge:agent-42-bot.  The key label observer-1 does not
+   assert that the observer is the executing account.
+
+
+
+
+
+Gruszka                    Expires 6 May 2027                  [Page 34]
+
+Internet-Draft           AUDIT Decision Receipts           November 2026
+
+
+   gate-1
+   draft-gruszka-audit-decision-receipts test key gate-1
+   100fa92fa6464c141f791a96327f555c1c0cfbf3095af986537e50c3c4335f8c
+   TWfs75IN1In3CNI8TnyIOUHgtwilOPGcRFQLJ670CJc=
+   SHA256:NjZMAelLq9XON3pxV5tR5hZjX99NkQyw4gGJSRc2gP8
+
+   observer-1
+   draft-gruszka-audit-decision-receipts test key observer-1
+   f03ad5b668ad225ea15fd9fd272fc8df84be59f467da86b0f2ad0a5ad26f4ddd
+   4hDsi5TCL+A+9SB7k2l4EkY7XePUheE+zE9mBazt2Fs=
+   SHA256:q/d0VZCREBObUFi8PWKWXEF4lVNeYPuGn0GuOqd1ij0
+
+   Each input is given by a name, its bytes, its size and its SHA-256.
+   "\n" stands for one line feed byte.  The bytes of ap, a3 and e3 are
+   the serialization under [RFC8785] of the JSON value shown, on one
+   line and without white space.  In ap, SHA-256(a1) stands for the JSON
+   string of the 64 lowercase hexadecimal digits of the SHA-256 of a1.
+   pol is the policy named by every policyDigest.  B is the payload of
+   vector P1 of [SER], Appendix A.2.1, cited by V3-decision.
+
+   a1 "git push origin refs/heads/topic:refs/heads/topic\n"
+   50 bytes, SHA-256
+   dec54f771352454097310ae4bd6608c0070ebebb3955c6be013c1b3a8e310bd0
+
+   a1x "git push --force origin refs/heads/topic:refs/heads/main\n"
+   57 bytes, SHA-256
+   b683418806875ff79c6fa190c50edab0b96577ad8062de5ba7b41dc1d9c363fb
+
+   a2 "gh pr merge 7 --repo acme/widgets --merge\n"
+   42 bytes, SHA-256
+   5a7549948a1441addb710f5ada59e06dbce25cc5a59accf14f140379f47adb5b
+
+   pol "example gate rules, revision 1\n"
+   31 bytes, SHA-256
+   43789b41915ae0febcd13263d293101af5ab041eb7c234e1cbe625d6312815f6
+
+   ap, 231 bytes, SHA-256
+   88e5b6d69b3e4bc250a42aeffea0414d406e5f04ba4f991ee432a78231da1170
+   {
+    "actionDigest": {
+     "sha256": SHA-256(a1)
+    },
+    "approvalId": "appr-001",
+    "approvedAt": "2026-10-15T09:00:00Z",
+    "approver": "user-123",
+    "session": "sess-1",
+    "validUntil": "2026-10-15T09:15:00Z"
+   }
+
+
+
+Gruszka                    Expires 6 May 2027                  [Page 35]
+
+Internet-Draft           AUDIT Decision Receipts           November 2026
+
+
+   a3, 81 bytes, SHA-256
+   9165c850b7e03cd59578efa1769be74c5386cff5ce96df6b59e25d38ad6f88b4
+   {
+    "body": "All required checks passed for 4f1c2a9.",
+    "pull": 7,
+    "repo": "acme/widgets"
+   }
+
+   e3, 93 bytes, SHA-256
+   d3d824cf55168298c0f651244853ec9d9620ea09087abe899243ceb8f9df3a6d
+   {
+    "author": "agent-42-bot",
+    "body": "All required checks passed for 4f1c2a9.",
+    "id": 9001,
+    "pull": 7
+   }
+
+   B, 458 bytes, SHA-256
+   8cd849a6dcce08aee334511d7b2f31c54e478885dda1795d3c8f972dd0d4811c
+
+A.2.  Statements
+
+   The payload bytes of each vector are the serialization under
+   [RFC8785] of a Statement {"_type": "https://in-toto.io/Statement/v1",
+   "predicateType": P, "predicate": D, "subject": [{"name": N, "digest":
+   {"sha256": H}}]}, where H is SHA-256 over the serialization of D.
+   For a decision receipt P is the decision receipt type and N is
+   "decision:" followed by decisionId; for an outcome receipt P is the
+   outcome receipt type and N is "outcome:" followed by outcomeId.
+
+   Each predicate is given as a list of assignments that starts from the
+   predicate named in its first line, {} being the empty object.  An
+   assignment sets the member at the path to the JSON value shown.  A
+   path is a sequence of member names joined by dots, where a decimal
+   index i in square brackets after a name selects element i of an
+   array; missing objects on the path are created, and an assignment to
+   element i of an array with i elements appends it.  Members not named
+   keep their value.  SHA-256(x) stands for the JSON string of the 64
+   lowercase hexadecimal digits of the SHA-256 of input x, and R(V) for
+   that of the payload bytes of vector V.
+
+
+
+
+
+
+
+
+
+
+
+Gruszka                    Expires 6 May 2027                  [Page 36]
+
+Internet-Draft           AUDIT Decision Receipts           November 2026
+
+
+   V1-good, from {}
+   agent.id = "agent-42"
+   decidedAt = "2026-10-15T09:00:05Z"
+   decision.reasonCodes = ["user_approval"]
+   decision.verdict = "ALLOW"
+   decisionChangeConditions = []
+   decisionChangeConditions[0].conditionType = "ruleChange"
+   decisionChangeConditions[0].description =
+    "a changed gate, mode or rule of the gate"
+   decisionId = "dec-0001"
+   decisionMaker.id = "gate-1"
+   decisionType = "preActionAuthorization"
+   evidenceRefs = []
+   inputSnapshot = []
+   inputSnapshot[0].digest.sha256 = SHA-256(a1)
+   inputSnapshot[0].mediaType = "text/plain"
+   inputSnapshot[0].name = "approved bytes"
+   inputSnapshot[1].digest.sha256 = SHA-256(ap)
+   inputSnapshot[1].mediaType = "application/json"
+   inputSnapshot[1].name = "approval record"
+   notChecked = []
+   notChecked[0].field = "content"
+   notChecked[0].impact = "an approved text can be wrong"
+   notChecked[0].reason =
+    "the gate does not judge whether the text is true"
+   policyBoundary.bundleRevision = "1"
+   policyBoundary.decisionPath = "outbound-gate/allow-write"
+   policyBoundary.policyDigest.sha256 = SHA-256(pol)
+   policyBoundary.policyEngine = "proofbundle-pilot/github-write"
+   policyBoundary.policyId = "outbound-gate-rules"
+   principal.id = "user-123"
+   privacy.rawInputsIncluded = false
+   proposedAction.actionType = "git.push"
+   proposedAction.method = "write"
+   proposedAction.parametersDigest.sha256 = SHA-256(a1)
+   proposedAction.target.name =
+    "https://git.example/acme/widgets refs/heads/topic"
+   proposedAction.target.uri = "https://git.example/acme/widgets"
+   schemaVersion = "0.1.0"
+   traceContext.parentId = "int-002"
+   traceContext.traceId = "trace-abc"
+   validity.audience = ["observer-1"]
+   validity.expiresAt = "2026-10-15T09:05:05Z"
+   validity.nonce = "dec-0001"
+
+
+
+
+
+
+
+Gruszka                    Expires 6 May 2027                  [Page 37]
+
+Internet-Draft           AUDIT Decision Receipts           November 2026
+
+
+   V2-good, from V1-good
+   actionOutcome.outcomeRef = null
+   actionOutcome.performedAt = null
+   actionOutcome.status = "blocked"
+   decidedAt = "2026-10-15T09:05:00Z"
+   decision.reasonCodes = ["required_check_failed"]
+   decision.verdict = "DENY"
+   decisionId = "dec-0002"
+   inputSnapshot = []
+   inputSnapshot[0].digest.sha256 = SHA-256(a2)
+   inputSnapshot[0].mediaType = "text/plain"
+   inputSnapshot[0].name = "proposed bytes"
+   policyBoundary.decisionPath = "outbound-gate/deny-write"
+   proposedAction.actionType = "github.merge"
+   proposedAction.parametersDigest.sha256 = SHA-256(a2)
+   proposedAction.target.name =
+    "https://git.example/acme/widgets/pull/7"
+   proposedAction.target.uri = "https://git.example/acme/widgets/pull/7"
+   traceContext.parentId = "int-003"
+   validity.expiresAt = "2026-10-15T09:10:00Z"
+   validity.nonce = "dec-0002"
+
+   V3-decision, from V1-good
+   decidedAt = "2026-10-15T09:10:00Z"
+   decision.reasonCodes = ["evidence_verified"]
+   decisionId = "dec-0003"
+   evidenceRefs = []
+   evidenceRefs[0].digest.sha256 = SHA-256(B)
+   evidenceRefs[0].relation = "evaluationResult"
+   inputSnapshot = []
+   inputSnapshot[0].digest.sha256 = SHA-256(a3)
+   inputSnapshot[0].mediaType = "application/json"
+   inputSnapshot[0].name = "approved bytes"
+   proposedAction.actionType = "github.conversationComment"
+   proposedAction.parametersDigest.sha256 = SHA-256(a3)
+   proposedAction.target.name =
+    "https://git.example/acme/widgets/pull/7"
+   proposedAction.target.uri = "https://git.example/acme/widgets/pull/7"
+   traceContext.parentId = "int-004"
+   validity.expiresAt = "2026-10-15T09:15:00Z"
+   validity.nonce = "dec-0003"
+
+
+
+
+
+
+
+
+
+
+Gruszka                    Expires 6 May 2027                  [Page 38]
+
+Internet-Draft           AUDIT Decision Receipts           November 2026
+
+
+   V3-good, from {}
+   decisionRef.sha256 = R(V3-decision)
+   effectDigest.sha256 = SHA-256(e3)
+   executor.id = "forge:agent-42-bot"
+   outcomeId = "out-0001"
+   performedAt = "2026-10-15T09:10:02Z"
+   requestedActionDigest.sha256 = SHA-256(a3)
+   schemaVersion = "0.1.0"
+   status = "executed"
+
+   V3-bad, from V3-good
+   decisionRef.sha256 = R(V1-good)
+   outcomeId = "out-0002"
+
+   V1-bad has the payload bytes of V1-good with every occurrence of the
+   hexadecimal SHA-256 of a1 replaced by that of a1x, and keeps the
+   signature of V1-good.  V2-bad has as payload bytes the output of
+   Python's json.dumps(s, sort_keys=True) for the Statement s of
+   V2-good, with a space after each comma and colon, and is validly
+   signed over them by gate-1.
+
+A.3.  Results
+
+   Every envelope is {"payload": base64 of the payload bytes,
+   "payloadType": "application/vnd.in-toto+json", "signatures":
+   [{"keyid": keyid of the signer, "sig": signature}]}. Each block below
+   gives the vector, the evaluation time T, the expected result with the
+   exit code of the proofbundle 6.4.0 command line interface, the
+   payload size and signer, the SHA-256 of the payload bytes (the
+   content root where the payload is canonical) and the signature in
+   base64 on two lines.  The expected audience is observer-1 and the
+   expected nonce is the decisionId. decision verify ran with --strict,
+   --aud, --nonce and --verification-time T; outcome verify with
+   --strict, --expected-decision-ref R(V3-decision) and --decision-
+   maker-id gate-1.
+
+   V1-good, T 2026-10-15T09:01:00Z, pass, exit 0
+   1829 bytes, signed by gate-1
+   b9dfd26537542632013d0df166141a788551b4987dfa33b060d5b5ebba78dfb1
+   GkvzPjklV5ZbtomNRXbS4+O4MIOSw8xGmA0diAEYKEm0
+   s4Q9qLkL1j7+e5RZnT9l56tfB2utDoNycACsSvSoDw==
+
+   V1-bad, T 2026-10-15T09:01:00Z, fail at step 3, exit 1
+   1829 bytes, signed by gate-1
+   69eb87fb33a29153182b0e0c89a444023cc00c82fe7c8db1c7e0893363b2c926
+   GkvzPjklV5ZbtomNRXbS4+O4MIOSw8xGmA0diAEYKEm0
+   s4Q9qLkL1j7+e5RZnT9l56tfB2utDoNycACsSvSoDw==
+
+
+
+
+Gruszka                    Expires 6 May 2027                  [Page 39]
+
+Internet-Draft           AUDIT Decision Receipts           November 2026
+
+
+   V2-good, T 2026-10-15T09:06:00Z, pass, exit 0
+   1765 bytes, signed by gate-1
+   ed149a1c7383842eebf8304001da9de97d130b0b15080d1315ab8fbf1274ed44
+   66CUa1kz6aOm6gbdctRg4l97fW8x185nxpsB5rkCFj+a
+   HZVjRjc5hDnQu6v4J/bHzaufyHhPCPdM6XUAWiylAQ==
+
+   V2-bad, T 2026-10-15T09:06:00Z, fail at step 4, exit 2
+   1866 bytes, signed by gate-1
+   646d4b2229a55c54848361030bf6d57816597a96bd7d1fb00d7da0f03b009bd2
+   2yjE3MxaVXdureYhh50+d3XdDAsJDhW3nacud4WCbzBM
+   R/NLHyxeqIvbsDKQTabl+X+5O4CSXu17rA7lFYN0Cw==
+
+   V3-decision, T 2026-10-15T09:11:00Z, pass, exit 0
+   1827 bytes, signed by gate-1
+   0014b1c419798125c3984e85a4b322ee619a3227978840cac5f9d282b189521f
+   DDLIUtX6uk5A3AqcvYP9f9zYeHJAWNTrdBZwpXmEQq4y
+   u0bivvsiNEjx4u2Kw2U6Mr11lcWoRZnSo1w5MX2PCA==
+
+   V3-good, pass, exit 0
+   694 bytes, signed by observer-1
+   f0ff90cf25e2db1e989fa79869d4b3b46899112e8c2269d9a18a64b751aa7274
+   MCUgSY+fGUO2cm5DnxBVKEC/BBSyeS359aj2rYowwkHT
+   j+CskAgraX5TirUBic2i2KyUUaxBYMMdVafhu3tcAQ==
+
+   V3-bad, fail at binding, exit 2
+   694 bytes, signed by observer-1
+   48be708cf3f959556323474f4a5c9193b417d2bfea5c88bb852daf00b64827b4
+   uEgT4TFv7jEgmH7pwJcPBEEZM+n2wGjic6U6yYWOU3Dh
+   Ta0tMuimQ8q4Ha1lgw4zWNR9YBag4GmVt9SdsfzwCQ==
+
+   The payload bytes of V1-good, V2-good, V3-decision, V3-good and
+   V3-bad and the inputs ap, a3, e3 and B are each equal to three
+   serializations of their parsed value: Python's json.dumps with
+   sort_keys=True, separators=(",", ":") and either setting of
+   ensure_ascii; the rfc8785 package 0.1.4 for Python; and the
+   independent JavaScript implementation [JCS-JS].  The values contain
+   no floating-point numbers and no characters outside ASCII, which
+   keeps these serializations equal.  The payload of V2-bad differs from
+   all of them, as intended.
+
+   Each result is that of one procedure.  V1-good is judged by
+   Section 3.2 with Case 1 of Section 3.3, using a1 and ap; V1-bad fails
+   at step 3 of Section 3.2, before any check of Case 1.  V2-good is
+   judged by Section 3.2 with Case 2, using a2; V2-bad fails at step 4
+   of Section 3.2.  V3-good is judged as Case 3, by Section 3.2 for
+   V3-decision and Section 3.4 for V3-good, with e3 as effect bytes and
+   forge:agent-42-bot as expected executor.id; V3-bad fails at step 4 of
+   Section 3.4.  V3-decision passes under both readings, by Section 3.2
+
+
+
+Gruszka                    Expires 6 May 2027                  [Page 40]
+
+Internet-Draft           AUDIT Decision Receipts           November 2026
+
+
+   alone and as Case 3 together with V3-good.  Case 3 is the reading
+   that applies, because V3-decision is the decision of an executed
+   action; the exit code of proofbundle decision verify reflects
+   Section 3.2 alone.
+
+A.4.  Signed Statements for Registration
+
+   This appendix gives one Signed Statement for each way of registration
+   in Section 3.7, both for V2-good.  Statement A carries the envelope
+   bytes as its payload.  Statement B is made over the content root and
+   uses, as one example of a profile, the COSE Hash Envelope of
+   [RFC9995] with a detached payload; other profiles are possible.
+   These Signed Statements were built from the specifications cited
+   here, not with proofbundle.  The SCITT Receipts for A and B at the
+   end of this appendix were generated for illustration with the library
+   scitt-cose 0.5.0 [SCITT-COSE], and no Transparency Service issued
+   them.
+
+   The envelope bytes are the serialization under [RFC8785] of the
+   V2-good envelope of Appendix A.3, 2590 bytes with SHA-256
+   0e60fbbf36ddc6691cdf0fb2b1faea70d23d02d0da7653f449ec60f2f820e71e.
+   The test key issuer-1 of the Issuer is built like the keys of
+   Appendix A.1 and given by its label, Ed25519 seed (hex) and public
+   key (base64).  Its kid is the COSE Key Thumbprint of [RFC9679] with
+   SHA-256 over the required parameters kty 1 (OKP), crv 6 (Ed25519) and
+   x.
+
+   issuer-1
+   draft-gruszka-audit-decision-receipts test key issuer-1
+   cce9d25f7abceebfb8d50ce46c19b948d354906ecdbe6b72d53973bed5614e30
+   fS1sCQ+XTgtuMzxOnSRz0IMbzm+iFb6bVcB6lEMy8e8=
+   kid
+   f823e78e15df312ae66be2b2d4a8c035873f68d22abb1b2f52fcc6708cce62b0
+
+   Both Signed Statements are COSE_Sign1 messages of [RFC9052] with tag
+   18, an empty unprotected header and an EdDSA (-8) signature of
+   [RFC9053] by issuer-1 over the Sig_structure of Section 4.4 of
+   [RFC9052].  Their CBOR uses the core deterministic encoding of
+   Section 4.2.1 of [RFC8949].  The protected headers carry the CWT
+   Claims (label 15) of [RFC9597] with iss "https://issuer-1.example"
+   and sub "decision:dec-0002", the subject name of V2-good.  They are
+   shown below in diagnostic notation, with kid standing for the value
+   above.
+
+
+
+
+
+
+
+
+Gruszka                    Expires 6 May 2027                  [Page 41]
+
+Internet-Draft           AUDIT Decision Receipts           November 2026
+
+
+   A  {1: -8, 3: "application/json", 4: kid,
+       15: {1: "https://issuer-1.example", 2: "decision:dec-0002"}}
+   B  {1: -8, 4: kid,
+       15: {1: "https://issuer-1.example", 2: "decision:dec-0002"},
+       258: -16, 259: "application/vnd.in-toto+json"}
+
+   In B, label 258 (payload_hash_alg) is -16 (SHA-256) and label 259
+   (payload_preimage_content_type) is the payloadType of the envelope,
+   whose decoded payload is the preimage.  B carries no content type
+   (label 3), as Section 4 of [RFC9995] requires for a Hash Envelope.
+
+   A is encoded as the bytes given below, followed by the envelope
+   bytes, the two bytes 0x58 0x40 and the signature.  B has a detached
+   payload, the content root R(V2-good) of Appendix A.3, and is given in
+   full.
+
+   A, 2768 bytes, SHA-256
+   ec0255d32b2e96aee414728dfa10995f4742849e9d71bb4d8710223765062517
+   bytes before the payload, 112 bytes
+   d2845868a4012703706170706c69636174696f6e2f6a736f6e045820f823e78e
+   15df312ae66be2b2d4a8c035873f68d22abb1b2f52fcc6708cce62b00fa20178
+   1868747470733a2f2f6973737565722d312e6578616d706c6502716465636973
+   696f6e3a6465632d30303032a0590a1e
+   signature
+   16181711ba8148149489c7a52f4c97ac44dfd91b83bcbab4ba2f048ef3da6612
+   52a508a3aecbe32f3e531e8cf8023fa381a10e51e1a5de468196a21ab208e40c
+
+   B, 195 bytes, SHA-256
+   3a814dfc59ddbe6da6f0ab7950db07801b3c60e917808febad5978c0ec90e83b
+   d284587ba50127045820f823e78e15df312ae66be2b2d4a8c035873f68d22abb
+   1b2f52fcc6708cce62b00fa201781868747470733a2f2f6973737565722d312e
+   6578616d706c6502716465636973696f6e3a6465632d303030321901022f1901
+   03781c6170706c69636174696f6e2f766e642e696e2d746f746f2b6a736f6ea0
+   f65840caec06ad5338ad0b9479190cd34c92eca213074ccfa02fcda1c5af70d8
+   3342e3d93819b07b983e8771ebf8c201fe95cc30bdded5a8c6da658d494c3fb2
+   4cb603
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Gruszka                    Expires 6 May 2027                  [Page 42]
+
+Internet-Draft           AUDIT Decision Receipts           November 2026
+
+
+   A verifier that holds the issuer-1 key decodes each Signed Statement,
+   checks that alg is EdDSA, that kid is the thumbprint of that key and
+   that iss is as expected, and verifies the signature, for B over the
+   detached payload.  Both pass.  Two counterexamples fail at the
+   signature.  In the first, the byte at offset 12 of the envelope bytes
+   in A, the first character "e" of the base64 payload, is replaced by
+   "f".  In the second, B is checked with a detached payload whose first
+   byte is 0xec instead of 0xed.  The binding of Section 3.7 then holds
+   for V2-good.  The payload of A equals its envelope bytes, and the
+   payload of B equals its content root and differs from R(V2-bad).  On
+   those envelope bytes, proofbundle 6.4.0 decision verify with the
+   arguments of Appendix A.3 exits 0.
+
+   For these Receipts, a local registration in the manner of Section 6.3
+   of [RFC9943] first verified the Issuer signature of each Signed
+   Statement, for B over the detached payload, and checked that its
+   protected header carries kid and CWT Claims with iss and sub
+   (Section 6 of [RFC9943]).  It accepted A and then B as the two
+   entries of a Merkle Tree of [RFC9162], each entry being the bytes of
+   the Signed Statement.  Neither [RFC9942] nor [RFC9943] defines what a
+   Transparency Service takes as an entry; the bytes of the Signed
+   Statement are the choice of this example, and other services enter,
+   for example, a hash of them.  It rejected A with the changed byte, B
+   with the changed detached payload, and a variant of A without sub.
+   The Receipts are COSE_Sign1 messages of [RFC9942] with vds 1
+   (RFC9162_SHA256), a detached payload, the root of that tree, and an
+   EdDSA signature by the test key receipt-issuer-1, built like the keys
+   of Appendix A.1.  Their CWT Claims carry the iss given below and the
+   sub of the Signed Statement, and their kid is the COSE Key Thumbprint
+   of the receipt-issuer-1 key.  Both Signed Statements have the same
+   sub and both Receipts sign the same root, so the two Receipts share
+   their protected header and signature and differ only in their
+   inclusion proofs.  Their protected header keeps the label order in
+   which scitt-cose writes it (395, 15, 4, 1), not the deterministic
+   order of Section 4.2.1 of [RFC8949]; the signature covers the bytes
+   as given.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Gruszka                    Expires 6 May 2027                  [Page 43]
+
+Internet-Draft           AUDIT Decision Receipts           November 2026
+
+
+   receipt-issuer-1
+   draft-gruszka-audit-decision-receipts test key receipt-issuer-1
+   b71a939bfbc162586fffa8b45a0d89d312e7102297906c3174fa6efab2b497fd
+   WpbTJ2CMpw5ELCFLr7kLdAjpZInhGIUzQQ5lzCXs0po=
+   kid
+   4277c54764b34816bb1836860d570849105f452369e4e5c741f5891d9fb25040
+   iss
+   https://receipt-issuer-1.example
+
+   root, tree size 2
+   f541c1ee787f59133666bd6907cb0174abb2460d8fdcce8deec05beb1a7ddd6d
+
+   Receipt for A, leaf index 0, 216 bytes, SHA-256
+   1525b5ab39b77b0283825673bb7ee6ec699b9940ab4730d2118d66fd1a7cfce8
+   d2845862a419018b010fa201782068747470733a2f2f726563656970742d6973
+   737565722d312e6578616d706c6502716465636973696f6e3a6465632d303030
+   320458204277c54764b34816bb1836860d570849105f452369e4e5c741f5891d
+   9fb250400127a119018ca120815826830200815820047d8ac95c86ec315a5419
+   b62eeeb68a6b7d94b0654ea372d72ec5ee418a9710f658400682628ba41d0364
+   9206c1a7c7294f1f878b44208bb37b08027319a196906f67d4b0ad8d70bce9cd
+   36d141c289bc3ba0a7933bceb71af802e7b2db2a28d6db0b
+
+   Receipt for B, leaf index 1, 216 bytes, SHA-256
+   50a0ed768b8e9482f0d4f3f821109fbe7704b4235ca56e7c5a8c5a4f5ae36a21
+   d2845862a419018b010fa201782068747470733a2f2f726563656970742d6973
+   737565722d312e6578616d706c6502716465636973696f6e3a6465632d303030
+   320458204277c54764b34816bb1836860d570849105f452369e4e5c741f5891d
+   9fb250400127a119018ca12081582683020181582031277502318f2fb4197043
+   c51cb6895267e7c48d48ab55aa0c2370745b1cdcf9f658400682628ba41d0364
+   9206c1a7c7294f1f878b44208bb37b08027319a196906f67d4b0ad8d70bce9cd
+   36d141c289bc3ba0a7933bceb71af802e7b2db2a28d6db0b
+
+   A verifier computes the leaf hash, SHA-256 over the byte 0x00
+   followed by the entry (Section 2.1.1 of [RFC9162]), applies the
+   inclusion path of the Receipt to obtain the root (Section 2.1.3.2 of
+   [RFC9162]), and verifies the signature over that root with the
+   receipt-issuer-1 key (Section 5.2.1 of [RFC9942]).  Both Receipts
+   pass.  Four counterexamples fail at the signature, namely A with the
+   Receipt for B, B with the Receipt for A, the Receipt for A with one
+   byte of its inclusion path changed, and the Receipt for A checked
+   with the issuer-1 key instead of the receipt-issuer-1 key.
+
+
+
+
+
+
+
+
+
+
+Gruszka                    Expires 6 May 2027                  [Page 44]
+
+Internet-Draft           AUDIT Decision Receipts           November 2026
+
+
+A.5.  Failure Vectors
+
+   Each vector below defines a failing test case based on a passing
+   vector of Appendix A.3 and names its expected first failing check for
+   the stated inputs and procedure.  For F10, receipt verification
+   passes and the relying party refuses the approval under Section 4.
+   The payloads are derived as in Appendix A.2, where a line "remove P"
+   removes the member at path P, and signed with the test keys of
+   Appendix A.1.  F4 and F5 reuse the envelopes of V1-good and V2-good
+   and differ from them only in an input of the verifier.  These vectors
+   were generated from the definitions in this document, not with
+   proofbundle.
+
+   The approval record ap2 is ap with a later validUntil, and c1 is the
+   consumption state of a relying party that has honoured ap, as an
+   array of approval identities.  Both are the [RFC8785] serialization
+   of the JSON value shown.
+
+   ap2, 231 bytes, SHA-256
+   37ec7f3fa06f086626268a6c818ba5b5af7fd16ba292735ce964a83c42c0357c
+   {
+    "actionDigest": {
+     "sha256": SHA-256(a1)
+    },
+    "approvalId": "appr-001",
+    "approvedAt": "2026-10-15T09:00:00Z",
+    "approver": "user-123",
+    "session": "sess-1",
+    "validUntil": "2026-10-15T09:30:00Z"
+   }
+
+   c1, 139 bytes, SHA-256
+   f13fce72c54f1872232c0339fa98b33ffe5142f72481cd31e378bc6a680b6f6a
+   [
+    {
+     "actionDigest": {
+      "sha256": SHA-256(a1)
+     },
+     "approvalId": "appr-001",
+     "session": "sess-1"
+    }
+   ]
+
+   The decision vectors are checked like their base vectors in
+   Appendix A.3, by Section 3.2 with Case 1 of Section 3.3 using a1 and
+   ap, or with Case 2 using a2, with expected audience observer-1 and
+   the decisionId as expected nonce.  F5 is checked with a1 instead of
+   a2.  F10 is checked with ap2, and then by a relying party under
+
+
+
+Gruszka                    Expires 6 May 2027                  [Page 45]
+
+Internet-Draft           AUDIT Decision Receipts           November 2026
+
+
+   Section 4 that holds c1.  F6 to F8 are checked by Section 3.4 against
+   V3-decision at T 2026-10-15T09:11:00Z, with e3 as effect bytes and
+   forge:agent-42-bot as expected executor.id.
+
+   F1, from V1-good
+   agent = null
+
+   F2, from V2-good
+   policyBoundary.validFrom = "2026-10-15T09:00:00+00:00"
+
+   F3, from V2-good
+   decisionMaker.id = "gate-2"
+
+   F6, from V3-good
+   executor.id = "forge:another-actor"
+
+   F7, from V3-good
+   status = "refused"
+   remove effectDigest
+
+   F8, from V3-good
+   performedAt = "2026-10-15T09:09:59Z"
+
+   F9, from V1-good
+   validity.expiresAt = "2026-10-15T10:00:00Z"
+
+   F10, from V1-good
+   decidedAt = "2026-10-15T09:20:00Z"
+   decisionId = "dec-0004"
+   inputSnapshot[1].digest.sha256 = SHA-256(ap2)
+   validity.expiresAt = "2026-10-15T09:25:00Z"
+   validity.nonce = "dec-0004"
+
+   Each block gives the vector, the evaluation time T, the step at which
+   it fails, the exit code of the proofbundle 6.4.0 command line
+   interface for the command of Appendix A.3, and, for a new payload,
+   its size and signer, the SHA-256 of the payload bytes and the
+   signature in base64 on two lines.
+
+   F1, T 2026-10-15T09:01:00Z, fails at step 7 of 3.2, exit 2
+   1816 bytes, signed by gate-1
+   c20b86e4fa3753555a3e84dc87e2efe574f5094544612c6fc91ccf4f68707063
+   TeDLj3n16X9LrDWZGsPSM1YTwCx37OuCrXj/rYp4ayMX
+   X4EMk9ymbLAjBUZliV3KqqA4E0MEPXA6EYArYoThAQ==
+
+   F2, T 2026-10-15T09:06:00Z, fails at step 7 of 3.2, exit 2
+   1805 bytes, signed by gate-1
+   f9015e5fbcce4da86a56e5facfc812f629b62e6c29afa5f7172d037e6b880978
+
+
+
+Gruszka                    Expires 6 May 2027                  [Page 46]
+
+Internet-Draft           AUDIT Decision Receipts           November 2026
+
+
+   bPEAg3NIdR7cKMu7egfmj1xWPs4r27HumGAG6z95uKVk
+   +iQwNWltjZBCDc5PJiBDVv3hb+ufBliTWf08CluRAA==
+
+   F3, T 2026-10-15T09:06:00Z, fails at step 8 of 3.2, exit 0
+   1765 bytes, signed by gate-1
+   506905bbeeb5205b82aa707a6e3a9ec4f27f6f7213b8dc864d5083063c2f460a
+   qGm1ojfaW3hFVuUV5q+H+t1zYQRVA9NPIWnTup1w22Xd
+   dNAtygYVZ3qA7Wcame3kZsd14kmp+o+4Az0/FDNOAg==
+
+   F4, the envelope of V1-good unchanged,
+   T 2026-10-15T09:05:05Z, fails at step 9 of 3.2, exit 2
+
+   F5, the envelope of V2-good with a1 as action bytes,
+   T 2026-10-15T09:06:00Z, fails at step 10 of 3.2, exit 0
+
+   F6, T 2026-10-15T09:11:00Z, fails at step 5 of 3.4, exit 0
+   695 bytes, signed by observer-1
+   400e251d35ce2d833d22eb8699b2300a565801056bc2cccd461842957107bd69
+   gNh8vj8l4Ke040Yos21Vhd6uThtQYLsPVkRBJ4sXu+/C
+   n4LaMY2xoO4RzoI/AMU4LY8GAlwelUVCab+FLjGuBw==
+
+   F7, T 2026-10-15T09:11:00Z, fails at step 6 of 3.4, exit 0
+   600 bytes, signed by observer-1
+   b277133a0cd9e0ceea68313a8896280a89fd24c1743b1e056dcec5d10e10c6ad
+   EhhyqWKqst02TtQfDvlLWyVgQrQao7fPywh0elGXrH0k
+   uZXQxMACzjGGbX+69BoygBO3/T7SHHLtmPAB5X3bBQ==
+
+   F8, T 2026-10-15T09:11:00Z, fails at step 7 of 3.4, exit 0
+   694 bytes, signed by observer-1
+   bbe81b4cf255b9444de8ead2773fc9a859f4c2b9f8288822209fac0653fb9888
+   B+PLo64p+ESIWVfdIk7FR6RuANsst7kgsep1K6+g92eU
+   Luty4HseuWJL2laTX+tkc0aM1ztineO5Q3rA9XTtAg==
+
+   F9, T 2026-10-15T09:16:00Z, fails at Case 1 of 3.3, exit 0
+   1829 bytes, signed by gate-1
+   8271acb7293138eea0a48e52ee0dfd99c063b1139f353c8b26c9cdbe56975151
+   hIPtCWefKjWx+MlTv7nUxCuq9v+JjapYccXx9rawMxw8
+   JcxybehAGp8d8MozhTzAjZ5BZgmzvKBkEXECTfQPCA==
+
+   F10, T 2026-10-15T09:21:00Z, fails at Section 4, exit 0
+   1829 bytes, signed by gate-1
+   c299b48e0a0596f8c8eb252beef0138c7d1133f113cdc03150abb6cb41bcdcce
+   qCHm6JNGoxXAdFPXKud8ojxef8wh+m9BrGHbYD/1miqG
+   1YGcYAZ/XRFO8+el6D8RirkB313aOUqZo6YwBAUYAw==
+
+
+
+
+
+
+
+Gruszka                    Expires 6 May 2027                  [Page 47]
+
+Internet-Draft           AUDIT Decision Receipts           November 2026
+
+
+          +========+================+======+===================+
+          | Vector | Fails at       | Exit | proofbundle 6.4.0 |
+          +========+================+======+===================+
+          | F1     | step 7 of 3.2  | 2    | rejects           |
+          +--------+----------------+------+-------------------+
+          | F2     | step 7 of 3.2  | 2    | rejects           |
+          +--------+----------------+------+-------------------+
+          | F3     | step 8 of 3.2  | 0    | accepts           |
+          +--------+----------------+------+-------------------+
+          | F4     | step 9 of 3.2  | 2    | rejects           |
+          +--------+----------------+------+-------------------+
+          | F5     | step 10 of 3.2 | 0    | accepts           |
+          +--------+----------------+------+-------------------+
+          | F6     | step 5 of 3.4  | 0    | accepts           |
+          +--------+----------------+------+-------------------+
+          | F7     | step 6 of 3.4  | 0    | accepts           |
+          +--------+----------------+------+-------------------+
+          | F8     | step 7 of 3.4  | 0    | accepts           |
+          +--------+----------------+------+-------------------+
+          | F9     | Case 1 of 3.3  | 0    | accepts           |
+          +--------+----------------+------+-------------------+
+          | F10    | Section 4      | 0    | accepts           |
+          +--------+----------------+------+-------------------+
+
+              Table 6: Failure vectors and proofbundle 6.4.0
+
+   The proofbundle 6.4.0 commands used here receive no action bytes,
+   effect bytes, expected executor.id or consumption state, and no
+   expected decisionMaker.id.  They reject F1, F2 and F4 and return exit
+   code 0 for the other seven command-line inputs.  The procedures
+   specified here reject F3, F5, F6, F7, F8 and F9.  F10 instead passes
+   receipt verification and is refused by the relying party under
+   Section 4 with c1; its acceptance by these commands does not test
+   consumption-state enforcement.  F9 shows why checking only the
+   decision's expiry is insufficient.  At the stated T of 09:16 the
+   decision passes step 9 of Section 3.2, while the approval expired at
+   09:15.  Its validity.expiresAt exceeds the validUntil of ap, so the
+   Case 1 time-bound condition of Section 3.3 is violated independently
+   of T.
+
+Appendix B.  Changes
+
+   This section is to be removed before publication.
+
+
+
+
+
+
+
+
+Gruszka                    Expires 6 May 2027                  [Page 48]
+
+Internet-Draft           AUDIT Decision Receipts           November 2026
+
+
+B.1.  Changes from -03
+
+   New Appendix A.4 gives one example Signed Statement for each way of
+   registration in Section 3.7, signed with a new test key, and a SCITT
+   Receipt for each, generated with a library for illustration, and
+   Section 3.7 points to it.  The informative references add RFC 8949,
+   RFC 9052, RFC 9053, RFC 9162, RFC 9597, RFC 9679, RFC 9942, RFC 9995
+   and scitt-cose.
+
+   Section 3.2 step 7 and Section 3.4 step 3 list by full path the
+   members that are digests and timestamps, and step 7 gives the form of
+   evidenceRefs[].typedDigest.  Appendix A.3 names the procedure that
+   decides each vector.  Appendix A.4 states that the entry of the tree
+   is the choice of the example.  New Appendix A.5 gives failure vectors
+   for steps 7 to 10 of Section 3.2, Case 1 of Section 3.3, steps 5 to 7
+   of Section 3.4 and Section 4.
+
+   New Section 3.8 gives the field rules of both predicates as tables,
+   step 7 of Section 3.2 and step 3 of Section 3.4 refer to it, and
+   [PB-DECISION] and [PB-OUTCOME] are informative references.  The field
+   rules distinguish JSON booleans from string literals.  Step 1 of
+   Section 3.2 rejects duplicate member names in DSSE envelopes.
+   Appendix A.5 identifies the first failing check for each stated test
+   procedure, distinguishes the relying-party check for F10, and
+   explains that F9 violates the Case 1 time-bound condition
+   independently of T.  Section 5 and Appendix A distinguish the
+   provenance of the seven DSSE vectors from that of the new examples.
+   Section 8 clarifies that the field rules do not establish the absence
+   of raw inputs.  Case 1 of Section 3.3 allows inputSnapshot entries
+   other than the approval record, and Section 3.6 states which digests
+   a pass checks against bytes.
+
+B.2.  Changes from -02
+
+   Section 6 adds, for [GILDA] and [IZMAYLOV], what this document does
+   differently.
+
+   The paragraph on clocks in Section 7 adds that a time-stamp token
+   under [RFC3161] over the envelope bytes is an anchor outside the
+   signer.
+
+   New Section 2.7 lists places where the mapping needed a reading of
+   [AUDIT-ARCH], as observations and questions.
+
+   Section 7 adds a paragraph on finding missing outcome receipts
+   through the sequence member of [PB-OUTCOME], and on boundary records
+   for decisions.
+
+
+
+
+Gruszka                    Expires 6 May 2027                  [Page 49]
+
+Internet-Draft           AUDIT Decision Receipts           November 2026
+
+
+B.3.  Changes from -01 to -02
+
+   The submissionType attribute is removed from the rfc element.
+
+   The Abstract states that the document describes, informatively, how a
+   receipt can be registered with a Transparency Service under RFC 9943
+   and what a SCITT Receipt then shows and does not show.
+
+   Section 1.1 states to whom the key words apply.
+
+   Section 7 adds a paragraph on what a receipt still shows when a
+   signing key of a decision maker or outcome signer is compromised or
+   replaced.
+
+   Section 8 describes what each way of registration in Section 3.7
+   reveals and distinguishes access to the registered Signed Statement
+   from access to a detached payload.
+
+B.4.  Changes from -00 to -01
+
+   Added Section 3.7, an informative description of how a decision or
+   outcome receipt can be registered with a Transparency Service under
+   [RFC9943], what a SCITT Receipt then shows and what it does not.
+
+   Section 2.5, the end of Section 3.6, Section 6 and the paragraph on
+   suppression in Section 7 refer to Section 3.7.  Section 7 adds that
+   completeness presupposes an expectation of which receipts ought to
+   exist, which this document does not define.
+
+   The introduction states that the mapping follows revision -01 of
+   [AUDIT-ARCH].
+
+   Sections 3.1 to 3.5, 4 and 5 and the test vectors of Appendix A are
+   unchanged.
+
+Acknowledgments
+
+   The author used AI tools to help draft this document and to generate
+   and cross-check its examples.  The author reviewed the entire text
+   and is responsible for it.
+
+   Citing adjacent work in the References does not imply that its
+   authors endorse this document.
+
+Author's Address
+
+
+
+
+
+
+Gruszka                    Expires 6 May 2027                  [Page 50]
+
+Internet-Draft           AUDIT Decision Receipts           November 2026
+
+
+   Konrad Gruszka
+   b7n0de
+   Germany
+   Email: kontakt@b7n0de.com
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Gruszka                    Expires 6 May 2027                  [Page 51]

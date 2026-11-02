@@ -1,0 +1,25 @@
+{
+  "reported_by": "coordinator message",
+  "coordinator_observed_at_utc": "2026-11-02T17:36Z",
+  "url": "https://www.ietf.org/archive/id/draft-gruszka-audit-decision-receipts-04.txt",
+  "revision": "04",
+  "expected_sha256": "f5065d91493fb15a4995f85ffd1a71911d01bc9c8b063b1938521e1bfc05c826",
+  "accessed_at_utc": "2026-11-02T17:43:04.190817+00:00",
+  "C03_results_preserved": true,
+  "C04_experiment": "PENDING",
+  "C04_tests_in_G": "NOT_RUN",
+  "status": "EXACT_REVISION_BYTES_VERIFIED",
+  "sandbox_attempt": {
+    "accessed_at_utc": "2026-11-02T17:39:46.679693+00:00",
+    "status": "UNKNOWN",
+    "error": "<urlopen error [Errno -3] Temporary failure in name resolution>"
+  },
+  "http_status": 200,
+  "final_url": "https://www.ietf.org/archive/id/draft-gruszka-audit-decision-receipts-04.txt",
+  "sha256": "f5065d91493fb15a4995f85ffd1a71911d01bc9c8b063b1938521e1bfc05c826",
+  "bytes": 127824,
+  "path": "docs/standards-lab-evidence/sources/draft-gruszka-audit-decision-receipts-04.txt",
+  "latest_revision_basis": "Coordinator observation at 2026-11-02T17:36Z; G retrieved exact -04 only, without further revision discovery.",
+  "author_vector_counts": "Coordinator-reported author/package coverage statement only; not a G or C03 measurement.",
+  "AUDIT_outreach": "HOLD_PENDING_C04_ASSESSMENT"
+}

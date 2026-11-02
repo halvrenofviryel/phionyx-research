@@ -24,7 +24,7 @@ not a new normative evidence schema.
   history is read. Snapshot-internal relative paths retain their original repository
   context; the Lab supplies usable links to the copied reports.
 - `replay_results.json`: G's A/C/E replay logs; original run records stay under
-  each experiment. D/B1 were not executed.
+  each experiment. D/B1/F were not executed by G; the update retains those prior A/C/E logs.
 - `whitespace_check.json`: source-only whitespace diagnostics retained without
   normalizing immutable raw snapshots; authored paths pass the scoped check.
 - `reference_check.json`, `claim_lint.json`, `validation.json`: bounded reference-row,
@@ -47,3 +47,23 @@ such a change requires a new review and does not amend the original experiments.
 Local hashes and timestamps are inspectable custody records, not independent
 time witnesses. No external evidence role or source independence is inferred from
 successful hashing, parsing, tests or separate Codex tasks.
+
+## F/H2 update
+
+`update_state.json` records the clean starting G review commit and fetch retry.
+`update_references.json` records F's exact 20 changed files, 138 archive-member
+hash checks and three archived JSON verification ledgers, plus H2's exact 26-file
+inventory, 13 paragraph mappings and unchanged twelve normative sections/BCP14
+elements. Only four F report/source snapshots are copied; no D/F code, archive
+or H2 candidate files are copied. Source worktrees remain read-only.
+
+`collect_update_refs.py` performs those read-only artifact checks and updates
+the local metadata when explicitly run. It does not execute F or render H2.
+The updated index checker records to `update_validation.json` only with `--record`;
+`validation.json` and the A/C/E replay logs retain the original G verification.
+B2/B3 remain pending, with enforced isolation NOT_ESTABLISHED.
+
+`audit04_discovery.json` records the later coordinator notification and G's
+exact-byte retrieval of decision-receipts -04. The supplied SHA-256 matched.
+Earlier -03 metadata remains as historical evidence; C03 outputs are unchanged.
+C04 is pending and AUDIT outreach is HOLD. No -04 vectors were run by G.

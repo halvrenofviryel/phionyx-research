@@ -1,6 +1,6 @@
 # Standards portfolio delta — 2026-11-02
 
-This is a bounded documentation audit of six current public repository READMEs,
+This is a bounded documentation audit of six public repository READMEs at the recorded snapshot times,
 the existing AIREP external-evidence record, two local standards landing pages and
 selected public publication references. It is not an implementation audit of the
 six repositories. Exact URLs, decoded Git-blob/raw-body SHA-256 values and UTC times
@@ -86,9 +86,9 @@ linter and unrelated SDK suite were not run; G does not claim those are green.
   acquisition manifest; it is not misreported as a broken release or successful
   raw-byte retrieval.
 - **Unpublished results:** A/C/E links in the Lab are working relative repository
-  paths. D/B1 are exact repository/commit/local-path references with portable
-  metadata snapshots. No nonexistent GitHub result commit URL is offered as
-  accessible evidence. The local D and B1 snapshot Markdown retains its original
+  paths. D/B1/F are exact repository/commit/local-path references with portable
+  report/metadata snapshots; H2 has an exact local artifact inventory and no files merged into G. No nonexistent GitHub result commit URL is offered as
+  accessible evidence. The local D, B1 and F snapshot Markdown retains its original
   context; relative links inside those copied reports are resolved in their
   original repository, not in G's snapshot folder.
 
@@ -112,7 +112,10 @@ not be erased by a blanket “no external evidence” statement:
 
 These are attributed historical reports, not G reruns. Different roles/versions
 do not combine into one same-version interoperability claim. A/C/E are internal;
-D is author-side regression; B1 is preparation; B2/B3/F remain pending.
+D is author-side regression; B1 is preparation; F is a completed same-user-controlled local demo with all SCITT verification
+NOT_EVALUATED; B2/B3 remain pending. H2 is a separate unpublished informative
+candidate, not a normative change or submission. The exact references and G
+report-only checks are in [update references](standards-lab-evidence/update_references.json).
 `portfolio.yaml`'s coarse `external_validation=false` defaults are retained to
 avoid an unbounded validation flag. The Lab supplies scoped role/version context
 rather than claiming the Boolean fully represents existing historical evidence.
@@ -135,3 +138,13 @@ public target commit exists for this G package yet**.
 The local ACDER landing-page correction (P01) and external Zenodo metadata correction
 (P07) are also explicit follow-up plans, not changes made by G. No draft text,
 other repository, publication record or external message was modified.
+
+## Later decision-receipts revision discovery
+
+At 2026-11-02T17:36Z the coordinator reported decision-receipts -04. G verified
+its [exact raw bytes and supplied digest](standards-lab-evidence/audit04_discovery.json).
+The earlier metadata freshness observation is historical; C03 is not a current
+revision assessment. Its frozen scenarios and counts remain unchanged. C04 is a
+separate pending addendum, without a supplied result or commit. AUDIT outreach is
+HOLD until that assessment. The author-reported §3.8 / Appendix A.5 additions and
+vector coverage are not G measurements; no new -04 experiment was run here.

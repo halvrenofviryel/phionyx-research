@@ -1,0 +1,27 @@
+{
+  "started_at_utc": "2026-11-02T17:34:46.783831+00:00",
+  "update_base_commit": "ef35030b823c37bc373e0718ace59c394dad2944",
+  "branch": "codex/standards-lab-consolidation",
+  "initial_status_porcelain": "",
+  "rules": "No AGENTS.md found in clone or ancestors; prior CONTRIBUTING rules remain applicable.",
+  "fetch": {
+    "command": "git fetch --all --prune",
+    "exit_code": 128,
+    "stdout": "",
+    "stderr": "fatal: unable to access 'https://github.com/halvrenofviryel/phionyx-research.git/': Could not resolve host: github.com\n",
+    "completed_at_utc": "2026-11-02T17:34:46.794499+00:00",
+    "head_after": "ef35030b823c37bc373e0718ace59c394dad2944"
+  },
+  "source_checkouts_read_only": true,
+  "approval_granted": false,
+  "source_experiment_reruns": "NOT_RUN; prior frozen A/C/E replay evidence retained; new F/H2 report/artifact verification only",
+  "fetch_retry": {
+    "command": "git fetch --all --prune",
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": "",
+    "observed_by_utc": "2026-11-02T17:37:53.769632+00:00",
+    "head_unchanged": true,
+    "execution": "authorized network retry"
+  }
+}

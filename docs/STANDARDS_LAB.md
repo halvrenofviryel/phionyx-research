@@ -1,8 +1,9 @@
 # Standards Lab
 
 Local, non-normative experiments with explicit evidence boundaries. This review package
-contains **3 reproduced experiments (A/C/E)**, **1 completed result reference (D)**,
-**1 sealed preparation package (B1)** and **3 pending results (B2/B3/F)**.
+contains **3 reproduced experiments (A/C/E)**, **2 completed result references (D/F)**,
+**1 sealed preparation package (B1)**, **1 separate editorial candidate (H2)**
+and **4 pending results/references (B2/B3/C04/H1)**.
 Counts and artifact digests are in [standards_lab.json](standards_lab.json);
 [G replay records](standards-lab-evidence/replay_results.json) support the three replay
 claims. These are internal runs, not independent third-party validation, a population
@@ -45,6 +46,15 @@ evaluation; the [original capture](../experiments/ietf/audit/decision-receipts-0
 and first reproduction failure remain in the frozen [run record](../experiments/ietf/audit/decision-receipts-03/run_record.json).
 Successful replay does not add unobserved runtime axes.
 
+**Revision update, 2026-11-02T17:36Z:** the coordinator reported decision-receipts
+**-04**. G fetched the [exact -04 text](standards-lab-evidence/sources/draft-gruszka-audit-decision-receipts-04.txt)
+and verified SHA-256 `f5065d91493fb15a4995f85ffd1a71911d01bc9c8b063b1938521e1bfc05c826`.
+C remains a frozen **-03-specific** result, not an assessment of the current revision.
+The coordinator reports additions in §3.8 and Appendix A.5; author-reported vector
+coverage is not our measurement. The separate **C04 addendum is PENDING** and
+**AUDIT outreach is HOLD** until assessed. G did not run -04 vectors or expand
+revision discovery; [retrieval and scope record](standards-lab-evidence/audit04_discovery.json).
+
 ```sh
 python3 experiments/ietf/claim-preservation/ser04/src/run.py --check
 ```
@@ -74,11 +84,12 @@ it is separate from the experiment and integration commits below.
 source manifest, original run record, report and result, plus exact source revision
 URLs, raw-byte SHA-256 and UTC access times. G independently reacquired seven draft
 revisions; all matched their original bytes and the fresh Datatracker snapshots
-reported no newer revision for those seven families. This is a time-bounded source
-check, not an ongoing monitor: [fresh HTTP pins](standards-lab-evidence/http_sources.json),
+reported no newer revision for those seven families **at their recorded access times**.
+The later decision-receipts -04 discovery above supersedes that earlier freshness
+observation for C; it does not alter the -03 results. These are time-bounded checks: [fresh HTTP pins](standards-lab-evidence/http_sources.json),
 [six repository pins](standards-lab-evidence/github_sources.json).
 
-## D and B1: local references, not integrated implementations
+## D, F, B1 and H2: separate local references
 
 **D — AIREP explain CLI.** Repository `halvrenofviryel/ai-runtime-evidence-protocol`,
 original commit `0130fcf8e7d70a0f9c4f977957e5de76ca8ef689`, integration commit **none**,
@@ -118,11 +129,59 @@ same-UID permissions do not establish blindness. Preparation is not a solver res
 a truth oracle, third-party independence, full draft conformance or deployment evidence.
 Exact file hashes and local paths for D/B1 are in [local references](standards-lab-evidence/local_references.json).
 
+**F — completed local claim-boundary demo, not SCITT compatibility.** Repository
+`halvrenofviryel/ai-runtime-evidence-protocol`, exact commit
+`84fe0aa9f29034aa6b873c0e83d689dc821bb398`, parent D
+`0130fcf8e7d70a0f9c4f977957e5de76ca8ef689`, integration commit **none**,
+**UNPUBLISHED**. Local checkout:
+`/home/toygar/.codex/worktrees/dd94/ai-runtime-evidence-protocol`.
+The [original results](standards-lab-evidence/local-refs/F/RESULTS.md) describe
+three same-user-controlled synthetic scenarios against the conceptual boundaries
+in RFC 9943, Measurement Capsule -01 and Agent Execution Evidence -02
+([exact source pins](standards-lab-evidence/local-refs/F/SOURCE_PINS.json)).
+The first two keep receiver/execution reports MISSING; composed supplied reports
+satisfy selected native AIREP predicates while all three summaries stay INCOMPLETE.
+**SCITT signature, registration/receipt and identity verification remain
+NOT_EVALUATED.** This is not a SCITT compatibility, interoperability or conformance result.
+
+The [original run record](standards-lab-evidence/local-refs/F/run_record.json)
+reports **15 integration tests, 73 v0.2 tests and final 56/56 CI commands**,
+with the earlier 47/56 sandbox outcome retained. G did not rerun those tests or the
+runtime. G checked the four report/source snapshots against the exact Git commit,
+the `evidence.tar.gz` SHA-256
+`2f6a3457e3d17206e0e9c43a79f7026e678f0385066b8838434c0d65112180b6`,
+all **138 archive members**, and the three archived JSON verification ledgers.
+The [update verification inventory](standards-lab-evidence/update_references.json)
+separates these checks from F's reported executions. No D/F implementation code or
+archive was copied into research. To reproduce **in a disposable copy of exact F**,
+with its documented Python 3.12/Node 20 bootstrap:
+
+```sh
+python3 integrations/scitt-claim-boundaries/demo.py
+```
+
+**H2 — separate CP-01 editorial candidate.** Repository
+`halvrenofviryel/phionyx-research`, commit
+`9e4524a1f4312c25b88af9444a7740662104b09a`, integration commit **none**,
+**UNPUBLISHED; user approval required**. Local checkout:
+`/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/h2-claim-preservation-candidate/phionyx-research`.
+Its `standards/ietf/ai-evaluation-claim-preservation/candidate/01/` directory contains
+candidate XML/TXT/HTML, `CP_00_TO_01.patch`, and `PARAGRAPH_EVIDENCE.json`.
+The exact **26-file path/hash/commit inventory** is in
+[update references](standards-lab-evidence/update_references.json).
+G compared the checksum ledger, all 13 paragraph anchors, twelve normative sections
+and BCP14 elements: **3 informative change groups, 0 normative changes**.
+G did not rerender or rerun E; H2's renderer/test results remain attributed to H2.
+No H2 files were merged or copied into G. This local candidate is not a submitted
+Internet-Draft, a newly discovered normative requirement, adoption or conformance
+finding; its supporting public artifact URL is still UNKNOWN.
+
 | Missing input | Status | Consequence |
 |---|---|---|
-| B2 isolated solver | **PENDING / NOT_EVALUATED** | No solver code/output or verified isolation supplied. |
+| B2 isolated solver | **PENDING / NOT_EVALUATED** | No solver code/output or enforced isolation supplied; same-UID permissions are not isolation evidence. |
 | B3 frozen comparison | **PENDING / NOT_EVALUATED** | No comparison supplied; B1 contributes no agreement count. |
-| F AIREP compatibility result | **PENDING / NOT_EVALUATED** | No exact frozen result supplied; compatibility remains unknown. |
+| H1 ACDER-03 evidence gate | **PENDING reference** | Coordinator preparing a separate local gate; no result/commit supplied. Provisional scoped NO-GO is coordinator context, not a G result. |
+| C04 revision addendum | **PENDING / NOT_EVALUATED** | -04 raw bytes verified, but no addendum result/commit supplied. C03 stays frozen; AUDIT outreach HOLD. |
 
 The pending entries in [standards_lab.json](standards_lab.json) are deliberate omissions,
 not failures converted to success. They do not block review of the reproduced A/C/E index.
@@ -134,8 +193,11 @@ requires an identified external artifact, frozen version, bounded claim and main
 reproduction. It remains unchanged. Its producer result targets v0.1.2 and its consumer
 result targets an earlier v0.2 handoff; these cannot be added into a same-version
 interoperability result. G cites that historical report without rerunning it or
-upgrading its independence attestation. None of A/B1/C/D/E qualifies as a new external
+upgrading its independence attestation. None of A/B1/C/D/E/F qualifies as a new external
 entry merely because it ran in another Codex task.
+
+The [updated integrity record](standards-lab-evidence/update_validation.json) preserves
+the earlier A/C/E run records; those 105 tests were not unnecessarily repeated.
 
 The [portfolio delta](STANDARDS_PORTFOLIO_DELTA.md) separates current documentation
 from historical publications and gives exact cross-repository patch targets. No

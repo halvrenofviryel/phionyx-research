@@ -1,0 +1,32 @@
+{
+  "status": "PASS",
+  "checked_at_utc": "2026-11-02T17:47:16.751694+00:00",
+  "command": "python3 -B docs/standards-lab-evidence/verify_index.py",
+  "base_commit": "275b871349721a8c917691d457c4a6270fe1028f",
+  "frozen_files_checked_against_base": 123,
+  "experiment_artifact_digests": 12,
+  "source_snapshots_hashed": 28,
+  "prior_draft_revisions_reacquired_and_matching": 7,
+  "new_revision_bytes_verified": "decision-receipts-04; separate C04 evaluation NOT_RUN",
+  "local_reference_snapshots_hashed": 11,
+  "F_archive_member_check": "138 hashes verified by collect_update_refs.py; runtime not rerun",
+  "H2_artifact_check": "26 exact-commit files, 13 paragraph anchors and 12 normative sections checked; rendering not rerun",
+  "relative_document_links_checked": 70,
+  "pending_states": "B2/B3 retained with enforced isolation NOT_ESTABLISHED; C04 pending, AUDIT outreach HOLD",
+  "prior_replay_tests": {
+    "A": 59,
+    "C": 16,
+    "E": 30,
+    "total": 105
+  },
+  "runtime_tests_rerun_in_update": 0,
+  "claim_lint_self_test": "PASS",
+  "local_research_README_claim_lint": "PASS",
+  "full_live_portfolio_lint": "NOT_RUN",
+  "unrelated_SDK_suite": "NOT_RUN",
+  "D_tests_in_G": "NOT_RUN",
+  "B1_tests_private_seal_and_builder_history": "NOT_ACCESSED",
+  "git_diff_check": "PASS for authored paths; raw snapshots retain source whitespace",
+  "raw_snapshot_whitespace_record": "docs/standards-lab-evidence/whitespace_check.json",
+  "normative_or_frozen_changes": "NONE"
+}

@@ -216,6 +216,70 @@ def build():
             "artifacts": b1,
         },
     ]
+    update = read("docs/standards-lab-evidence/update_references.json")
+    f = update["F"]
+    h = update["H2"]
+    refs.extend(
+        [
+            {
+                "id": "F",
+                "status": f["status"],
+                "publication_status": "UNPUBLISHED",
+                "repository": f["repository"],
+                "original_experiment_commit": f["commit"],
+                "parent_commit": f["parent_commit"],
+                "integration_commit": None,
+                "local_checkout": f["local_checkout"],
+                "evidence_class": f["evidence_class"],
+                "third_party_evidence": False,
+                "external_targets": read(
+                    "docs/standards-lab-evidence/local-refs/F/SOURCE_PINS.json"
+                )["documents"],
+                "why_tested": "Keep local AIREP lifecycle predicates separate from assumed SCITT registration and unverified sidecars.",
+                "reproduction_command": "python3 integrations/scitt-claim-boundaries/demo.py",
+                "reproduction_scope": "In a disposable copy of exact F, with its documented Python 3.12/Node 20 bootstrap; G inspected reports/archive only, did not run demo/tests.",
+                "observed_result": {
+                    "archived_scenarios": 3,
+                    "reported_integration_tests": 15,
+                    "reported_v02_tests": 73,
+                    "reported_final_beta_commands": 56,
+                    "G_runtime_rerun": "NOT_RUN",
+                    "G_archive_members_hash_verified": 138,
+                    "SCITT_signature_registration_identity_verification": "NOT_EVALUATED",
+                },
+                "non_claims": f["non_claims"],
+                "artifacts": f["artifacts"],
+                "snapshots": f["snapshots"],
+            },
+            {
+                "id": "H2",
+                "status": h["status"],
+                "publication_status": "UNPUBLISHED",
+                "repository": h["repository"],
+                "original_experiment_commit": h["commit"],
+                "integration_commit": None,
+                "local_checkout": h["local_checkout"],
+                "candidate_directory": h["candidate_directory"],
+                "user_approval_required": True,
+                "evidence_class": "SEPARATE_AUTHOR_SIDE_INFORMATIVE_ID_CANDIDATE",
+                "third_party_evidence": False,
+                "observed_result": {
+                    "informative_change_groups": 3,
+                    "normative_changes": 0,
+                    "paragraphs": 13,
+                    "G_exact_commit_artifacts_verified": 26,
+                    "G_normative_sections_compared": 12,
+                    "rendering_rerun_in_G": False,
+                },
+                "candidate_files_copied_to_G": False,
+                "non_claims": h["non_claims"],
+                "artifacts": h["artifacts"],
+            },
+        ]
+    )
+    definitions[1]["revision_update"] = read(
+        "docs/standards-lab-evidence/audit04_discovery.json"
+    )
     pending = [
         {
             "id": name,
@@ -235,8 +299,12 @@ def build():
                 "No frozen solver/reveal comparison supplied; B1 seal is not a comparison result.",
             ),
             (
-                "F",
-                "Separate task in progress at handoff; no frozen exact-commit compatibility result supplied.",
+                "H1",
+                "Coordinator is preparing a separate ACDER-03 evidence gate; no result/commit supplied. Provisional scoped NO-GO due to absent B2/B3 is coordinator context, not a completed G measurement.",
+            ),
+            (
+                "C04",
+                "Decision-receipts -04 observed by coordinator at 2026-11-02T17:36Z; exact bytes hash-verified by G, separate addendum result/commit not supplied. C03 remains revision-specific; AUDIT outreach HOLD.",
             ),
         ]
     ]
@@ -247,12 +315,14 @@ def build():
         "approval_granted": False,
         "publication_status": "UNPUBLISHED",
         "base_commit": initial["base_commit"],
+        "update_base_commit": update["update_base_commit"],
         "integration_mapping": initial["integration_mapping"],
         "counts": {
             "integrated_experiments": 3,
-            "completed_result_references": 1,
+            "completed_result_references": 2,
+            "separate_editorial_candidates": 1,
             "preparation_packages": 1,
-            "pending_results": 3,
+            "pending_results": 4,
             "third_party_validations_added": 0,
         },
         "experiments": definitions,
@@ -267,6 +337,9 @@ def build():
                 "http_sources.json",
                 "local_references.json",
                 "replay_results.json",
+                "update_state.json",
+                "update_references.json",
+                "audit04_discovery.json",
             ]
         ],
         "non_claims": [
