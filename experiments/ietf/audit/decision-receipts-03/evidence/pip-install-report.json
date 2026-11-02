@@ -1,0 +1,332 @@
+{
+  "version": "1",
+  "pip_version": "24.0",
+  "install": [
+    {
+      "download_info": {
+        "url": "https://files.pythonhosted.org/packages/ac/f5/9bb58c6d15eafa618491d269efd8ecdd50af862c0408ee0b312f548f3f92/proofbundle-6.4.0-py3-none-any.whl",
+        "archive_info": {
+          "hash": "sha256=72153d160c2f78647095f029c0946dbfd64a15e006a233a5abc78a3071eebf94",
+          "hashes": {
+            "sha256": "72153d160c2f78647095f029c0946dbfd64a15e006a233a5abc78a3071eebf94"
+          }
+        }
+      },
+      "is_direct": false,
+      "is_yanked": false,
+      "requested": true,
+      "metadata": {
+        "metadata_version": "2.4",
+        "name": "proofbundle",
+        "version": "6.4.0",
+        "dynamic": [
+          "license-file"
+        ],
+        "summary": "Emit and verify portable cryptographic evidence bundles, offline: Ed25519 + RFC 6962 Merkle + optional SD-JWT.",
+        "description": "<div align=\"center\">\n\n<img alt=\"proofbundle\" src=\"https://raw.githubusercontent.com/b7n0de/proofbundle/main/assets/proofbundle-hase-pluesch-kopf-512.png\" width=\"180\">\n\n<h1>proofbundle</h1>\n\n[![CI](https://github.com/b7n0de/proofbundle/actions/workflows/ci.yml/badge.svg)](https://github.com/b7n0de/proofbundle/actions/workflows/ci.yml)\n[![demo reproducible](https://github.com/b7n0de/proofbundle/actions/workflows/demo-reproducible.yml/badge.svg)](https://github.com/b7n0de/proofbundle/actions/workflows/demo-reproducible.yml)\n[![PyPI](https://img.shields.io/pypi/v/proofbundle.svg)](https://pypi.org/project/proofbundle/)\n[![Python](https://img.shields.io/pypi/pyversions/proofbundle.svg)](https://pypi.org/project/proofbundle/)\n[![License: MIT](https://img.shields.io/badge/license-MIT-D6248A.svg)](https://github.com/b7n0de/proofbundle/blob/main/LICENSE)\n[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21110642.svg)](https://doi.org/10.5281/zenodo.21110642)\n\n**Portable evidence for AI work, verifiable offline. Integrity, not truth**\n\n**One file. No verification server. No network required.**\n\n[Quick start](#quick-start) · [What it proves](#what-a-receipt-proves) · [Current release](#current-release) · [Adoption review](https://github.com/b7n0de/proofbundle/blob/main/docs/REVIEWERS.md) · [Documentation](#documentation)\n\n</div>\n\n## Current release\n\n**[v6.4.0](https://github.com/b7n0de/proofbundle/releases/tag/v6.4.0) · Beta · [Audit status and limits](https://github.com/b7n0de/proofbundle/blob/v6.4.0/audit_artifacts/640/README.md)**\n\n[Known limitations for 6.4.0](https://github.com/b7n0de/proofbundle/blob/v6.4.0/RESTRISIKO_640.md) · [Earlier risk record](https://github.com/b7n0de/proofbundle/blob/v6.4.0/RESTRISIKO_631.md) · [Release notes](https://github.com/b7n0de/proofbundle/blob/v6.4.0/CHANGELOG.md) · [Release scope](https://github.com/b7n0de/proofbundle/blob/v6.4.0/docs/release_scope/6.4.0.md)\n\n<details>\n<summary>What was checked, and what remains open</summary>\n\n**A feature release following 6.3.1.** The installed package adds an experimental reader for SCITT Transparent Statements with CCF receipts and a verifier for TRACE v0.2 Trust Records, and its strict JSON reader now rejects non-finite numbers and applies explicit integer and encoding limits. The Rust cross verifier gains three SCITT commands, and the release workflows select fixed versions of the build frontend and backend. Review the input restrictions when upgrading.\n\n- **SCITT Transparent Statements with CCF receipts, experimental.** `proofbundle.scitt_ccf` reads a Transparent Statement, its receipts and section 4 consistency receipts under the narrow profile `scitt-ccf/v1` of ADR 0009, as draft -06 of the CCF profile reads them. It needs the `[scitt]` extra; without it every entry point refuses with `no_lib`. Only a direct call reaches it. No verify path of the package does.\n- **TRACE v0.2 Trust Records.** `proofbundle verify-trace` checks a record against keys, a time window and expectations that the relying party supplies. A pass is evidence for that policy, and `safeForAutomation` is false in every verdict.\n- **The strict JSON reader applies explicit number and encoding limits.** It refuses non-finite numbers, integer literals outside the inclusive range -(2^53 - 1) to 2^53 - 1, and JSON bytes with a UTF-8 byte order mark or encoded as UTF-16 or UTF-32, with `BundleFormatError`. With an `sd_jwt_vc` whose issuer signature verifies, `verify_bundle` demands and fails `sd-jwt-bundle-binding` when that reader refuses the signed payload. Review code that hands such input to a verifier.\n- **The Rust cross verifier and the build path.** `pb_verify_rs` verifies statement signatures, Transparent Statements and consistency receipts of the profile on shared vectors; it is not part of the Python package. The release workflow installs the build frontend and backend at fixed versions and refuses a wheel whose recorded backend is not the pinned one.\n\nIn the tagged tree, check `audit_artifacts/640/pre_tag_receipt_v6.4.0.json` for the recorded audit command and result.\n\nThe package being published and its closing audit passing are separate facts. An audit that was not run makes no statement about the absence of defects.\n\n[Residual risks for 6.4.0](https://github.com/b7n0de/proofbundle/blob/v6.4.0/RESTRISIKO_640.md) · [Earlier risk record](https://github.com/b7n0de/proofbundle/blob/v6.4.0/RESTRISIKO_631.md)\n\n</details>\n\n## Quick start\n\nInstall the verifier, download an example, then verify the local file.\n\n```bash\npython -m pip install proofbundle==6.4.0\n\ncurl -fsSLo receipt.json \\\n  https://raw.githubusercontent.com/b7n0de/proofbundle/v6.4.0/examples/example_bundle.json\n\nproofbundle verify receipt.json\n```\n\nPython 3.10 or newer. Installation and download use the network. **Verification reads the local file only.**\n\n<details>\n<summary>Exit codes and the tamper demo</summary>\n\nThese exit codes apply to `proofbundle verify`, not to every command in the package.\n\n| Exit code | Meaning |\n|---|---|\n| `0` | Verified |\n| `1` | Verification failed |\n| `2` | Malformed input or usage error |\n| `3` | Relying party policy not met |\n\n`decision verify`, `outcome verify` and `relation-statement verify` have separate contracts in their own `--help`.\n\nTo try deliberate tampering, install the evaluation extra and run the demo.\n\n```bash\npython -m pip install 'proofbundle[eval]==6.4.0'\nproofbundle demo\n```\n\nThe demo checks an honest receipt, tampered variants and a sample swap. It exits with a nonzero code if a tamper is accepted.\n\n[Guided walkthrough](https://github.com/b7n0de/proofbundle/blob/v6.4.0/docs/DEMO.md) · [Inspect plugin](#plugins)\n\n</details>\n\n## What a receipt proves\n\n| What verification can establish | What it does not establish |\n|---|---|\n| Which key signed the content | Whether you should trust that key |\n| Whether signed content has changed | Whether the reported result is true |\n| Whether supplied proofs and requested policy checks pass | Whether the work was correct or complete |\n\n**A valid signature does not make a reported result true.** Checks depend on the receipt format and the policy you request.\n\nA PASS means: the signature is valid, the explicitly checked artefacts match the signed digests, and a trust policy passed if you gave one with `--policy` (without it the output says `POLICY: NOT_EVALUATED`). Truth, code quality and provenance from a particular AI model are not confirmed by it.\n\n[Threat model](https://github.com/b7n0de/proofbundle/blob/v6.4.0/THREAT_MODEL.md) · [Non claims](https://github.com/b7n0de/proofbundle/blob/v6.4.0/docs/NON_CLAIMS.md)\n\n<a name=\"choose-the-path-that-matches-your-task\"></a>\n\n## Choose your task\n\n| I want to | Start here |\n|---|---|\n| Verify a receipt | [Quick start](#quick-start) |\n| Create evaluation evidence | [Evaluation walkthrough](https://github.com/b7n0de/proofbundle/blob/v6.4.0/docs/DEMO.md) |\n| Add receipts to Inspect AI | [Inspect plugin](#plugins) |\n| Assess proofbundle for adoption | [Adversarial review guide](https://github.com/b7n0de/proofbundle/blob/v6.4.0/docs/REVIEWERS.md) |\n\n<details>\n<summary>Other workflows and optional features</summary>\n\n| Workflow | Package or reference |\n|---|---|\n| Evaluation receipts and preregistration | `proofbundle[eval]` · [Claim format](https://github.com/b7n0de/proofbundle/blob/v6.4.0/EVAL_CLAIM.md) |\n| Inspect AI | `proofbundle[inspect]` · [Plugin setup](#plugins) |\n| Agent review disclosures | [Profile inventory](https://github.com/b7n0de/proofbundle/blob/v6.4.0/docs/predicates/README.md) · [Conformance examples](https://github.com/b7n0de/proofbundle/tree/v6.4.0/conformance/agent_review) |\n| RFC 3161 and OpenTimestamps | `proofbundle[anchors]` · [Anchor guide](https://github.com/b7n0de/proofbundle/blob/v6.4.0/docs/ANCHORS.md) |\n| ML-DSA-44 witness cosignatures | `proofbundle[pq]` · [Anchor guide](https://github.com/b7n0de/proofbundle/blob/v6.4.0/docs/ANCHORS.md) |\n| TEE attestation bridge | `proofbundle[experimental]` · [Experimental bridge](https://github.com/b7n0de/proofbundle/blob/v6.4.0/docs/EXPERIMENTAL_ENCLAVE.md) |\n\nShipped features do not all have the same maturity. Agent review disclosures are self declarations. Anchor and enclave paths have experimental boundaries. Check the [predicate inventory](https://github.com/b7n0de/proofbundle/blob/v6.4.0/docs/predicates/README.md) for the exact profile before relying on it.\n\n</details>\n\n## Plugins\n\nproofbundle ships plugins for pytest and Inspect AI. Receipt emission is opt-in and requires an explicit pass threshold.\n\n| Plugin | Package |\n|---|---|\n| pytest | `proofbundle[pytest,eval]` |\n| Inspect AI | `proofbundle[inspect,eval]` |\n\n<details>\n<summary>Commands, threshold and output</summary>\n\n**pytest**\n\n```bash\npython -m pip install 'proofbundle[pytest,eval]==6.4.0'\nPROOFBUNDLE_EMIT=1 PROOFBUNDLE_THRESHOLD=0.9 pytest\n```\n\n**Inspect AI**\n\n```bash\npython -m pip install 'proofbundle[inspect,eval]==6.4.0'\nPROOFBUNDLE_EMIT=1 PROOFBUNDLE_THRESHOLD=0.9 inspect eval task.py --model <model>\n```\n\nThese commands use POSIX shell syntax. Run pytest in your test project; replace `task.py` and `<model>` with your Inspect task and configured model.\n\n`0.9` is an example, not a default. pytest records `pass_rate`; Inspect selects the first available metric unless you set `PROOFBUNDLE_METRIC`. The comparison defaults to `>=`; set `PROOFBUNDLE_COMPARATOR` to change it. The threshold verdict is recorded in the receipt and does not change the test or eval exit status. Without `PROOFBUNDLE_THRESHOLD`, receipt emission is skipped.\n\nReceipts go to the current directory by default, and the plugin prints the output path. Set `PROOFBUNDLE_OUT` to choose a file or directory. Set `PROOFBUNDLE_KEY` to the path of a file containing a 32-byte raw Ed25519 seed for a reusable signing key. Otherwise, an emitted receipt uses a temporary key and is not tied to a lasting identity.\n\n</details>\n\n## Documentation\n\n| Your question | Reference |\n|---|---|\n| How do I implement the format? | [Specification](https://github.com/b7n0de/proofbundle/blob/v6.4.0/SPEC.md) · [Conformance](https://github.com/b7n0de/proofbundle/blob/v6.4.0/CONFORMANCE.md) |\n| How do I integrate my workflow? | [pytest and Inspect plugins](#plugins) · [Other integrations](https://github.com/b7n0de/proofbundle/blob/v6.4.0/INTEGRATIONS.md) · [Glossary](https://github.com/b7n0de/proofbundle/blob/v6.4.0/docs/GLOSSARY.md) |\n| Which keys and claims should I accept? | [Policies](https://github.com/b7n0de/proofbundle/blob/v6.4.0/docs/POLICY_PROFILES.md) · [Trust anchors](https://github.com/b7n0de/proofbundle/blob/v6.4.0/docs/TRUST_ANCHORS.md) |\n| How is security assessed? | [Threat model](https://github.com/b7n0de/proofbundle/blob/v6.4.0/THREAT_MODEL.md) · [Security policy](https://github.com/b7n0de/proofbundle/blob/v6.4.0/SECURITY.md) |\n| How was this release prepared? | [Release process](https://github.com/b7n0de/proofbundle/blob/v6.4.0/RELEASE.md) · [Pre tag audit](https://github.com/b7n0de/proofbundle/blob/v6.4.0/docs/PRE_TAG_AUDIT.md) |\n\n<a name=\"how-it-works\"></a>\n\n<details>\n<summary>How it works</summary>\n\n```text\nYour evaluation, review, decision or action\n                    ↓\nCanonical statement, signature and supplied proofs\n                    ↓\nOne portable receipt file\n                    ↓\nOffline verification and explicit policy checks\n```\n\nThe verifier checks the evidence it receives. Expected subjects, trusted keys, freshness requirements and acceptance policies come from the relying party. Missing evidence is not evidence that omitted work never happened.\n\n</details>\n\n<a name=\"capabilities-and-maturity\"></a>\n\n<details>\n<summary>Capabilities and maturity</summary>\n\nThe core supports signed receipts and Merkle inclusion proofs. Evaluation receipts can bind metrics, thresholds, provenance and commitments. Selective disclosure can hide selected values while preserving the checks supported by its profile.\n\nDecision receipts record a verdict over named evidence. That does not establish that the decision was correct. Outcome, relation, run ledger, trust pack and verification summary profiles have their own maturity limits.\n\nThe Rust cross verifier is experimental and advisory. Agreement on recorded cases does not prove either implementation correct, and the Rust tool is not part of the Python package.\n\n[Predicate inventory](https://github.com/b7n0de/proofbundle/blob/v6.4.0/docs/predicates/README.md) · [Conformance boundaries](https://github.com/b7n0de/proofbundle/blob/v6.4.0/CONFORMANCE.md)\n\n</details>\n\n<a name=\"security-and-trust\"></a>\n<a name=\"openssf-scorecard\"></a>\n\n<details>\n<summary>Security and trust</summary>\n\nThe core uses `cryptography` and `rfc8785`, rather than implementing its own cryptographic primitives. The test approach includes external vectors, mutation checks and parser fuzzing. Those are test signals, not a proof of correctness.\n\nReceipt signatures are Ed25519, not post quantum. ML-DSA-44 witness cosignatures and the experimental renewal path do not turn the payload signature into a post quantum signature. See the [anchor documentation](https://github.com/b7n0de/proofbundle/blob/v6.4.0/docs/ANCHORS.md).\n\nBuild provenance and package attestations answer questions about the build and its bytes. They do not establish the truth of an evaluation or replace a security audit. See the [release process](https://github.com/b7n0de/proofbundle/blob/v6.4.0/RELEASE.md).\n\n[Report a vulnerability](https://github.com/b7n0de/proofbundle/blob/v6.4.0/SECURITY.md) · [Conformance](https://github.com/b7n0de/proofbundle/blob/v6.4.0/CONFORMANCE.md) · [Adoption review](https://github.com/b7n0de/proofbundle/blob/v6.4.0/docs/REVIEWERS.md)\n\nThe [OpenSSF Scorecard](https://scorecard.dev/viewer/?uri=github.com/b7n0de/proofbundle) is a heuristic, not a product verdict. Read the [per check explanations](https://github.com/b7n0de/proofbundle/blob/v6.4.0/docs/SCORECARD.md) and [self assessment](https://github.com/b7n0de/proofbundle/blob/v6.4.0/docs/openssf_best_practices_self_assessment.md).\n\n</details>\n\n<a name=\"standards-and-interoperability\"></a>\n\n<details>\n<summary>Standards and interoperability</summary>\n\nproofbundle complements other evidence systems. A format mapping or an open proposal is not the same as adoption by the upstream project.\n\n[Tool comparison](https://github.com/b7n0de/proofbundle/blob/v6.4.0/INTEROP.md) · [Receipt envelope profile](https://github.com/b7n0de/proofbundle/blob/v6.4.0/docs/RECEIPT_ENVELOPE_PROFILE.md) · [in-toto mapping](https://github.com/b7n0de/proofbundle/blob/v6.4.0/docs/IN_TOTO_PROFILE.md) · [SCITT mapping](https://github.com/b7n0de/proofbundle/blob/v6.4.0/docs/SCITT_CPB_MAPPING.md) · [Related work](https://github.com/b7n0de/proofbundle/blob/v6.4.0/docs/RELATED_WORK.md)\n\nThe [interop discussion with inspect-receipts](https://github.com/b7n0de/proofbundle/issues/147) records a specific envelope comparison. It must not be read as evidence of a second independent implementation of every predicate.\n\n</details>\n\n<a name=\"scope\"></a>\n<a name=\"citation\"></a>\n<a name=\"contributing\"></a>\n\n<details>\n<summary>Scope, citation and contributing</summary>\n\nproofbundle is not a hosted transparency service, a complete in-toto client, a trusted execution environment, a consensus system or a compliance product by itself.\n\n[Release scope](https://github.com/b7n0de/proofbundle/blob/v6.4.0/docs/release_scope/6.4.0.md) records what belongs to this release. [Deferred work](https://github.com/b7n0de/proofbundle/blob/v6.4.0/docs/release_scope/6.4.0.md#out--the-register-not-blocking-640) is not a delivered capability.\n\nUse [CITATION.cff](https://github.com/b7n0de/proofbundle/blob/v6.4.0/CITATION.cff) for citation metadata. The software archive has concept DOI [10.5281/zenodo.21110642](https://doi.org/10.5281/zenodo.21110642). The Technical Note has concept DOI [10.5281/zenodo.21230466](https://doi.org/10.5281/zenodo.21230466). Software and Technical Note versions are separate records.\n\n[Contributing guide](https://github.com/b7n0de/proofbundle/blob/v6.4.0/CONTRIBUTING.md) · [Code of Conduct](https://github.com/b7n0de/proofbundle/blob/v6.4.0/CODE_OF_CONDUCT.md) · [Good first issues](https://github.com/b7n0de/proofbundle/labels/good-first-issue) · [Security reports](https://github.com/b7n0de/proofbundle/blob/v6.4.0/SECURITY.md)\n\n</details>\n\n<a name=\"license\"></a>\n\n---\n\n[MIT license](https://github.com/b7n0de/proofbundle/blob/v6.4.0/LICENSE) · Part of [b7n0de](https://b7n0de.com), Verified AI Work\n",
+        "description_content_type": "text/markdown",
+        "keywords": [
+          "cryptography",
+          "merkle",
+          "transparency-log",
+          "ed25519",
+          "sd-jwt",
+          "verifiable-credentials",
+          "attestation",
+          "provenance",
+          "rfc6962"
+        ],
+        "author": "Konrad Gruszka",
+        "license": "MIT",
+        "classifier": [
+          "Development Status :: 4 - Beta",
+          "Intended Audience :: Developers",
+          "License :: OSI Approved :: MIT License",
+          "Programming Language :: Python :: 3",
+          "Programming Language :: Python :: 3.10",
+          "Programming Language :: Python :: 3.11",
+          "Programming Language :: Python :: 3.12",
+          "Programming Language :: Python :: 3.13",
+          "Programming Language :: Python :: 3.14",
+          "Topic :: Security :: Cryptography"
+        ],
+        "requires_dist": [
+          "cryptography>=42",
+          "rfc8785>=0.1.4",
+          "rfc8785>=0.1.4; extra == \"eval\"",
+          "rfc3161-client>=1.0.6; extra == \"anchors\"",
+          "opentimestamps<0.5,>=0.4.5; extra == \"anchors\"",
+          "rfc8785>=0.1.4; extra == \"anchors\"",
+          "cryptography>=48; extra == \"pq\"",
+          "ecdsa>=0.18; extra == \"rootcommit\"",
+          "cbor2==6.1.4; extra == \"scitt\"",
+          "z3-solver>=4.12; extra == \"formal\"",
+          "pytest>=7; extra == \"pytest\"",
+          "pytest>=7; extra == \"test\"",
+          "hypothesis>=6; extra == \"test\"",
+          "PyYAML>=6; extra == \"test\"",
+          "jsonschema>=4; extra == \"test\"",
+          "sd-jwt>=0.10; extra == \"test\"",
+          "rfc8785>=0.1.4; extra == \"test\"",
+          "inspect_ai<=0.3.281,>=0.3.112; extra == \"inspect\"",
+          "pytest>=7; extra == \"dev\"",
+          "ruff<0.18,>=0.5; extra == \"dev\"",
+          "jsonschema>=4; extra == \"dev\"",
+          "mypy<3,>=1.8; extra == \"dev\"",
+          "build>=1; extra == \"dev\"",
+          "hypothesis>=6; extra == \"dev\"",
+          "rfc8785>=0.1.4; extra == \"dev\"",
+          "sd-jwt>=0.10; extra == \"dev\"",
+          "PyYAML>=6; extra == \"dev\"",
+          "inspect_ai<=0.3.281,>=0.3.112; extra == \"dev\"",
+          "cbor2==6.1.4; extra == \"dev\""
+        ],
+        "requires_python": ">=3.10",
+        "project_url": [
+          "Homepage, https://b7n0de.com",
+          "Repository, https://github.com/b7n0de/proofbundle",
+          "Issues, https://github.com/b7n0de/proofbundle/issues",
+          "Changelog, https://github.com/b7n0de/proofbundle/blob/main/CHANGELOG.md",
+          "Documentation, https://github.com/b7n0de/proofbundle#readme"
+        ],
+        "provides_extra": [
+          "sdjwt",
+          "eval",
+          "anchors",
+          "adapters",
+          "chia",
+          "experimental",
+          "pq",
+          "rootcommit",
+          "scitt",
+          "formal",
+          "pytest",
+          "test",
+          "inspect",
+          "dev"
+        ]
+      }
+    },
+    {
+      "download_info": {
+        "url": "https://files.pythonhosted.org/packages/d3/69/2c833a049475e0a3444e94c7d0aca0aa51d166374a449b09e92ac98138de/cryptography-50.0.2-cp311-abi3-manylinux_2_34_x86_64.whl",
+        "archive_info": {
+          "hash": "sha256=9dab55f57c74c3cad24c323bacbbd04be4705ba6eb0d92e920b1fc4837ed5079",
+          "hashes": {
+            "sha256": "9dab55f57c74c3cad24c323bacbbd04be4705ba6eb0d92e920b1fc4837ed5079"
+          }
+        }
+      },
+      "is_direct": false,
+      "is_yanked": false,
+      "requested": false,
+      "metadata": {
+        "metadata_version": "2.4",
+        "name": "cryptography",
+        "version": "50.0.2",
+        "summary": "cryptography is a package which provides cryptographic recipes and primitives to Python developers.",
+        "description": "pyca/cryptography\n=================\n\n.. image:: https://img.shields.io/pypi/v/cryptography.svg\n    :target: https://pypi.org/project/cryptography/\n    :alt: Latest Version\n\n.. image:: https://readthedocs.org/projects/cryptography/badge/?version=latest\n    :target: https://cryptography.io\n    :alt: Latest Docs\n\n.. image:: https://github.com/pyca/cryptography/actions/workflows/ci.yml/badge.svg\n    :target: https://github.com/pyca/cryptography/actions/workflows/ci.yml?query=branch%3Amain\n\n``cryptography`` is a package which provides cryptographic recipes and\nprimitives to Python developers. Our goal is for it to be your \"cryptographic\nstandard library\". It supports Python 3.9+ and PyPy3 7.3.11+.\n\n``cryptography`` includes both high level recipes and low level interfaces to\ncommon cryptographic algorithms such as symmetric ciphers, message digests, and\nkey derivation functions. For example, to encrypt something with\n``cryptography``'s high level symmetric encryption recipe:\n\n.. code-block:: pycon\n\n    >>> from cryptography.fernet import Fernet\n    >>> # Put this somewhere safe!\n    >>> key = Fernet.generate_key()\n    >>> f = Fernet(key)\n    >>> token = f.encrypt(b\"A really secret message. Not for prying eyes.\")\n    >>> token\n    b'...'\n    >>> f.decrypt(token)\n    b'A really secret message. Not for prying eyes.'\n\nYou can find more information in the `documentation`_.\n\nYou can install ``cryptography`` with:\n\n.. code-block:: console\n\n    $ pip install cryptography\n\nFor full details see `the installation documentation`_.\n\nDiscussion\n~~~~~~~~~~\n\nIf you run into bugs, you can file them in our `issue tracker`_.\n\nWe maintain a `cryptography-dev`_ mailing list for development discussion.\n\nYou can also join ``#pyca`` on ``irc.libera.chat`` to ask questions or get\ninvolved.\n\nSecurity\n~~~~~~~~\n\nNeed to report a security issue? Please consult our `security reporting`_\ndocumentation.\n\n\n.. _`documentation`: https://cryptography.io/\n.. _`the installation documentation`: https://cryptography.io/en/latest/installation/\n.. _`issue tracker`: https://github.com/pyca/cryptography/issues\n.. _`cryptography-dev`: https://mail.python.org/mailman/listinfo/cryptography-dev\n.. _`security reporting`: https://cryptography.io/en/latest/security/\n\n",
+        "description_content_type": "text/x-rst; charset=UTF-8",
+        "author_email": "The Python Cryptographic Authority and individual contributors <cryptography-dev@python.org>",
+        "classifier": [
+          "Development Status :: 5 - Production/Stable",
+          "Intended Audience :: Developers",
+          "Natural Language :: English",
+          "Operating System :: MacOS :: MacOS X",
+          "Operating System :: POSIX",
+          "Operating System :: POSIX :: BSD",
+          "Operating System :: POSIX :: Linux",
+          "Operating System :: Microsoft :: Windows",
+          "Programming Language :: Python",
+          "Programming Language :: Python :: 3",
+          "Programming Language :: Python :: 3 :: Only",
+          "Programming Language :: Python :: 3.9",
+          "Programming Language :: Python :: 3.10",
+          "Programming Language :: Python :: 3.11",
+          "Programming Language :: Python :: 3.12",
+          "Programming Language :: Python :: 3.13",
+          "Programming Language :: Python :: 3.14",
+          "Programming Language :: Python :: 3.15",
+          "Programming Language :: Python :: Implementation :: CPython",
+          "Programming Language :: Python :: Implementation :: PyPy",
+          "Programming Language :: Python :: Free Threading :: 3 - Stable",
+          "Topic :: Security :: Cryptography"
+        ],
+        "requires_dist": [
+          "cffi>=2.0.0 ; platform_python_implementation != 'PyPy'",
+          "typing-extensions>=4.13.2 ; python_full_version < '3.11'",
+          "bcrypt>=3.1.5 ; extra == 'ssh'"
+        ],
+        "requires_python": ">=3.9, !=3.9.0, !=3.9.1",
+        "project_url": [
+          "changelog, https://cryptography.io/en/latest/changelog/",
+          "documentation, https://cryptography.io/",
+          "homepage, https://github.com/pyca/cryptography",
+          "issues, https://github.com/pyca/cryptography/issues",
+          "source, https://github.com/pyca/cryptography/"
+        ],
+        "provides_extra": [
+          "ssh"
+        ]
+      }
+    },
+    {
+      "download_info": {
+        "url": "https://files.pythonhosted.org/packages/4d/78/119878110660b2ad709888c8a1614fce7e2fab39080ab960656dc8605bf6/rfc8785-0.1.4-py3-none-any.whl",
+        "archive_info": {
+          "hash": "sha256=520d690b448ecf0703691c76e1a34a24ddcd4fc5bc41d589cb7c58ec651bcd48",
+          "hashes": {
+            "sha256": "520d690b448ecf0703691c76e1a34a24ddcd4fc5bc41d589cb7c58ec651bcd48"
+          }
+        }
+      },
+      "is_direct": false,
+      "is_yanked": false,
+      "requested": false,
+      "metadata": {
+        "metadata_version": "2.1",
+        "name": "rfc8785",
+        "version": "0.1.4",
+        "summary": "A pure-Python implementation of RFC 8785 (JSON Canonicalization Scheme)",
+        "description": "# rfc8785.py\n\n<!--- BADGES: START --->\n[![CI](https://github.com/trailofbits/rfc8785.py/actions/workflows/tests.yml/badge.svg)](https://github.com/trailofbits/rfc8785.py/actions/workflows/tests.yml)\n[![PyPI version](https://badge.fury.io/py/rfc8785.svg)](https://pypi.org/project/rfc8785)\n[![Packaging status](https://repology.org/badge/tiny-repos/python:rfc8785.svg)](https://repology.org/project/python:rfc8785/versions)\n<!--- BADGES: END --->\n\nA pure-Python, no-dependency implementation of [RFC 8785], a.k.a. JSON Canonicalization Scheme or JCS.\n\nThis implementation should be behaviorally comparable to\n[Andrew Rundgren's reference implementation], with the following added constraints:\n\n1. This implementation does not transparently convert non-`str` dictionary keys into\n   strings. Users must explicitly perform this conversion.\n1. No support for indentation, pretty-printing, etc. is provided. The output is always\n   minimally encoded.\n2. All APIs produce UTF-8-encoded `bytes` objects or `bytes` I/O.\n\n## Installation\n\n```bash\npython -m pip install rfc8785\n```\n\n## Usage\n\nSee the full API documentation [here].\n\n```python\nimport rfc8785\n\nfoo = {\n    \"key\": \"value\",\n    \"another-key\": 2,\n    \"a-third\": [1, 2, 3, [4], (5, 6, \"this works too\")],\n    \"more\": [None, True, False],\n}\n\nrfc8785.dumps(foo)\n```\n\nyields:\n\n```python\nb'{\"a-third\":[1,2,3,[4],[5,6,\"this works too\"]],\"another-key\":2,\"key\":\"value\",\"more\":[null,true,false]}'\n```\n\nFor direct serialization to an I/O sink, use `rfc8785.dump` instead:\n\n```python\nimport rfc8785\n\nwith open(\"/some/file\", mode=\"wb\") as io:\n    rfc8785.dump([1, 2, 3, 4], io)\n```\n\nAll APIs raise `rfc8785.CanonicalizationError` or a subclass on serialization failures.\n\n## Licensing\n\nApache License, Version 2.0.\n\nWhere noted, parts of this implementation are adapted from [Andrew Rundgren's reference implementation], which is also licensed under the Apache License, Version 2.0.\n\n[RFC 8785]: https://datatracker.ietf.org/doc/html/rfc8785\n\n[Andrew Rundgren's reference implementation]: https://github.com/cyberphone/json-canonicalization/tree/master/python3\n\n[here]: https://trailofbits.github.io/rfc8785.py\n\n",
+        "description_content_type": "text/markdown",
+        "author_email": "Trail of Bits <opensource@trailofbits.com>",
+        "classifier": [
+          "Development Status :: 4 - Beta",
+          "License :: OSI Approved :: Apache Software License",
+          "Programming Language :: Python :: 3",
+          "Topic :: File Formats :: JSON",
+          "Topic :: Security :: Cryptography"
+        ],
+        "requires_dist": [
+          "rfc8785[doc,test,lint] ; extra == \"dev\"",
+          "build ; extra == \"dev\"",
+          "pdoc ; extra == \"doc\"",
+          "ruff ~= 0.3 ; extra == \"lint\"",
+          "mypy >= 1.0 ; extra == \"lint\"",
+          "interrogate ; extra == \"lint\"",
+          "pytest ; extra == \"test\"",
+          "pytest-cov ; extra == \"test\"",
+          "coverage ; extra == \"test\""
+        ],
+        "requires_python": ">=3.8",
+        "project_url": [
+          "Documentation, https://trailofbits.github.io/rfc8785.py/",
+          "Homepage, https://pypi.org/project/rfc8785",
+          "Issues, https://github.com/trailofbits/rfc8785.py/issues",
+          "Source, https://github.com/trailofbits/rfc8785.py"
+        ],
+        "provides_extra": [
+          "dev",
+          "doc",
+          "lint",
+          "test"
+        ]
+      }
+    },
+    {
+      "download_info": {
+        "url": "https://files.pythonhosted.org/packages/b1/db/dceb9dd5b231e1da801793f8acc9f3c52a7e1afe40bb1aae37e02b0faad5/cffi-2.1.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl",
+        "archive_info": {
+          "hash": "sha256=c1453022f490d2459a11819d83ad1d586e9ff65a12ac3e705ffebd46d3685dcf",
+          "hashes": {
+            "sha256": "c1453022f490d2459a11819d83ad1d586e9ff65a12ac3e705ffebd46d3685dcf"
+          }
+        }
+      },
+      "is_direct": false,
+      "is_yanked": false,
+      "requested": false,
+      "metadata": {
+        "metadata_version": "2.4",
+        "name": "cffi",
+        "version": "2.1.1",
+        "dynamic": [
+          "license-file"
+        ],
+        "summary": "Foreign Function Interface for Python calling C code.",
+        "description": "[![GitHub Actions Status](https://github.com/python-cffi/cffi/actions/workflows/ci.yaml/badge.svg?branch=main)](https://github.com/python-cffi/cffi/actions/workflows/ci.yaml?query=branch%3Amain++)\n[![PyPI version](https://img.shields.io/pypi/v/cffi.svg)](https://pypi.org/project/cffi)\n[![Read the Docs](https://img.shields.io/badge/docs-latest-blue.svg)][Documentation]\n\n\nCFFI\n====\n\nForeign Function Interface for Python calling C code.\n\nPlease see the [Documentation] or uncompiled in the `doc/` subdirectory.\n\nDownload\n--------\n\n[Download page](https://github.com/python-cffi/cffi/releases)\n\nSource Code\n-----------\n\nSource code is publicly available on\n[GitHub](https://github.com/python-cffi/cffi).\n\nContact\n-------\n\n[Mailing list](https://groups.google.com/forum/#!forum/python-cffi)\n\nTesting/development tips\n------------------------\n\nAfter `git clone` or `wget && tar`, we will get a directory called `cffi` or `cffi-x.x.x`. We call it `repo-directory`. To run tests under CPython, run the following in the `repo-directory`:\n\n    pip install pytest\n    pip install -e .  # editable install of CFFI for local development\n    pytest src/c/ testing/\n\n[Documentation]: http://cffi.readthedocs.org/\n",
+        "description_content_type": "text/markdown",
+        "author": "Armin Rigo, Maciej Fijalkowski",
+        "maintainer": "Matt Davis, Matt Clay",
+        "classifier": [
+          "Programming Language :: Python",
+          "Programming Language :: Python :: 3",
+          "Programming Language :: Python :: 3.10",
+          "Programming Language :: Python :: 3.11",
+          "Programming Language :: Python :: 3.12",
+          "Programming Language :: Python :: 3.13",
+          "Programming Language :: Python :: 3.14",
+          "Programming Language :: Python :: 3.15",
+          "Programming Language :: Python :: Free Threading :: 2 - Beta",
+          "Programming Language :: Python :: Implementation :: CPython"
+        ],
+        "requires_dist": [
+          "pycparser; implementation_name != \"PyPy\""
+        ],
+        "requires_python": ">=3.10",
+        "project_url": [
+          "Documentation, https://cffi.readthedocs.io/",
+          "Changelog, https://cffi.readthedocs.io/en/latest/whatsnew.html",
+          "Download, https://github.com/python-cffi/cffi/releases",
+          "Contact, https://groups.google.com/forum/#!forum/python-cffi",
+          "Source Code, https://github.com/python-cffi/cffi",
+          "Issue Tracker, https://github.com/python-cffi/cffi/issues"
+        ]
+      }
+    },
+    {
+      "download_info": {
+        "url": "https://files.pythonhosted.org/packages/b6/ae/315bbeee126a769cbde43cf4908acb4b40408d8bf8bbf334dd7368d8dadf/pycparser-3.12-py3-none-any.whl",
+        "archive_info": {
+          "hash": "sha256=a076f3f489b39b43ed13563a1dafe42447445bec2e294154ec5c57fcdda4c85e",
+          "hashes": {
+            "sha256": "a076f3f489b39b43ed13563a1dafe42447445bec2e294154ec5c57fcdda4c85e"
+          }
+        }
+      },
+      "is_direct": false,
+      "is_yanked": false,
+      "requested": false,
+      "metadata": {
+        "metadata_version": "2.4",
+        "name": "pycparser",
+        "version": "3.12",
+        "dynamic": [
+          "license-file"
+        ],
+        "summary": "C parser in Python",
+        "description": "=========\npycparser\n=========\n\n\n.. image:: https://github.com/eliben/pycparser/workflows/pycparser-tests/badge.svg\n  :align: center\n  :target: https://github.com/eliben/pycparser/actions\n\n----\n\n.. contents::\n    :backlinks: none\n\n.. sectnum::\n\nIntroduction\n============\n\nWhat is pycparser?\n------------------\n\n**pycparser** is a parser for the C language, written in pure Python. It is a\nmodule designed to be easily integrated into applications that need to parse\nC source code.\n\nWhat is it good for?\n--------------------\n\nAnything that needs C code to be parsed. The following are some uses for\n**pycparser**, taken from real user reports:\n\n* C code obfuscator\n* Front-end for various specialized C compilers\n* Static code checker\n* Automatic unit-test discovery\n* Adding specialized extensions to the C language\n\nOne of the most popular uses of **pycparser** is in the `cffi\n<https://cffi.readthedocs.io/en/latest/>`_ library, which uses it to parse the\ndeclarations of C functions and types in order to auto-generate FFIs.\n\n**pycparser** is unique in the sense that it's written in pure Python - a very\nhigh level language that's easy to experiment with and tweak. To people familiar\nwith Lex and Yacc, **pycparser**'s code will be simple to understand. It also\nhas no external dependencies (except for a Python interpreter), making it very\nsimple to install and deploy.\n\nWhich version of C does pycparser support?\n------------------------------------------\n\n**pycparser** aims to support the full C11 language, including earlier\nrevisions like C99.\n\nC23 support is conditional on a ``dialect=\"c23\"`` setting, since this revision\nintroduces new keywords like ``bool`` that would conflict with existing C code\nif not handled properly.\n\n**pycparser** supports very few GCC extensions, but it's fairly easy to set\nthings up so that it parses code with a lot of GCC-isms successfully. See the\n`FAQ <https://github.com/eliben/pycparser/wiki/FAQ>`_ for more details.\n\nWhat grammar does pycparser follow?\n-----------------------------------\n\n**pycparser** very closely follows the C grammar provided in Annex A of the C99\nstandard (ISO/IEC 9899).\n\nHow is pycparser licensed?\n--------------------------\n\n`BSD license <https://github.com/eliben/pycparser/blob/main/LICENSE>`_.\n\nContact details\n---------------\n\nFor reporting problems with **pycparser** or submitting feature requests, please\nopen an `issue <https://github.com/eliben/pycparser/issues>`_, or submit a\npull request.\n\n\nInstalling\n==========\n\nPrerequisites\n-------------\n\n**pycparser** is being tested with modern versions of Python on\nLinux, macOS and Windows. See `the CI dashboard <https://github.com/eliben/pycparser/actions/workflows/ci.yml>`__\nfor details.\n\n**pycparser** has no external dependencies.\n\nInstallation process\n--------------------\n\nThe recommended way to install **pycparser** is with ``pip``::\n\n    > pip install pycparser\n\nUsing\n=====\n\nInteraction with the C preprocessor\n-----------------------------------\n\nIn order to be compilable, C code must be preprocessed by the C preprocessor -\n``cpp``. A compatible ``cpp`` handles preprocessing directives like ``#include`` and\n``#define``, removes comments, and performs other minor tasks that prepare the C\ncode for compilation.\n\nFor all but the most trivial snippets of C code **pycparser**, like a C\ncompiler, must receive preprocessed C code in order to function correctly. If\nyou import the top-level ``parse_file`` function from the **pycparser** package,\nit will interact with ``cpp`` for you, as long as it's in your PATH, or you\nprovide a path to it.\n\nNote also that you can use ``gcc -E`` or ``clang -E`` instead of ``cpp``. See\nthe ``using_gcc_E_libc.py`` example for more details. Windows users can download\nand install a binary build of Clang for Windows `from this website\n<http://llvm.org/releases/download.html>`_.\n\nWhat about the standard C library headers?\n------------------------------------------\n\nC code almost always ``#include``\\s various header files from the standard C\nlibrary, like ``stdio.h``. While (with some effort) **pycparser** can be made to\nparse the standard headers from any C compiler, it's much simpler to use the\nprovided \"fake\" standard includes for C11 in ``utils/fake_libc_include``. These\nare standard C header files that contain only the bare necessities to allow\nvalid parsing of the files that use them. As a bonus, since they're minimal, it\ncan significantly improve the performance of parsing large C files.\n\nThe key point to understand here is that **pycparser** doesn't really care about\nthe semantics of types. It only needs to know whether some token encountered in\nthe source is a previously defined type. This is essential in order to be able\nto parse C correctly.\n\nSee `this blog post\n<https://eli.thegreenplace.net/2015/on-parsing-c-type-declarations-and-fake-headers>`_\nfor more details.\n\nNote that the fake headers are not included in the ``pip`` package nor installed\nvia the package build (`#224 <https://github.com/eliben/pycparser/issues/224>`_).\n\nBasic usage\n-----------\n\nTake a look at the |examples|_ directory of the distribution for a few examples\nof using **pycparser**. These should be enough to get you started. Please note\nthat most realistic C code samples would require running the C preprocessor\nbefore passing the code to **pycparser**; see the previous sections for more\ndetails.\n\nFor example, to parse C23 source with a preprocessor that supports ``-std=c23``::\n\n    from pycparser import CParser, parse_file\n\n    ast = parse_file(\n        \"example.c\",\n        use_cpp=True,\n        cpp_args=[\"-std=c23\"],\n        parser=CParser(dialect=\"c23\"),\n    )\n\nThe parser's dialect does not configure the external preprocessor; select its\nlanguage mode separately through ``cpp_args``.\n\n.. |examples| replace:: ``examples``\n.. _examples: examples\n\n\nAdvanced usage\n--------------\n\nThe public interface of **pycparser** is well documented with comments in\n``pycparser/c_parser.py``. For a detailed overview of the various AST nodes\ncreated by the parser, see ``pycparser/_c_ast.cfg``.\n\nThe root node is a ``FileAST``, whose ``ext`` attribute is a list of top-level\ndeclarations and function definitions. Explore nodes through their named fields,\nand use ``show()`` on a subtree to inspect just that part of the AST::\n\n    from pycparser import CParser\n\n    ast = CParser().parse(\"int x; int f(void) { return x; }\")\n    print(len(ast.ext))  # 2\n    func = ast.ext[1]\n    func.body.show()\n\nFor generic exploration, call ``children()`` to get a tuple of ``(field_name,\nchild_node)`` pairs for the immediate children. The tuple supports length and\nindexing directly::\n\n    children = func.children()\n    print(len(children))  # 2: decl and body\n    name, child = children[0]\n    print(name)  # decl\n    child.show()\n\nIterating over a node directly (``for child in node``) yields just the child\nnodes, without their names. For a guided walkthrough, see\n`examples/explore_ast.py <examples/explore_ast.py>`_; for recursive traversal,\nsee the ``NodeVisitor`` example in `examples/func_defs.py <examples/func_defs.py>`_.\n\nThere's also a `FAQ available here <https://github.com/eliben/pycparser/wiki/FAQ>`_.\nIn any case, you can always drop me an `email <eliben@gmail.com>`_ for help.\n\n\nModifying\n=========\n\nThere are a few points to keep in mind when modifying **pycparser**:\n\n* The code for **pycparser**'s AST nodes is automatically generated from a\n  configuration file - ``_c_ast.cfg``, by ``_ast_gen.py``. If you modify the AST\n  configuration or the generator, run ``make regen-ast`` from the repository\n  root to re-generate ``pycparser/c_ast.py`` and run ``make format``.\n* Read the docstring in the constructor of the ``CParser`` class for details\n  on configuration and compatibility arguments.\n\n\nPackage contents\n================\n\nOnce you unzip the ``pycparser`` package, you'll see the following files and\ndirectories:\n\nREADME.rst:\n  This README file.\n\nLICENSE:\n  The pycparser license\n\nsetup.py:\n  Legacy installation script (build metadata lives in ``pyproject.toml``).\n\npyproject.toml:\n  Package metadata and build configuration.\n\nexamples/:\n  A directory with some examples of using **pycparser**\n\npycparser/:\n  The **pycparser** module source code.\n\ntests/:\n  Unit tests.\n\nutils/fake_libc_include:\n  Minimal standard C library include files that should allow to parse any C code.\n  Note that these headers now include C11 code, so they may not work when the\n  preprocessor is configured to an earlier C standard (like ``-std=c99``).\n\nutils/internal/:\n  Internal utilities for my own use. You probably don't need them.\n\n\nContributors\n============\n\nSome people have contributed to **pycparser** by opening issues on bugs they've\nfound and/or submitting patches. The list of contributors is in the CONTRIBUTORS\nfile in the source distribution. After **pycparser** moved to Github I stopped\nupdating this list because Github does a much better job at tracking\ncontributions.\n",
+        "description_content_type": "text/x-rst",
+        "author_email": "Eli Bendersky <eliben@gmail.com>",
+        "maintainer_email": "Eli Bendersky <eliben@gmail.com>",
+        "classifier": [
+          "Development Status :: 5 - Production/Stable",
+          "Programming Language :: Python :: 3",
+          "Programming Language :: Python :: 3.11",
+          "Programming Language :: Python :: 3.12",
+          "Programming Language :: Python :: 3.13",
+          "Programming Language :: Python :: 3.14",
+          "Programming Language :: Python :: 3.15"
+        ],
+        "requires_python": ">=3.11",
+        "project_url": [
+          "Homepage, https://github.com/eliben/pycparser"
+        ]
+      }
+    }
+  ],
+  "environment": {
+    "implementation_name": "cpython",
+    "implementation_version": "3.12.3",
+    "os_name": "posix",
+    "platform_machine": "x86_64",
+    "platform_release": "6.11.0-29-generic",
+    "platform_system": "Linux",
+    "platform_version": "#29~24.04.1-Ubuntu SMP PREEMPT_DYNAMIC Thu Jun 26 14:16:59 UTC 2",
+    "python_full_version": "3.12.3",
+    "platform_python_implementation": "CPython",
+    "python_version": "3.12",
+    "sys_platform": "linux"
+  }
+}

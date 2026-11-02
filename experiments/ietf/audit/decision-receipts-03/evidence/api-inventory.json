@@ -1,0 +1,258 @@
+{
+  "decision": {
+    "sha256": "bb738073be1065b26d9ddf6c80f5d94e222921f03b7e2163ea228fb27fe93165",
+    "public_functions": [
+      {
+        "name": "validate_decision_predicate",
+        "line": 222,
+        "signature": "predicate: Any, *, strict: bool=False"
+      },
+      {
+        "name": "require_valid_decision_predicate",
+        "line": 416,
+        "signature": "predicate: Any, *, strict: bool=False"
+      },
+      {
+        "name": "action_outcome_proven",
+        "line": 433,
+        "signature": "predicate: Any"
+      },
+      {
+        "name": "resolve_evidence_ref",
+        "line": 450,
+        "signature": "ref: dict, *, evidence_payload: bytes | None=None, artifact_bytes: bytes | None=None"
+      },
+      {
+        "name": "build_decision_statement",
+        "line": 540,
+        "signature": "predicate: dict, *, subject_name: str | None=None, subject_sha256: str | None=None"
+      },
+      {
+        "name": "emit_decision_receipt",
+        "line": 568,
+        "signature": "predicate: dict, signer, *, subject_name: str | None=None, subject_sha256: str | None=None, keyid: str | None=None, strict: bool=True"
+      },
+      {
+        "name": "verify_decision_receipt_or_raise",
+        "line": 634,
+        "signature": "envelope: dict, public_key: bytes, *, strict: bool=False, expected_audience: str | None=None, expected_nonce: str | None=None, policy: dict | None=None, anchors: list | None=None, rp_trust: dict | None=None, require_derived_subject: bool=False, evidence_resolver: Callable[[dict], bool] | None=None, related: dict | None=None, now: int | None=None"
+      },
+      {
+        "name": "verify_decision_receipt",
+        "line": 654,
+        "signature": "envelope: dict, public_key: bytes, *, strict: bool=False, expected_audience: str | None=None, expected_nonce: str | None=None, policy: dict | None=None, anchors: list | None=None, rp_trust: dict | None=None, require_derived_subject: bool=False, evidence_resolver: Callable[[dict], bool] | None=None, related: dict | None=None, now: int | None=None, _raise_on_malformed: bool=False"
+      }
+    ]
+  },
+  "outcome": {
+    "sha256": "5cdb826082eff96d4697a9546787dcaaa581efe193037341fbbc4061553f3dca",
+    "public_functions": [
+      {
+        "name": "validate_outcome_predicate",
+        "line": 101,
+        "signature": "predicate: Any, *, strict: bool=False"
+      },
+      {
+        "name": "require_valid_outcome_predicate",
+        "line": 235,
+        "signature": "predicate: Any, *, strict: bool=False"
+      },
+      {
+        "name": "outcome_execution_proven",
+        "line": 243,
+        "signature": "predicate: Any"
+      },
+      {
+        "name": "pack_key_binds_signer",
+        "line": 261,
+        "signature": "key_id: Any, trust_pack: Any, public_key: Any"
+      },
+      {
+        "name": "executor_trusted_by_role",
+        "line": 332,
+        "signature": "executor: Any, trust_pack: dict, *, public_key: Any=None"
+      },
+      {
+        "name": "receiver_trusted_by_role",
+        "line": 398,
+        "signature": "receiver_key_id: Any, trust_pack: dict"
+      },
+      {
+        "name": "resolve_receiver_ref",
+        "line": 428,
+        "signature": "ref: dict, *, receiver_payload: bytes | None=None, artifact_bytes: bytes | None=None"
+      },
+      {
+        "name": "detect_outcome_sequence_gaps",
+        "line": 467,
+        "signature": "predicates"
+      },
+      {
+        "name": "build_outcome_statement",
+        "line": 553,
+        "signature": "predicate: dict, *, subject_name: str | None=None, subject_sha256: str | None=None"
+      },
+      {
+        "name": "emit_outcome_receipt",
+        "line": 574,
+        "signature": "predicate: dict, signer, *, subject_name: str | None=None, subject_sha256: str | None=None, keyid: str | None=None, strict: bool=True"
+      },
+      {
+        "name": "verify_outcome_receipt_or_raise",
+        "line": 684,
+        "signature": "envelope: dict, public_key: bytes, *, strict: bool=False, expected_decision_ref: str | None=None, decision_maker_id: str | None=None, expected_audience: str | None=None, expected_nonce: str | None=None, require_derived_subject: bool=False, trust_pack: dict | None=None, trust_pack_expected_genesis_digest: str | None=None, trust_pack_expected_root_keys: dict | None=None, trust_pack_pinned: bool | None=None, trust_pack_envelope: dict | None=None, trust_pack_pinned_digest: str | None=None, evidence_resolver: Callable[[dict], bool] | None=None, receiver_attestation_resolver: Callable[[dict], bool] | None=None, related: dict | None=None, policy: dict | None=None"
+      },
+      {
+        "name": "verify_outcome_receipt",
+        "line": 716,
+        "signature": "envelope: dict, public_key: bytes, *, strict: bool=False, expected_decision_ref: str | None=None, decision_maker_id: str | None=None, expected_audience: str | None=None, expected_nonce: str | None=None, require_derived_subject: bool=False, trust_pack: dict | None=None, trust_pack_expected_genesis_digest: str | None=None, trust_pack_expected_root_keys: dict | None=None, trust_pack_pinned: bool | None=None, trust_pack_envelope: dict | None=None, trust_pack_pinned_digest: str | None=None, evidence_resolver: Callable[[dict], bool] | None=None, receiver_attestation_resolver: Callable[[dict], bool] | None=None, related: dict | None=None, policy: dict | None=None, _raise_on_malformed: bool=False"
+      }
+    ]
+  },
+  "intoto": {
+    "sha256": "0b6cc0f383cb1275eb998e69e541b61ddfb1bcd1656725b2a11e4dbe10ee9ada",
+    "public_functions": [
+      {
+        "name": "to_intoto_statement",
+        "line": 198,
+        "signature": "claim: dict, *, root_b64: Optional[str]=None, harness: Optional[dict]=None"
+      },
+      {
+        "name": "to_test_result_statement",
+        "line": 367,
+        "signature": "claim: dict, *, subject_digest: dict, root_b64: Optional[str]=None, harness: Optional[dict]=None, url: Optional[str]=None, content_root_alg: str=CONTENT_ROOT_ALG"
+      },
+      {
+        "name": "export_intoto_dsse",
+        "line": 456,
+        "signature": "claim: dict, signer, *, root_b64: Optional[str]=None, harness: Optional[dict]=None, url: Optional[str]=None, keyid: Optional[str]=None, content_root_alg: str=CONTENT_ROOT_ALG"
+      },
+      {
+        "name": "verify_intoto_dsse",
+        "line": 887,
+        "signature": "envelope: dict, public_key: bytes, *, expected_predicate_type: str=TEST_RESULT_PREDICATE_TYPE"
+      },
+      {
+        "name": "resolve_subject",
+        "line": 1014,
+        "signature": "profile: str, claim: dict, *, root_b64: Optional[str]=None, subject_name: Optional[str]=None, subject_sha256: Optional[str]=None"
+      },
+      {
+        "name": "to_eval_result_predicate",
+        "line": 1066,
+        "signature": "claim: dict, *, root_b64: Optional[str]=None, harness: Optional[dict]=None, anchors: Optional[list]=None, subject_profile: str='receipt'"
+      },
+      {
+        "name": "to_eval_result_statement",
+        "line": 1131,
+        "signature": "claim: dict, *, subject: list, root_b64: Optional[str]=None, harness: Optional[dict]=None, anchors: Optional[list]=None, subject_profile: str='receipt', content_root_alg: str=CONTENT_ROOT_ALG"
+      },
+      {
+        "name": "export_eval_result_dsse",
+        "line": 1151,
+        "signature": "claim: dict, signer, *, subject_profile: str='receipt', subject_name: Optional[str]=None, subject_sha256: Optional[str]=None, root_b64: Optional[str]=None, harness: Optional[dict]=None, anchors: Optional[list]=None, keyid: Optional[str]=None, content_root_alg: str=CONTENT_ROOT_ALG"
+      },
+      {
+        "name": "verify_eval_result_dsse",
+        "line": 1199,
+        "signature": "envelope: dict, public_key: bytes, *, expected_predicate_type: Optional[str]=EVAL_RESULT_PREDICATE_TYPE"
+      },
+      {
+        "name": "classify_eval_result_v02_predicate",
+        "line": 1459,
+        "signature": "statement: Any"
+      },
+      {
+        "name": "receipt_evidence",
+        "line": 1492,
+        "signature": "receipt_bytes: bytes, *, uri: Optional[str]=None"
+      },
+      {
+        "name": "to_eval_result_v02_predicate",
+        "line": 1518,
+        "signature": "claim: dict, *, evaluator_id: str, subject_profile: str='receipt', model: Optional[dict]=None, dataset: Optional[dict]=None, evidence: Optional[list]=None, harness: Optional[dict]=None"
+      },
+      {
+        "name": "to_eval_result_v02_statement",
+        "line": 1588,
+        "signature": "claim: dict, *, subject: list, evaluator_id: str, subject_profile: str='receipt', model: Optional[dict]=None, dataset: Optional[dict]=None, evidence: Optional[list]=None, harness: Optional[dict]=None, content_root_alg: str=CONTENT_ROOT_ALG"
+      },
+      {
+        "name": "export_eval_result_v02_dsse",
+        "line": 1611,
+        "signature": "claim: dict, signer, *, evaluator_id: str, subject_profile: str='receipt', subject_name: Optional[str]=None, subject_sha256: Optional[str]=None, root_b64: Optional[str]=None, model: Optional[dict]=None, dataset: Optional[dict]=None, evidence: Optional[list]=None, harness: Optional[dict]=None, keyid: Optional[str]=None, content_root_alg: str=CONTENT_ROOT_ALG"
+      },
+      {
+        "name": "svr_properties",
+        "line": 1664,
+        "signature": "result, claim: dict, *, prereg_verified: bool=False, anchor_verified: bool=False"
+      },
+      {
+        "name": "export_svr_dsse",
+        "line": 1774,
+        "signature": "bundle: dict, signer, *, time_created: Optional[str]=None, policy: Optional[dict]=None, prereg_verified: bool=False, anchor_verified: bool=False, keyid: Optional[str]=None, content_root_alg: str=CONTENT_ROOT_ALG"
+      },
+      {
+        "name": "classify_svr_predicate_shape",
+        "line": 1876,
+        "signature": "statement: Any"
+      },
+      {
+        "name": "verify_svr_dsse",
+        "line": 1917,
+        "signature": "envelope: dict, public_key: bytes, *, expected_predicate_type: str=SVR_PREDICATE_TYPE"
+      }
+    ]
+  },
+  "dsse": {
+    "sha256": "9b5ea434c2c9e2204d40994eb4901f8ecd161cbf82822de27997901344b5ce93",
+    "public_functions": [
+      {
+        "name": "pae",
+        "line": 47,
+        "signature": "payload_type: str, body: bytes"
+      },
+      {
+        "name": "openssh_sha256_keyid",
+        "line": 65,
+        "signature": "public_key_raw: bytes"
+      },
+      {
+        "name": "sign_envelope",
+        "line": 95,
+        "signature": "body: bytes, signer, *, payload_type: str, keyid: Optional[str]=None"
+      },
+      {
+        "name": "verify_envelope",
+        "line": 184,
+        "signature": "envelope: dict, public_key: bytes, *, payload_type: Optional[str]=None"
+      },
+      {
+        "name": "load_payload",
+        "line": 256,
+        "signature": "envelope: dict"
+      }
+    ]
+  },
+  "errors": {
+    "sha256": "0519cec81d6182576a1b1332ef857ce722e632c205f27115be23c00dbf365d2e",
+    "inspection_scope": "Process-local origin token serialization only",
+    "public_functions": []
+  },
+  "cli": {
+    "sha256": "831024ff471b8291cc697f180457934b99139c6ffb8b5e55dc590ac0738af8e7",
+    "inspection_scope": "Process-local origin token serialization only",
+    "public_functions": [
+      {
+        "name": "build_parser",
+        "line": 3249,
+        "signature": ""
+      },
+      {
+        "name": "main",
+        "line": 3879,
+        "signature": "argv=None"
+      }
+    ]
+  }
+}

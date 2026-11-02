@@ -1,0 +1,85 @@
+{
+  "recorded_at_utc": "2026-11-02T16:15:44.605841+00:00",
+  "repository_root": "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/c-audit-decision-receipts/phionyx-research",
+  "branch": "codex/audit-decision-receipts-probe",
+  "base_commit": "69bc8cfd282e9a0a45e34b1fcf6106b1ab618f9d",
+  "initial_worktree_status": "CLEAN (git status --porcelain=v1 produced no output before experiment directory creation)",
+  "rules_checked": [
+    "ancestor AGENTS.md: none found",
+    "repository AGENTS.md: none found",
+    "CONTRIBUTING.md",
+    ".gitignore",
+    ".claude/skills/state-grounding/SKILL.md: state facts freshly grounded",
+    "binding-enforcement and mcp-self-governance skills inspected for applicability; Claude hook / MCP-use instructions do not invoke a runtime here"
+  ],
+  "fetch": {
+    "command": "git fetch --all --prune",
+    "exit_code": 0,
+    "output": "From https://github.com/halvrenofviryel/phionyx-research\n - [deleted] (none) -> origin/codex/acde-01-independent-assessment\n (refs/remotes/origin/HEAD has become dangling)\n * [new branch] dependabot/github_actions/actions/checkout-7\n * [new branch] dependabot/github_actions/actions/setup-python-7\n * [new branch] dependabot/github_actions/softprops/action-gh-release-3.0.3\n * [new branch] docs/claim-realignment",
+    "base_after_fetch": "69bc8cfd282e9a0a45e34b1fcf6106b1ab618f9d",
+    "remote_refs": "refs/remotes/origin/dependabot/github_actions/actions/checkout-7 92599921904417e0fcd82c0de148cbc575c555a3\nrefs/remotes/origin/dependabot/github_actions/actions/setup-python-7 b9451b16b25275230b75025271d62f539661b532\nrefs/remotes/origin/dependabot/github_actions/softprops/action-gh-release-3.0.3 138fcb869e7aef3848e91903fc7351b0669eed4c\nrefs/remotes/origin/docs/claim-realignment aba36e1d544baeea39056f22d1fad6408d036f1f\nrefs/remotes/origin/main 69bc8cfd282e9a0a45e34b1fcf6106b1ab618f9d\n"
+  },
+  "network": {
+    "sandbox_ietf_raw_fetch": "UNAVAILABLE: urllib DNS resolution failed (Errno -3); retry through approved read-only escalation",
+    "web_tool_drafts": "UNAVAILABLE: web open returned inaccessible for both revisions",
+    "approved_raw_fetch": "SUCCESS; sources/manifest.json records each resource"
+  },
+  "scope": {
+    "draft_target": "draft-gruszka-audit-decision-receipts-03",
+    "historical_comparison": "-00; no execution observations claimed",
+    "preview_execution": "NOT_EVALUATED",
+    "other_tasks": "not started"
+  },
+  "environment": {
+    "python": "3.12.3",
+    "platform": "Linux-6.11.0-29-generic-x86_64-with-glibc2.39",
+    "package_version": "6.4.0",
+    "dependency_lock": "requirements.lock",
+    "pip_report": "evidence/pip-install-report.json",
+    "pip_freeze": "cffi==2.1.1\ncryptography==50.0.2\npip==24.0\nproofbundle==6.4.0\npycparser==3.12\nrfc8785==0.1.4\n"
+  },
+  "sources_manifest": "sources/manifest.json",
+  "source_verification": {
+    "datatracker_revision": "03",
+    "datatracker_document_time_utc": "2026-11-02T09:01:08Z",
+    "latest_revision_delta": "No newer draft than the requested -03 at this acquisition; -00 to -03 changes in requirements.md",
+    "release_tag_object": "e57b357c2ba2bd859d20e712835af26e42be38b1",
+    "release_commit": "699545521ec5ef479bb84e61fe7461fc79ed558c",
+    "preview_commit": "8bb289c8b41d32c54734155fc00756231093bc2a",
+    "preview_result_class": "SOURCE_METADATA_ONLY: commit existence and README pin; runtime NOT_EVALUATED",
+    "release_wheel_sha256": "72153d160c2f78647095f029c0946dbfd64a15e006a233a5abc78a3071eebf94",
+    "release_sdist_sha256": "9b074c7ed9dec106b45ae541b9194087f7238230953a7c784df7c4a08c386699",
+    "wheel_python_sources_matching_release_tree": 80,
+    "whole_build_reproducibility": "NOT_EVALUATED"
+  },
+  "tests": {
+    "status": "PASS",
+    "unit_tests": 16,
+    "appendix_a_cli_cases": 7,
+    "scenario_count": 9,
+    "scenario_status_counts": {
+      "PARTIALLY_EVALUATED": 6,
+      "NOT_EVALUATED": 3
+    },
+    "runtime_scenarios_executed": 0,
+    "command": "bash experiments/ietf/audit/decision-receipts-03/reproduce.sh",
+    "determinism": "PASS: two separate Python processes, token-only report projection, 20 artifacts byte-identical; archived original API capture differs only in per-process tokens",
+    "clean_venv_reproduction": "PASS: offline hash-locked wheel install into .reproduced/clean-venv; pip check + 16 tests + 20 artifact comparison",
+    "initial_reproduction_failure": {
+      "result": "FAIL: api_results.json differed across processes",
+      "cause": "proofbundle errors.py creates a random per-process HMAC key; decision.verified_origin varies",
+      "resolution": "Preserve raw initial capture; report_projection masks only non-null verified_origin after API/policy calls, and cross-process test checks the projection; upstream package unchanged"
+    },
+    "final_validation": "evidence/final-validation.json",
+    "final_log": "evidence/final-validation.txt",
+    "lint": "PASS: ruff check and ruff format --check (100 columns)",
+    "recorded_artifacts": 20
+  },
+  "commit_record": "Result commit is git log -1 --format=%H -- experiments/ietf/audit/decision-receipts-03; not embedded to avoid a self-referential hash",
+  "original_api_capture": {
+    "path": "evidence/api_results.original.json",
+    "sha256": "e7bb0a6c7e43b024a2125df5eb499b31890af43ea30d6f717c96023959bbba09",
+    "captured_at_utc": "2026-11-02T16:32:31Z",
+    "capture_time_note": "Original capture was generated at 2026-11-02T16:32:31Z per filesystem mtime before preservation; stored mtime may change on checkout"
+  }
+}

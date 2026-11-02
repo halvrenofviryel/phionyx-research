@@ -1,0 +1,58 @@
+[
+  {
+    "section": "2.6.  Evaluation Receipts",
+    "comparison": "pagination removed, whitespace normalized",
+    "same": true,
+    "00_sha256": "d7c3736da31be3e34ecb28513f7b94dd38fb4b6e3287d68debadcf28796424ed",
+    "03_sha256": "d7c3736da31be3e34ecb28513f7b94dd38fb4b6e3287d68debadcf28796424ed"
+  },
+  {
+    "section": "3.1.  Inputs",
+    "comparison": "pagination removed, whitespace normalized",
+    "same": true,
+    "00_sha256": "cade9337d77028c6f7b5a9544e0d192aeb61de129b7ef271a2667954280327bc",
+    "03_sha256": "cade9337d77028c6f7b5a9544e0d192aeb61de129b7ef271a2667954280327bc"
+  },
+  {
+    "section": "3.2.  Decision Receipt",
+    "comparison": "pagination removed, whitespace normalized",
+    "same": true,
+    "00_sha256": "fbed24a5280839e14249bd8bee02a5651a750e3385bef666d717329008ddf1d5",
+    "03_sha256": "fbed24a5280839e14249bd8bee02a5651a750e3385bef666d717329008ddf1d5"
+  },
+  {
+    "section": "3.3.  Checks per Case",
+    "comparison": "pagination removed, whitespace normalized",
+    "same": true,
+    "00_sha256": "8c7bfef9e7ba665de7773a3b85236165eaf875ecad6a5bf27ef63d00266a0682",
+    "03_sha256": "8c7bfef9e7ba665de7773a3b85236165eaf875ecad6a5bf27ef63d00266a0682"
+  },
+  {
+    "section": "3.4.  Outcome Receipt",
+    "comparison": "pagination removed, whitespace normalized",
+    "same": true,
+    "00_sha256": "872195c5f959d148a8ea7f03eee19919dacfd2ec030fdb33bc8ab7758a22653b",
+    "03_sha256": "872195c5f959d148a8ea7f03eee19919dacfd2ec030fdb33bc8ab7758a22653b"
+  },
+  {
+    "section": "3.5.  Checks over a Set",
+    "comparison": "pagination removed, whitespace normalized",
+    "same": true,
+    "00_sha256": "2fc9f9a74d3408cb11b040f4c64aa4ce53476b4771c956aab4eb43a4beff0a85",
+    "03_sha256": "2fc9f9a74d3408cb11b040f4c64aa4ce53476b4771c956aab4eb43a4beff0a85"
+  },
+  {
+    "section": "4.  Approvals Are",
+    "comparison": "pagination removed, whitespace normalized",
+    "same": true,
+    "00_sha256": "1279890bc4748e421e1a759f69ad5c3b4a5fd322c41878d7f10d3b88e402259c",
+    "03_sha256": "1279890bc4748e421e1a759f69ad5c3b4a5fd322c41878d7f10d3b88e402259c"
+  },
+  {
+    "section": "5.  Implementation Status",
+    "comparison": "pagination removed, whitespace normalized",
+    "same": true,
+    "00_sha256": "e859e9ad3f8ca660e09e814b92e45c0eaf05d7250a864bdd9b548457b04d3647",
+    "03_sha256": "e859e9ad3f8ca660e09e814b92e45c0eaf05d7250a864bdd9b548457b04d3647"
+  }
+]

@@ -1,0 +1,485 @@
+--- -00 (pagination/blank lines removed)
+
++++ -03 (pagination/blank lines removed)
+
+@@ -1,9 +1,9 @@
+
+ Network Working Group                                         K. Gruszka
+-Intended status: Informational                           1 November 2026
+-Expires: 5 May 2027
++Intended status: Informational                           2 November 2026
++Expires: 6 May 2027
+  Decision Receipts for Approvals, Declined Actions and Executed Actions
+                          in Agent Audit Records
+-                draft-gruszka-audit-decision-receipts-00
++                draft-gruszka-audit-decision-receipts-03
+ Abstract
+    The architecture for auditing agent delegation and interactions
+    proposed for the AUDIT effort names Interaction Records, Action
+@@ -19,8 +19,11 @@
+
+    verification procedure.  It states one requirement for approvals,
+    that an approval is honoured at most once, also after the record of
+    consumed approvals is rotated.  Test vectors for all three cases,
+-   each with a counterexample, are included.  This document defines no
+-   new format, predicate or registry.
++   each with a counterexample, are included.  The document also
++   describes, informatively, how a receipt can be registered with a
++   Transparency Service under RFC 9943 and what a SCITT Receipt then
++   shows and does not show.  This document defines no new format,
++   predicate or registry.
+ Status of This Memo
+    This Internet-Draft is submitted in full conformance with the
+    provisions of BCP 78 and BCP 79.
+@@ -32,7 +35,7 @@
+
+    and may be updated, replaced, or obsoleted by other documents at any
+    time.  It is inappropriate to use Internet-Drafts as reference
+    material or to cite them other than as "work in progress."
+-   This Internet-Draft will expire on 5 May 2027.
++   This Internet-Draft will expire on 6 May 2027.
+ Copyright Notice
+    Copyright (c) 2026 IETF Trust and the persons identified as the
+    document authors.  All rights reserved.
+@@ -46,37 +49,43 @@
+
+    provided without warranty as described in the Revised BSD License.
+ Table of Contents
+    1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   3
+-     1.1.  Requirements Language . . . . . . . . . . . . . . . . . .   3
+-     1.2.  Terms . . . . . . . . . . . . . . . . . . . . . . . . . .   3
++     1.1.  Requirements Language . . . . . . . . . . . . . . . . . .   4
++     1.2.  Terms . . . . . . . . . . . . . . . . . . . . . . . . . .   4
+    2.  Mapping the Three Cases onto AUDIT Records  . . . . . . . . .   4
+-     2.1.  Case 1, a Human Approval  . . . . . . . . . . . . . . . .   4
+-     2.2.  Case 2, a Declined Action . . . . . . . . . . . . . . . .   5
++     2.1.  Case 1, a Human Approval  . . . . . . . . . . . . . . . .   5
++     2.2.  Case 2, a Declined Action . . . . . . . . . . . . . . . .   6
+      2.3.  Case 3, an Executed Action and Its Result . . . . . . . .   6
+      2.4.  What the Receipt Adds . . . . . . . . . . . . . . . . . .   7
+      2.5.  What the Receipt Does Not Do  . . . . . . . . . . . . . .   8
+-     2.6.  Evaluation Receipts Are Evidence, Never Authorization . .   8
+-   3.  Offline Verification  . . . . . . . . . . . . . . . . . . . .   9
+-     3.1.  Inputs  . . . . . . . . . . . . . . . . . . . . . . . . .   9
+-     3.2.  Decision Receipt  . . . . . . . . . . . . . . . . . . . .   9
+-     3.3.  Checks per Case . . . . . . . . . . . . . . . . . . . . .  10
+-     3.4.  Outcome Receipt . . . . . . . . . . . . . . . . . . . . .  11
+-     3.5.  Checks over a Set of Receipts . . . . . . . . . . . . . .  12
+-     3.6.  What a Pass Shows . . . . . . . . . . . . . . . . . . . .  13
+-   4.  Approvals Are Honoured At Most Once . . . . . . . . . . . . .  13
+-   5.  Implementation Status . . . . . . . . . . . . . . . . . . . .  14
+-   6.  Relation to Other Work  . . . . . . . . . . . . . . . . . . .  16
+-   7.  Security Considerations . . . . . . . . . . . . . . . . . . .  17
+-   8.  Privacy Considerations  . . . . . . . . . . . . . . . . . . .  18
+-   9.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  18
+-   10. References  . . . . . . . . . . . . . . . . . . . . . . . . .  18
+-     10.1.  Normative References . . . . . . . . . . . . . . . . . .  18
+-     10.2.  Informative References . . . . . . . . . . . . . . . . .  19
+-   Appendix A.  Test Vectors . . . . . . . . . . . . . . . . . . . .  21
+-     A.1.  Test Keys and Inputs  . . . . . . . . . . . . . . . . . .  21
+-     A.2.  Statements  . . . . . . . . . . . . . . . . . . . . . . .  23
+-     A.3.  Results . . . . . . . . . . . . . . . . . . . . . . . . .  26
+-   Acknowledgments . . . . . . . . . . . . . . . . . . . . . . . . .  27
+-   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .  28
++     2.6.  Evaluation Receipts Are Evidence, Never Authorization . .   9
++     2.7.  Observations for the Architecture . . . . . . . . . . . .   9
++   3.  Offline Verification  . . . . . . . . . . . . . . . . . . . .  10
++     3.1.  Inputs  . . . . . . . . . . . . . . . . . . . . . . . . .  10
++     3.2.  Decision Receipt  . . . . . . . . . . . . . . . . . . . .  10
++     3.3.  Checks per Case . . . . . . . . . . . . . . . . . . . . .  12
++     3.4.  Outcome Receipt . . . . . . . . . . . . . . . . . . . . .  12
++     3.5.  Checks over a Set of Receipts . . . . . . . . . . . . . .  14
++     3.6.  What a Pass Shows . . . . . . . . . . . . . . . . . . . .  14
++     3.7.  Registering a Receipt with a Transparency Service . . . .  14
++   4.  Approvals Are Honoured At Most Once . . . . . . . . . . . . .  16
++   5.  Implementation Status . . . . . . . . . . . . . . . . . . . .  17
++   6.  Relation to Other Work  . . . . . . . . . . . . . . . . . . .  19
++   7.  Security Considerations . . . . . . . . . . . . . . . . . . .  20
++   8.  Privacy Considerations  . . . . . . . . . . . . . . . . . . .  22
++   9.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  22
++   10. References  . . . . . . . . . . . . . . . . . . . . . . . . .  22
++     10.1.  Normative References . . . . . . . . . . . . . . . . . .  22
++     10.2.  Informative References . . . . . . . . . . . . . . . . .  24
++   Appendix A.  Test Vectors . . . . . . . . . . . . . . . . . . . .  25
++     A.1.  Test Keys and Inputs  . . . . . . . . . . . . . . . . . .  25
++     A.2.  Statements  . . . . . . . . . . . . . . . . . . . . . . .  27
++     A.3.  Results . . . . . . . . . . . . . . . . . . . . . . . . .  30
++   Appendix B.  Changes  . . . . . . . . . . . . . . . . . . . . . .  31
++     B.1.  Changes from -02  . . . . . . . . . . . . . . . . . . . .  31
++     B.2.  Changes from -01 to -02 . . . . . . . . . . . . . . . . .  32
++     B.3.  Changes from -00 to -01 . . . . . . . . . . . . . . . . .  32
++   Acknowledgments . . . . . . . . . . . . . . . . . . . . . . . . .  33
++   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .  33
+ 1.  Introduction
+    The architecture of [AUDIT-ARCH] asks that auditing link user intent,
+    delegation, authorization and execution, and treats authorization as
+@@ -104,13 +113,19 @@
+
+    3.  an executed action with its result (an Action Record).
+    The document maps and verifies.  It does not propose the decision
+    receipt as the data model of the architecture and does not change the
+-   receipts it describes.
++   receipts it describes.  The mapping of Section 2 follows revision -01
++   of [AUDIT-ARCH]; a later revision of the architecture can change it.
+ 1.1.  Requirements Language
+    The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+    "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
+    "OPTIONAL" in this document are to be interpreted as described in
+    BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
+    capitals, as shown here.
++   In this document, these key words apply to a verifier in Section 2.6
++   and in the procedure of Section 3, to an Auditor that performs the
++   checks of Section 3.5, to a relying party that lets an action run
++   because of an approval in Section 4, and to the use of the test keys
++   of Appendix A.
+ 1.2.  Terms
+    Decision receipt, outcome receipt:  A DSSE envelope whose payload is
+       an in-toto Statement v1 with the predicate type
+@@ -271,7 +286,9 @@
+
+       digest that cannot be resolved to bytes shows only that a value
+       was written.
+    *  It does not register anything.  Transparency in the sense of
+-      [RFC9943] needs a separate registration and a SCITT Receipt.
++      [RFC9943] needs a separate registration and a SCITT Receipt;
++      Section 3.7 describes how a receipt of this document can be
++      registered.
+    *  It does not detect a receipt that was never written, unless an
+       observer or a sequence counter is added.
+    *  Its times are the signer's clock.
+@@ -288,6 +305,54 @@
+
+    permission for an action.  In the records of this document only a
+    decision receipt with the verdict ALLOW, from a key the relying party
+    trusts for decisions, records a permission.
++2.7.  Observations for the Architecture
++   This section is informative.  At the places below, the mapping of
++   this section needed a reading of revision -01 of [AUDIT-ARCH].  They
++   are offered as observations and questions, not as requirements.
++   *  Evidence for a human approval.  Section 3 of [AUDIT-ARCH]
++      associates Interaction Records with the User; Section 3.1 says
++      that user-facing systems produce records of prompts and approvals,
++      and Section 4.2 has the Auditing Service sign records under its
++      own identity.  In Case 1, the gate's decision receipt binds an
++      approval record that names a person but is not signed by that
++      person (Section 2.1 and Section 2.5).  What evidence is needed to
++      bind such a record to that person's act of approval, and when is
++      the person's own signature required?
++   *  Previous state.  The Authorization Transition Record of
++      Section 7.4 of [AUDIT-ARCH], and its work item WI-1-4 (Section 6
++      of [AUDIT-ARCH]), carries a previous state, a new state, a trigger
++      and an actor in one record.  A decision receipt records only the
++      new state for one action and leaves the previous state to other
++      records (Section 2.1).  Section 5 of [AUDIT-ARCH] reconstructs
++      authorization from the ordered sequence of such records; is a
++      record without the previous state enough for that?
++   *  Binding an Action Record to its authorization.  In Section 7.2 of
++      [AUDIT-ARCH] the parent_id of an Action Record references the
++      Interaction Record that motivated the action, and the
++      authorization appears as scope and expiry.  The outcome receipt of
++      Case 3 names the decision receipt by its content root in
++      decisionRef and takes parent_id from that decision (Section 2.3).
++      The examples of [AUDIT-ARCH] have no member that binds an Action
++      Record to the authorizing decision by digest.
++   *  Refusals before execution.  Section 5 of [AUDIT-ARCH] includes
++      model responses and agent-to-agent dialogue among Interaction
++      Records.  Its work item WI-1-2 (Section 6 of [AUDIT-ARCH]) also
++      includes system events and does not preclude profiles for non-
++      conversational interactions.  In Case 2, a gate can decline a
++      proposed action under a rule before execution (Section 2.2).  When
++      such a denial is internal to a workflow and is not part of a
++      conversation, is it an Interaction Record, an Action Record of an
++      attempted request, or a different event type?
++   *  Who records an action.  Section 3 of [AUDIT-ARCH] has Action
++      Records generated by the Agent, while Section 5 of [AUDIT-ARCH]
++      places them at the boundary where the action took effect.  Its
++      work item WI-1-3 (Section 6 of [AUDIT-ARCH]) already distinguishes
++      the Recorder's signing identity from the recorded Agent's identity
++      where they are operationally separated.  In Case 3 the outcome
++      signer can be an observer that attests the executor's identifier
++      (Section 3.1 and Section 3.4).  How should an Action Record and
++      the Auditor's trust policy identify the Recorder separately from
++      the actor whose action is recorded?
+ 3.  Offline Verification
+    The procedure below needs no network access.  Each step either passes
+    or ends the procedure with a failure named by the step.  A later step
+@@ -444,7 +509,77 @@
+
+    that the outcome signer observed the boundary, that no other receipt
+    exists, or that the keys were not misused.  Those questions belong to
+    the trust policy, to signed approvals, to observers and to
+-   transparency registration.
++   transparency registration (Section 3.7).
++3.7.  Registering a Receipt with a Transparency Service
++   This section is informative.  It describes how the receipts of this
++   document can be registered with a Transparency Service under
++   [RFC9943].  It defines no format, predicate type, media type or
++   registry and adds no requirement to those of [RFC9943].
++   Registration.  In SCITT a Signed Statement is a COSE_Sign1 message
++   whose protected header carries CWT Claims with an Issuer Claim and a
++   Subject Claim (Section 6 of [RFC9943]).  A decision receipt or an
++   outcome receipt can be registered in two ways.  Its envelope bytes
++   can be the payload of a Signed Statement.  Or, as Section 6.2 of
++   [RFC9943] allows for Statements too large or too sensitive to send to
++   a Transparency Service, the Signed Statement can be made over a hash,
++   here the content root of the receipt.  This document does not define
++   how a Signed Statement indicates the hash, its algorithm or its
++   content type; that belongs to a deployment's profile and to the
++   Registration Policy of the Transparency Service (Section 5.1.1 of
++   [RFC9943]).
++   Issuer.  The Issuer of the Signed Statement is the entity identified
++   by its iss Claim, whose key signs the COSE_Sign1 (Sections 3 and 6 of
++   [RFC9943]).  It can be the decision maker or the outcome signer, or
++   another party such as the Auditing Service of Section 4.2 of
++   [AUDIT-ARCH].  The Client that registers a Signed Statement need not
++   be its Issuer (Section 7 of [RFC9943]).  The Issuer's COSE signature
++   is separate from the DSSE signature of the receipt.  The COSE
++   signature authenticates the Signed Statement's protected header and
++   payload.  The DSSE signature covers the pre-authentication encoding
++   of the receipt's payloadType and decoded payload bytes, not the DSSE
++   envelope as a whole.  Section 3.2 or Section 3.4 checks that DSSE
++   signature and its signer.
++   What a SCITT Receipt shows.  During Registration the Transparency
++   Service verifies the Issuer's signature and applies its Registration
++   Policy (Sections 5.1.1.1 and 6.3 of [RFC9943]).  It registers the
++   Signed Statement before it releases a Receipt (Section 6.3 of
++   [RFC9943]), and the Receipt demonstrates inclusion of the Signed
++   Statement in the Verifiable Data Structure of the Transparency
++   Service and can be verified without online access to it (Section 4 of
++   [RFC9943]).  The Transparency Service records the Registration time
++   when it adds the Signed Statement (Section 7 of [RFC9943]).
++   What it does not show.  Registering a Statement proves only that it
++   was produced by an Issuer, not that it is accurate (Section 9.2 of
++   [RFC9943]).  Issuers can register some Statements and not others
++   (Section 9.3 of [RFC9943]), so a Receipt for one receipt says nothing
++   about a receipt that was never registered.  The Subject Claim lets
++   Relying Parties identify the Transparent Statements registered for a
++   Subject (Section 3 of [RFC9943]), not receipts that were never
++   registered.  Unless the Registration Policy says otherwise, the order
++   of the Verifiable Data Structure need not be the order of issuance
++   (Section 9.1 of [RFC9943]).  A Receipt does not change what the
++   checks of Section 3 show, and it does not make an ALLOW an
++   authorization.
++   Verification.  A verifier checks the SCITT Receipt for the particular
++   Signed Statement, including its inclusion proof, using the
++   verification key of a Receipt Issuer it trusts and the verification
++   rules for the applicable Verifiable Data Structure (Sections 7 and
++   7.1 of [RFC9943]).  It establishes the binding from the registered
++   Signed Statement to the envelope bytes or content root used in the
++   following checks.  If the Signed Statement's COSE payload is detached
++   and this binding depends on the Issuer's signature, it verifies that
++   signature.  It then applies Section 3 of this document to the
++   receipt.  Where the envelope bytes are the Signed Statement's
++   payload, it checks those bytes; where the Signed Statement is made
++   over the content root, it checks an envelope whose computed content
++   root equals the registered value.  This latter comparison binds the
++   decoded DSSE payload, not the envelope bytes or the DSSE signature,
++   and does not establish that the DSSE signature existed when the
++   content root was registered.  Section 7.1 of [RFC9943] permits
++   verification of a Receipt without rechecking the Issuer's signature
++   on the Signed Statement; this does not dispense with the binding just
++   described.  The signatures of the decision maker and of the outcome
++   signer are checked by Section 3 in either case.
+ 4.  Approvals Are Honoured At Most Once
+    An approval in Case 1 frees one action once.  For live use, the
+    relying party MUST apply the time bounds of Section 3.3 with its own
+@@ -573,13 +708,28 @@
+
+    decision and outcome in two receipts signed under different keys and
+    maps three cases onto the architecture; the consumption-state input
+    that [GILDA] names concerns the same kind of state as Section 4.
++   [GILDA] lets records carry a sequence number, so that a record
++   withheld from a party that holds a later record of the same series
++   can be detected (Section 6.3 of [GILDA]); the decision receipts of
++   this document carry no such member (Section 3.2).  [GILDA] also
++   derives the agreement between decision and effect inside one record
++   (Section 5.3 of [GILDA]), where this document compares two receipts
++   through decisionRef (Section 3.4).
+    [IZMAYLOV] specifies permissions that a principal signs with a
+    passkey and action receipts signed by the agent, linked to earlier
+    receipts and appended to a log by a recorder.  It also defines a
+    passkey-signed approval of one action.  Such an approval could supply
+    additional evidence for Case 1.  Citing it by digest does not replace
+    the approval record or the checks of Section 3.3; this document
+-   defines no mapping from that format to the approval record.
++   defines no mapping from that format to the approval record.  In
++   [IZMAYLOV] each action receipt carries its place in a chain; every
++   receipt after the first also names the preceding receipt by digest.
++   It is signed with the agent's keys or, for a helper, with the keys in
++   the to member of its delegation (Section 6 of [IZMAYLOV]).  Here the
++   decision maker signs a decision receipt and the executor or an
++   observer signs an outcome receipt (Section 3.1); a verifier checks
++   that executor.id differs from decisionMaker.id (Section 3.4).
++   Section 3.2 does not define a chain of decision receipts.
+    [WRIGHT] defines a verdict record that states a result on a claim and
+    cites its evidence by digest, in any receipt format.  A decision or
+    outcome receipt of this document can be such evidence, and a verdict
+@@ -591,10 +741,10 @@
+
+    human approval and how it corresponds to the action, approver,
+    session and validity of Case 1 requires a mapping not defined here.
+    The approval record and the checks of Section 3.3 still apply.
+-   SCITT [RFC9943] makes the existence of a signed statement undeniable
+-   through registration and Receipts.  A decision or outcome receipt can
+-   be registered as the payload of a Signed Statement, or by its content
+-   root, which adds what Section 2.5 says the receipt lacks.
++   SCITT [RFC9943] registers Signed Statements with a Transparency
++   Service, which returns Receipts.  Section 3.7 describes how a
++   decision or outcome receipt can be registered and what a Receipt then
++   shows.
+ 7.  Security Considerations
+    Key binding.  A receipt is only as trustworthy as the verifier's
+    choice of keys and its policy for the identities those keys may
+@@ -605,6 +755,28 @@
+
+    Auditor that does not trust that Agent little assurance.  The
+    inspected Agent Guard design uses separate service accounts as
+    described in Section 5.
++   Key compromise.  Whoever holds the signing key of a decision maker or
++   of an outcome signer can produce receipts with any decidedAt or
++   performedAt, since these times come from the signer's clock, as the
++   paragraph on clocks below says.  A check under Section 3 does not
++   tell such a receipt from one signed before the key was compromised or
++   replaced.  Which keys are accepted for which identity and for which
++   period is set by the verifier's trust policy, not by this document;
++   [RFC9943] likewise leaves revocation strategies for compromised keys
++   out of its scope (Section 9.4.2 of [RFC9943]).  A time anchor outside
++   the signer helps, if it was set before the compromise.  Where the
++   envelope bytes are the payload of a registered Signed Statement
++   (Section 3.7), a Receipt for it shows that the DSSE signature existed
++   when that Signed Statement was registered, and the Transparency
++   Service records the Registration time (Section 7 of [RFC9943]).
++   Where the Signed Statement is made over the content root, the
++   comparison binds the decoded DSSE payload, not the envelope bytes or
++   the DSSE signature, and does not establish that the DSSE signature
++   existed when the content root was registered (Section 3.7).  The
++   rules of Section 4 keep a relying party from honouring one approval
++   more than once; they do not prevent the holder of a compromised
++   decision maker key from signing receipts that cite approvals with new
++   identities.
+    Exact bytes.  A verifier that re-serializes a payload before checking
+    it can be led to accept bytes that were never signed, or to compute
+    another content root.  Step 4 refuses such payloads, and vector
+@@ -624,12 +796,40 @@
+
+    was chosen by the signer.
+    Suppression.  A decision maker can fail to write a receipt for a
+    decision it does not want seen.  Independent observers at the
+-   boundary, as the architecture requires for Action Records, and
+-   registration with a Transparency Service reduce this risk; this
+-   document does not remove it.
++   boundary, as the architecture requires for Action Records, reduce
++   this risk.  Registration with a Transparency Service helps address
++   selective registration when Relying Parties accept a Signed Statement
++   only if they can discover and verify a Receipt for that Signed
++   Statement from a Transparency Service they trust (Sections 7.1 and
++   9.3 of [RFC9943]).  This document does not ensure that a receipt is
++   produced for every decision.  A SCITT Receipt shows inclusion of the
++   registered Signed Statement, not that every receipt was registered
++   (Section 3.7).  Completeness presupposes an expectation of which
++   receipts ought to exist, and this document does not define that
++   expectation.
++   Gaps.  For outcome receipts, [PB-OUTCOME] defines an optional member
++   sequence, with a run identifier and a counter that an executor can
++   opt into (its sections 4 and 7); Section 3.4 admits that member.  A
++   verifier that holds numbered outcome receipts of a run can report a
++   gap in the numbers it has.  Such a gap can reflect withholding or
++   delivery delay; the numbers alone do not establish its cause.  Those
++   sequence numbers alone do not show whether receipts above the highest
++   observed number have been withheld, and a run without the member
++   leaves no such trace (compare Section 6.3 of [GILDA]).  The profile
++   of Section 3.2 defines no sequence counter or chain of decision
++   receipts.  Records that a Service or Tool emits at the boundary where
++   an action took effect (Section 4.1 of [AUDIT-ARCH]) can expose an
++   effect for which the Auditor has no matching decision receipt.
+    Clocks. decidedAt and performedAt come from the signers' clocks.
+    Ordering against outside events needs a timestamp or a transparency
+-   registration.
++   registration.  A verified time-stamp token under [RFC3161] for a hash
++   of the envelope bytes is, like a registration (Section 3.7), an
++   anchor outside the signer for a verifier that trusts the time-
++   stamping authority.  It supports the assertion that those bytes
++   existed no later than genTime plus the applicable accuracy
++   (Section 2.4.2 of [RFC3161]).  If the accuracy field is absent, the
++   accuracy may be available through other means, such as the TSA
++   policy; its absence does not establish zero uncertainty.
+ 8.  Privacy Considerations
+    The receipts of this document carry digests of action bytes, approval
+    records and effects instead of their content, and state
+@@ -641,7 +841,17 @@
+
+    person's actions across services, as Section 9 of [AUDIT-ARCH]
+    describes; pairwise or opaque identifiers reduce that linkage.
+    Registering a receipt reveals that a decision took place at a time,
+-   even when only its content root is registered.
++   even when only its content root is registered.  Where the envelope
++   bytes are the payload of a registered Signed Statement (Section 3.7),
++   readers of that payload can read the receipt with its identifiers and
++   digests.  Registering a Statement over the content root avoids
++   including the receipt's envelope bytes in that Statement, but the
++   Signed Statement still carries its Issuer and Subject Claims and the
++   Transparency Service records the Registration time (Sections 6 and 7
++   of [RFC9943]).  Access to the registered data and any detached
++   payload depends on the Transparency Service and any Adjacent
++   Services; Issuers and Clients assess their privacy and security
++   posture before registration (Section 8 of [RFC9943]).
+ 9.  IANA Considerations
+    This document has no IANA actions.
+ 10.  References
+@@ -722,6 +932,10 @@
+
+               2026, <https://pypi.org/project/proofbundle/6.4.0/>.
+    [PB-REPO]  proofbundle project, "proofbundle source repository",
+               2026, <https://github.com/b7n0de/proofbundle>.
++   [RFC3161]  Adams, C., Cain, P., Pinkas, D., and R. Zuccherato,
++              "Internet X.509 Public Key Infrastructure Time-Stamp
++              Protocol (TSP)", RFC 3161, DOI 10.17487/RFC3161, August
++              2001, <https://www.rfc-editor.org/info/rfc3161>.
+    [RFC7942]  Sheffer, Y. and A. Farrel, "Improving Awareness of Running
+               Code: The Implementation Status Section", BCP 205,
+               RFC 7942, DOI 10.17487/RFC7942, July 2016,
+@@ -996,6 +1210,43 @@
+
+    no floating-point numbers and no characters outside ASCII, which
+    keeps these serializations equal.  The payload of V2-bad differs from
+    all of them, as intended.
++Appendix B.  Changes
++   This section is to be removed before publication.
++B.1.  Changes from -02
++   Section 6 adds, for [GILDA] and [IZMAYLOV], what this document does
++   differently.
++   The paragraph on clocks in Section 7 adds that a time-stamp token
++   under [RFC3161] over the envelope bytes is an anchor outside the
++   signer.
++   New Section 2.7 lists places where the mapping needed a reading of
++   [AUDIT-ARCH], as observations and questions.
++   Section 7 adds a paragraph on finding missing outcome receipts
++   through the sequence member of [PB-OUTCOME], and on boundary records
++   for decisions.
++B.2.  Changes from -01 to -02
++   The submissionType attribute is removed from the rfc element.
++   The Abstract states that the document describes, informatively, how a
++   receipt can be registered with a Transparency Service under RFC 9943
++   and what a SCITT Receipt then shows and does not show.
++   Section 1.1 states to whom the key words apply.
++   Section 7 adds a paragraph on what a receipt still shows when a
++   signing key of a decision maker or outcome signer is compromised or
++   replaced.
++   Section 8 describes what each way of registration in Section 3.7
++   reveals and distinguishes access to the registered Signed Statement
++   from access to a detached payload.
++B.3.  Changes from -00 to -01
++   Added Section 3.7, an informative description of how a decision or
++   outcome receipt can be registered with a Transparency Service under
++   [RFC9943], what a SCITT Receipt then shows and what it does not.
++   Section 2.5, the end of Section 3.6, Section 6 and the paragraph on
++   suppression in Section 7 refer to Section 3.7.  Section 7 adds that
++   completeness presupposes an expectation of which receipts ought to
++   exist, which this document does not define.
++   The introduction states that the mapping follows revision -01 of
++   [AUDIT-ARCH].
++   Sections 3.1 to 3.5, 4 and 5 and the test vectors of Appendix A are
++   unchanged.
+ Acknowledgments
+    The author used AI tools to help draft this document and to generate
+    and cross-check its examples.  The author reviewed the entire text
