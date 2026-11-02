@@ -1,0 +1,353 @@
+{
+  "aggregate_claim": {
+    "fact": "The declared bounded population has the reported structural reconciliation result under this profile and cutoff.",
+    "qualification": "FULLY_SUPPORTED if evidence establishes the scoped result; CONDITIONALLY_SUPPORTED with named conditions only for accepted declared-only authority. A supported negative result is not an affirmative delivery claim.",
+    "scope": [
+      "manifest_id",
+      "instruction_ids",
+      "target_sets",
+      "cutoff",
+      "profile_id"
+    ]
+  },
+  "aggregate_rules": {
+    "FAIL": "At least one frozen positive fail condition. Absence alone never FAIL.",
+    "INCONCLUSIVE": "Neither PASS nor a positive FAIL condition established.",
+    "PASS": "Population closed, conserved, nonempty eligible obligations, no missing issuer/rule evidence, every obligation CONFIRMED, no positive fail condition. Empty/all-excluded PASS not permitted."
+  },
+  "authority_processing": "DECLARED_ONLY observer bindings permit structural processing but positive claim support is INDETERMINATE/CONDITIONALLY_SUPPORTED with authority_binding_declared_only. Unknown observer/binding is unresolved trust, not proof of non-delivery.",
+  "baseline_contracts": {
+    "acder_bounded": {
+      "applicable_kinds": [
+        "envelope_integrity",
+        "issuer_dispatched",
+        "receiver_receipt",
+        "all_required_delivery",
+        "enforcement_applied",
+        "execution_observed",
+        "effect_observed",
+        "ordering",
+        "population_complete",
+        "complete_mediation",
+        "semantic_preservation"
+      ],
+      "rule": "Requirement-derived bounded evidence profile above. No full standard, production, real-world truth or external independence claim."
+    },
+    "integrity_only": {
+      "applicable_kinds": [
+        "envelope_integrity"
+      ],
+      "nonclaims": [
+        "authenticity",
+        "authority",
+        "delivery",
+        "enforcement",
+        "execution",
+        "effect",
+        "completeness"
+      ],
+      "rule": "Hash exact named payload bytes; SUPPORTED on all matches, REFUTED on a mismatch. All other query kinds NOT_APPLICABLE."
+    },
+    "naive_ack": {
+      "applicable_kinds": [
+        "receiver_receipt",
+        "all_required_delivery",
+        "enforcement_applied",
+        "effect_observed"
+      ],
+      "nonclaims": [
+        "integrity",
+        "issuer dispatch",
+        "execution",
+        "ordering",
+        "population completeness",
+        "deployment mediation",
+        "semantic preservation"
+      ],
+      "rule": "Any payload for the same instruction_id with kind transport_ack or receiver_observation and outcome ACCEPTED/QUEUED/RECEIVED yields SUPPORTED, ignoring target, content, boundary, authority, enforcement and effect bindings. For a population query, any successful ACK for an included instruction suffices. Otherwise INDETERMINATE/NOT_SUPPORTED, never REFUTED solely for absent ACK. Conditions empty; this deliberately loses qualifications."
+    }
+  },
+  "claim_definitions": {
+    "all_required_delivery": "Every obligation for every manifest instruction in the query scope is CONFIRMED, with closed resolution and preserved population. No vacuous all-target success.",
+    "complete_mediation": "All required delivery supported AND accepted verified coverage for all paths in the declared deployment scope AND required authority; named-member delivery alone is insufficient.",
+    "effect_observed": "A valid observation establishes the exact requested predicate, operation/target, method and window. Other operations or windows cannot satisfy it.",
+    "enforcement_applied": "An attributable native APPLIED assertion for the exact target/control/effective boundary. No independent runtime-state, completion or effect claim.",
+    "envelope_integrity": "Every named record payload hashes to its stated digest; no event truth implied.",
+    "execution_observed": "An attributable boundary_crossing observation establishes only the named operation entering provider-entry. It does not establish execution completion or effect.",
+    "issuer_dispatched": "Valid issuer emission observation establishes crossing of issuer-egress for the exact instruction.",
+    "ordering": "The requested before/after relationship is established by the same accepted clock domain or declared accepted causal link.",
+    "population_complete": "Independent population manifest, included instruction IDs and available instruction metadata agree under the frozen rule; this is bounded issuer-population completeness, not deployment coverage.",
+    "receiver_receipt": "Valid target-bound observation of reading/matching the exact instruction at target-entry. This independent receiver fact can be supported while missing issuer evidence leaves its obligation INDETERMINATE.",
+    "semantic_preservation": "The named transformation preserves every relevant source state distinctly and retains source provenance; an identity envelope hash alone cannot establish this."
+  },
+  "clock_rules": {
+    "mono": "One stipulated monotonic ordering domain. Compare numeric times only within this domain. Different clock IDs without explicit accepted causal link do not establish ordering."
+  },
+  "condition_rule": "A sorted unique set of applicable missing predicates/limitations from the fixed vocabulary. Conditions do not substitute for mandatory evidence. Positive supported bounded claims need no conditions; their scope remains explicit in the query.",
+  "conditions": [
+    "missing_issuer_observation",
+    "missing_receiver_observation",
+    "unclosed_target_resolution",
+    "missing_instruction_metadata",
+    "invalid_receiver_record",
+    "governed_content_substitution",
+    "unconfirmed_required_target",
+    "outcome_adaptive_exclusion",
+    "missing_enforcement_observation",
+    "missing_effect_observation",
+    "ordering_not_established",
+    "population_members_missing",
+    "coverage_declared_only",
+    "coverage_indeterminate",
+    "authority_binding_declared_only",
+    "semantic_mapping_not_lossless",
+    "source_state_does_not_establish_applied",
+    "effect_scope_mismatch",
+    "unverified_population_rule"
+  ],
+  "cutoff": {
+    "clock_id": "mono",
+    "time": 10
+  },
+  "disposition_precedence": [
+    "SUBSTITUTION",
+    "CONFLICT",
+    "INVALID",
+    "EXPLICIT_FAILURE",
+    "INDETERMINATE",
+    "UNCONFIRMED",
+    "CONFIRMED"
+  ],
+  "disposition_rules": {
+    "CONFIRMED": "All structural bindings, issuer observation and valid matching receiver observation established.",
+    "CONFLICT": "Otherwise verified applicable observations make irreconcilable assertions.",
+    "EXPLICIT_FAILURE": "Positive verified failure bound to exact instruction, attempt, target and relevant boundary.",
+    "INDETERMINATE": "Required issuer observation missing or applicable required trust/reference unresolved, unless a preceding positive condition controls.",
+    "INVALID": "Positive malformed native record or required structural binding absent, or envelope digest verification failed.",
+    "SUBSTITUTION": "Applicable same identity scope/instruction/attempt records disagree on governed content, including issuer/receiver. Preserve all records.",
+    "UNCONFIRMED": "Expected obligation has issuer observation but no valid matching receiver observation at cutoff."
+  },
+  "hash": {
+    "algorithm": "sha256",
+    "input": "UTF-8 bytes of payload_utf8, with no additional newline",
+    "meaning": "payload byte integrity only; no signer identity, event truth, authority, or semantic equivalence"
+  },
+  "observers": {
+    "ep-a": {
+      "authority": "VERIFIED",
+      "boundaries": [
+        "target-entry",
+        "provider-entry"
+      ],
+      "kinds": [
+        "receiver_observation",
+        "enforcement",
+        "failure",
+        "boundary_crossing"
+      ],
+      "targets": [
+        "ep-a"
+      ]
+    },
+    "ep-a-declared": {
+      "authority": "DECLARED_ONLY",
+      "boundaries": [
+        "target-entry"
+      ],
+      "kinds": [
+        "receiver_observation",
+        "enforcement"
+      ],
+      "targets": [
+        "ep-a"
+      ]
+    },
+    "ep-b": {
+      "authority": "VERIFIED",
+      "boundaries": [
+        "target-entry",
+        "provider-entry"
+      ],
+      "kinds": [
+        "receiver_observation",
+        "enforcement",
+        "failure",
+        "boundary_crossing"
+      ],
+      "targets": [
+        "ep-b"
+      ]
+    },
+    "gateway": {
+      "authority": "VERIFIED",
+      "boundaries": [
+        "gateway-egress",
+        "transport-queue"
+      ],
+      "kinds": [
+        "transformation",
+        "transport_ack"
+      ],
+      "targets": [
+        "ep-a",
+        "ep-b"
+      ]
+    },
+    "issuer": {
+      "authority": "VERIFIED",
+      "boundaries": [
+        "issuer-egress"
+      ],
+      "kinds": [
+        "issuer_emission",
+        "failure"
+      ],
+      "targets": [
+        "ep-a",
+        "ep-b"
+      ]
+    },
+    "reconciler": {
+      "authority": "VERIFIED",
+      "boundaries": [
+        "reconciliation-cutoff"
+      ],
+      "kinds": [
+        "deadline"
+      ],
+      "targets": [
+        "ep-a",
+        "ep-b"
+      ]
+    },
+    "transport": {
+      "authority": "VERIFIED",
+      "boundaries": [
+        "transport-queue"
+      ],
+      "kinds": [
+        "transport_ack"
+      ],
+      "targets": [
+        "ep-a",
+        "ep-b"
+      ]
+    },
+    "witness": {
+      "authority": "VERIFIED",
+      "boundaries": [
+        "runtime-state",
+        "provider-entry"
+      ],
+      "kinds": [
+        "effect"
+      ],
+      "targets": [
+        "ep-a",
+        "ep-b"
+      ]
+    }
+  },
+  "output_contract": {
+    "acder_case_fields": [
+      "case_id",
+      "claims",
+      "obligations",
+      "instruction_accounting",
+      "obligation_counts",
+      "receiver_record_counts",
+      "structural_result",
+      "aggregate_claim"
+    ],
+    "claim_fields": [
+      "claim_id",
+      "state",
+      "qualification",
+      "conditions",
+      "reason_codes",
+      "evidence_refs"
+    ],
+    "non_scored_text": [
+      "reason_codes",
+      "evidence_refs"
+    ]
+  },
+  "payload_serialization": {
+    "consumer": "hash exact payload_utf8 before JSON parsing; canonical reserialization is not the verification input",
+    "producer": "JSON sorted keys, compact separators, UTF-8, ensure_ascii=false"
+  },
+  "population": {
+    "coverage": "VERIFIED and evidence_refs nonempty is an accepted synthetic coverage basis. DECLARED_ONLY permits named-member accounting only; no complete-mediation assertion.",
+    "empty_or_all_excluded_pass_permitted": false,
+    "expected_instructions": "Independent frozen population.manifest_instruction_ids; never derive from received records.",
+    "missing_instruction_metadata": "Account expected instruction as target_resolution_unclosed; create no synthetic obligation; retain missing metadata diagnostic.",
+    "permitted_exclusion_inputs": [
+      "issuer_metadata",
+      "target_resolution"
+    ],
+    "rule_fields": [
+      "rule_id",
+      "version",
+      "frozen_time",
+      "permitted_inputs",
+      "evidence_available"
+    ],
+    "unclosed_resolution": "No synthetic obligation; prevents PASS for dependent aggregate.",
+    "valid_exclusion": "Rule/version match frozen population.exclusion_rule; input_basis permitted; applied_time <= frozen rule time. Invalid outcome-adaptive exclusions do not remove candidate targets."
+  },
+  "positive_fail_conditions": [
+    "SUBSTITUTION",
+    "CONFLICT",
+    "INVALID",
+    "EXPLICIT_FAILURE",
+    "verified_outcome_adaptive_exclusion",
+    "known_population_member_omission",
+    "positive_conservation_violation"
+  ],
+  "profile_id": "acder02-control-benchmark-v1",
+  "receiver_accounting": "Only receiver_observation records enter receiver counts; each appears once. matched means correlated eligible record, not a second confirmation count. Diagnostics do not add counts.",
+  "receiver_accounting_precedence": [
+    "substitution",
+    "conflict",
+    "invalid",
+    "duplicate",
+    "matched",
+    "orphan"
+  ],
+  "receiver_correlation": "Same instruction_id + identity_scope + attempt_id + expected target_id. A malformed required binding can remain correlated when the other identity fields identify the obligation; target mismatch is ORPHAN. Content mismatch remains correlated and is SUBSTITUTION.",
+  "receiver_success": {
+    "attempt_id": "attempt-1",
+    "boundary_id": "target-entry",
+    "outcome": "RECEIVED"
+  },
+  "refutation_rule": "REFUTED requires positive contradictory evidence for the exact proposition/scope. UNCONFIRMED, INVALID or absence does not itself prove the proposition false.",
+  "required_receiver_fields": [
+    "instruction_id",
+    "identity_scope",
+    "content_sha256",
+    "target_id",
+    "boundary_id",
+    "observer_id",
+    "clock_id",
+    "time",
+    "attempt_id",
+    "outcome"
+  ],
+  "schema": "acder02-control-benchmark-profile-v1",
+  "scope": "Synthetic bounded evidence evaluation; no wire-format, production runtime, native signature verifier, or complete ACDER implementation claim.",
+  "semantic_mapping_rule": "For the supplied native state vocabulary, every relevant state must have a distinct destination with the same declared meaning. This benchmark uses identical native/canonical state names; a nonidentity or many-to-one mapping is positive nonpreservation.",
+  "semantic_state_vocabulary": [
+    "APPLIED",
+    "REFUSED",
+    "NO_EFFECT",
+    "UNKNOWN"
+  ],
+  "state_qualification": {
+    "INDETERMINATE": "CONDITIONALLY_SUPPORTED only for declared-only authority/coverage with otherwise supporting structural evidence; otherwise NOT_SUPPORTED",
+    "NOT_APPLICABLE": null,
+    "NOT_EVALUATED": null,
+    "REFUTED": "NOT_SUPPORTED",
+    "SUPPORTED": "FULLY_SUPPORTED"
+  },
+  "trust_limit": "VERIFIED is accepted synthetic profile configuration, not cryptographic verification of real-world identity. All fixtures and observations are authored by one owner."
+}

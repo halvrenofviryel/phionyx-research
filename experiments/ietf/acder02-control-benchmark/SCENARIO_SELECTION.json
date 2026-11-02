@@ -1,0 +1,139 @@
+{
+  "categories": [
+    {
+      "category_id": "cat-01",
+      "development_case_id": "dev-01",
+      "draft_sections": [
+        "5.4",
+        "5.5",
+        "6.1"
+      ],
+      "holdout_case_id": "holdout-01",
+      "name": "issuer_emission_without_target_delivery"
+    },
+    {
+      "category_id": "cat-02",
+      "development_case_id": "dev-02",
+      "draft_sections": [
+        "5.4",
+        "6.5"
+      ],
+      "holdout_case_id": "holdout-02",
+      "name": "missing_issuer_observation"
+    },
+    {
+      "category_id": "cat-03",
+      "development_case_id": "dev-03",
+      "draft_sections": [
+        "4.2",
+        "5.11",
+        "6.4"
+      ],
+      "holdout_case_id": "holdout-03",
+      "name": "unclosed_required_target_resolution"
+    },
+    {
+      "category_id": "cat-04",
+      "development_case_id": "dev-04",
+      "draft_sections": [
+        "5.5",
+        "5.11",
+        "6.1"
+      ],
+      "holdout_case_id": "holdout-04",
+      "name": "receiver_correlation_without_confirmation"
+    },
+    {
+      "category_id": "cat-05",
+      "development_case_id": "dev-05",
+      "draft_sections": [
+        "5.1",
+        "5.2",
+        "5.5",
+        "5.10"
+      ],
+      "holdout_case_id": "holdout-05",
+      "name": "target_or_content_substitution"
+    },
+    {
+      "category_id": "cat-06",
+      "development_case_id": "dev-06",
+      "draft_sections": [
+        "4.2",
+        "5.11",
+        "6.2"
+      ],
+      "holdout_case_id": "holdout-06",
+      "name": "partial_delivery_and_outcome_adaptive_exclusion"
+    },
+    {
+      "category_id": "cat-07",
+      "development_case_id": "dev-07",
+      "draft_sections": [
+        "5.6",
+        "5.13"
+      ],
+      "holdout_case_id": "holdout-07",
+      "name": "valid_signed_receipt_without_enforcement"
+    },
+    {
+      "category_id": "cat-08",
+      "development_case_id": "dev-08",
+      "draft_sections": [
+        "4.4",
+        "4.5",
+        "5.7"
+      ],
+      "holdout_case_id": "holdout-08",
+      "name": "enforcement_without_effect_observation"
+    },
+    {
+      "category_id": "cat-09",
+      "development_case_id": "dev-09",
+      "draft_sections": [
+        "5.9",
+        "9.4"
+      ],
+      "holdout_case_id": "holdout-09",
+      "name": "control_race_and_inflight_execution"
+    },
+    {
+      "category_id": "cat-10",
+      "development_case_id": "dev-10",
+      "draft_sections": [
+        "5.8",
+        "6.1",
+        "6.5"
+      ],
+      "holdout_case_id": "holdout-10",
+      "name": "timeout_is_unknown_not_failure"
+    },
+    {
+      "category_id": "cat-11",
+      "development_case_id": "dev-11",
+      "draft_sections": [
+        "5.10",
+        "5.11",
+        "6.4"
+      ],
+      "holdout_case_id": "holdout-11",
+      "name": "incomplete_population"
+    },
+    {
+      "category_id": "cat-12",
+      "development_case_id": "dev-12",
+      "draft_sections": [
+        "5.13",
+        "5.16",
+        "6.6"
+      ],
+      "holdout_case_id": "holdout-12",
+      "name": "intermediary_semantic_change_with_intact_envelope"
+    }
+  ],
+  "count": 24,
+  "development_count": 12,
+  "holdout_count": 12,
+  "schema": "acder02-scenario-selection-v1",
+  "selection": "Exactly one development and one withheld case per requested category; no case chosen from previous expected outputs or evaluator results. Holdout details remain author-only."
+}

@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "properties": {
+    "claim_id": {
+      "type": "string"
+    },
+    "conditions": {
+      "items": {
+        "enum": [
+          "missing_issuer_observation",
+          "missing_receiver_observation",
+          "unclosed_target_resolution",
+          "missing_instruction_metadata",
+          "invalid_receiver_record",
+          "governed_content_substitution",
+          "unconfirmed_required_target",
+          "outcome_adaptive_exclusion",
+          "missing_enforcement_observation",
+          "missing_effect_observation",
+          "ordering_not_established",
+          "population_members_missing",
+          "coverage_declared_only",
+          "coverage_indeterminate",
+          "authority_binding_declared_only",
+          "semantic_mapping_not_lossless",
+          "source_state_does_not_establish_applied",
+          "effect_scope_mismatch",
+          "unverified_population_rule"
+        ]
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "evidence_refs": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "qualification": {
+      "enum": [
+        "FULLY_SUPPORTED",
+        "CONDITIONALLY_SUPPORTED",
+        "NOT_SUPPORTED",
+        null
+      ]
+    },
+    "reason_codes": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "state": {
+      "enum": [
+        "SUPPORTED",
+        "REFUTED",
+        "INDETERMINATE",
+        "NOT_EVALUATED",
+        "NOT_APPLICABLE"
+      ]
+    }
+  },
+  "required": [
+    "claim_id",
+    "state",
+    "qualification",
+    "conditions",
+    "reason_codes",
+    "evidence_refs"
+  ],
+  "type": "object"
+}

@@ -1,0 +1,37 @@
+{
+  "author_protocol_commit": "c8c5889c5a96df92febf8ba44888479dd320e646",
+  "recorded_utc": "2026-11-02T20:16:37.863953+00:00",
+  "evaluator_implementation_started": false,
+  "holdout_content_read": false,
+  "comparator_executed": false,
+  "files": [
+    {
+      "path": "BENCHMARK_PROTOCOL.md",
+      "sha256": "183565d841f282211f214fbef8f4371faf63e5853df9a100f827bb8a283e49de"
+    },
+    {
+      "path": "PROFILE.json",
+      "sha256": "8c27cd685289028261ff5c035a6d9643c58412954bff8ebee7ffaa485c9e8a54"
+    },
+    {
+      "path": "EVIDENCE_SCHEMA.json",
+      "sha256": "9bbc6511814bd24a3ff1b31cf1a260a7c87f0b8dc2afd64dcfcf4f45ecbbd555"
+    },
+    {
+      "path": "CLAIM_OUTPUT_SCHEMA.json",
+      "sha256": "fd47e4a3d517748a17358112cea45bdd6116b6cca970798b91b01327adaf687c"
+    },
+    {
+      "path": "CONTRACT.md",
+      "sha256": "57cd437e03e184aebc83de33835c8408b503d2d1ab27f1dc05f871613f75fafc"
+    },
+    {
+      "path": "SCENARIO_SELECTION.json",
+      "sha256": "8cf277d7d7edf246a497394ef33c01ac32a98735d9402bbb6602c51add948b7b"
+    },
+    {
+      "path": "requirements_matrix.md",
+      "sha256": "6397134eb29785dd9e51dffa357e57718db18aac9646d678d45d7b99d98c8f6a"
+    }
+  ]
+}
