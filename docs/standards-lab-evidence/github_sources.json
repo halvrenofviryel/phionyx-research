@@ -1,0 +1,192 @@
+{
+  "heads": [
+    {
+      "repository": "halvrenofviryel/phionyx-research",
+      "revision": "69bc8cfd282e9a0a45e34b1fcf6106b1ab618f9d",
+      "queried_at_utc": "2026-11-02T17:08:51.835Z",
+      "method": "GitHub connector fetch_commit(main)",
+      "commit_url": "https://github.com/halvrenofviryel/phionyx-research/commit/69bc8cfd282e9a0a45e34b1fcf6106b1ab618f9d"
+    },
+    {
+      "repository": "halvrenofviryel/ai-runtime-evidence-protocol",
+      "revision": "075aff5610731736405951ecf3b7c4bfc3cc0f07",
+      "queried_at_utc": "2026-11-02T17:08:51.831Z",
+      "method": "GitHub connector fetch_commit(main)",
+      "commit_url": "https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/commit/075aff5610731736405951ecf3b7c4bfc3cc0f07"
+    },
+    {
+      "repository": "halvrenofviryel/measurement-axioms",
+      "revision": "ea672f3918c53ac9ad22ad72d0b0a5d70a9a59ce",
+      "queried_at_utc": "2026-11-02T17:08:51.827Z",
+      "method": "GitHub connector fetch_commit(main)",
+      "commit_url": "https://github.com/halvrenofviryel/measurement-axioms/commit/ea672f3918c53ac9ad22ad72d0b0a5d70a9a59ce"
+    },
+    {
+      "repository": "halvrenofviryel/phionyx-mcp-server",
+      "revision": "7dc7f7eb1db80f465e7d438d95878ab2633983f4",
+      "queried_at_utc": "2026-11-02T17:08:51.827Z",
+      "method": "GitHub connector fetch_commit(main)",
+      "commit_url": "https://github.com/halvrenofviryel/phionyx-mcp-server/commit/7dc7f7eb1db80f465e7d438d95878ab2633983f4"
+    },
+    {
+      "repository": "halvrenofviryel/phionyx-pipeline-mcp",
+      "revision": "e36acd84022c3bc014e9a7083074fb5af62c276e",
+      "queried_at_utc": "2026-11-02T17:08:52.015Z",
+      "method": "GitHub connector fetch_commit(main)",
+      "commit_url": "https://github.com/halvrenofviryel/phionyx-pipeline-mcp/commit/e36acd84022c3bc014e9a7083074fb5af62c276e"
+    },
+    {
+      "repository": "halvrenofviryel/resonatus-ontology",
+      "revision": "46229d179c40524f12d70d68f735205fecf4c861",
+      "queried_at_utc": "2026-11-02T17:08:53.013Z",
+      "method": "GitHub connector fetch_commit(main)",
+      "commit_url": "https://github.com/halvrenofviryel/resonatus-ontology/commit/46229d179c40524f12d70d68f735205fecf4c861"
+    }
+  ],
+  "sources": [
+    {
+      "id": "phionyx-research--README.md",
+      "kind": "repository-file",
+      "repository": "halvrenofviryel/phionyx-research",
+      "repository_path": "README.md",
+      "revision": "69bc8cfd282e9a0a45e34b1fcf6106b1ab618f9d",
+      "exact_revision_url": "https://github.com/halvrenofviryel/phionyx-research/blob/69bc8cfd282e9a0a45e34b1fcf6106b1ab618f9d/README.md",
+      "raw_url": "https://raw.githubusercontent.com/halvrenofviryel/phionyx-research/69bc8cfd282e9a0a45e34b1fcf6106b1ab618f9d/README.md",
+      "accessed_at_utc": "2026-11-02T17:08:53.758Z",
+      "sha256": "d3bb34f6963f3e3006699d889244ceb512ff49f6c3a9e6c740e6e829584551f5",
+      "git_blob_sha": "c4ad6724bec56e66b4b7b3ce7a1e3d0b9421583c",
+      "bytes": 31237,
+      "path": "docs/standards-lab-evidence/sources/phionyx-research--README.md",
+      "retrieval": "GitHub connector base64 decoded to unmodified Git blob bytes; blob SHA verified",
+      "status": "AVAILABLE"
+    },
+    {
+      "id": "ai-runtime-evidence-protocol--README.md",
+      "kind": "repository-file",
+      "repository": "halvrenofviryel/ai-runtime-evidence-protocol",
+      "repository_path": "README.md",
+      "revision": "075aff5610731736405951ecf3b7c4bfc3cc0f07",
+      "exact_revision_url": "https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/blob/075aff5610731736405951ecf3b7c4bfc3cc0f07/README.md",
+      "raw_url": "https://raw.githubusercontent.com/halvrenofviryel/ai-runtime-evidence-protocol/075aff5610731736405951ecf3b7c4bfc3cc0f07/README.md",
+      "accessed_at_utc": "2026-11-02T17:08:54.911Z",
+      "sha256": "7a043fd6289773900c0ab3d8c2096b22b9cb6737176564be9b3c51e0867382d4",
+      "git_blob_sha": "fc5e609910bdc6422a3b0728ac61dbb8aeabe2c9",
+      "bytes": 20300,
+      "path": "docs/standards-lab-evidence/sources/ai-runtime-evidence-protocol--README.md",
+      "retrieval": "GitHub connector base64 decoded to unmodified Git blob bytes; blob SHA verified",
+      "status": "AVAILABLE"
+    },
+    {
+      "id": "measurement-axioms--README.md",
+      "kind": "repository-file",
+      "repository": "halvrenofviryel/measurement-axioms",
+      "repository_path": "README.md",
+      "revision": "ea672f3918c53ac9ad22ad72d0b0a5d70a9a59ce",
+      "exact_revision_url": "https://github.com/halvrenofviryel/measurement-axioms/blob/ea672f3918c53ac9ad22ad72d0b0a5d70a9a59ce/README.md",
+      "raw_url": "https://raw.githubusercontent.com/halvrenofviryel/measurement-axioms/ea672f3918c53ac9ad22ad72d0b0a5d70a9a59ce/README.md",
+      "accessed_at_utc": "2026-11-02T17:08:54.911Z",
+      "sha256": "989d338737b4006f67f56b19f75a6ee332e23758472b4cdeed95b73490641c4d",
+      "git_blob_sha": "9ed4c3eb8cb1da38b33683420878054bfdf40243",
+      "bytes": 5025,
+      "path": "docs/standards-lab-evidence/sources/measurement-axioms--README.md",
+      "retrieval": "GitHub connector base64 decoded to unmodified Git blob bytes; blob SHA verified",
+      "status": "AVAILABLE"
+    },
+    {
+      "id": "phionyx-mcp-server--README.md",
+      "kind": "repository-file",
+      "repository": "halvrenofviryel/phionyx-mcp-server",
+      "repository_path": "README.md",
+      "revision": "7dc7f7eb1db80f465e7d438d95878ab2633983f4",
+      "exact_revision_url": "https://github.com/halvrenofviryel/phionyx-mcp-server/blob/7dc7f7eb1db80f465e7d438d95878ab2633983f4/README.md",
+      "raw_url": "https://raw.githubusercontent.com/halvrenofviryel/phionyx-mcp-server/7dc7f7eb1db80f465e7d438d95878ab2633983f4/README.md",
+      "accessed_at_utc": "2026-11-02T17:08:54.912Z",
+      "sha256": "6937932c9f1705fec8688fd6200a2e1ee52cc02951bb7996b6af4a4cf33095dd",
+      "git_blob_sha": "e84979c31b46871714a64ab3afa270313aea08b5",
+      "bytes": 8377,
+      "path": "docs/standards-lab-evidence/sources/phionyx-mcp-server--README.md",
+      "retrieval": "GitHub connector base64 decoded to unmodified Git blob bytes; blob SHA verified",
+      "status": "AVAILABLE"
+    },
+    {
+      "id": "phionyx-pipeline-mcp--README.md",
+      "kind": "repository-file",
+      "repository": "halvrenofviryel/phionyx-pipeline-mcp",
+      "repository_path": "README.md",
+      "revision": "e36acd84022c3bc014e9a7083074fb5af62c276e",
+      "exact_revision_url": "https://github.com/halvrenofviryel/phionyx-pipeline-mcp/blob/e36acd84022c3bc014e9a7083074fb5af62c276e/README.md",
+      "raw_url": "https://raw.githubusercontent.com/halvrenofviryel/phionyx-pipeline-mcp/e36acd84022c3bc014e9a7083074fb5af62c276e/README.md",
+      "accessed_at_utc": "2026-11-02T17:08:54.911Z",
+      "sha256": "1078534f2dcd3a8270ddcced595c77628ada6a023c93e5658f5afb7fedc18bd2",
+      "git_blob_sha": "ea2d66498f2ea21d07daa2e6df796d4f96e9ecda",
+      "bytes": 11709,
+      "path": "docs/standards-lab-evidence/sources/phionyx-pipeline-mcp--README.md",
+      "retrieval": "GitHub connector base64 decoded to unmodified Git blob bytes; blob SHA verified",
+      "status": "AVAILABLE"
+    },
+    {
+      "id": "resonatus-ontology--README.md",
+      "kind": "repository-file",
+      "repository": "halvrenofviryel/resonatus-ontology",
+      "repository_path": "README.md",
+      "revision": "46229d179c40524f12d70d68f735205fecf4c861",
+      "exact_revision_url": "https://github.com/halvrenofviryel/resonatus-ontology/blob/46229d179c40524f12d70d68f735205fecf4c861/README.md",
+      "raw_url": "https://raw.githubusercontent.com/halvrenofviryel/resonatus-ontology/46229d179c40524f12d70d68f735205fecf4c861/README.md",
+      "accessed_at_utc": "2026-11-02T17:08:54.912Z",
+      "sha256": "ac7958ad1eddd8eacd247f2aa3e84a9a3d38b74cd4be1589779a2fc91da1b85c",
+      "git_blob_sha": "d57e5277f429cf79afac86902343364d78ebae51",
+      "bytes": 8334,
+      "path": "docs/standards-lab-evidence/sources/resonatus-ontology--README.md",
+      "retrieval": "GitHub connector base64 decoded to unmodified Git blob bytes; blob SHA verified",
+      "status": "AVAILABLE"
+    },
+    {
+      "id": "ai-runtime-evidence-protocol--EXTERNAL_EVIDENCE.md",
+      "kind": "repository-file",
+      "repository": "halvrenofviryel/ai-runtime-evidence-protocol",
+      "repository_path": "EXTERNAL_EVIDENCE.md",
+      "revision": "075aff5610731736405951ecf3b7c4bfc3cc0f07",
+      "exact_revision_url": "https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/blob/075aff5610731736405951ecf3b7c4bfc3cc0f07/EXTERNAL_EVIDENCE.md",
+      "raw_url": "https://raw.githubusercontent.com/halvrenofviryel/ai-runtime-evidence-protocol/075aff5610731736405951ecf3b7c4bfc3cc0f07/EXTERNAL_EVIDENCE.md",
+      "accessed_at_utc": "2026-11-02T17:08:56.036Z",
+      "sha256": "b88d482221a77f748e73874cd9bb19f8a4c493f6cf04389262f384abf1155661",
+      "git_blob_sha": "39161ba6f7b0c2aa8a96a6202bc4336a9b8be834",
+      "bytes": 12063,
+      "path": "docs/standards-lab-evidence/sources/ai-runtime-evidence-protocol--EXTERNAL_EVIDENCE.md",
+      "retrieval": "GitHub connector base64 decoded to unmodified Git blob bytes; blob SHA verified",
+      "status": "AVAILABLE"
+    },
+    {
+      "id": "phionyx-research--standards--ietf--agent-control-delivery-evidence--README.md",
+      "kind": "repository-file",
+      "repository": "halvrenofviryel/phionyx-research",
+      "repository_path": "standards/ietf/agent-control-delivery-evidence/README.md",
+      "revision": "69bc8cfd282e9a0a45e34b1fcf6106b1ab618f9d",
+      "exact_revision_url": "https://github.com/halvrenofviryel/phionyx-research/blob/69bc8cfd282e9a0a45e34b1fcf6106b1ab618f9d/standards/ietf/agent-control-delivery-evidence/README.md",
+      "raw_url": "https://raw.githubusercontent.com/halvrenofviryel/phionyx-research/69bc8cfd282e9a0a45e34b1fcf6106b1ab618f9d/standards/ietf/agent-control-delivery-evidence/README.md",
+      "accessed_at_utc": "2026-11-02T17:08:55.609Z",
+      "sha256": "9d16abca5390fb5ccbfe104be2b327f753342636e6acb41af985df77c90d81a1",
+      "git_blob_sha": "4f36f80f8a2080201cca7e18f733a2c48e8ff9a9",
+      "bytes": 7801,
+      "path": "docs/standards-lab-evidence/sources/phionyx-research--standards--ietf--agent-control-delivery-evidence--README.md",
+      "retrieval": "GitHub connector base64 decoded to unmodified Git blob bytes; blob SHA verified",
+      "status": "AVAILABLE"
+    },
+    {
+      "id": "phionyx-research--standards--ietf--ai-evaluation-claim-preservation--README.md",
+      "kind": "repository-file",
+      "repository": "halvrenofviryel/phionyx-research",
+      "repository_path": "standards/ietf/ai-evaluation-claim-preservation/README.md",
+      "revision": "69bc8cfd282e9a0a45e34b1fcf6106b1ab618f9d",
+      "exact_revision_url": "https://github.com/halvrenofviryel/phionyx-research/blob/69bc8cfd282e9a0a45e34b1fcf6106b1ab618f9d/standards/ietf/ai-evaluation-claim-preservation/README.md",
+      "raw_url": "https://raw.githubusercontent.com/halvrenofviryel/phionyx-research/69bc8cfd282e9a0a45e34b1fcf6106b1ab618f9d/standards/ietf/ai-evaluation-claim-preservation/README.md",
+      "accessed_at_utc": "2026-11-02T17:08:55.609Z",
+      "sha256": "9483b95fd99fed958003643b6464a6eba042ba3c58fe69df3b4a8ce3facde5c4",
+      "git_blob_sha": "986ed9143dfe7119a43db9651b012bd5bdef0bfa",
+      "bytes": 2566,
+      "path": "docs/standards-lab-evidence/sources/phionyx-research--standards--ietf--ai-evaluation-claim-preservation--README.md",
+      "retrieval": "GitHub connector base64 decoded to unmodified Git blob bytes; blob SHA verified",
+      "status": "AVAILABLE"
+    }
+  ]
+}

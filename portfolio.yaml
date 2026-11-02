@@ -42,7 +42,7 @@ artifacts:
     status: proposed_format
     release_source: github-release
     airep_relationship: self
-    spec_versions: ["v0.1"]   # the format identifier — not a release pin when cited by siblings
+    spec_versions: ["v0.1", "v0.2"]   # the format identifier — not a release pin when cited by siblings
     readme: https://raw.githubusercontent.com/halvrenofviryel/ai-runtime-evidence-protocol/main/README.md
 
   measurement-axioms:

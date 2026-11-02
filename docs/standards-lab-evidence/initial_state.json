@@ -1,0 +1,45 @@
+{
+  "recorded_at_utc": "2026-11-02T17:08:00.808637+00:00",
+  "base_commit": "275b871349721a8c917691d457c4a6270fe1028f",
+  "branch": "codex/standards-lab-consolidation",
+  "initial_clean": true,
+  "initial_status_porcelain": "",
+  "preparation_manifest_sha256": "3d9d06c0e9a44830a1505b2a93bc47323e9ae869790d42b6773691274a6b9111",
+  "integration_mapping": [
+    {
+      "task": "S0",
+      "original_commit": "31f9b7e7cab5a1b556aa1ebab0dc29617e01e5c1",
+      "integration_commit": "5478e8b107552468e440d9f709c18fd780502293"
+    },
+    {
+      "task": "A",
+      "original_commit": "e0ac30203e39949bb52d612eb3496c39ccb85651",
+      "integration_commit": "95139b50ddd6263f7845537879250eca3994a77d"
+    },
+    {
+      "task": "C",
+      "original_commit": "02a44a812699f853ea65fffa21320e7cc8ddb6c7",
+      "integration_commit": "36b1214b72acafd784dcbd7b17cc6d2eb3de93dc"
+    },
+    {
+      "task": "E",
+      "original_commit": "9f928980b3027d9dd892dfe297af98635fcd3c18",
+      "integration_commit": "275b871349721a8c917691d457c4a6270fe1028f"
+    }
+  ],
+  "rules": "No AGENTS.md at checked ancestors or anywhere in clone. CONTRIBUTING.md read.",
+  "fetch": {
+    "command": "git fetch --all --prune",
+    "exit_code": 0,
+    "exact_fetch_utc": "NOT_RECORDED; completed before this record",
+    "base_after_fetch": "275b871349721a8c917691d457c4a6270fe1028f",
+    "remote_refs": "refs/remotes/origin/dependabot/github_actions/actions/checkout-7 92599921904417e0fcd82c0de148cbc575c555a3\nrefs/remotes/origin/dependabot/github_actions/actions/setup-python-7 b9451b16b25275230b75025271d62f539661b532\nrefs/remotes/origin/dependabot/github_actions/softprops/action-gh-release-3.0.3 138fcb869e7aef3848e91903fc7351b0669eed4c\nrefs/remotes/origin/docs/claim-realignment aba36e1d544baeea39056f22d1fad6408d036f1f\nrefs/remotes/origin/main 69bc8cfd282e9a0a45e34b1fcf6106b1ab618f9d\n"
+  },
+  "policy": {
+    "approval_granted": false,
+    "external_writes_performed": false,
+    "new_tasks_started": false,
+    "source_clones_read_only": true,
+    "private_B1_expected_or_builder_history_read": false
+  }
+}

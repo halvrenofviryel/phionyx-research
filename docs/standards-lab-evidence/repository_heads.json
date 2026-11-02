@@ -1,0 +1,56 @@
+[
+  {
+    "repository": "halvrenofviryel/phionyx-research",
+    "queried_at_utc": "2026-11-02T17:08:00.817431+00:00",
+    "command": "git ls-remote (read-only) refs/heads/main",
+    "exit_code": 128,
+    "output": "",
+    "stderr": "fatal: unable to access 'https://github.com/halvrenofviryel/phionyx-research.git/': Could not resolve host: github.com\n",
+    "revision": null
+  },
+  {
+    "repository": "halvrenofviryel/ai-runtime-evidence-protocol",
+    "queried_at_utc": "2026-11-02T17:08:00.817665+00:00",
+    "command": "git ls-remote (read-only) refs/heads/main",
+    "exit_code": 128,
+    "output": "",
+    "stderr": "fatal: unable to access 'https://github.com/halvrenofviryel/ai-runtime-evidence-protocol.git/': Could not resolve host: github.com\n",
+    "revision": null
+  },
+  {
+    "repository": "halvrenofviryel/measurement-axioms",
+    "queried_at_utc": "2026-11-02T17:08:00.818044+00:00",
+    "command": "git ls-remote (read-only) refs/heads/main",
+    "exit_code": 128,
+    "output": "",
+    "stderr": "fatal: unable to access 'https://github.com/halvrenofviryel/measurement-axioms.git/': Could not resolve host: github.com\n",
+    "revision": null
+  },
+  {
+    "repository": "halvrenofviryel/phionyx-mcp-server",
+    "queried_at_utc": "2026-11-02T17:08:00.818203+00:00",
+    "command": "git ls-remote (read-only) refs/heads/main",
+    "exit_code": 128,
+    "output": "",
+    "stderr": "fatal: unable to access 'https://github.com/halvrenofviryel/phionyx-mcp-server.git/': Could not resolve host: github.com\n",
+    "revision": null
+  },
+  {
+    "repository": "halvrenofviryel/phionyx-pipeline-mcp",
+    "queried_at_utc": "2026-11-02T17:08:00.818650+00:00",
+    "command": "git ls-remote (read-only) refs/heads/main",
+    "exit_code": 128,
+    "output": "",
+    "stderr": "fatal: unable to access 'https://github.com/halvrenofviryel/phionyx-pipeline-mcp.git/': Could not resolve host: github.com\n",
+    "revision": null
+  },
+  {
+    "repository": "halvrenofviryel/resonatus-ontology",
+    "queried_at_utc": "2026-11-02T17:08:00.818923+00:00",
+    "command": "git ls-remote (read-only) refs/heads/main",
+    "exit_code": 128,
+    "output": "",
+    "stderr": "fatal: unable to access 'https://github.com/halvrenofviryel/resonatus-ontology.git/': Could not resolve host: github.com\n",
+    "revision": null
+  }
+]

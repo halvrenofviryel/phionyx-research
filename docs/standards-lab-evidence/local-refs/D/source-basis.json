@@ -1,0 +1,239 @@
+{
+  "kind": "NON-NORMATIVE local implementation source record",
+  "base_commit": "075aff5610731736405951ecf3b7c4bfc3cc0f07",
+  "initial_head": "075aff5610731736405951ecf3b7c4bfc3cc0f07",
+  "initial_branch": null,
+  "initial_status_porcelain": "",
+  "branch": "codex/airep-v02-evidence-explain",
+  "fetch": {
+    "command": "git -c safe.directory=\"$PWD\" fetch --all --prune",
+    "exit": 0,
+    "stdout": "",
+    "stderr": "",
+    "observed_by_utc": "2026-11-02T16:14:02Z",
+    "sandbox_attempt": "UNAVAILABLE: worktree FETCH_HEAD was read-only; authorized escalation succeeded",
+    "latest_origin_main": "075aff5610731736405951ecf3b7c4bfc3cc0f07",
+    "latest_revision_difference": "none at fetch; experiment base remains fixed"
+  },
+  "git_ownership": "per-command safe.directory; no global Git configuration changed",
+  "package_version": "0.2.0-beta.1",
+  "wire_version": "0.2",
+  "reconciliation_version": "0.2-beta.1",
+  "sources": [
+    {
+      "path": "README.md",
+      "revision_url": "https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/blob/075aff5610731736405951ecf3b7c4bfc3cc0f07/README.md",
+      "accessed_utc": "2026-11-02T16:15:44Z",
+      "raw_bytes_sha256": "7a043fd6289773900c0ab3d8c2096b22b9cb6737176564be9b3c51e0867382d4",
+      "retrieval": "git show from origin after successful git fetch --all --prune"
+    },
+    {
+      "path": "EXTERNAL_EVIDENCE.md",
+      "revision_url": "https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/blob/075aff5610731736405951ecf3b7c4bfc3cc0f07/EXTERNAL_EVIDENCE.md",
+      "accessed_utc": "2026-11-02T16:15:44Z",
+      "raw_bytes_sha256": "b88d482221a77f748e73874cd9bb19f8a4c493f6cf04389262f384abf1155661",
+      "retrieval": "git show from origin after successful git fetch --all --prune"
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "revision_url": "https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/blob/075aff5610731736405951ecf3b7c4bfc3cc0f07/CONTRIBUTING.md",
+      "accessed_utc": "2026-11-02T16:15:44Z",
+      "raw_bytes_sha256": "5b730ea95da39d47c6279d8d514d8791005d24b4aaeca21b154b6c6fe73df856",
+      "retrieval": "git show from origin after successful git fetch --all --prune"
+    },
+    {
+      "path": "DEVELOPMENT_PROCESS.md",
+      "revision_url": "https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/blob/075aff5610731736405951ecf3b7c4bfc3cc0f07/DEVELOPMENT_PROCESS.md",
+      "accessed_utc": "2026-11-02T16:15:44Z",
+      "raw_bytes_sha256": "09a6554477c170bbc11e2c5634a4ed7dc65b55057dc681cf86d0f1ae51fa3884",
+      "retrieval": "git show from origin after successful git fetch --all --prune"
+    },
+    {
+      "path": "spec/airep/v0.2/SPEC.md",
+      "revision_url": "https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/blob/075aff5610731736405951ecf3b7c4bfc3cc0f07/spec/airep/v0.2/SPEC.md",
+      "accessed_utc": "2026-11-02T16:15:44Z",
+      "raw_bytes_sha256": "b5b33f6bf0265717d889248fa85a6a0390efbe57fb00a74d5c23c6721edf4766",
+      "retrieval": "git show from origin after successful git fetch --all --prune"
+    },
+    {
+      "path": "spec/airep/v0.2/VERIFICATION.md",
+      "revision_url": "https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/blob/075aff5610731736405951ecf3b7c4bfc3cc0f07/spec/airep/v0.2/VERIFICATION.md",
+      "accessed_utc": "2026-11-02T16:15:44Z",
+      "raw_bytes_sha256": "3bb35cd0122899bbbe384a34f167e95d54e78af47c6739dc34b7261bde1d8b0d",
+      "retrieval": "git show from origin after successful git fetch --all --prune"
+    },
+    {
+      "path": "spec/airep/v0.2/QUICKSTART.md",
+      "revision_url": "https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/blob/075aff5610731736405951ecf3b7c4bfc3cc0f07/spec/airep/v0.2/QUICKSTART.md",
+      "accessed_utc": "2026-11-02T16:15:44Z",
+      "raw_bytes_sha256": "984b532f6b123d1aa7d8e1948e8262047b568f14b79a1aba82a54533906b0a3a",
+      "retrieval": "git show from origin after successful git fetch --all --prune"
+    },
+    {
+      "path": "spec/airep/v0.2/RECONCILIATION.md",
+      "revision_url": "https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/blob/075aff5610731736405951ecf3b7c4bfc3cc0f07/spec/airep/v0.2/RECONCILIATION.md",
+      "accessed_utc": "2026-11-02T16:15:44Z",
+      "raw_bytes_sha256": "d720ff4139676b913e9d9f9a3a38d57fea586c9a76b1816bdcbf57e1ea39d023",
+      "retrieval": "git show from origin after successful git fetch --all --prune"
+    },
+    {
+      "path": "tools/airep_v02/__init__.py",
+      "revision_url": "https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/blob/075aff5610731736405951ecf3b7c4bfc3cc0f07/tools/airep_v02/__init__.py",
+      "accessed_utc": "2026-11-02T16:15:44Z",
+      "raw_bytes_sha256": "bfb7a78b37490532e38bed547414e4c43398c6fb36f41603574884067074945f",
+      "retrieval": "git show from origin after successful git fetch --all --prune"
+    },
+    {
+      "path": "tools/airep_v02/__main__.py",
+      "revision_url": "https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/blob/075aff5610731736405951ecf3b7c4bfc3cc0f07/tools/airep_v02/__main__.py",
+      "accessed_utc": "2026-11-02T16:15:44Z",
+      "raw_bytes_sha256": "dd55becf24a1d164433b65852892a5a29baa9bb2f421749da10d2dec5a377624",
+      "retrieval": "git show from origin after successful git fetch --all --prune"
+    },
+    {
+      "path": "tools/airep_v02/reconcile.py",
+      "revision_url": "https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/blob/075aff5610731736405951ecf3b7c4bfc3cc0f07/tools/airep_v02/reconcile.py",
+      "accessed_utc": "2026-11-02T16:15:44Z",
+      "raw_bytes_sha256": "ea94f18a8cf95e10be7435a820debc84d72465e080683fc04399f418d1f6d715",
+      "retrieval": "git show from origin after successful git fetch --all --prune"
+    },
+    {
+      "path": "tools/airep_v02/verify.py",
+      "revision_url": "https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/blob/075aff5610731736405951ecf3b7c4bfc3cc0f07/tools/airep_v02/verify.py",
+      "accessed_utc": "2026-11-02T16:15:44Z",
+      "raw_bytes_sha256": "cc70f0f1bb2c97dede1c99fe64f6984a221fe715722403ec6a8269ad626a33dd",
+      "retrieval": "git show from origin after successful git fetch --all --prune"
+    },
+    {
+      "path": "tools/airep_v02/README.md",
+      "revision_url": "https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/blob/075aff5610731736405951ecf3b7c4bfc3cc0f07/tools/airep_v02/README.md",
+      "accessed_utc": "2026-11-02T16:15:44Z",
+      "raw_bytes_sha256": "cb54e44022ec202bff7aeb80c96d584bb83443aa6270a3fd7d961a390ddc5d97",
+      "retrieval": "git show from origin after successful git fetch --all --prune"
+    },
+    {
+      "path": "examples/v02/README.md",
+      "revision_url": "https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/blob/075aff5610731736405951ecf3b7c4bfc3cc0f07/examples/v02/README.md",
+      "accessed_utc": "2026-11-02T16:15:44Z",
+      "raw_bytes_sha256": "4632b208ac87824ac8532f4649871c5aab8b56fc9eafd4a8f25e8d7894da887f",
+      "retrieval": "git show from origin after successful git fetch --all --prune"
+    },
+    {
+      "path": "examples/v02/run_lifecycle.py",
+      "revision_url": "https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/blob/075aff5610731736405951ecf3b7c4bfc3cc0f07/examples/v02/run_lifecycle.py",
+      "accessed_utc": "2026-11-02T16:15:44Z",
+      "raw_bytes_sha256": "48a17d1aafe17a99220a11488c493af4205f7fb5da38bfd1494ffd3440703b55",
+      "retrieval": "git show from origin after successful git fetch --all --prune"
+    },
+    {
+      "path": "tests/v02/test_beta.py",
+      "revision_url": "https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/blob/075aff5610731736405951ecf3b7c4bfc3cc0f07/tests/v02/test_beta.py",
+      "accessed_utc": "2026-11-02T16:15:44Z",
+      "raw_bytes_sha256": "7159a76b91e6c60cc378caa708f80f662dd6071eb521c3f6a9b80f1cdec1f1a7",
+      "retrieval": "git show from origin after successful git fetch --all --prune"
+    },
+    {
+      "path": "tests/v02/test_embedded_evaluation_profile.py",
+      "revision_url": "https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/blob/075aff5610731736405951ecf3b7c4bfc3cc0f07/tests/v02/test_embedded_evaluation_profile.py",
+      "accessed_utc": "2026-11-02T16:15:44Z",
+      "raw_bytes_sha256": "9f4a0fa8c8f47c22ab1ec50a9db6970dd822fa809ed0a049dd3671408b4b983a",
+      "retrieval": "git show from origin after successful git fetch --all --prune"
+    },
+    {
+      "path": "scripts/check_beta.py",
+      "revision_url": "https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/blob/075aff5610731736405951ecf3b7c4bfc3cc0f07/scripts/check_beta.py",
+      "accessed_utc": "2026-11-02T16:15:44Z",
+      "raw_bytes_sha256": "8c0a697354d63884aabfc375c18b73c7be2ec9d097aed4fabafbdd64702b397c",
+      "retrieval": "git show from origin after successful git fetch --all --prune"
+    },
+    {
+      "path": ".github/workflows/v0.2-beta.yml",
+      "revision_url": "https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/blob/075aff5610731736405951ecf3b7c4bfc3cc0f07/.github/workflows/v0.2-beta.yml",
+      "accessed_utc": "2026-11-02T16:15:44Z",
+      "raw_bytes_sha256": "fb9c9132bd97b98c7736fb200eb1baaa4d723fd238d5a3c05c6f15744063560f",
+      "retrieval": "git show from origin after successful git fetch --all --prune"
+    },
+    {
+      "path": "examples/v02/fixtures/broken-control.json",
+      "revision_url": "https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/blob/075aff5610731736405951ecf3b7c4bfc3cc0f07/examples/v02/fixtures/broken-control.json",
+      "accessed_utc": "2026-11-02T16:15:44Z",
+      "raw_bytes_sha256": "a719698af40c14acd447120a1c71da0c1ca4bc69e69fb88e1e7f36a383ee8f9e",
+      "retrieval": "git show from origin after successful git fetch --all --prune"
+    },
+    {
+      "path": "examples/v02/fixtures/broken-decision.json",
+      "revision_url": "https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/blob/075aff5610731736405951ecf3b7c4bfc3cc0f07/examples/v02/fixtures/broken-decision.json",
+      "accessed_utc": "2026-11-02T16:15:44Z",
+      "raw_bytes_sha256": "ba0a80af21311e8e7808d04ef4450f6aaab69ee85e7823c7f8d9edef9ea97f90",
+      "retrieval": "git show from origin after successful git fetch --all --prune"
+    },
+    {
+      "path": "examples/v02/fixtures/broken-effect.json",
+      "revision_url": "https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/blob/075aff5610731736405951ecf3b7c4bfc3cc0f07/examples/v02/fixtures/broken-effect.json",
+      "accessed_utc": "2026-11-02T16:15:44Z",
+      "raw_bytes_sha256": "f37307741d6ae90a723e815e5cc19e5d060da1b3bbe016aed72f79e2ab841302",
+      "retrieval": "git show from origin after successful git fetch --all --prune"
+    },
+    {
+      "path": "examples/v02/fixtures/broken-execution.json",
+      "revision_url": "https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/blob/075aff5610731736405951ecf3b7c4bfc3cc0f07/examples/v02/fixtures/broken-execution.json",
+      "accessed_utc": "2026-11-02T16:15:44Z",
+      "raw_bytes_sha256": "52ebed936d1e5e5b2cf386ae2bcd18ddf946507e47921f586599d31d086bdcd1",
+      "retrieval": "git show from origin after successful git fetch --all --prune"
+    },
+    {
+      "path": "examples/v02/fixtures/complete.json",
+      "revision_url": "https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/blob/075aff5610731736405951ecf3b7c4bfc3cc0f07/examples/v02/fixtures/complete.json",
+      "accessed_utc": "2026-11-02T16:15:44Z",
+      "raw_bytes_sha256": "2352daee8cd47547919b2b624915f10b656457b0cffc2bc860e4e5f3d144bb8a",
+      "retrieval": "git show from origin after successful git fetch --all --prune"
+    },
+    {
+      "path": "examples/v02/fixtures/no-effect.json",
+      "revision_url": "https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/blob/075aff5610731736405951ecf3b7c4bfc3cc0f07/examples/v02/fixtures/no-effect.json",
+      "accessed_utc": "2026-11-02T16:15:44Z",
+      "raw_bytes_sha256": "5d1cf787ff70f08547e9801b16cde42f888f82633f44d0b77e2e5407e9fe82c9",
+      "retrieval": "git show from origin after successful git fetch --all --prune"
+    },
+    {
+      "path": "examples/v02/fixtures/no-execution.json",
+      "revision_url": "https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/blob/075aff5610731736405951ecf3b7c4bfc3cc0f07/examples/v02/fixtures/no-execution.json",
+      "accessed_utc": "2026-11-02T16:15:44Z",
+      "raw_bytes_sha256": "ad82963d8a499bd176bf6ce13a4a18c8ae87bf11e8be91503c87ca8fbf34e480",
+      "retrieval": "git show from origin after successful git fetch --all --prune"
+    },
+    {
+      "path": "examples/v02/fixtures/no-receipt.json",
+      "revision_url": "https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/blob/075aff5610731736405951ecf3b7c4bfc3cc0f07/examples/v02/fixtures/no-receipt.json",
+      "accessed_utc": "2026-11-02T16:15:44Z",
+      "raw_bytes_sha256": "e41bae0269aeb2475bdf9506afe271305034aace555198149c9b1fbccac73723",
+      "retrieval": "git show from origin after successful git fetch --all --prune"
+    },
+    {
+      "path": "examples/v02/fixtures/same-executor.json",
+      "revision_url": "https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/blob/075aff5610731736405951ecf3b7c4bfc3cc0f07/examples/v02/fixtures/same-executor.json",
+      "accessed_utc": "2026-11-02T16:15:44Z",
+      "raw_bytes_sha256": "62812598a8b691247a73926a319923ae0b75bd494e8d98324dd590ccf95b9399",
+      "retrieval": "git show from origin after successful git fetch --all --prune"
+    },
+    {
+      "path": "examples/v02/fixtures/toctou-mismatch.json",
+      "revision_url": "https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/blob/075aff5610731736405951ecf3b7c4bfc3cc0f07/examples/v02/fixtures/toctou-mismatch.json",
+      "accessed_utc": "2026-11-02T16:15:44Z",
+      "raw_bytes_sha256": "2a98586bd95b0033bd51e7442910929ce39f2bff1fe45caa0bb18c3de00dba79",
+      "retrieval": "git show from origin after successful git fetch --all --prune"
+    },
+    {
+      "path": "examples/v02/fixtures/unproven-independent.json",
+      "revision_url": "https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/blob/075aff5610731736405951ecf3b7c4bfc3cc0f07/examples/v02/fixtures/unproven-independent.json",
+      "accessed_utc": "2026-11-02T16:15:44Z",
+      "raw_bytes_sha256": "2352daee8cd47547919b2b624915f10b656457b0cffc2bc860e4e5f3d144bb8a",
+      "retrieval": "git show from origin after successful git fetch --all --prune"
+    }
+  ],
+  "limits": [
+    "Raw source bytes independently re-hashed for this task from the fetched pinned Git revision; not a new third-party validation.",
+    "External studies linked by README or EXTERNAL_EVIDENCE were not rerun or adopted as evidence for this feature. Their current remote status is UNAVAILABLE in this task.",
+    "No mutable external document is used as a semantic dependency; no claims about a newer revision after the recorded fetch."
+  ]
+}

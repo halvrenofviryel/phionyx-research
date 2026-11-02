@@ -1,0 +1,18 @@
+{
+  "checked_at_utc": "2026-11-02T17:27:04.241208+00:00",
+  "command": "git diff --cached --check",
+  "exit_code": 2,
+  "finding": "Only immutable raw source snapshots contain whitespace diagnostics; original bytes deliberately preserved. No authored path warning.",
+  "warning_count": 332,
+  "warning_counts_by_path": {
+    "docs/standards-lab-evidence/sources/airep-arxiv-v2.html": 2,
+    "docs/standards-lab-evidence/sources/draft-abak-agent-control-delivery-evidence-referencedby.html": 187,
+    "docs/standards-lab-evidence/sources/draft-abak-ai-evaluation-claim-preservation-referencedby.html": 142,
+    "docs/standards-lab-evidence/sources/phionyx-research--standards--ietf--ai-evaluation-claim-preservation--README.md": 1
+  },
+  "warning_types": {
+    "trailing whitespace.": 331,
+    "new blank line at EOF.": 1
+  },
+  "resolution": "Use authored-path diff --check plus SHA-256 checks for byte-exact raw snapshots; do not normalize external source bytes."
+}

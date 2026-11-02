@@ -1,0 +1,535 @@
+{
+  "schema": "local-standards-lab-index-1",
+  "generated_at_utc": "2026-11-02T17:15:58.649953+00:00",
+  "scope": "Non-normative local documentation index; not a protocol schema or certification.",
+  "approval_granted": false,
+  "publication_status": "UNPUBLISHED",
+  "base_commit": "275b871349721a8c917691d457c4a6270fe1028f",
+  "integration_mapping": [
+    {
+      "task": "S0",
+      "original_commit": "31f9b7e7cab5a1b556aa1ebab0dc29617e01e5c1",
+      "integration_commit": "5478e8b107552468e440d9f709c18fd780502293"
+    },
+    {
+      "task": "A",
+      "original_commit": "e0ac30203e39949bb52d612eb3496c39ccb85651",
+      "integration_commit": "95139b50ddd6263f7845537879250eca3994a77d"
+    },
+    {
+      "task": "C",
+      "original_commit": "02a44a812699f853ea65fffa21320e7cc8ddb6c7",
+      "integration_commit": "36b1214b72acafd784dcbd7b17cc6d2eb3de93dc"
+    },
+    {
+      "task": "E",
+      "original_commit": "9f928980b3027d9dd892dfe297af98635fcd3c18",
+      "integration_commit": "275b871349721a8c917691d457c4a6270fe1028f"
+    }
+  ],
+  "counts": {
+    "integrated_experiments": 3,
+    "completed_result_references": 1,
+    "preparation_packages": 1,
+    "pending_results": 3,
+    "third_party_validations_added": 0
+  },
+  "experiments": [
+    {
+      "id": "A",
+      "name": "Draft-text completeness appraisal",
+      "external_targets": [
+        "draft-he-agentproto-verifier-evidence-03"
+      ],
+      "why_tested": "Keep supplied-record validity separate from independently appraised domain completeness (CMP-1/CMP-2).",
+      "reproduction_command": "python3 experiments/ietf/agentproto/verifier-evidence-03/reproduce.py",
+      "prerequisites": "Python 3.10+ and pytest; evaluator is stdlib-only; offline replay.",
+      "evidence_class": "INDEPENDENTLY_DEVELOPED_FROM_TEXT_INTERNAL_RUN",
+      "class_boundary": "Independent of linked implementation code per original methodology; same controlled task environment, not an external independent evidence root.",
+      "observed_result": {
+        "vectors": 12,
+        "SATISFIED": 2,
+        "UNSATISFIED": 1,
+        "INDETERMINATE": 8,
+        "NOT_EVALUATED": 1,
+        "tests_passed_in_G": 59,
+        "replay": "BYTE_IDENTICAL"
+      },
+      "non_claims": [
+        "Positive cases depend on a stipulated finite exhaustive counterparty index, synthetic authority/control/input-selection/scope/time facts; those facts are not externally authenticated.",
+        "No event truth, actual-population completeness, signature validation, author-code interoperability, full draft or EXR-1/CMP-2 exercise conformance, third-party validation, or IETF endorsement.",
+        "Local precommitment digests and timestamps are not externally witnessed chronology."
+      ],
+      "status": "COMPLETE_LOCAL",
+      "publication_status": "UNPUBLISHED",
+      "repository": "halvrenofviryel/phionyx-research",
+      "original_experiment_commit": "e0ac30203e39949bb52d612eb3496c39ccb85651",
+      "integration_commit": "95139b50ddd6263f7845537879250eca3994a77d",
+      "path": "experiments/ietf/agentproto/verifier-evidence-03",
+      "third_party_evidence": false,
+      "report_path": "experiments/ietf/agentproto/verifier-evidence-03/RESULTS.md",
+      "readme_path": "experiments/ietf/agentproto/verifier-evidence-03/README.md",
+      "source_pins": [
+        {
+          "id": "draft-he-agentproto-verifier-evidence-03.txt",
+          "url": "https://www.ietf.org/archive/id/draft-he-agentproto-verifier-evidence-03.txt",
+          "exact_revision": "03",
+          "kind": "revision-pinned-draft",
+          "accessed_at_utc": "2026-11-02T17:10:33.806547+00:00",
+          "retrieval": "HTTPS GET; Accept-Encoding identity; SHA-256 of raw body bytes",
+          "status": "AVAILABLE",
+          "http_status": 200,
+          "resolved_url": "https://www.ietf.org/archive/id/draft-he-agentproto-verifier-evidence-03.txt",
+          "sha256": "c64cb2fd988476a56f82bdc4386a652c5841f7b3723941bffea44e73208ef600",
+          "bytes": 71649,
+          "path": "docs/standards-lab-evidence/sources/draft-he-agentproto-verifier-evidence-03.txt"
+        }
+      ],
+      "artifacts": {
+        "run_record": {
+          "path": "experiments/ietf/agentproto/verifier-evidence-03/run_record.json",
+          "sha256": "f34d9a3ddfffe7f61de77e83601341a7515d2390432525712a4deb3f801b31bd"
+        },
+        "source_manifest": {
+          "path": "experiments/ietf/agentproto/verifier-evidence-03/sources/manifest.json",
+          "sha256": "761d6417f57222ef295456b6f9c7950ac4e9a60ca9633efb0d3072b5e6b2a630"
+        },
+        "result": {
+          "path": "experiments/ietf/agentproto/verifier-evidence-03/results.json",
+          "sha256": "6ee32f19f69e8eece702c9cab20abba08c1f524c5dc9d365a717f18863af88c4"
+        },
+        "report": {
+          "path": "experiments/ietf/agentproto/verifier-evidence-03/RESULTS.md",
+          "sha256": "62d85e38dcbaf98d00a53c49b4f2538323d739b3f15ceab003f099ad0396772c"
+        }
+      }
+    },
+    {
+      "id": "C",
+      "name": "Released decision-receipt API/CLI probe",
+      "external_targets": [
+        "draft-gruszka-audit-decision-receipts-03",
+        "draft-gruszka-signed-evaluation-receipts-04"
+      ],
+      "external_implementation": {
+        "repository": "b7n0de/proofbundle",
+        "version": "6.4.0",
+        "commit": "699545521ec5ef479bb84e61fe7461fc79ed558c",
+        "wheel_sha256": "72153d160c2f78647095f029c0946dbfd64a15e006a233a5abc78a3071eebf94",
+        "preview_commit": "8bb289c8b41d32c54734155fc00756231093bc2a",
+        "preview_runtime": "NOT_EVALUATED"
+      },
+      "why_tested": "Separate receipt validity, approval consumption, set audit, execution and effect observations in the released implementation.",
+      "reproduction_command": "bash experiments/ietf/audit/decision-receipts-03/reproduce.sh",
+      "prerequisites": "CPython 3.12, venv/pip, Linux x86_64 compatible locked wheels; uses local cache or hash-checked HTTPS PyPI download in a fresh checkout.",
+      "evidence_class": "INTERNAL_PROBE_OF_EXTERNAL_RELEASE",
+      "class_boundary": "External package authorship does not make this internal synthetic probe third-party validation of AIREP or ACDER.",
+      "observed_result": {
+        "scenarios": 9,
+        "PARTIALLY_EVALUATED": 6,
+        "NOT_EVALUATED": 3,
+        "execution_observation_all": "UNOBSERVED",
+        "effect_observation_all": "UNOBSERVED",
+        "approval_consumption_all": "NOT_EVALUATED",
+        "set_audit_section_3_5_all": "NOT_EVALUATED",
+        "runtime_executions_observed": 0,
+        "cli_vectors": 7,
+        "tests_passed_in_G": 16,
+        "byte_identical_artifacts": 20
+      },
+      "non_claims": [
+        "No end-to-end runtime scenario, approval consumption/rotation/re-allow behavior, actual execution or effect, full population, full draft conformance, or independent operator measured.",
+        "Legacy execution_proven describes digest presence, not event truth; supplied min/max sequence completeness is not population completeness.",
+        "Two outcome receipts do not prove two executions; evaluation evidence does not turn DENY into authorization.",
+        "Only verified_origin report tokens are normalized after API/policy calls; initial unmodified capture and first failed cross-process replay remain archived."
+      ],
+      "status": "COMPLETE_LOCAL",
+      "publication_status": "UNPUBLISHED",
+      "repository": "halvrenofviryel/phionyx-research",
+      "original_experiment_commit": "02a44a812699f853ea65fffa21320e7cc8ddb6c7",
+      "integration_commit": "36b1214b72acafd784dcbd7b17cc6d2eb3de93dc",
+      "path": "experiments/ietf/audit/decision-receipts-03",
+      "third_party_evidence": false,
+      "report_path": "experiments/ietf/audit/decision-receipts-03/RESULTS.md",
+      "readme_path": "experiments/ietf/audit/decision-receipts-03/README.md",
+      "source_pins": [
+        {
+          "id": "draft-gruszka-audit-decision-receipts-03.txt",
+          "url": "https://www.ietf.org/archive/id/draft-gruszka-audit-decision-receipts-03.txt",
+          "exact_revision": "03",
+          "kind": "revision-pinned-draft",
+          "accessed_at_utc": "2026-11-02T17:10:33.807641+00:00",
+          "retrieval": "HTTPS GET; Accept-Encoding identity; SHA-256 of raw body bytes",
+          "status": "AVAILABLE",
+          "http_status": 200,
+          "resolved_url": "https://www.ietf.org/archive/id/draft-gruszka-audit-decision-receipts-03.txt",
+          "sha256": "c0aae84b82108a3bd40cbbbee33df13c760b5c2e943a205e9efca4c623438245",
+          "bytes": 80358,
+          "path": "docs/standards-lab-evidence/sources/draft-gruszka-audit-decision-receipts-03.txt"
+        },
+        {
+          "id": "draft-gruszka-signed-evaluation-receipts-04.txt",
+          "url": "https://www.ietf.org/archive/id/draft-gruszka-signed-evaluation-receipts-04.txt",
+          "exact_revision": "04",
+          "kind": "revision-pinned-draft",
+          "accessed_at_utc": "2026-11-02T17:10:33.808090+00:00",
+          "retrieval": "HTTPS GET; Accept-Encoding identity; SHA-256 of raw body bytes",
+          "status": "AVAILABLE",
+          "http_status": 200,
+          "resolved_url": "https://www.ietf.org/archive/id/draft-gruszka-signed-evaluation-receipts-04.txt",
+          "sha256": "d60c3dd95aefb8019a5f1c0ce041d8c4eb1d4571302766944bfbc92b91c1e358",
+          "bytes": 109277,
+          "path": "docs/standards-lab-evidence/sources/draft-gruszka-signed-evaluation-receipts-04.txt"
+        }
+      ],
+      "artifacts": {
+        "run_record": {
+          "path": "experiments/ietf/audit/decision-receipts-03/run_record.json",
+          "sha256": "5b770c4edc9af2aa1cedc3d0b74e24cfb006eab98538b8799902612888ae3bc5"
+        },
+        "source_manifest": {
+          "path": "experiments/ietf/audit/decision-receipts-03/sources/manifest.json",
+          "sha256": "9ccc5bd36e3eb57974c65744adc8dd06c00ce1e30fc98e94c0e18b0d1b7033b5"
+        },
+        "result": {
+          "path": "experiments/ietf/audit/decision-receipts-03/cases/scenario_results.json",
+          "sha256": "14ba2faebfa2e0efc11d8738a0f0e9c21acceea9eb5eb6e7403ca08d57cdbc8f"
+        },
+        "report": {
+          "path": "experiments/ietf/audit/decision-receipts-03/RESULTS.md",
+          "sha256": "c8b1aca4f19560d0ac80d371b50be8e8a4314093b88ebe6d7c706d05050a6775"
+        }
+      }
+    },
+    {
+      "id": "E",
+      "name": "Claim preservation across SER and selected representations",
+      "external_targets": [
+        "draft-abak-ai-evaluation-claim-preservation-00",
+        "draft-gruszka-signed-evaluation-receipts-04",
+        "draft-gruszka-evaluation-receipt-mappings-04",
+        "draft-watts-eqr-conformance-05"
+      ],
+      "external_fixture_commit": "a339424e07fd58fa261d8ca3f41af5de4dcbf751",
+      "why_tested": "Measure which claim distinctions survive direct SER, DSSE, digest-only and digest-resolved representations.",
+      "reproduction_command": "python3 experiments/ietf/claim-preservation/ser04/src/run.py --check",
+      "prerequisites": "Python 3.10+ standard library; offline replay.",
+      "evidence_class": "AUTHOR_SIDE_NON_NORMATIVE_MAPPING_EXPERIMENT",
+      "class_boundary": "Same-author local semantic experiment; EQR-05 is context only, not an implemented conformance target.",
+      "observed_result": {
+        "requirement_route_cells": 48,
+        "matrix_counts": {
+          "PRESERVED": 17,
+          "QUALIFIED_LOSS": 10,
+          "UNESTABLISHED": 17,
+          "NOT_APPLICABLE": 4
+        },
+        "scenario_route_observations": 80,
+        "scenario_counts": {
+          "PRESERVED": 34,
+          "QUALIFIED_LOSS": 17,
+          "UNESTABLISHED": 13,
+          "NOT_APPLICABLE": 16
+        },
+        "tests_passed_in_G": 30,
+        "replay": "BYTE_IDENTICAL",
+        "SER_Ed25519_selected_key_COSE_SCITT_verification": "NOT_EVALUATED"
+      },
+      "non_claims": [
+        "The 48 bounded requirement-by-route cells are distinct from 80 scenario-by-route observations; PRESERVED does not implement every clause and NOT_APPLICABLE is not success.",
+        "No full CP/SER conformance, independent interoperability, real evaluator/model execution, criteria chronology, complete populations, trusted identity, safety, authorization, or endorsement.",
+        "No SER Ed25519/selected-key, COSE or SCITT verification; local HMAC test carrier is a separate synthetic check.",
+        "All 66 reconstructed receipt byte strings match the pinned public vectors; proofbundle code and its 66 verification verdicts were not executed."
+      ],
+      "status": "COMPLETE_LOCAL",
+      "publication_status": "UNPUBLISHED",
+      "repository": "halvrenofviryel/phionyx-research",
+      "original_experiment_commit": "9f928980b3027d9dd892dfe297af98635fcd3c18",
+      "integration_commit": "275b871349721a8c917691d457c4a6270fe1028f",
+      "path": "experiments/ietf/claim-preservation/ser04",
+      "third_party_evidence": false,
+      "report_path": "experiments/ietf/claim-preservation/ser04/RESULTS.md",
+      "readme_path": "experiments/ietf/claim-preservation/ser04/README.md",
+      "source_pins": [
+        {
+          "id": "draft-abak-ai-evaluation-claim-preservation-00.txt",
+          "url": "https://www.ietf.org/archive/id/draft-abak-ai-evaluation-claim-preservation-00.txt",
+          "exact_revision": "00",
+          "kind": "revision-pinned-draft",
+          "accessed_at_utc": "2026-11-02T17:10:34.271068+00:00",
+          "retrieval": "HTTPS GET; Accept-Encoding identity; SHA-256 of raw body bytes",
+          "status": "AVAILABLE",
+          "http_status": 200,
+          "resolved_url": "https://www.ietf.org/archive/id/draft-abak-ai-evaluation-claim-preservation-00.txt",
+          "sha256": "9088079da04ed23fdead8a54894ac70bcf6ff26ce4834c815e4dc6961986de54",
+          "bytes": 64625,
+          "path": "docs/standards-lab-evidence/sources/draft-abak-ai-evaluation-claim-preservation-00.txt"
+        },
+        {
+          "id": "draft-gruszka-signed-evaluation-receipts-04.txt",
+          "url": "https://www.ietf.org/archive/id/draft-gruszka-signed-evaluation-receipts-04.txt",
+          "exact_revision": "04",
+          "kind": "revision-pinned-draft",
+          "accessed_at_utc": "2026-11-02T17:10:33.808090+00:00",
+          "retrieval": "HTTPS GET; Accept-Encoding identity; SHA-256 of raw body bytes",
+          "status": "AVAILABLE",
+          "http_status": 200,
+          "resolved_url": "https://www.ietf.org/archive/id/draft-gruszka-signed-evaluation-receipts-04.txt",
+          "sha256": "d60c3dd95aefb8019a5f1c0ce041d8c4eb1d4571302766944bfbc92b91c1e358",
+          "bytes": 109277,
+          "path": "docs/standards-lab-evidence/sources/draft-gruszka-signed-evaluation-receipts-04.txt"
+        },
+        {
+          "id": "draft-gruszka-evaluation-receipt-mappings-04.txt",
+          "url": "https://www.ietf.org/archive/id/draft-gruszka-evaluation-receipt-mappings-04.txt",
+          "exact_revision": "04",
+          "kind": "revision-pinned-draft",
+          "accessed_at_utc": "2026-11-02T17:10:34.373775+00:00",
+          "retrieval": "HTTPS GET; Accept-Encoding identity; SHA-256 of raw body bytes",
+          "status": "AVAILABLE",
+          "http_status": 200,
+          "resolved_url": "https://www.ietf.org/archive/id/draft-gruszka-evaluation-receipt-mappings-04.txt",
+          "sha256": "aa24f2d4c6b51509aba836c3786d6eb32711c8638ae0621cd4a6a7a54c978c25",
+          "bytes": 163444,
+          "path": "docs/standards-lab-evidence/sources/draft-gruszka-evaluation-receipt-mappings-04.txt"
+        },
+        {
+          "id": "draft-watts-eqr-conformance-05.txt",
+          "url": "https://www.ietf.org/archive/id/draft-watts-eqr-conformance-05.txt",
+          "exact_revision": "05",
+          "kind": "revision-pinned-draft",
+          "accessed_at_utc": "2026-11-02T17:10:34.536541+00:00",
+          "retrieval": "HTTPS GET; Accept-Encoding identity; SHA-256 of raw body bytes",
+          "status": "AVAILABLE",
+          "http_status": 200,
+          "resolved_url": "https://www.ietf.org/archive/id/draft-watts-eqr-conformance-05.txt",
+          "sha256": "18a46eeabe9cd942e410f5ba2258d2eaf61c8d7fe4f425ee3f5eb63fbd753c5d",
+          "bytes": 35288,
+          "path": "docs/standards-lab-evidence/sources/draft-watts-eqr-conformance-05.txt"
+        }
+      ],
+      "artifacts": {
+        "run_record": {
+          "path": "experiments/ietf/claim-preservation/ser04/run_record.json",
+          "sha256": "0c778be5f681c364f579835e1b0a1d0f85e8aa073f1475a169ab4c81d004f4ef"
+        },
+        "source_manifest": {
+          "path": "experiments/ietf/claim-preservation/ser04/SOURCE_PINS.json",
+          "sha256": "651c1317d4f7967ec072db0b3095f173f5a296251f0aa58728cede6e60e78dcd"
+        },
+        "result": {
+          "path": "experiments/ietf/claim-preservation/ser04/results.json",
+          "sha256": "268f25f1b333f17f4d8702dc1eac168b0f8ac141b6c9cb03a57adadb01e17327"
+        },
+        "report": {
+          "path": "experiments/ietf/claim-preservation/ser04/RESULTS.md",
+          "sha256": "1661144567f707cb0dca7537967778f29434a7749bf7d6f91adfa2a27257d761"
+        }
+      }
+    }
+  ],
+  "references": [
+    {
+      "id": "D",
+      "status": "COMPLETE_LOCAL_REFERENCE_ONLY",
+      "publication_status": "UNPUBLISHED",
+      "repository": "halvrenofviryel/ai-runtime-evidence-protocol",
+      "original_experiment_commit": "0130fcf8e7d70a0f9c4f977957e5de76ca8ef689",
+      "integration_commit": null,
+      "local_checkout": "/home/toygar/.codex/worktrees/a4cd/ai-runtime-evidence-protocol",
+      "external_target": {
+        "wire_version": "0.2",
+        "implementation_version": "0.2.0-beta.1",
+        "source_commit": "075aff5610731736405951ecf3b7c4bfc3cc0f07"
+      },
+      "why_tested": "Expose native lifecycle evidence and absent enforcement/coverage distinctions without stronger claims.",
+      "reproduction_command": "python3 scripts/check_beta.py --out .reproduced/g-explain-check",
+      "reproduction_scope": "Run in a disposable copy of the exact D commit with its documented Python/Node dependencies; G did not run this command or write in D.",
+      "evidence_class": "AUTHOR_SIDE_REGRESSION",
+      "third_party_evidence": false,
+      "observed_result": "Original D validation reports 73 v0.2 tests and final 56/56 commands, 1919 historical files unchanged; first sandbox failure retained. G checked exact-commit report bytes only.",
+      "non_claims": [
+        "Enforcement, relying-party claim evaluation and intended-target coverage remain NOT_EVALUATED; signatures do not prove event truth.",
+        "No schema, reconciliation semantics or frozen v0.1 change; not third-party or IETF evidence."
+      ],
+      "artifacts": [
+        {
+          "task": "D",
+          "repository": "halvrenofviryel/ai-runtime-evidence-protocol",
+          "original_commit": "0130fcf8e7d70a0f9c4f977957e5de76ca8ef689",
+          "integration_commit": null,
+          "publication_status": "UNPUBLISHED",
+          "source_local_path": "/home/toygar/.codex/worktrees/a4cd/ai-runtime-evidence-protocol/reports/explain/source-basis.json",
+          "snapshot_path": "docs/standards-lab-evidence/local-refs/D/source-basis.json",
+          "sha256": "6d00c376e6ccd2710e51d4e87e1b10f01d71ee691ec7b56077e47ebb906f4f6a",
+          "bytes": 14955,
+          "accessed_at_utc": "2026-11-02T17:13:44.693630+00:00",
+          "verified_against_exact_git_blob": true
+        },
+        {
+          "task": "D",
+          "repository": "halvrenofviryel/ai-runtime-evidence-protocol",
+          "original_commit": "0130fcf8e7d70a0f9c4f977957e5de76ca8ef689",
+          "integration_commit": null,
+          "publication_status": "UNPUBLISHED",
+          "source_local_path": "/home/toygar/.codex/worktrees/a4cd/ai-runtime-evidence-protocol/reports/explain/validation.json",
+          "snapshot_path": "docs/standards-lab-evidence/local-refs/D/validation.json",
+          "sha256": "031ac7a31bc329e5c1bcd19f382cc21075adad528aeb8255c150884415d94169",
+          "bytes": 5420,
+          "accessed_at_utc": "2026-11-02T17:13:44.698245+00:00",
+          "verified_against_exact_git_blob": true
+        },
+        {
+          "task": "D",
+          "repository": "halvrenofviryel/ai-runtime-evidence-protocol",
+          "original_commit": "0130fcf8e7d70a0f9c4f977957e5de76ca8ef689",
+          "integration_commit": null,
+          "publication_status": "UNPUBLISHED",
+          "source_local_path": "/home/toygar/.codex/worktrees/a4cd/ai-runtime-evidence-protocol/examples/v02/EXPLAIN.md",
+          "snapshot_path": "docs/standards-lab-evidence/local-refs/D/EXPLAIN.md",
+          "sha256": "ab8338f3528eecd855a1ea0a96a8c1cd8a5c40052d53021b9ef30bc893b54767",
+          "bytes": 5611,
+          "accessed_at_utc": "2026-11-02T17:13:44.702360+00:00",
+          "verified_against_exact_git_blob": true
+        }
+      ]
+    },
+    {
+      "id": "B1",
+      "status": "SEALED_PREPARATION_ONLY",
+      "publication_status": "UNPUBLISHED",
+      "repository": "halvrenofviryel/phionyx-research",
+      "original_experiment_commit": "d749ea7c1789aa0377a5e25e40d28f20cf700821",
+      "integration_commit": null,
+      "local_checkout": "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/b1-acder-sealed-challenge/phionyx-research",
+      "external_target": "draft-abak-agent-control-delivery-evidence-02",
+      "why_tested": "Prepare a bounded, sealed ACDER-02 challenge for a future isolated implementation.",
+      "evidence_class": "AUTHOR_SIDE_CHALLENGE_PREPARATION",
+      "third_party_evidence": false,
+      "observed_result": "Public manifest lists 14 cases / 15 declared profile runs; sealed commitment exists; solver and reveal comparison absent.",
+      "commitment_sha256": "804c65c50dea4064f5e3d411c469a0089bb0ca9a061713c23793b572868193f8",
+      "reproduction_command": null,
+      "reproduction_status": "NOT_EVALUATED; G hashes public metadata only and does not run builder/private tests.",
+      "non_claims": [
+        "No B2 execution or B3 comparison, no established blindness, no third-party independence, no full draft conformance or event truth.",
+        "Same-UID file permissions do not establish isolation. Original commit attributed to coordinator; builder history and private expected results were not accessed."
+      ],
+      "artifacts": [
+        {
+          "task": "B1",
+          "repository": "halvrenofviryel/phionyx-research",
+          "original_commit": "d749ea7c1789aa0377a5e25e40d28f20cf700821",
+          "commit_basis": "coordinator handoff; no builder Git history accessed",
+          "integration_commit": null,
+          "publication_status": "UNPUBLISHED",
+          "source_local_path": "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/b1-acder-sealed-challenge/phionyx-research/experiments/ietf/acder02-sealed-challenge/METHODOLOGY.md",
+          "snapshot_path": "docs/standards-lab-evidence/local-refs/B1/METHODOLOGY.md",
+          "sha256": "d0b29740d78aaa93e2baef19e4a4baaf3ddf28ffa5c804208b6ce7e1fa44ca29",
+          "bytes": 6922,
+          "accessed_at_utc": "2026-11-02T17:13:44.702570+00:00",
+          "verified_against_exact_git_blob": "NOT_EVALUATED"
+        },
+        {
+          "task": "B1",
+          "repository": "halvrenofviryel/phionyx-research",
+          "original_commit": "d749ea7c1789aa0377a5e25e40d28f20cf700821",
+          "commit_basis": "coordinator handoff; no builder Git history accessed",
+          "integration_commit": null,
+          "publication_status": "UNPUBLISHED",
+          "source_local_path": "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/b1-acder-sealed-challenge/phionyx-research/experiments/ietf/acder02-sealed-challenge/public/challenge_manifest.json",
+          "snapshot_path": "docs/standards-lab-evidence/local-refs/B1/challenge_manifest.json",
+          "sha256": "def095c2efe235be958a978dce7a886ce407dc5c98a88c84bbeeafe27a6be248",
+          "bytes": 5457,
+          "accessed_at_utc": "2026-11-02T17:13:44.702717+00:00",
+          "verified_against_exact_git_blob": "NOT_EVALUATED"
+        },
+        {
+          "task": "B1",
+          "repository": "halvrenofviryel/phionyx-research",
+          "original_commit": "d749ea7c1789aa0377a5e25e40d28f20cf700821",
+          "commit_basis": "coordinator handoff; no builder Git history accessed",
+          "integration_commit": null,
+          "publication_status": "UNPUBLISHED",
+          "source_local_path": "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/b1-acder-sealed-challenge/phionyx-research/experiments/ietf/acder02-sealed-challenge/public/commitment.json",
+          "snapshot_path": "docs/standards-lab-evidence/local-refs/B1/commitment.json",
+          "sha256": "cda835db77dc737694786bb73cee63977cff468279edfba1c62ea05a7f6aa7c7",
+          "bytes": 370,
+          "accessed_at_utc": "2026-11-02T17:13:44.702840+00:00",
+          "verified_against_exact_git_blob": "NOT_EVALUATED"
+        },
+        {
+          "task": "B1",
+          "repository": "halvrenofviryel/phionyx-research",
+          "original_commit": "d749ea7c1789aa0377a5e25e40d28f20cf700821",
+          "commit_basis": "coordinator handoff; no builder Git history accessed",
+          "integration_commit": null,
+          "publication_status": "UNPUBLISHED",
+          "source_local_path": "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/b1-acder-sealed-challenge/phionyx-research/experiments/ietf/acder02-sealed-challenge/public/source_audit.json",
+          "snapshot_path": "docs/standards-lab-evidence/local-refs/B1/source_audit.json",
+          "sha256": "c62de0aa7ebe12ff5d3cb9256ab83e853c48fcbe5aa87fc80f4f581954516a57",
+          "bytes": 3936,
+          "accessed_at_utc": "2026-11-02T17:13:44.702979+00:00",
+          "verified_against_exact_git_blob": "NOT_EVALUATED"
+        }
+      ]
+    }
+  ],
+  "pending": [
+    {
+      "id": "B2",
+      "status": "PENDING",
+      "result": "NOT_EVALUATED",
+      "commit": null,
+      "reason": "No isolated solver implementation/output supplied; access boundary not established.",
+      "counted_as_success": false
+    },
+    {
+      "id": "B3",
+      "status": "PENDING",
+      "result": "NOT_EVALUATED",
+      "commit": null,
+      "reason": "No frozen solver/reveal comparison supplied; B1 seal is not a comparison result.",
+      "counted_as_success": false
+    },
+    {
+      "id": "F",
+      "status": "PENDING",
+      "result": "NOT_EVALUATED",
+      "commit": null,
+      "reason": "Separate task in progress at handoff; no frozen exact-commit compatibility result supplied.",
+      "counted_as_success": false
+    }
+  ],
+  "evidence_manifests": [
+    {
+      "path": "docs/standards-lab-evidence/initial_state.json",
+      "sha256": "395d3d5133add99517432448048d83a92e6ab653abecd10e20793a5626d53c7f"
+    },
+    {
+      "path": "docs/standards-lab-evidence/frozen_inputs.json",
+      "sha256": "777a60a64d31b119a6bd830122a0003d78835c079d402bea963e2f050cedbdef"
+    },
+    {
+      "path": "docs/standards-lab-evidence/github_sources.json",
+      "sha256": "b3feebd8145a0790fddce7dd5bf7699870b0b435e3126edee81e4c0a94d659d1"
+    },
+    {
+      "path": "docs/standards-lab-evidence/http_sources.json",
+      "sha256": "6df49bbb52ec295026735ad9fe351cd24a5ae6e629dd67fce54081b7c4da3bc0"
+    },
+    {
+      "path": "docs/standards-lab-evidence/local_references.json",
+      "sha256": "cf1237cd2ee97ac6d5179e6c649f4b0efd45d8e00a34163df17ebf917d8b761e"
+    },
+    {
+      "path": "docs/standards-lab-evidence/replay_results.json",
+      "sha256": "f1fc50b618b78cf76d0b91b9ea240bb9fd65837116d0b56c016c6488790577bd"
+    }
+  ],
+  "non_claims": [
+    "Internal Codex runs are not independent third-party evidence or IETF conformance.",
+    "AIREP EXTERNAL_EVIDENCE.md was read under its existing external-artifact/maintainer-reproduction methodology, not modified.",
+    "No same-version external AIREP producer/consumer interoperability is established by this index.",
+    "No push, PR, issue, release, hosting, message or Internet-Draft submission is authorized or performed."
+  ]
+}

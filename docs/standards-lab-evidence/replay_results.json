@@ -1,0 +1,33 @@
+{
+  "observed_by_utc": "2026-11-02T17:12:27.878Z",
+  "working_directory": "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/g-standards-lab/phionyx-research",
+  "runs": [
+    {
+      "task": "A",
+      "name": "A",
+      "chunk_id": "3ba218",
+      "wall_time_seconds": 0.172726724,
+      "exit_code": 0,
+      "original_token_count": 94,
+      "output": "...........................................................              [100%]\n59 passed in 0.07s\n{\n  \"integrity\": \"MATCH\",\n  \"replay\": \"BYTE_IDENTICAL\",\n  \"vectors\": 12,\n  \"outcomes\": {\n    \"INDETERMINATE\": 8,\n    \"NOT_EVALUATED\": 1,\n    \"SATISFIED\": 2,\n    \"UNSATISFIED\": 1\n  },\n  \"run_record_sha256\": \"f34d9a3ddfffe7f61de77e83601341a7515d2390432525712a4deb3f801b31bd\"\n}\n"
+    },
+    {
+      "task": "C",
+      "chunk_id": "d053db",
+      "wall_time_seconds": 0.000001212,
+      "exit_code": 0,
+      "original_token_count": 1059,
+      "output": "Looking in links: /home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/g-standards-lab/phionyx-research/experiments/ietf/audit/decision-receipts-03/.downloads\nProcessing ./experiments/ietf/audit/decision-receipts-03/.downloads/cffi-2.1.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (from -r /home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/g-standards-lab/phionyx-research/experiments/ietf/audit/decision-receipts-03/requirements.lock (line 2))\nProcessing ./experiments/ietf/audit/decision-receipts-03/.downloads/cryptography-50.0.2-cp311-abi3-manylinux_2_34_x86_64.whl (from -r /home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/g-standards-lab/phionyx-research/experiments/ietf/audit/decision-receipts-03/requirements.lock (line 3))\nProcessing ./experiments/ietf/audit/decision-receipts-03/.downloads/proofbundle-6.4.0-py3-none-any.whl (from -r /home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/g-standards-lab/phionyx-research/experiments/ietf/audit/decision-receipts-03/requirements.lock (line 4))\nProcessing ./experiments/ietf/audit/decision-receipts-03/.downloads/pycparser-3.12-py3-none-any.whl (from -r /home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/g-standards-lab/phionyx-research/experiments/ietf/audit/decision-receipts-03/requirements.lock (line 5))\nProcessing ./experiments/ietf/audit/decision-receipts-03/.downloads/rfc8785-0.1.4-py3-none-any.whl (from -r /home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/g-standards-lab/phionyx-research/experiments/ietf/audit/decision-receipts-03/requirements.lock (line 6))\nInstalling collected packages: rfc8785, pycparser, cffi, cryptography, proofbundle\nSuccessfully installed cffi-2.1.1 cryptography-50.0.2 proofbundle-6.4.0 pycparser-3.12 rfc8785-0.1.4\nNo broken requirements found.\ntest_all_nine_cases_keep_unknown_axes_visible (test_probe.ReleasedAPIProbe.test_all_nine_cases_keep_unknown_axes_visible) ... ok\ntest_appendix_a_payloads_and_signatures_match_published_bytes (test_probe.ReleasedAPIProbe.test_appendix_a_payloads_and_signatures_match_published_bytes) ... ok\ntest_appendix_a_positive_and_negative_controls (test_probe.ReleasedAPIProbe.test_appendix_a_positive_and_negative_controls) ... ok\ntest_baseline_receipt_is_not_execution_observation (test_probe.ReleasedAPIProbe.test_baseline_receipt_is_not_execution_observation) ... ok\ntest_cli_vectors_and_repeated_output_are_deterministic (test_probe.ReleasedAPIProbe.test_cli_vectors_and_repeated_output_are_deterministic) ... ok\ntest_evaluation_evidence_does_not_promote_deny_to_allow (test_probe.ReleasedAPIProbe.test_evaluation_evidence_does_not_promote_deny_to_allow) ... ok\ntest_exact_dependency_versions (test_probe.ReleasedAPIProbe.test_exact_dependency_versions) ... ok\ntest_installed_source_is_unmodified (test_probe.ReleasedAPIProbe.test_installed_source_is_unmodified) ... ok\ntest_outcome_same_executor_id_control_is_rejected (test_probe.ReleasedAPIProbe.test_outcome_same_executor_id_control_is_rejected) ... ok\ntest_preserved_source_bytes (test_probe.ReleasedAPIProbe.test_preserved_source_bytes) ... ok\ntest_repeated_receipt_verification_is_stateless (test_probe.ReleasedAPIProbe.test_repeated_receipt_verification_is_stateless) ... ok\ntest_sequence_complete_is_only_within_observed_bounds (test_probe.ReleasedAPIProbe.test_sequence_complete_is_only_within_observed_bounds) ... ok\ntest_two_allow_payloads_do_not_claim_a_package_set_audit (test_probe.ReleasedAPIProbe.test_two_allow_payloads_do_not_claim_a_package_set_audit) ... ok\ntest_two_outcomes_can_bind_one_allow_without_execution_evidence (test_probe.ReleasedAPIProbe.test_two_outcomes_can_bind_one_allow_without_execution_evidence) ... ok\ntest_unknown_is_preserved_not_changed_to_failure (test_probe.ReleasedAPIProbe.test_unknown_is_preserved_not_changed_to_failure) ... ok\ntest_wrong_key_nonce_and_expiry_are_refused (test_probe.ReleasedAPIProbe.test_wrong_key_nonce_and_expiry_are_refused) ... ok\n\n----------------------------------------------------------------------\nRan 16 tests in 1.172s\n\nOK\nPASS: 20 recorded artifacts reproduced byte-for-byte\n9 scenarios: 6 PARTIALLY_EVALUATED, 3 NOT_EVALUATED; runtime executions observed: 0\n"
+    },
+    {
+      "task": "E",
+      "name": "E",
+      "chunk_id": "b34643",
+      "wall_time_seconds": 0.039730394,
+      "exit_code": 0,
+      "original_token_count": 103,
+      "output": "..............................\n----------------------------------------------------------------------\nRan 30 tests in 0.057s\n\nOK\n{\"matrix_cells\": 48, \"matrix_counts\": {\"NOT_APPLICABLE\": 4, \"PRESERVED\": 17, \"QUALIFIED_LOSS\": 10, \"UNESTABLISHED\": 17}, \"outputs\": \"MATCH\", \"scenario_counts\": {\"NOT_APPLICABLE\": 16, \"PRESERVED\": 34, \"QUALIFIED_LOSS\": 17, \"UNESTABLISHED\": 13}, \"scenario_routes\": 80, \"tests\": 30}\n"
+    }
+  ],
+  "scope": "G replays only A/C/E, not D or B1, no full SDK suite."
+}

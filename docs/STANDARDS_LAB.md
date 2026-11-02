@@ -1,0 +1,144 @@
+# Standards Lab
+
+Local, non-normative experiments with explicit evidence boundaries. This review package
+contains **3 reproduced experiments (A/C/E)**, **1 completed result reference (D)**,
+**1 sealed preparation package (B1)** and **3 pending results (B2/B3/F)**.
+Counts and artifact digests are in [standards_lab.json](standards_lab.json);
+[G replay records](standards-lab-evidence/replay_results.json) support the three replay
+claims. These are internal runs, not independent third-party validation, a population
+success rate, IETF conformance or endorsement. Pending work contributes no success.
+
+**Publication state: UNPUBLISHED. `approval_granted=false`.** Local experiment commit
+identities below are provenance, not claims that GitHub serves those commits.
+The [publication review](PUBLICATION_REVIEW.md) identifies the reviewable scope and
+holds all publication until explicit user approval. No contact or follow-on task is initiated.
+
+## Reproduce the integrated experiments
+
+Run each command from the root of this `halvrenofviryel/phionyx-research` checkout.
+Source checkout files and original first-run outputs are preserved; G replay records
+are separate. [123 frozen files](standards-lab-evidence/frozen_inputs.json) were compared
+byte-for-byte with the supplied S0/A/C/E source worktrees. Digests establish local
+integrity, not independent custody or chronology.
+
+| ID / purpose | Exact target and evidence class | Observed result | Boundary and evidence |
+|---|---|---|---|
+| **A — completeness appraisal**: distinguish valid supplied records from an appraised completeness basis | [verifier-evidence-03](https://www.ietf.org/archive/id/draft-he-agentproto-verifier-evidence-03.txt); internally developed from published text without linked implementation inspection, per original methodology | 12 synthetic vectors: **2 SATISFIED, 1 UNSATISFIED, 8 INDETERMINATE, 1 NOT_EVALUATED**; 59 tests; byte-identical replay | The two positives require a **stipulated finite exhaustive counterparty index and synthetic authority, party control/input-selection, scope and time facts**. No authenticated external basis, real-population completeness, event truth, full draft or EXR-1/CMP-2 exercise conformance. [Results/non-claims](../experiments/ietf/agentproto/verifier-evidence-03/RESULTS.md), [machine results](../experiments/ietf/agentproto/verifier-evidence-03/results.json), [method/reproduction](../experiments/ietf/agentproto/verifier-evidence-03/REPRODUCE.md). |
+| **C — receipt boundaries**: distinguish receipt verification from consumption, execution and effect | [decision-receipts-03](https://www.ietf.org/archive/id/draft-gruszka-audit-decision-receipts-03.txt), SER-04 P1 and released `proofbundle==6.4.0`, commit `699545521ec5ef479bb84e61fe7461fc79ed558c`; internal probe of an external release | 9 scenarios: **6 PARTIALLY_EVALUATED, 3 NOT_EVALUATED**; 7 CLI vectors; 16 tests; 20 byte-identical artifacts | **All execution/effect observations UNOBSERVED**; consumption and §3.5 set-audit axes NOT_EVALUATED. No runtime scenario executed. `execution_proven` reflects digest presence; supplied sequence bounds do not establish population completeness. No replay bug, end-to-end authorization, preview behavior or full draft conformance inferred. [Results/non-claims](../experiments/ietf/audit/decision-receipts-03/RESULTS.md), [axis matrix](../experiments/ietf/audit/decision-receipts-03/cases/scenario_results.json), [method/reproduction](../experiments/ietf/audit/decision-receipts-03/REPRODUCE.md). |
+| **E — claim preservation**: track distinctions across SER, DSSE, digest-only and digest-resolved routes | [CP-00](https://www.ietf.org/archive/id/draft-abak-ai-evaluation-claim-preservation-00.txt), [SER-04](https://www.ietf.org/archive/id/draft-gruszka-signed-evaluation-receipts-04.txt), [mappings-04](https://www.ietf.org/archive/id/draft-gruszka-evaluation-receipt-mappings-04.txt); author-side semantic experiment. [EQR-05](https://www.ietf.org/archive/id/draft-watts-eqr-conformance-05.txt) is context only | **48 requirement×route cells:** 17 PRESERVED / 10 QUALIFIED_LOSS / 17 UNESTABLISHED / 4 NOT_APPLICABLE. Separately, **80 scenario×route observations:** 34 / 17 / 13 / 16 in that order. 30 tests; frozen JSON and Markdown reproduce byte-for-byte | These are bounded questions, not full requirements: PRESERVED is not full CP/SER conformance and NOT_APPLICABLE is not success. **SER Ed25519/selected-key, COSE and SCITT verification NOT_EVALUATED.** Local HMAC probes are separate. No independent interoperability, event truth, model safety or complete populations. [Results/non-claims](../experiments/ietf/claim-preservation/ser04/RESULTS.md), [machine results](../experiments/ietf/claim-preservation/ser04/results.json), [method/reproduction](../experiments/ietf/claim-preservation/ser04/README.md). |
+
+```sh
+python3 experiments/ietf/agentproto/verifier-evidence-03/reproduce.py
+```
+
+A needs Python 3.10+ and pytest; its evaluator is standard-library only and replay is offline.
+
+```sh
+bash experiments/ietf/audit/decision-receipts-03/reproduce.sh
+```
+
+C needs CPython 3.12, venv/pip and Linux x86_64 compatible locked wheels. It uses an
+existing local wheel cache or downloads hash-locked PyPI artifacts in a fresh checkout.
+G installed the five verified cached wheels into its own isolated venv. The only
+normalization is the process-local `verified_origin` reporting token, after policy
+evaluation; the [original capture](../experiments/ietf/audit/decision-receipts-03/evidence/api_results.original.json)
+and first reproduction failure remain in the frozen [run record](../experiments/ietf/audit/decision-receipts-03/run_record.json).
+Successful replay does not add unobserved runtime axes.
+
+```sh
+python3 experiments/ietf/claim-preservation/ser04/src/run.py --check
+```
+
+E needs Python 3.10+ and the standard library; no external service is needed. The
+[fixture provenance](../experiments/ietf/claim-preservation/ser04/SOURCE_PINS.json)
+pins proofbundle fixture commit `a339424e07fd58fa261d8ca3f41af5de4dcbf751`.
+Reconstructing 66 equal receipt byte strings does not mean proofbundle or the 66 SER
+verification verdicts were run; neither was executed in E.
+
+## Provenance and source/run digests
+
+Preparation base: `275b871349721a8c917691d457c4a6270fe1028f`, branch
+`codex/standards-lab-consolidation`. The clean starting tree, successful fetch and
+unchanged HEAD are recorded in [initial state](standards-lab-evidence/initial_state.json).
+The enclosing G commit is obtained with `git log -1 --format=%H -- docs/STANDARDS_LAB.md`;
+it is separate from the experiment and integration commits below.
+
+| Input | Original experiment commit (UNPUBLISHED) | Integration commit (UNPUBLISHED) | Source and original run record |
+|---|---|---|---|
+| S0 source audit, not an implementation experiment | `31f9b7e7cab5a1b556aa1ebab0dc29617e01e5c1` | `5478e8b107552468e440d9f709c18fd780502293` | [baseline](../research/standards-reentry/2026-11-02/baseline.json) |
+| A | `e0ac30203e39949bb52d612eb3496c39ccb85651` | `95139b50ddd6263f7845537879250eca3994a77d` | [source manifest](../experiments/ietf/agentproto/verifier-evidence-03/sources/manifest.json), [run record](../experiments/ietf/agentproto/verifier-evidence-03/run_record.json) |
+| C | `02a44a812699f853ea65fffa21320e7cc8ddb6c7` | `36b1214b72acafd784dcbd7b17cc6d2eb3de93dc` | [source manifest](../experiments/ietf/audit/decision-receipts-03/sources/manifest.json), [run record](../experiments/ietf/audit/decision-receipts-03/run_record.json) |
+| E | `9f928980b3027d9dd892dfe297af98635fcd3c18` | `275b871349721a8c917691d457c4a6270fe1028f` | [source pins](../experiments/ietf/claim-preservation/ser04/SOURCE_PINS.json), [run record](../experiments/ietf/claim-preservation/ser04/run_record.json) |
+
+[standards_lab.json](standards_lab.json) records SHA-256 for every linked experiment's
+source manifest, original run record, report and result, plus exact source revision
+URLs, raw-byte SHA-256 and UTC access times. G independently reacquired seven draft
+revisions; all matched their original bytes and the fresh Datatracker snapshots
+reported no newer revision for those seven families. This is a time-bounded source
+check, not an ongoing monitor: [fresh HTTP pins](standards-lab-evidence/http_sources.json),
+[six repository pins](standards-lab-evidence/github_sources.json).
+
+## D and B1: local references, not integrated implementations
+
+**D — AIREP explain CLI.** Repository `halvrenofviryel/ai-runtime-evidence-protocol`,
+original commit `0130fcf8e7d70a0f9c4f977957e5de76ca8ef689`, integration commit **none**,
+**UNPUBLISHED**. Local checkout:
+`/home/toygar/.codex/worktrees/a4cd/ai-runtime-evidence-protocol`.
+This author-side regression makes lifecycle states readable; the source basis is
+public commit `075aff5610731736405951ecf3b7c4bfc3cc0f07`, implementation `0.2.0-beta.1`.
+G checked exact-commit bytes of the [source record](standards-lab-evidence/local-refs/D/source-basis.json),
+[validation record](standards-lab-evidence/local-refs/D/validation.json) and
+[example](standards-lab-evidence/local-refs/D/EXPLAIN.md); it did **not** rerun D.
+The original record reports 73 v0.2 tests, final 56/56 commands and 1,919 historical
+files preserved, retaining the first sandbox failure. These are internal regressions.
+Enforcement, relying-party claim evaluation and intended-target coverage remain
+NOT_EVALUATED; no event truth, third-party validation or normative change is implied.
+
+One-command reproduction **in a disposable copy of D at that exact commit**, with its
+documented Python/Node dependencies:
+
+```sh
+python3 scripts/check_beta.py --out .reproduced/g-explain-check
+```
+
+**B1 — sealed ACDER-02 challenge preparation.** Repository
+`halvrenofviryel/phionyx-research`, original commit
+`d749ea7c1789aa0377a5e25e40d28f20cf700821` (coordinator-supplied; builder history not
+inspected), integration commit **none**, **UNPUBLISHED**. Local checkout:
+`/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/b1-acder-sealed-challenge/phionyx-research`.
+The [public manifest snapshot](standards-lab-evidence/local-refs/B1/challenge_manifest.json)
+lists 14 cases / 15 declared profile runs against
+[ACDER-02](https://www.ietf.org/archive/id/draft-abak-agent-control-delivery-evidence-02.txt).
+The [public commitment](standards-lab-evidence/local-refs/B1/commitment.json) is
+`804c65c50dea4064f5e3d411c469a0089bb0ca9a061713c23793b572868193f8`.
+G reads only public metadata/methodology, hashes those bytes and does not reproduce
+the builder, access expected/private files, or validate the private seal.
+The [methodology](standards-lab-evidence/local-refs/B1/METHODOLOGY.md) explicitly says
+same-UID permissions do not establish blindness. Preparation is not a solver result,
+a truth oracle, third-party independence, full draft conformance or deployment evidence.
+Exact file hashes and local paths for D/B1 are in [local references](standards-lab-evidence/local_references.json).
+
+| Missing input | Status | Consequence |
+|---|---|---|
+| B2 isolated solver | **PENDING / NOT_EVALUATED** | No solver code/output or verified isolation supplied. |
+| B3 frozen comparison | **PENDING / NOT_EVALUATED** | No comparison supplied; B1 contributes no agreement count. |
+| F AIREP compatibility result | **PENDING / NOT_EVALUATED** | No exact frozen result supplied; compatibility remains unknown. |
+
+The pending entries in [standards_lab.json](standards_lab.json) are deliberate omissions,
+not failures converted to success. They do not block review of the reproduced A/C/E index.
+
+## External evidence and publication boundaries
+
+AIREP's existing [EXTERNAL_EVIDENCE.md at the inspected public commit](https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/blob/075aff5610731736405951ecf3b7c4bfc3cc0f07/EXTERNAL_EVIDENCE.md)
+requires an identified external artifact, frozen version, bounded claim and maintainer
+reproduction. It remains unchanged. Its producer result targets v0.1.2 and its consumer
+result targets an earlier v0.2 handoff; these cannot be added into a same-version
+interoperability result. G cites that historical report without rerunning it or
+upgrading its independence attestation. None of A/B1/C/D/E qualifies as a new external
+entry merely because it ran in another Codex task.
+
+The [portfolio delta](STANDARDS_PORTFOLIO_DELTA.md) separates current documentation
+from historical publications and gives exact cross-repository patch targets. No
+normative Measurement Axioms or Resonatus change is justified by these bounded
+results; no new semantic requirement was established. AIREP v0.1, normative schemas
+and published Internet-Draft bytes are preserved.

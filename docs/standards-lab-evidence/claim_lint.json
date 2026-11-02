@@ -1,0 +1,7 @@
+{
+  "method": "existing lint_artifact; current local README/registry and fixed preparation-base comparison, no network fetch",
+  "self_test": "PASS",
+  "current_findings": [],
+  "preparation_base_findings": [],
+  "scope": "local research README only; not full portfolio gate"
+}

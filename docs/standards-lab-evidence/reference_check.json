@@ -1,0 +1,38 @@
+{
+  "checked_at_utc": "2026-11-02T17:21:33.566652+00:00",
+  "references": [
+    {
+      "target": "draft-abak-agent-control-delivery-evidence",
+      "snapshot": "docs/standards-lab-evidence/sources/draft-abak-agent-control-delivery-evidence-referencedby.html",
+      "sha256": "8ed5cbdd0b57196c4ae09209d6828935f10d2c898366a817163afaf4beb4dde5",
+      "rows": [
+        "draft-abak-ai-evaluation-claim-preservation",
+        "draft-baek-audit-absence-claims",
+        "draft-dogru-cedulon-core",
+        "draft-dogru-cedulon-decision-profile",
+        "draft-gruszka-evaluation-receipt-mappings",
+        "draft-sergeev-claim-boundaries",
+        "draft-wadkins-agentproto-action-determinability",
+        "draft-zhang-audit-record-limits"
+      ],
+      "row_count": 8,
+      "S0_row_set_match": true,
+      "scope": "informative references only, not adoption or implementation"
+    },
+    {
+      "target": "draft-abak-ai-evaluation-claim-preservation",
+      "snapshot": "docs/standards-lab-evidence/sources/draft-abak-ai-evaluation-claim-preservation-referencedby.html",
+      "sha256": "800741149ff52214dccd4ae362208ab147413b04673685b86c1a7f9d41e5b5a0",
+      "rows": [
+        "draft-gruszka-evaluation-receipt-mappings",
+        "draft-gruszka-signed-evaluation-receipts",
+        "draft-watts-eqr-conformance"
+      ],
+      "row_count": 3,
+      "S0_row_set_match": true,
+      "scope": "informative references only, not adoption or implementation"
+    }
+  ],
+  "unique_external_draft_identities": 9,
+  "new_growth_measurement": false
+}
