@@ -44,6 +44,15 @@ artifacts:
     airep_relationship: self
     spec_versions: ["v0.1", "v0.2"]   # the format identifier — not a release pin when cited by siblings
     readme: https://raw.githubusercontent.com/halvrenofviryel/ai-runtime-evidence-protocol/main/README.md
+    allowed_exceptions:
+      - text: "## What has actually been independently reproduced?"
+        reason: >-
+          This heading introduces the version- and role-scoped results documented
+          in AIREP EXTERNAL_EVIDENCE.md: a frozen v0.1.2 producer and an older v0.2
+          consumer/verifier. It does not establish independent validation of the
+          whole protocol or same-version v0.2 producer/consumer interoperability.
+          The default external_validation flag remains false; other result claims
+          remain subject to V1.
 
   measurement-axioms:
     role: normative measurement doctrine + verdict algebra + self-audit

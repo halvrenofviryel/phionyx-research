@@ -234,6 +234,9 @@ def check():
         "docs/STANDARDS_LAB.md",
         "docs/STANDARDS_PORTFOLIO_DELTA.md",
         "docs/PUBLICATION_REVIEW.md",
+        "docs/PUBLICATION_PR_DRAFT.md",
+        "docs/PUBLICATION_STATUS.md",
+        "docs/standards-lab-evidence/README.md",
     ]
     unpublished = [
         r["original_experiment_commit"] for r in lab["experiments"] + lab["references"]

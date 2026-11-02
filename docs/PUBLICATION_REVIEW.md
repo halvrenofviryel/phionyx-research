@@ -1,4 +1,10 @@
-# Publication review — local approval units
+# Publication review — historical pre-publication snapshot
+
+**Recorded before publication on 2 November 2026.** The approval flags and
+publication statements below describe that preparation stage. U1 was subsequently
+approved and published in [PR #107](https://github.com/halvrenofviryel/phionyx-research/pull/107).
+See the [publication status and approval scope](PUBLICATION_STATUS.md) for later
+events and the live PR state. U2/U3/U4 remain on HOLD.
 
 **READY_FOR_USER_REVIEW; `approval_granted=false`; UNPUBLISHED.** The first proposed
 publication is the bounded phionyx-research **S0/A/C03/C04/E + Standards Lab** package.
@@ -49,7 +55,7 @@ patch. Its B3-dependent interoperability gate is not complete.
 Review commands from this clone:
 
 A local [PR title and exact multiline body](PUBLICATION_PR_DRAFT.md) is supplied
-for review; no PR exists. The JSON holds the content hash; the final response
+for review; no PR existed at that snapshot. The JSON holds the content hash; the final response
 identifies the enclosing metadata commit.
 
 ```sh
@@ -106,5 +112,6 @@ permissions do not establish B2 blindness or an independent evidence root.
 
 No independent third-party validation, full IETF conformance, adoption, endorsement,
 event truth, actual-population completeness or safety certification is established.
-No push, PR/issue, release/hosting, external message, submission, new task or automation
-was performed. Every approval flag remains false.
+At that snapshot, no push, PR/issue, release/hosting, external message, submission,
+new task or automation had been performed. Its frozen approval flags remain false
+as historical evidence; later U1 authorization is recorded in the publication status.

@@ -1,4 +1,4 @@
-"""Verify exact Git inventories and separation of the local approval units."""
+"""Verify the frozen pre-publication inventories and separation of approval units."""
 
 import argparse
 import hashlib
@@ -7,6 +7,7 @@ import subprocess
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
+REVIEW_SNAPSHOT_COMMIT = "1dc53d6ebc7f672ceaa176b06eee532e56d83a9d"
 
 
 def git(*args):
@@ -14,7 +15,11 @@ def git(*args):
 
 
 def check(with_local_approval_units=False):
-    review = json.loads((ROOT / "docs/publication_review.json").read_text())
+    snapshot = git("show", REVIEW_SNAPSHOT_COMMIT + ":docs/publication_review.json")
+    assert (ROOT / "docs/publication_review.json").read_bytes() == snapshot, (
+        "historical publication_review.json must remain unchanged"
+    )
+    review = json.loads(snapshot)
     assert review["approval_granted"] is False
     assert review["publication_status"] == "UNPUBLISHED"
     assert not any(review["external_actions"].values())
@@ -95,10 +100,9 @@ def check(with_local_approval_units=False):
                 assert 100 <= len(body.split()) <= 180 and body.count("?") <= 1
                 assert "<PUBLIC_ARTIFACT_URL_REQUIRED_BEFORE_SEND>" in body
     for row in review["review_metadata_files"]:
-        assert (
-            hashlib.sha256((ROOT / row["path"]).read_bytes()).hexdigest()
-            == row["sha256"]
-        )
+        data = git("show", REVIEW_SNAPSHOT_COMMIT + ":" + row["path"])
+        assert hashlib.sha256(data).hexdigest() == row["sha256"]
+        assert len(data) == row["bytes"]
     validation = review["validation"]
     assert (
         hashlib.sha256(git("show", content + ":" + validation["record"])).hexdigest()
@@ -112,6 +116,9 @@ def check(with_local_approval_units=False):
     assert units["U4_H2_CP01"]["files"] == update["H2"]["artifacts"]
     return {
         "status": "PASS",
+        "record_scope": "Historical pre-publication snapshot; not live approval or PR state",
+        "snapshot_commit": REVIEW_SNAPSHOT_COMMIT,
+        "publication_status_document": "docs/PUBLICATION_STATUS.md",
         "content_commit": content,
         "inventoried_git_files_checked": checked,
         "U1_commits_without_outreach_DF_code_or_H2_candidate": len(

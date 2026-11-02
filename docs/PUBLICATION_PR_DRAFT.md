@@ -1,10 +1,15 @@
-# Local PR draft — not submitted
+# Original PR draft — historical preparation record
+
+This is the text prepared before publication on 2 November 2026. It was later
+submitted as [PR #107](https://github.com/halvrenofviryel/phionyx-research/pull/107).
+See [publication status](PUBLICATION_STATUS.md) for the subsequent approval scope
+and the live PR for its current description and merge state.
 
 Repository: `halvrenofviryel/phionyx-research`.
 Proposed base: `main`, observed public base `69bc8cfd282e9a0a45e34b1fcf6106b1ab618f9d`.
 Local source branch: `codex/standards-lab-publication-candidate`.
 Exact content commit and parent chain: `publication_review.json`, U1.
-`approval_granted=false`; no remote branch or PR created.
+At preparation: `approval_granted=false`; no remote branch or PR had been created.
 
 ## Exact title
 

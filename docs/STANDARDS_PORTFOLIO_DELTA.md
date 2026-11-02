@@ -1,5 +1,9 @@
 # Standards portfolio delta — 2026-11-02
 
+This is the preparation-stage audit. Its publication and validation statements
+describe the recorded snapshot; later U1 publication and the claim-lint correction
+are covered by [publication status](PUBLICATION_STATUS.md) and the live PR checks.
+
 This is a bounded documentation audit of six public repository READMEs at the recorded snapshot times,
 the existing AIREP external-evidence record, two local standards landing pages and
 selected public publication references. It is not an implementation audit of the

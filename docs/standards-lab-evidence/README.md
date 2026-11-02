@@ -4,6 +4,12 @@ This directory supports the [Standards Lab](../STANDARDS_LAB.md) and
 [portfolio delta](../STANDARDS_PORTFOLIO_DELTA.md). It is documentation provenance,
 not a new normative evidence schema.
 
+These are historical preparation and validation records. Their approval flags,
+`UNPUBLISHED` values and no-external-action statements describe collection time.
+The later [publication status](../PUBLICATION_STATUS.md) records U1's approval and
+PR #107; U2/U3/U4 remain HOLD. Original evidence JSON and experiment outputs are
+preserved without changing their past state to match a later publication event.
+
 - `initial_state.json`: fixed preparation HEAD, clean initial tree, original to
   integration mapping, fetch outcome and no-publication policy.
 - `frozen_inputs.json`: 123 unchanged S0/A/C/E file hashes; original worktree
@@ -81,6 +87,17 @@ five report/metadata files. Source checkouts remain read-only.
 `verify_review.py` checks those Git bytes and that U1's history excludes I outreach,
 D/F implementation code and H2 candidate files. I remains on its separate local
 branch; its optional ignored review copies are not publication content.
+
+The historical review JSON must still match published commit
+`1dc53d6ebc7f672ceaa176b06eee532e56d83a9d`. Its metadata-document hashes are checked
+against that commit, so later historical labels do not rewrite or invalidate the
+original seal. The verifier reports its historical scope explicitly.
+
+Run the seal regression checks with:
+
+```sh
+python3 -B -m unittest discover -s docs/standards-lab-evidence -p test_review_snapshot.py -v
+```
 
 The default `python3 -B docs/standards-lab-evidence/verify_review.py` checks U1 and
 labels U2 METADATA_ONLY. It does not require the intentionally unpublished I Git

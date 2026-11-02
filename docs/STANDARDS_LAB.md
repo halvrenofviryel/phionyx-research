@@ -9,10 +9,12 @@ Counts and artifact digests are in [standards_lab.json](standards_lab.json);
 claims; the [C04 replay](standards-lab-evidence/c04_replay.json) separately supports the fourth. These are internal runs, not independent third-party validation, a population
 success rate, IETF conformance or endorsement. Pending work contributes no success.
 
-**Publication state: UNPUBLISHED. `approval_granted=false`.** Local experiment commit
-identities below are provenance, not claims that GitHub serves those commits.
-The [publication review](PUBLICATION_REVIEW.md) identifies the reviewable scope and
-holds all publication until explicit user approval. No contact or follow-on task is initiated.
+**U1 was published in [PR #107](https://github.com/halvrenofviryel/phionyx-research/pull/107).**
+The [publication status](PUBLICATION_STATUS.md) records its approval scope and points
+to the live merge state. The [publication review](PUBLICATION_REVIEW.md) and JSON
+manifests retain their pre-publication state; their `approval_granted=false` and
+`UNPUBLISHED` values are historical. Original source commit IDs remain provenance;
+the integration commits are included in the published U1 history. U2/U3/U4 remain HOLD.
 
 ## Reproduce the integrated experiments
 
@@ -89,7 +91,7 @@ unchanged HEAD are recorded in [initial state](standards-lab-evidence/initial_st
 The enclosing G commit is obtained with `git log -1 --format=%H -- docs/STANDARDS_LAB.md`;
 it is separate from the experiment and integration commits below.
 
-| Input | Original experiment commit (UNPUBLISHED) | Integration commit (UNPUBLISHED) | Source and original run record |
+| Input | Original experiment commit (local provenance) | Integration commit (published in U1) | Source and original run record |
 |---|---|---|---|
 | S0 source audit, not an implementation experiment | `31f9b7e7cab5a1b556aa1ebab0dc29617e01e5c1` | `5478e8b107552468e440d9f709c18fd780502293` | [baseline](../research/standards-reentry/2026-11-02/baseline.json) |
 | A | `e0ac30203e39949bb52d612eb3496c39ccb85651` | `95139b50ddd6263f7845537879250eca3994a77d` | [source manifest](../experiments/ietf/agentproto/verifier-evidence-03/sources/manifest.json), [run record](../experiments/ietf/agentproto/verifier-evidence-03/run_record.json) |
