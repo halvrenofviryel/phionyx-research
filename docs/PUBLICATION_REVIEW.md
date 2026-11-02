@@ -1,8 +1,8 @@
 # Publication review — local approval units
 
 **READY_FOR_USER_REVIEW; `approval_granted=false`; UNPUBLISHED.** The first proposed
-publication is the bounded phionyx-research S0/A/C03/E + Standards Lab package,
-with C04 added only after its separate result is supplied and verified. B2/B3
+publication is the bounded phionyx-research **S0/A/C03/C04/E + Standards Lab** package.
+C04 is integrated and reproduced; H1 is a scoped NO-GO reference. B2/B3
 remain HOLD because enforced isolation and comparison results are absent.
 
 The exact content commit, parent chain, file sizes and SHA-256 inventory are in
@@ -14,29 +14,35 @@ self-embedded. This review does not grant or request publication approval.
 
 | Unit | Concrete scope and destination | Review recommendation | Publication state |
 |---|---|---|---|
-| **U1 — research Lab** | `halvrenofviryel/phionyx-research`: unchanged S0/A/C03/E prerequisites; Lab index and evidence; bounded root README and portfolio corrections; separately verified C04 addendum when supplied | READY_FOR_USER_REVIEW; first scoped publication candidate | HOLD until explicit approval of exact content and destination |
-| **U2 — I outreach** | Separate local branch `codex/standards-lab-outreach-review`; each proposed message has its own file, destination, digest, evidence and non-claims | Draft preparation follows the G freeze; final inventory identifies its separate commit | HOLD; no public result URL or send approval. AUDIT additionally awaits C04 |
+| **U1 — research Lab** | `halvrenofviryel/phionyx-research`: unchanged S0/A/C03/E prerequisites; Lab index and evidence; bounded root README and portfolio corrections; verified 55-file C04 addendum | READY_FOR_USER_REVIEW; first scoped publication candidate | HOLD until explicit approval of exact content and destination |
+| **U2 — I outreach** | Separate local branch `codex/standards-lab-outreach-review`; each proposed message has its own file, destination, digest, evidence and non-claims | Three drafts prepared after the G freeze; exact separate I commit and file hashes are inventoried | HOLD; no public result URL or send approval. AUDIT is NO_OUTREACH_NOW: C04 adds no new bug or technical question |
 | **U3 — AIREP D/F** | `halvrenofviryel/ai-runtime-evidence-protocol`; D `0130fcf8e7d70a0f9c4f977957e5de76ca8ef689`, F `84fe0aa9f29034aa6b873c0e83d689dc821bb398`, exact 7/20 changed-file inventories | READY_FOR_USER_REVIEW as a separate implementation candidate | HOLD outside U1; no D/F code copied into research |
 | **U4 — H2 CP-01** | Separate candidate at `9e4524a1f4312c25b88af9444a7740662104b09a`; 26 files including XML/TXT/HTML/patch/paragraph map | READY_FOR_USER_REVIEW as a separate unpublished ID candidate | HOLD for separate ID approval; no H2 files merged or submitted |
 
 The first publication branch must contain **no I outreach files or I commit in its
 ancestry**. Use the exact U1 commit and parent inventory, never an arbitrary current
 HEAD. D/F report snapshots in Lab are attributed references; U3 implementation
-publication is a separate decision. H1 is a separate pending source/result reference;
-the coordinator's provisional scoped NO-GO is not a completed G measurement.
+publication is a separate decision. H1 is a separate completed scoped NO-GO reference at
+`57ab6d0f186f42f6a6788bb7b64b59bcae602424`; zero proposed/normative changes and no
+patch. Its B3-dependent interoperability gate is not complete.
 
 ## Human-readable change review
 
 | Area | Before | After |
 |---|---|---|
 | Lab references | F missing; no H2 inventory | F completed same-user-controlled local demo, all SCITT axes NOT_EVALUATED; H2 separate informative candidate with exact artifact inventory |
-| Revision freshness | Earlier acquisition found decision-receipts -03 | Later coordinator observation and exact -04 byte/hash check recorded; frozen C03 is explicitly revision-specific; C04 pending, AUDIT HOLD |
-| Missing work | B2/B3/F pending | B2/B3 still absent with enforced isolation NOT_ESTABLISHED; C04 and H1 awaiting separate results; F no longer pending |
+| Revision freshness | Earlier acquisition found decision-receipts -03 | Later coordinator observation and exact -04 byte/hash check recorded; frozen C03 remains revision-specific; C04 reproduced, AUDIT NO_OUTREACH_NOW / HOLD |
+| Missing work | B2/B3/F pending | B2/B3 still absent with enforced isolation NOT_ESTABLISHED; C04 complete and H1 scoped NO-GO; F no longer pending |
+| C04 addendum | No -04 implementation result | Original `ecaff138be0fd833848b6f27267e555e6b31e7f6` integrated as `23f6b9dea1da6d229ce0acf646822d23d3f5c497`; 13 tests and 33 exact outputs in G |
 | G index/evidence | Original A/C/E replay and D/B1 references | Updated generator, offline checks, F archive ledger inspection, H2 XML/paragraph checks; original experiment bytes and logs retained |
-| Initial README/registry changes | Generic/legacy AIREP and signing descriptions | One Lab link; bounded AIREP/RGE/signing descriptions; only `v0.2` added to portfolio format versions |
+| Initial README/registry changes | Generic/legacy AIREP and signing descriptions | One Lab link; bounded AIREP/RGE/signing descriptions; only `v0.2` added to portfolio format versions; final duplicate “hash chain” wording and Documentation signing qualification aligned |
 | Publication scope | One general local documentation review | Four separately inventoried approval units; first U1 scope excludes outreach ancestry and D/F/H2 implementations |
 
 Review commands from this clone:
+
+A local [PR title and exact multiline body](PUBLICATION_PR_DRAFT.md) is supplied
+for review; no PR exists. The JSON holds the content hash; the final response
+identifies the enclosing metadata commit.
 
 ```sh
 git diff --stat 69bc8cfd282e9a0a45e34b1fcf6106b1ab618f9d <U1_CONTENT_COMMIT>
@@ -65,7 +71,19 @@ verification remain **NOT_EVALUATED**. H2's 26 files and 13 paragraph anchors ma
 12 normative sections and BCP14 elements are unchanged: **three informative groups,
 zero normative changes**. G did not rerender H2 or copy its candidate files.
 
-A positive results depend on stipulated exhaustive-index and synthetic party/control,
+[C04 replay](standards-lab-evidence/c04_replay.json) adds **13 passing tests** and
+**33 byte-identical outputs with no normalization**. F1/F2/F4 exit 2, the other
+seven exit 0; four negative controls exit 2 and two positive controls exit 0.
+F10 consumption remains NOT_EVALUATED, runtime execution NOT_EVALUATED and effects
+UNOBSERVED. No new defect or technical question was found. All 55 imported files
+match the original C04 commit; all 56 C03 tracked files remain unchanged.
+
+[H1 inspection](standards-lab-evidence/h1_reference.json) checks 26 committed files,
+25 manifest hashes, 12 source pins and eight report/run snapshots. Only five
+report/metadata snapshots are copied. This confirms the attributed NO-GO review's
+integrity; G does not claim an independent normative review.
+
+A's positive results depend on stipulated exhaustive-index and synthetic party/control,
 scope and time premises. C03 has six partial and three unevaluated scenarios, with
 all execution/effect axes **UNOBSERVED**. E keeps its 48 requirement×route cells
 separate from 80 scenario×route observations; SER Ed25519/COSE/SCITT verification is
