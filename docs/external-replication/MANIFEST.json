@@ -1,0 +1,867 @@
+{
+  "algorithm": "sha256",
+  "files": [
+    {
+      "byte_length": 105629,
+      "path": "DEPENDENCY_ARTIFACTS.json",
+      "sha256": "bfb3e39f43a1e40bae09c3e42bedac738a2547c427d947967ffacfe244492942"
+    },
+    {
+      "byte_length": 3230,
+      "path": "EXPERIMENT_CATALOG.json",
+      "sha256": "36f0f240aade75127cbac536c34ba4b6ca15c41fa1167946499dbb50927e159d"
+    },
+    {
+      "byte_length": 1713,
+      "path": "EXTERNAL_RUN_SUBMISSION_TEMPLATE.json",
+      "sha256": "cf1bbb024af5c3c4c00bbef9a77faa8b8584194e6c9c2a7157d90670dd39aed8"
+    },
+    {
+      "byte_length": 1045,
+      "path": "ISSUE_REPORT_TEMPLATE.md",
+      "sha256": "2825874871c50493f1a9d3ada2dcaff452f685f08693bacf815d43ab3ce0c716"
+    },
+    {
+      "byte_length": 7178,
+      "path": "K3_TRACEABILITY.md",
+      "sha256": "0a85ed24c69e1e99d288c2dc5259f4ebf38b52c716eb1f622bb5df3f960f10b4"
+    },
+    {
+      "byte_length": 2774,
+      "path": "LICENSE_AND_DATA_HANDLING.md",
+      "sha256": "11546b27766269fef77d68f1013886f19da0423fb4d067549ddb6ae0fcfc5303"
+    },
+    {
+      "byte_length": 2706,
+      "path": "PLAN_COVERAGE.md",
+      "sha256": "57f8ecd25e57eec8c463cf651dba9e1dd586e005552d423895165fcf95e4b13f"
+    },
+    {
+      "byte_length": 1954,
+      "path": "PUBLIC_READY_CHECKLIST.md",
+      "sha256": "c06d13e4d6148593d881489ae4d3ab49f80806715daf5c75db55c88a6297d6c8"
+    },
+    {
+      "byte_length": 1554,
+      "path": "RESULTS_INDEX.md",
+      "sha256": "2f207b3578d1cfa07f8eb300c32d80604c53efe2510bddbf474e0e132fba8ea1"
+    },
+    {
+      "byte_length": 2722,
+      "path": "START_HERE.md",
+      "sha256": "9be19f69f556efbb3af4a61fe08bfe1b8f41307cfb5cd236a14004add594e4e2"
+    },
+    {
+      "byte_length": 9222409,
+      "path": "bundles/airep-sources.bundle",
+      "sha256": "abc5863eea07e96ae719d225affef07a35f6c13c07ac58281f35bbb4d5dcf2e3"
+    },
+    {
+      "byte_length": 19183724,
+      "path": "bundles/langgraph-wheelhouse.tar.gz",
+      "sha256": "83e30216dfc9d4c32e92f49e00f4c1d067856cb37a32465c967c73ff9fd75439"
+    },
+    {
+      "byte_length": 2524,
+      "path": "external-evidence-methodology.md",
+      "sha256": "c52f706026a094bbd8459fafd4056a423221778436daf3808dfa2754edaddf0a"
+    },
+    {
+      "byte_length": 11358,
+      "path": "licenses/AIREP-LICENSE",
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+    },
+    {
+      "byte_length": 18657,
+      "path": "licenses/AIREP-LICENSE-CC-BY-4.0.txt",
+      "sha256": "9ba9550ad48438d0836ddab3da480b3b69ffa0aac7b7878b5a0039e7ab429411"
+    },
+    {
+      "byte_length": 34523,
+      "path": "licenses/K5-AGPL-3.0.txt",
+      "sha256": "8486a10c4393cee1c25392769ddd3b2d6c242d6ec7928e1414efff7dfb2f07ef"
+    },
+    {
+      "byte_length": 2351,
+      "path": "licenses/dependencies/PyYAML-6.0.3/01-METADATA",
+      "sha256": "03c3b415ed38d09faedc49360e930769b40c58f68585e6de00e2e4916a858d34"
+    },
+    {
+      "byte_length": 1101,
+      "path": "licenses/dependencies/PyYAML-6.0.3/02-LICENSE",
+      "sha256": "8d3928f9dc4490fd635707cb88eb26bd764102a7282954307d3e5167a577e8a4"
+    },
+    {
+      "byte_length": 15009,
+      "path": "licenses/dependencies/annotated-types-0.8.0/01-METADATA",
+      "sha256": "614985b278f601b8ef863f82783b991cc3ada4b89f592eb71c7c48c5f2ef2298"
+    },
+    {
+      "byte_length": 1083,
+      "path": "licenses/dependencies/annotated-types-0.8.0/02-LICENSE",
+      "sha256": "fe1049884b1a0d9342901e88e07f32925d24b3121d9972b6a6805fb9824b095d"
+    },
+    {
+      "byte_length": 4733,
+      "path": "licenses/dependencies/anyio-4.16.0/01-METADATA",
+      "sha256": "b184ac9cd097e2bb7f90d42799346cc91c276095d000d95d7f7ddd407d0c887e"
+    },
+    {
+      "byte_length": 1081,
+      "path": "licenses/dependencies/anyio-4.16.0/02-LICENSE",
+      "sha256": "5361ac9dc58f2ef5fd2e9b09c68297c17f04950909bbc8023bdb82eacf22c2b0"
+    },
+    {
+      "byte_length": 8754,
+      "path": "licenses/dependencies/attrs-26.1.0/01-METADATA",
+      "sha256": "4cd40e690f23bf37cbcad34efd6758e062df1df07c86833f7e3ce95bf1fa38cc"
+    },
+    {
+      "byte_length": 1109,
+      "path": "licenses/dependencies/attrs-26.1.0/02-LICENSE",
+      "sha256": "882115c95dfc2af1eeb6714f8ec6d5cbcabf667caff8729f42420da63f714e9f"
+    },
+    {
+      "byte_length": 2526,
+      "path": "licenses/dependencies/certifi-2026.10.23/01-METADATA",
+      "sha256": "e463e38f7fe7da36a11e6d3fecc5dfa5b97be8c8022620400750d79ae7d842bc"
+    },
+    {
+      "byte_length": 989,
+      "path": "licenses/dependencies/certifi-2026.10.23/02-LICENSE",
+      "sha256": "e93716da6b9c0d5a4a1df60fe695b370f0695603d21f6f83f053e42cfc10caf7"
+    },
+    {
+      "byte_length": 2527,
+      "path": "licenses/dependencies/cffi-2.1.1/01-METADATA",
+      "sha256": "558bafb9093a8e790175d9ecff9688382981d744877dad86fd6770db0f4dc918"
+    },
+    {
+      "byte_length": 1123,
+      "path": "licenses/dependencies/cffi-2.1.1/02-LICENSE",
+      "sha256": "5ba24ddc57067f9249add644c3afc41a5d6dc37e23433ef759d95df370b0af63"
+    },
+    {
+      "byte_length": 46395,
+      "path": "licenses/dependencies/charset-normalizer-3.5.2/01-METADATA",
+      "sha256": "89ce6362bb7be88558f4be99a98f5d1b4da93d19cd0323e5ee0bac05cf883dfb"
+    },
+    {
+      "byte_length": 1071,
+      "path": "licenses/dependencies/charset-normalizer-3.5.2/02-LICENSE",
+      "sha256": "6d0d41bfe170ac6c7dc248c9a63e254d0fb45a60d50a8257d0af92c6e249b887"
+    },
+    {
+      "byte_length": 4343,
+      "path": "licenses/dependencies/cryptography-48.0.0/01-METADATA",
+      "sha256": "43f08e5fe52da6c825e5ee189bd985ee1537860020332dcbcbc5da5679dec906"
+    },
+    {
+      "byte_length": 197,
+      "path": "licenses/dependencies/cryptography-48.0.0/02-LICENSE",
+      "sha256": "3e0c7c091a948b82533ba98fd7cbb40432d6f1a9acbf85f5922d2f99a93ae6bb"
+    },
+    {
+      "byte_length": 11360,
+      "path": "licenses/dependencies/cryptography-48.0.0/03-LICENSE.APACHE",
+      "sha256": "aac73b3148f6d1d7111dbca32099f68d26c644c6813ae1e4f05f6579aa2663fe"
+    },
+    {
+      "byte_length": 1532,
+      "path": "licenses/dependencies/cryptography-48.0.0/04-LICENSE.BSD",
+      "sha256": "602c4c7482de6479dd2e9793cda275e5e63d773dacd1eca689232ab7008fb4fb"
+    },
+    {
+      "byte_length": 11325,
+      "path": "licenses/dependencies/distro-1.9.0/01-LICENSE",
+      "sha256": "cb5e8e7e5f4a3988e1063c142c60dc2df75605f4c46515e776e3aca6df976e14"
+    },
+    {
+      "byte_length": 6791,
+      "path": "licenses/dependencies/distro-1.9.0/02-METADATA",
+      "sha256": "31632ab2de5591131091b3397bdcdf797718579d85a75186f06839dd0c09e81d"
+    },
+    {
+      "byte_length": 8348,
+      "path": "licenses/dependencies/h11-0.16.0/01-METADATA",
+      "sha256": "28f326098ac09fcba79b8f180f96087c841fe2456215cb7b872a9c7d5cd19d64"
+    },
+    {
+      "byte_length": 1124,
+      "path": "licenses/dependencies/h11-0.16.0/02-LICENSE.txt",
+      "sha256": "37db5bb85926db28a427a25867f10b1232003aea1be69ccb851138adb8e6f361"
+    },
+    {
+      "byte_length": 21529,
+      "path": "licenses/dependencies/httpcore-1.0.9/01-METADATA",
+      "sha256": "fe2d4fda6199128978779e0cf27f3c045c531863fcdd987eacc74f3a18d41c21"
+    },
+    {
+      "byte_length": 1518,
+      "path": "licenses/dependencies/httpcore-1.0.9/02-LICENSE.md",
+      "sha256": "fdcb59154c74cbaba16a11242f7740bea9f23d6feb5547917d8c5f94a80392a5"
+    },
+    {
+      "byte_length": 27552,
+      "path": "licenses/dependencies/httpcore2-2.16.0/01-METADATA",
+      "sha256": "c073bd68b2bd543fbc2bab3763b42ed1e70666536d32c1bf39ef2764fd50b0a4"
+    },
+    {
+      "byte_length": 1599,
+      "path": "licenses/dependencies/httpcore2-2.16.0/02-LICENSE.md",
+      "sha256": "c4df125c807b0613501e943a5c92496dd11d2c16604ce396097a8dde396304d9"
+    },
+    {
+      "byte_length": 7052,
+      "path": "licenses/dependencies/httpx-0.28.1/01-METADATA",
+      "sha256": "febb9b0f8f3e80d57c8199c304f35c4336e8581d1d18d7983c92766b82793b25"
+    },
+    {
+      "byte_length": 1508,
+      "path": "licenses/dependencies/httpx-0.28.1/02-LICENSE.md",
+      "sha256": "4ec59d544f12b5f539a3a716fd321ac58ccd8030b465221f2c880200cdf28d8d"
+    },
+    {
+      "byte_length": 10019,
+      "path": "licenses/dependencies/httpx2-2.16.0/01-METADATA",
+      "sha256": "192f20046200ff50911a7278c21dfbee1e1a4c6fa7943227afe9231d28defc3f"
+    },
+    {
+      "byte_length": 1589,
+      "path": "licenses/dependencies/httpx2-2.16.0/02-LICENSE.md",
+      "sha256": "7e7d6dbaf7fe160d39fd6e84fd02c33cab96bcbea34d36998d545bceb4a19c30"
+    },
+    {
+      "byte_length": 7207,
+      "path": "licenses/dependencies/idna-3.20/01-METADATA",
+      "sha256": "dbd8c14c1e4ca1e0c9824a6dbc7cbbf78884f38eb52d91148cd3025f671e4b85"
+    },
+    {
+      "byte_length": 1541,
+      "path": "licenses/dependencies/idna-3.20/02-LICENSE.md",
+      "sha256": "1a9a4f0e3d479a27240ddd59a9137a66ab4a0f9dfdc8ca6188cc0bfd85187f04"
+    },
+    {
+      "byte_length": 3672,
+      "path": "licenses/dependencies/jsonpatch-1.39/01-METADATA",
+      "sha256": "5134cc1137aed198a715ebaed9bc0776dbad51b0d55bc32810419145f16deb6a"
+    },
+    {
+      "byte_length": 140,
+      "path": "licenses/dependencies/jsonpatch-1.39/02-AUTHORS",
+      "sha256": "84eb449c119b7c37a02a3ccc0c4979bee549c9ccdb2363e5604da1a382e318d4"
+    },
+    {
+      "byte_length": 1481,
+      "path": "licenses/dependencies/jsonpatch-1.39/03-LICENSE",
+      "sha256": "4393eb6733fa1e367f41769b382f4f1be7bf0daeb1e243ed92b3f5d8bafd236f"
+    },
+    {
+      "byte_length": 2638,
+      "path": "licenses/dependencies/jsonpointer-3.7/01-METADATA",
+      "sha256": "5885612e1f55a756aab89ba4e38f6bd327444613db2cd0a84efbafdaa792297e"
+    },
+    {
+      "byte_length": 113,
+      "path": "licenses/dependencies/jsonpointer-3.7/02-AUTHORS",
+      "sha256": "4d58319d0f59c87bef5b07b3fe4db0f19c2d7d5545b034c6bf7b57c89bbef57f"
+    },
+    {
+      "byte_length": 1413,
+      "path": "licenses/dependencies/jsonpointer-3.7/03-LICENSE.txt",
+      "sha256": "d8b24f15d472885f788a2d6e985850f264627b86012a17bb242c83f310d907e5"
+    },
+    {
+      "byte_length": 7608,
+      "path": "licenses/dependencies/jsonschema-4.25.1/01-METADATA",
+      "sha256": "31f83c1579e46e1af62269cefa5d83534ef155f3ee21914f7881bbd544bc125c"
+    },
+    {
+      "byte_length": 1057,
+      "path": "licenses/dependencies/jsonschema-4.25.1/02-COPYING",
+      "sha256": "4f92a015a13c4d1a040bef018aa13430b4f1bc73b41b16bb846c346766de7439"
+    },
+    {
+      "byte_length": 2907,
+      "path": "licenses/dependencies/jsonschema-specifications-2025.9.1/01-METADATA",
+      "sha256": "35abd41757f32b4ea24756920ded47b70173d77cbc052a5a6d3ab583b2e8d89d"
+    },
+    {
+      "byte_length": 1057,
+      "path": "licenses/dependencies/jsonschema-specifications-2025.9.1/02-COPYING",
+      "sha256": "42dcd63495f87b4eb7c7757afa379bb55a53f94afd7a5f657d9adf57236e515c"
+    },
+    {
+      "byte_length": 1090,
+      "path": "licenses/dependencies/k2-ajv-8.20.0/01-LICENSE",
+      "sha256": "a05350a88e318e4f5f2c2a1ff1e2e88daa4dd38e6e78b71cccae422bdc762cc3"
+    },
+    {
+      "byte_length": 4405,
+      "path": "licenses/dependencies/k2-ajv-8.20.0/02-package.json",
+      "sha256": "1f9033ee5a6515e7d76938b7072941862d1ed228a6879cc7fe10cdeb75107989"
+    },
+    {
+      "byte_length": 9531,
+      "path": "licenses/dependencies/k2-attrs-23.2.0/01-METADATA",
+      "sha256": "5b0bc6ece1f22a310fa72154642098b759f413f09ca9d45bedb96218475c9be0"
+    },
+    {
+      "byte_length": 1109,
+      "path": "licenses/dependencies/k2-attrs-23.2.0/02-LICENSE",
+      "sha256": "882115c95dfc2af1eeb6714f8ec6d5cbcabf667caff8729f42420da63f714e9f"
+    },
+    {
+      "byte_length": 2559,
+      "path": "licenses/dependencies/k2-cffi-2.0.0/01-METADATA",
+      "sha256": "b98ce7e3417af089bc12d5c73412d9b3b1683ccf8ec73c986c35ac8c9be1ba39"
+    },
+    {
+      "byte_length": 208,
+      "path": "licenses/dependencies/k2-cffi-2.0.0/02-AUTHORS",
+      "sha256": "2a67a60bbfb33759d67d645ff131b8e6d6bc4cafc232d751fcac3eda4d314cc8"
+    },
+    {
+      "byte_length": 1123,
+      "path": "licenses/dependencies/k2-cffi-2.0.0/03-LICENSE",
+      "sha256": "5ba24ddc57067f9249add644c3afc41a5d6dc37e23433ef759d95df370b0af63"
+    },
+    {
+      "byte_length": 4343,
+      "path": "licenses/dependencies/k2-cryptography-48.0.0/01-METADATA",
+      "sha256": "43f08e5fe52da6c825e5ee189bd985ee1537860020332dcbcbc5da5679dec906"
+    },
+    {
+      "byte_length": 197,
+      "path": "licenses/dependencies/k2-cryptography-48.0.0/02-LICENSE",
+      "sha256": "3e0c7c091a948b82533ba98fd7cbb40432d6f1a9acbf85f5922d2f99a93ae6bb"
+    },
+    {
+      "byte_length": 11360,
+      "path": "licenses/dependencies/k2-cryptography-48.0.0/03-LICENSE.APACHE",
+      "sha256": "aac73b3148f6d1d7111dbca32099f68d26c644c6813ae1e4f05f6579aa2663fe"
+    },
+    {
+      "byte_length": 1532,
+      "path": "licenses/dependencies/k2-cryptography-48.0.0/04-LICENSE.BSD",
+      "sha256": "602c4c7482de6479dd2e9793cda275e5e63d773dacd1eca689232ab7008fb4fb"
+    },
+    {
+      "byte_length": 1074,
+      "path": "licenses/dependencies/k2-fast-deep-equal-3.1.3/01-LICENSE",
+      "sha256": "7bf9b2de73a6b356761c948d0e9eeb4be6c1270bd04c79cd489c1e400ffdfc1a"
+    },
+    {
+      "byte_length": 1496,
+      "path": "licenses/dependencies/k2-fast-deep-equal-3.1.3/02-package.json",
+      "sha256": "a5c63940db0260739be9e2ac67f3aac268df4db5770420ee4e34e493152f97d2"
+    },
+    {
+      "byte_length": 1813,
+      "path": "licenses/dependencies/k2-fast-uri-3.1.6/01-LICENSE",
+      "sha256": "b010b0dfdfdb23d7396e03b82cd4621fc9bb8f95d6b0aea70b9c24e12074c786"
+    },
+    {
+      "byte_length": 1983,
+      "path": "licenses/dependencies/k2-fast-uri-3.1.6/02-package.json",
+      "sha256": "d62cb9be0a111b42131b264efe1fee4638a5f643ff25fe0bc3627675a9b92a8b"
+    },
+    {
+      "byte_length": 1074,
+      "path": "licenses/dependencies/k2-json-schema-traverse-1.0.0/01-LICENSE",
+      "sha256": "7bf9b2de73a6b356761c948d0e9eeb4be6c1270bd04c79cd489c1e400ffdfc1a"
+    },
+    {
+      "byte_length": 1004,
+      "path": "licenses/dependencies/k2-json-schema-traverse-1.0.0/02-package.json",
+      "sha256": "156fb24af02845c190701360d06dfda35ef04282e34a734289ea9535ad9819ae"
+    },
+    {
+      "byte_length": 7608,
+      "path": "licenses/dependencies/k2-jsonschema-4.25.1/01-METADATA",
+      "sha256": "31f83c1579e46e1af62269cefa5d83534ef155f3ee21914f7881bbd544bc125c"
+    },
+    {
+      "byte_length": 1057,
+      "path": "licenses/dependencies/k2-jsonschema-4.25.1/02-COPYING",
+      "sha256": "4f92a015a13c4d1a040bef018aa13430b4f1bc73b41b16bb846c346766de7439"
+    },
+    {
+      "byte_length": 2907,
+      "path": "licenses/dependencies/k2-jsonschema-specifications-2025.9.1/01-METADATA",
+      "sha256": "35abd41757f32b4ea24756920ded47b70173d77cbc052a5a6d3ab583b2e8d89d"
+    },
+    {
+      "byte_length": 1057,
+      "path": "licenses/dependencies/k2-jsonschema-specifications-2025.9.1/02-COPYING",
+      "sha256": "42dcd63495f87b4eb7c7757afa379bb55a53f94afd7a5f657d9adf57236e515c"
+    },
+    {
+      "byte_length": 8229,
+      "path": "licenses/dependencies/k2-pycparser-3.0/01-METADATA",
+      "sha256": "f547a60b0ab54cc2f242213d1f87960ad80df7dd5dfeb98d17a444d48bfb6b93"
+    },
+    {
+      "byte_length": 1543,
+      "path": "licenses/dependencies/k2-pycparser-3.0/02-LICENSE",
+      "sha256": "0c846399369ea76ddd7b5c44fe6d16497415fcf015f5cbb508c24bf98b81c5b1"
+    },
+    {
+      "byte_length": 2845,
+      "path": "licenses/dependencies/k2-referencing-0.37.0/01-METADATA",
+      "sha256": "c93b00e6ab1524fd60848376604c189a114374776475c25a31d57be47b29de6a"
+    },
+    {
+      "byte_length": 1057,
+      "path": "licenses/dependencies/k2-referencing-0.37.0/02-COPYING",
+      "sha256": "42dcd63495f87b4eb7c7757afa379bb55a53f94afd7a5f657d9adf57236e515c"
+    },
+    {
+      "byte_length": 1128,
+      "path": "licenses/dependencies/k2-require-from-string-2.0.2/01-license",
+      "sha256": "6ee0feb1f6ef996ff5a68600f8cf98909cf412d39ef3cdceaefd87d636fa1b7f"
+    },
+    {
+      "byte_length": 511,
+      "path": "licenses/dependencies/k2-require-from-string-2.0.2/02-package.json",
+      "sha256": "c0002f7d4c7d7e2a885cf0f97226344902417c3a0980f2beca41962d2bc1f6d8"
+    },
+    {
+      "byte_length": 4145,
+      "path": "licenses/dependencies/k2-rpds-py-0.30.0/01-METADATA",
+      "sha256": "cc01d097ddb9c7e07a29c9553ee8dd35cf920e85fb574f7b0c23d68138a716bf"
+    },
+    {
+      "byte_length": 1057,
+      "path": "licenses/dependencies/k2-rpds-py-0.30.0/02-LICENSE",
+      "sha256": "314e4e91be3baa93c0fb4bccc9e4e97cd643eb839b065af921782c2175fe9909"
+    },
+    {
+      "byte_length": 3259,
+      "path": "licenses/dependencies/k2-typing-extensions-4.15.0/01-METADATA",
+      "sha256": "c138378fe8f18934ac99de060535c53ec6c13aeed65e94c32641da7ee3192a72"
+    },
+    {
+      "byte_length": 13936,
+      "path": "licenses/dependencies/k2-typing-extensions-4.15.0/02-LICENSE",
+      "sha256": "3b2f81fe21d181c499c59a256c8e1968455d6689d269aa85373bfb6af41da3bf"
+    },
+    {
+      "byte_length": 4781,
+      "path": "licenses/dependencies/langchain-core-1.7.4/01-METADATA",
+      "sha256": "c5a92f717ae208c73653fee3520e0686c18a16cc87676522384d247840be8ff4"
+    },
+    {
+      "byte_length": 1067,
+      "path": "licenses/dependencies/langchain-core-1.7.4/02-LICENSE",
+      "sha256": "4ec67e4ca6e6721dba849b2ca82261597c86a61ee214bbf21416006b7b2d0478"
+    },
+    {
+      "byte_length": 2406,
+      "path": "licenses/dependencies/langchain-protocol-0.0.20/01-METADATA",
+      "sha256": "18e3ee4b2dd8feefab5c13d254efae6bbfec0c7d793b2422fac5ec3c1c0c15d9"
+    },
+    {
+      "byte_length": 1072,
+      "path": "licenses/dependencies/langchain-protocol-0.0.20/02-LICENSE",
+      "sha256": "893e6e30275896912c21c77f9f7c112aba85fd985d05b26a29424cf7e511d177"
+    },
+    {
+      "byte_length": 4870,
+      "path": "licenses/dependencies/langgraph-1.2.19/01-METADATA",
+      "sha256": "45dc20b0de6036b8c7d3b11dab9508e2a397a25ea9756a8ffa1ccb61f49ec095"
+    },
+    {
+      "byte_length": 1072,
+      "path": "licenses/dependencies/langgraph-1.2.19/02-LICENSE",
+      "sha256": "d9bb52f2e3540d60ff50d8f0f5b6ba649b7fd346948c4c3d086c8afb120763c7"
+    },
+    {
+      "byte_length": 6674,
+      "path": "licenses/dependencies/langgraph-checkpoint-4.3.1/01-METADATA",
+      "sha256": "9e59af41fb620215449b7c13fdb27f3e001379dfe03ca2d799781d29e816c226"
+    },
+    {
+      "byte_length": 1072,
+      "path": "licenses/dependencies/langgraph-checkpoint-4.3.1/02-LICENSE",
+      "sha256": "d9bb52f2e3540d60ff50d8f0f5b6ba649b7fd346948c4c3d086c8afb120763c7"
+    },
+    {
+      "byte_length": 6915,
+      "path": "licenses/dependencies/langgraph-prebuilt-1.1.1/01-METADATA",
+      "sha256": "0c378432b6201dcf4b6641e642ce9f03e353515a155f15501a91fa7cdd401496"
+    },
+    {
+      "byte_length": 1072,
+      "path": "licenses/dependencies/langgraph-prebuilt-1.1.1/02-LICENSE",
+      "sha256": "d9bb52f2e3540d60ff50d8f0f5b6ba649b7fd346948c4c3d086c8afb120763c7"
+    },
+    {
+      "byte_length": 5099,
+      "path": "licenses/dependencies/langgraph-sdk-0.4.11/01-METADATA",
+      "sha256": "7e707f60b946e7a2c1229694da800bb66cb791d7cc0b8cbf8756b2dc75d023b8"
+    },
+    {
+      "byte_length": 1072,
+      "path": "licenses/dependencies/langgraph-sdk-0.4.11/02-LICENSE",
+      "sha256": "d9bb52f2e3540d60ff50d8f0f5b6ba649b7fd346948c4c3d086c8afb120763c7"
+    },
+    {
+      "byte_length": 39816,
+      "path": "licenses/dependencies/langsmith-0.14.17/01-METADATA",
+      "sha256": "e4080fb1ac161d6b34bf29d062e05e9f1286bd192fb566d250ff0a39025c60d0"
+    },
+    {
+      "byte_length": 1049,
+      "path": "licenses/dependencies/langsmith-0.14.17/02-LICENSE",
+      "sha256": "b309deba813e5bef2c128236a105d0eb74197aaf4ede3861730bdc0e5c5edfbb"
+    },
+    {
+      "byte_length": 42207,
+      "path": "licenses/dependencies/orjson-3.13.0/01-METADATA",
+      "sha256": "4b64a33cb3c47299ae9afe9919c67fb5159e89d086857a4fe74c727044c98612"
+    },
+    {
+      "byte_length": 10847,
+      "path": "licenses/dependencies/orjson-3.13.0/02-LICENSE-APACHE",
+      "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+    },
+    {
+      "byte_length": 1023,
+      "path": "licenses/dependencies/orjson-3.13.0/03-LICENSE-MIT",
+      "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+    },
+    {
+      "byte_length": 16727,
+      "path": "licenses/dependencies/orjson-3.13.0/04-LICENSE-MPL-2.0",
+      "sha256": "66a3107d5ad6a058aab753eaac2047ccb2ed0e39465dd0fe5844da3e300d5172"
+    },
+    {
+      "byte_length": 3219,
+      "path": "licenses/dependencies/ormsgpack-1.13.0/01-METADATA",
+      "sha256": "582d86268d04891ad4defac9ad3619a6c27def87a87249b6ddabd170d10d1f3c"
+    },
+    {
+      "byte_length": 10847,
+      "path": "licenses/dependencies/ormsgpack-1.13.0/02-LICENSE-APACHE",
+      "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+    },
+    {
+      "byte_length": 1023,
+      "path": "licenses/dependencies/ormsgpack-1.13.0/03-LICENSE-MIT",
+      "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+    },
+    {
+      "byte_length": 3544,
+      "path": "licenses/dependencies/packaging-26.3/01-METADATA",
+      "sha256": "70fdb89fc4d4a9a043bf7372b8972bcc883fddff34ab55e9cf80d73875384763"
+    },
+    {
+      "byte_length": 197,
+      "path": "licenses/dependencies/packaging-26.3/02-LICENSE",
+      "sha256": "cad1ef5bd340d73e074ba614d26f7deaca5c7940c3d8c34852e65c4909686c48"
+    },
+    {
+      "byte_length": 10174,
+      "path": "licenses/dependencies/packaging-26.3/03-LICENSE.APACHE",
+      "sha256": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594"
+    },
+    {
+      "byte_length": 1344,
+      "path": "licenses/dependencies/packaging-26.3/04-LICENSE.BSD",
+      "sha256": "b70e7e9b742f1cc6f948b34c16aa39ffece94196364bc88ff0d2180f0028fac5"
+    },
+    {
+      "byte_length": 9709,
+      "path": "licenses/dependencies/pycparser-3.12/01-METADATA",
+      "sha256": "ad8db5fe2b0e0a3b0e8419fe5041b80be92470a40b06bd9c1462a0a8bb637c92"
+    },
+    {
+      "byte_length": 1543,
+      "path": "licenses/dependencies/pycparser-3.12/02-LICENSE",
+      "sha256": "0a9e78156ae8b96caf1b4f11ac2df424b83de29736f9e757630548a6272fdf90"
+    },
+    {
+      "byte_length": 137593,
+      "path": "licenses/dependencies/pydantic-2.14.2/01-METADATA",
+      "sha256": "5e27715d350cc99bc33877404deba2a9491221ae972db8f8c79f64032bee3a01"
+    },
+    {
+      "byte_length": 1129,
+      "path": "licenses/dependencies/pydantic-2.14.2/02-LICENSE",
+      "sha256": "a9e186f3ca16b5eef84318e7a701721351a00cb7b8ae3a4394b67b49e3529ef3"
+    },
+    {
+      "byte_length": 6515,
+      "path": "licenses/dependencies/pydantic_core-2.50.2/01-METADATA",
+      "sha256": "ca680c6a06d7e24685a8c13f47c56af9f4deaba25272412f8688459cd6dd2dd1"
+    },
+    {
+      "byte_length": 1080,
+      "path": "licenses/dependencies/pydantic_core-2.50.2/02-LICENSE",
+      "sha256": "2afdd30d54b4d62b6f488a6bcc1546e84ec5061f13f4209c03d012348783795a"
+    },
+    {
+      "byte_length": 2845,
+      "path": "licenses/dependencies/referencing-0.37.0/01-METADATA",
+      "sha256": "c93b00e6ab1524fd60848376604c189a114374776475c25a31d57be47b29de6a"
+    },
+    {
+      "byte_length": 1057,
+      "path": "licenses/dependencies/referencing-0.37.0/02-COPYING",
+      "sha256": "42dcd63495f87b4eb7c7757afa379bb55a53f94afd7a5f657d9adf57236e515c"
+    },
+    {
+      "byte_length": 4806,
+      "path": "licenses/dependencies/requests-2.34.2/01-METADATA",
+      "sha256": "8c384ba3e979480faae2859d3c5e6c1276dd2c3616e322e124d52c8cfc556f27"
+    },
+    {
+      "byte_length": 10142,
+      "path": "licenses/dependencies/requests-2.34.2/02-LICENSE",
+      "sha256": "09e8a9bcec8067104652c168685ab0931e7868f9c8284b66f5ae6edae5f1130b"
+    },
+    {
+      "byte_length": 38,
+      "path": "licenses/dependencies/requests-2.34.2/03-NOTICE",
+      "sha256": "f5110972dedad2b4e9d314518daf3b7d72d6e02e499acd802181de6f74571dcc"
+    },
+    {
+      "byte_length": 986,
+      "path": "licenses/dependencies/requests-toolbelt-1.0.0/01-AUTHORS.rst",
+      "sha256": "57df198f62c9098aac95c9b8ec1f0b8efc024080f61d5a0ed89ef4c5da3cf031"
+    },
+    {
+      "byte_length": 596,
+      "path": "licenses/dependencies/requests-toolbelt-1.0.0/02-LICENSE",
+      "sha256": "1f8cf8bdacd98ed6d36d0fec0c07f7765acebd6e81205962ab5146023b3c858d"
+    },
+    {
+      "byte_length": 14638,
+      "path": "licenses/dependencies/requests-toolbelt-1.0.0/03-METADATA",
+      "sha256": "fa52f26237cc8d148d25c5746fdca499a56d0e765e69095cc3564a07cce23967"
+    },
+    {
+      "byte_length": 4147,
+      "path": "licenses/dependencies/rpds-py-2026.9.1/01-METADATA",
+      "sha256": "5d72dca2e387c8d2b4180b68ee87c15b64751e059100a6db58891ec9995445c3"
+    },
+    {
+      "byte_length": 1057,
+      "path": "licenses/dependencies/rpds-py-2026.9.1/02-LICENSE",
+      "sha256": "314e4e91be3baa93c0fb4bccc9e4e97cd643eb839b065af921782c2175fe9909"
+    },
+    {
+      "byte_length": 185,
+      "path": "licenses/dependencies/sniffio-1.3.1/01-LICENSE",
+      "sha256": "652c878488d1456361e08c3f8607fd7ba59892a14103d15cce4ff93c85b5cc8b"
+    },
+    {
+      "byte_length": 11358,
+      "path": "licenses/dependencies/sniffio-1.3.1/02-LICENSE.APACHE2",
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+    },
+    {
+      "byte_length": 1046,
+      "path": "licenses/dependencies/sniffio-1.3.1/03-LICENSE.MIT",
+      "sha256": "3e6dae555eb92787fc82d1d48355677f454c7f65aeb38d3f9e72bf9a3daf034b"
+    },
+    {
+      "byte_length": 3875,
+      "path": "licenses/dependencies/sniffio-1.3.1/04-METADATA",
+      "sha256": "0b318b57098edeccf585e60a889a6b6a7b5c4086f3a9aa62eff76a1d3cee12d9"
+    },
+    {
+      "byte_length": 1450,
+      "path": "licenses/dependencies/tenacity-9.2.1/01-METADATA",
+      "sha256": "1d30f0b4cd3cf1ad585400f9ea9c424e64c630ea63e57209a1f16fce72e68eb7"
+    },
+    {
+      "byte_length": 11357,
+      "path": "licenses/dependencies/tenacity-9.2.1/02-LICENSE",
+      "sha256": "58d1e17ffe5109a7ae296caafcadfdbe6a7d176f0bc4ab01e12a689b0499d8bd"
+    },
+    {
+      "byte_length": 4515,
+      "path": "licenses/dependencies/truststore-0.10.5/01-METADATA",
+      "sha256": "1fd496f290853214e630d96f7163d2dd916f84ebe634b58aa827d6853e8f8610"
+    },
+    {
+      "byte_length": 1086,
+      "path": "licenses/dependencies/truststore-0.10.5/02-LICENSE",
+      "sha256": "33be7b7e8fa4fd19b1760e1a8ed8a668bdab852c91b692dd41424bcb725a9fca"
+    },
+    {
+      "byte_length": 2554,
+      "path": "licenses/dependencies/typing-inspection-0.4.4/01-METADATA",
+      "sha256": "bad3d9e6342ef6750cf5128ec942327b8bebdce0b6e4d6f67cb15b27ae5118da"
+    },
+    {
+      "byte_length": 1090,
+      "path": "licenses/dependencies/typing-inspection-0.4.4/02-LICENSE",
+      "sha256": "804b59b25f2c31bd278f9202a19ae49a3945aa2664387e2d0a128c7cacc61ec3"
+    },
+    {
+      "byte_length": 3310,
+      "path": "licenses/dependencies/typing_extensions-4.16.0/01-METADATA",
+      "sha256": "b05084ca1d50879865178d9fff9fabeab61bdfb1f361bfbde95421ffc8f9be46"
+    },
+    {
+      "byte_length": 13936,
+      "path": "licenses/dependencies/typing_extensions-4.16.0/02-LICENSE",
+      "sha256": "3b2f81fe21d181c499c59a256c8e1968455d6689d269aa85373bfb6af41da3bf"
+    },
+    {
+      "byte_length": 7389,
+      "path": "licenses/dependencies/urllib3-2.8.0/01-METADATA",
+      "sha256": "10898c620e8007c030e07fa5622b68358a43010025dfbd78a1cb797699de2bb4"
+    },
+    {
+      "byte_length": 1093,
+      "path": "licenses/dependencies/urllib3-2.8.0/02-LICENSE.txt",
+      "sha256": "130e3a64d5fdd5d096a752694634a7d9df284469de86e5732100268041e3d686"
+    },
+    {
+      "byte_length": 6410,
+      "path": "licenses/dependencies/uuid_utils-0.19.0/01-METADATA",
+      "sha256": "0332e95af212190fed2aabf51512552425c7e7082cd1216563530174e9a16f08"
+    },
+    {
+      "byte_length": 1487,
+      "path": "licenses/dependencies/uuid_utils-0.19.0/02-LICENSE.md",
+      "sha256": "0c47f52b4c484bd04c78e7c969542eea31afe644f587f3b8a8ccce86352c6046"
+    },
+    {
+      "byte_length": 6336,
+      "path": "licenses/dependencies/websockets-17.4/01-METADATA",
+      "sha256": "09b83a3c9da174e7f309c9052c45c06907b8011be1f22bdf58b4a1e26221d669"
+    },
+    {
+      "byte_length": 1514,
+      "path": "licenses/dependencies/websockets-17.4/02-LICENSE",
+      "sha256": "3d6a0c050d8bec52fabad502e45fb25bd02bcadbd70dea34d447b6a0ff4e6da8"
+    },
+    {
+      "byte_length": 17894,
+      "path": "licenses/dependencies/xxhash-4.0.2/01-METADATA",
+      "sha256": "9c77e2dc143269f99b8cda61c3ee1c4d106019d9d434fb345033e8f44440408d"
+    },
+    {
+      "byte_length": 1313,
+      "path": "licenses/dependencies/xxhash-4.0.2/02-LICENSE",
+      "sha256": "b76e99529f3e47372029e11914a8f4b95d6313463ed5a1a5c9afe96c3e015114"
+    },
+    {
+      "byte_length": 3275,
+      "path": "licenses/dependencies/zstandard-0.25.0/01-METADATA",
+      "sha256": "03d37736b26b9ae48451dd17026d93dffbd252fb708c1a2a9ae1be0c0966de92"
+    },
+    {
+      "byte_length": 1484,
+      "path": "licenses/dependencies/zstandard-0.25.0/02-LICENSE",
+      "sha256": "788fe85e53724a40b299051c4abc9cf74d42b27e7968325b80891c25f79adb4b"
+    },
+    {
+      "byte_length": 2051,
+      "path": "protocol-pins.json",
+      "sha256": "c18fc86b0e6e6129107c92a367c735259abc303e713bd84155d64a3f13caf51c"
+    },
+    {
+      "byte_length": 2879,
+      "path": "provenance/k2-node-MANIFEST.json",
+      "sha256": "7d5e7f75866d8218d35dab13530bf4655a44617e556ead1489e616bc83413f66"
+    },
+    {
+      "byte_length": 3758,
+      "path": "provenance/k2-python-MANIFEST.json",
+      "sha256": "5793c00a344f8896f25eb493149fd3f851465ae3ed8503183c6578029d9f74dd"
+    },
+    {
+      "byte_length": 485,
+      "path": "provenance/package-base.json",
+      "sha256": "481a9806027f4c9c1bf3ed31dd8050c888ee53087c7a6ddd5bb59674f97173a0"
+    },
+    {
+      "byte_length": 4857,
+      "path": "reproduction-quickstart.md",
+      "sha256": "79b27333d9a4e9541a8506f650e0ec8c76aabf9499b91760ac44e514b8caaec2"
+    },
+    {
+      "byte_length": 1501,
+      "path": "review/REVIEW_README.md",
+      "sha256": "520330449b9eacb1a267d2bcdf7a4923228a07fd25778c74cbc2cf1c53a20e82"
+    },
+    {
+      "byte_length": 52956,
+      "path": "review/d-plus-k3/D-only.diff",
+      "sha256": "2081b46951b323ade60d452faba65b6800493665540efae248a96c24bb34c3c5"
+    },
+    {
+      "byte_length": 238474,
+      "path": "review/d-plus-k3/complete.diff.gz",
+      "sha256": "b26102a4c80f971f42477f43e281b96a082e16faed09cded3c9216b31726b8f2"
+    },
+    {
+      "byte_length": 91559,
+      "path": "review/d-plus-k3/implementation.diff",
+      "sha256": "553e350ab48a3956c5f7a2eb1b2b7a3b35967b9b5c2089261318a05a9a160ef3"
+    },
+    {
+      "byte_length": 76097,
+      "path": "review/d-plus-k3/inventory.json",
+      "sha256": "1379e15b2cdfd37ea83fbbdfffed417ed24b1fa2e5f51f871a099187462afad4"
+    },
+    {
+      "byte_length": 903,
+      "path": "review/d-plus-k3/review.json",
+      "sha256": "c9fa56e5c8e099606bb3ade672ca05ced788990d43ca767fef80cf8c67aeaf29"
+    },
+    {
+      "byte_length": 175205,
+      "path": "review/k2/complete.diff.gz",
+      "sha256": "2a9cebe9bbbd21b2d3cf6d0136fd8b4a6150437f3dae2ed0815dc7bbdcbed29a"
+    },
+    {
+      "byte_length": 129537,
+      "path": "review/k2/implementation.diff",
+      "sha256": "db03116617aafc0e9c9f077648a7bbac1dd625adfc99ba8dc0ebf60ef5e27bfb"
+    },
+    {
+      "byte_length": 32994,
+      "path": "review/k2/inventory.json",
+      "sha256": "e6d7cb51947f6c5e4e65ba1c742f8e3e1e142a818cc9c82355619832c7dbeac2"
+    },
+    {
+      "byte_length": 565,
+      "path": "review/k2/review.json",
+      "sha256": "bbb26e8c06604707037b11ed64f0e0cd2f655cd1c3c9c92c64bb914398209e93"
+    },
+    {
+      "byte_length": 1541,
+      "path": "review/review-lanes.json",
+      "sha256": "d93726ae99c1e432e6d1067786e5fcc3972755e985f71a85a9a61a5bf92c1df1"
+    },
+    {
+      "byte_length": 2879,
+      "path": "role-and-independence-checklist.md",
+      "sha256": "04e824d9eaf4d2f7aaea7b7c0dabe7ac047a4d3c2318c6aef6990208852e8571"
+    },
+    {
+      "byte_length": 14516,
+      "path": "run.py",
+      "sha256": "46e9cb9657ee76a2fba65609c82f9a47d61a611b06f9307af2f28f3ef218f01d"
+    },
+    {
+      "byte_length": 3425,
+      "path": "test_runner.py",
+      "sha256": "c7ab03b88fd2acb5df70de4dee9b3f72a7e4bdc76b514b6d541c7b6fd1114d6a"
+    },
+    {
+      "byte_length": 5410,
+      "path": "validate_offline.py",
+      "sha256": "e00a677f4ba356c8e1f32891f838993d2dd87b6c371a5fbd2b20a5a7fc167da1"
+    }
+  ],
+  "schema": "k5-package-manifest-v1",
+  "self_excluded": "MANIFEST.json; bind this manifest digest in the release/run record"
+}

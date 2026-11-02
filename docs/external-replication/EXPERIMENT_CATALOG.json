@@ -1,0 +1,84 @@
+{
+  "F": "EXCLUDED",
+  "experiments": [
+    {
+      "command": "python3 run.py --experiment k2 --out /tmp/airep-k2-rerun",
+      "expected_native_status": "INCOMPLETE",
+      "external_result": "EXTERNAL_RESULT_NOT_SUPPLIED",
+      "id": "k2",
+      "limits": [
+        "Reference producer/consumer share the author-side implementation family",
+        "No external independent implementation is included",
+        "Negative controls are bounded; broader v1 wish-list is not claimed complete"
+      ],
+      "native_counts": {
+        "NOT_EVALUATED": 1,
+        "SATISFIED": 37
+      },
+      "protocol_target": {
+        "commit": "8a6c01ecce457aa94330c0ed7219e4c56ebfe771",
+        "normative_basis_sha256": "333977c9e27c57371686b9cfb9c4becda68da43aebf024b04068e32563597b8d",
+        "release": "v0.2.0-beta.1",
+        "wire_version": "0.2"
+      },
+      "readiness": "READY_FOR_LOCAL_SELF_SERVICE_VALIDATION",
+      "role": "AUTHOR_SIDE_REFERENCE",
+      "source_commit": "ea1f39a6da72639a73e601918a6c8bc87bff1d77",
+      "tests_expected": 28,
+      "title": "Frozen AIREP beta.1 same-version reference interop"
+    },
+    {
+      "D_commit": "0130fcf8e7d70a0f9c4f977957e5de76ca8ef689",
+      "command": "python3 run.py --experiment k3 --out /tmp/airep-k3-rerun",
+      "id": "k3",
+      "limits": [
+        "Cooperative pause at instrumented node boundaries only",
+        "Same-executor effect observer; one local target/trust domain",
+        "No LLM, preemptive cancellation, independent witness, durable resume or complete history assurance"
+      ],
+      "native_unavailable_claims": [
+        "enforcement_observed",
+        "relying_party_claim_support"
+      ],
+      "observed_steps": {
+        "effect-unobserved": null,
+        "normal": 4,
+        "receiver-ignores-stop": 4,
+        "receiver-unreachable": 4,
+        "stop-before-start": 0,
+        "stop-during-action": 1
+      },
+      "readiness": "READY_FOR_LOCAL_SELF_SERVICE_VALIDATION",
+      "role": "AUTHOR_SIDE_REFERENCE",
+      "runtime": "langgraph==1.2.19",
+      "source_commit": "76ecce0b378a6b391850795abf45fb6aca8e1d6b",
+      "tests_expected": 13,
+      "title": "Frozen D plus real LangGraph cooperative-stop evidence"
+    }
+  ],
+  "external_evidence": "NOT_EVALUATED",
+  "not_packaged": [
+    {
+      "id": "K1",
+      "readiness": "PENDING_SEPARATE_FREEZE_OR_PACKAGE",
+      "reason": "This packet is bounded to existing frozen K2 and D+K3 sources; inclusion does not follow from the wider plan"
+    },
+    {
+      "id": "B3",
+      "readiness": "PENDING_SEPARATE_FREEZE_OR_PACKAGE",
+      "reason": "This packet is bounded to existing frozen K2 and D+K3 sources; inclusion does not follow from the wider plan"
+    },
+    {
+      "id": "C",
+      "readiness": "PENDING_SEPARATE_FREEZE_OR_PACKAGE",
+      "reason": "This packet is bounded to existing frozen K2 and D+K3 sources; inclusion does not follow from the wider plan"
+    },
+    {
+      "id": "E",
+      "readiness": "PENDING_SEPARATE_FREEZE_OR_PACKAGE",
+      "reason": "This packet is bounded to existing frozen K2 and D+K3 sources; inclusion does not follow from the wider plan"
+    }
+  ],
+  "publication": "LOCAL_ONLY_NOT_AUTHORIZED",
+  "schema": "k5-experiment-catalog-v1"
+}

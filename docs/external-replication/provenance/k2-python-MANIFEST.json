@@ -1,0 +1,79 @@
+{
+  "acquisition": "DEPENDENCY_ACQUISITION_ONLY - NOT AN OFFICIAL REPRODUCTION RUN",
+  "aggregate_rule": "sha256 of the concatenation, in ASCII-ascending order of canonical distribution-name strings, of UTF-8 lines '<sha256>  <wheel-filename>\\n'. The sort key is the distribution name, NOT the assembled line and NOT the hash prefix; each line is built AFTER the sort.",
+  "aggregate_sha256": "39bad2faaf9bc126b25279b781aa7414b4211ccb292cbe99288b4197995e966f",
+  "bundle": "AIREP v0.2 class-verification - Python offline dependency bundle",
+  "packages": {
+    "attrs": {
+      "bytes": 60752,
+      "sha256": "99b87a485a5820b23b879f04c2305b44b951b502fd64be915879d77a7e8fc6f1",
+      "version": "23.2.0",
+      "wheel": "attrs-23.2.0-py3-none-any.whl"
+    },
+    "cffi": {
+      "bytes": 219572,
+      "sha256": "3e17ed538242334bf70832644a32a7aae3d83b57567f9fd60a26257e992b79ba",
+      "version": "2.0.0",
+      "wheel": "cffi-2.0.0-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl"
+    },
+    "cryptography": {
+      "bytes": 4743326,
+      "sha256": "bd72e68b06bb1e96913f97dd4901119bc17f39d4586a5adf2d3e47bc2b9d58b5",
+      "version": "48.0.0",
+      "wheel": "cryptography-48.0.0-cp311-abi3-manylinux_2_34_x86_64.whl"
+    },
+    "jsonschema": {
+      "bytes": 90040,
+      "sha256": "3fba0169e345c7175110351d456342c364814cfcf3b964ba4587f22915230a63",
+      "version": "4.25.1",
+      "wheel": "jsonschema-4.25.1-py3-none-any.whl"
+    },
+    "jsonschema-specifications": {
+      "bytes": 18437,
+      "sha256": "98802fee3a11ee76ecaca44429fda8a41bff98b00a0f2838151b113f210cc6fe",
+      "version": "2025.9.1",
+      "wheel": "jsonschema_specifications-2025.9.1-py3-none-any.whl"
+    },
+    "pycparser": {
+      "bytes": 48172,
+      "sha256": "b727414169a36b7d524c1c3e31839a521725078d7b2ff038656844266160a992",
+      "version": "3.0",
+      "wheel": "pycparser-3.0-py3-none-any.whl"
+    },
+    "referencing": {
+      "bytes": 26766,
+      "sha256": "381329a9f99628c9069361716891d34ad94af76e461dcb0335825aecc7692231",
+      "version": "0.37.0",
+      "wheel": "referencing-0.37.0-py3-none-any.whl"
+    },
+    "rpds-py": {
+      "bytes": 394080,
+      "sha256": "47f236970bccb2233267d89173d3ad2703cd36a0e2a6e92d0560d333871a3d23",
+      "version": "0.30.0",
+      "wheel": "rpds_py-0.30.0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
+    },
+    "typing-extensions": {
+      "bytes": 44614,
+      "sha256": "f0fa19c6845758ab08074a0cfa8b7aecb71c999ca73d62883bc25cc018c4e548",
+      "version": "4.15.0",
+      "wheel": "typing_extensions-4.15.0-py3-none-any.whl"
+    }
+  },
+  "purpose": "Isolated venv for the official run. No network, no system/user site-packages.",
+  "runtime_baseline": {
+    "abi": "cp312",
+    "platform": "Linux x86_64",
+    "python": "3.12.3"
+  },
+  "runtime_note": "cffi is a declared dependency of cryptography on CPython but is NOT imported by the verifier's Ed25519 path, which uses the Rust backend (measured). It is vendored for closure completeness, not because the run needs it.",
+  "verifier_third_party_imports": [
+    "cryptography (Ed25519, module level)",
+    "jsonschema (stage 0, function level)",
+    "referencing (stage 0, function level)"
+  ],
+  "version_provenance": {
+    "cffi/pycparser/typing-extensions": "MEASURED in the same environment; pip's default resolution offered newer cffi 2.1.1 and typing-extensions 4.16.0, which were REJECTED to avoid a silent substitution.",
+    "cryptography": "MEASURED in the environment that produced the final 45-case run (48.0.0); not chosen.",
+    "schema stack": "Reused verbatim from spec/airep/v0.2/schema-validation/requirements.lock (jsonschema 4.25.1, referencing 0.37.0, attrs 23.2.0, rpds-py 0.30.0, jsonschema-specifications 2025.9.1)."
+  }
+}

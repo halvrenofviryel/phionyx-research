@@ -1,0 +1,2041 @@
+{
+  "k2_release": [
+    {
+      "bytes": 60752,
+      "container": "bundles/airep-sources.bundle",
+      "legacy_license_first_line": "",
+      "license_assessment": "DECLARED_METADATA_ONLY; original archive and notice bytes retained, no relicensing",
+      "license_classifiers": [
+        "License :: OSI Approved :: MIT License"
+      ],
+      "license_expression": "MIT",
+      "name": "attrs",
+      "preserved_metadata_and_notices": [
+        {
+          "copy": "licenses/dependencies/k2-attrs-23.2.0/01-METADATA",
+          "original_member": "attrs-23.2.0.dist-info/METADATA",
+          "sha256": "5b0bc6ece1f22a310fa72154642098b759f413f09ca9d45bedb96218475c9be0"
+        },
+        {
+          "copy": "licenses/dependencies/k2-attrs-23.2.0/02-LICENSE",
+          "original_member": "attrs-23.2.0.dist-info/licenses/LICENSE",
+          "sha256": "882115c95dfc2af1eeb6714f8ec6d5cbcabf667caff8729f42420da63f714e9f"
+        }
+      ],
+      "project_urls": [
+        "Documentation, https://www.attrs.org/",
+        "Changelog, https://www.attrs.org/en/stable/changelog.html",
+        "GitHub, https://github.com/python-attrs/attrs",
+        "Funding, https://github.com/sponsors/hynek",
+        "Tidelift, https://tidelift.com/subscription/pkg/pypi-attrs?utm_source=pypi-attrs&utm_medium=pypi"
+      ],
+      "provenance": "Unmodified release offline manifest and embedded archive metadata; source URL only where supplied by that manifest",
+      "sha256": "99b87a485a5820b23b879f04c2305b44b951b502fd64be915879d77a7e8fc6f1",
+      "source_commit": "8a6c01ecce457aa94330c0ed7219e4c56ebfe771",
+      "source_path": "spec/airep/v0.2/class-verification/offline-python-deps/wheels/attrs-23.2.0-py3-none-any.whl",
+      "version": "23.2.0",
+      "wheel": "attrs-23.2.0-py3-none-any.whl"
+    },
+    {
+      "bytes": 219572,
+      "container": "bundles/airep-sources.bundle",
+      "legacy_license_first_line": "",
+      "license_assessment": "DECLARED_METADATA_ONLY; original archive and notice bytes retained, no relicensing",
+      "license_classifiers": [],
+      "license_expression": "MIT",
+      "name": "cffi",
+      "preserved_metadata_and_notices": [
+        {
+          "copy": "licenses/dependencies/k2-cffi-2.0.0/01-METADATA",
+          "original_member": "cffi-2.0.0.dist-info/METADATA",
+          "sha256": "b98ce7e3417af089bc12d5c73412d9b3b1683ccf8ec73c986c35ac8c9be1ba39"
+        },
+        {
+          "copy": "licenses/dependencies/k2-cffi-2.0.0/02-AUTHORS",
+          "original_member": "cffi-2.0.0.dist-info/licenses/AUTHORS",
+          "sha256": "2a67a60bbfb33759d67d645ff131b8e6d6bc4cafc232d751fcac3eda4d314cc8"
+        },
+        {
+          "copy": "licenses/dependencies/k2-cffi-2.0.0/03-LICENSE",
+          "original_member": "cffi-2.0.0.dist-info/licenses/LICENSE",
+          "sha256": "5ba24ddc57067f9249add644c3afc41a5d6dc37e23433ef759d95df370b0af63"
+        }
+      ],
+      "project_urls": [
+        "Documentation, https://cffi.readthedocs.io/",
+        "Changelog, https://cffi.readthedocs.io/en/latest/whatsnew.html",
+        "Downloads, https://github.com/python-cffi/cffi/releases",
+        "Contact, https://groups.google.com/forum/#!forum/python-cffi",
+        "Source Code, https://github.com/python-cffi/cffi",
+        "Issue Tracker, https://github.com/python-cffi/cffi/issues"
+      ],
+      "provenance": "Unmodified release offline manifest and embedded archive metadata; source URL only where supplied by that manifest",
+      "sha256": "3e17ed538242334bf70832644a32a7aae3d83b57567f9fd60a26257e992b79ba",
+      "source_commit": "8a6c01ecce457aa94330c0ed7219e4c56ebfe771",
+      "source_path": "spec/airep/v0.2/class-verification/offline-python-deps/wheels/cffi-2.0.0-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl",
+      "version": "2.0.0",
+      "wheel": "cffi-2.0.0-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl"
+    },
+    {
+      "bytes": 4743326,
+      "container": "bundles/airep-sources.bundle",
+      "legacy_license_first_line": "",
+      "license_assessment": "DECLARED_METADATA_ONLY; original archive and notice bytes retained, no relicensing",
+      "license_classifiers": [],
+      "license_expression": "Apache-2.0 OR BSD-3-Clause",
+      "name": "cryptography",
+      "preserved_metadata_and_notices": [
+        {
+          "copy": "licenses/dependencies/k2-cryptography-48.0.0/01-METADATA",
+          "original_member": "cryptography-48.0.0.dist-info/METADATA",
+          "sha256": "43f08e5fe52da6c825e5ee189bd985ee1537860020332dcbcbc5da5679dec906"
+        },
+        {
+          "copy": "licenses/dependencies/k2-cryptography-48.0.0/02-LICENSE",
+          "original_member": "cryptography-48.0.0.dist-info/licenses/LICENSE",
+          "sha256": "3e0c7c091a948b82533ba98fd7cbb40432d6f1a9acbf85f5922d2f99a93ae6bb"
+        },
+        {
+          "copy": "licenses/dependencies/k2-cryptography-48.0.0/03-LICENSE.APACHE",
+          "original_member": "cryptography-48.0.0.dist-info/licenses/LICENSE.APACHE",
+          "sha256": "aac73b3148f6d1d7111dbca32099f68d26c644c6813ae1e4f05f6579aa2663fe"
+        },
+        {
+          "copy": "licenses/dependencies/k2-cryptography-48.0.0/04-LICENSE.BSD",
+          "original_member": "cryptography-48.0.0.dist-info/licenses/LICENSE.BSD",
+          "sha256": "602c4c7482de6479dd2e9793cda275e5e63d773dacd1eca689232ab7008fb4fb"
+        }
+      ],
+      "project_urls": [
+        "changelog, https://cryptography.io/en/latest/changelog/",
+        "documentation, https://cryptography.io/",
+        "homepage, https://github.com/pyca/cryptography",
+        "issues, https://github.com/pyca/cryptography/issues",
+        "source, https://github.com/pyca/cryptography/"
+      ],
+      "provenance": "Unmodified release offline manifest and embedded archive metadata; source URL only where supplied by that manifest",
+      "sha256": "bd72e68b06bb1e96913f97dd4901119bc17f39d4586a5adf2d3e47bc2b9d58b5",
+      "source_commit": "8a6c01ecce457aa94330c0ed7219e4c56ebfe771",
+      "source_path": "spec/airep/v0.2/class-verification/offline-python-deps/wheels/cryptography-48.0.0-cp311-abi3-manylinux_2_34_x86_64.whl",
+      "version": "48.0.0",
+      "wheel": "cryptography-48.0.0-cp311-abi3-manylinux_2_34_x86_64.whl"
+    },
+    {
+      "bytes": 90040,
+      "container": "bundles/airep-sources.bundle",
+      "legacy_license_first_line": "",
+      "license_assessment": "DECLARED_METADATA_ONLY; original archive and notice bytes retained, no relicensing",
+      "license_classifiers": [],
+      "license_expression": "MIT",
+      "name": "jsonschema",
+      "preserved_metadata_and_notices": [
+        {
+          "copy": "licenses/dependencies/k2-jsonschema-4.25.1/01-METADATA",
+          "original_member": "jsonschema-4.25.1.dist-info/METADATA",
+          "sha256": "31f83c1579e46e1af62269cefa5d83534ef155f3ee21914f7881bbd544bc125c"
+        },
+        {
+          "copy": "licenses/dependencies/k2-jsonschema-4.25.1/02-COPYING",
+          "original_member": "jsonschema-4.25.1.dist-info/licenses/COPYING",
+          "sha256": "4f92a015a13c4d1a040bef018aa13430b4f1bc73b41b16bb846c346766de7439"
+        }
+      ],
+      "project_urls": [
+        "Homepage, https://github.com/python-jsonschema/jsonschema",
+        "Documentation, https://python-jsonschema.readthedocs.io/",
+        "Issues, https://github.com/python-jsonschema/jsonschema/issues/",
+        "Funding, https://github.com/sponsors/Julian",
+        "Tidelift, https://tidelift.com/subscription/pkg/pypi-jsonschema?utm_source=pypi-jsonschema&utm_medium=referral&utm_campaign=pypi-link",
+        "Changelog, https://github.com/python-jsonschema/jsonschema/blob/main/CHANGELOG.rst",
+        "Source, https://github.com/python-jsonschema/jsonschema"
+      ],
+      "provenance": "Unmodified release offline manifest and embedded archive metadata; source URL only where supplied by that manifest",
+      "sha256": "3fba0169e345c7175110351d456342c364814cfcf3b964ba4587f22915230a63",
+      "source_commit": "8a6c01ecce457aa94330c0ed7219e4c56ebfe771",
+      "source_path": "spec/airep/v0.2/class-verification/offline-python-deps/wheels/jsonschema-4.25.1-py3-none-any.whl",
+      "version": "4.25.1",
+      "wheel": "jsonschema-4.25.1-py3-none-any.whl"
+    },
+    {
+      "bytes": 18437,
+      "container": "bundles/airep-sources.bundle",
+      "legacy_license_first_line": "",
+      "license_assessment": "DECLARED_METADATA_ONLY; original archive and notice bytes retained, no relicensing",
+      "license_classifiers": [],
+      "license_expression": "MIT",
+      "name": "jsonschema-specifications",
+      "preserved_metadata_and_notices": [
+        {
+          "copy": "licenses/dependencies/k2-jsonschema-specifications-2025.9.1/01-METADATA",
+          "original_member": "jsonschema_specifications-2025.9.1.dist-info/METADATA",
+          "sha256": "35abd41757f32b4ea24756920ded47b70173d77cbc052a5a6d3ab583b2e8d89d"
+        },
+        {
+          "copy": "licenses/dependencies/k2-jsonschema-specifications-2025.9.1/02-COPYING",
+          "original_member": "jsonschema_specifications-2025.9.1.dist-info/licenses/COPYING",
+          "sha256": "42dcd63495f87b4eb7c7757afa379bb55a53f94afd7a5f657d9adf57236e515c"
+        }
+      ],
+      "project_urls": [
+        "Documentation, https://jsonschema-specifications.readthedocs.io/",
+        "Homepage, https://github.com/python-jsonschema/jsonschema-specifications",
+        "Issues, https://github.com/python-jsonschema/jsonschema-specifications/issues/",
+        "Funding, https://github.com/sponsors/Julian",
+        "Tidelift, https://tidelift.com/subscription/pkg/pypi-jsonschema-specifications?utm_source=pypi-jsonschema-specifications&utm_medium=referral&utm_campaign=pypi-link",
+        "Source, https://github.com/python-jsonschema/jsonschema-specifications"
+      ],
+      "provenance": "Unmodified release offline manifest and embedded archive metadata; source URL only where supplied by that manifest",
+      "sha256": "98802fee3a11ee76ecaca44429fda8a41bff98b00a0f2838151b113f210cc6fe",
+      "source_commit": "8a6c01ecce457aa94330c0ed7219e4c56ebfe771",
+      "source_path": "spec/airep/v0.2/class-verification/offline-python-deps/wheels/jsonschema_specifications-2025.9.1-py3-none-any.whl",
+      "version": "2025.9.1",
+      "wheel": "jsonschema_specifications-2025.9.1-py3-none-any.whl"
+    },
+    {
+      "bytes": 48172,
+      "container": "bundles/airep-sources.bundle",
+      "legacy_license_first_line": "",
+      "license_assessment": "DECLARED_METADATA_ONLY; original archive and notice bytes retained, no relicensing",
+      "license_classifiers": [],
+      "license_expression": "BSD-3-Clause",
+      "name": "pycparser",
+      "preserved_metadata_and_notices": [
+        {
+          "copy": "licenses/dependencies/k2-pycparser-3.0/01-METADATA",
+          "original_member": "pycparser-3.0.dist-info/METADATA",
+          "sha256": "f547a60b0ab54cc2f242213d1f87960ad80df7dd5dfeb98d17a444d48bfb6b93"
+        },
+        {
+          "copy": "licenses/dependencies/k2-pycparser-3.0/02-LICENSE",
+          "original_member": "pycparser-3.0.dist-info/licenses/LICENSE",
+          "sha256": "0c846399369ea76ddd7b5c44fe6d16497415fcf015f5cbb508c24bf98b81c5b1"
+        }
+      ],
+      "project_urls": [
+        "Homepage, https://github.com/eliben/pycparser"
+      ],
+      "provenance": "Unmodified release offline manifest and embedded archive metadata; source URL only where supplied by that manifest",
+      "sha256": "b727414169a36b7d524c1c3e31839a521725078d7b2ff038656844266160a992",
+      "source_commit": "8a6c01ecce457aa94330c0ed7219e4c56ebfe771",
+      "source_path": "spec/airep/v0.2/class-verification/offline-python-deps/wheels/pycparser-3.0-py3-none-any.whl",
+      "version": "3.0",
+      "wheel": "pycparser-3.0-py3-none-any.whl"
+    },
+    {
+      "bytes": 26766,
+      "container": "bundles/airep-sources.bundle",
+      "legacy_license_first_line": "",
+      "license_assessment": "DECLARED_METADATA_ONLY; original archive and notice bytes retained, no relicensing",
+      "license_classifiers": [],
+      "license_expression": "MIT",
+      "name": "referencing",
+      "preserved_metadata_and_notices": [
+        {
+          "copy": "licenses/dependencies/k2-referencing-0.37.0/01-METADATA",
+          "original_member": "referencing-0.37.0.dist-info/METADATA",
+          "sha256": "c93b00e6ab1524fd60848376604c189a114374776475c25a31d57be47b29de6a"
+        },
+        {
+          "copy": "licenses/dependencies/k2-referencing-0.37.0/02-COPYING",
+          "original_member": "referencing-0.37.0.dist-info/licenses/COPYING",
+          "sha256": "42dcd63495f87b4eb7c7757afa379bb55a53f94afd7a5f657d9adf57236e515c"
+        }
+      ],
+      "project_urls": [
+        "Documentation, https://referencing.readthedocs.io/",
+        "Homepage, https://github.com/python-jsonschema/referencing",
+        "Issues, https://github.com/python-jsonschema/referencing/issues/",
+        "Funding, https://github.com/sponsors/Julian",
+        "Tidelift, https://tidelift.com/subscription/pkg/pypi-referencing?utm_source=pypi-referencing&utm_medium=referral&utm_campaign=pypi-link",
+        "Changelog, https://referencing.readthedocs.io/en/stable/changes/",
+        "Source, https://github.com/python-jsonschema/referencing"
+      ],
+      "provenance": "Unmodified release offline manifest and embedded archive metadata; source URL only where supplied by that manifest",
+      "sha256": "381329a9f99628c9069361716891d34ad94af76e461dcb0335825aecc7692231",
+      "source_commit": "8a6c01ecce457aa94330c0ed7219e4c56ebfe771",
+      "source_path": "spec/airep/v0.2/class-verification/offline-python-deps/wheels/referencing-0.37.0-py3-none-any.whl",
+      "version": "0.37.0",
+      "wheel": "referencing-0.37.0-py3-none-any.whl"
+    },
+    {
+      "bytes": 394080,
+      "container": "bundles/airep-sources.bundle",
+      "legacy_license_first_line": "",
+      "license_assessment": "DECLARED_METADATA_ONLY; original archive and notice bytes retained, no relicensing",
+      "license_classifiers": [],
+      "license_expression": "MIT",
+      "name": "rpds-py",
+      "preserved_metadata_and_notices": [
+        {
+          "copy": "licenses/dependencies/k2-rpds-py-0.30.0/01-METADATA",
+          "original_member": "rpds_py-0.30.0.dist-info/METADATA",
+          "sha256": "cc01d097ddb9c7e07a29c9553ee8dd35cf920e85fb574f7b0c23d68138a716bf"
+        },
+        {
+          "copy": "licenses/dependencies/k2-rpds-py-0.30.0/02-LICENSE",
+          "original_member": "rpds_py-0.30.0.dist-info/licenses/LICENSE",
+          "sha256": "314e4e91be3baa93c0fb4bccc9e4e97cd643eb839b065af921782c2175fe9909"
+        }
+      ],
+      "project_urls": [
+        "Documentation, https://rpds.readthedocs.io/",
+        "Homepage, https://github.com/crate-py/rpds",
+        "Issues, https://github.com/crate-py/rpds/issues/",
+        "Funding, https://github.com/sponsors/Julian",
+        "Tidelift, https://tidelift.com/subscription/pkg/pypi-rpds-py?utm_source=pypi-rpds-py&utm_medium=referral&utm_campaign=pypi-link",
+        "Source, https://github.com/crate-py/rpds",
+        "Upstream, https://github.com/orium/rpds"
+      ],
+      "provenance": "Unmodified release offline manifest and embedded archive metadata; source URL only where supplied by that manifest",
+      "sha256": "47f236970bccb2233267d89173d3ad2703cd36a0e2a6e92d0560d333871a3d23",
+      "source_commit": "8a6c01ecce457aa94330c0ed7219e4c56ebfe771",
+      "source_path": "spec/airep/v0.2/class-verification/offline-python-deps/wheels/rpds_py-0.30.0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+      "version": "0.30.0",
+      "wheel": "rpds_py-0.30.0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
+    },
+    {
+      "bytes": 44614,
+      "container": "bundles/airep-sources.bundle",
+      "legacy_license_first_line": "",
+      "license_assessment": "DECLARED_METADATA_ONLY; original archive and notice bytes retained, no relicensing",
+      "license_classifiers": [],
+      "license_expression": "PSF-2.0",
+      "name": "typing_extensions",
+      "preserved_metadata_and_notices": [
+        {
+          "copy": "licenses/dependencies/k2-typing-extensions-4.15.0/01-METADATA",
+          "original_member": "typing_extensions-4.15.0.dist-info/METADATA",
+          "sha256": "c138378fe8f18934ac99de060535c53ec6c13aeed65e94c32641da7ee3192a72"
+        },
+        {
+          "copy": "licenses/dependencies/k2-typing-extensions-4.15.0/02-LICENSE",
+          "original_member": "typing_extensions-4.15.0.dist-info/licenses/LICENSE",
+          "sha256": "3b2f81fe21d181c499c59a256c8e1968455d6689d269aa85373bfb6af41da3bf"
+        }
+      ],
+      "project_urls": [
+        "Bug Tracker, https://github.com/python/typing_extensions/issues",
+        "Changes, https://github.com/python/typing_extensions/blob/main/CHANGELOG.md",
+        "Documentation, https://typing-extensions.readthedocs.io/",
+        "Home, https://github.com/python/typing_extensions",
+        "Q & A, https://github.com/python/typing/discussions",
+        "Repository, https://github.com/python/typing_extensions"
+      ],
+      "provenance": "Unmodified release offline manifest and embedded archive metadata; source URL only where supplied by that manifest",
+      "sha256": "f0fa19c6845758ab08074a0cfa8b7aecb71c999ca73d62883bc25cc018c4e548",
+      "source_commit": "8a6c01ecce457aa94330c0ed7219e4c56ebfe771",
+      "source_path": "spec/airep/v0.2/class-verification/offline-python-deps/wheels/typing_extensions-4.15.0-py3-none-any.whl",
+      "version": "4.15.0",
+      "wheel": "typing_extensions-4.15.0-py3-none-any.whl"
+    },
+    {
+      "bytes": 217611,
+      "container": "bundles/airep-sources.bundle",
+      "integrity_sha512_sri": "sha512-Thbli+OlOj+iMPYFBVBfJ3OmCAnaSyNn4M1vz9T6Gka5Jt9ba/HIR56joy65tY6kx/FCF5VXNB819Y7/GUrBGA==",
+      "license_assessment": "DECLARED_METADATA_ONLY; original archive and notice bytes retained, no relicensing",
+      "license_expression": "MIT",
+      "name": "ajv",
+      "preserved_metadata_and_notices": [
+        {
+          "copy": "licenses/dependencies/k2-ajv-8.20.0/01-LICENSE",
+          "original_member": "package/LICENSE",
+          "sha256": "a05350a88e318e4f5f2c2a1ff1e2e88daa4dd38e6e78b71cccae422bdc762cc3"
+        },
+        {
+          "copy": "licenses/dependencies/k2-ajv-8.20.0/02-package.json",
+          "original_member": "package/package.json",
+          "sha256": "1f9033ee5a6515e7d76938b7072941862d1ed228a6879cc7fe10cdeb75107989"
+        }
+      ],
+      "provenance": "Unmodified release offline manifest and embedded archive metadata; source URL only where supplied by that manifest",
+      "repository": "ajv-validator/ajv",
+      "resolved": "https://registry.npmjs.org/ajv/-/ajv-8.20.0.tgz",
+      "sha256": "b2f0b3a893bbb8cc5efb6814f08b1499e19e31d5dd73683f5893382f48f6e7b3",
+      "source_commit": "8a6c01ecce457aa94330c0ed7219e4c56ebfe771",
+      "source_path": "spec/airep/v0.2/class-verification/offline-node-deps/tarballs/ajv-8.20.0.tgz",
+      "tarball": "ajv-8.20.0.tgz",
+      "version": "8.20.0"
+    },
+    {
+      "bytes": 3656,
+      "container": "bundles/airep-sources.bundle",
+      "integrity_sha512_sri": "sha512-f3qQ9oQy9j2AhBe/H9VC91wLmKBCCU/gDOnKNAYG5hswO7BLKj09Hc5HYNz9cGI++xlpDCIgDaitVs03ATR84Q==",
+      "license_assessment": "DECLARED_METADATA_ONLY; original archive and notice bytes retained, no relicensing",
+      "license_expression": "MIT",
+      "name": "fast-deep-equal",
+      "preserved_metadata_and_notices": [
+        {
+          "copy": "licenses/dependencies/k2-fast-deep-equal-3.1.3/01-LICENSE",
+          "original_member": "package/LICENSE",
+          "sha256": "7bf9b2de73a6b356761c948d0e9eeb4be6c1270bd04c79cd489c1e400ffdfc1a"
+        },
+        {
+          "copy": "licenses/dependencies/k2-fast-deep-equal-3.1.3/02-package.json",
+          "original_member": "package/package.json",
+          "sha256": "a5c63940db0260739be9e2ac67f3aac268df4db5770420ee4e34e493152f97d2"
+        }
+      ],
+      "provenance": "Unmodified release offline manifest and embedded archive metadata; source URL only where supplied by that manifest",
+      "repository": {
+        "type": "git",
+        "url": "git+https://github.com/epoberezkin/fast-deep-equal.git"
+      },
+      "resolved": "https://registry.npmjs.org/fast-deep-equal/-/fast-deep-equal-3.1.3.tgz",
+      "sha256": "b019a0980f27638dc3f85836b0e478f188e00d7a6e5852c0819fa86f56e47b8f",
+      "source_commit": "8a6c01ecce457aa94330c0ed7219e4c56ebfe771",
+      "source_path": "spec/airep/v0.2/class-verification/offline-node-deps/tarballs/fast-deep-equal-3.1.3.tgz",
+      "tarball": "fast-deep-equal-3.1.3.tgz",
+      "version": "3.1.3"
+    },
+    {
+      "bytes": 42968,
+      "container": "bundles/airep-sources.bundle",
+      "integrity_sha512_sri": "sha512-7Ical1vFEMr0onbVzEDIreM22I4khW+fzyQPwvAFWBp1iwdshSZRsL4jjRvPG9JP1uiqMHRto+YU6R2/CzDz5Q==",
+      "license_assessment": "DECLARED_METADATA_ONLY; original archive and notice bytes retained, no relicensing",
+      "license_expression": "BSD-3-Clause",
+      "name": "fast-uri",
+      "preserved_metadata_and_notices": [
+        {
+          "copy": "licenses/dependencies/k2-fast-uri-3.1.6/01-LICENSE",
+          "original_member": "package/LICENSE",
+          "sha256": "b010b0dfdfdb23d7396e03b82cd4621fc9bb8f95d6b0aea70b9c24e12074c786"
+        },
+        {
+          "copy": "licenses/dependencies/k2-fast-uri-3.1.6/02-package.json",
+          "original_member": "package/package.json",
+          "sha256": "d62cb9be0a111b42131b264efe1fee4638a5f643ff25fe0bc3627675a9b92a8b"
+        }
+      ],
+      "provenance": "Unmodified release offline manifest and embedded archive metadata; source URL only where supplied by that manifest",
+      "repository": {
+        "type": "git",
+        "url": "git+https://github.com/fastify/fast-uri.git"
+      },
+      "resolved": "https://registry.npmjs.org/fast-uri/-/fast-uri-3.1.6.tgz",
+      "sha256": "264af0e32c4b7b7bcb9ce5b4623c82469ee3e69ba5d171920f1762d626db1064",
+      "source_commit": "8a6c01ecce457aa94330c0ed7219e4c56ebfe771",
+      "source_path": "spec/airep/v0.2/class-verification/offline-node-deps/tarballs/fast-uri-3.1.6.tgz",
+      "tarball": "fast-uri-3.1.6.tgz",
+      "version": "3.1.6"
+    },
+    {
+      "bytes": 6074,
+      "container": "bundles/airep-sources.bundle",
+      "integrity_sha512_sri": "sha512-NM8/P9n3XjXhIZn1lLhkFaACTOURQXjWhV4BA/RnOv8xvgqtqpAX9IO4mRQxSx1Rlo4tqzeqb0sOlruaOy3dug==",
+      "license_assessment": "DECLARED_METADATA_ONLY; original archive and notice bytes retained, no relicensing",
+      "license_expression": "MIT",
+      "name": "json-schema-traverse",
+      "preserved_metadata_and_notices": [
+        {
+          "copy": "licenses/dependencies/k2-json-schema-traverse-1.0.0/01-LICENSE",
+          "original_member": "package/LICENSE",
+          "sha256": "7bf9b2de73a6b356761c948d0e9eeb4be6c1270bd04c79cd489c1e400ffdfc1a"
+        },
+        {
+          "copy": "licenses/dependencies/k2-json-schema-traverse-1.0.0/02-package.json",
+          "original_member": "package/package.json",
+          "sha256": "156fb24af02845c190701360d06dfda35ef04282e34a734289ea9535ad9819ae"
+        }
+      ],
+      "provenance": "Unmodified release offline manifest and embedded archive metadata; source URL only where supplied by that manifest",
+      "repository": {
+        "type": "git",
+        "url": "git+https://github.com/epoberezkin/json-schema-traverse.git"
+      },
+      "resolved": "https://registry.npmjs.org/json-schema-traverse/-/json-schema-traverse-1.0.0.tgz",
+      "sha256": "023222622df29fc274bde5d3590e47aa1d4a8e3c1d6e2aba029948ed79799b21",
+      "source_commit": "8a6c01ecce457aa94330c0ed7219e4c56ebfe771",
+      "source_path": "spec/airep/v0.2/class-verification/offline-node-deps/tarballs/json-schema-traverse-1.0.0.tgz",
+      "tarball": "json-schema-traverse-1.0.0.tgz",
+      "version": "1.0.0"
+    },
+    {
+      "bytes": 1816,
+      "container": "bundles/airep-sources.bundle",
+      "integrity_sha512_sri": "sha512-Xf0nWe6RseziFMu+Ap9biiUbmplq6S9/p+7w7YXP/JBHhrUDDUhwa+vANyubuqfZWTveU//DYVGsDG7RKL/vEw==",
+      "license_assessment": "DECLARED_METADATA_ONLY; original archive and notice bytes retained, no relicensing",
+      "license_expression": "MIT",
+      "name": "require-from-string",
+      "preserved_metadata_and_notices": [
+        {
+          "copy": "licenses/dependencies/k2-require-from-string-2.0.2/01-license",
+          "original_member": "package/license",
+          "sha256": "6ee0feb1f6ef996ff5a68600f8cf98909cf412d39ef3cdceaefd87d636fa1b7f"
+        },
+        {
+          "copy": "licenses/dependencies/k2-require-from-string-2.0.2/02-package.json",
+          "original_member": "package/package.json",
+          "sha256": "c0002f7d4c7d7e2a885cf0f97226344902417c3a0980f2beca41962d2bc1f6d8"
+        }
+      ],
+      "provenance": "Unmodified release offline manifest and embedded archive metadata; source URL only where supplied by that manifest",
+      "repository": "floatdrop/require-from-string",
+      "resolved": "https://registry.npmjs.org/require-from-string/-/require-from-string-2.0.2.tgz",
+      "sha256": "cb694a4965908f7775a0c757f00cf4e624d193cd71d77988fbcca0f597b88d82",
+      "source_commit": "8a6c01ecce457aa94330c0ed7219e4c56ebfe771",
+      "source_path": "spec/airep/v0.2/class-verification/offline-node-deps/tarballs/require-from-string-2.0.2.tgz",
+      "tarball": "require-from-string-2.0.2.tgz",
+      "version": "2.0.2"
+    }
+  ],
+  "k3_runtime": [
+    {
+      "archive": "bundles/langgraph-wheelhouse.tar.gz",
+      "byte_length": 13427,
+      "filename": "annotated_types-0.8.0-py3-none-any.whl",
+      "legacy_license_first_line": "",
+      "license_assessment": "DECLARED_METADATA_ONLY; original archive and notice bytes retained, no relicensing",
+      "license_classifiers": [
+        "License :: OSI Approved :: MIT License"
+      ],
+      "license_expression": "MIT",
+      "name": "annotated-types",
+      "preserved_metadata_and_notices": [
+        {
+          "copy": "licenses/dependencies/annotated-types-0.8.0/01-METADATA",
+          "original_member": "annotated_types-0.8.0.dist-info/METADATA",
+          "sha256": "614985b278f601b8ef863f82783b991cc3ada4b89f592eb71c7c48c5f2ef2298"
+        },
+        {
+          "copy": "licenses/dependencies/annotated-types-0.8.0/02-LICENSE",
+          "original_member": "annotated_types-0.8.0.dist-info/licenses/LICENSE",
+          "sha256": "fe1049884b1a0d9342901e88e07f32925d24b3121d9972b6a6805fb9824b095d"
+        }
+      ],
+      "project_urls": [
+        "Homepage, https://github.com/annotated-types/annotated-types",
+        "Source, https://github.com/annotated-types/annotated-types",
+        "Changelog, https://github.com/annotated-types/annotated-types/releases"
+      ],
+      "provenance": "Exact URL/hash from frozen K3 pip report; downloaded with --require-hashes",
+      "sha256": "f072f4d804ea359e4eaf198b1af7a8b0943881a87f31bb764f8bf219bb9419e0",
+      "url": "https://files.pythonhosted.org/packages/99/91/8acff4f5e50511b911bbccb72b8628a49c68ce14148cd9f6431094859a90/annotated_types-0.8.0-py3-none-any.whl",
+      "version": "0.8.0"
+    },
+    {
+      "archive": "bundles/langgraph-wheelhouse.tar.gz",
+      "byte_length": 134521,
+      "filename": "anyio-4.16.0-py3-none-any.whl",
+      "legacy_license_first_line": "",
+      "license_assessment": "DECLARED_METADATA_ONLY; original archive and notice bytes retained, no relicensing",
+      "license_classifiers": [],
+      "license_expression": "MIT",
+      "name": "anyio",
+      "preserved_metadata_and_notices": [
+        {
+          "copy": "licenses/dependencies/anyio-4.16.0/01-METADATA",
+          "original_member": "anyio-4.16.0.dist-info/METADATA",
+          "sha256": "b184ac9cd097e2bb7f90d42799346cc91c276095d000d95d7f7ddd407d0c887e"
+        },
+        {
+          "copy": "licenses/dependencies/anyio-4.16.0/02-LICENSE",
+          "original_member": "anyio-4.16.0.dist-info/licenses/LICENSE",
+          "sha256": "5361ac9dc58f2ef5fd2e9b09c68297c17f04950909bbc8023bdb82eacf22c2b0"
+        }
+      ],
+      "project_urls": [
+        "Documentation, https://anyio.readthedocs.io/en/latest/",
+        "Changelog, https://anyio.readthedocs.io/en/stable/versionhistory.html",
+        "Source code, https://github.com/agronholm/anyio",
+        "Issue tracker, https://github.com/agronholm/anyio/issues"
+      ],
+      "provenance": "Exact URL/hash from frozen K3 pip report; downloaded with --require-hashes",
+      "sha256": "c66ae634e0b8228396b801741beb3294326d4b6102f7bba4041c0dfb58c29026",
+      "url": "https://files.pythonhosted.org/packages/a9/16/7757fb84c819accc7d7e9af5291b261e4abb8627ee040f99e7d35ef2457a/anyio-4.16.0-py3-none-any.whl",
+      "version": "4.16.0"
+    },
+    {
+      "archive": "bundles/langgraph-wheelhouse.tar.gz",
+      "byte_length": 67548,
+      "filename": "attrs-26.1.0-py3-none-any.whl",
+      "legacy_license_first_line": "",
+      "license_assessment": "DECLARED_METADATA_ONLY; original archive and notice bytes retained, no relicensing",
+      "license_classifiers": [],
+      "license_expression": "MIT",
+      "name": "attrs",
+      "preserved_metadata_and_notices": [
+        {
+          "copy": "licenses/dependencies/attrs-26.1.0/01-METADATA",
+          "original_member": "attrs-26.1.0.dist-info/METADATA",
+          "sha256": "4cd40e690f23bf37cbcad34efd6758e062df1df07c86833f7e3ce95bf1fa38cc"
+        },
+        {
+          "copy": "licenses/dependencies/attrs-26.1.0/02-LICENSE",
+          "original_member": "attrs-26.1.0.dist-info/licenses/LICENSE",
+          "sha256": "882115c95dfc2af1eeb6714f8ec6d5cbcabf667caff8729f42420da63f714e9f"
+        }
+      ],
+      "project_urls": [
+        "Documentation, https://www.attrs.org/",
+        "Changelog, https://www.attrs.org/en/stable/changelog.html",
+        "GitHub, https://github.com/python-attrs/attrs",
+        "Funding, https://github.com/sponsors/hynek",
+        "Tidelift, https://tidelift.com/subscription/pkg/pypi-attrs?utm_source=pypi-attrs&utm_medium=pypi"
+      ],
+      "provenance": "Exact URL/hash from frozen K3 pip report; downloaded with --require-hashes",
+      "sha256": "c647aa4a12dfbad9333ca4e71fe62ddc36f4e63b2d260a37a8b83d2f043ac309",
+      "url": "https://files.pythonhosted.org/packages/64/b4/17d4b0b2a2dc85a6df63d1157e028ed19f90d4cd97c36717afef2bc2f395/attrs-26.1.0-py3-none-any.whl",
+      "version": "26.1.0"
+    },
+    {
+      "archive": "bundles/langgraph-wheelhouse.tar.gz",
+      "byte_length": 135082,
+      "filename": "certifi-2026.10.23-py3-none-any.whl",
+      "legacy_license_first_line": "MPL-2.0",
+      "license_assessment": "DECLARED_METADATA_ONLY; original archive and notice bytes retained, no relicensing",
+      "license_classifiers": [
+        "License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)"
+      ],
+      "license_expression": null,
+      "name": "certifi",
+      "preserved_metadata_and_notices": [
+        {
+          "copy": "licenses/dependencies/certifi-2026.10.23/01-METADATA",
+          "original_member": "certifi-2026.10.23.dist-info/METADATA",
+          "sha256": "e463e38f7fe7da36a11e6d3fecc5dfa5b97be8c8022620400750d79ae7d842bc"
+        },
+        {
+          "copy": "licenses/dependencies/certifi-2026.10.23/02-LICENSE",
+          "original_member": "certifi-2026.10.23.dist-info/licenses/LICENSE",
+          "sha256": "e93716da6b9c0d5a4a1df60fe695b370f0695603d21f6f83f053e42cfc10caf7"
+        }
+      ],
+      "project_urls": [
+        "Source, https://github.com/certifi/python-certifi"
+      ],
+      "provenance": "Exact URL/hash from frozen K3 pip report; downloaded with --require-hashes",
+      "sha256": "e9b54de76e530bb6cf0ccd036787103acb58fd42ba930ea8bf948ddbaa2f61d1",
+      "url": "https://files.pythonhosted.org/packages/32/d1/a3652fe2c19134d0d15922177821d863cbd7e842d53a21bbe7e8e3a1b5ac/certifi-2026.10.23-py3-none-any.whl",
+      "version": "2026.10.23"
+    },
+    {
+      "archive": "bundles/langgraph-wheelhouse.tar.gz",
+      "byte_length": 221822,
+      "filename": "cffi-2.1.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl",
+      "legacy_license_first_line": "",
+      "license_assessment": "DECLARED_METADATA_ONLY; original archive and notice bytes retained, no relicensing",
+      "license_classifiers": [],
+      "license_expression": "MIT-0",
+      "name": "cffi",
+      "preserved_metadata_and_notices": [
+        {
+          "copy": "licenses/dependencies/cffi-2.1.1/01-METADATA",
+          "original_member": "cffi-2.1.1.dist-info/METADATA",
+          "sha256": "558bafb9093a8e790175d9ecff9688382981d744877dad86fd6770db0f4dc918"
+        },
+        {
+          "copy": "licenses/dependencies/cffi-2.1.1/02-LICENSE",
+          "original_member": "cffi-2.1.1.dist-info/licenses/LICENSE",
+          "sha256": "5ba24ddc57067f9249add644c3afc41a5d6dc37e23433ef759d95df370b0af63"
+        }
+      ],
+      "project_urls": [
+        "Documentation, https://cffi.readthedocs.io/",
+        "Changelog, https://cffi.readthedocs.io/en/latest/whatsnew.html",
+        "Download, https://github.com/python-cffi/cffi/releases",
+        "Contact, https://groups.google.com/forum/#!forum/python-cffi",
+        "Source Code, https://github.com/python-cffi/cffi",
+        "Issue Tracker, https://github.com/python-cffi/cffi/issues"
+      ],
+      "provenance": "Exact URL/hash from frozen K3 pip report; downloaded with --require-hashes",
+      "sha256": "c1453022f490d2459a11819d83ad1d586e9ff65a12ac3e705ffebd46d3685dcf",
+      "url": "https://files.pythonhosted.org/packages/b1/db/dceb9dd5b231e1da801793f8acc9f3c52a7e1afe40bb1aae37e02b0faad5/cffi-2.1.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl",
+      "version": "2.1.1"
+    },
+    {
+      "archive": "bundles/langgraph-wheelhouse.tar.gz",
+      "byte_length": 257601,
+      "filename": "charset_normalizer-3.5.2-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl",
+      "legacy_license_first_line": "MIT",
+      "license_assessment": "DECLARED_METADATA_ONLY; original archive and notice bytes retained, no relicensing",
+      "license_classifiers": [],
+      "license_expression": null,
+      "name": "charset-normalizer",
+      "preserved_metadata_and_notices": [
+        {
+          "copy": "licenses/dependencies/charset-normalizer-3.5.2/01-METADATA",
+          "original_member": "charset_normalizer-3.5.2.dist-info/METADATA",
+          "sha256": "89ce6362bb7be88558f4be99a98f5d1b4da93d19cd0323e5ee0bac05cf883dfb"
+        },
+        {
+          "copy": "licenses/dependencies/charset-normalizer-3.5.2/02-LICENSE",
+          "original_member": "charset_normalizer-3.5.2.dist-info/licenses/LICENSE",
+          "sha256": "6d0d41bfe170ac6c7dc248c9a63e254d0fb45a60d50a8257d0af92c6e249b887"
+        }
+      ],
+      "project_urls": [
+        "Changelog, https://github.com/jawah/charset_normalizer/blob/master/CHANGELOG.md",
+        "Documentation, https://charset-normalizer.readthedocs.io/",
+        "Code, https://github.com/jawah/charset_normalizer",
+        "Issue tracker, https://github.com/jawah/charset_normalizer/issues"
+      ],
+      "provenance": "Exact URL/hash from frozen K3 pip report; downloaded with --require-hashes",
+      "sha256": "3d31298449090ab8d47b7b1b2a555ff73cac7ed438a08b7ac160980c7ebed649",
+      "url": "https://files.pythonhosted.org/packages/7f/c5/38806a25ab5e65fc178f39affeda20858efafede2fce1ffc2556cfc9fe73/charset_normalizer-3.5.2-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl",
+      "version": "3.5.2"
+    },
+    {
+      "archive": "bundles/langgraph-wheelhouse.tar.gz",
+      "byte_length": 4743326,
+      "filename": "cryptography-48.0.0-cp311-abi3-manylinux_2_34_x86_64.whl",
+      "legacy_license_first_line": "",
+      "license_assessment": "DECLARED_METADATA_ONLY; original archive and notice bytes retained, no relicensing",
+      "license_classifiers": [],
+      "license_expression": "Apache-2.0 OR BSD-3-Clause",
+      "name": "cryptography",
+      "preserved_metadata_and_notices": [
+        {
+          "copy": "licenses/dependencies/cryptography-48.0.0/01-METADATA",
+          "original_member": "cryptography-48.0.0.dist-info/METADATA",
+          "sha256": "43f08e5fe52da6c825e5ee189bd985ee1537860020332dcbcbc5da5679dec906"
+        },
+        {
+          "copy": "licenses/dependencies/cryptography-48.0.0/02-LICENSE",
+          "original_member": "cryptography-48.0.0.dist-info/licenses/LICENSE",
+          "sha256": "3e0c7c091a948b82533ba98fd7cbb40432d6f1a9acbf85f5922d2f99a93ae6bb"
+        },
+        {
+          "copy": "licenses/dependencies/cryptography-48.0.0/03-LICENSE.APACHE",
+          "original_member": "cryptography-48.0.0.dist-info/licenses/LICENSE.APACHE",
+          "sha256": "aac73b3148f6d1d7111dbca32099f68d26c644c6813ae1e4f05f6579aa2663fe"
+        },
+        {
+          "copy": "licenses/dependencies/cryptography-48.0.0/04-LICENSE.BSD",
+          "original_member": "cryptography-48.0.0.dist-info/licenses/LICENSE.BSD",
+          "sha256": "602c4c7482de6479dd2e9793cda275e5e63d773dacd1eca689232ab7008fb4fb"
+        }
+      ],
+      "project_urls": [
+        "changelog, https://cryptography.io/en/latest/changelog/",
+        "documentation, https://cryptography.io/",
+        "homepage, https://github.com/pyca/cryptography",
+        "issues, https://github.com/pyca/cryptography/issues",
+        "source, https://github.com/pyca/cryptography/"
+      ],
+      "provenance": "Exact URL/hash from frozen K3 pip report; downloaded with --require-hashes",
+      "sha256": "bd72e68b06bb1e96913f97dd4901119bc17f39d4586a5adf2d3e47bc2b9d58b5",
+      "url": "https://files.pythonhosted.org/packages/d0/c0/7101d3b7215edcdc90c45da544961fd8ed2d6448f77577460fa75a8443f7/cryptography-48.0.0-cp311-abi3-manylinux_2_34_x86_64.whl",
+      "version": "48.0.0"
+    },
+    {
+      "archive": "bundles/langgraph-wheelhouse.tar.gz",
+      "byte_length": 20277,
+      "filename": "distro-1.9.0-py3-none-any.whl",
+      "legacy_license_first_line": "Apache License, Version 2.0",
+      "license_assessment": "DECLARED_METADATA_ONLY; original archive and notice bytes retained, no relicensing",
+      "license_classifiers": [
+        "License :: OSI Approved :: Apache Software License"
+      ],
+      "license_expression": null,
+      "name": "distro",
+      "preserved_metadata_and_notices": [
+        {
+          "copy": "licenses/dependencies/distro-1.9.0/01-LICENSE",
+          "original_member": "distro-1.9.0.dist-info/LICENSE",
+          "sha256": "cb5e8e7e5f4a3988e1063c142c60dc2df75605f4c46515e776e3aca6df976e14"
+        },
+        {
+          "copy": "licenses/dependencies/distro-1.9.0/02-METADATA",
+          "original_member": "distro-1.9.0.dist-info/METADATA",
+          "sha256": "31632ab2de5591131091b3397bdcdf797718579d85a75186f06839dd0c09e81d"
+        }
+      ],
+      "project_urls": [],
+      "provenance": "Exact URL/hash from frozen K3 pip report; downloaded with --require-hashes",
+      "sha256": "7bffd925d65168f85027d8da9af6bddab658135b840670a223589bc0c8ef02b2",
+      "url": "https://files.pythonhosted.org/packages/12/b3/231ffd4ab1fc9d679809f356cebee130ac7daa00d6d6f3206dd4fd137e9e/distro-1.9.0-py3-none-any.whl",
+      "version": "1.9.0"
+    },
+    {
+      "archive": "bundles/langgraph-wheelhouse.tar.gz",
+      "byte_length": 37515,
+      "filename": "h11-0.16.0-py3-none-any.whl",
+      "legacy_license_first_line": "MIT",
+      "license_assessment": "DECLARED_METADATA_ONLY; original archive and notice bytes retained, no relicensing",
+      "license_classifiers": [
+        "License :: OSI Approved :: MIT License"
+      ],
+      "license_expression": null,
+      "name": "h11",
+      "preserved_metadata_and_notices": [
+        {
+          "copy": "licenses/dependencies/h11-0.16.0/01-METADATA",
+          "original_member": "h11-0.16.0.dist-info/METADATA",
+          "sha256": "28f326098ac09fcba79b8f180f96087c841fe2456215cb7b872a9c7d5cd19d64"
+        },
+        {
+          "copy": "licenses/dependencies/h11-0.16.0/02-LICENSE.txt",
+          "original_member": "h11-0.16.0.dist-info/licenses/LICENSE.txt",
+          "sha256": "37db5bb85926db28a427a25867f10b1232003aea1be69ccb851138adb8e6f361"
+        }
+      ],
+      "project_urls": [],
+      "provenance": "Exact URL/hash from frozen K3 pip report; downloaded with --require-hashes",
+      "sha256": "63cf8bbe7522de3bf65932fda1d9c2772064ffb3dae62d55932da54b31cb6c86",
+      "url": "https://files.pythonhosted.org/packages/04/4b/29cac41a4d98d144bf5f6d33995617b185d14b22401f75ca86f384e87ff1/h11-0.16.0-py3-none-any.whl",
+      "version": "0.16.0"
+    },
+    {
+      "archive": "bundles/langgraph-wheelhouse.tar.gz",
+      "byte_length": 78784,
+      "filename": "httpcore-1.0.9-py3-none-any.whl",
+      "legacy_license_first_line": "",
+      "license_assessment": "DECLARED_METADATA_ONLY; original archive and notice bytes retained, no relicensing",
+      "license_classifiers": [
+        "License :: OSI Approved :: BSD License"
+      ],
+      "license_expression": "BSD-3-Clause",
+      "name": "httpcore",
+      "preserved_metadata_and_notices": [
+        {
+          "copy": "licenses/dependencies/httpcore-1.0.9/01-METADATA",
+          "original_member": "httpcore-1.0.9.dist-info/METADATA",
+          "sha256": "fe2d4fda6199128978779e0cf27f3c045c531863fcdd987eacc74f3a18d41c21"
+        },
+        {
+          "copy": "licenses/dependencies/httpcore-1.0.9/02-LICENSE.md",
+          "original_member": "httpcore-1.0.9.dist-info/licenses/LICENSE.md",
+          "sha256": "fdcb59154c74cbaba16a11242f7740bea9f23d6feb5547917d8c5f94a80392a5"
+        }
+      ],
+      "project_urls": [
+        "Documentation, https://www.encode.io/httpcore",
+        "Homepage, https://www.encode.io/httpcore/",
+        "Source, https://github.com/encode/httpcore"
+      ],
+      "provenance": "Exact URL/hash from frozen K3 pip report; downloaded with --require-hashes",
+      "sha256": "2d400746a40668fc9dec9810239072b40b4484b640a8c38fd654a024c7a1bf55",
+      "url": "https://files.pythonhosted.org/packages/7e/f5/f66802a942d491edb555dd61e3a9961140fd64c90bce1eafd741609d334d/httpcore-1.0.9-py3-none-any.whl",
+      "version": "1.0.9"
+    },
+    {
+      "archive": "bundles/langgraph-wheelhouse.tar.gz",
+      "byte_length": 85070,
+      "filename": "httpcore2-2.16.0-py3-none-any.whl",
+      "legacy_license_first_line": "",
+      "license_assessment": "DECLARED_METADATA_ONLY; original archive and notice bytes retained, no relicensing",
+      "license_classifiers": [
+        "License :: OSI Approved :: BSD License"
+      ],
+      "license_expression": "BSD-3-Clause",
+      "name": "httpcore2",
+      "preserved_metadata_and_notices": [
+        {
+          "copy": "licenses/dependencies/httpcore2-2.16.0/01-METADATA",
+          "original_member": "httpcore2-2.16.0.dist-info/METADATA",
+          "sha256": "c073bd68b2bd543fbc2bab3763b42ed1e70666536d32c1bf39ef2764fd50b0a4"
+        },
+        {
+          "copy": "licenses/dependencies/httpcore2-2.16.0/02-LICENSE.md",
+          "original_member": "httpcore2-2.16.0.dist-info/licenses/LICENSE.md",
+          "sha256": "c4df125c807b0613501e943a5c92496dd11d2c16604ce396097a8dde396304d9"
+        }
+      ],
+      "project_urls": [
+        "Changelog, https://github.com/pydantic/httpx2/blob/main/src/httpcore2/CHANGELOG.md",
+        "Homepage, https://github.com/pydantic/httpx2",
+        "Source, https://github.com/pydantic/httpx2/blob/main/src/httpcore2"
+      ],
+      "provenance": "Exact URL/hash from frozen K3 pip report; downloaded with --require-hashes",
+      "sha256": "5c4358319f2602d984ad93182c9fee5160f22e9da7babdda870a5e7c4e2dc34f",
+      "url": "https://files.pythonhosted.org/packages/af/c2/ce417c397afa5181f0e3c6ff01a4d01639414e1adef08730d97571297151/httpcore2-2.16.0-py3-none-any.whl",
+      "version": "2.16.0"
+    },
+    {
+      "archive": "bundles/langgraph-wheelhouse.tar.gz",
+      "byte_length": 73517,
+      "filename": "httpx-0.28.1-py3-none-any.whl",
+      "legacy_license_first_line": "BSD-3-Clause",
+      "license_assessment": "DECLARED_METADATA_ONLY; original archive and notice bytes retained, no relicensing",
+      "license_classifiers": [
+        "License :: OSI Approved :: BSD License"
+      ],
+      "license_expression": null,
+      "name": "httpx",
+      "preserved_metadata_and_notices": [
+        {
+          "copy": "licenses/dependencies/httpx-0.28.1/01-METADATA",
+          "original_member": "httpx-0.28.1.dist-info/METADATA",
+          "sha256": "febb9b0f8f3e80d57c8199c304f35c4336e8581d1d18d7983c92766b82793b25"
+        },
+        {
+          "copy": "licenses/dependencies/httpx-0.28.1/02-LICENSE.md",
+          "original_member": "httpx-0.28.1.dist-info/licenses/LICENSE.md",
+          "sha256": "4ec59d544f12b5f539a3a716fd321ac58ccd8030b465221f2c880200cdf28d8d"
+        }
+      ],
+      "project_urls": [
+        "Changelog, https://github.com/encode/httpx/blob/master/CHANGELOG.md",
+        "Documentation, https://www.python-httpx.org",
+        "Homepage, https://github.com/encode/httpx",
+        "Source, https://github.com/encode/httpx"
+      ],
+      "provenance": "Exact URL/hash from frozen K3 pip report; downloaded with --require-hashes",
+      "sha256": "d909fcccc110f8c7faf814ca82a9a4d816bc5a6dbfea25d6591d6985b8ba59ad",
+      "url": "https://files.pythonhosted.org/packages/2a/39/e50c7c3a983047577ee07d2a9e53faf5a69493943ec3f6a384bdc792deb2/httpx-0.28.1-py3-none-any.whl",
+      "version": "0.28.1"
+    },
+    {
+      "archive": "bundles/langgraph-wheelhouse.tar.gz",
+      "byte_length": 97880,
+      "filename": "httpx2-2.16.0-py3-none-any.whl",
+      "legacy_license_first_line": "",
+      "license_assessment": "DECLARED_METADATA_ONLY; original archive and notice bytes retained, no relicensing",
+      "license_classifiers": [
+        "License :: OSI Approved :: BSD License"
+      ],
+      "license_expression": "BSD-3-Clause",
+      "name": "httpx2",
+      "preserved_metadata_and_notices": [
+        {
+          "copy": "licenses/dependencies/httpx2-2.16.0/01-METADATA",
+          "original_member": "httpx2-2.16.0.dist-info/METADATA",
+          "sha256": "192f20046200ff50911a7278c21dfbee1e1a4c6fa7943227afe9231d28defc3f"
+        },
+        {
+          "copy": "licenses/dependencies/httpx2-2.16.0/02-LICENSE.md",
+          "original_member": "httpx2-2.16.0.dist-info/licenses/LICENSE.md",
+          "sha256": "7e7d6dbaf7fe160d39fd6e84fd02c33cab96bcbea34d36998d545bceb4a19c30"
+        }
+      ],
+      "project_urls": [
+        "Changelog, https://github.com/pydantic/httpx2/blob/main/src/httpx2/CHANGELOG.md",
+        "Homepage, https://github.com/pydantic/httpx2",
+        "Source, https://github.com/pydantic/httpx2"
+      ],
+      "provenance": "Exact URL/hash from frozen K3 pip report; downloaded with --require-hashes",
+      "sha256": "fd2c5d7909e8d86fe92d53020c310ca0e4e431b838c207c5754b9bbf0308d49a",
+      "url": "https://files.pythonhosted.org/packages/7b/3d/2e4bc4fd1ef9770871669adb348d612a6e4786b303a23f9935b81c48dd60/httpx2-2.16.0-py3-none-any.whl",
+      "version": "2.16.0"
+    },
+    {
+      "archive": "bundles/langgraph-wheelhouse.tar.gz",
+      "byte_length": 69583,
+      "filename": "idna-3.20-py3-none-any.whl",
+      "legacy_license_first_line": "",
+      "license_assessment": "DECLARED_METADATA_ONLY; original archive and notice bytes retained, no relicensing",
+      "license_classifiers": [],
+      "license_expression": "BSD-3-Clause",
+      "name": "idna",
+      "preserved_metadata_and_notices": [
+        {
+          "copy": "licenses/dependencies/idna-3.20/01-METADATA",
+          "original_member": "idna-3.20.dist-info/METADATA",
+          "sha256": "dbd8c14c1e4ca1e0c9824a6dbc7cbbf78884f38eb52d91148cd3025f671e4b85"
+        },
+        {
+          "copy": "licenses/dependencies/idna-3.20/02-LICENSE.md",
+          "original_member": "idna-3.20.dist-info/licenses/LICENSE.md",
+          "sha256": "1a9a4f0e3d479a27240ddd59a9137a66ab4a0f9dfdc8ca6188cc0bfd85187f04"
+        }
+      ],
+      "project_urls": [
+        "Changelog, https://github.com/kjd/idna/blob/master/HISTORY.md",
+        "Issue tracker, https://github.com/kjd/idna/issues",
+        "Source, https://github.com/kjd/idna"
+      ],
+      "provenance": "Exact URL/hash from frozen K3 pip report; downloaded with --require-hashes",
+      "sha256": "ab7ae7122974553370f0bdb919e1a960b2cd1bc1ef0276416d896db81c14582c",
+      "url": "https://files.pythonhosted.org/packages/58/a2/bb081bab032533a855d44de1d56f8e8426114ff1ba5d1f07a438a0a654f8/idna-3.20-py3-none-any.whl",
+      "version": "3.20"
+    },
+    {
+      "archive": "bundles/langgraph-wheelhouse.tar.gz",
+      "byte_length": 17444,
+      "filename": "jsonpatch-1.39-py3-none-any.whl",
+      "legacy_license_first_line": "",
+      "license_assessment": "DECLARED_METADATA_ONLY; original archive and notice bytes retained, no relicensing",
+      "license_classifiers": [],
+      "license_expression": "BSD-3-Clause",
+      "name": "jsonpatch",
+      "preserved_metadata_and_notices": [
+        {
+          "copy": "licenses/dependencies/jsonpatch-1.39/01-METADATA",
+          "original_member": "jsonpatch-1.39.dist-info/METADATA",
+          "sha256": "5134cc1137aed198a715ebaed9bc0776dbad51b0d55bc32810419145f16deb6a"
+        },
+        {
+          "copy": "licenses/dependencies/jsonpatch-1.39/02-AUTHORS",
+          "original_member": "jsonpatch-1.39.dist-info/licenses/AUTHORS",
+          "sha256": "84eb449c119b7c37a02a3ccc0c4979bee549c9ccdb2363e5604da1a382e318d4"
+        },
+        {
+          "copy": "licenses/dependencies/jsonpatch-1.39/03-LICENSE",
+          "original_member": "jsonpatch-1.39.dist-info/licenses/LICENSE",
+          "sha256": "4393eb6733fa1e367f41769b382f4f1be7bf0daeb1e243ed92b3f5d8bafd236f"
+        }
+      ],
+      "project_urls": [
+        "Website, https://github.com/stefankoegl/python-json-patch",
+        "Repository, https://github.com/stefankoegl/python-json-patch.git",
+        "Documentation, https://python-json-patch.readthedocs.org/",
+        "PyPI, https://pypi.org/pypi/jsonpatch",
+        "Tests, https://github.com/stefankoegl/python-json-patch/actions",
+        "Test Coverage, https://coveralls.io/github/stefankoegl/python-json-patch"
+      ],
+      "provenance": "Exact URL/hash from frozen K3 pip report; downloaded with --require-hashes",
+      "sha256": "8c1849545b8b245623274b881e18cf5606dc4f11272cde327d3c1f3997181097",
+      "url": "https://files.pythonhosted.org/packages/55/ed/e9c6dc32d9a048b80e2dd2e17983cd23f4fa32ed906c2bad5b9a13eeb487/jsonpatch-1.39-py3-none-any.whl",
+      "version": "1.39"
+    },
+    {
+      "archive": "bundles/langgraph-wheelhouse.tar.gz",
+      "byte_length": 9363,
+      "filename": "jsonpointer-3.7-py3-none-any.whl",
+      "legacy_license_first_line": "Modified BSD License",
+      "license_assessment": "DECLARED_METADATA_ONLY; original archive and notice bytes retained, no relicensing",
+      "license_classifiers": [
+        "License :: OSI Approved :: BSD License"
+      ],
+      "license_expression": null,
+      "name": "jsonpointer",
+      "preserved_metadata_and_notices": [
+        {
+          "copy": "licenses/dependencies/jsonpointer-3.7/01-METADATA",
+          "original_member": "jsonpointer-3.7.dist-info/METADATA",
+          "sha256": "5885612e1f55a756aab89ba4e38f6bd327444613db2cd0a84efbafdaa792297e"
+        },
+        {
+          "copy": "licenses/dependencies/jsonpointer-3.7/02-AUTHORS",
+          "original_member": "jsonpointer-3.7.dist-info/licenses/AUTHORS",
+          "sha256": "4d58319d0f59c87bef5b07b3fe4db0f19c2d7d5545b034c6bf7b57c89bbef57f"
+        },
+        {
+          "copy": "licenses/dependencies/jsonpointer-3.7/03-LICENSE.txt",
+          "original_member": "jsonpointer-3.7.dist-info/licenses/LICENSE.txt",
+          "sha256": "d8b24f15d472885f788a2d6e985850f264627b86012a17bb242c83f310d907e5"
+        }
+      ],
+      "project_urls": [],
+      "provenance": "Exact URL/hash from frozen K3 pip report; downloaded with --require-hashes",
+      "sha256": "41005d228d8a6ec517b727d2821b7fa16e6bfc7c695ca3339f8331cccaba3887",
+      "url": "https://files.pythonhosted.org/packages/17/91/ffedd6ed8952a65dd4497a0c95b4d87f42f5ce3334f01e344027099bc0be/jsonpointer-3.7-py3-none-any.whl",
+      "version": "3.7"
+    },
+    {
+      "archive": "bundles/langgraph-wheelhouse.tar.gz",
+      "byte_length": 90040,
+      "filename": "jsonschema-4.25.1-py3-none-any.whl",
+      "legacy_license_first_line": "",
+      "license_assessment": "DECLARED_METADATA_ONLY; original archive and notice bytes retained, no relicensing",
+      "license_classifiers": [],
+      "license_expression": "MIT",
+      "name": "jsonschema",
+      "preserved_metadata_and_notices": [
+        {
+          "copy": "licenses/dependencies/jsonschema-4.25.1/01-METADATA",
+          "original_member": "jsonschema-4.25.1.dist-info/METADATA",
+          "sha256": "31f83c1579e46e1af62269cefa5d83534ef155f3ee21914f7881bbd544bc125c"
+        },
+        {
+          "copy": "licenses/dependencies/jsonschema-4.25.1/02-COPYING",
+          "original_member": "jsonschema-4.25.1.dist-info/licenses/COPYING",
+          "sha256": "4f92a015a13c4d1a040bef018aa13430b4f1bc73b41b16bb846c346766de7439"
+        }
+      ],
+      "project_urls": [
+        "Homepage, https://github.com/python-jsonschema/jsonschema",
+        "Documentation, https://python-jsonschema.readthedocs.io/",
+        "Issues, https://github.com/python-jsonschema/jsonschema/issues/",
+        "Funding, https://github.com/sponsors/Julian",
+        "Tidelift, https://tidelift.com/subscription/pkg/pypi-jsonschema?utm_source=pypi-jsonschema&utm_medium=referral&utm_campaign=pypi-link",
+        "Changelog, https://github.com/python-jsonschema/jsonschema/blob/main/CHANGELOG.rst",
+        "Source, https://github.com/python-jsonschema/jsonschema"
+      ],
+      "provenance": "Exact URL/hash from frozen K3 pip report; downloaded with --require-hashes",
+      "sha256": "3fba0169e345c7175110351d456342c364814cfcf3b964ba4587f22915230a63",
+      "url": "https://files.pythonhosted.org/packages/bf/9c/8c95d856233c1f82500c2450b8c68576b4cf1c871db3afac5c34ff84e6fd/jsonschema-4.25.1-py3-none-any.whl",
+      "version": "4.25.1"
+    },
+    {
+      "archive": "bundles/langgraph-wheelhouse.tar.gz",
+      "byte_length": 18437,
+      "filename": "jsonschema_specifications-2025.9.1-py3-none-any.whl",
+      "legacy_license_first_line": "",
+      "license_assessment": "DECLARED_METADATA_ONLY; original archive and notice bytes retained, no relicensing",
+      "license_classifiers": [],
+      "license_expression": "MIT",
+      "name": "jsonschema-specifications",
+      "preserved_metadata_and_notices": [
+        {
+          "copy": "licenses/dependencies/jsonschema-specifications-2025.9.1/01-METADATA",
+          "original_member": "jsonschema_specifications-2025.9.1.dist-info/METADATA",
+          "sha256": "35abd41757f32b4ea24756920ded47b70173d77cbc052a5a6d3ab583b2e8d89d"
+        },
+        {
+          "copy": "licenses/dependencies/jsonschema-specifications-2025.9.1/02-COPYING",
+          "original_member": "jsonschema_specifications-2025.9.1.dist-info/licenses/COPYING",
+          "sha256": "42dcd63495f87b4eb7c7757afa379bb55a53f94afd7a5f657d9adf57236e515c"
+        }
+      ],
+      "project_urls": [
+        "Documentation, https://jsonschema-specifications.readthedocs.io/",
+        "Homepage, https://github.com/python-jsonschema/jsonschema-specifications",
+        "Issues, https://github.com/python-jsonschema/jsonschema-specifications/issues/",
+        "Funding, https://github.com/sponsors/Julian",
+        "Tidelift, https://tidelift.com/subscription/pkg/pypi-jsonschema-specifications?utm_source=pypi-jsonschema-specifications&utm_medium=referral&utm_campaign=pypi-link",
+        "Source, https://github.com/python-jsonschema/jsonschema-specifications"
+      ],
+      "provenance": "Exact URL/hash from frozen K3 pip report; downloaded with --require-hashes",
+      "sha256": "98802fee3a11ee76ecaca44429fda8a41bff98b00a0f2838151b113f210cc6fe",
+      "url": "https://files.pythonhosted.org/packages/41/45/1a4ed80516f02155c51f51e8cedb3c1902296743db0bbc66608a0db2814f/jsonschema_specifications-2025.9.1-py3-none-any.whl",
+      "version": "2025.9.1"
+    },
+    {
+      "archive": "bundles/langgraph-wheelhouse.tar.gz",
+      "byte_length": 577184,
+      "filename": "langchain_core-1.7.4-py3-none-any.whl",
+      "legacy_license_first_line": "MIT",
+      "license_assessment": "DECLARED_METADATA_ONLY; original archive and notice bytes retained, no relicensing",
+      "license_classifiers": [
+        "License :: OSI Approved :: MIT License"
+      ],
+      "license_expression": null,
+      "name": "langchain-core",
+      "preserved_metadata_and_notices": [
+        {
+          "copy": "licenses/dependencies/langchain-core-1.7.4/01-METADATA",
+          "original_member": "langchain_core-1.7.4.dist-info/METADATA",
+          "sha256": "c5a92f717ae208c73653fee3520e0686c18a16cc87676522384d247840be8ff4"
+        },
+        {
+          "copy": "licenses/dependencies/langchain-core-1.7.4/02-LICENSE",
+          "original_member": "langchain_core-1.7.4.dist-info/licenses/LICENSE",
+          "sha256": "4ec67e4ca6e6721dba849b2ca82261597c86a61ee214bbf21416006b7b2d0478"
+        }
+      ],
+      "project_urls": [
+        "Homepage, https://docs.langchain.com/",
+        "Documentation, https://reference.langchain.com/python/langchain_core/",
+        "Repository, https://github.com/langchain-ai/langchain",
+        "Issues, https://github.com/langchain-ai/langchain/issues",
+        "Changelog, https://github.com/langchain-ai/langchain/releases?q=%22langchain-core%3D%3D1%22",
+        "Twitter, https://x.com/langchain_oss",
+        "Slack, https://www.langchain.com/join-community",
+        "Reddit, https://www.reddit.com/r/LangChain/"
+      ],
+      "provenance": "Exact URL/hash from frozen K3 pip report; downloaded with --require-hashes",
+      "sha256": "20963807aa074366a3820a5d980399009ac05e17b77105c1e847db3ea3b4829f",
+      "url": "https://files.pythonhosted.org/packages/99/dc/8c0e82e0171187f3425b3f7ef962858991ad731b4618d7e814eb72715091/langchain_core-1.7.4-py3-none-any.whl",
+      "version": "1.7.4"
+    },
+    {
+      "archive": "bundles/langgraph-wheelhouse.tar.gz",
+      "byte_length": 7347,
+      "filename": "langchain_protocol-0.0.20-py3-none-any.whl",
+      "legacy_license_first_line": "MIT",
+      "license_assessment": "DECLARED_METADATA_ONLY; original archive and notice bytes retained, no relicensing",
+      "license_classifiers": [
+        "License :: OSI Approved :: MIT License"
+      ],
+      "license_expression": null,
+      "name": "langchain-protocol",
+      "preserved_metadata_and_notices": [
+        {
+          "copy": "licenses/dependencies/langchain-protocol-0.0.20/01-METADATA",
+          "original_member": "langchain_protocol-0.0.20.dist-info/METADATA",
+          "sha256": "18e3ee4b2dd8feefab5c13d254efae6bbfec0c7d793b2422fac5ec3c1c0c15d9"
+        },
+        {
+          "copy": "licenses/dependencies/langchain-protocol-0.0.20/02-LICENSE",
+          "original_member": "langchain_protocol-0.0.20.dist-info/licenses/LICENSE",
+          "sha256": "893e6e30275896912c21c77f9f7c112aba85fd985d05b26a29424cf7e511d177"
+        }
+      ],
+      "project_urls": [
+        "Homepage, https://github.com/langchain-ai/agent-protocol/tree/main/streaming",
+        "Repository, https://github.com/langchain-ai/agent-protocol",
+        "Issues, https://github.com/langchain-ai/agent-protocol/issues"
+      ],
+      "provenance": "Exact URL/hash from frozen K3 pip report; downloaded with --require-hashes",
+      "sha256": "3c935e5e46b0f6f9cb52f45ba7cfa53d1b9fa80c82c4a277d47f03e07f7385b1",
+      "url": "https://files.pythonhosted.org/packages/02/4b/f1c99a0b27c5ff8b4b131c0d6e62012c17cc424089efe213767db927afd2/langchain_protocol-0.0.20-py3-none-any.whl",
+      "version": "0.0.20"
+    },
+    {
+      "archive": "bundles/langgraph-wheelhouse.tar.gz",
+      "byte_length": 262285,
+      "filename": "langgraph-1.2.19-py3-none-any.whl",
+      "legacy_license_first_line": "",
+      "license_assessment": "DECLARED_METADATA_ONLY; original archive and notice bytes retained, no relicensing",
+      "license_classifiers": [],
+      "license_expression": "MIT",
+      "name": "langgraph",
+      "preserved_metadata_and_notices": [
+        {
+          "copy": "licenses/dependencies/langgraph-1.2.19/01-METADATA",
+          "original_member": "langgraph-1.2.19.dist-info/METADATA",
+          "sha256": "45dc20b0de6036b8c7d3b11dab9508e2a397a25ea9756a8ffa1ccb61f49ec095"
+        },
+        {
+          "copy": "licenses/dependencies/langgraph-1.2.19/02-LICENSE",
+          "original_member": "langgraph-1.2.19.dist-info/licenses/LICENSE",
+          "sha256": "d9bb52f2e3540d60ff50d8f0f5b6ba649b7fd346948c4c3d086c8afb120763c7"
+        }
+      ],
+      "project_urls": [
+        "Homepage, https://docs.langchain.com/oss/python/langgraph/overview",
+        "Documentation, https://reference.langchain.com/python/langgraph/",
+        "Source, https://github.com/langchain-ai/langgraph/tree/main/libs/langgraph",
+        "Changelog, https://github.com/langchain-ai/langgraph/releases",
+        "Twitter, https://x.com/langchain_oss",
+        "Slack, https://www.langchain.com/join-community",
+        "Reddit, https://www.reddit.com/r/LangChain/"
+      ],
+      "provenance": "Exact URL/hash from frozen K3 pip report; downloaded with --require-hashes",
+      "sha256": "6094a5cbed52a77d8c74c276fcd2056abde7b2836eab1c7a6b74bacbd1a269b3",
+      "url": "https://files.pythonhosted.org/packages/d7/9e/bd29e368fb16feea8d24270d377d56c34b49afea371717124f19cdfa890c/langgraph-1.2.19-py3-none-any.whl",
+      "version": "1.2.19"
+    },
+    {
+      "archive": "bundles/langgraph-wheelhouse.tar.gz",
+      "byte_length": 58093,
+      "filename": "langgraph_checkpoint-4.3.1-py3-none-any.whl",
+      "legacy_license_first_line": "",
+      "license_assessment": "DECLARED_METADATA_ONLY; original archive and notice bytes retained, no relicensing",
+      "license_classifiers": [],
+      "license_expression": "MIT",
+      "name": "langgraph-checkpoint",
+      "preserved_metadata_and_notices": [
+        {
+          "copy": "licenses/dependencies/langgraph-checkpoint-4.3.1/01-METADATA",
+          "original_member": "langgraph_checkpoint-4.3.1.dist-info/METADATA",
+          "sha256": "9e59af41fb620215449b7c13fdb27f3e001379dfe03ca2d799781d29e816c226"
+        },
+        {
+          "copy": "licenses/dependencies/langgraph-checkpoint-4.3.1/02-LICENSE",
+          "original_member": "langgraph_checkpoint-4.3.1.dist-info/licenses/LICENSE",
+          "sha256": "d9bb52f2e3540d60ff50d8f0f5b6ba649b7fd346948c4c3d086c8afb120763c7"
+        }
+      ],
+      "project_urls": [
+        "Source, https://github.com/langchain-ai/langgraph/tree/main/libs/checkpoint",
+        "Twitter, https://x.com/langchain_oss",
+        "Slack, https://www.langchain.com/join-community",
+        "Reddit, https://www.reddit.com/r/LangChain/"
+      ],
+      "provenance": "Exact URL/hash from frozen K3 pip report; downloaded with --require-hashes",
+      "sha256": "215a826935c8db4d9676e79fd95943e5b3847d78604390898e1d98581cc594e5",
+      "url": "https://files.pythonhosted.org/packages/f3/40/4251d676b5c585d42175c901175d4bff56e22939625e18bcef781fc3e893/langgraph_checkpoint-4.3.1-py3-none-any.whl",
+      "version": "4.3.1"
+    },
+    {
+      "archive": "bundles/langgraph-wheelhouse.tar.gz",
+      "byte_length": 42254,
+      "filename": "langgraph_prebuilt-1.1.1-py3-none-any.whl",
+      "legacy_license_first_line": "",
+      "license_assessment": "DECLARED_METADATA_ONLY; original archive and notice bytes retained, no relicensing",
+      "license_classifiers": [],
+      "license_expression": "MIT",
+      "name": "langgraph-prebuilt",
+      "preserved_metadata_and_notices": [
+        {
+          "copy": "licenses/dependencies/langgraph-prebuilt-1.1.1/01-METADATA",
+          "original_member": "langgraph_prebuilt-1.1.1.dist-info/METADATA",
+          "sha256": "0c378432b6201dcf4b6641e642ce9f03e353515a155f15501a91fa7cdd401496"
+        },
+        {
+          "copy": "licenses/dependencies/langgraph-prebuilt-1.1.1/02-LICENSE",
+          "original_member": "langgraph_prebuilt-1.1.1.dist-info/licenses/LICENSE",
+          "sha256": "d9bb52f2e3540d60ff50d8f0f5b6ba649b7fd346948c4c3d086c8afb120763c7"
+        }
+      ],
+      "project_urls": [
+        "Source, https://github.com/langchain-ai/langgraph/tree/main/libs/prebuilt",
+        "Twitter, https://x.com/langchain_oss",
+        "Slack, https://www.langchain.com/join-community",
+        "Reddit, https://www.reddit.com/r/LangChain/"
+      ],
+      "provenance": "Exact URL/hash from frozen K3 pip report; downloaded with --require-hashes",
+      "sha256": "fae17c22562e501940eb7aa052a15c58a431febbabf33f8ad172e1b44354a7e4",
+      "url": "https://files.pythonhosted.org/packages/38/26/4da2c6ae8b9fe73c3c09cf32c058415c5041e773fd00219c5e0d76588c23/langgraph_prebuilt-1.1.1-py3-none-any.whl",
+      "version": "1.1.1"
+    },
+    {
+      "archive": "bundles/langgraph-wheelhouse.tar.gz",
+      "byte_length": 169311,
+      "filename": "langgraph_sdk-0.4.11-py3-none-any.whl",
+      "legacy_license_first_line": "",
+      "license_assessment": "DECLARED_METADATA_ONLY; original archive and notice bytes retained, no relicensing",
+      "license_classifiers": [],
+      "license_expression": "MIT",
+      "name": "langgraph-sdk",
+      "preserved_metadata_and_notices": [
+        {
+          "copy": "licenses/dependencies/langgraph-sdk-0.4.11/01-METADATA",
+          "original_member": "langgraph_sdk-0.4.11.dist-info/METADATA",
+          "sha256": "7e707f60b946e7a2c1229694da800bb66cb791d7cc0b8cbf8756b2dc75d023b8"
+        },
+        {
+          "copy": "licenses/dependencies/langgraph-sdk-0.4.11/02-LICENSE",
+          "original_member": "langgraph_sdk-0.4.11.dist-info/licenses/LICENSE",
+          "sha256": "d9bb52f2e3540d60ff50d8f0f5b6ba649b7fd346948c4c3d086c8afb120763c7"
+        }
+      ],
+      "project_urls": [
+        "Source, https://github.com/langchain-ai/langgraph/tree/main/libs/sdk-py",
+        "Twitter, https://x.com/langchain_oss",
+        "Slack, https://www.langchain.com/join-community",
+        "Reddit, https://www.reddit.com/r/LangChain/"
+      ],
+      "provenance": "Exact URL/hash from frozen K3 pip report; downloaded with --require-hashes",
+      "sha256": "6a65be4a8f825966a07317b8e34e3337cd227b9b58b185f0123fd13c3d0116fa",
+      "url": "https://files.pythonhosted.org/packages/01/88/69899bb20b96b80468e98b90377e605c36658125e7e7fba401868a86138e/langgraph_sdk-0.4.11-py3-none-any.whl",
+      "version": "0.4.11"
+    },
+    {
+      "archive": "bundles/langgraph-wheelhouse.tar.gz",
+      "byte_length": 940828,
+      "filename": "langsmith-0.14.17-py3-none-any.whl",
+      "legacy_license_first_line": "MIT",
+      "license_assessment": "DECLARED_METADATA_ONLY; original archive and notice bytes retained, no relicensing",
+      "license_classifiers": [
+        "License :: OSI Approved :: MIT License"
+      ],
+      "license_expression": null,
+      "name": "langsmith",
+      "preserved_metadata_and_notices": [
+        {
+          "copy": "licenses/dependencies/langsmith-0.14.17/01-METADATA",
+          "original_member": "langsmith-0.14.17.dist-info/METADATA",
+          "sha256": "e4080fb1ac161d6b34bf29d062e05e9f1286bd192fb566d250ff0a39025c60d0"
+        },
+        {
+          "copy": "licenses/dependencies/langsmith-0.14.17/02-LICENSE",
+          "original_member": "langsmith-0.14.17.dist-info/licenses/LICENSE",
+          "sha256": "b309deba813e5bef2c128236a105d0eb74197aaf4ede3861730bdc0e5c5edfbb"
+        }
+      ],
+      "project_urls": [
+        "Homepage, https://github.com/langchain-ai/langsmith-python",
+        "Repository, https://github.com/langchain-ai/langsmith-python"
+      ],
+      "provenance": "Exact URL/hash from frozen K3 pip report; downloaded with --require-hashes",
+      "sha256": "0aa2c79936c93c7cea9c55656f05e21cc5da715fecbdbda439d084adc08429be",
+      "url": "https://files.pythonhosted.org/packages/a8/11/4da3faa7fd20c487c4770f14aa2b4247871e787ad305c2ba528fcf0f2bcc/langsmith-0.14.17-py3-none-any.whl",
+      "version": "0.14.17"
+    },
+    {
+      "archive": "bundles/langgraph-wheelhouse.tar.gz",
+      "byte_length": 130612,
+      "filename": "orjson-3.13.0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+      "legacy_license_first_line": "",
+      "license_assessment": "DECLARED_METADATA_ONLY; original archive and notice bytes retained, no relicensing",
+      "license_classifiers": [
+        "License :: OSI Approved :: Apache Software License",
+        "License :: OSI Approved :: MIT License",
+        "License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)"
+      ],
+      "license_expression": "MPL-2.0 AND (Apache-2.0 OR MIT)",
+      "name": "orjson",
+      "preserved_metadata_and_notices": [
+        {
+          "copy": "licenses/dependencies/orjson-3.13.0/01-METADATA",
+          "original_member": "orjson-3.13.0.dist-info/METADATA",
+          "sha256": "4b64a33cb3c47299ae9afe9919c67fb5159e89d086857a4fe74c727044c98612"
+        },
+        {
+          "copy": "licenses/dependencies/orjson-3.13.0/02-LICENSE-APACHE",
+          "original_member": "orjson-3.13.0.dist-info/licenses/LICENSE-APACHE",
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "copy": "licenses/dependencies/orjson-3.13.0/03-LICENSE-MIT",
+          "original_member": "orjson-3.13.0.dist-info/licenses/LICENSE-MIT",
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        },
+        {
+          "copy": "licenses/dependencies/orjson-3.13.0/04-LICENSE-MPL-2.0",
+          "original_member": "orjson-3.13.0.dist-info/licenses/LICENSE-MPL-2.0",
+          "sha256": "66a3107d5ad6a058aab753eaac2047ccb2ed0e39465dd0fe5844da3e300d5172"
+        }
+      ],
+      "project_urls": [
+        "changelog, https://github.com/ijl/orjson/blob/master/CHANGELOG.md",
+        "documentation, https://github.com/ijl/orjson",
+        "source, https://github.com/ijl/orjson"
+      ],
+      "provenance": "Exact URL/hash from frozen K3 pip report; downloaded with --require-hashes",
+      "sha256": "bceadfd314bd238f584fc229a4bbaf0e573597e7a026dec5429fbf29fd66c641",
+      "url": "https://files.pythonhosted.org/packages/ea/8c/bb07c368abbf4021c4cd01c12edb526e00090f7f750ff1b88da6e6b6c7a6/orjson-3.13.0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+      "version": "3.13.0"
+    },
+    {
+      "archive": "bundles/langgraph-wheelhouse.tar.gz",
+      "byte_length": 254913,
+      "filename": "ormsgpack-1.13.0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+      "legacy_license_first_line": "",
+      "license_assessment": "DECLARED_METADATA_ONLY; original archive and notice bytes retained, no relicensing",
+      "license_classifiers": [
+        "License :: OSI Approved :: Apache Software License",
+        "License :: OSI Approved :: MIT License"
+      ],
+      "license_expression": "Apache-2.0 OR MIT",
+      "name": "ormsgpack",
+      "preserved_metadata_and_notices": [
+        {
+          "copy": "licenses/dependencies/ormsgpack-1.13.0/01-METADATA",
+          "original_member": "ormsgpack-1.13.0.dist-info/METADATA",
+          "sha256": "582d86268d04891ad4defac9ad3619a6c27def87a87249b6ddabd170d10d1f3c"
+        },
+        {
+          "copy": "licenses/dependencies/ormsgpack-1.13.0/02-LICENSE-APACHE",
+          "original_member": "ormsgpack-1.13.0.dist-info/licenses/LICENSE-APACHE",
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "copy": "licenses/dependencies/ormsgpack-1.13.0/03-LICENSE-MIT",
+          "original_member": "ormsgpack-1.13.0.dist-info/licenses/LICENSE-MIT",
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        }
+      ],
+      "project_urls": [
+        "Homepage, https://github.com/ormsgpack/ormsgpack"
+      ],
+      "provenance": "Exact URL/hash from frozen K3 pip report; downloaded with --require-hashes",
+      "sha256": "8187048ec7b9ec628f985954e2409248acfeb8732e2751305649eaaba7304db7",
+      "url": "https://files.pythonhosted.org/packages/49/f1/1bc3710e6f1b8d4da288d949aa8c04d12d5265c23004799f0b102778ee2c/ormsgpack-1.13.0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+      "version": "1.13.0"
+    },
+    {
+      "archive": "bundles/langgraph-wheelhouse.tar.gz",
+      "byte_length": 129956,
+      "filename": "packaging-26.3-py3-none-any.whl",
+      "legacy_license_first_line": "",
+      "license_assessment": "DECLARED_METADATA_ONLY; original archive and notice bytes retained, no relicensing",
+      "license_classifiers": [],
+      "license_expression": "Apache-2.0 OR BSD-2-Clause",
+      "name": "packaging",
+      "preserved_metadata_and_notices": [
+        {
+          "copy": "licenses/dependencies/packaging-26.3/01-METADATA",
+          "original_member": "packaging-26.3.dist-info/METADATA",
+          "sha256": "70fdb89fc4d4a9a043bf7372b8972bcc883fddff34ab55e9cf80d73875384763"
+        },
+        {
+          "copy": "licenses/dependencies/packaging-26.3/02-LICENSE",
+          "original_member": "packaging-26.3.dist-info/licenses/LICENSE",
+          "sha256": "cad1ef5bd340d73e074ba614d26f7deaca5c7940c3d8c34852e65c4909686c48"
+        },
+        {
+          "copy": "licenses/dependencies/packaging-26.3/03-LICENSE.APACHE",
+          "original_member": "packaging-26.3.dist-info/licenses/LICENSE.APACHE",
+          "sha256": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594"
+        },
+        {
+          "copy": "licenses/dependencies/packaging-26.3/04-LICENSE.BSD",
+          "original_member": "packaging-26.3.dist-info/licenses/LICENSE.BSD",
+          "sha256": "b70e7e9b742f1cc6f948b34c16aa39ffece94196364bc88ff0d2180f0028fac5"
+        }
+      ],
+      "project_urls": [
+        "Documentation, https://packaging.pypa.io/",
+        "Source, https://github.com/pypa/packaging"
+      ],
+      "provenance": "Exact URL/hash from frozen K3 pip report; downloaded with --require-hashes",
+      "sha256": "d7193f7c8e4e93f444fde0262bf90af30e16fa0ad0ad44cb553c87339b23cd1c",
+      "url": "https://files.pythonhosted.org/packages/63/34/ba1c580383c9eada3711951fef0795c80b829a078d72188184bcab9dd527/packaging-26.3-py3-none-any.whl",
+      "version": "26.3"
+    },
+    {
+      "archive": "bundles/langgraph-wheelhouse.tar.gz",
+      "byte_length": 62600,
+      "filename": "pycparser-3.12-py3-none-any.whl",
+      "legacy_license_first_line": "",
+      "license_assessment": "DECLARED_METADATA_ONLY; original archive and notice bytes retained, no relicensing",
+      "license_classifiers": [],
+      "license_expression": "BSD-3-Clause",
+      "name": "pycparser",
+      "preserved_metadata_and_notices": [
+        {
+          "copy": "licenses/dependencies/pycparser-3.12/01-METADATA",
+          "original_member": "pycparser-3.12.dist-info/METADATA",
+          "sha256": "ad8db5fe2b0e0a3b0e8419fe5041b80be92470a40b06bd9c1462a0a8bb637c92"
+        },
+        {
+          "copy": "licenses/dependencies/pycparser-3.12/02-LICENSE",
+          "original_member": "pycparser-3.12.dist-info/licenses/LICENSE",
+          "sha256": "0a9e78156ae8b96caf1b4f11ac2df424b83de29736f9e757630548a6272fdf90"
+        }
+      ],
+      "project_urls": [
+        "Homepage, https://github.com/eliben/pycparser"
+      ],
+      "provenance": "Exact URL/hash from frozen K3 pip report; downloaded with --require-hashes",
+      "sha256": "a076f3f489b39b43ed13563a1dafe42447445bec2e294154ec5c57fcdda4c85e",
+      "url": "https://files.pythonhosted.org/packages/b6/ae/315bbeee126a769cbde43cf4908acb4b40408d8bf8bbf334dd7368d8dadf/pycparser-3.12-py3-none-any.whl",
+      "version": "3.12"
+    },
+    {
+      "archive": "bundles/langgraph-wheelhouse.tar.gz",
+      "byte_length": 490403,
+      "filename": "pydantic-2.14.2-py3-none-any.whl",
+      "legacy_license_first_line": "",
+      "license_assessment": "DECLARED_METADATA_ONLY; original archive and notice bytes retained, no relicensing",
+      "license_classifiers": [],
+      "license_expression": "MIT",
+      "name": "pydantic",
+      "preserved_metadata_and_notices": [
+        {
+          "copy": "licenses/dependencies/pydantic-2.14.2/01-METADATA",
+          "original_member": "pydantic-2.14.2.dist-info/METADATA",
+          "sha256": "5e27715d350cc99bc33877404deba2a9491221ae972db8f8c79f64032bee3a01"
+        },
+        {
+          "copy": "licenses/dependencies/pydantic-2.14.2/02-LICENSE",
+          "original_member": "pydantic-2.14.2.dist-info/licenses/LICENSE",
+          "sha256": "a9e186f3ca16b5eef84318e7a701721351a00cb7b8ae3a4394b67b49e3529ef3"
+        }
+      ],
+      "project_urls": [
+        "Homepage, https://github.com/pydantic/pydantic",
+        "Documentation, https://pydantic.dev/docs/validation/latest/get-started/",
+        "Funding, https://github.com/sponsors/samuelcolvin",
+        "Source, https://github.com/pydantic/pydantic",
+        "Changelog, https://pydantic.dev/docs/validation/latest/get-started/changelog/"
+      ],
+      "provenance": "Exact URL/hash from frozen K3 pip report; downloaded with --require-hashes",
+      "sha256": "7efbf7507b937931cd32a5755acb00ea1cf5ccb1d4e8067a5850d5069e382118",
+      "url": "https://files.pythonhosted.org/packages/97/01/c71a71258b58659c72504e5fd65b451f6e36e34dc931d0b237ded213c814/pydantic-2.14.2-py3-none-any.whl",
+      "version": "2.14.2"
+    },
+    {
+      "archive": "bundles/langgraph-wheelhouse.tar.gz",
+      "byte_length": 2242782,
+      "filename": "pydantic_core-2.50.2-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl",
+      "legacy_license_first_line": "",
+      "license_assessment": "DECLARED_METADATA_ONLY; original archive and notice bytes retained, no relicensing",
+      "license_classifiers": [],
+      "license_expression": "MIT",
+      "name": "pydantic_core",
+      "preserved_metadata_and_notices": [
+        {
+          "copy": "licenses/dependencies/pydantic_core-2.50.2/01-METADATA",
+          "original_member": "pydantic_core-2.50.2.dist-info/METADATA",
+          "sha256": "ca680c6a06d7e24685a8c13f47c56af9f4deaba25272412f8688459cd6dd2dd1"
+        },
+        {
+          "copy": "licenses/dependencies/pydantic_core-2.50.2/02-LICENSE",
+          "original_member": "pydantic_core-2.50.2.dist-info/licenses/LICENSE",
+          "sha256": "2afdd30d54b4d62b6f488a6bcc1546e84ec5061f13f4209c03d012348783795a"
+        }
+      ],
+      "project_urls": [
+        "Funding, https://github.com/sponsors/samuelcolvin",
+        "Homepage, https://github.com/pydantic",
+        "Source, https://github.com/pydantic/pydantic/tree/main/pydantic-core"
+      ],
+      "provenance": "Exact URL/hash from frozen K3 pip report; downloaded with --require-hashes",
+      "sha256": "9667637665acba166a7dbbc786f14c50512d3a01f7199e0e1a13b929e92d7c7a",
+      "url": "https://files.pythonhosted.org/packages/08/93/2a6556bbdb8e918175af9d849a5d0b367b5644e41939d040f3a7215b1339/pydantic_core-2.50.2-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl",
+      "version": "2.50.2"
+    },
+    {
+      "archive": "bundles/langgraph-wheelhouse.tar.gz",
+      "byte_length": 807870,
+      "filename": "pyyaml-6.0.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl",
+      "legacy_license_first_line": "MIT",
+      "license_assessment": "DECLARED_METADATA_ONLY; original archive and notice bytes retained, no relicensing",
+      "license_classifiers": [
+        "License :: OSI Approved :: MIT License"
+      ],
+      "license_expression": null,
+      "name": "PyYAML",
+      "preserved_metadata_and_notices": [
+        {
+          "copy": "licenses/dependencies/PyYAML-6.0.3/01-METADATA",
+          "original_member": "pyyaml-6.0.3.dist-info/METADATA",
+          "sha256": "03c3b415ed38d09faedc49360e930769b40c58f68585e6de00e2e4916a858d34"
+        },
+        {
+          "copy": "licenses/dependencies/PyYAML-6.0.3/02-LICENSE",
+          "original_member": "pyyaml-6.0.3.dist-info/licenses/LICENSE",
+          "sha256": "8d3928f9dc4490fd635707cb88eb26bd764102a7282954307d3e5167a577e8a4"
+        }
+      ],
+      "project_urls": [
+        "Bug Tracker, https://github.com/yaml/pyyaml/issues",
+        "CI, https://github.com/yaml/pyyaml/actions",
+        "Documentation, https://pyyaml.org/wiki/PyYAMLDocumentation",
+        "Mailing lists, http://lists.sourceforge.net/lists/listinfo/yaml-core",
+        "Source Code, https://github.com/yaml/pyyaml"
+      ],
+      "provenance": "Exact URL/hash from frozen K3 pip report; downloaded with --require-hashes",
+      "sha256": "ba1cc08a7ccde2d2ec775841541641e4548226580ab850948cbfda66a1befcdc",
+      "url": "https://files.pythonhosted.org/packages/8b/9d/b3589d3877982d4f2329302ef98a8026e7f4443c765c46cfecc8858c6b4b/pyyaml-6.0.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl",
+      "version": "6.0.3"
+    },
+    {
+      "archive": "bundles/langgraph-wheelhouse.tar.gz",
+      "byte_length": 26766,
+      "filename": "referencing-0.37.0-py3-none-any.whl",
+      "legacy_license_first_line": "",
+      "license_assessment": "DECLARED_METADATA_ONLY; original archive and notice bytes retained, no relicensing",
+      "license_classifiers": [],
+      "license_expression": "MIT",
+      "name": "referencing",
+      "preserved_metadata_and_notices": [
+        {
+          "copy": "licenses/dependencies/referencing-0.37.0/01-METADATA",
+          "original_member": "referencing-0.37.0.dist-info/METADATA",
+          "sha256": "c93b00e6ab1524fd60848376604c189a114374776475c25a31d57be47b29de6a"
+        },
+        {
+          "copy": "licenses/dependencies/referencing-0.37.0/02-COPYING",
+          "original_member": "referencing-0.37.0.dist-info/licenses/COPYING",
+          "sha256": "42dcd63495f87b4eb7c7757afa379bb55a53f94afd7a5f657d9adf57236e515c"
+        }
+      ],
+      "project_urls": [
+        "Documentation, https://referencing.readthedocs.io/",
+        "Homepage, https://github.com/python-jsonschema/referencing",
+        "Issues, https://github.com/python-jsonschema/referencing/issues/",
+        "Funding, https://github.com/sponsors/Julian",
+        "Tidelift, https://tidelift.com/subscription/pkg/pypi-referencing?utm_source=pypi-referencing&utm_medium=referral&utm_campaign=pypi-link",
+        "Changelog, https://referencing.readthedocs.io/en/stable/changes/",
+        "Source, https://github.com/python-jsonschema/referencing"
+      ],
+      "provenance": "Exact URL/hash from frozen K3 pip report; downloaded with --require-hashes",
+      "sha256": "381329a9f99628c9069361716891d34ad94af76e461dcb0335825aecc7692231",
+      "url": "https://files.pythonhosted.org/packages/2c/58/ca301544e1fa93ed4f80d724bf5b194f6e4b945841c5bfd555878eea9fcb/referencing-0.37.0-py3-none-any.whl",
+      "version": "0.37.0"
+    },
+    {
+      "archive": "bundles/langgraph-wheelhouse.tar.gz",
+      "byte_length": 73075,
+      "filename": "requests-2.34.2-py3-none-any.whl",
+      "legacy_license_first_line": "Apache-2.0",
+      "license_assessment": "DECLARED_METADATA_ONLY; original archive and notice bytes retained, no relicensing",
+      "license_classifiers": [
+        "License :: OSI Approved :: Apache Software License"
+      ],
+      "license_expression": null,
+      "name": "requests",
+      "preserved_metadata_and_notices": [
+        {
+          "copy": "licenses/dependencies/requests-2.34.2/01-METADATA",
+          "original_member": "requests-2.34.2.dist-info/METADATA",
+          "sha256": "8c384ba3e979480faae2859d3c5e6c1276dd2c3616e322e124d52c8cfc556f27"
+        },
+        {
+          "copy": "licenses/dependencies/requests-2.34.2/02-LICENSE",
+          "original_member": "requests-2.34.2.dist-info/licenses/LICENSE",
+          "sha256": "09e8a9bcec8067104652c168685ab0931e7868f9c8284b66f5ae6edae5f1130b"
+        },
+        {
+          "copy": "licenses/dependencies/requests-2.34.2/03-NOTICE",
+          "original_member": "requests-2.34.2.dist-info/licenses/NOTICE",
+          "sha256": "f5110972dedad2b4e9d314518daf3b7d72d6e02e499acd802181de6f74571dcc"
+        }
+      ],
+      "project_urls": [
+        "Documentation, https://requests.readthedocs.io",
+        "Source, https://github.com/psf/requests"
+      ],
+      "provenance": "Exact URL/hash from frozen K3 pip report; downloaded with --require-hashes",
+      "sha256": "2a0d60c172f83ac6ab31e4554906c0f3b3588d37b5cb939b1c061f4907e278e0",
+      "url": "https://files.pythonhosted.org/packages/a0/f4/c67b0b3f1b9245e8d266f0f112c500d50e5b4e83cb6f3b71b6528104182a/requests-2.34.2-py3-none-any.whl",
+      "version": "2.34.2"
+    },
+    {
+      "archive": "bundles/langgraph-wheelhouse.tar.gz",
+      "byte_length": 54481,
+      "filename": "requests_toolbelt-1.0.0-py2.py3-none-any.whl",
+      "legacy_license_first_line": "Apache 2.0",
+      "license_assessment": "DECLARED_METADATA_ONLY; original archive and notice bytes retained, no relicensing",
+      "license_classifiers": [
+        "License :: OSI Approved :: Apache Software License"
+      ],
+      "license_expression": null,
+      "name": "requests-toolbelt",
+      "preserved_metadata_and_notices": [
+        {
+          "copy": "licenses/dependencies/requests-toolbelt-1.0.0/01-AUTHORS.rst",
+          "original_member": "requests_toolbelt-1.0.0.dist-info/AUTHORS.rst",
+          "sha256": "57df198f62c9098aac95c9b8ec1f0b8efc024080f61d5a0ed89ef4c5da3cf031"
+        },
+        {
+          "copy": "licenses/dependencies/requests-toolbelt-1.0.0/02-LICENSE",
+          "original_member": "requests_toolbelt-1.0.0.dist-info/LICENSE",
+          "sha256": "1f8cf8bdacd98ed6d36d0fec0c07f7765acebd6e81205962ab5146023b3c858d"
+        },
+        {
+          "copy": "licenses/dependencies/requests-toolbelt-1.0.0/03-METADATA",
+          "original_member": "requests_toolbelt-1.0.0.dist-info/METADATA",
+          "sha256": "fa52f26237cc8d148d25c5746fdca499a56d0e765e69095cc3564a07cce23967"
+        }
+      ],
+      "project_urls": [
+        "Changelog, https://github.com/requests/toolbelt/blob/master/HISTORY.rst",
+        "Source, https://github.com/requests/toolbelt"
+      ],
+      "provenance": "Exact URL/hash from frozen K3 pip report; downloaded with --require-hashes",
+      "sha256": "cccfdd665f0a24fcf4726e690f65639d272bb0637b9b92dfd91a5568ccf6bd06",
+      "url": "https://files.pythonhosted.org/packages/3f/51/d4db610ef29373b879047326cbf6fa98b6c1969d6f6dc423279de2b1be2c/requests_toolbelt-1.0.0-py2.py3-none-any.whl",
+      "version": "1.0.0"
+    },
+    {
+      "archive": "bundles/langgraph-wheelhouse.tar.gz",
+      "byte_length": 371261,
+      "filename": "rpds_py-2026.9.1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+      "legacy_license_first_line": "",
+      "license_assessment": "DECLARED_METADATA_ONLY; original archive and notice bytes retained, no relicensing",
+      "license_classifiers": [],
+      "license_expression": "MIT",
+      "name": "rpds-py",
+      "preserved_metadata_and_notices": [
+        {
+          "copy": "licenses/dependencies/rpds-py-2026.9.1/01-METADATA",
+          "original_member": "rpds_py-2026.9.1.dist-info/METADATA",
+          "sha256": "5d72dca2e387c8d2b4180b68ee87c15b64751e059100a6db58891ec9995445c3"
+        },
+        {
+          "copy": "licenses/dependencies/rpds-py-2026.9.1/02-LICENSE",
+          "original_member": "rpds_py-2026.9.1.dist-info/licenses/LICENSE",
+          "sha256": "314e4e91be3baa93c0fb4bccc9e4e97cd643eb839b065af921782c2175fe9909"
+        }
+      ],
+      "project_urls": [
+        "Documentation, https://rpds.readthedocs.io/",
+        "Funding, https://github.com/sponsors/Julian",
+        "Homepage, https://github.com/crate-py/rpds",
+        "Issues, https://github.com/crate-py/rpds/issues/",
+        "Source, https://github.com/crate-py/rpds",
+        "Tidelift, https://tidelift.com/subscription/pkg/pypi-rpds-py?utm_source=pypi-rpds-py&utm_medium=referral&utm_campaign=pypi-link",
+        "Upstream, https://github.com/orium/rpds"
+      ],
+      "provenance": "Exact URL/hash from frozen K3 pip report; downloaded with --require-hashes",
+      "sha256": "addeda51556dac7c1a2f14cda62db8b621cd12afba3091d03a96c72932387eab",
+      "url": "https://files.pythonhosted.org/packages/1d/6d/b26eb1e75395925b3a142ed351cbed2ec8212f5c9d937aee3df32c701baa/rpds_py-2026.9.1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+      "version": "2026.9.1"
+    },
+    {
+      "archive": "bundles/langgraph-wheelhouse.tar.gz",
+      "byte_length": 10235,
+      "filename": "sniffio-1.3.1-py3-none-any.whl",
+      "legacy_license_first_line": "MIT OR Apache-2.0",
+      "license_assessment": "DECLARED_METADATA_ONLY; original archive and notice bytes retained, no relicensing",
+      "license_classifiers": [
+        "License :: OSI Approved :: MIT License",
+        "License :: OSI Approved :: Apache Software License"
+      ],
+      "license_expression": null,
+      "name": "sniffio",
+      "preserved_metadata_and_notices": [
+        {
+          "copy": "licenses/dependencies/sniffio-1.3.1/01-LICENSE",
+          "original_member": "sniffio-1.3.1.dist-info/LICENSE",
+          "sha256": "652c878488d1456361e08c3f8607fd7ba59892a14103d15cce4ff93c85b5cc8b"
+        },
+        {
+          "copy": "licenses/dependencies/sniffio-1.3.1/02-LICENSE.APACHE2",
+          "original_member": "sniffio-1.3.1.dist-info/LICENSE.APACHE2",
+          "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+        },
+        {
+          "copy": "licenses/dependencies/sniffio-1.3.1/03-LICENSE.MIT",
+          "original_member": "sniffio-1.3.1.dist-info/LICENSE.MIT",
+          "sha256": "3e6dae555eb92787fc82d1d48355677f454c7f65aeb38d3f9e72bf9a3daf034b"
+        },
+        {
+          "copy": "licenses/dependencies/sniffio-1.3.1/04-METADATA",
+          "original_member": "sniffio-1.3.1.dist-info/METADATA",
+          "sha256": "0b318b57098edeccf585e60a889a6b6a7b5c4086f3a9aa62eff76a1d3cee12d9"
+        }
+      ],
+      "project_urls": [
+        "Homepage, https://github.com/python-trio/sniffio",
+        "Documentation, https://sniffio.readthedocs.io/",
+        "Changelog, https://sniffio.readthedocs.io/en/latest/history.html"
+      ],
+      "provenance": "Exact URL/hash from frozen K3 pip report; downloaded with --require-hashes",
+      "sha256": "2f6da418d1f1e0fddd844478f41680e794e6051915791a034ff65e5f100525a2",
+      "url": "https://files.pythonhosted.org/packages/e9/44/75a9c9421471a6c4805dbf2356f7c181a29c1879239abab1ea2cc8f38b40/sniffio-1.3.1-py3-none-any.whl",
+      "version": "1.3.1"
+    },
+    {
+      "archive": "bundles/langgraph-wheelhouse.tar.gz",
+      "byte_length": 32310,
+      "filename": "tenacity-9.2.1-py3-none-any.whl",
+      "legacy_license_first_line": "",
+      "license_assessment": "DECLARED_METADATA_ONLY; original archive and notice bytes retained, no relicensing",
+      "license_classifiers": [],
+      "license_expression": "Apache-2.0",
+      "name": "tenacity",
+      "preserved_metadata_and_notices": [
+        {
+          "copy": "licenses/dependencies/tenacity-9.2.1/01-METADATA",
+          "original_member": "tenacity-9.2.1.dist-info/METADATA",
+          "sha256": "1d30f0b4cd3cf1ad585400f9ea9c424e64c630ea63e57209a1f16fce72e68eb7"
+        },
+        {
+          "copy": "licenses/dependencies/tenacity-9.2.1/02-LICENSE",
+          "original_member": "tenacity-9.2.1.dist-info/licenses/LICENSE",
+          "sha256": "58d1e17ffe5109a7ae296caafcadfdbe6a7d176f0bc4ab01e12a689b0499d8bd"
+        }
+      ],
+      "project_urls": [
+        "Homepage, https://github.com/jd/tenacity",
+        "Documentation, https://tenacity.readthedocs.io",
+        "Source, https://github.com/jd/tenacity",
+        "Issues, https://github.com/jd/tenacity/issues",
+        "Changelog, https://tenacity.readthedocs.io/en/latest/changelog.html"
+      ],
+      "provenance": "Exact URL/hash from frozen K3 pip report; downloaded with --require-hashes",
+      "sha256": "9e56f17539296baab7beabb08b92f6ee3d7be92d8be72d763360677c2ad6580e",
+      "url": "https://files.pythonhosted.org/packages/d6/26/1ff2b0721ac66a3ec5b1402b333110b352ab0a8724052ac279a7b82d40c4/tenacity-9.2.1-py3-none-any.whl",
+      "version": "9.2.1"
+    },
+    {
+      "archive": "bundles/langgraph-wheelhouse.tar.gz",
+      "byte_length": 19017,
+      "filename": "truststore-0.10.5-py3-none-any.whl",
+      "legacy_license_first_line": "",
+      "license_assessment": "DECLARED_METADATA_ONLY; original archive and notice bytes retained, no relicensing",
+      "license_classifiers": [],
+      "license_expression": "MIT",
+      "name": "truststore",
+      "preserved_metadata_and_notices": [
+        {
+          "copy": "licenses/dependencies/truststore-0.10.5/01-METADATA",
+          "original_member": "truststore-0.10.5.dist-info/METADATA",
+          "sha256": "1fd496f290853214e630d96f7163d2dd916f84ebe634b58aa827d6853e8f8610"
+        },
+        {
+          "copy": "licenses/dependencies/truststore-0.10.5/02-LICENSE",
+          "original_member": "truststore-0.10.5.dist-info/licenses/LICENSE",
+          "sha256": "33be7b7e8fa4fd19b1760e1a8ed8a668bdab852c91b692dd41424bcb725a9fca"
+        }
+      ],
+      "project_urls": [
+        "Documentation, https://truststore.readthedocs.io",
+        "Source, https://github.com/sethmlarson/truststore"
+      ],
+      "provenance": "Exact URL/hash from frozen K3 pip report; downloaded with --require-hashes",
+      "sha256": "9aaaedaefaf06d8b206278cf8b5012bc897f485a874503501e12d776df78951c",
+      "url": "https://files.pythonhosted.org/packages/51/e9/3a7820be2bb0fe53b6bc9c3be26d3d1158004e4c3ab953aa6840b955b1e9/truststore-0.10.5-py3-none-any.whl",
+      "version": "0.10.5"
+    },
+    {
+      "archive": "bundles/langgraph-wheelhouse.tar.gz",
+      "byte_length": 45571,
+      "filename": "typing_extensions-4.16.0-py3-none-any.whl",
+      "legacy_license_first_line": "",
+      "license_assessment": "DECLARED_METADATA_ONLY; original archive and notice bytes retained, no relicensing",
+      "license_classifiers": [],
+      "license_expression": "PSF-2.0",
+      "name": "typing_extensions",
+      "preserved_metadata_and_notices": [
+        {
+          "copy": "licenses/dependencies/typing_extensions-4.16.0/01-METADATA",
+          "original_member": "typing_extensions-4.16.0.dist-info/METADATA",
+          "sha256": "b05084ca1d50879865178d9fff9fabeab61bdfb1f361bfbde95421ffc8f9be46"
+        },
+        {
+          "copy": "licenses/dependencies/typing_extensions-4.16.0/02-LICENSE",
+          "original_member": "typing_extensions-4.16.0.dist-info/licenses/LICENSE",
+          "sha256": "3b2f81fe21d181c499c59a256c8e1968455d6689d269aa85373bfb6af41da3bf"
+        }
+      ],
+      "project_urls": [
+        "Bug Tracker, https://github.com/python/typing_extensions/issues",
+        "Changes, https://github.com/python/typing_extensions/blob/main/CHANGELOG.md",
+        "Documentation, https://typing-extensions.readthedocs.io/",
+        "Home, https://github.com/python/typing_extensions",
+        "Q & A, https://github.com/python/typing/discussions",
+        "Repository, https://github.com/python/typing_extensions"
+      ],
+      "provenance": "Exact URL/hash from frozen K3 pip report; downloaded with --require-hashes",
+      "sha256": "481caa481374e813c1b176ada14e97f1f67a4539ce9cfeb3f350d78d6370c2e8",
+      "url": "https://files.pythonhosted.org/packages/49/d3/b8441a820a491ddfc024b0b0cf0393375b75ea13866d9c66727e54c2fc80/typing_extensions-4.16.0-py3-none-any.whl",
+      "version": "4.16.0"
+    },
+    {
+      "archive": "bundles/langgraph-wheelhouse.tar.gz",
+      "byte_length": 14750,
+      "filename": "typing_inspection-0.4.4-py3-none-any.whl",
+      "legacy_license_first_line": "",
+      "license_assessment": "DECLARED_METADATA_ONLY; original archive and notice bytes retained, no relicensing",
+      "license_classifiers": [],
+      "license_expression": "MIT",
+      "name": "typing-inspection",
+      "preserved_metadata_and_notices": [
+        {
+          "copy": "licenses/dependencies/typing-inspection-0.4.4/01-METADATA",
+          "original_member": "typing_inspection-0.4.4.dist-info/METADATA",
+          "sha256": "bad3d9e6342ef6750cf5128ec942327b8bebdce0b6e4d6f67cb15b27ae5118da"
+        },
+        {
+          "copy": "licenses/dependencies/typing-inspection-0.4.4/02-LICENSE",
+          "original_member": "typing_inspection-0.4.4.dist-info/licenses/LICENSE",
+          "sha256": "804b59b25f2c31bd278f9202a19ae49a3945aa2664387e2d0a128c7cacc61ec3"
+        }
+      ],
+      "project_urls": [
+        "Homepage, https://github.com/pydantic/typing-inspection",
+        "Documentation, https://pydantic.github.io/typing-inspection/dev/",
+        "Source, https://github.com/pydantic/typing-inspection",
+        "Changelog, https://github.com/pydantic/typing-inspection/blob/main/HISTORY.md"
+      ],
+      "provenance": "Exact URL/hash from frozen K3 pip report; downloaded with --require-hashes",
+      "sha256": "65b8397ba37ccbce054456aaccddfc91e6e3083c92824df348d96ca832f3f147",
+      "url": "https://files.pythonhosted.org/packages/67/81/4add07e5172b7ac40d8ed5ff580409a7801a4fe26d529bdd915401dabfbe/typing_inspection-0.4.4-py3-none-any.whl",
+      "version": "0.4.4"
+    },
+    {
+      "archive": "bundles/langgraph-wheelhouse.tar.gz",
+      "byte_length": 135717,
+      "filename": "urllib3-2.8.0-py3-none-any.whl",
+      "legacy_license_first_line": "",
+      "license_assessment": "DECLARED_METADATA_ONLY; original archive and notice bytes retained, no relicensing",
+      "license_classifiers": [],
+      "license_expression": "MIT",
+      "name": "urllib3",
+      "preserved_metadata_and_notices": [
+        {
+          "copy": "licenses/dependencies/urllib3-2.8.0/01-METADATA",
+          "original_member": "urllib3-2.8.0.dist-info/METADATA",
+          "sha256": "10898c620e8007c030e07fa5622b68358a43010025dfbd78a1cb797699de2bb4"
+        },
+        {
+          "copy": "licenses/dependencies/urllib3-2.8.0/02-LICENSE.txt",
+          "original_member": "urllib3-2.8.0.dist-info/licenses/LICENSE.txt",
+          "sha256": "130e3a64d5fdd5d096a752694634a7d9df284469de86e5732100268041e3d686"
+        }
+      ],
+      "project_urls": [
+        "Changelog, https://github.com/urllib3/urllib3/blob/main/CHANGES.rst",
+        "Documentation, https://urllib3.readthedocs.io",
+        "Code, https://github.com/urllib3/urllib3",
+        "Issue tracker, https://github.com/urllib3/urllib3/issues",
+        "Security policy, https://urllib3.readthedocs.io/en/latest/security.html"
+      ],
+      "provenance": "Exact URL/hash from frozen K3 pip report; downloaded with --require-hashes",
+      "sha256": "0cf3cae568d36aa9576b28dfb35f11328f1cb974ca7647d9475ebb86c75ac6e3",
+      "url": "https://files.pythonhosted.org/packages/92/9d/c4e665119135114480843e7ab388fa94d8480650450e6f8e26b70d323a4c/urllib3-2.8.0-py3-none-any.whl",
+      "version": "2.8.0"
+    },
+    {
+      "archive": "bundles/langgraph-wheelhouse.tar.gz",
+      "byte_length": 330342,
+      "filename": "uuid_utils-0.19.0-cp310-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+      "legacy_license_first_line": "",
+      "license_assessment": "DECLARED_METADATA_ONLY; original archive and notice bytes retained, no relicensing",
+      "license_classifiers": [],
+      "license_expression": "BSD-3-Clause",
+      "name": "uuid_utils",
+      "preserved_metadata_and_notices": [
+        {
+          "copy": "licenses/dependencies/uuid_utils-0.19.0/01-METADATA",
+          "original_member": "uuid_utils-0.19.0.dist-info/METADATA",
+          "sha256": "0332e95af212190fed2aabf51512552425c7e7082cd1216563530174e9a16f08"
+        },
+        {
+          "copy": "licenses/dependencies/uuid_utils-0.19.0/02-LICENSE.md",
+          "original_member": "uuid_utils-0.19.0.dist-info/licenses/LICENSE.md",
+          "sha256": "0c47f52b4c484bd04c78e7c969542eea31afe644f587f3b8a8ccce86352c6046"
+        }
+      ],
+      "project_urls": [
+        "Documentation, https://github.com/aminalaee/uuid-utils",
+        "Issues, https://github.com/aminalaee/uuid-utils/issues",
+        "Source, https://github.com/aminalaee/uuid-utils"
+      ],
+      "provenance": "Exact URL/hash from frozen K3 pip report; downloaded with --require-hashes",
+      "sha256": "b8060530a8fa27f11947489c79bc36e6ebb465b2d714945364dc397283309417",
+      "url": "https://files.pythonhosted.org/packages/be/45/8238eac588b668e5c500cb187fd74a9f6d984c09f3f3f2fa4161d3c07eb7/uuid_utils-0.19.0-cp310-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
+      "version": "0.19.0"
+    },
+    {
+      "archive": "bundles/langgraph-wheelhouse.tar.gz",
+      "byte_length": 226321,
+      "filename": "websockets-17.4-cp312-cp312-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl",
+      "legacy_license_first_line": "",
+      "license_assessment": "DECLARED_METADATA_ONLY; original archive and notice bytes retained, no relicensing",
+      "license_classifiers": [],
+      "license_expression": "BSD-3-Clause",
+      "name": "websockets",
+      "preserved_metadata_and_notices": [
+        {
+          "copy": "licenses/dependencies/websockets-17.4/01-METADATA",
+          "original_member": "websockets-17.4.dist-info/METADATA",
+          "sha256": "09b83a3c9da174e7f309c9052c45c06907b8011be1f22bdf58b4a1e26221d669"
+        },
+        {
+          "copy": "licenses/dependencies/websockets-17.4/02-LICENSE",
+          "original_member": "websockets-17.4.dist-info/licenses/LICENSE",
+          "sha256": "3d6a0c050d8bec52fabad502e45fb25bd02bcadbd70dea34d447b6a0ff4e6da8"
+        }
+      ],
+      "project_urls": [
+        "Homepage, https://github.com/python-websockets/websockets",
+        "Changelog, https://websockets.readthedocs.io/en/stable/project/changelog.html",
+        "Documentation, https://websockets.readthedocs.io/",
+        "Funding, https://tidelift.com/subscription/pkg/pypi-websockets?utm_source=pypi-websockets&utm_medium=referral&utm_campaign=readme",
+        "Tracker, https://github.com/python-websockets/websockets/issues"
+      ],
+      "provenance": "Exact URL/hash from frozen K3 pip report; downloaded with --require-hashes",
+      "sha256": "9ae1429ee9e52b139167ed0169757806a27ed7307e942e8c62037a9184e9843b",
+      "url": "https://files.pythonhosted.org/packages/cb/18/6229d6583031ca81d092a0cd887a13a57b402fb555acc323d39b45967eb7/websockets-17.4-cp312-cp312-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl",
+      "version": "17.4"
+    },
+    {
+      "archive": "bundles/langgraph-wheelhouse.tar.gz",
+      "byte_length": 261797,
+      "filename": "xxhash-4.0.2-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl",
+      "legacy_license_first_line": "BSD-2-Clause",
+      "license_assessment": "DECLARED_METADATA_ONLY; original archive and notice bytes retained, no relicensing",
+      "license_classifiers": [],
+      "license_expression": null,
+      "name": "xxhash",
+      "preserved_metadata_and_notices": [
+        {
+          "copy": "licenses/dependencies/xxhash-4.0.2/01-METADATA",
+          "original_member": "xxhash-4.0.2.dist-info/METADATA",
+          "sha256": "9c77e2dc143269f99b8cda61c3ee1c4d106019d9d434fb345033e8f44440408d"
+        },
+        {
+          "copy": "licenses/dependencies/xxhash-4.0.2/02-LICENSE",
+          "original_member": "xxhash-4.0.2.dist-info/licenses/LICENSE",
+          "sha256": "b76e99529f3e47372029e11914a8f4b95d6313463ed5a1a5c9afe96c3e015114"
+        }
+      ],
+      "project_urls": [],
+      "provenance": "Exact URL/hash from frozen K3 pip report; downloaded with --require-hashes",
+      "sha256": "7c7c95dba490be3b4e5a2fa5595b4d4f088fe7b8726e5998b8c1d83b1f9eb3e4",
+      "url": "https://files.pythonhosted.org/packages/b2/c6/3a85fc0b821ed2dfcf6fb7cfdf07e0b261ada40374583a50abb3480f2863/xxhash-4.0.2-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl",
+      "version": "4.0.2"
+    },
+    {
+      "archive": "bundles/langgraph-wheelhouse.tar.gz",
+      "byte_length": 5546993,
+      "filename": "zstandard-0.25.0-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl",
+      "legacy_license_first_line": "",
+      "license_assessment": "DECLARED_METADATA_ONLY; original archive and notice bytes retained, no relicensing",
+      "license_classifiers": [],
+      "license_expression": "BSD-3-Clause",
+      "name": "zstandard",
+      "preserved_metadata_and_notices": [
+        {
+          "copy": "licenses/dependencies/zstandard-0.25.0/01-METADATA",
+          "original_member": "zstandard-0.25.0.dist-info/METADATA",
+          "sha256": "03d37736b26b9ae48451dd17026d93dffbd252fb708c1a2a9ae1be0c0966de92"
+        },
+        {
+          "copy": "licenses/dependencies/zstandard-0.25.0/02-LICENSE",
+          "original_member": "zstandard-0.25.0.dist-info/licenses/LICENSE",
+          "sha256": "788fe85e53724a40b299051c4abc9cf74d42b27e7968325b80891c25f79adb4b"
+        }
+      ],
+      "project_urls": [
+        "Homepage, https://github.com/indygreg/python-zstandard",
+        "Documentation, https://python-zstandard.readthedocs.io/en/latest/"
+      ],
+      "provenance": "Exact URL/hash from frozen K3 pip report; downloaded with --require-hashes",
+      "sha256": "5a56ba0db2d244117ed744dfa8f6f5b366e14148e00de44723413b2f3938a902",
+      "url": "https://files.pythonhosted.org/packages/53/60/7be26e610767316c028a2cbedb9a3beabdbe33e2182c373f71a1c0b88f36/zstandard-0.25.0-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl",
+      "version": "0.25.0"
+    }
+  ],
+  "schema": "k5-dependency-artifacts-v1"
+}

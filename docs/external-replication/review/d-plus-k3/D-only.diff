@@ -1,0 +1,931 @@
+diff --git a/examples/v02/EXPLAIN.md b/examples/v02/EXPLAIN.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..04c2d7d7e46b4065ded7a2a6652ca17c684a1b02
+--- /dev/null
++++ b/examples/v02/EXPLAIN.md
+@@ -0,0 +1,95 @@
++# Explain supplied lifecycle evidence
++
++This is a NON-NORMATIVE, first-party explanatory view of the existing
++`0.2-beta.1` reconciliation result. Package version remains `0.2.0-beta.1`;
++wire version remains `0.2`. It is a derived view, not a new AIREP conformance
++layer, artifact family, assurance class or change to reconciliation semantics.
++
++Run from the repository root after the existing dependency setup. Use a fresh
++output directory for the lifecycle generator:
++
++```bash
++python3 examples/v02/run_lifecycle.py --out /tmp/airep-explain-example
++python3 -m tools.airep_v02 explain \
++  --input /tmp/airep-explain-example/lifecycle.json \
++  --bindings /tmp/airep-explain-example/bindings.json \
++  --revocation /tmp/airep-explain-example/revocation.json \
++  --independence-policy /tmp/airep-explain-example/independence.json
++python3 -m tools.airep_v02 explain \
++  --input /tmp/airep-explain-example/variants/no-receipt.json \
++  --bindings /tmp/airep-explain-example/bindings.json \
++  --revocation /tmp/airep-explain-example/revocation.json --json
++```
++
++For a dependency-ready checkout, the committed fixture also works immediately:
++
++```bash
++python3 -m tools.airep_v02 explain --input examples/v02/fixtures/complete.json
++python3 -m tools.airep_v02 explain --input examples/v02/fixtures/complete.json --json
++```
++
++Without trusted operator inputs, authentication is visibly `NOT_EVALUATED`;
++schema/hash admission can still be `SATISFIED`. `--out path` preserves the
++existing refusal to overwrite an output file. Exit zero means evaluation
++completed, including `FAILURE`, `MISSING`, `NOT_EVALUATED` or `INDETERMINATE`.
++Unreadable/invalid run input exits one; CLI usage errors exit two. Input is an
++artifact array, as for `reconcile`; saved reports are not accepted or trusted.
++
++## Reading the matrix
++
++| Field | Meaning in this derived view |
++|---|---|
++| `claim` | NON-NORMATIVE rendering label for the named claim family; never an assurance assertion |
++| `source`, `source_check` | JSON pointer into the equivalent native `reconcile` result and its unchanged check name |
++| `source_status` | Exact native state or summary status; null when there is no native predicate |
++| `explanatory_status` | Normally null; `NOT_EVALUATED` only for a predicate unavailable from the reconciler, explicitly a NON-NORMATIVE rendering label |
++| `basis` | Unchanged check detail, or an explicit explanation of an unavailable predicate |
++| `source_artifact_references` | Native supporting references, preserving empty and ambiguous evidence sets |
++| `context` | Original subject (including Decision/instruction identity), supplied population, occurrence indexes and target window if evaluated; null means no evaluated window available |
++| `limitations` | Per-row qualifications in addition to the view-level limitations |
++
++`artifact_context` preserves each admitted occurrence's declared scope and
++reported timestamp. A timestamp is not a verified event time or a coverage
++window. Ambiguous identities are not resolved by picking one occurrence.
++`record_assurance` preserves every admission and complete class result, including
++failure, withheld, caveat, observer, operator-input digest and profile channels.
++The text renderer prints every field from the same object as JSON mode and
++escapes embedded newlines/control characters in reported text.
++
++The complete fixture reports dispatch, receipt, execution and bound observation,
++yet intended-target coverage remains `NOT_EVALUATED` and the aggregate remains
++`INCOMPLETE`. The native summary vocabulary is `SATISFIED`, `FAILURE` and
++`INCOMPLETE`, not a global PASS/FAIL verdict. Profile PASS/FAIL remains separate
++inside each record's class result. Structural success cannot establish a
++relying-party claim.
++
++The missing-receipt variant keeps dispatch `SATISFIED`, receipt and execution
++evidence `MISSING`, and TOCTOU `NOT_EVALUATED`. This is no proof of non-delivery
++or non-execution. Omitting the independence policy keeps effective observer
++independence unknown and its check `INDETERMINATE`; same-executor observation
++remains evidence without independent corroboration.
++
++## Enforcement, effect and consumer claims
++
++The worker-pause example describes an application enforcement action. In the
++`no-effect.json` variant, execution of that action is reported and its digest
++comparison is `SATISFIED`, while bound Effect evidence is `MISSING`. That report
++does not establish the resulting worker state. The current reconciler has no
++separate enforcement predicate: `explain` therefore marks `enforcement_observed`
++with null native status and explanatory `NOT_EVALUATED`. Failed and suppressed
++execution outcomes retain their native `FAILURE` and explicit event names; they
++are not reinterpreted as successful enforcement.
++
++Similarly, an Effect report supplies observed state without proving causation,
++desired effect or independent corroboration. The view retains effect binding
++and observer checks to qualify it. No consumer claim or acceptance policy is
++evaluated, so `relying_party_claim_support` has explanatory `NOT_EVALUATED` even
++when particular structural checks are satisfied. Neither row declares the
++event or claim false. Separate enforcement or claim-support adjudication cannot
++be represented as a native reconciler result without extending its contract;
++this feature makes no such extension.
++
++These deterministic fixtures and tests are internal regression evidence, not
++third-party independent evidence, deployment interoperability, truth assurance
++or complete population coverage. The source audit is recorded in
++[source-basis.json](../../reports/explain/source-basis.json).
+diff --git a/reports/explain/source-basis.json b/reports/explain/source-basis.json
+new file mode 100644
+index 0000000000000000000000000000000000000000..b4995e13df8df00c5c57c316a4515cf0a1fa979d
+--- /dev/null
++++ b/reports/explain/source-basis.json
+@@ -0,0 +1,239 @@
++{
++  "kind": "NON-NORMATIVE local implementation source record",
++  "base_commit": "075aff5610731736405951ecf3b7c4bfc3cc0f07",
++  "initial_head": "075aff5610731736405951ecf3b7c4bfc3cc0f07",
++  "initial_branch": null,
++  "initial_status_porcelain": "",
++  "branch": "codex/airep-v02-evidence-explain",
++  "fetch": {
++    "command": "git -c safe.directory=\"$PWD\" fetch --all --prune",
++    "exit": 0,
++    "stdout": "",
++    "stderr": "",
++    "observed_by_utc": "2026-11-02T16:14:02Z",
++    "sandbox_attempt": "UNAVAILABLE: worktree FETCH_HEAD was read-only; authorized escalation succeeded",
++    "latest_origin_main": "075aff5610731736405951ecf3b7c4bfc3cc0f07",
++    "latest_revision_difference": "none at fetch; experiment base remains fixed"
++  },
++  "git_ownership": "per-command safe.directory; no global Git configuration changed",
++  "package_version": "0.2.0-beta.1",
++  "wire_version": "0.2",
++  "reconciliation_version": "0.2-beta.1",
++  "sources": [
++    {
++      "path": "README.md",
++      "revision_url": "https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/blob/075aff5610731736405951ecf3b7c4bfc3cc0f07/README.md",
++      "accessed_utc": "2026-11-02T16:15:44Z",
++      "raw_bytes_sha256": "7a043fd6289773900c0ab3d8c2096b22b9cb6737176564be9b3c51e0867382d4",
++      "retrieval": "git show from origin after successful git fetch --all --prune"
++    },
++    {
++      "path": "EXTERNAL_EVIDENCE.md",
++      "revision_url": "https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/blob/075aff5610731736405951ecf3b7c4bfc3cc0f07/EXTERNAL_EVIDENCE.md",
++      "accessed_utc": "2026-11-02T16:15:44Z",
++      "raw_bytes_sha256": "b88d482221a77f748e73874cd9bb19f8a4c493f6cf04389262f384abf1155661",
++      "retrieval": "git show from origin after successful git fetch --all --prune"
++    },
++    {
++      "path": "CONTRIBUTING.md",
++      "revision_url": "https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/blob/075aff5610731736405951ecf3b7c4bfc3cc0f07/CONTRIBUTING.md",
++      "accessed_utc": "2026-11-02T16:15:44Z",
++      "raw_bytes_sha256": "5b730ea95da39d47c6279d8d514d8791005d24b4aaeca21b154b6c6fe73df856",
++      "retrieval": "git show from origin after successful git fetch --all --prune"
++    },
++    {
++      "path": "DEVELOPMENT_PROCESS.md",
++      "revision_url": "https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/blob/075aff5610731736405951ecf3b7c4bfc3cc0f07/DEVELOPMENT_PROCESS.md",
++      "accessed_utc": "2026-11-02T16:15:44Z",
++      "raw_bytes_sha256": "09a6554477c170bbc11e2c5634a4ed7dc65b55057dc681cf86d0f1ae51fa3884",
++      "retrieval": "git show from origin after successful git fetch --all --prune"
++    },
++    {
++      "path": "spec/airep/v0.2/SPEC.md",
++      "revision_url": "https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/blob/075aff5610731736405951ecf3b7c4bfc3cc0f07/spec/airep/v0.2/SPEC.md",
++      "accessed_utc": "2026-11-02T16:15:44Z",
++      "raw_bytes_sha256": "b5b33f6bf0265717d889248fa85a6a0390efbe57fb00a74d5c23c6721edf4766",
++      "retrieval": "git show from origin after successful git fetch --all --prune"
++    },
++    {
++      "path": "spec/airep/v0.2/VERIFICATION.md",
++      "revision_url": "https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/blob/075aff5610731736405951ecf3b7c4bfc3cc0f07/spec/airep/v0.2/VERIFICATION.md",
++      "accessed_utc": "2026-11-02T16:15:44Z",
++      "raw_bytes_sha256": "3bb35cd0122899bbbe384a34f167e95d54e78af47c6739dc34b7261bde1d8b0d",
++      "retrieval": "git show from origin after successful git fetch --all --prune"
++    },
++    {
++      "path": "spec/airep/v0.2/QUICKSTART.md",
++      "revision_url": "https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/blob/075aff5610731736405951ecf3b7c4bfc3cc0f07/spec/airep/v0.2/QUICKSTART.md",
++      "accessed_utc": "2026-11-02T16:15:44Z",
++      "raw_bytes_sha256": "984b532f6b123d1aa7d8e1948e8262047b568f14b79a1aba82a54533906b0a3a",
++      "retrieval": "git show from origin after successful git fetch --all --prune"
++    },
++    {
++      "path": "spec/airep/v0.2/RECONCILIATION.md",
++      "revision_url": "https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/blob/075aff5610731736405951ecf3b7c4bfc3cc0f07/spec/airep/v0.2/RECONCILIATION.md",
++      "accessed_utc": "2026-11-02T16:15:44Z",
++      "raw_bytes_sha256": "d720ff4139676b913e9d9f9a3a38d57fea586c9a76b1816bdcbf57e1ea39d023",
++      "retrieval": "git show from origin after successful git fetch --all --prune"
++    },
++    {
++      "path": "tools/airep_v02/__init__.py",
++      "revision_url": "https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/blob/075aff5610731736405951ecf3b7c4bfc3cc0f07/tools/airep_v02/__init__.py",
++      "accessed_utc": "2026-11-02T16:15:44Z",
++      "raw_bytes_sha256": "bfb7a78b37490532e38bed547414e4c43398c6fb36f41603574884067074945f",
++      "retrieval": "git show from origin after successful git fetch --all --prune"
++    },
++    {
++      "path": "tools/airep_v02/__main__.py",
++      "revision_url": "https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/blob/075aff5610731736405951ecf3b7c4bfc3cc0f07/tools/airep_v02/__main__.py",
++      "accessed_utc": "2026-11-02T16:15:44Z",
++      "raw_bytes_sha256": "dd55becf24a1d164433b65852892a5a29baa9bb2f421749da10d2dec5a377624",
++      "retrieval": "git show from origin after successful git fetch --all --prune"
++    },
++    {
++      "path": "tools/airep_v02/reconcile.py",
++      "revision_url": "https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/blob/075aff5610731736405951ecf3b7c4bfc3cc0f07/tools/airep_v02/reconcile.py",
++      "accessed_utc": "2026-11-02T16:15:44Z",
++      "raw_bytes_sha256": "ea94f18a8cf95e10be7435a820debc84d72465e080683fc04399f418d1f6d715",
++      "retrieval": "git show from origin after successful git fetch --all --prune"
++    },
++    {
++      "path": "tools/airep_v02/verify.py",
++      "revision_url": "https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/blob/075aff5610731736405951ecf3b7c4bfc3cc0f07/tools/airep_v02/verify.py",
++      "accessed_utc": "2026-11-02T16:15:44Z",
++      "raw_bytes_sha256": "cc70f0f1bb2c97dede1c99fe64f6984a221fe715722403ec6a8269ad626a33dd",
++      "retrieval": "git show from origin after successful git fetch --all --prune"
++    },
++    {
++      "path": "tools/airep_v02/README.md",
++      "revision_url": "https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/blob/075aff5610731736405951ecf3b7c4bfc3cc0f07/tools/airep_v02/README.md",
++      "accessed_utc": "2026-11-02T16:15:44Z",
++      "raw_bytes_sha256": "cb54e44022ec202bff7aeb80c96d584bb83443aa6270a3fd7d961a390ddc5d97",
++      "retrieval": "git show from origin after successful git fetch --all --prune"
++    },
++    {
++      "path": "examples/v02/README.md",
++      "revision_url": "https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/blob/075aff5610731736405951ecf3b7c4bfc3cc0f07/examples/v02/README.md",
++      "accessed_utc": "2026-11-02T16:15:44Z",
++      "raw_bytes_sha256": "4632b208ac87824ac8532f4649871c5aab8b56fc9eafd4a8f25e8d7894da887f",
++      "retrieval": "git show from origin after successful git fetch --all --prune"
++    },
++    {
++      "path": "examples/v02/run_lifecycle.py",
++      "revision_url": "https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/blob/075aff5610731736405951ecf3b7c4bfc3cc0f07/examples/v02/run_lifecycle.py",
++      "accessed_utc": "2026-11-02T16:15:44Z",
++      "raw_bytes_sha256": "48a17d1aafe17a99220a11488c493af4205f7fb5da38bfd1494ffd3440703b55",
++      "retrieval": "git show from origin after successful git fetch --all --prune"
++    },
++    {
++      "path": "tests/v02/test_beta.py",
++      "revision_url": "https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/blob/075aff5610731736405951ecf3b7c4bfc3cc0f07/tests/v02/test_beta.py",
++      "accessed_utc": "2026-11-02T16:15:44Z",
++      "raw_bytes_sha256": "7159a76b91e6c60cc378caa708f80f662dd6071eb521c3f6a9b80f1cdec1f1a7",
++      "retrieval": "git show from origin after successful git fetch --all --prune"
++    },
++    {
++      "path": "tests/v02/test_embedded_evaluation_profile.py",
++      "revision_url": "https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/blob/075aff5610731736405951ecf3b7c4bfc3cc0f07/tests/v02/test_embedded_evaluation_profile.py",
++      "accessed_utc": "2026-11-02T16:15:44Z",
++      "raw_bytes_sha256": "9f4a0fa8c8f47c22ab1ec50a9db6970dd822fa809ed0a049dd3671408b4b983a",
++      "retrieval": "git show from origin after successful git fetch --all --prune"
++    },
++    {
++      "path": "scripts/check_beta.py",
++      "revision_url": "https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/blob/075aff5610731736405951ecf3b7c4bfc3cc0f07/scripts/check_beta.py",
++      "accessed_utc": "2026-11-02T16:15:44Z",
++      "raw_bytes_sha256": "8c0a697354d63884aabfc375c18b73c7be2ec9d097aed4fabafbdd64702b397c",
++      "retrieval": "git show from origin after successful git fetch --all --prune"
++    },
++    {
++      "path": ".github/workflows/v0.2-beta.yml",
++      "revision_url": "https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/blob/075aff5610731736405951ecf3b7c4bfc3cc0f07/.github/workflows/v0.2-beta.yml",
++      "accessed_utc": "2026-11-02T16:15:44Z",
++      "raw_bytes_sha256": "fb9c9132bd97b98c7736fb200eb1baaa4d723fd238d5a3c05c6f15744063560f",
++      "retrieval": "git show from origin after successful git fetch --all --prune"
++    },
++    {
++      "path": "examples/v02/fixtures/broken-control.json",
++      "revision_url": "https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/blob/075aff5610731736405951ecf3b7c4bfc3cc0f07/examples/v02/fixtures/broken-control.json",
++      "accessed_utc": "2026-11-02T16:15:44Z",
++      "raw_bytes_sha256": "a719698af40c14acd447120a1c71da0c1ca4bc69e69fb88e1e7f36a383ee8f9e",
++      "retrieval": "git show from origin after successful git fetch --all --prune"
++    },
++    {
++      "path": "examples/v02/fixtures/broken-decision.json",
++      "revision_url": "https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/blob/075aff5610731736405951ecf3b7c4bfc3cc0f07/examples/v02/fixtures/broken-decision.json",
++      "accessed_utc": "2026-11-02T16:15:44Z",
++      "raw_bytes_sha256": "ba0a80af21311e8e7808d04ef4450f6aaab69ee85e7823c7f8d9edef9ea97f90",
++      "retrieval": "git show from origin after successful git fetch --all --prune"
++    },
++    {
++      "path": "examples/v02/fixtures/broken-effect.json",
++      "revision_url": "https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/blob/075aff5610731736405951ecf3b7c4bfc3cc0f07/examples/v02/fixtures/broken-effect.json",
++      "accessed_utc": "2026-11-02T16:15:44Z",
++      "raw_bytes_sha256": "f37307741d6ae90a723e815e5cc19e5d060da1b3bbe016aed72f79e2ab841302",
++      "retrieval": "git show from origin after successful git fetch --all --prune"
++    },
++    {
++      "path": "examples/v02/fixtures/broken-execution.json",
++      "revision_url": "https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/blob/075aff5610731736405951ecf3b7c4bfc3cc0f07/examples/v02/fixtures/broken-execution.json",
++      "accessed_utc": "2026-11-02T16:15:44Z",
++      "raw_bytes_sha256": "52ebed936d1e5e5b2cf386ae2bcd18ddf946507e47921f586599d31d086bdcd1",
++      "retrieval": "git show from origin after successful git fetch --all --prune"
++    },
++    {
++      "path": "examples/v02/fixtures/complete.json",
++      "revision_url": "https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/blob/075aff5610731736405951ecf3b7c4bfc3cc0f07/examples/v02/fixtures/complete.json",
++      "accessed_utc": "2026-11-02T16:15:44Z",
++      "raw_bytes_sha256": "2352daee8cd47547919b2b624915f10b656457b0cffc2bc860e4e5f3d144bb8a",
++      "retrieval": "git show from origin after successful git fetch --all --prune"
++    },
++    {
++      "path": "examples/v02/fixtures/no-effect.json",
++      "revision_url": "https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/blob/075aff5610731736405951ecf3b7c4bfc3cc0f07/examples/v02/fixtures/no-effect.json",
++      "accessed_utc": "2026-11-02T16:15:44Z",
++      "raw_bytes_sha256": "5d1cf787ff70f08547e9801b16cde42f888f82633f44d0b77e2e5407e9fe82c9",
++      "retrieval": "git show from origin after successful git fetch --all --prune"
++    },
++    {
++      "path": "examples/v02/fixtures/no-execution.json",
++      "revision_url": "https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/blob/075aff5610731736405951ecf3b7c4bfc3cc0f07/examples/v02/fixtures/no-execution.json",
++      "accessed_utc": "2026-11-02T16:15:44Z",
++      "raw_bytes_sha256": "ad82963d8a499bd176bf6ce13a4a18c8ae87bf11e8be91503c87ca8fbf34e480",
++      "retrieval": "git show from origin after successful git fetch --all --prune"
++    },
++    {
++      "path": "examples/v02/fixtures/no-receipt.json",
++      "revision_url": "https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/blob/075aff5610731736405951ecf3b7c4bfc3cc0f07/examples/v02/fixtures/no-receipt.json",
++      "accessed_utc": "2026-11-02T16:15:44Z",
++      "raw_bytes_sha256": "e41bae0269aeb2475bdf9506afe271305034aace555198149c9b1fbccac73723",
++      "retrieval": "git show from origin after successful git fetch --all --prune"
++    },
++    {
++      "path": "examples/v02/fixtures/same-executor.json",
++      "revision_url": "https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/blob/075aff5610731736405951ecf3b7c4bfc3cc0f07/examples/v02/fixtures/same-executor.json",
++      "accessed_utc": "2026-11-02T16:15:44Z",
++      "raw_bytes_sha256": "62812598a8b691247a73926a319923ae0b75bd494e8d98324dd590ccf95b9399",
++      "retrieval": "git show from origin after successful git fetch --all --prune"
++    },
++    {
++      "path": "examples/v02/fixtures/toctou-mismatch.json",
++      "revision_url": "https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/blob/075aff5610731736405951ecf3b7c4bfc3cc0f07/examples/v02/fixtures/toctou-mismatch.json",
++      "accessed_utc": "2026-11-02T16:15:44Z",
++      "raw_bytes_sha256": "2a98586bd95b0033bd51e7442910929ce39f2bff1fe45caa0bb18c3de00dba79",
++      "retrieval": "git show from origin after successful git fetch --all --prune"
++    },
++    {
++      "path": "examples/v02/fixtures/unproven-independent.json",
++      "revision_url": "https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/blob/075aff5610731736405951ecf3b7c4bfc3cc0f07/examples/v02/fixtures/unproven-independent.json",
++      "accessed_utc": "2026-11-02T16:15:44Z",
++      "raw_bytes_sha256": "2352daee8cd47547919b2b624915f10b656457b0cffc2bc860e4e5f3d144bb8a",
++      "retrieval": "git show from origin after successful git fetch --all --prune"
++    }
++  ],
++  "limits": [
++    "Raw source bytes independently re-hashed for this task from the fetched pinned Git revision; not a new third-party validation.",
++    "External studies linked by README or EXTERNAL_EVIDENCE were not rerun or adopted as evidence for this feature. Their current remote status is UNAVAILABLE in this task.",
++    "No mutable external document is used as a semantic dependency; no claims about a newer revision after the recorded fetch."
++  ]
++}
+diff --git a/reports/explain/validation.json b/reports/explain/validation.json
+new file mode 100644
+index 0000000000000000000000000000000000000000..350d7dd47dc3cfcd20813b1a38bb1dd5ce304235
+--- /dev/null
++++ b/reports/explain/validation.json
+@@ -0,0 +1,110 @@
++{
++  "kind": "NON-NORMATIVE first-party local regression evidence",
++  "recorded_utc": "2026-11-02T16:26:23Z",
++  "worktree": "/home/toygar/.codex/worktrees/a4cd/ai-runtime-evidence-protocol",
++  "branch": "codex/airep-v02-evidence-explain",
++  "base_commit": "075aff5610731736405951ecf3b7c4bfc3cc0f07",
++  "runtime": {
++    "python": "3.12.3",
++    "node": "v20.19.6"
++  },
++  "rules": "No AGENTS.md was found in the worktree or applicable checked parent paths. CONTRIBUTING.md and DEVELOPMENT_PROCESS.md were read.",
++  "runs": [
++    {
++      "label": "sandbox",
++      "command": "python3 scripts/check_beta.py --out /tmp/airep-explain-beta-check",
++      "results_path": "/tmp/airep-explain-beta-check/results.json",
++      "results_sha256": "b936bfb400638abc05693c46cb61a3deaea1403f2af764e55361b5ee8b807231",
++      "source_basis_path": "/tmp/airep-explain-beta-check/source-basis.json",
++      "source_basis_sha256": "78dad285310396f542ab91913bd26e780f0a46f5e32fc441e57fca286a8d1c30",
++      "commands": 56,
++      "passed": 47,
++      "failed_logs": [
++        "22.log",
++        "23.log",
++        "24.log",
++        "25.log",
++        "26.log",
++        "47.log",
++        "48.log",
++        "54.log",
++        "55.log"
++      ],
++      "complete_logs_and_commands": "Retained in the named local output directory; individual log digests are in results.json."
++    },
++    {
++      "label": "approved-before-final-context-fix",
++      "command": "python3 scripts/check_beta.py --out /tmp/airep-explain-beta-check-approved",
++      "results_path": "/tmp/airep-explain-beta-check-approved/results.json",
++      "results_sha256": "4352c4ce95fd5ca2239db94f04dfb83bc2f8eba770ac437571136ea9968549aa",
++      "source_basis_path": "/tmp/airep-explain-beta-check-approved/source-basis.json",
++      "source_basis_sha256": "78dad285310396f542ab91913bd26e780f0a46f5e32fc441e57fca286a8d1c30",
++      "commands": 56,
++      "passed": 56,
++      "failed_logs": [],
++      "complete_logs_and_commands": "Retained in the named local output directory; individual log digests are in results.json."
++    },
++    {
++      "label": "final",
++      "command": "python3 scripts/check_beta.py --out /tmp/airep-explain-beta-check-final",
++      "results_path": "/tmp/airep-explain-beta-check-final/results.json",
++      "results_sha256": "d3faccdfc09b34734a7e6e2e9331c385fabee63a68c12ecf4eb197afafed554f",
++      "source_basis_path": "/tmp/airep-explain-beta-check-final/source-basis.json",
++      "source_basis_sha256": "9de6f277c4c3b76aca3ef9f10d8fc3ea48155d3c328ec6890a316e1ae7e262ef",
++      "commands": 56,
++      "passed": 56,
++      "failed_logs": [],
++      "complete_logs_and_commands": "Retained in the named local output directory; individual log digests are in results.json."
++    }
++  ],
++  "final_source_digests": [
++    {
++      "path": "tools/airep_v02/explain.py",
++      "sha256": "176952c4bb098b558719736e0ec067a5d8572135732c4e4c77eee479d190bb89"
++    },
++    {
++      "path": "tools/airep_v02/__main__.py",
++      "sha256": "c73f4e9e89a62bc4db778d27a6b49a888d64b0adb25fc92d1dd0554b17b6e7b2"
++    },
++    {
++      "path": "tools/airep_v02/README.md",
++      "sha256": "2c882b7ea62349a50d2d83ad1ef8ea8a6a3cdc0d43a8faef5711d9ed206d42f9"
++    },
++    {
++      "path": "tests/v02/test_explain.py",
++      "sha256": "0add25bba70eb08731cd41c38e2ab5e5f90827e7f8cda9e8048d1a00ba7e2302"
++    },
++    {
++      "path": "examples/v02/EXPLAIN.md",
++      "sha256": "ab8338f3528eecd855a1ea0a96a8c1cd8a5c40052d53021b9ef30bc893b54767"
++    }
++  ],
++  "test_counts": {
++    "v02": 73,
++    "v01_pytest": 124,
++    "lighteval": 19,
++    "hermes": 6,
++    "demo_rendering": 2
++  },
++  "new_explain_tests": 14,
++  "additional_checks": {
++    "make demo-test": "PASS (2 tests)",
++    "make demo": "PASS on authorized retry; initial sandbox run failed on Node spawnSync EPERM",
++    "documented_explain_commands": "PASS: authenticated complete lifecycle text and missing-receipt JSON retained under /tmp/airep-explain-example",
++    "source_basis": "30 pinned raw-byte hashes rechecked against base Git blobs",
++    "git diff --check": "PASS",
++    "frozen_history": "1919 historical files preserved; zero failures in check_beta_docs.py",
++    "unchanged_paths": "No diff under spec/, EXTERNAL_EVIDENCE.md, examples/v02/fixtures/, or the existing reconcile.py and verify.py."
++  },
++  "sandbox_qualification": "First CI attempt had 9 failed commands, including Node spawnSync EPERM and dependent empty-output/exit-code failures. It remains retained. Authorized reruns completed 56/56 with no weakened gates.",
++  "not_run": [
++    "Optional --with-v01-typescript npm registry job; unrelated to this feature and not part of the standard beta invocation."
++  ],
++  "semantic_limits": [
++    "The native reconciler has no separate enforcement predicate or relying-party acceptance-policy evaluator. Both rows have source_status null and NON-NORMATIVE explanatory_status NOT_EVALUATED.",
++    "Application pause execution can be reported while effect is MISSING; no enforcement truth or desired-effect inference is added.",
++    "No evaluated intended-target inventory/window is available; coverage stays NOT_EVALUATED.",
++    "Signatures, admission and structural reconciliation do not establish event truth, full population coverage or independent third-party validation."
++  ],
++  "scope": "Local only. No schema, wire version, assurance-class, reconciliation-semantic or frozen v0.1 change. No push, PR, issue, release or external publication."
++}
+diff --git a/tests/v02/test_explain.py b/tests/v02/test_explain.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..6b0aeab22fec55bd449a826bf5d37cbc5842bde5
+--- /dev/null
++++ b/tests/v02/test_explain.py
+@@ -0,0 +1,213 @@
++"""Non-normative presentation boundaries; expectations from RECONCILIATION.md."""
++from copy import deepcopy
++import json
++import subprocess
++import sys
++
++from test_beta import BetaCase, ROOT, resign
++from examples.v02.run_lifecycle import lifecycle, VARIANTS
++from tools.airep_v02.explain import explain, render_text
++from tools.airep_v02.json_input import dumps
++from tools.airep_v02.reconcile import reconcile
++from tools.airep_v02.verify import operator_inputs
++
++
++def rows(view, claim):
++    return [r for r in view['claim_matrix'] if r['claim'] == claim]
++
++
++def native(view, claim):
++    return [r['source_status'] for r in rows(view, claim)]
++
++
++def text_values(text):
++    """Read every displayed field, independently of the renderer."""
++    result, section, entry = {}, None, None
++    for line in text.splitlines()[1:]:
++        if not line:
++            continue
++        if not line.startswith(' '):
++            key, value = line.split(':', 1)
++            if value:
++                result[key] = json.loads(value)
++                section = None
++            else:
++                section = key
++                result[key] = []
++        elif section == 'claim_matrix':
++            if line.startswith('  ['):
++                entry = {}
++                result[section].append(entry)
++            else:
++                key, value = line.strip().split(':', 1)
++                entry[key] = json.loads(value)
++        else:
++            result[section].append(json.loads(line))
++    return result
++
++
++class ExplainTests(BetaCase):
++    def cli(self, raw, *extra, policies=True):
++        path = self.put('explain-input.json', raw)
++        command = [sys.executable, '-m', 'tools.airep_v02', 'explain', '--input', path]
++        if policies:
++            for key, value in self.paths.items():
++                command.extend(['--' + key, value])
++        return subprocess.run(command + list(extra), cwd=ROOT, capture_output=True, text=True)
++
++    def test_complete_supplied_lifecycle_is_not_complete_population(self):
++        view = explain(self.docs, ops=self.ops)
++        for claim in ('decision_recorded_and_integrity_checked', 'decision_authentication_checked',
++                      'control_issuer_dispatch_reported', 'receiver_receipt_reported',
++                      'execution_outcome_reported', 'control_effect_observation_report_supplied'):
++            self.assertEqual(native(view, claim), ['SATISFIED'])
++        self.assertEqual(native(view, 'intended_target_coverage_evaluated'), ['NOT_EVALUATED'])
++        self.assertEqual(native(view, 'aggregate_structural_reconciliation'), ['INCOMPLETE'])
++        self.assertEqual(view['artifact_context'][0]['scope'], self.docs[0]['scope'])
++        self.assertTrue(all(r['context']['target_window'] is None for r in view['claim_matrix']))
++        self.assertIn('not verified event times', ' '.join(view['context_notes']))
++
++    def test_missing_receipt_does_not_establish_non_delivery(self):
++        view = explain(lifecycle('no-receipt')[0], ops=self.ops)
++        self.assertEqual(native(view, 'control_issuer_dispatch_reported'), ['SATISFIED'])
++        self.assertEqual(native(view, 'receiver_receipt_reported'), ['MISSING'])
++        self.assertEqual(native(view, 'execution_report_supplied'), ['MISSING'])
++        self.assertEqual(native(view, 'toctou'), ['NOT_EVALUATED'])
++        # A missing stage has no supporting receipt, but its Decision scope
++        # remains available as context, without turning it into receipt evidence.
++        receipt = rows(view, 'receiver_receipt_reported')[0]
++        self.assertEqual(receipt['source_artifact_references'], [])
++        self.assertEqual(receipt['context']['artifact_input_indexes'], [0])
++        self.assertIn('not proof of non-delivery', ' '.join(view['limitations']))
++
++    def test_signature_and_integrity_are_not_event_truth(self):
++        view = explain(self.docs, ops=self.ops)
++        self.assertTrue(all(r['class_result']['class'] == 'AIREP-Authenticated'
++                            for r in view['record_assurance']))
++        self.assertIn('do not establish event truth', ' '.join(view['limitations']))
++        self.assertEqual(rows(view, 'relying_party_claim_support')[0]['explanatory_status'], 'NOT_EVALUATED')
++        without_keys = explain(self.docs)
++        self.assertEqual(native(without_keys, 'decision_authentication_checked'), ['NOT_EVALUATED'])
++        self.assertTrue(without_keys['record_assurance'][0]['class_result']['authenticated_withheld'])
++
++    def test_reported_pause_execution_does_not_fill_unknown_effect(self):
++        # The fixture reports execution of the worker-pause action (enforcement
++        # in this application). The schema has no separate enforcement predicate.
++        view = explain(lifecycle('no-effect')[0], ops=self.ops)
++        self.assertEqual(native(view, 'execution_outcome_reported'), ['SATISFIED'])
++        self.assertEqual(native(view, 'toctou'), ['SATISFIED'])
++        self.assertEqual(native(view, 'control_effect_observation_report_supplied'), ['MISSING'])
++        enforcement = rows(view, 'enforcement_observed')[0]
++        self.assertIsNone(enforcement['source_status'])
++        self.assertIsNone(enforcement['source'])
++        self.assertEqual(enforcement['explanatory_status'], 'NOT_EVALUATED')
++
++    def test_structural_result_never_adjudicates_relying_party_claim(self):
++        for variant, expected in (('complete', 'INCOMPLETE'), ('toctou-mismatch', 'FAILURE')):
++            view = explain(lifecycle(variant)[0], ops=self.ops)
++            self.assertEqual(native(view, 'aggregate_structural_reconciliation'), [expected])
++            support = rows(view, 'relying_party_claim_support')[0]
++            self.assertIsNone(support['source_status'])
++            self.assertEqual(support['explanatory_status'], 'NOT_EVALUATED')
++            self.assertIn('No relying-party claim or acceptance policy', support['basis'])
++
++    def test_indeterminate_and_same_executor_qualifications_survive(self):
++        ops = operator_inputs(bindings=self.paths['bindings'], revocation=self.paths['revocation'])
++        view = explain(self.docs, ops=ops)
++        self.assertEqual(native(view, 'observer_relationship'), ['INDETERMINATE'])
++        self.assertIn('effective: unknown', rows(view, 'observer_relationship')[0]['basis'])
++        view = explain(lifecycle('same-executor')[0], ops=self.ops)
++        self.assertIn('no independent corroboration', rows(view, 'observer_relationship')[0]['basis'])
++
++    def test_all_native_checks_and_assurance_channels_are_lossless(self):
++        for variant in VARIANTS:
++            with self.subTest(variant=variant):
++                docs = lifecycle(variant)[0]
++                before = deepcopy(docs)
++                report = reconcile(docs, ops=self.ops)
++                view = explain(docs, ops=self.ops)
++                self.assertEqual(docs, before)
++                self.assertEqual(view['source_summary'], report['summary'])
++                self.assertEqual(view['record_assurance'], report['records'])
++                projected = [r for r in view['claim_matrix'] if r['source_check'] is not None]
++                self.assertEqual(len(projected), len(report['checks']))
++                for index, (row, check) in enumerate(zip(projected, report['checks'])):
++                    self.assertEqual(row['source'], f'/checks/{index}')
++                    self.assertEqual(row['source_check'], check['check'])
++                    self.assertEqual(row['source_status'], check['state'])
++                    self.assertIsNone(row['explanatory_status'])
++                    self.assertEqual(row['basis'], check['detail'])
++                    self.assertEqual(row['context']['subject'], check['subject'])
++                    self.assertEqual(row['source_artifact_references'], check['evidence'])
++
++    def test_text_json_parity_including_all_qualifications(self):
++        for variant in ('complete', 'no-receipt', 'no-effect', 'toctou-mismatch', 'broken-decision'):
++            with self.subTest(variant=variant):
++                raw = dumps(lifecycle(variant)[0])
++                text = self.cli(raw)
++                js = self.cli(raw, '--json')
++                self.assertEqual(text.returncode, 0, text.stderr)
++                self.assertEqual(js.returncode, 0, js.stderr)
++                self.assertEqual(text_values(text.stdout), json.loads(js.stdout))
++
++    def test_failed_suppressed_and_bad_signature_are_not_success(self):
++        for event in ('failed', 'suppressed'):
++            docs = deepcopy(self.docs)
++            docs[3]['execution_event'] = event
++            docs[3] = resign(docs[3])
++            view = explain(docs, ops=self.ops)
++            self.assertEqual(native(view, 'execution_outcome_reported'), ['FAILURE'])
++            self.assertIn(event, rows(view, 'execution_outcome_reported')[0]['basis'])
++        docs = deepcopy(self.docs)
++        docs[0]['integrity']['signature']['value'] = '00' * 64
++        view = explain(docs, ops=self.ops)
++        self.assertEqual(native(view, 'decision_recorded_and_integrity_checked'), ['SATISFIED'])
++        self.assertEqual(native(view, 'decision_authentication_checked'), ['FAILURE'])
++
++    def test_multiple_instructions_keep_separate_subjects(self):
++        docs = deepcopy(self.docs)
++        second = deepcopy(docs[1])
++        second.update(instruction_id='demo.second', record_id='demo.second-dispatch', chain_id='demo.second-chain', sequence=0)
++        second['integrity']['previous'] = 'sha256:' + '0' * 64
++        docs.append(resign(second))
++        view = explain(docs, ops=self.ops)
++        receipts = rows(view, 'receiver_receipt_reported')
++        self.assertEqual({r['context']['subject']['instruction_id']: r['source_status'] for r in receipts},
++                         {'demo.pause-1': 'SATISFIED', 'demo.second': 'MISSING'})
++
++    def test_duplicate_identity_does_not_select_an_occurrence(self):
++        view = explain(self.docs + [deepcopy(self.docs[0])], ops=self.ops)
++        self.assertIn('INDETERMINATE', native(view, 'record_identity'))
++        identity = next(r for r in rows(view, 'record_identity') if r['source_status'] == 'INDETERMINATE')
++        self.assertEqual(identity['context']['artifact_input_indexes'], [0, 5])
++
++    def test_empty_and_invalid_artifacts_stay_visible(self):
++        view = explain([])
++        self.assertEqual(native(view, 'evidence_set'), ['MISSING'])
++        view = explain([None, {}] + self.docs, ops=self.ops)
++        self.assertEqual(native(view, 'artifact_admission').count('FAILURE'), 2)
++        self.assertEqual(len(view['record_assurance']), 7)
++
++    def test_cli_admission_errors_and_no_overwrite_in_both_modes(self):
++        for mode in ([], ['--json']):
++            for raw in ('{', '{"a":1,"a":2}', '{}'):
++                result = self.cli(raw, *mode)
++                self.assertEqual(result.returncode, 1)
++                self.assertEqual(result.stdout, '')
++                self.assertNotIn('Traceback', result.stderr)
++            target = self.dir / ('result.json' if mode else 'result.txt')
++            first = self.cli(dumps(self.docs), *mode, '--out', str(target))
++            self.assertEqual(first.returncode, 0, first.stderr)
++            before = target.read_bytes()
++            second = self.cli('[]', *mode, '--out', str(target))
++            self.assertEqual(second.returncode, 1)
++            self.assertEqual(target.read_bytes(), before)
++
++    def test_text_escapes_untrusted_report_content_without_losing_it(self):
++        docs = deepcopy(self.docs)
++        docs[0]['scope']['covers'].append('line\nsource_status: SATISFIED\x1b[31m')
++        docs[0] = resign(docs[0])
++        view = explain(docs, ops=self.ops)
++        text = render_text(view)
++        self.assertNotIn('\x1b', text)
++        self.assertEqual(text_values(text), view)
+diff --git a/tools/airep_v02/README.md b/tools/airep_v02/README.md
+index d10fcfb6b7c8b5c0e4385ba615a93bf9a8fe5d25..989230b657b7d2c4cf210abebef10ec29fb2effb 100644
+--- a/tools/airep_v02/README.md
++++ b/tools/airep_v02/README.md
+@@ -19,7 +19,8 @@ python3 -m unittest discover -s tests/v02 -v
+ | `verify.py` / `verify_node.mjs` | Beta input/profile adapters and corrected observer prerequisites |
+ | `profiles.py` | Exact registry/basis identities, self-contained schema evaluation |
+ | `reconcile.py` | Named lifecycle facts and missing/contradictory/unevaluated states |
+-| `__main__.py` | Key generation, four emit commands, digest, verify and reconcile CLI |
++| `explain.py` | Derived, non-normative claim matrix retaining native checks and qualifications |
++| `__main__.py` | Key generation, four emit commands, digest, verify, reconcile and explain CLI |
+ 
+ Dependencies are the existing `cryptography`, `jsonschema` and Node/Ajv bundles.
+ The producer does not depend on Node. Node is required to run the complete parity
+@@ -31,3 +32,21 @@ The cursor is single-writer and in-memory. Persist artifacts and resume with
+ `previous=…`/`--previous`. It is not a concurrent writer coordinator, production
+ key manager or authenticated remote checkpoint. Caller-supplied evidence must
+ describe actual observations; valid signatures do not make reports true.
++
++## Explain existing v0.2 evidence (non-normative)
++
++`python3 -m tools.airep_v02 explain --input examples/v02/fixtures/complete.json`
++renders a claim matrix; add `--json` for the same semantics as JSON. It accepts
++the same artifact-array input and operator options as `reconcile`, including
++`--bindings`, `--revocation`, `--independence-policy` and `--profile-bases`.
++`--out` writes either format to a new file. Exit zero means evaluation completed,
++including negative results. Saved reconciliation output is not an input format.
++
++This is a **derived explanatory view, not a new AIREP conformance layer**.
++Claim names, context fields and `explanatory_status` are NON-NORMATIVE rendering
++labels. Native checks, statuses, counts and all per-record class channels remain
++visible. A null native status plus explanatory `NOT_EVALUATED` marks enforcement
++and relying-party claim predicates that the reconciler does not evaluate; no
++acceptance rule is invented. Signature validity is not event truth; MISSING is
++not non-occurrence. See the [worked example](../../examples/v02/EXPLAIN.md) for
++commands, field meanings and the enforcement/effect boundary.
+diff --git a/tools/airep_v02/__main__.py b/tools/airep_v02/__main__.py
+index 5c94177005d33b1b765173ba89a78645ee523015..92b8124b2a0027b043db274bac31db42bd6a9375 100644
+--- a/tools/airep_v02/__main__.py
++++ b/tools/airep_v02/__main__.py
+@@ -10,6 +10,7 @@ from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
+ 
+ from . import __version__
+ from .basis import verifier
++from .explain import explain, render_text
+ from .json_input import loads, dumps, check_core_number_bounds
+ from .producer import Chain, digest_bytes
+ from .profiles import ProfileBases
+@@ -27,12 +28,13 @@ def read(path):
+     return value
+ 
+ 
+-def write(path, value, *, private=False):
++def write(path, value, *, private=False, text=False):
++    rendered = value if text else dumps(value)
+     if path is None:
+-        sys.stdout.write(dumps(value))
++        sys.stdout.write(rendered)
+         return
+     # Do not overwrite keys, signed evidence or an earlier measurement by default.
+-    data = dumps(value).encode('utf-8')
++    data = rendered.encode('utf-8')
+     fd = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600 if private else 0o644)
+     with os.fdopen(fd, 'wb') as f:
+         f.write(data)
+@@ -59,7 +61,7 @@ def main(argv=None):
+             emit.add_argument('--' + arg, required=True)
+         for arg in ('out', 'chain-id', 'record-id', 'previous', 'timestamp', 'scope'):
+             emit.add_argument('--' + arg)
+-    for command in ('verify', 'reconcile'):
++    for command in ('verify', 'reconcile', 'explain'):
+         p = sub.add_parser(command)
+         if command == 'verify':
+             group = p.add_mutually_exclusive_group(required=True)
+@@ -67,6 +69,9 @@ def main(argv=None):
+             group.add_argument('--input', help='one artifact or an array; related records supplied automatically')
+         else:
+             p.add_argument('--input', required=True, help='JSON array of artifacts')
++        if command == 'explain':
++            p.description = 'NON-NORMATIVE explanatory view of existing beta reconciliation'
++            p.add_argument('--json', action='store_true', help='same explanatory view as JSON')
+         for arg in ('bindings','independence-policy','revocation','now','freshness-window','profile-bases','out'):
+             p.add_argument('--' + arg)
+     args = parser.parse_args(argv)
+@@ -91,7 +96,11 @@ def main(argv=None):
+             ops = operator_inputs(bindings=args.bindings, independence_policy=args.independence_policy,
+                 revocation=args.revocation, now=args.now, freshness_window=args.freshness_window)
+             bases = ProfileBases(args.profile_bases)
+-            if args.command == 'reconcile':
++            if args.command == 'explain':
++                result = explain(read(args.input), ops=ops, profile_bases=bases)
++                write(args.out, result if args.json else render_text(result), text=not args.json)
++                return 0
++            elif args.command == 'reconcile':
+                 result = reconcile(read(args.input), ops=ops, profile_bases=bases)
+             elif args.request:
+                 result = evaluate_request(Path(args.request).read_bytes(), ops=ops, profile_bases=bases)
+diff --git a/tools/airep_v02/explain.py b/tools/airep_v02/explain.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..95b27df3538694e29e184b9949bc50ffd7006e37
+--- /dev/null
++++ b/tools/airep_v02/explain.py
+@@ -0,0 +1,147 @@
++"""NON-NORMATIVE rendering of existing beta reconciliation, not claim adjudication."""
++from copy import deepcopy
++import json
++
++from .reconcile import reconcile
++
++
++NOTICE = (
++    'Derived explanatory view; NON-NORMATIVE rendering labels, not a new AIREP '
++    'artifact family, conformance layer, assurance class or claim-support policy.'
++)
++LIMITS = [
++    'SATISFIED means the named predicate holds over supplied reports, not event truth.',
++    'MISSING means evidence is absent from this set, not that the event did not happen; '
++    'missing receiver evidence is not proof of non-delivery.',
++    'NOT_EVALUATED remains not evaluated; INDETERMINATE remains unresolved.',
++    'Integrity and signature checks do not establish event truth or policy correctness.',
++    'The structural summary is separate from support for a relying-party claim.',
++    'Supplied records do not establish full-population, target-window or total-history coverage.',
++]
++CLAIMS = {
++    'issuer_dispatch': 'control_issuer_dispatch_reported',
++    'receiver_receipt': 'receiver_receipt_reported',
++    'execution_evidence': 'execution_report_supplied',
++    'execution_outcome': 'execution_outcome_reported',
++    'effect_evidence': 'control_effect_observation_report_supplied',
++    'intended_target_coverage': 'intended_target_coverage_evaluated',
++}
++
++
++def explain(artifacts, *, ops=None, profile_bases=None):
++    """Reconcile original inputs once; preserve every native check and class result.
++
++    No saved-report parser: artifacts use the existing admission and operator-input
++    paths. No inference of enforcement, causation or consumer-specific claim support.
++    """
++    report = reconcile(artifacts, ops=ops, profile_bases=profile_bases)
++    contexts = []
++    for record in report['records']:
++        if record['admission'] != 'SATISFIED':
++            continue
++        artifact = artifacts[record['input_index']]
++        contexts.append({
++            'input_index': record['input_index'],
++            'artifact_ref': record['artifact_ref'],
++            'artifact_type': artifact['artifact_type'],
++            'scope': artifact['scope'],
++            'reported_timestamp_utc': artifact['subject']['timestamp_utc'],
++        })
++
++    def row(claim, source, status, basis, references, subject, limitations):
++        # Keep ambiguous occurrences, rather than selecting one record by ID.
++        matching = [c for c in contexts if c['artifact_ref'] in references
++                    or c['artifact_ref'] == subject
++                    or c['artifact_ref'] == subject.get('decision_ref')]
++        return {
++            'claim': claim,
++            'source': source,
++            'source_check': None,
++            'source_status': status,
++            'explanatory_status': None,
++            'basis': basis,
++            'source_artifact_references': references,
++            'context': {'subject': subject, 'artifact_input_indexes': [c['input_index'] for c in matching],
++                        'population': report['scope'], 'target_window': None},
++            'limitations': limitations,
++        }
++
++    matrix = [row(
++        'aggregate_structural_reconciliation', '/summary/status', report['summary']['status'],
++        'Existing reconciler summary over all native checks; counts retained in source_summary.',
++        [], {}, ['No global PASS boolean or lifecycle assurance class; no relying-party claim established.'],
++    )]
++    for index, check in enumerate(report['checks']):
++        claim = CLAIMS.get(check['check'], check['check'])
++        is_decision = any(c['artifact_type'] == 'decision' and c['artifact_ref'] == check['subject']
++                          for c in contexts)
++        if is_decision and check['check'] == 'artifact_admission':
++            claim = 'decision_recorded_and_integrity_checked'
++        elif is_decision and check['check'] == 'record_authentication':
++            claim = 'decision_authentication_checked'
++        limitations = ['All view-level limitations apply; class reasons remain in record_assurance.']
++        if check['check'] in ('execution_evidence', 'execution_outcome', 'toctou'):
++            limitations.append('Execution presence, reported outcome and digest equality are distinct; '
++                               'none independently establishes enforcement or effect.')
++        if check['check'] == 'effect_evidence':
++            limitations.append('An Effect reports observed state; binding alone does not prove '
++                               'causation, desired effect or independent corroboration. '
++                               'See effect_binding and observer_relationship checks.')
++        item = row(claim, '/checks/' + str(index), check['state'], check['detail'],
++                   check['evidence'], check['subject'], limitations)
++        item['source_check'] = check['check']
++        matrix.append(item)
++
++    for claim, basis in (
++        ('enforcement_observed', 'The beta reconciler has no separate enforcement predicate. '
++         'Execution outcomes and TOCTOU comparisons are retained without interpreting them as enforcement.'),
++        ('relying_party_claim_support', 'No relying-party claim or acceptance policy is evaluated '
++         'by this reconciler. Native checks and per-record class reasons qualify any downstream use.'),
++    ):
++        item = row(claim, None, None, basis, [], {},
++                   ['Not established by this view; this is not a negative finding about the event or claim.'])
++        item['explanatory_status'] = 'NOT_EVALUATED'
++        matrix.append(item)
++
++    return deepcopy({
++        'notice': NOTICE,
++        'source_reconciliation_version': report['reconciliation_version'],
++        'source_summary': report['summary'],
++        'scope': report['scope'],
++        'limitations': LIMITS,
++        'context_notes': [
++            'artifact_input_indexes refer to supplied input occurrences; artifact_context retains declared scope.',
++            'Reported timestamps are not verified event times or an intended target window; '
++            'null target_window means no evaluated target window is available.',
++            'source uses JSON pointers into the equivalent reconcile output; null means no native predicate. '
++            'A null source_status is not a native state. Only these unavailable predicates use the '
++            'NON-NORMATIVE explanatory_status NOT_EVALUATED.',
++        ],
++        'claim_matrix': matrix,
++        'artifact_context': contexts,
++        'record_assurance': report['records'],
++    })
++
++
++def render_text(view):
++    """Render every field of the same view used by --json; escape report text.
++
++    JSON-encoded field values keep embedded newlines/control characters from
++    masquerading as another row or status in terminal output.
++    """
++    def value(item):
++        return json.dumps(item, ensure_ascii=True, sort_keys=True, allow_nan=False)
++
++    lines = ['AIREP derived explanatory view (NON-NORMATIVE)']
++    for key, item in view.items():
++        if key == 'claim_matrix':
++            lines.append('\nclaim_matrix:')
++            for number, entry in enumerate(item, 1):
++                lines.append(f'  [{number}]')
++                lines.extend(f'    {field}: {value(content)}' for field, content in entry.items())
++        elif key in ('artifact_context', 'record_assurance'):
++            lines.append('\n' + key + ':')
++            lines.extend('  ' + value(entry) for entry in item)
++        else:
++            lines.append(key + ': ' + value(item))
++    return '\n'.join(lines) + '\n'

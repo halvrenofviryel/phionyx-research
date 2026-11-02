@@ -1,0 +1,2081 @@
+diff --git a/interop/same-version/v0.2.0-beta.1/ADAPTER_CONTRACT.md b/interop/same-version/v0.2.0-beta.1/ADAPTER_CONTRACT.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..a5d4c34fbf86be96a4c4f1948bd37066b145d2fa
+--- /dev/null
++++ b/interop/same-version/v0.2.0-beta.1/ADAPTER_CONTRACT.md
+@@ -0,0 +1,137 @@
++# Optional local adapter contract (non-normative)
++
++This is harness transport version `airep-k2-local-1`, not an AIREP schema or release.
++It carries the existing #62 artifact/verification inputs. An adapter must implement
++its own producer or consumer logic. It is not required to import the reference
++verifier, use Python, or reproduce its output format. Adapters are supplied only
++when a contributor has a concrete implementation to measure.
++
++## Configuration and invocation
++
++Pass `--producer-adapter /absolute/path/producer.json` and/or
++`--consumer-adapter /absolute/path/consumer.json` to `harness.py run`.
++The JSON configuration contains:
++
++```json
++{
++  "role": "consumer",
++  "target": "COPY THE EXACT OBJECT FROM pins.json.target",
++  "implementation_id": "contributor-implementation-and-version",
++  "argv": ["/absolute/path/to/consumer-adapter"],
++  "source_file": "/absolute/path/to/declared-source-snapshot",
++  "source_sha256": "64 lowercase hex characters"
++}
++```
++
++`target` above is a placeholder: replace it with the JSON object, not a string.
++`argv` is executed directly, without a shell, in the config file's directory.
++The source_file can be a contributor-created archive of the complete source;
++the harness hashes its exact bytes before execution. This check alone cannot
++verify that the program actually implements the declared source. Bundle its
++licence, dependency closure, toolchain versions and method note for human review.
++
++The process reads one UTF-8 JSON request from stdin and writes exactly one UTF-8
++JSON response to stdout. Send diagnostic text to stderr. The harness preserves
++both streams and exit code, rejects duplicate JSON keys, and uses a 180 s timeout.
++Nonzero exit, timeout, missing executable, wrong target/role or hash mismatch can
++never become a successful result. Missing configuration is
++`EXTERNAL_RESULT_NOT_SUPPLIED`; an unavailable configured executable is
++`ADAPTER_UNAVAILABLE`.
++
++The request contains `adapter_contract`, `role`, the exact `target` object,
++`output_dir`, `input_bundle` and `input_manifest_sha256`. The last two are null
++for a producer. Absolute paths are local to this invocation.
++
++Every response contains the same `target`, `role` and `implementation_id` as the
++configuration. The response is retained separately from reference outputs.
++
++## Producer
++
++Write these files inside `output_dir/bundle/`:
++
++| File | Content |
++|---|---|
++| lifecycle.json | Array of five wire-version `0.2` artifacts: Decision, issuer dispatched Control, receiver received Control, Execution, Effect |
++| bindings.json | Explicit contributor-controlled test-key bindings using the pinned verification contract |
++| revocation.json | Explicit test revocation input using the pinned verification contract |
++| independence.json | Explicit test policy; empty pairs may leave independence unknown |
++| bundle.json | Manifest below |
++
++```json
++{
++  "target": "COPY pins.json.target OBJECT",
++  "implementation_id": "same ID as configuration",
++  "files": {
++    "lifecycle.json": "SHA-256 of exact file bytes",
++    "bindings.json": "SHA-256 of exact file bytes",
++    "revocation.json": "SHA-256 of exact file bytes",
++    "independence.json": "SHA-256 of exact file bytes"
++  },
++  "profile_basis": null,
++  "authorship": "UNASSESSED"
++}
++```
++
++No canonicalization is performed for these file hashes. A whitespace change must
++change the hash. No profiles are accepted by this deliberately minimal transport.
++After a valid response the harness consumes the bundle with the pinned reference
++tools and, if provided, the external consumer. Admission, authentication,
++reconciliation and process errors remain separate evidence.
++
++## Consumer
++
++Read the four declared input files and bundle manifest; preserve their bytes.
++Return `input_manifest_sha256` exactly as received, plus `native_result` containing
++your own JSON result. Your own classification can report failure, unknown or an
++ambiguity; it does not need to resemble the reference output. Reusing the reference
++engine would need disclosure and would not demonstrate an independent consumer.
++
++An optional `observation` enables mechanical comparison. Omit it or set it to null
++when the result cannot honestly map to this projection; comparison then remains
++`NOT_COMPARABLE`. The projection has exactly three keys:
++
++- `records`: array sorted by `record_id`, with `record_id`, `class`,
++  `authenticated_failures`, `authenticated_withheld`, `witnessed_withheld`,
++  `observer_assessment` mapped to the pinned verification meanings.
++- `reconciliation_summary`: the pinned reconciliation `status` and five `counts`.
++- `checks`: array of `{check, subject, state}`, sorted by UTF-8 bytes of Python
++  `json.dumps(item, ensure_ascii=False, sort_keys=True, indent=2) + LF`.
++
++When `observation` is supplied, validation is recursive and fail-closed. It
++must have exactly those three keys. `records` and `checks` must be arrays; each
++element must contain exactly the fields listed above. Record IDs are nonempty,
++unique, admitted Unicode strings sorted by record_id. Class values are exactly
++`AIREP-Core`, `AIREP-Authenticated`, `AIREP-Witnessed`; observer values are exactly
++`same_executor`, `independent`, `unknown`, `not_applicable`. Reason arrays must be
++deduplicated ASCII-sorted strings from their exact tier/channel in the frozen
++CLASS_VERIFIER_CONTRACT.md §5. The projected class/reason invariants from §2 apply.
++
++`reconciliation_summary` has exactly `status` and `counts`. Status is `FAILURE`,
++`INCOMPLETE` or `SATISFIED`. Counts has exactly `SATISFIED`, `FAILURE`, `MISSING`,
++`NOT_EVALUATED`, `INDETERMINATE`, each a nonnegative integer (not a Boolean or
++floating-point number). Counts must equal the supplied checks, and status follows
++the frozen failure/incomplete/satisfied precedence. Check names and structured
++subject identities must use the pinned reconciler vocabulary; states use exactly
++the five count labels. No unknown fields, null nested structures or fabricated
++vocabulary are accepted. Source hashes are in
++`sources/projection-validation-source.json`.
++
++Malformed supplied projections yield `ADAPTER_ERROR` with
++`MALFORMED_COMPARISON_PROJECTION` before the adapter result can be `REPORTED` or
++compared. The exact response bytes remain retained. An omitted or null
++`observation` still yields `NOT_COMPARABLE`; a consumer can always retain its
++native result without claiming that it fits the optional projection.
++
++The optional normalization vocabulary is defined by the release documents; its
++implementation is yours. Exact equality yields `PROJECTION_AGREES`; unequal
++projections yield `PROJECTION_DIVERGES`. Neither word establishes conformance or
++independent authorship. Original native_result and command output are always
++retained. A failed reference process yields `REFERENCE_PROCESS_ERROR` rather than
++a comparison. Mappings that cannot be made are never silently guessed.
++
++## Evidence boundary
++
++No adapter is supplied in this package. Unit tests create local protocol test
++doubles, explicitly labelled as such, and never add their outputs to external
++evidence. A real contributor still owes the source/licence, toolchain, artifact
++hashes, command logs, method note and maintainer reproduction described in #62.
+diff --git a/interop/same-version/v0.2.0-beta.1/README.md b/interop/same-version/v0.2.0-beta.1/README.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..4dbd33dc1a89c4b90e63fdaae6936dd3fe0ca9c6
+--- /dev/null
++++ b/interop/same-version/v0.2.0-beta.1/README.md
+@@ -0,0 +1,97 @@
++# Same-version local interop harness — v0.2.0-beta.1
++
++This non-normative package makes [issue #62](https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/issues/62)
++runnable without changing its challenge. It fixes every role to release
++`v0.2.0-beta.1`, commit `8a6c01ecce457aa94330c0ed7219e4c56ebfe771`, wire version `0.2`.
++It adds a local transport contract, role matrix, automated measurements and evidence
++separation. It does not implement an independently authored producer or verifier.
++
++The package and test doubles were authored with AI assistance. First-party producer,
++verifier and reconciler source was read and is reused explicitly for the reference
++lane. Nothing here is a submission to issue #62 or a new entry in EXTERNAL_EVIDENCE.md.
++
++## Run
++
++From the repository root, use an output directory that does not exist:
++
++```sh
++python3 interop/same-version/v0.2.0-beta.1/harness.py produce --out /tmp/k2-produced
++python3 interop/same-version/v0.2.0-beta.1/harness.py run --local-bundle /tmp/k2-produced/local-reference-bundle --out /tmp/k2-measured
++```
++
++Or generate and measure in one command:
++
++```sh
++python3 interop/same-version/v0.2.0-beta.1/harness.py run --out /tmp/k2-combined
++python3 -m unittest discover -s interop/same-version/v0.2.0-beta.1 -p 'test_*.py' -v
++```
++
++Python 3.12 on Linux x86-64 and Node are required. This run measured Python 3.12.3
++and Node 20.19.6. `pins.json` contains frozen dependency manifests and SHA-256
++identities. The runner archives the exact release commit from local Git, verifies
++the archive plus individual normative/source/dependency files, and materializes
++the release's offline bundles in a fresh temporary directory. It never installs
++from an index and never runs the current main-branch verifier by accident.
++
++The fresh release directory is retained and named in `run_record.json`. Dependency
++setup must be able to launch child processes. The original sandbox restriction
++(`spawnSync EPERM`) is retained as a failed attempt, separately from the successful
++authorized local rerun.
++
++The five artifacts are Decision, issuer Control dispatch, receiver Control receipt,
++Execution and Effect. The existing release example executes a local file change
++and uses public test keys. Python verification and reconciliation and all five
++Node request evaluations are captured independently. These are reference adapters
++from the same first-party implementation family; parity is not independent authorship.
++
++## Results and claim boundary
++
++The checked-in [RESULTS.md](RESULTS.md) identifies the exact local measurement and
++tests. Detailed argv, cwd, exits, stdout/stderr, input hashes, negative controls and
++role-separated results live in the run record. A successful local harness check
++does not replace the reconciler's `INCOMPLETE` result with PASS. All three external
++lanes remain `EXTERNAL_RESULT_NOT_SUPPLIED` until supplied adapters actually run.
++
++[ROLE_MATRIX.md](ROLE_MATRIX.md) fixes which implementation produces or consumes
++each bundle. [ADAPTER_CONTRACT.md](ADAPTER_CONTRACT.md) describes the small optional
++stdin/stdout adapter. An external consumer can preserve its own native result;
++the reference verifier is not required as its logic or dependency.
++
++External commands are opt-in local executable programs, not sandboxed plugins.
++Their outputs and any optional comparison projections are unassessed reports.
++Source-file hashes bind a declared entry point, not an entire dependency closure
++or contributor identity. Source, licence, exact toolchain, test-key ownership,
++method note and maintainer reproduction required by #62 remain external inputs.
++No third-party independence, general interoperability, real authority, report
++truth, completeness, standards endorsement or production safety is claimed.
++
++This transport accepts only the minimal no-profile lifecycle. It does not change
++normative schemas/protocol rules, expand v0.1 claims, or provide a new challenge.
++
++Code: Apache-2.0, consistent with CONTRIBUTING.md. This tooling documentation does
++not override the repository's CC-BY-4.0 specification/schema licence.
++
++## Complete archived payloads
++
++To keep the review compact, all measurement payloads and logs are retained in
++`evidence/payloads.tar.gz`, with per-file hashes in `evidence/PAYLOAD_SHA256SUMS`.
++The final signed lifecycle, policies, final command streams and run records remain
++directly readable; duplicate generated bundles, raw contribution logs and negative
++fixtures (including deliberately trailing whitespace) are in the archive unchanged.
++
++Restore every captured relative path and verify every payload hash:
++
++```sh
++mkdir /tmp/k2-evidence-restored
++tar -xzf interop/same-version/v0.2.0-beta.1/evidence/payloads.tar.gz -C /tmp/k2-evidence-restored
++# From /tmp/k2-evidence-restored, use the absolute path to the checksum file:
++sha256sum -c /ABSOLUTE/REPO/interop/same-version/v0.2.0-beta.1/evidence/PAYLOAD_SHA256SUMS
++```
++
++The run records retain original execution paths and hashes. The archive preserves
++payload contents, not runtime environments. Reproduce tools with the documented
++commands and frozen dependency bundles.
++
++The external-consumer projection review fix and its new 28-test measurement are
++recorded in [RESULTS.md](RESULTS.md#projection-validation-review-correction).
++The earlier measurement remains unchanged; the real external result is still absent.
+diff --git a/interop/same-version/v0.2.0-beta.1/RESULTS.md b/interop/same-version/v0.2.0-beta.1/RESULTS.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..f87a85e36d1b7cd4564a3c54831cf8bd537d1d47
+--- /dev/null
++++ b/interop/same-version/v0.2.0-beta.1/RESULTS.md
+@@ -0,0 +1,142 @@
++# K2 same-version local results
++
++**Local package complete; external submission pending.** The reference producer,
++Python verifier/reconciler and Node verifier target `v0.2.0-beta.1`, commit
++`8a6c01ecce457aa94330c0ed7219e4c56ebfe771`. All external lanes remain
++**EXTERNAL_RESULT_NOT_SUPPLIED**. No independent author or outside implementation
++result is claimed.
++
++| Measurement | Actual result |
++|---|---|
++| Minimal lifecycle | Decision, issuer dispatch, receiver receipt, Execution, Effect |
++| Python authentication | Five AIREP-Authenticated records |
++| Python/Node comparison | All five full verdicts equal; same first-party family |
++| Reconciliation | INCOMPLETE: 37 SATISFIED, 1 NOT_EVALUATED, 0 FAILURE/MISSING/INDETERMINATE |
++| Harness tests | 28 current tests, OK; original 20-test result retained |
++| Real negative controls | 8/8 assertions met; negative verdicts retained |
++| Contribution checks | make demo-test and make demo completed; beta check 56/56 commands exit zero |
++
++The reference result's `INCOMPLETE` state is expected because intended-target
++coverage is NOT_EVALUATED. Exit zero means evaluation completed. It is not a
++conformance, truth, completeness or external-independence claim.
++
++## Negative controls
++
++| Control | Preserved outcome |
++|---|---|
++| Whitespace-only byte tamper | BUNDLE_BYTE_HASH_MISMATCH |
++| Manifest target mismatch | TARGET_MISMATCH |
++| Wire-version mismatch after rehash | WIRE_VERSION_MISMATCH |
++| Receiver role rewritten as issuer | CONTROL_ROLE_SEPARATION_MISMATCH |
++| Broken Decision digest | verifier exit 1; reconciler exit 0 with summary FAILURE |
++| Signed TOCTOU mismatch | both commands exit 0; toctou FAILURE and summary FAILURE |
++| No receipt | receiver_receipt MISSING; reconciliation INCOMPLETE |
++| Independence policy omitted | Effect observer_assessment unknown |
++
++The original 20 tests additionally exercise unavailable adapters, nonzero exits carrying a
++fake success response, wrong consumer input hashes, changed source hashes, input
++mutation during consumption, duplicate JSON keys, malformed response/artifact/
++manifest types, role mismatches and real failed verifier/reconciler processes.
++Test doubles are local test code and are not counted as external results.
++
++## Exact commands and evidence
++
++The final two-command producer/measurement flow was executed from the independent
++clone on `codex/airep-v02-same-version-interop`, based on
++`075aff5610731736405951ecf3b7c4bfc3cc0f07`:
++
++```sh
++python3 interop/same-version/v0.2.0-beta.1/harness.py produce --out /tmp/k2-produced-final-r2
++python3 interop/same-version/v0.2.0-beta.1/harness.py run --local-bundle /tmp/k2-produced-final-r2/local-reference-bundle --out interop/same-version/v0.2.0-beta.1/evidence/final-reference
++python3 -m unittest discover -s interop/same-version/v0.2.0-beta.1 -p 'test_*.py' -v
++make demo-test
++make demo 'DEMO_ARGS=--out /tmp/k2-contribution-demo-final'
++python3 scripts/check_beta.py --out /tmp/k2-contribution-beta-final
++```
++
++These output paths already exist in the recorded run; choose new paths when
++repeating. Captured argv use absolute paths where applicable.
++
++- [Common run record](run_record.json): source identities, limits and evidence pointers.
++- [Final measurement](evidence/final-reference/run_record.json): every command/cwd/exit,
++  full textual stdout/stderr, exact bundle bytes and separate role records.
++- [Final command/test logs](evidence/final-validation.json): 20 tests and final two-command run.
++- [Contribution commands](evidence/validation.json) and [beta details](evidence/contribution-beta/results.json).
++- [Pinned sources/dependencies](pins.json), [issue #62 connector snapshot](sources/issue-62-connector.json),
++  [primary docs](sources/primary-documentation.json), [distribution metadata](sources/dependency-metadata.json).
++- [First sandbox attempt](evidence/sandbox-harness-attempt/run_record.json): Node child-process EPERM
++  retained as FAILED. The beta sandbox attempt likewise retained 9 failed commands.
++  Authorized reruns resolved the environment restriction without changing release tools.
++
++The successful final source and dependency versions are Python 3.12.3,
++Node 20.19.6, cryptography 48.0.0 and jsonschema 4.25.1. Every wheel and Node tarball
++is hashed in the frozen manifests; bootstrap verifies them offline. Runtime
++version availability was checked against the linked primary release/documentation
++pages, and dependency package metadata was read from the pinned distributions.
++
++## Scope and remaining dependency
++
++An actual issue #62 submission is still required: contributor-controlled producer
++implementation and test keys, source/licence/toolchain/method disclosure and
++maintainer-side reproduction. An external consumer is also needed for the reverse
++lane. The adapter permits native consumer results without importing reference
++verification code; optional mapped projections report agreement or divergence
++only. This work creates no new challenge, normative schema, v0.1 result, public
++push, PR, issue/comment, release or EXTERNAL_EVIDENCE entry.
++
++The five-artifact transport currently excludes profiles and witnesses. External
++adapters execute locally without a sandbox; their declared source hash is not
++authorship or dependency-closure attestation. The local observer uses a public
++test policy. Linux x86-64 CPython 3.12 wheels are the reproduced platform. Complete
++limitations and machine-readable records are in run_record.json.
++
++## Complete archived payloads
++
++To keep the review compact, all measurement payloads and logs are retained in
++`evidence/payloads.tar.gz`, with per-file hashes in `evidence/PAYLOAD_SHA256SUMS`.
++The final signed lifecycle, policies, final command streams and run records remain
++directly readable; duplicate generated bundles, raw contribution logs and negative
++fixtures (including deliberately trailing whitespace) are in the archive unchanged.
++
++Restore every captured relative path and verify every payload hash:
++
++```sh
++mkdir /tmp/k2-evidence-restored
++tar -xzf interop/same-version/v0.2.0-beta.1/evidence/payloads.tar.gz -C /tmp/k2-evidence-restored
++# From /tmp/k2-evidence-restored, use the absolute path to the checksum file:
++sha256sum -c /ABSOLUTE/REPO/interop/same-version/v0.2.0-beta.1/evidence/PAYLOAD_SHA256SUMS
++```
++
++The run records retain original execution paths and hashes. The archive preserves
++payload contents, not runtime environments. Reproduce tools with the documented
++commands and frozen dependency bundles.
++
++## Projection validation review correction
++
++The review found a real defect in the external consumer transport: a supplied
++`observation` with null `records`, `reconciliation_summary` and `checks` passed the
++former shallow check and was recorded as REPORTED / PROJECTION_DIVERGES. The fix
++validates nested types, exact fields, pinned class/observer/reason/check/state
++vocabularies, structured subjects, ordering and summary counts/status consistency
++before REPORTED. Malformed projections now yield
++ADAPTER_ERROR / MALFORMED_COMPARISON_PROJECTION. Absent/null observation still
++yields NOT_COMPARABLE, and a valid reported divergence remains distinguishable.
++
++[Review reproduction](evidence/projection-validation-fix/review-reproduction.json)
++captures actual adapter subprocesses against the before/fixed code and the real
++previous projection. They are local test doubles, not outside consumer evidence.
++[Current tests and commands](evidence/projection-validation-fix/validation.json)
++record 28 successful tests, including null nested structures, malformed record,
++status, count and check fields, pinned reason channels and a valid actual projection.
++[New pinned measurement](evidence/projection-validation-fix/measurement/run_record.json)
++confirms the full local reference result is unchanged: five authenticated records,
++Python/Node parity, eight expected negative controls and INCOMPLETE reconciliation.
++External result remains EXTERNAL_RESULT_NOT_SUPPLIED.
++
++The original measurement files and their original payload archive are unchanged.
++Prior root summaries/source hashes are retained under
++`evidence/projection-validation-fix/before/`. All new measurement payloads and logs
++are retained in `evidence/projection-validation-fix/measurement.tar.gz`, with
++`MEASUREMENT_SHA256SUMS`; extract this archive into a fresh directory to restore
++the `measurement/` tree. The original 56-command beta suite was not repeated:
++the frozen release tools, normative target and dependencies did not change.
+diff --git a/interop/same-version/v0.2.0-beta.1/ROLE_MATRIX.md b/interop/same-version/v0.2.0-beta.1/ROLE_MATRIX.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..cdc4ff33b838fc31dc327ebccc2638a217e25b07
+--- /dev/null
++++ b/interop/same-version/v0.2.0-beta.1/ROLE_MATRIX.md
+@@ -0,0 +1,29 @@
++# Same-version role matrix
++
++All cells target v0.2.0-beta.1 / 8a6c01ecce457aa94330c0ed7219e4c56ebfe771.
++`pins.json.target` also binds the exact five normative documents and all schemas.
++Evidence against v0.1.2 is not added to these results.
++
++| Lane | Producer | Consumer | Current evidence | Permitted conclusion |
++|---|---|---|---|---|
++| Reference → reference | Pinned Python example, public test keys | Pinned Python verifier/reconciler; pinned Node verifier parity | Local measured run | Local regression behavior only |
++| External → reference | Contributor adapter and its source/key evidence | Pinned Python verifier/reconciler | EXTERNAL_RESULT_NOT_SUPPLIED | No external producer claim |
++| Reference → external | Exact reference bundle bytes | Contributor's own consumer logic | EXTERNAL_RESULT_NOT_SUPPLIED | No external consumer claim |
++| External → external | Contributor producer bundle | Contributor consumer adapter over that same bundle | EXTERNAL_RESULT_NOT_SUPPLIED | No interchange claim |
++
++The reference implementation ID begins `reference:` and cannot be used as an
++external adapter ID. Producer and consumer transport roles are explicit and
++checked both before invocation and in the response. Labels, separate commands,
++languages or keys do not establish independent authorship. All external adapter
++records keep `independence: NOT_ASSESSED` even when projections agree.
++
++Within a lifecycle, issuer dispatch and receiver receipt must occupy their
++respective Control roles. Separate artifact families, record references and
++chain identities remain the release verifier/reconciler's responsibility.
++The harness's five-artifact gate is a transport guard, not an alternative schema
++validator. Unchanged serialized bytes are hashed before and after consumption.
++
++The local Effect is accepted as independent only under the published demonstration
++test policy. Removing that policy yields `observer_assessment: unknown`. That
++internal evidence-class result does not describe the independence of the software
++authors or establish an external observer.
+diff --git a/interop/same-version/v0.2.0-beta.1/SHA256SUMS b/interop/same-version/v0.2.0-beta.1/SHA256SUMS
+new file mode 100644
+index 0000000000000000000000000000000000000000..3c2c3c4392857bdd87fefdbeaada6f1ec6726861
+--- /dev/null
++++ b/interop/same-version/v0.2.0-beta.1/SHA256SUMS
+@@ -0,0 +1,140 @@
++25c5a13cc489c9e0065141266a2a5731ca01cd8f8f59fa285a1574eeef6b3028  ADAPTER_CONTRACT.md
++6dd5852b708dc8c696683c937bc1ff9ea8d442741a4a5d0e69fa29387ff3958a  README.md
++425d0c165805649791ff1bfef68388382295a66f79aaa922b15f37533a6d146f  RESULTS.md
++f3e8fca86fde09e9e6fd5a6ceb0d18e37111e58a8c9f9ef9ed5db79cef821b12  ROLE_MATRIX.md
++cdadd1fc7b9010fe42a6d2387f0d6b1896d1a7a823f1d4cb294efcdbd29d0d92  evidence/01-validation.stderr
++e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  evidence/01-validation.stdout
++e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  evidence/02-validation.stderr
++3a168d0c0d1c75069d16a3c1e528ceaa84e6f7dd76c7ac6f42e8210bdb7a1f19  evidence/02-validation.stdout
++e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  evidence/03-validation.stderr
++16f989680658da5de2cba32abb775a0664b69d08b5c3615c1c616425a42ad311  evidence/03-validation.stdout
++bab0dc58f6601d5b6d76a919695f4c54afc4a27c86bec1c39e9cf5a2faa49b59  evidence/04-validation.stderr
++6f7074d4c23b2ad881a64184f9b55330b1a9791f921b7aff17b56f2bcf2b47ce  evidence/04-validation.stdout
++e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  evidence/05-validation.stderr
++d5ee76704837cfe755beab8a538eb96a6f0d576d4379b41d0c3d5e169627ded4  evidence/05-validation.stdout
++e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  evidence/06-validation.stderr
++ea83a53b2bd7131c08a2ffbc66bb6c84dbc326e09c461d13fc0bd20766d1c5b4  evidence/06-validation.stdout
++ab746a0f40bba07404870698d30a384381ad4203575d804f1c64636c1ed64dca  evidence/PAYLOAD_SHA256SUMS
++2e7239ed6b5dc51e123533ee9cf1b24a2d5b4ca98b6e6f6ef3238bdcfd3774c0  evidence/contribution-beta/parity.json
++390c64e26b37d2109400909eb0b81d67efaf2c0682c1e735a91e48df2fe3bd71  evidence/contribution-beta/parity.txt
++98ec2dfe8f0bdaa11154a764fefa20328780d0f47e091708f4cda3ebac7f3ed7  evidence/contribution-beta/results.json
++dca5a2188bfef23d2a143c4fb8a2dacfd61d8b01a691dfac6e487a20877fd385  evidence/contribution-beta/source-basis.json
++986bb42cb8e52d9936dcd41899cdf3ed5ad2a207eb7a01a574cfdac0d836518e  evidence/final-producer-command/RESULTS.md
++cddfab9bfb7be04ad39c932d93669694524aab7e036373c789f22f002979c388  evidence/final-producer-command/run_record.json
++162d3848341cf05c9bfba8906e9707fb9849a9d681b5fe7a72a2a607c058450b  evidence/final-reference/RESULTS.md
++c0e552bf23884a95f515ec6db3db1adf553951c7997137db293bb78789d4d289  evidence/final-reference/local-reference-bundle/bindings.json
++d7d940eba503ab70508e90965c923ed3c2a9fb75a8f37d9004e173c8995cd4d9  evidence/final-reference/local-reference-bundle/bundle.json
++b124ee583faee01755d531a71ff98db2e7adddc92e87ca243cb42b3748031951  evidence/final-reference/local-reference-bundle/independence.json
++2352daee8cd47547919b2b624915f10b656457b0cffc2bc860e4e5f3d144bb8a  evidence/final-reference/local-reference-bundle/lifecycle.json
++67267c40ca39c51a32679548c64af11f1d70e69abf45140a306d6d6e231826c9  evidence/final-reference/local-reference-bundle/revocation.json
++e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  evidence/final-reference/logs/01-head.stderr
++28a97ba4c54b3e8d10905fcd42ba4111df4f7bc09a80ab482b936526a9774fce  evidence/final-reference/logs/01-head.stdout
++e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  evidence/final-reference/logs/02-status.stderr
++3ccef5ed2fc665a52807eafb2d777e01459194031fa9f68f4bb75e1eb532eaa5  evidence/final-reference/logs/02-status.stdout
++e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  evidence/final-reference/logs/03-resolve-release.stderr
++bcf52eec4cc16c2fdd7f7e9e0d52594748cd62975b630f38cd48a59743eeec34  evidence/final-reference/logs/03-resolve-release.stdout
++e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  evidence/final-reference/logs/04-archive-release.stderr
++e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  evidence/final-reference/logs/05-python-version.stderr
++56d8a85f918921939f8d29bc49a57cc7548c2f4bec8234d47e934257f66234bf  evidence/final-reference/logs/05-python-version.stdout
++e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  evidence/final-reference/logs/06-node-version.stderr
++89abdb6ecfed00022752dc543087c9a6d28dd27f75417dfe1f17ac06065cc968  evidence/final-reference/logs/06-node-version.stdout
++e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  evidence/final-reference/logs/07-offline-python.stderr
++3dd04a5713d835e5eac7aba9a8b7f1a87b369422a761a4c0e91361d8e03a9622  evidence/final-reference/logs/07-offline-python.stdout
++e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  evidence/final-reference/logs/08-offline-node.stderr
++6edb426e1898586fc0a772a5ad60e3ad092fa1673c28b9f5bcb5c46ca0677eb3  evidence/final-reference/logs/08-offline-node.stdout
++e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  evidence/final-reference/logs/09-verify.stderr
++e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  evidence/final-reference/logs/09-verify.stdout
++e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  evidence/final-reference/logs/10-reconcile.stderr
++e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  evidence/final-reference/logs/10-reconcile.stdout
++e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  evidence/final-reference/logs/11-node-verify-demo.stderr
++3503531dddea2da4a2b1162e0acce157c6b4b90005062b6af35e1529531ad600  evidence/final-reference/logs/11-node-verify-demo.stdout
++e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  evidence/final-reference/logs/12-node-verify-demo.stderr
++c487d21c3bcddd43f8db35dbd870f8d54666975bae8e21acfaf0ad6355e1a0ac  evidence/final-reference/logs/12-node-verify-demo.stdout
++e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  evidence/final-reference/logs/13-node-verify-demo.stderr
++e40eef21bf7c87665414d300585e6e2c5959f8f9945d2edfbe0ad17480f62b0e  evidence/final-reference/logs/13-node-verify-demo.stdout
++e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  evidence/final-reference/logs/14-node-verify-demo.stderr
++3227948f5fca7441be0fcb8fad8f389b60a076f3b76059bb160219d367a6d72e  evidence/final-reference/logs/14-node-verify-demo.stdout
++e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  evidence/final-reference/logs/15-node-verify-demo.stderr
++84658fa8dea4d3f8cc9519c2905b2579620563cf38d217eca539cd510a608f2c  evidence/final-reference/logs/15-node-verify-demo.stdout
++c6b4114f3ec4f31b135a0f1ce6af268dd6805130dc3830d9fadb575ac912e392  evidence/final-reference/logs/16-verify.stderr
++e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  evidence/final-reference/logs/16-verify.stdout
++e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  evidence/final-reference/logs/17-reconcile.stderr
++e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  evidence/final-reference/logs/17-reconcile.stdout
++e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  evidence/final-reference/logs/18-verify.stderr
++e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  evidence/final-reference/logs/18-verify.stdout
++e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  evidence/final-reference/logs/19-reconcile.stderr
++e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  evidence/final-reference/logs/19-reconcile.stdout
++e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  evidence/final-reference/logs/20-verify.stderr
++e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  evidence/final-reference/logs/20-verify.stdout
++e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  evidence/final-reference/logs/21-reconcile.stderr
++e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  evidence/final-reference/logs/21-reconcile.stdout
++e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  evidence/final-reference/logs/22-verify.stderr
++e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  evidence/final-reference/logs/22-verify.stdout
++e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  evidence/final-reference/logs/23-reconcile.stderr
++e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  evidence/final-reference/logs/23-reconcile.stdout
++c76b89796311c8c2c368e3c16084de624ee5571e9a3cff55836db0a1b3125c08  evidence/final-reference/run_record.json
++2071b35e09709147b2b75ce779579f6f9d6b8f72230f6264bf4f87d43a7e8713  evidence/final-validation.json
++162d3848341cf05c9bfba8906e9707fb9849a9d681b5fe7a72a2a607c058450b  evidence/local-reference/RESULTS.md
++ac98f910e332542283afaace737f424933f33efa1e1b09ea98ccc76c4405381b  evidence/local-reference/run_record.json
++ee8ddb46f097972a09a68696f45e575c9ba5d3c45a61dcb13b9ae60873f7f4d4  evidence/payloads.tar.gz
++986bb42cb8e52d9936dcd41899cdf3ed5ad2a207eb7a01a574cfdac0d836518e  evidence/producer-command/RESULTS.md
++451715e908c67e55226e104f6bb92e9273492b5e606d3f0a3874fa3d6cbb83d2  evidence/producer-command/run_record.json
++f0d864d61f4baccace8424617fbe5b1856e0397d84cbdee20161ae7a43f199c9  evidence/projection-validation-fix/01.stderr
++e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  evidence/projection-validation-fix/01.stdout
++e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  evidence/projection-validation-fix/02.stderr
++16f989680658da5de2cba32abb775a0664b69d08b5c3615c1c616425a42ad311  evidence/projection-validation-fix/02.stdout
++0939023a2b86c857066a1724593bbf5931cab7137cefa983bbeff88a8e0c716b  evidence/projection-validation-fix/MEASUREMENT_SHA256SUMS
++54c1dd287389726876cc334fc11b028aff089a237c0ddd58840923d0c9ca774f  evidence/projection-validation-fix/before/RESULTS.md
++d2ef9304813b7db463c1c2677abf087b6f95746d2623bcc11daedf69654a3fdc  evidence/projection-validation-fix/before/SHA256SUMS
++ec5b2839c925d9dab024e1bf09a4db011fdddfded04ba90a4652e223291056ff  evidence/projection-validation-fix/before/harness.py
++9b484c212af8a3e262e40c76b1322235ad8b82e3cf376f22e20d002126759183  evidence/projection-validation-fix/before/pins.json
++cf24c4e192cc7dd95e232f604d3ec3e21b65b83ca969f6e7ae923ec5dda45caf  evidence/projection-validation-fix/before/run_record.json
++972c41e7f3df83751646eee13a84f07f88df2673d7a764082006cd5d2c306df6  evidence/projection-validation-fix/before/test_harness.py
++7322e67969913523fadf65ae6e366e0c4891cf6b44822262fbd169b2f4cec3a7  evidence/projection-validation-fix/historical-evidence-hashes.json
++162d3848341cf05c9bfba8906e9707fb9849a9d681b5fe7a72a2a607c058450b  evidence/projection-validation-fix/measurement/RESULTS.md
++c256b4895a0687c0dd784f04502a0e54b1cb81030cd493463ad91d6532ee7c8a  evidence/projection-validation-fix/measurement/run_record.json
++25927acc59e1b35f7b407d0d4c6dfdf5fdc63201677dc5dedb3e25f6b2e051b0  evidence/projection-validation-fix/measurement.tar.gz
++5654b6ed40c137d672a95e36cfe54d9edb8b19db721e115e71980d1f15b955dd  evidence/projection-validation-fix/reproduction/after-actual-projection/adapter.py
++e2db6ddba7c3e65c0d69aa00932879d7e762213599d09db190d4ceacb0f7bbba  evidence/projection-validation-fix/reproduction/after-actual-projection/config.json
++e2db6ddba7c3e65c0d69aa00932879d7e762213599d09db190d4ceacb0f7bbba  evidence/projection-validation-fix/reproduction/after-actual-projection/output/adapter-config.json
++2280a132215914034d4f41384d62d31a4fcb7915d17ddfa757b7a9281e3c2b5b  evidence/projection-validation-fix/reproduction/after-actual-projection/output/response.json
++e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  evidence/projection-validation-fix/reproduction/after-actual-projection/record/logs/01-adapter-consumer.stderr
++3444b319d4efd36e128420928e8c7521e8be7ba933eec865ded7ebddc62f46ca  evidence/projection-validation-fix/reproduction/after-actual-projection/record/logs/01-adapter-consumer.stdin.json
++2280a132215914034d4f41384d62d31a4fcb7915d17ddfa757b7a9281e3c2b5b  evidence/projection-validation-fix/reproduction/after-actual-projection/record/logs/01-adapter-consumer.stdout
++79c0a0816415c22223cb4d3ea0ad9251c7be30e6b5fed56255faa0474b43a974  evidence/projection-validation-fix/reproduction/after-null-nested/adapter.py
++507a6b8a450d10321e04711c89f4a9510466d6293c867b6a3c5961acbe9f152f  evidence/projection-validation-fix/reproduction/after-null-nested/config.json
++507a6b8a450d10321e04711c89f4a9510466d6293c867b6a3c5961acbe9f152f  evidence/projection-validation-fix/reproduction/after-null-nested/output/adapter-config.json
++55e676158396c491bd33c4523d56e8dbaf196694128a0c64d9edb17e1d62861b  evidence/projection-validation-fix/reproduction/after-null-nested/output/response.json
++e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  evidence/projection-validation-fix/reproduction/after-null-nested/record/logs/01-adapter-consumer.stderr
++69c7f936043157b61480e8138b204fe90a7e5ff2c640488b9a70c4a3e97ee874  evidence/projection-validation-fix/reproduction/after-null-nested/record/logs/01-adapter-consumer.stdin.json
++55e676158396c491bd33c4523d56e8dbaf196694128a0c64d9edb17e1d62861b  evidence/projection-validation-fix/reproduction/after-null-nested/record/logs/01-adapter-consumer.stdout
++79c0a0816415c22223cb4d3ea0ad9251c7be30e6b5fed56255faa0474b43a974  evidence/projection-validation-fix/reproduction/before-null-nested/adapter.py
++452863e8c4a87760fa25963d1ed3736a1aa36465c1fbd58652b22d0646cceb89  evidence/projection-validation-fix/reproduction/before-null-nested/config.json
++452863e8c4a87760fa25963d1ed3736a1aa36465c1fbd58652b22d0646cceb89  evidence/projection-validation-fix/reproduction/before-null-nested/output/adapter-config.json
++81c646d5500cb0bda3b9eedfafe46c77f97e365261f1f0158cfb2915bf7c2a20  evidence/projection-validation-fix/reproduction/before-null-nested/output/response.json
++e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  evidence/projection-validation-fix/reproduction/before-null-nested/record/logs/01-adapter-consumer.stderr
++48f66c3c4aa5c7496596fec4e3fc603ed429be4cbad0d61adee84f79fa28bdfd  evidence/projection-validation-fix/reproduction/before-null-nested/record/logs/01-adapter-consumer.stdin.json
++55e676158396c491bd33c4523d56e8dbaf196694128a0c64d9edb17e1d62861b  evidence/projection-validation-fix/reproduction/before-null-nested/record/logs/01-adapter-consumer.stdout
++bcc65fda19fd795739cd80597de3698c8894c73dbf3cee6a6a036ff5b9b5307d  evidence/projection-validation-fix/review-reproduction.json
++33ad528d824163ab322a12a8a1fe7e7713943605dc1e6ee9dfdabbd45a204d43  evidence/projection-validation-fix/validation.json
++e0ac94aa013526754873ad27a40250ec8775d7916c86f44c149b5959fff75433  evidence/projection-validation-fix/verification-summary.json
++c09af28a3c59f11413d1ab4fcafc8f3fe94e8b771014905547a9a25b181f4bc7  evidence/r2-01.stderr
++e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  evidence/r2-01.stdout
++e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  evidence/r2-02.stderr
++3a168d0c0d1c75069d16a3c1e528ceaa84e6f7dd76c7ac6f42e8210bdb7a1f19  evidence/r2-02.stdout
++e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855  evidence/r2-03.stderr
++16f989680658da5de2cba32abb775a0664b69d08b5c3615c1c616425a42ad311  evidence/r2-03.stdout
++75f46fd125a7dbdae00d3c25513896cf9dd2216e0752b4bd22cd5cecc9ff183e  evidence/sandbox-contribution-attempt/results.json
++dca5a2188bfef23d2a143c4fb8a2dacfd61d8b01a691dfac6e487a20877fd385  evidence/sandbox-contribution-attempt/source-basis.json
++ccef9ceb702df3f6664a4ee3610cef317613c5980146ad7cbafd80d558bb3488  evidence/sandbox-harness-attempt/RESULTS.md
++c4c4c09dd4eca28deeb814d225acc7081ff5c90040fb4d9396e01659c0537b2b  evidence/sandbox-harness-attempt/run_record.json
++2ec3c2c34235de5f525c124fdb893af9c9bd21219130f0787b784211afd20908  evidence/validation.json
++dd1ebdafb4b79195f94ab0aecc568669b31442c58ad692d637d4fe24785f4a5a  harness.py
++018884272840e5aefc57a9ac3db7a25cf281b82de14f69ace133fbfc94ff6a34  pins.json
++df4693d869b743b292528a8f329c1ac9b27882bb42dafb18e230f7305a25b1f5  run_record.json
++e560d1676bcb5795320c4cddc8d25209869af5f4491cee00a8330257ffd4e6e5  sources/dependency-metadata.json
++5a17dd487bbb4c1fc3e48f240f84112765c8962ce8087def3f82be00d7ab7678  sources/issue-62-connector.json
++2d3cbbc1367acc89ef1094d8a84ca2d6599637a1a4efc01823d9f7c4fc7984fb  sources/primary-documentation.json
++f0cb94e7d8569bb850577d6043cdbf8899c433851cf916631dd6576f727808e5  sources/projection-validation-source.json
++f442ee26c070d59ba711d182263db86b2c21805ec330e6f5cc8eb379e87a4284  sources/start_record.json
++b7b8179818d2b318efa89a14ffd183161243d48046c97a158018be43e4b403c5  test_harness.py
+diff --git a/interop/same-version/v0.2.0-beta.1/harness.py b/interop/same-version/v0.2.0-beta.1/harness.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..5fa4aec8bf113755c5aa0c949e6dba792d573a96
+--- /dev/null
++++ b/interop/same-version/v0.2.0-beta.1/harness.py
+@@ -0,0 +1,570 @@
++#!/usr/bin/env python3
++"""Non-normative, release-pinned issue #62 transport and local measurement harness.
++
++Apache-2.0. External adapter output is an unassessed report, never independence proof.
++"""
++import argparse
++from collections import Counter
++from copy import deepcopy
++from datetime import datetime, timezone
++import hashlib
++import io
++import json
++import os
++from pathlib import Path
++import platform
++import shutil
++import subprocess
++import sys
++import tarfile
++import tempfile
++
++HERE = Path(__file__).resolve().parent
++PINS = json.loads((HERE / 'pins.json').read_text())
++TARGET = PINS['target']
++REQUIRED = ('lifecycle.json', 'bindings.json', 'revocation.json', 'independence.json')
++STATES = {'SATISFIED', 'FAILURE', 'MISSING', 'NOT_EVALUATED', 'INDETERMINATE'}
++# Non-normative transport vocabulary, transcribed from the target commit's
++# CLASS_VERIFIER_CONTRACT.md §§2,5 and tools/airep_v02/reconcile.py. This validates
++# reported projection structure; it does not execute or import a class verifier.
++PROJECTION_REASONS = {
++    'authenticated_failures': {'producer-binding-not-trusted', 'producer-binding-revoked',
++                               'producer-signature-invalid'},
++    'authenticated_withheld': {'producer-binding-missing', 'producer-binding-malformed',
++        'producer-suite-unsupported', 'producer-revocation-state-missing',
++        'producer-revocation-state-malformed'},
++    'witnessed_withheld': {'no-witness-supplied', 'witness-binding-missing',
++        'witness-binding-malformed', 'witness-suite-unsupported',
++        'witness-revocation-state-missing', 'witness-revocation-state-malformed',
++        'independence-policy-missing', 'independence-policy-malformed',
++        'independence-relation-absent', 'freshness-inputs-missing'},
++}
++PROJECTION_SUBJECTS = {
++    **dict.fromkeys(('record_authentication', 'decision_reference', 'decision_correlation',
++        'instruction_evidence', 'control_boundary', 'execution_outcome',
++        'execution_reference', 'effect_binding', 'observer_relationship', 'effect_evidence'), 'reference'),
++    **dict.fromkeys(('instruction_digest_agreement', 'issuer_dispatch', 'receiver_receipt',
++        'execution_evidence', 'delivery_failure_report', 'delivery_outcome',
++        'execution_outcomes', 'authorization_agreement', 'toctou',
++        'execution_instruction_binding'), 'instruction'),
++    **dict.fromkeys(('chain_position', 'chain_link', 'chain_predecessor'), 'position'),
++    **dict.fromkeys(('evidence_set', 'intended_target_coverage'), 'empty'),
++    'record_identity': 'identity', 'artifact_admission': 'admission',
++}
++ENV = dict(os.environ, PYTHONDONTWRITEBYTECODE='1', PYTHONNOUSERSITE='1', PIP_NO_CACHE_DIR='1')
++
++
++class Invalid(ValueError):
++    pass
++
++
++def sha(data):
++    return hashlib.sha256(data).hexdigest()
++
++
++def encode(value):
++    return (json.dumps(value, ensure_ascii=False, sort_keys=True, indent=2, allow_nan=False) + '\n').encode()
++
++
++def write(path, value):
++    path.parent.mkdir(parents=True, exist_ok=True)
++    path.write_bytes(encode(value))
++
++
++def load(raw):
++    def unique(pairs):
++        result = {}
++        for key, value in pairs:
++            if key in result:
++                raise Invalid('duplicate JSON member: ' + key)
++            result[key] = value
++        return result
++    return json.loads(raw, object_pairs_hook=unique,
++                      parse_constant=lambda x: (_ for _ in ()).throw(Invalid('non-finite JSON: ' + x)))
++
++
++def inventory(root):
++    return {str(p.relative_to(root)): sha(p.read_bytes()) for p in sorted(root.rglob('*'))
++            if p.is_file() and '__pycache__' not in p.parts}
++
++
++class Recorder:
++    def __init__(self, out):
++        self.out, self.commands = out, []
++
++    def command(self, name, argv, cwd, stdin=None, timeout=180):
++        log = self.out / 'logs' / f'{len(self.commands)+1:02d}-{name}'
++        log.parent.mkdir(parents=True, exist_ok=True)
++        entry = {'name': name, 'argv': [str(x) for x in argv], 'cwd': str(cwd),
++                 'started_at_utc': datetime.now(timezone.utc).isoformat()}
++        try:
++            p = subprocess.run(entry['argv'], cwd=cwd, input=stdin, capture_output=True,
++                               env=ENV, timeout=timeout)
++            code, stdout, stderr = p.returncode, p.stdout, p.stderr
++        except subprocess.TimeoutExpired as exc:
++            code, stdout, stderr = -1, exc.stdout or b'', (exc.stderr or b'') + b'\nTIMEOUT\n'
++        except OSError as exc:
++            code, stdout, stderr = -1, b'', str(exc).encode()
++        for stream, raw in [('stdout', stdout), ('stderr', stderr)]:
++            path = log.with_suffix('.' + stream)
++            path.write_bytes(raw)
++            entry[stream] = {'path': str(path.relative_to(self.out)), 'sha256': sha(raw)}
++        if stdin is not None:
++            path = log.with_suffix('.stdin.json')
++            path.write_bytes(stdin)
++            entry['stdin'] = {'path': str(path.relative_to(self.out)), 'sha256': sha(stdin)}
++        entry['exit_code'] = code
++        self.commands.append(entry)
++        return code, stdout, stderr
++
++    def checked(self, name, argv, cwd):
++        code, stdout, stderr = self.command(name, argv, cwd)
++        if code:
++            raise Invalid(f'{name}: process failed (exit {code}); complete logs retained')
++        return stdout
++
++
++def source_root(repo, rec):
++    commit = rec.checked('resolve-release', ['git', 'rev-parse', TARGET['release']+'^{commit}'], repo).decode().strip()
++    if commit != TARGET['commit']:
++        raise Invalid('RELEASE_COMMIT_MISMATCH')
++    archive = rec.checked('archive-release', ['git', 'archive', '--format=tar', TARGET['commit']], repo)
++    # The tar is binary evidence: hash it, but avoid storing a redundant 17 MB log.
++    entry = rec.commands[-1]
++    (rec.out / entry['stdout']['path']).unlink()
++    entry['stdout']['path'] = None
++    entry['stdout']['retention'] = 'regenerate from exact git commit; SHA-256 retained'
++    if sha(archive) != PINS['release_archive_sha256']:
++        raise Invalid('RELEASE_ARCHIVE_BYTE_MISMATCH')
++    work = Path(tempfile.mkdtemp(prefix='airep-k2-release-'))
++    with tarfile.open(fileobj=io.BytesIO(archive)) as tar:
++        tar.extractall(work, filter='data')
++    for path, expected in PINS['release_files'].items():
++        if sha((work / path).read_bytes()) != expected:
++            raise Invalid('PINNED_SOURCE_MISMATCH: ' + path)
++    return work
++
++
++def bootstrap(work, rec):
++    base = 'spec/airep/v0.2/class-verification/'
++    rec.checked('python-version', ['python3', '-VV'], work)
++    rec.checked('node-version', ['node', '--version'], work)
++    rec.checked('offline-python', ['python3', base+'offline-python-deps/prepare_offline_venv.py',
++                                  '--venv', str(work / '.venv')], work)
++    rec.checked('offline-node', ['python3', base+'offline-node-deps/materialize_node_modules.py'], work)
++    return work / '.venv/bin/python'
++
++
++def seal_bundle(bundle, identity):
++    files = {}
++    for name in REQUIRED:
++        p = bundle / name
++        if not p.is_file() or p.is_symlink():
++            raise Invalid('BUNDLE_FILE_MISSING_OR_SYMLINK: ' + name)
++        files[name] = sha(p.read_bytes())
++    manifest = {'target': TARGET, 'implementation_id': identity, 'files': files,
++                'profile_basis': None, 'authorship': 'UNASSESSED'}
++    write(bundle / 'bundle.json', manifest)
++    return manifest
++
++
++def check_bundle(bundle):
++    if bundle.is_symlink():
++        raise Invalid('BUNDLE_DIRECTORY_SYMLINK')
++    if (bundle / 'bundle.json').is_symlink():
++        raise Invalid('BUNDLE_MANIFEST_SYMLINK')
++    manifest = load((bundle / 'bundle.json').read_bytes())
++    if not isinstance(manifest, dict):
++        raise Invalid('BUNDLE_MANIFEST_MUST_BE_OBJECT')
++    if manifest.get('target') != TARGET:
++        raise Invalid('TARGET_MISMATCH')
++    if (not isinstance(manifest.get('files'), dict) or set(manifest['files']) != set(REQUIRED)
++            or manifest.get('profile_basis') is not None):
++        raise Invalid('BUNDLE_FILE_SET_OR_PROFILE_BASIS_MISMATCH')
++    for name, expected in manifest['files'].items():
++        p = bundle / name
++        if p.is_symlink() or not p.is_file() or sha(p.read_bytes()) != expected:
++            raise Invalid('BUNDLE_BYTE_HASH_MISMATCH: ' + name)
++    docs = load((bundle / 'lifecycle.json').read_bytes())
++    if not isinstance(docs, list) or len(docs) != 5:
++        raise Invalid('MINIMAL_LIFECYCLE_REQUIRES_FIVE_ARTIFACTS')
++    if not all(isinstance(d, dict) for d in docs):
++        raise Invalid('ARTIFACT_MUST_BE_OBJECT')
++    wanted = Counter({'decision': 1, 'control': 2, 'execution': 1, 'effect': 1})
++    if Counter(d.get('artifact_type') for d in docs) != wanted:
++        raise Invalid('MINIMAL_LIFECYCLE_FAMILY_MISMATCH')
++    for d in docs:
++        if d.get('airep_version') != TARGET['wire_version']:
++            raise Invalid('WIRE_VERSION_MISMATCH')
++        if d.get('profiles'):
++            raise Invalid('PROFILE_BASIS_NOT_SUPPORTED_IN_MINIMAL_TRANSPORT')
++    controls = {(d.get('boundary_side'), d.get('control_event')) for d in docs if d['artifact_type'] == 'control'}
++    if controls != {('issuer', 'dispatched'), ('receiver', 'received')}:
++        raise Invalid('CONTROL_ROLE_SEPARATION_MISMATCH')
++    return manifest
++
++
++def consume(work, py, bundle, out, rec, input_name='lifecycle.json', policy=True):
++    out.mkdir(parents=True, exist_ok=False)
++    before = inventory(bundle)
++    common = ['--input', str(bundle / input_name), '--bindings', str(bundle / 'bindings.json'),
++              '--revocation', str(bundle / 'revocation.json')]
++    if policy:
++        common += ['--independence-policy', str(bundle / 'independence.json')]
++    rows = {}
++    for operation in ('verify', 'reconcile'):
++        path = out / (operation + '.json')
++        code, _, _ = rec.command(operation, [py, '-m', 'tools.airep_v02', operation, *common, '--out', path], work)
++        rows[operation] = {'exit_code': code, 'result': load(path.read_bytes()) if path.exists() else None}
++    if before != inventory(bundle):
++        raise Invalid('INPUT_BYTES_CHANGED_DURING_REFERENCE_CONSUMPTION')
++    rows['transport_status'] = 'EVALUATED' if all(r['exit_code'] == 0 for r in rows.values()) else 'PROCESS_ERROR'
++    rows['observation'] = projection(rows)
++    write(out / 'reference-result.json', rows)
++    return rows
++
++
++def projection(rows):
++    if rows.get('transport_status') != 'EVALUATED':
++        return None
++    v, r = rows['verify']['result'], rows['reconcile']['result']
++    return {'records': sorted([{'record_id': a['artifact_ref']['record_id'], 'class': a['class'],
++                               'authenticated_failures': a['authenticated_failures'],
++                               'authenticated_withheld': a['authenticated_withheld'],
++                               'witnessed_withheld': a['witnessed_withheld'],
++                               'observer_assessment': a['observer_assessment']}
++                              for a in v['verdicts']], key=lambda a: a['record_id']),
++            'reconciliation_summary': r['summary'],
++            'checks': sorted([{'check': c['check'], 'subject': c['subject'], 'state': c['state']}
++                              for c in r['checks']], key=lambda c: encode(c))}
++
++
++def node_parity(work, bundle, reference, out, rec):
++    out.mkdir()
++    rows = []
++    for request in sorted((bundle/'requests').glob('*.json')):
++        code, stdout, _ = rec.command('node-verify-'+request.stem,
++            ['node', 'tools/airep_v02/verify_node.mjs', '--request', request,
++             '--bindings', bundle/'bindings.json', '--revocation', bundle/'revocation.json',
++             '--independence-policy', bundle/'independence.json'], work)
++        result = load(stdout) if code == 0 else None
++        rows.append({'record_id': request.stem, 'exit_code': code, 'result': result})
++    expected = (reference.get('verify', {}).get('result') or {}).get('verdicts', [])
++    by_id = {r['artifact_ref']['record_id']: r for r in expected}
++    agrees = len(rows) == 5 and all(r['exit_code'] == 0 and r['result'] == by_id.get(r['record_id']) for r in rows)
++    write(out/'node-results.json', {'same_first_party_reference_family': True, 'agrees': agrees, 'records': rows})
++    return {'agrees': agrees, 'same_first_party_reference_family': True, 'results': rows}
++
++
++def validate_projection(value):
++    """Fail closed on malformed optional projections before marking them REPORTED."""
++    def require(condition):
++        if not condition:
++            raise Invalid('MALFORMED_COMPARISON_PROJECTION')
++
++    def obj(value, keys):
++        return isinstance(value, dict) and set(value) == set(keys)
++
++    def text(value):
++        return isinstance(value, str) and bool(value) and not any(0xd800 <= ord(c) <= 0xdfff for c in value)
++
++    def choice(value, choices):
++        return isinstance(value, str) and value in choices
++
++    def uint(value):
++        return type(value) is int and value >= 0
++
++    def reference(value):
++        return obj(value, ('record_id', 'chain_id')) and all(text(v) for v in value.values())
++
++    require(obj(value, ('records', 'reconciliation_summary', 'checks')))
++    records, summary, checks = value['records'], value['reconciliation_summary'], value['checks']
++    require(isinstance(records, list) and isinstance(checks, list))
++    identities = []
++    for record in records:
++        require(obj(record, ('record_id', 'class', 'observer_assessment', *PROJECTION_REASONS)))
++        require(text(record['record_id']))
++        identities.append(record['record_id'])
++        require(choice(record['class'], {'AIREP-Core', 'AIREP-Authenticated', 'AIREP-Witnessed'}))
++        require(choice(record['observer_assessment'], {'same_executor', 'independent', 'unknown', 'not_applicable'}))
++        for channel, reasons in PROJECTION_REASONS.items():
++            array = record[channel]
++            require(isinstance(array, list) and all(choice(reason, reasons) for reason in array))
++            require(array == sorted(set(array)))
++        if record['authenticated_failures'] or record['authenticated_withheld']:
++            require(record['class'] == 'AIREP-Core')
++        if record['witnessed_withheld']:
++            require(record['class'] != 'AIREP-Witnessed')
++    require(identities == sorted(set(identities)))
++    require(obj(summary, ('status', 'counts')) and obj(summary['counts'], STATES))
++    require(choice(summary['status'], {'FAILURE', 'INCOMPLETE', 'SATISFIED'}))
++    require(all(uint(n) for n in summary['counts'].values()))
++    for check in checks:
++        require(obj(check, ('check', 'subject', 'state')))
++        require(choice(check['check'], PROJECTION_SUBJECTS) and choice(check['state'], STATES))
++        subject, kind = check['subject'], PROJECTION_SUBJECTS[check['check']]
++        if kind == 'reference':
++            require(reference(subject))
++        elif kind == 'identity':
++            require(obj(subject, ('record_id',)) and text(subject['record_id']))
++        elif kind == 'instruction':
++            require(obj(subject, ('decision_ref', 'instruction_id'))
++                    and reference(subject['decision_ref']) and text(subject['instruction_id']))
++        elif kind == 'position':
++            require(obj(subject, ('chain_id', 'sequence')) and text(subject['chain_id'])
++                    and uint(subject['sequence']) and subject['sequence'] <= 9007199254740991)
++        elif kind == 'admission':
++            require(reference(subject) or (obj(subject, ('input_index',)) and uint(subject['input_index'])))
++        else:
++            require(obj(subject, ()))
++    require(checks == sorted(checks, key=encode))
++    counts = {state: sum(c['state'] == state for c in checks) for state in STATES}
++    require(summary['counts'] == counts)
++    status = ('FAILURE' if counts['FAILURE'] else 'INCOMPLETE'
++              if any(counts[s] for s in ('MISSING', 'NOT_EVALUATED', 'INDETERMINATE')) else 'SATISFIED')
++    require(summary['status'] == status)
++
++
++def adapter(config_path, role, bundle, out, rec):
++    if config_path is None:
++        return {'status': 'EXTERNAL_RESULT_NOT_SUPPLIED', 'independence': 'NOT_ASSESSED'}
++    out.mkdir(parents=True, exist_ok=False)
++    result = {'status': 'ADAPTER_ERROR', 'independence': 'NOT_ASSESSED'}
++    try:
++        config = load(config_path.read_bytes())
++        if not isinstance(config, dict):
++            raise Invalid('ADAPTER_CONFIG_MUST_BE_OBJECT')
++        if config.get('role') != role or config.get('target') != TARGET:
++            raise Invalid('ADAPTER_ROLE_OR_TARGET_MISMATCH')
++        if (not isinstance(config.get('implementation_id'), str) or not config['implementation_id']
++                or config['implementation_id'].startswith('reference:')):
++            raise Invalid('ADAPTER_IMPLEMENTATION_ID_REQUIRED')
++        argv = config.get('argv')
++        if not isinstance(argv, list) or not argv or not all(isinstance(a, str) and a for a in argv):
++            raise Invalid('ADAPTER_ARGV_REQUIRED')
++        source = Path(config['source_file']).resolve()
++        if not source.is_file() or sha(source.read_bytes()) != config['source_sha256']:
++            raise Invalid('ADAPTER_SOURCE_HASH_MISMATCH')
++        # Source closure/toolchain/licence remain the contributor's responsibility.
++        write(out / 'adapter-config.json', config)
++        before = inventory(bundle) if bundle is not None else None
++        request = {'adapter_contract': 'airep-k2-local-1', 'role': role, 'target': TARGET,
++                   'output_dir': str(out), 'input_bundle': str(bundle) if bundle else None,
++                   'input_manifest_sha256': sha((bundle / 'bundle.json').read_bytes()) if bundle else None}
++        if bundle is not None:
++            check_bundle(bundle)
++        code, stdout, _ = rec.command('adapter-'+role, argv, config_path.parent, encode(request))
++        result.update({'implementation_id': config['implementation_id'], 'exit_code': code,
++                       'source_sha256': config['source_sha256']})
++        if before is not None and before != inventory(bundle):
++            raise Invalid('INPUT_BYTES_CHANGED_DURING_ADAPTER')
++        if code:
++            result['status'] = 'ADAPTER_UNAVAILABLE' if code == -1 else 'ADAPTER_PROCESS_ERROR'
++            return result
++        response = load(stdout)
++        if not isinstance(response, dict):
++            raise Invalid('ADAPTER_RESPONSE_MUST_BE_OBJECT')
++        if response.get('role') != role or response.get('target') != TARGET:
++            raise Invalid('ADAPTER_RESPONSE_ROLE_OR_TARGET_MISMATCH')
++        if response.get('implementation_id') != config['implementation_id']:
++            raise Invalid('ADAPTER_IDENTITY_MISMATCH')
++        # Preserve the exact adapter bytes, including malformed projections whose
++        # strings cannot be re-encoded as admitted UTF-8 scalar text.
++        (out / 'response.json').write_bytes(stdout)
++        if role == 'producer':
++            produced = out / 'bundle'
++            manifest = check_bundle(produced)
++            if manifest.get('implementation_id') != config['implementation_id']:
++                raise Invalid('PRODUCER_BUNDLE_IDENTITY_MISMATCH')
++            result.update({'status': 'BUNDLE_SUPPLIED', 'bundle': str(produced), 'manifest': manifest})
++        else:
++            if response.get('input_manifest_sha256') != request['input_manifest_sha256']:
++                raise Invalid('CONSUMER_INPUT_HASH_MISMATCH')
++            if 'native_result' not in response:
++                raise Invalid('NATIVE_RESULT_REQUIRED')
++            # Comparison projection is optional; no native verifier format is prescribed.
++            observation = response.get('observation')
++            if observation is not None:
++                validate_projection(observation)
++            result.update({'status': 'REPORTED', 'observation': observation,
++                           'native_result': response['native_result']})
++    except (Invalid, ValueError, TypeError, KeyError, OSError) as exc:
++        result['error'] = str(exc)
++    return result
++
++
++def compare(reference, external):
++    if external['status'] != 'REPORTED':
++        return external['status']
++    if reference['transport_status'] != 'EVALUATED':
++        return 'REFERENCE_PROCESS_ERROR'
++    if external.get('observation') is None:
++        return 'NOT_COMPARABLE'
++    return 'PROJECTION_AGREES' if reference['observation'] == external['observation'] else 'PROJECTION_DIVERGES'
++
++
++def negatives(work, py, bundle, out, rec):
++    out.mkdir()
++    checks = []
++    docs = load((bundle / 'lifecycle.json').read_bytes())
++    for name, mutate, expected in (
++        ('byte-tamper', lambda b: (b/'lifecycle.json').write_bytes((b/'lifecycle.json').read_bytes()+b' '), 'BUNDLE_BYTE_HASH_MISMATCH'),
++        ('manifest-target', lambda b: write(b/'bundle.json', dict(load((b/'bundle.json').read_bytes()), target={})), 'TARGET_MISMATCH'),
++        ('wire-version', None, 'WIRE_VERSION_MISMATCH'),
++        ('control-role', None, 'CONTROL_ROLE_SEPARATION_MISMATCH'),
++    ):
++        b = out/name
++        shutil.copytree(bundle, b)
++        if mutate:
++            mutate(b)
++        else:
++            edited = deepcopy(docs)
++            if name == 'wire-version':
++                edited[0]['airep_version'] = '0.1'
++            else:
++                next(d for d in edited if d.get('boundary_side') == 'receiver')['boundary_side'] = 'issuer'
++            write(b/'lifecycle.json', edited)
++            seal_bundle(b, 'local-negative-test')
++        try:
++            check_bundle(b)
++            actual = 'ACCEPTED'
++        except Invalid as exc:
++            actual = str(exc)
++        checks.append({'name': name, 'expected': expected, 'actual': actual, 'assertion_met': actual.startswith(expected)})
++    for name in ('broken-decision', 'toctou-mismatch', 'no-receipt'):
++        result = consume(work, py, bundle, out/(name+'-result'), rec, 'variants/'+name+'.json')
++        summary = result['reconcile']['result']['summary'] if result['reconcile']['result'] else None
++        if name == 'broken-decision':
++            met = result['verify']['exit_code'] != 0 and summary is not None and summary['counts']['FAILURE'] > 0
++        elif name == 'toctou-mismatch':
++            met = result['transport_status'] == 'EVALUATED' and any(c['check'] == 'toctou' and c['state'] == 'FAILURE' for c in result['reconcile']['result']['checks'])
++        else:
++            met = result['transport_status'] == 'EVALUATED' and any(c['check'] == 'receiver_receipt' and c['state'] == 'MISSING' for c in result['reconcile']['result']['checks'])
++        checks.append({'name': name, 'assertion_met': met, 'verify_exit': result['verify']['exit_code'],
++                       'reconcile_exit': result['reconcile']['exit_code'], 'summary': summary})
++    result = consume(work, py, bundle, out/'no-independence-policy', rec, policy=False)
++    effect = next(v for v in result['verify']['result']['verdicts'] if v['artifact_ref']['record_id'] == 'demo.effect')
++    checks.append({'name': 'no-independence-policy', 'assertion_met': effect['observer_assessment'] == 'unknown',
++                   'observer_assessment': effect['observer_assessment']})
++    write(out/'negative-results.json', checks)
++    return checks
++
++
++def main(argv=None):
++    ap = argparse.ArgumentParser(description=__doc__)
++    ap.add_argument('mode', choices=('produce', 'run'))
++    ap.add_argument('--repo', type=Path, default=Path.cwd())
++    ap.add_argument('--out', type=Path, required=True)
++    ap.add_argument('--local-bundle', type=Path)
++    ap.add_argument('--producer-adapter', type=Path)
++    ap.add_argument('--consumer-adapter', type=Path)
++    args = ap.parse_args(argv)
++    out = args.out.resolve()
++    out.mkdir(parents=True, exist_ok=False)
++    rec = Recorder(out)
++    record = {'target': TARGET, 'started_at_utc': datetime.now(timezone.utc).isoformat(),
++              'claim_boundary': 'LOCAL_REFERENCE_ONLY; third-party independence is not established',
++              'platform': platform.platform(), 'external_result': 'EXTERNAL_RESULT_NOT_SUPPLIED',
++              'harness_sources': {str(p.relative_to(HERE)): sha(p.read_bytes())
++                  for p in sorted(HERE.rglob('*')) if p.is_file()
++                  and 'evidence' not in p.relative_to(HERE).parts and '__pycache__' not in p.parts},
++              'commands': rec.commands}
++    work = None
++    try:
++        record['repository'] = {'path': str(args.repo.resolve()),
++            'head': rec.checked('head', ['git','rev-parse','HEAD'], args.repo).decode().strip(),
++            'status_before': rec.checked('status', ['git','status','--porcelain=v1'], args.repo).decode()}
++        work = source_root(args.repo, rec)
++        record['release_workdir'] = str(work)
++        record['release_archive_sha256'] = PINS['release_archive_sha256']
++        py = bootstrap(work, rec)
++        bundle = out/'local-reference-bundle'
++        if args.local_bundle:
++            check_bundle(args.local_bundle)
++            shutil.copytree(args.local_bundle, bundle)
++        else:
++            rec.checked('reference-producer', [py, 'examples/v02/run_lifecycle.py', '--out', bundle], work)
++            seal_bundle(bundle, 'reference:airep-v0.2.0-beta.1-python')
++        check_bundle(bundle)
++        record['local_bundle'] = {'path': str(bundle.relative_to(out)), 'files': inventory(bundle)}
++        if args.mode == 'produce':
++            record['status'] = 'LOCAL_REFERENCE_BUNDLE_WRITTEN'
++        else:
++            local = consume(work, py, bundle, out/'reference-to-reference', rec)
++            record['reference_to_reference'] = local
++            observation = local['observation']
++            record['reference_expectation_met'] = bool(observation and len(observation['records']) == 5
++                and all(v['class'] == 'AIREP-Authenticated' and not v['authenticated_failures']
++                        and not v['authenticated_withheld'] for v in observation['records'])
++                and observation['reconciliation_summary'] == {'status': 'INCOMPLETE', 'counts': {
++                    'SATISFIED': 37, 'FAILURE': 0, 'MISSING': 0, 'NOT_EVALUATED': 1, 'INDETERMINATE': 0}})
++            record['node_reference_parity'] = node_parity(work, bundle, local, out/'node-reference', rec)
++            record['negative_controls'] = negatives(work, py, bundle, out/'negative-controls', rec)
++            ep = adapter(args.producer_adapter.resolve() if args.producer_adapter else None,
++                         'producer', None, out/'external-producer', rec)
++            ec = adapter(args.consumer_adapter.resolve() if args.consumer_adapter else None,
++                         'consumer', bundle, out/'external-consumer-local-input', rec)
++            lanes = {'external_to_reference': {'producer': ep},
++                     'reference_to_external': {'consumer': ec, 'comparison': compare(local, ec)},
++                     'external_to_external': {'status': 'EXTERNAL_RESULT_NOT_SUPPLIED'}}
++            if ep['status'] == 'BUNDLE_SUPPLIED':
++                external_bundle = Path(ep['bundle'])
++                er = consume(work, py, external_bundle, out/'external-to-reference', rec)
++                lanes['external_to_reference']['reference_result'] = er
++                ee = adapter(args.consumer_adapter.resolve() if args.consumer_adapter else None,
++                             'consumer', external_bundle, out/'external-consumer-external-input', rec)
++                lanes['external_to_external'] = {'consumer': ee, 'comparison': compare(er, ee)}
++            record['external_lanes'] = lanes
++            if args.producer_adapter or args.consumer_adapter:
++                record['external_result'] = 'ADAPTER_ATTEMPT_RECORDED_UNASSESSED'
++            good = (local['transport_status'] == 'EVALUATED' and record['reference_expectation_met']
++                    and record['node_reference_parity']['agrees']
++                    and all(x['assertion_met'] for x in record['negative_controls']))
++            statuses = [ep['status'], ec['status']]
++            bad_adapter = any(s not in ('EXTERNAL_RESULT_NOT_SUPPLIED','BUNDLE_SUPPLIED','REPORTED') for s in statuses)
++            if ep['status'] == 'BUNDLE_SUPPLIED':
++                bad_adapter |= er['transport_status'] != 'EVALUATED' or ee['status'] not in ('EXTERNAL_RESULT_NOT_SUPPLIED','REPORTED')
++            record['status'] = 'LOCAL_CHECKS_COMPLETED' if good and not bad_adapter else 'FAILED'
++    except (Invalid, ValueError, KeyError, TypeError, OSError) as exc:
++        record['status'], record['error'] = 'FAILED', str(exc)
++    finally:
++        record['finished_at_utc'] = datetime.now(timezone.utc).isoformat()
++        record['evidence_files'] = inventory(out)
++        write(out/'run_record.json', record)
++        # Workdir remains available for inspecting/repeating exact captured commands.
++        write_results(out, record)
++    print(record['status'] + '; external: ' + record['external_result'])
++    return 1 if record['status'] == 'FAILED' else 0
++
++
++def write_results(out, record):
++    local = record.get('reference_to_reference', {})
++    summary = (local.get('reconcile', {}).get('result') or {}).get('summary')
++    lines = ['# K2 local same-version run', '', f"Target: `{TARGET['release']}` / `{TARGET['commit']}`.",
++             '', f"Harness: **{record['status']}**. External: **{record['external_result']}**.",
++             '', 'This is first-party local regression evidence. No third-party producer, consumer, authorship,',
++             'deployment interoperability or independent observation is established by this run.', '',
++             '## Reference producer → reference consumer', '',
++             f"Transport: `{local.get('transport_status','NOT_RUN')}`. Reconciliation: `{json.dumps(summary)}`.",
++             '', 'Exit zero means evaluation completed; FAILURE, MISSING and NOT_EVALUATED are retained.',
++             'The demo observer uses a test policy; it is not an external independent observer.', '',
++             '## Negative controls', '', '| Control | Assertion met |', '|---|---|']
++    lines += [f"| {c['name']} | {c['assertion_met']} |" for c in record.get('negative_controls', [])]
++    lines += ['', '## External lanes', '', 'See `run_record.json.external_lanes` for separately retained adapter responses and comparisons.',
++              'Absent adapters remain EXTERNAL_RESULT_NOT_SUPPLIED. Projection agreement is a comparison of reported',
++              'observations only; a supplied native result without a projection is NOT_COMPARABLE.', '',
++              '## Reproduction and limitations', '',
++              'Every argv, cwd, exit code and complete textual stdout/stderr is retained in run_record.json and logs/.',
++              'The binary Git archive is represented by its SHA-256 and exact reproduction command.',
++              'Source and dependency pinning is in pins.json. Linux x86-64 / CPython 3.12 wheels are used.',
++              'Adapters run as user-supplied local programs, not in a sandbox. A source-file hash does not attest',
++              'a complete implementation closure; contributor source, licence and toolchain evidence remains required.',
++              'This minimal transport does not support profiles, witnesses or remote deployments.',
++              'The release work directory is retained for inspection; it may be removed after review.']
++    if record.get('error'):
++        lines += ['', 'Error: ' + record['error']]
++    (out/'RESULTS.md').write_text('\n'.join(lines)+'\n')
++
++
++if __name__ == '__main__':
++    sys.exit(main())
+diff --git a/interop/same-version/v0.2.0-beta.1/pins.json b/interop/same-version/v0.2.0-beta.1/pins.json
+new file mode 100644
+index 0000000000000000000000000000000000000000..205cdcee426f6995ec3cb13d69c89fe5954cb35d
+--- /dev/null
++++ b/interop/same-version/v0.2.0-beta.1/pins.json
+@@ -0,0 +1,198 @@
++{
++  "dependency_manifests": {
++    "node": {
++      "acquisition": "DEPENDENCY_ACQUISITION_ONLY - NOT AN OFFICIAL REPRODUCTION RUN",
++      "aggregate_rule": "sha256 of the concatenation, in ASCII-ascending order of package-name strings, of UTF-8 lines '<sha256>  <tarball-filename>\\n'. The sort key is the package name, NOT the assembled line and NOT the hash prefix; each line is built AFTER the sort.",
++      "aggregate_sha256": "50826cb483e2fdf475b1c8c2067d8742ae7e7fb8c1416c82ed4b5fdb7fd5c912",
++      "bundle": "AIREP v0.2 class-verification - Node offline dependency bundle",
++      "closure_is_exact": true,
++      "lock_source": "verifier_node_r2/package-lock.json (frozen)",
++      "node_baseline": "v20.19.6",
++      "packages": {
++        "ajv": {
++          "bytes": 217611,
++          "integrity_sha512_sri": "sha512-Thbli+OlOj+iMPYFBVBfJ3OmCAnaSyNn4M1vz9T6Gka5Jt9ba/HIR56joy65tY6kx/FCF5VXNB819Y7/GUrBGA==",
++          "resolved": "https://registry.npmjs.org/ajv/-/ajv-8.20.0.tgz",
++          "sha256": "b2f0b3a893bbb8cc5efb6814f08b1499e19e31d5dd73683f5893382f48f6e7b3",
++          "tarball": "ajv-8.20.0.tgz",
++          "version": "8.20.0"
++        },
++        "fast-deep-equal": {
++          "bytes": 3656,
++          "integrity_sha512_sri": "sha512-f3qQ9oQy9j2AhBe/H9VC91wLmKBCCU/gDOnKNAYG5hswO7BLKj09Hc5HYNz9cGI++xlpDCIgDaitVs03ATR84Q==",
++          "resolved": "https://registry.npmjs.org/fast-deep-equal/-/fast-deep-equal-3.1.3.tgz",
++          "sha256": "b019a0980f27638dc3f85836b0e478f188e00d7a6e5852c0819fa86f56e47b8f",
++          "tarball": "fast-deep-equal-3.1.3.tgz",
++          "version": "3.1.3"
++        },
++        "fast-uri": {
++          "bytes": 42968,
++          "integrity_sha512_sri": "sha512-7Ical1vFEMr0onbVzEDIreM22I4khW+fzyQPwvAFWBp1iwdshSZRsL4jjRvPG9JP1uiqMHRto+YU6R2/CzDz5Q==",
++          "resolved": "https://registry.npmjs.org/fast-uri/-/fast-uri-3.1.6.tgz",
++          "sha256": "264af0e32c4b7b7bcb9ce5b4623c82469ee3e69ba5d171920f1762d626db1064",
++          "tarball": "fast-uri-3.1.6.tgz",
++          "version": "3.1.6"
++        },
++        "json-schema-traverse": {
++          "bytes": 6074,
++          "integrity_sha512_sri": "sha512-NM8/P9n3XjXhIZn1lLhkFaACTOURQXjWhV4BA/RnOv8xvgqtqpAX9IO4mRQxSx1Rlo4tqzeqb0sOlruaOy3dug==",
++          "resolved": "https://registry.npmjs.org/json-schema-traverse/-/json-schema-traverse-1.0.0.tgz",
++          "sha256": "023222622df29fc274bde5d3590e47aa1d4a8e3c1d6e2aba029948ed79799b21",
++          "tarball": "json-schema-traverse-1.0.0.tgz",
++          "version": "1.0.0"
++        },
++        "require-from-string": {
++          "bytes": 1816,
++          "integrity_sha512_sri": "sha512-Xf0nWe6RseziFMu+Ap9biiUbmplq6S9/p+7w7YXP/JBHhrUDDUhwa+vANyubuqfZWTveU//DYVGsDG7RKL/vEw==",
++          "resolved": "https://registry.npmjs.org/require-from-string/-/require-from-string-2.0.2.tgz",
++          "sha256": "cb694a4965908f7775a0c757f00cf4e624d193cd71d77988fbcca0f597b88d82",
++          "tarball": "require-from-string-2.0.2.tgz",
++          "version": "2.0.2"
++        }
++      },
++      "purpose": "Materialize verifier_node_r2/node_modules with NO network and NO system-ajv fallback."
++    },
++    "python": {
++      "acquisition": "DEPENDENCY_ACQUISITION_ONLY - NOT AN OFFICIAL REPRODUCTION RUN",
++      "aggregate_rule": "sha256 of the concatenation, in ASCII-ascending order of canonical distribution-name strings, of UTF-8 lines '<sha256>  <wheel-filename>\\n'. The sort key is the distribution name, NOT the assembled line and NOT the hash prefix; each line is built AFTER the sort.",
++      "aggregate_sha256": "39bad2faaf9bc126b25279b781aa7414b4211ccb292cbe99288b4197995e966f",
++      "bundle": "AIREP v0.2 class-verification - Python offline dependency bundle",
++      "packages": {
++        "attrs": {
++          "bytes": 60752,
++          "sha256": "99b87a485a5820b23b879f04c2305b44b951b502fd64be915879d77a7e8fc6f1",
++          "version": "23.2.0",
++          "wheel": "attrs-23.2.0-py3-none-any.whl"
++        },
++        "cffi": {
++          "bytes": 219572,
++          "sha256": "3e17ed538242334bf70832644a32a7aae3d83b57567f9fd60a26257e992b79ba",
++          "version": "2.0.0",
++          "wheel": "cffi-2.0.0-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl"
++        },
++        "cryptography": {
++          "bytes": 4743326,
++          "sha256": "bd72e68b06bb1e96913f97dd4901119bc17f39d4586a5adf2d3e47bc2b9d58b5",
++          "version": "48.0.0",
++          "wheel": "cryptography-48.0.0-cp311-abi3-manylinux_2_34_x86_64.whl"
++        },
++        "jsonschema": {
++          "bytes": 90040,
++          "sha256": "3fba0169e345c7175110351d456342c364814cfcf3b964ba4587f22915230a63",
++          "version": "4.25.1",
++          "wheel": "jsonschema-4.25.1-py3-none-any.whl"
++        },
++        "jsonschema-specifications": {
++          "bytes": 18437,
++          "sha256": "98802fee3a11ee76ecaca44429fda8a41bff98b00a0f2838151b113f210cc6fe",
++          "version": "2025.9.1",
++          "wheel": "jsonschema_specifications-2025.9.1-py3-none-any.whl"
++        },
++        "pycparser": {
++          "bytes": 48172,
++          "sha256": "b727414169a36b7d524c1c3e31839a521725078d7b2ff038656844266160a992",
++          "version": "3.0",
++          "wheel": "pycparser-3.0-py3-none-any.whl"
++        },
++        "referencing": {
++          "bytes": 26766,
++          "sha256": "381329a9f99628c9069361716891d34ad94af76e461dcb0335825aecc7692231",
++          "version": "0.37.0",
++          "wheel": "referencing-0.37.0-py3-none-any.whl"
++        },
++        "rpds-py": {
++          "bytes": 394080,
++          "sha256": "47f236970bccb2233267d89173d3ad2703cd36a0e2a6e92d0560d333871a3d23",
++          "version": "0.30.0",
++          "wheel": "rpds_py-0.30.0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl"
++        },
++        "typing-extensions": {
++          "bytes": 44614,
++          "sha256": "f0fa19c6845758ab08074a0cfa8b7aecb71c999ca73d62883bc25cc018c4e548",
++          "version": "4.15.0",
++          "wheel": "typing_extensions-4.15.0-py3-none-any.whl"
++        }
++      },
++      "purpose": "Isolated venv for the official run. No network, no system/user site-packages.",
++      "runtime_baseline": {
++        "abi": "cp312",
++        "platform": "Linux x86_64",
++        "python": "3.12.3"
++      },
++      "runtime_note": "cffi is a declared dependency of cryptography on CPython but is NOT imported by the verifier's Ed25519 path, which uses the Rust backend (measured). It is vendored for closure completeness, not because the run needs it.",
++      "verifier_third_party_imports": [
++        "cryptography (Ed25519, module level)",
++        "jsonschema (stage 0, function level)",
++        "referencing (stage 0, function level)"
++      ],
++      "version_provenance": {
++        "cffi/pycparser/typing-extensions": "MEASURED in the same environment; pip's default resolution offered newer cffi 2.1.1 and typing-extensions 4.16.0, which were REJECTED to avoid a silent substitution.",
++        "cryptography": "MEASURED in the environment that produced the final 45-case run (48.0.0); not chosen.",
++        "schema stack": "Reused verbatim from spec/airep/v0.2/schema-validation/requirements.lock (jsonschema 4.25.1, referencing 0.37.0, attrs 23.2.0, rpds-py 0.30.0, jsonschema-specifications 2025.9.1)."
++      }
++    }
++  },
++  "normative_basis": {
++    "spec/airep/v0.2/CONFORMANCE_CLASSES.md": "331f7cabb99cb12aa55f2395f0f073caf58282e0a43756680b9d86bf59e9a9a6",
++    "spec/airep/v0.2/INTEGRITY.md": "2fca9a02ebd8b22807f51742278d7ddfc101e25ca6fd4fa844d6c6a537e98c11",
++    "spec/airep/v0.2/RECONCILIATION.md": "d720ff4139676b913e9d9f9a3a38d57fea586c9a76b1816bdcbf57e1ea39d023",
++    "spec/airep/v0.2/SPEC.md": "28b5741059e704fe62869e78027f1bd8346277822c11d03f7e9c563ddf6f30c4",
++    "spec/airep/v0.2/VERIFICATION.md": "3bb35cd0122899bbbe384a34f167e95d54e78af47c6739dc34b7261bde1d8b0d",
++    "spec/airep/v0.2/schemas/common.schema.json": "b46a02988ba3260444cd92153562346ca633e79f64eaf12c684d5069830e714a",
++    "spec/airep/v0.2/schemas/control.schema.json": "f986225eac62c8df2091fc1f2af917c717025a88b6b0fe9157fdb07732f00b90",
++    "spec/airep/v0.2/schemas/decision.schema.json": "04b53d4a5a1f1e3c7ba4d5ad32072a09b9e2b58702304a7845d327bc4ef84a6b",
++    "spec/airep/v0.2/schemas/effect.schema.json": "4bc2cda84ba68be6e57a8b18a7fce733c54c6835e463822e5b9721a586456297",
++    "spec/airep/v0.2/schemas/execution.schema.json": "eaf476d0dbc43a7abb3eabc55a427a0bfc8dfd8529f18d8e5efe53672f58085b"
++  },
++  "normative_basis_hash_rule": "SHA-256 of UTF-8 json.dumps(normative_basis, sort_keys=True, separators=(comma,colon)) plus LF",
++  "release_archive_sha256": "90ef6ac928019a3b6955b1ca0f0b8a91b786c81b91436c533c39ba88e860fa86",
++  "release_files": {
++    "examples/v02/run_lifecycle.py": "48a17d1aafe17a99220a11488c493af4205f7fb5da38bfd1494ffd3440703b55",
++    "spec/airep/v0.2/CONFORMANCE_CLASSES.md": "331f7cabb99cb12aa55f2395f0f073caf58282e0a43756680b9d86bf59e9a9a6",
++    "spec/airep/v0.2/INTEGRITY.md": "2fca9a02ebd8b22807f51742278d7ddfc101e25ca6fd4fa844d6c6a537e98c11",
++    "spec/airep/v0.2/RECONCILIATION.md": "d720ff4139676b913e9d9f9a3a38d57fea586c9a76b1816bdcbf57e1ea39d023",
++    "spec/airep/v0.2/SPEC.md": "28b5741059e704fe62869e78027f1bd8346277822c11d03f7e9c563ddf6f30c4",
++    "spec/airep/v0.2/VERIFICATION.md": "3bb35cd0122899bbbe384a34f167e95d54e78af47c6739dc34b7261bde1d8b0d",
++    "spec/airep/v0.2/class-verification/CLASS_VERIFIER_CONTRACT.md": "7ecfce56ab576a495816df77e25442b25c1afdb22cc9828e47ba29a565138885",
++    "spec/airep/v0.2/class-verification/offline-node-deps/MANIFEST.json": "21b82cbc22427501bbf5f7989966f7f993bc20b19f1a7de15ee816deab9e54e8",
++    "spec/airep/v0.2/class-verification/offline-node-deps/materialize_node_modules.py": "e466cce99895c475de6e7a943271fb4d76bb926f4faadd4d541fdc40b1a11f8e",
++    "spec/airep/v0.2/class-verification/offline-node-deps/tarballs/ajv-8.20.0.tgz": "b2f0b3a893bbb8cc5efb6814f08b1499e19e31d5dd73683f5893382f48f6e7b3",
++    "spec/airep/v0.2/class-verification/offline-node-deps/tarballs/fast-deep-equal-3.1.3.tgz": "b019a0980f27638dc3f85836b0e478f188e00d7a6e5852c0819fa86f56e47b8f",
++    "spec/airep/v0.2/class-verification/offline-node-deps/tarballs/fast-uri-3.1.6.tgz": "264af0e32c4b7b7bcb9ce5b4623c82469ee3e69ba5d171920f1762d626db1064",
++    "spec/airep/v0.2/class-verification/offline-node-deps/tarballs/json-schema-traverse-1.0.0.tgz": "023222622df29fc274bde5d3590e47aa1d4a8e3c1d6e2aba029948ed79799b21",
++    "spec/airep/v0.2/class-verification/offline-node-deps/tarballs/require-from-string-2.0.2.tgz": "cb694a4965908f7775a0c757f00cf4e624d193cd71d77988fbcca0f597b88d82",
++    "spec/airep/v0.2/class-verification/offline-python-deps/MANIFEST.json": "c69244aa584606c8f2ff6fd28ca3c57a893be004ec3c51c18ace4a03ceafb3d2",
++    "spec/airep/v0.2/class-verification/offline-python-deps/prepare_offline_venv.py": "9a55766fca3ec3e941b914dac919d7cb6337a9a5cdc4b44b529ac5a7ae744079",
++    "spec/airep/v0.2/class-verification/offline-python-deps/requirements.lock": "41195c1ad18863943b248867cc28624090d728324df28aec42856b159c3b51dc",
++    "spec/airep/v0.2/class-verification/offline-python-deps/wheels/attrs-23.2.0-py3-none-any.whl": "99b87a485a5820b23b879f04c2305b44b951b502fd64be915879d77a7e8fc6f1",
++    "spec/airep/v0.2/class-verification/offline-python-deps/wheels/cffi-2.0.0-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl": "3e17ed538242334bf70832644a32a7aae3d83b57567f9fd60a26257e992b79ba",
++    "spec/airep/v0.2/class-verification/offline-python-deps/wheels/cryptography-48.0.0-cp311-abi3-manylinux_2_34_x86_64.whl": "bd72e68b06bb1e96913f97dd4901119bc17f39d4586a5adf2d3e47bc2b9d58b5",
++    "spec/airep/v0.2/class-verification/offline-python-deps/wheels/jsonschema-4.25.1-py3-none-any.whl": "3fba0169e345c7175110351d456342c364814cfcf3b964ba4587f22915230a63",
++    "spec/airep/v0.2/class-verification/offline-python-deps/wheels/jsonschema_specifications-2025.9.1-py3-none-any.whl": "98802fee3a11ee76ecaca44429fda8a41bff98b00a0f2838151b113f210cc6fe",
++    "spec/airep/v0.2/class-verification/offline-python-deps/wheels/pycparser-3.0-py3-none-any.whl": "b727414169a36b7d524c1c3e31839a521725078d7b2ff038656844266160a992",
++    "spec/airep/v0.2/class-verification/offline-python-deps/wheels/referencing-0.37.0-py3-none-any.whl": "381329a9f99628c9069361716891d34ad94af76e461dcb0335825aecc7692231",
++    "spec/airep/v0.2/class-verification/offline-python-deps/wheels/rpds_py-0.30.0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl": "47f236970bccb2233267d89173d3ad2703cd36a0e2a6e92d0560d333871a3d23",
++    "spec/airep/v0.2/class-verification/offline-python-deps/wheels/typing_extensions-4.15.0-py3-none-any.whl": "f0fa19c6845758ab08074a0cfa8b7aecb71c999ca73d62883bc25cc018c4e548",
++    "spec/airep/v0.2/schemas/common.schema.json": "b46a02988ba3260444cd92153562346ca633e79f64eaf12c684d5069830e714a",
++    "spec/airep/v0.2/schemas/control.schema.json": "f986225eac62c8df2091fc1f2af917c717025a88b6b0fe9157fdb07732f00b90",
++    "spec/airep/v0.2/schemas/decision.schema.json": "04b53d4a5a1f1e3c7ba4d5ad32072a09b9e2b58702304a7845d327bc4ef84a6b",
++    "spec/airep/v0.2/schemas/effect.schema.json": "4bc2cda84ba68be6e57a8b18a7fce733c54c6835e463822e5b9721a586456297",
++    "spec/airep/v0.2/schemas/execution.schema.json": "eaf476d0dbc43a7abb3eabc55a427a0bfc8dfd8529f18d8e5efe53672f58085b",
++    "tools/airep_v02/README.md": "cb54e44022ec202bff7aeb80c96d584bb83443aa6270a3fd7d961a390ddc5d97",
++    "tools/airep_v02/__init__.py": "bfb7a78b37490532e38bed547414e4c43398c6fb36f41603574884067074945f",
++    "tools/airep_v02/__main__.py": "dd55becf24a1d164433b65852892a5a29baa9bb2f421749da10d2dec5a377624",
++    "tools/airep_v02/basis.py": "18b1f535da202ec4665ae2dcdd5acbfc6efb021dc66425791eaa6264330ed835",
++    "tools/airep_v02/json_input.py": "53879153a18054639843c32aa54aa19a1e7c87be3e89405769b157571670e890",
++    "tools/airep_v02/producer.py": "ccdec93ccb49b09bae8542a8f2b037319e1d00cda2144fc72f219690eda6090a",
++    "tools/airep_v02/profiles.py": "c87ccd501d78f865e647357c79728918336d4dfdf4d31201a34d173e76953da3",
++    "tools/airep_v02/reconcile.py": "ea94f18a8cf95e10be7435a820debc84d72465e080683fc04399f418d1f6d715",
++    "tools/airep_v02/verify.py": "cc70f0f1bb2c97dede1c99fe64f6984a221fe715722403ec6a8269ad626a33dd",
++    "tools/airep_v02/verify_node.mjs": "5ebbd088667862305f24ec735666c7978af942fa9b483a043956ca56078c0c30"
++  },
++  "target": {
++    "commit": "8a6c01ecce457aa94330c0ed7219e4c56ebfe771",
++    "normative_basis_sha256": "333977c9e27c57371686b9cfb9c4becda68da43aebf024b04068e32563597b8d",
++    "release": "v0.2.0-beta.1",
++    "wire_version": "0.2"
++  }
++}
+diff --git a/interop/same-version/v0.2.0-beta.1/run_record.json b/interop/same-version/v0.2.0-beta.1/run_record.json
+new file mode 100644
+index 0000000000000000000000000000000000000000..f87f7b88b10cc873483fe49eb6998947b370fd86
+--- /dev/null
++++ b/interop/same-version/v0.2.0-beta.1/run_record.json
+@@ -0,0 +1,139 @@
++{
++  "base_commit": "075aff5610731736405951ecf3b7c4bfc3cc0f07",
++  "branch": "codex/airep-v02-same-version-interop",
++  "contribution_checks": {
++    "beta_commands": 56,
++    "beta_failed": 0,
++    "make_demo": 0,
++    "make_demo_test": 0
++  },
++  "external_result": "EXTERNAL_RESULT_NOT_SUPPLIED",
++  "harness_unit_tests": {
++    "count": 28,
++    "historical_20_test_log": "evidence/r2-01.stderr",
++    "log": "evidence/projection-validation-fix/01.stderr",
++    "status": "OK"
++  },
++  "independence": "NOT_ESTABLISHED",
++  "known_limitations": [
++    "No real external producer or consumer submission; no independent authorship or external interoperability conclusion.",
++    "The local observer independence verdict uses demonstration test policy and public test keys.",
++    "Minimal transport supports exactly five artifacts and no profiles or witness submission.",
++    "External adapters are opt-in local programs, not sandboxed; declared source hash does not establish complete source/toolchain closure.",
++    "Offline wheels target Linux x86-64 CPython 3.12; runtime/Git installation remains outside the offline dependency claim.",
++    "Initial sandbox failures are retained separately; successful authorized reruns do not erase them.",
++    "Binary Git archive bytes are reconstructible from the exact command and pinned by SHA-256; textual command streams are retained in full."
++  ],
++  "local_authenticated_records": 5,
++  "local_reconciliation_summary": {
++    "counts": {
++      "FAILURE": 0,
++      "INDETERMINATE": 0,
++      "MISSING": 0,
++      "NOT_EVALUATED": 1,
++      "SATISFIED": 37
++    },
++    "status": "INCOMPLETE"
++  },
++  "negative_controls": {
++    "all_assertions_met": true,
++    "count": 8
++  },
++  "node_python_verdict_parity": true,
++  "payload_retention": {
++    "archive": "evidence/payloads.tar.gz",
++    "archive_sha256": "ee8ddb46f097972a09a68696f45e575c9ba5d3c45a61dcb13b9ae60873f7f4d4",
++    "archived_file_count": 861,
++    "file_hashes": "evidence/PAYLOAD_SHA256SUMS",
++    "rule": "All captured measurement payloads/logs are preserved byte-for-byte; selected raw copies remain directly readable."
++  },
++  "projection_validation_fix": {
++    "absent_or_null_observation": "NOT_COMPARABLE",
++    "beta_suite_not_repeated": "Frozen release tools and dependencies unchanged; original 56/56 evidence retained.",
++    "historical_evidence_unchanged": true,
++    "impact": "External consumer optional projection validation; existing actual local results unchanged.",
++    "local_reference_result_unchanged": true,
++    "malformed_projection_error": "MALFORMED_COMPARISON_PROJECTION",
++    "malformed_projection_status": "ADAPTER_ERROR",
++    "measurement_archive": "evidence/projection-validation-fix/measurement.tar.gz",
++    "measurement_archive_sha256": "25927acc59e1b35f7b407d0d4c6dfdf5fdc63201677dc5dedb3e25f6b2e051b0",
++    "measurement_payload_hashes": "evidence/projection-validation-fix/MEASUREMENT_SHA256SUMS",
++    "prior_commit": "ad0f0220e0ea7c61a0b011536434bd8dea792641"
++  },
++  "public_mutations": [],
++  "records": {
++    "evidence/contribution-beta/results.json": {
++      "sha256": "98ec2dfe8f0bdaa11154a764fefa20328780d0f47e091708f4cda3ebac7f3ed7"
++    },
++    "evidence/final-producer-command/run_record.json": {
++      "sha256": "cddfab9bfb7be04ad39c932d93669694524aab7e036373c789f22f002979c388"
++    },
++    "evidence/final-reference/run_record.json": {
++      "sha256": "c76b89796311c8c2c368e3c16084de624ee5571e9a3cff55836db0a1b3125c08"
++    },
++    "evidence/final-validation.json": {
++      "sha256": "2071b35e09709147b2b75ce779579f6f9d6b8f72230f6264bf4f87d43a7e8713"
++    },
++    "evidence/projection-validation-fix/historical-evidence-hashes.json": {
++      "sha256": "7322e67969913523fadf65ae6e366e0c4891cf6b44822262fbd169b2f4cec3a7"
++    },
++    "evidence/projection-validation-fix/measurement/run_record.json": {
++      "sha256": "c256b4895a0687c0dd784f04502a0e54b1cb81030cd493463ad91d6532ee7c8a"
++    },
++    "evidence/projection-validation-fix/review-reproduction.json": {
++      "sha256": "bcc65fda19fd795739cd80597de3698c8894c73dbf3cee6a6a036ff5b9b5307d"
++    },
++    "evidence/projection-validation-fix/validation.json": {
++      "sha256": "33ad528d824163ab322a12a8a1fe7e7713943605dc1e6ee9dfdabbd45a204d43"
++    },
++    "evidence/projection-validation-fix/verification-summary.json": {
++      "sha256": "e0ac94aa013526754873ad27a40250ec8775d7916c86f44c149b5959fff75433"
++    },
++    "evidence/sandbox-contribution-attempt/results.json": {
++      "sha256": "75f46fd125a7dbdae00d3c25513896cf9dd2216e0752b4bd22cd5cecc9ff183e"
++    },
++    "evidence/sandbox-harness-attempt/run_record.json": {
++      "sha256": "c4c4c09dd4eca28deeb814d225acc7081ff5c90040fb4d9396e01659c0537b2b"
++    },
++    "evidence/validation.json": {
++      "sha256": "2ec3c2c34235de5f525c124fdb893af9c9bd21219130f0787b784211afd20908"
++    },
++    "harness.py": {
++      "sha256": "dd1ebdafb4b79195f94ab0aecc568669b31442c58ad692d637d4fe24785f4a5a"
++    },
++    "pins.json": {
++      "sha256": "018884272840e5aefc57a9ac3db7a25cf281b82de14f69ace133fbfc94ff6a34"
++    },
++    "sources/dependency-metadata.json": {
++      "sha256": "e560d1676bcb5795320c4cddc8d25209869af5f4491cee00a8330257ffd4e6e5"
++    },
++    "sources/issue-62-connector.json": {
++      "sha256": "5a17dd487bbb4c1fc3e48f240f84112765c8962ce8087def3f82be00d7ab7678"
++    },
++    "sources/primary-documentation.json": {
++      "sha256": "2d3cbbc1367acc89ef1094d8a84ca2d6599637a1a4efc01823d9f7c4fc7984fb"
++    },
++    "sources/projection-validation-source.json": {
++      "sha256": "f0cb94e7d8569bb850577d6043cdbf8899c433851cf916631dd6576f727808e5"
++    },
++    "sources/start_record.json": {
++      "sha256": "f442ee26c070d59ba711d182263db86b2c21805ec330e6f5cc8eb379e87a4284"
++    },
++    "test_harness.py": {
++      "sha256": "b7b8179818d2b318efa89a14ffd183161243d48046c97a158018be43e4b403c5"
++    }
++  },
++  "runtime": {
++    "node": "20.19.6",
++    "platform": "Linux-6.11.0-29-generic-x86_64-with-glibc2.39",
++    "python": "3.12.3"
++  },
++  "source_archive_sha256": "90ef6ac928019a3b6955b1ca0f0b8a91b786c81b91436c533c39ba88e860fa86",
++  "status": "LOCAL_PACKAGE_COMPLETE_EXTERNAL_SUBMISSION_PENDING",
++  "target": {
++    "commit": "8a6c01ecce457aa94330c0ed7219e4c56ebfe771",
++    "normative_basis_sha256": "333977c9e27c57371686b9cfb9c4becda68da43aebf024b04068e32563597b8d",
++    "release": "v0.2.0-beta.1",
++    "wire_version": "0.2"
++  }
++}
+diff --git a/interop/same-version/v0.2.0-beta.1/sources/dependency-metadata.json b/interop/same-version/v0.2.0-beta.1/sources/dependency-metadata.json
+new file mode 100644
+index 0000000000000000000000000000000000000000..f254624f8e1991be824ab2493092051550778208
+--- /dev/null
++++ b/interop/same-version/v0.2.0-beta.1/sources/dependency-metadata.json
+@@ -0,0 +1,133 @@
++{
++  "attrs-23.2.0-py3-none-any.whl": {
++    "wheel_sha256": "99b87a485a5820b23b879f04c2305b44b951b502fd64be915879d77a7e8fc6f1",
++    "metadata_sha256": "5b0bc6ece1f22a310fa72154642098b759f413f09ca9d45bedb96218475c9be0",
++    "primary_distribution_metadata": [
++      "Name: attrs",
++      "Version: 23.2.0",
++      "Project-URL: Documentation, https://www.attrs.org/",
++      "Project-URL: Changelog, https://www.attrs.org/en/stable/changelog.html",
++      "Project-URL: GitHub, https://github.com/python-attrs/attrs",
++      "Project-URL: Funding, https://github.com/sponsors/hynek",
++      "Project-URL: Tidelift, https://tidelift.com/subscription/pkg/pypi-attrs?utm_source=pypi-attrs&utm_medium=pypi",
++      "Requires-Python: >=3.7"
++    ]
++  },
++  "cffi-2.0.0-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl": {
++    "wheel_sha256": "3e17ed538242334bf70832644a32a7aae3d83b57567f9fd60a26257e992b79ba",
++    "metadata_sha256": "b98ce7e3417af089bc12d5c73412d9b3b1683ccf8ec73c986c35ac8c9be1ba39",
++    "primary_distribution_metadata": [
++      "Name: cffi",
++      "Version: 2.0.0",
++      "Project-URL: Documentation, https://cffi.readthedocs.io/",
++      "Project-URL: Changelog, https://cffi.readthedocs.io/en/latest/whatsnew.html",
++      "Project-URL: Downloads, https://github.com/python-cffi/cffi/releases",
++      "Project-URL: Contact, https://groups.google.com/forum/#!forum/python-cffi",
++      "Project-URL: Source Code, https://github.com/python-cffi/cffi",
++      "Project-URL: Issue Tracker, https://github.com/python-cffi/cffi/issues",
++      "Requires-Python: >=3.9"
++    ]
++  },
++  "cryptography-48.0.0-cp311-abi3-manylinux_2_34_x86_64.whl": {
++    "wheel_sha256": "bd72e68b06bb1e96913f97dd4901119bc17f39d4586a5adf2d3e47bc2b9d58b5",
++    "metadata_sha256": "43f08e5fe52da6c825e5ee189bd985ee1537860020332dcbcbc5da5679dec906",
++    "primary_distribution_metadata": [
++      "Name: cryptography",
++      "Version: 48.0.0",
++      "Requires-Python: >=3.9, !=3.9.0, !=3.9.1",
++      "Project-URL: changelog, https://cryptography.io/en/latest/changelog/",
++      "Project-URL: documentation, https://cryptography.io/",
++      "Project-URL: homepage, https://github.com/pyca/cryptography",
++      "Project-URL: issues, https://github.com/pyca/cryptography/issues",
++      "Project-URL: source, https://github.com/pyca/cryptography/"
++    ]
++  },
++  "jsonschema-4.25.1-py3-none-any.whl": {
++    "wheel_sha256": "3fba0169e345c7175110351d456342c364814cfcf3b964ba4587f22915230a63",
++    "metadata_sha256": "31f83c1579e46e1af62269cefa5d83534ef155f3ee21914f7881bbd544bc125c",
++    "primary_distribution_metadata": [
++      "Name: jsonschema",
++      "Version: 4.25.1",
++      "Project-URL: Homepage, https://github.com/python-jsonschema/jsonschema",
++      "Project-URL: Documentation, https://python-jsonschema.readthedocs.io/",
++      "Project-URL: Issues, https://github.com/python-jsonschema/jsonschema/issues/",
++      "Project-URL: Funding, https://github.com/sponsors/Julian",
++      "Project-URL: Tidelift, https://tidelift.com/subscription/pkg/pypi-jsonschema?utm_source=pypi-jsonschema&utm_medium=referral&utm_campaign=pypi-link",
++      "Project-URL: Changelog, https://github.com/python-jsonschema/jsonschema/blob/main/CHANGELOG.rst",
++      "Project-URL: Source, https://github.com/python-jsonschema/jsonschema",
++      "Requires-Python: >=3.9"
++    ]
++  },
++  "jsonschema_specifications-2025.9.1-py3-none-any.whl": {
++    "wheel_sha256": "98802fee3a11ee76ecaca44429fda8a41bff98b00a0f2838151b113f210cc6fe",
++    "metadata_sha256": "35abd41757f32b4ea24756920ded47b70173d77cbc052a5a6d3ab583b2e8d89d",
++    "primary_distribution_metadata": [
++      "Name: jsonschema-specifications",
++      "Version: 2025.9.1",
++      "Project-URL: Documentation, https://jsonschema-specifications.readthedocs.io/",
++      "Project-URL: Homepage, https://github.com/python-jsonschema/jsonschema-specifications",
++      "Project-URL: Issues, https://github.com/python-jsonschema/jsonschema-specifications/issues/",
++      "Project-URL: Funding, https://github.com/sponsors/Julian",
++      "Project-URL: Tidelift, https://tidelift.com/subscription/pkg/pypi-jsonschema-specifications?utm_source=pypi-jsonschema-specifications&utm_medium=referral&utm_campaign=pypi-link",
++      "Project-URL: Source, https://github.com/python-jsonschema/jsonschema-specifications",
++      "Requires-Python: >=3.9"
++    ]
++  },
++  "pycparser-3.0-py3-none-any.whl": {
++    "wheel_sha256": "b727414169a36b7d524c1c3e31839a521725078d7b2ff038656844266160a992",
++    "metadata_sha256": "f547a60b0ab54cc2f242213d1f87960ad80df7dd5dfeb98d17a444d48bfb6b93",
++    "primary_distribution_metadata": [
++      "Name: pycparser",
++      "Version: 3.0",
++      "Project-URL: Homepage, https://github.com/eliben/pycparser",
++      "Requires-Python: >=3.10"
++    ]
++  },
++  "referencing-0.37.0-py3-none-any.whl": {
++    "wheel_sha256": "381329a9f99628c9069361716891d34ad94af76e461dcb0335825aecc7692231",
++    "metadata_sha256": "c93b00e6ab1524fd60848376604c189a114374776475c25a31d57be47b29de6a",
++    "primary_distribution_metadata": [
++      "Name: referencing",
++      "Version: 0.37.0",
++      "Project-URL: Documentation, https://referencing.readthedocs.io/",
++      "Project-URL: Homepage, https://github.com/python-jsonschema/referencing",
++      "Project-URL: Issues, https://github.com/python-jsonschema/referencing/issues/",
++      "Project-URL: Funding, https://github.com/sponsors/Julian",
++      "Project-URL: Tidelift, https://tidelift.com/subscription/pkg/pypi-referencing?utm_source=pypi-referencing&utm_medium=referral&utm_campaign=pypi-link",
++      "Project-URL: Changelog, https://referencing.readthedocs.io/en/stable/changes/",
++      "Project-URL: Source, https://github.com/python-jsonschema/referencing",
++      "Requires-Python: >=3.10"
++    ]
++  },
++  "rpds_py-0.30.0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl": {
++    "wheel_sha256": "47f236970bccb2233267d89173d3ad2703cd36a0e2a6e92d0560d333871a3d23",
++    "metadata_sha256": "cc01d097ddb9c7e07a29c9553ee8dd35cf920e85fb574f7b0c23d68138a716bf",
++    "primary_distribution_metadata": [
++      "Name: rpds-py",
++      "Version: 0.30.0",
++      "Requires-Python: >=3.10",
++      "Project-URL: Documentation, https://rpds.readthedocs.io/",
++      "Project-URL: Homepage, https://github.com/crate-py/rpds",
++      "Project-URL: Issues, https://github.com/crate-py/rpds/issues/",
++      "Project-URL: Funding, https://github.com/sponsors/Julian",
++      "Project-URL: Tidelift, https://tidelift.com/subscription/pkg/pypi-rpds-py?utm_source=pypi-rpds-py&utm_medium=referral&utm_campaign=pypi-link",
++      "Project-URL: Source, https://github.com/crate-py/rpds",
++      "Project-URL: Upstream, https://github.com/orium/rpds"
++    ]
++  },
++  "typing_extensions-4.15.0-py3-none-any.whl": {
++    "wheel_sha256": "f0fa19c6845758ab08074a0cfa8b7aecb71c999ca73d62883bc25cc018c4e548",
++    "metadata_sha256": "c138378fe8f18934ac99de060535c53ec6c13aeed65e94c32641da7ee3192a72",
++    "primary_distribution_metadata": [
++      "Name: typing_extensions",
++      "Version: 4.15.0",
++      "Requires-Python: >=3.9",
++      "Project-URL: Bug Tracker, https://github.com/python/typing_extensions/issues",
++      "Project-URL: Changes, https://github.com/python/typing_extensions/blob/main/CHANGELOG.md",
++      "Project-URL: Documentation, https://typing-extensions.readthedocs.io/",
++      "Project-URL: Home, https://github.com/python/typing_extensions",
++      "Project-URL: Q & A, https://github.com/python/typing/discussions",
++      "Project-URL: Repository, https://github.com/python/typing_extensions"
++    ]
++  }
++}
+diff --git a/interop/same-version/v0.2.0-beta.1/sources/issue-62-connector.json b/interop/same-version/v0.2.0-beta.1/sources/issue-62-connector.json
+new file mode 100644
+index 0000000000000000000000000000000000000000..e53efb22d6f7e3f9539a1890c0ce9121335b921f
+--- /dev/null
++++ b/interop/same-version/v0.2.0-beta.1/sources/issue-62-connector.json
+@@ -0,0 +1,52 @@
++{
++  "accessed_at_utc": "2026-11-02T19:08:31.114Z",
++  "method": "GitHub connector github_fetch_issue / github_fetch_issue_comments",
++  "issue": {
++    "issue": {
++      "url": "https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/issues/62",
++      "title": "Independent v0.2 producer challenge — emit and verify a release-pinned minimal lifecycle",
++      "issue_number": 62,
++      "body": "## Objective\n\nIndependently implement the smallest useful AIREP v0.2 producer that emits a release-pinned Decision → Control → Execution → Effect lifecycle, then run the published verification and reconciliation paths over its output.\n\nThis is an evidence-gathering challenge, not a requirement to reproduce the first-party producer and not a request for a complete AIREP product.\n\n## Exact target\n\n- Release: `v0.2.0-beta.1`\n- Tag target commit: `8a6c01ecce457aa94330c0ed7219e4c56ebfe771`\n- Normative entry point: `spec/airep/v0.2/SPEC.md` at that tag\n- Schemas: `spec/airep/v0.2/schemas/` at that tag\n- Verification inputs and rules: `spec/airep/v0.2/VERIFICATION.md`, `INTEGRITY.md`, `CONFORMANCE_CLASSES.md`, and `RECONCILIATION.md` at that tag\n\nDo not target moving `main`, and do not combine this result with the frozen v0.1.2 external-producer result.\n\n## Minimal scope\n\nImplement a producer in one language not copied from the first-party Python producer—Go, Rust, or TypeScript are particularly welcome—that emits the five-artifact minimal lifecycle:\n\n1. Decision\n2. issuer Control dispatch\n3. receiver Control receipt\n4. Execution\n5. Effect\n\nThe artifacts should use contributor-controlled test keys and should be checkable with two top-level commands:\n\n```text\n<producer command>     # writes the lifecycle and required verification inputs\n<verification command> # runs the release-pinned verifier/reconciler and retains output\n```\n\nExact command syntax is up to the implementation. No private service, credential, or deployment is required.\n\n## Evidence bundle\n\nPlease provide:\n\n- implementation source and licence;\n- exact runtime/toolchain versions;\n- exact commands and complete stdout/stderr;\n- generated artifacts and any bindings, revocation input, independence policy, or profile basis used;\n- SHA-256 identities for the source snapshot and submitted artifacts;\n- the release-pinned verifier and reconciliation outputs;\n- a short method note describing whether first-party producer code was read or reused.\n\nThe maintainer will reproduce the submitted bundle before any result is summarized in `EXTERNAL_EVIDENCE.md`.\n\n## Valid outcomes\n\nAny of these is useful:\n\n- **compatible** — the pinned verifier/reconciler accepts and classifies the submitted lifecycle as expected;\n- **divergence found** — independently generated bytes expose a verifier, producer, or expected-result mismatch;\n- **spec ambiguity found** — two reasonable readings of the frozen text produce different results.\n\nPASS is not required. A reproducible failure or ambiguity is evidence, not a failed contribution.\n\n## Claim boundary\n\nOne successful submission would be one independently authored producer result against this exact beta target. It would not by itself establish general interchange, deployment interoperability, protocol correctness, AIREP stability, or standards-body endorsement. Contributor credit will be added only with permission and after maintainer-side reproduction.\n",
++      "state": "open",
++      "user": {
++        "login": "halvrenofviryel",
++        "name": "halvrenofviryel",
++        "email": null,
++        "avatar_url": "https://avatars.githubusercontent.com/u/246127299?v=4",
++        "id": 246127299
++      },
++      "assignees": null,
++      "labels": [
++        {
++          "name": "help wanted",
++          "color": "008672",
++          "description": "Extra attention is needed"
++        },
++        {
++          "name": "adoption",
++          "color": "0e8a16",
++          "description": ""
++        }
++      ],
++      "milestone": null,
++      "state_reason": null,
++      "comments": 0,
++      "created_at": "2026-09-23T19:03:44Z",
++      "updated_at": "2026-09-23T19:03:44Z",
++      "closed_at": null,
++      "display_url": "https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/issues/62",
++      "display_title": "Independent v0.2 producer challenge — emit and verify a release-pinned minimal lifecycle"
++    },
++    "url": "https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/issues/62",
++    "title": "Independent v0.2 producer challenge — emit and verify a release-pinned minimal lifecycle",
++    "display_url": "https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/issues/62",
++    "display_title": "Independent v0.2 producer challenge — emit and verify a release-pinned minimal lifecycle"
++  },
++  "comments": {
++    "comments": [],
++    "url": "https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/issues/62",
++    "title": "halvrenofviryel/ai-runtime-evidence-protocol Issue #62 comments",
++    "display_url": "https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/issues/62",
++    "display_title": "halvrenofviryel/ai-runtime-evidence-protocol Issue #62 comments"
++  }
++}
+diff --git a/interop/same-version/v0.2.0-beta.1/sources/primary-documentation.json b/interop/same-version/v0.2.0-beta.1/sources/primary-documentation.json
+new file mode 100644
+index 0000000000000000000000000000000000000000..ff068ecb6f9cea4a6821022a79db1cb684bb991a
+--- /dev/null
++++ b/interop/same-version/v0.2.0-beta.1/sources/primary-documentation.json
+@@ -0,0 +1,24 @@
++{
++  "accessed_at_utc": "2026-11-02T19:15:18.516Z",
++  "primary_pages": [
++    {
++      "url": "https://www.python.org/downloads/release/python-3123/",
++      "observed": "Python 3.12.3 release page"
++    },
++    {
++      "url": "https://nodejs.org/en/blog/release/v20.19.6",
++      "observed": "Node.js 20.19.6 release page"
++    },
++    {
++      "url": "https://cryptography.io/en/48.0.0/installation/",
++      "observed": "Cryptography 48.0.0 versioned installation documentation"
++    },
++    {
++      "url": "https://python-jsonschema.readthedocs.io/en/v4.25.1/",
++      "observed": "jsonschema 4.25.1 versioned documentation"
++    }
++  ],
++  "verification_scope": "Primary documentation confirms named release/version availability. Installed dependency identities are verified from frozen wheel/tarball hashes and primary distribution metadata, not inferred from webpage titles.",
++  "retrieval_sha256": "e7fb3a0646fd092753b93194d6f3f80769ccf7ddb6c7a9f372f5ba66eb261242",
++  "retrieval_hash_scope": "UTF-8 text returned by web open for the four primary pages; primary observations retained, no normative dependency inferred from web content"
++}
+diff --git a/interop/same-version/v0.2.0-beta.1/sources/projection-validation-source.json b/interop/same-version/v0.2.0-beta.1/sources/projection-validation-source.json
+new file mode 100644
+index 0000000000000000000000000000000000000000..474037fd81c6e3d92d67de7b9d7c53edca4a5202
+--- /dev/null
++++ b/interop/same-version/v0.2.0-beta.1/sources/projection-validation-source.json
+@@ -0,0 +1,28 @@
++{
++  "scope": "Non-normative validation of optional adapter projections; no imported verifier implementation.",
++  "sources": {
++    "spec/airep/v0.2/RECONCILIATION.md": {
++      "sections": [
++        "Structured result and summary"
++      ],
++      "sha256": "d720ff4139676b913e9d9f9a3a38d57fea586c9a76b1816bdcbf57e1ea39d023"
++    },
++    "spec/airep/v0.2/class-verification/CLASS_VERIFIER_CONTRACT.md": {
++      "sections": [
++        "2. Normalized verdict envelope",
++        "5. Closed reason registry"
++      ],
++      "sha256": "7ecfce56ab576a495816df77e25442b25c1afdb22cc9828e47ba29a565138885"
++    },
++    "tools/airep_v02/reconcile.py": {
++      "scope": "Frozen check names and structured subject shapes",
++      "sha256": "ea94f18a8cf95e10be7435a820debc84d72465e080683fc04399f418d1f6d715"
++    }
++  },
++  "target": {
++    "commit": "8a6c01ecce457aa94330c0ed7219e4c56ebfe771",
++    "normative_basis_sha256": "333977c9e27c57371686b9cfb9c4becda68da43aebf024b04068e32563597b8d",
++    "release": "v0.2.0-beta.1",
++    "wire_version": "0.2"
++  }
++}
+diff --git a/interop/same-version/v0.2.0-beta.1/sources/start_record.json b/interop/same-version/v0.2.0-beta.1/sources/start_record.json
+new file mode 100644
+index 0000000000000000000000000000000000000000..bd7897726fb50df99a792e9bbe0f2751bf8f1189
+--- /dev/null
++++ b/interop/same-version/v0.2.0-beta.1/sources/start_record.json
+@@ -0,0 +1,13 @@
++{
++  "clone_url": "https://github.com/halvrenofviryel/ai-runtime-evidence-protocol.git",
++  "independent_clone": "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/k2-airep-same-version-interop/ai-runtime-evidence-protocol",
++  "branch": "codex/airep-v02-same-version-interop",
++  "initial_status_porcelain": "",
++  "initial_HEAD": "075aff5610731736405951ecf3b7c4bfc3cc0f07",
++  "fetch_command": "git fetch --tags origin",
++  "origin_main_after_fetch": "075aff5610731736405951ecf3b7c4bfc3cc0f07",
++  "tag_commit_after_fetch": "8a6c01ecce457aa94330c0ed7219e4c56ebfe771",
++  "repository_rules": "CONTRIBUTING.md read; no AGENTS.md found in repository or inspected ancestor directories",
++  "publications": "none",
++  "issue_snapshot_sha256": "5a17dd487bbb4c1fc3e48f240f84112765c8962ce8087def3f82be00d7ab7678"
++}
+diff --git a/interop/same-version/v0.2.0-beta.1/test_harness.py b/interop/same-version/v0.2.0-beta.1/test_harness.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..60014ed76839dd650709c2bf39eef3c7256b1f06
+--- /dev/null
++++ b/interop/same-version/v0.2.0-beta.1/test_harness.py
+@@ -0,0 +1,295 @@
++"""Transport and failure-preservation tests; these adapters are local test doubles.
++
++Apache-2.0. They are never recorded as external interoperability evidence.
++"""
++from copy import deepcopy
++import json
++from pathlib import Path
++import sys
++import tempfile
++import unittest
++
++import harness as h
++
++
++class HarnessTests(unittest.TestCase):
++    def setUp(self):
++        self.tmp = tempfile.TemporaryDirectory()
++        self.root = Path(self.tmp.name)
++        self.bundle = self.root/'input'
++        self.bundle.mkdir()
++        docs = [{'record_id': name, 'artifact_type': family, 'airep_version': '0.2'}
++                for name, family in [('d','decision'), ('s','control'), ('r','control'),
++                                     ('x','execution'), ('e','effect')]]
++        docs[1].update(boundary_side='issuer', control_event='dispatched')
++        docs[2].update(boundary_side='receiver', control_event='received')
++        h.write(self.bundle/'lifecycle.json', docs)
++        for name in h.REQUIRED[1:]:
++            h.write(self.bundle/name, {})
++        h.seal_bundle(self.bundle, 'local-test-fixture')
++        self.rec = h.Recorder(self.root/'record')
++
++    def tearDown(self):
++        self.tmp.cleanup()
++
++    def config(self, body, role='consumer', argv=None):
++        source = self.root/'adapter.py'
++        source.write_text(body)
++        config = self.root/'config.json'
++        h.write(config, {'role': role, 'target': h.TARGET, 'implementation_id': 'local-test-double',
++                        'argv': argv or [sys.executable, str(source)], 'source_file': str(source),
++                        'source_sha256': h.sha(source.read_bytes())})
++        return config
++
++    def invoke(self, body, role='consumer', argv=None):
++        return h.adapter(self.config(body, role, argv), role,
++                         self.bundle if role == 'consumer' else None,
++                         self.root/('output-'+str(len(self.rec.commands))), self.rec)
++
++    def actual_projection(self):
++        # Use a real release-pinned measurement, not a hand-built success shape.
++        source = h.HERE/'evidence/final-reference'
++        for name in (*h.REQUIRED, 'bundle.json'):
++            (self.bundle/name).write_bytes((source/'local-reference-bundle'/name).read_bytes())
++        return h.load((source/'run_record.json').read_bytes())['reference_to_reference']['observation']
++
++    def invoke_projection(self, observation):
++        script = ('import json,sys\nr=json.load(sys.stdin)\n'
++                  'response=dict(role="consumer",target=r["target"],implementation_id="local-test-double",'
++                  'input_manifest_sha256=r["input_manifest_sha256"],native_result={"local_test_double":True})\n'
++                  f'response["observation"]=json.loads({json.dumps(observation)!r})\n'
++                  'print(json.dumps(response))\n')
++        result = self.invoke(script)
++        self.assertEqual(self.rec.commands[-1]['exit_code'], 0)
++        return result
++
++    def assert_projection_rejected(self, observation):
++        result = self.invoke_projection(observation)
++        self.assertEqual(result['status'], 'ADAPTER_ERROR')
++        self.assertEqual(result['error'], 'MALFORMED_COMPARISON_PROJECTION')
++        self.assertNotIn('observation', result)
++        self.assertEqual(h.compare({'transport_status':'EVALUATED'}, result), 'ADAPTER_ERROR')
++
++    def test_no_submission_stays_missing(self):
++        r = h.adapter(None, 'consumer', self.bundle, self.root/'output', self.rec)
++        self.assertEqual(r['status'], 'EXTERNAL_RESULT_NOT_SUPPLIED')
++        self.assertEqual(self.rec.commands, [])
++
++    def test_adapter_unavailable_is_not_a_pass(self):
++        r = self.invoke('', argv=[str(self.root/'does-not-exist')])
++        self.assertEqual(r['status'], 'ADAPTER_UNAVAILABLE')
++        self.assertEqual(r['exit_code'], -1)
++
++    def test_nonzero_response_cannot_smuggle_success(self):
++        r = self.invoke('import json\nprint(json.dumps({"status":"PASS"}))\nraise SystemExit(9)\n')
++        self.assertEqual(r['status'], 'ADAPTER_PROCESS_ERROR')
++        self.assertEqual(r['exit_code'], 9)
++        self.assertNotIn('native_result', r)
++
++    def test_duplicate_json_keys_rejected(self):
++        with self.assertRaises(h.Invalid):
++            h.load('{"target": 1, "target": 2}')
++
++    def test_byte_change_rejected_even_same_json_value(self):
++        p = self.bundle/'lifecycle.json'
++        p.write_bytes(p.read_bytes()+b' ')
++        with self.assertRaisesRegex(h.Invalid, 'BYTE_HASH_MISMATCH'):
++            h.check_bundle(self.bundle)
++
++    def test_forged_hash_rejected(self):
++        m = h.load((self.bundle/'bundle.json').read_bytes())
++        m['files']['bindings.json'] = '0'*64
++        h.write(self.bundle/'bundle.json', m)
++        with self.assertRaisesRegex(h.Invalid, 'BYTE_HASH_MISMATCH'):
++            h.check_bundle(self.bundle)
++
++    def test_target_commit_mismatch_rejected(self):
++        m = h.load((self.bundle/'bundle.json').read_bytes())
++        m['target']['commit'] = '0'*40
++        h.write(self.bundle/'bundle.json', m)
++        with self.assertRaisesRegex(h.Invalid, 'TARGET_MISMATCH'):
++            h.check_bundle(self.bundle)
++
++    def test_wire_mismatch_rejected_after_rehash(self):
++        docs = h.load((self.bundle/'lifecycle.json').read_bytes())
++        docs[0]['airep_version'] = '0.1'
++        h.write(self.bundle/'lifecycle.json', docs)
++        h.seal_bundle(self.bundle, 'local-test-fixture')
++        with self.assertRaisesRegex(h.Invalid, 'WIRE_VERSION'):
++            h.check_bundle(self.bundle)
++
++    def test_issuer_cannot_supply_receiver_role(self):
++        docs = h.load((self.bundle/'lifecycle.json').read_bytes())
++        docs[2]['boundary_side'] = 'issuer'
++        h.write(self.bundle/'lifecycle.json', docs)
++        h.seal_bundle(self.bundle, 'local-test-fixture')
++        with self.assertRaisesRegex(h.Invalid, 'CONTROL_ROLE'):
++            h.check_bundle(self.bundle)
++
++    def test_adapter_role_cannot_change(self):
++        config = self.config('', role='producer')
++        r = h.adapter(config, 'consumer', self.bundle, self.root/'output', self.rec)
++        self.assertEqual(r['status'], 'ADAPTER_ERROR')
++        self.assertIn('ROLE_OR_TARGET', r['error'])
++        self.assertEqual(self.rec.commands, [])
++
++    def test_source_hash_mismatch_stops_execution(self):
++        config = self.config('raise RuntimeError("must not run")')
++        (self.root/'adapter.py').write_text('print(1)')
++        r = h.adapter(config, 'consumer', self.bundle, self.root/'output', self.rec)
++        self.assertIn('SOURCE_HASH_MISMATCH', r['error'])
++        self.assertEqual(self.rec.commands, [])
++
++    def test_input_mutation_detected(self):
++        r = self.invoke('import json,sys,pathlib\nr=json.load(sys.stdin)\np=pathlib.Path(r["input_bundle"])/"lifecycle.json"\np.write_bytes(p.read_bytes()+b" ")\nprint("{}")\n')
++        self.assertIn('INPUT_BYTES_CHANGED', r['error'])
++
++    def test_consumer_native_format_is_free(self):
++        r = self.invoke('import json,sys\nr=json.load(sys.stdin)\nprint(json.dumps(dict(role="consumer",target=r["target"],implementation_id="local-test-double",input_manifest_sha256=r["input_manifest_sha256"],native_result={"my_engine":"no-shared-verifier-code","answer":"unknown"})))\n')
++        self.assertEqual(r['status'], 'REPORTED')
++        self.assertIsNone(r['observation'])
++        self.assertEqual(h.compare({'transport_status':'EVALUATED'}, r), 'NOT_COMPARABLE')
++        self.assertEqual(r['independence'], 'NOT_ASSESSED')
++
++    def test_consumer_wrong_input_hash_rejected(self):
++        r = self.invoke('import json,sys\nr=json.load(sys.stdin)\nprint(json.dumps(dict(role="consumer",target=r["target"],implementation_id="local-test-double",input_manifest_sha256="0"*64,native_result={})))\n')
++        self.assertIn('INPUT_HASH_MISMATCH', r['error'])
++
++    def test_reference_process_errors_preserved(self):
++        # Empty cwd has no tools package: actual verifier AND reconciler processes fail.
++        empty = self.root/'empty'; empty.mkdir()
++        r = h.consume(empty, Path(sys.executable), self.bundle, self.root/'consumed', self.rec)
++        self.assertEqual(r['transport_status'], 'PROCESS_ERROR')
++        self.assertNotEqual(r['verify']['exit_code'], 0)
++        self.assertNotEqual(r['reconcile']['exit_code'], 0)
++        self.assertIsNone(r['observation'])
++
++    def test_projection_divergence_never_agrees(self):
++        observed = self.actual_projection()
++        ref = {'transport_status':'EVALUATED', 'observation': deepcopy(observed)}
++        observed['records'][0]['class'] = 'AIREP-Core'
++        ext = self.invoke_projection(observed)
++        self.assertEqual(ext['status'], 'REPORTED')
++        self.assertEqual(h.compare(ref, ext), 'PROJECTION_DIVERGES')
++        ref['transport_status'] = 'PROCESS_ERROR'
++        self.assertEqual(h.compare(ref, ext), 'REFERENCE_PROCESS_ERROR')
++
++    def test_producer_bundle_is_transport_only(self):
++        # The fixture omits normative required fields: transport accepts its shape,
++        # but this is never labelled authenticated or compatible.
++        script = ('import json,sys,pathlib,shutil\nr=json.load(sys.stdin)\n'
++                  f'shutil.copytree({str(self.bundle)!r}, pathlib.Path(r["output_dir"])/"bundle")\n'
++                  'p=pathlib.Path(r["output_dir"])/"bundle"/"bundle.json"\n'
++                  'm=json.loads(p.read_text()); m["implementation_id"]="local-test-double"\n'
++                  'p.write_text(json.dumps(m))\n'
++                  'print(json.dumps(dict(role="producer",target=r["target"],implementation_id="local-test-double")))\n')
++        result = self.invoke(script, role='producer')
++        self.assertEqual(result['status'], 'BUNDLE_SUPPLIED')
++        self.assertEqual(result['independence'], 'NOT_ASSESSED')
++        self.assertNotIn('class', result)
++
++    def test_nonobject_response_recorded_as_adapter_error(self):
++        r = self.invoke('print("[]")\n')
++        self.assertEqual(r['status'], 'ADAPTER_ERROR')
++        self.assertIn('RESPONSE_MUST_BE_OBJECT', r['error'])
++
++    def test_nonobject_manifest_rejected(self):
++        h.write(self.bundle/'bundle.json', [])
++        with self.assertRaisesRegex(h.Invalid, 'MANIFEST_MUST_BE_OBJECT'):
++            h.check_bundle(self.bundle)
++
++    def test_nonobject_artifact_rejected(self):
++        h.write(self.bundle/'lifecycle.json', [[],{},{},{},{}])
++        h.seal_bundle(self.bundle, 'local-test-fixture')
++        with self.assertRaisesRegex(h.Invalid, 'ARTIFACT_MUST_BE_OBJECT'):
++            h.check_bundle(self.bundle)
++
++    def test_actual_projection_accepted_through_adapter_subprocess(self):
++        observation = self.actual_projection()
++        result = self.invoke_projection(observation)
++        self.assertEqual(result['status'], 'REPORTED')
++        self.assertEqual(result['observation'], observation)
++        self.assertEqual(h.compare({'transport_status':'EVALUATED', 'observation':observation}, result), 'PROJECTION_AGREES')
++        self.assertEqual(result['independence'], 'NOT_ASSESSED')
++
++    def test_null_observation_remains_not_comparable(self):
++        result = self.invoke_projection(None)
++        self.assertEqual(result['status'], 'REPORTED')
++        self.assertEqual(h.compare({'transport_status':'EVALUATED'}, result), 'NOT_COMPARABLE')
++
++    def test_null_nested_projection_rejected(self):
++        self.assert_projection_rejected(dict(records=None, reconciliation_summary=None, checks=None))
++        for field in ('records', 'reconciliation_summary', 'checks'):
++            with self.subTest(field=field):
++                value = self.actual_projection(); value[field] = None
++                self.assert_projection_rejected(value)
++
++    def test_record_fields_and_vocabularies_rejected(self):
++        mutations = [
++            lambda r: r.pop('class'),
++            lambda r: r.update(record_id=None),
++            lambda r: r.update(record_id=''),
++            lambda r: r.update(record_id='\ud800'),
++            lambda r: r.update(**{'class':'PASS'}),
++            lambda r: r.update(observer_assessment='trusted'),
++            lambda r: r.update(authenticated_failures=None),
++            lambda r: r.update(authenticated_failures=[1]),
++            lambda r: r.update(authenticated_failures=['unknown-reason']),
++            lambda r: r.update(authenticated_withheld=['producer-signature-invalid']),
++            lambda r: r.update(witnessed_withheld=['no-witness-supplied','no-witness-supplied']),
++            lambda r: r.update(witnessed_withheld=['witness-binding-missing','no-witness-supplied']),
++            lambda r: r.update(authenticated_failures=['producer-signature-invalid']),
++            lambda r: r.update(**{'class':'AIREP-Witnessed'}),
++            lambda r: r.update(unregistered_field=True),
++        ]
++        for index, mutation in enumerate(mutations):
++            with self.subTest(mutation=index):
++                value=self.actual_projection(); mutation(value['records'][0])
++                self.assert_projection_rejected(value)
++
++    def test_record_container_and_identity_rejected(self):
++        for mutation in (lambda v:v.update(records={}), lambda v:v.update(records=[None]),
++                         lambda v:v['records'].append(deepcopy(v['records'][0])),
++                         lambda v:v['records'].reverse()):
++            value=self.actual_projection(); mutation(value)
++            self.assert_projection_rejected(value)
++
++    def test_summary_status_and_counts_rejected(self):
++        mutations = [lambda s:s.pop('status'), lambda s:s.update(status='PASS'),
++                     lambda s:s.update(status='SATISFIED'), lambda s:s.update(counts=None),
++                     lambda s:s['counts'].pop('MISSING'), lambda s:s['counts'].update(PASS=0)]
++        for count in (None, True, -1, 37.0, '37', 38):
++            mutations.append(lambda s,n=count:s['counts'].update(SATISFIED=n))
++        for index,mutation in enumerate(mutations):
++            with self.subTest(mutation=index):
++                value=self.actual_projection(); mutation(value['reconciliation_summary'])
++                self.assert_projection_rejected(value)
++
++    def test_check_fields_and_vocabularies_rejected(self):
++        mutations = [lambda c:c.pop('state'), lambda c:c.update(state='PASS'),
++                     lambda c:c.update(check='unregistered_check'), lambda c:c.update(subject=None),
++                     lambda c:c.update(subject='demo.decision'),
++                     lambda c:c.update(subject={'record_id':None,'chain_id':'demo.chain'}),
++                     lambda c:c.update(subject={'input_index':True}),
++                     lambda c:c.update(unregistered_field=1)]
++        for index,mutation in enumerate(mutations):
++            with self.subTest(mutation=index):
++                value=self.actual_projection(); mutation(value['checks'][0])
++                self.assert_projection_rejected(value)
++        for replacement in ({}, [None]):
++            value=self.actual_projection(); value['checks']=replacement
++            self.assert_projection_rejected(value)
++
++    def test_nested_check_identity_and_order_rejected(self):
++        value=self.actual_projection()
++        next(c for c in value['checks'] if c['check']=='issuer_dispatch')['subject']['decision_ref'] = None
++        self.assert_projection_rejected(value)
++        value=self.actual_projection()
++        next(c for c in value['checks'] if c['check']=='chain_link')['subject']['sequence'] = True
++        self.assert_projection_rejected(value)
++        value=self.actual_projection(); value['checks'].reverse()
++        self.assert_projection_rejected(value)
++
++
++if __name__ == '__main__':
++    unittest.main()

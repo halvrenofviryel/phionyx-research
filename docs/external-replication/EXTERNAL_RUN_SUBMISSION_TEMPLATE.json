@@ -1,0 +1,64 @@
+{
+  "commands": [],
+  "deviations_and_missing_evidence": [],
+  "environment": {
+    "architecture": null,
+    "dependency_inventory_sha256": null,
+    "git": null,
+    "node": null,
+    "os": null,
+    "python": null
+  },
+  "experiment_id": null,
+  "implementation": {
+    "imports_author_reference_code": null,
+    "independent_code_description": null,
+    "license": null,
+    "source_commit": null,
+    "source_url_or_archive": null
+  },
+  "negative_controls": [],
+  "normative_basis_sha256": null,
+  "notice": "Blank template. Filling fields is not submission, verification, endorsement, interop, adoption, or citation evidence. No automatic upload.",
+  "observed_native_statuses": null,
+  "package_manifest_sha256": null,
+  "protocol_release": null,
+  "public_permissions": {
+    "permission_to_cite_identity": false,
+    "permission_to_publish_artifacts": false,
+    "permitted_identity_text": null
+  },
+  "raw_evidence": [],
+  "reproduction_reviewer": null,
+  "review_decision": {
+    "classification": "NOT_EVALUATED",
+    "reason": null,
+    "reviewer": null
+  },
+  "role_requested": null,
+  "role_values": [
+    "AUTHOR_SIDE_REFERENCE",
+    "AUTHOR_CONTROLLED_BLIND_SECOND",
+    "EXTERNAL_PRODUCER_ONLY",
+    "EXTERNAL_CONSUMER_ONLY",
+    "EXTERNAL_SAME_VERSION_CROSS_INTEROP",
+    "EXTERNAL_REPRODUCTION",
+    "EXTERNAL_PRODUCT_ADOPTION",
+    "EXTERNAL_CITATION",
+    "NOT_EVALUATED"
+  ],
+  "run_record": {
+    "location": null,
+    "sha256": null
+  },
+  "schema": "k5-external-submission-v1",
+  "source_commits": [],
+  "status": "NOT_EVALUATED",
+  "submitter": {
+    "author_affiliation_or_control": null,
+    "contact": null,
+    "name": null,
+    "organization": null
+  },
+  "template_only": true
+}
