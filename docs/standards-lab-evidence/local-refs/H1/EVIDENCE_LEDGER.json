@@ -1,0 +1,87 @@
+{
+  "evidence": [
+    {
+      "label": "A",
+      "source_commit": "e0ac30203e39949bb52d612eb3496c39ccb85651",
+      "local_repository": "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/a-agentproto-completeness/phionyx-research",
+      "files": [
+        {
+          "source_path": "experiments/ietf/agentproto/verifier-evidence-03/RESULTS.md",
+          "snapshot_path": "evidence/A/RESULTS.md",
+          "sha256": "62d85e38dcbaf98d00a53c49b4f2538323d739b3f15ceab003f099ad0396772c",
+          "bytes": 8257
+        },
+        {
+          "source_path": "experiments/ietf/agentproto/verifier-evidence-03/run_record.json",
+          "snapshot_path": "evidence/A/run_record.json",
+          "sha256": "f34d9a3ddfffe7f61de77e83601341a7515d2390432525712a4deb3f801b31bd",
+          "bytes": 4597
+        }
+      ],
+      "inspection": "exact committed bytes; not an independent external rerun"
+    },
+    {
+      "label": "C03",
+      "source_commit": "02a44a812699f853ea65fffa21320e7cc8ddb6c7",
+      "local_repository": "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/c-audit-decision-receipts/phionyx-research",
+      "files": [
+        {
+          "source_path": "experiments/ietf/audit/decision-receipts-03/RESULTS.md",
+          "snapshot_path": "evidence/C03/RESULTS.md",
+          "sha256": "c8b1aca4f19560d0ac80d371b50be8e8a4314093b88ebe6d7c706d05050a6775",
+          "bytes": 7699
+        },
+        {
+          "source_path": "experiments/ietf/audit/decision-receipts-03/run_record.json",
+          "snapshot_path": "evidence/C03/run_record.json",
+          "sha256": "5b770c4edc9af2aa1cedc3d0b74e24cfb006eab98538b8799902612888ae3bc5",
+          "bytes": 5544
+        }
+      ],
+      "inspection": "exact committed bytes; not an independent external rerun"
+    },
+    {
+      "label": "C04",
+      "source_commit": "ecaff138be0fd833848b6f27267e555e6b31e7f6",
+      "local_repository": "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/c-audit-decision-receipts/phionyx-research",
+      "files": [
+        {
+          "source_path": "experiments/ietf/audit/decision-receipts-04/RESULTS.md",
+          "snapshot_path": "evidence/C04/RESULTS.md",
+          "sha256": "704425fd87da17df11d4aefee279a5bb0fd876841aaa9aa76ea5eb06dc212756",
+          "bytes": 5936
+        },
+        {
+          "source_path": "experiments/ietf/audit/decision-receipts-04/run_record.json",
+          "snapshot_path": "evidence/C04/run_record.json",
+          "sha256": "a2e5728aae78fa7d80ab4c3937ea51b045f62c1c021368b32536caf3f0a011e0",
+          "bytes": 4336
+        }
+      ],
+      "inspection": "exact committed bytes; not an independent external rerun"
+    },
+    {
+      "label": "F",
+      "source_commit": "84fe0aa9f29034aa6b873c0e83d689dc821bb398",
+      "local_repository": "/home/toygar/.codex/worktrees/dd94/ai-runtime-evidence-protocol",
+      "files": [
+        {
+          "source_path": "integrations/scitt-claim-boundaries/RESULTS.md",
+          "snapshot_path": "evidence/F/RESULTS.md",
+          "sha256": "247db84121c8972f851ed04cfa1fc8f4b2c48e66b7deff01c4e4a757f6c2f5d8",
+          "bytes": 5134
+        },
+        {
+          "source_path": "integrations/scitt-claim-boundaries/run_record.json",
+          "snapshot_path": "evidence/F/run_record.json",
+          "sha256": "f007834e1ede1b66129632710b7e81e7c59d45edfaed870e6a4004eebef8e17e",
+          "bytes": 34892
+        }
+      ],
+      "inspection": "exact committed bytes; not an independent external rerun"
+    }
+  ],
+  "B2": "NOT_RUN: enforced agent access boundary not established",
+  "B3": "NOT_RUN: no frozen B2 result",
+  "private_expected_outputs_read": false
+}

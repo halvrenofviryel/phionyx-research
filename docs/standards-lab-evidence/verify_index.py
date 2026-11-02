@@ -34,14 +34,15 @@ def check():
     assert lab["approval_granted"] is False
     assert lab["base_commit"] == BASE
     assert lab["counts"] == {
-        "integrated_experiments": 3,
+        "integrated_experiments": 4,
         "completed_result_references": 2,
         "separate_editorial_candidates": 1,
+        "completed_scoped_review_references": 1,
         "preparation_packages": 1,
-        "pending_results": 4,
+        "pending_results": 2,
         "third_party_validations_added": 0,
     }
-    assert {p["id"] for p in lab["pending"]} == {"B2", "B3", "C04", "H1"}
+    assert {p["id"] for p in lab["pending"]} == {"B2", "B3"}
     for pending in lab["pending"]:
         assert pending["status"] == "PENDING" and pending["result"] == "NOT_EVALUATED"
         assert pending["commit"] is None and not pending["counted_as_success"]
@@ -54,7 +55,7 @@ def check():
         )
         assert hashlib.sha256(blob).hexdigest() == row["sha256"]
     exp = {e["id"]: e for e in lab["experiments"]}
-    assert set(exp) == {"A", "C", "E"}
+    assert set(exp) == {"A", "C", "C04", "E"}
     digest_count = 0
     for e in exp.values():
         assert e["original_experiment_commit"] != e["integration_commit"]
@@ -86,6 +87,47 @@ def check():
     assert e["scenario_counts"] == exp["E"]["observed_result"]["scenario_counts"]
     assert sum(e["matrix_counts"].values()) == 48
     assert sum(e["scenario_counts"].values()) == 80
+    c04 = load(exp["C04"]["artifacts"]["result"]["path"])
+    assert len(c04["vectors"]) == 10 and len(c04["controls"]) == 6
+    assert {r["id"]: r["measured_cli"]["exit_code"] for r in c04["vectors"]} == {
+        "F1": 2,
+        "F2": 2,
+        "F3": 0,
+        "F4": 2,
+        "F5": 0,
+        "F6": 0,
+        "F7": 0,
+        "F8": 0,
+        "F9": 0,
+        "F10": 0,
+    }
+    assert all(r["signature_verified"] for r in c04["vectors"])
+    assert all(
+        r["full_draft_procedure_execution"] == "NOT_EVALUATED" for r in c04["vectors"]
+    )
+    assert (
+        next(r for r in c04["vectors"] if r["id"] == "F10")["consumption_enforcement"]
+        == "NOT_EVALUATED"
+    )
+    assert (
+        c04["runtime_execution"] == "NOT_EVALUATED"
+        and c04["effect_observation"] == "UNOBSERVED"
+    )
+    c04_inventory = load("docs/standards-lab-evidence/c04_integration.json")
+    assert len(c04_inventory["files"]) == 55
+    for row in c04_inventory["files"]:
+        assert sha(row["path"]) == row["sha256"]
+        raw = subprocess.check_output(
+            ["git", "show", c04_inventory["integration_commit"] + ":" + row["path"]],
+            cwd=ROOT,
+        )
+        assert hashlib.sha256(raw).hexdigest() == row["sha256"]
+    replay04 = load("docs/standards-lab-evidence/c04_replay.json")
+    assert replay04["status"] == "PASS" and replay04["tests_passed"] == 13
+    assert (
+        replay04["byte_identical_artifacts"] == 33
+        and replay04["normalization"] == "NONE"
+    )
     for manifest in lab["evidence_manifests"]:
         assert sha(manifest["path"]) == manifest["sha256"]
     github = load("docs/standards-lab-evidence/github_sources.json")
@@ -120,7 +162,8 @@ def check():
         revision["C04_experiment"] == "PENDING"
         and revision["C04_tests_in_G"] == "NOT_RUN"
     )
-    assert exp["C"]["revision_update"] == revision
+    assert exp["C"]["revision_update"]["historical_discovery"] == revision
+    assert exp["C"]["revision_update"]["current_addendum_status"] == "COMPLETE_LOCAL"
     local = load("docs/standards-lab-evidence/local_references.json")
     assert local["private_expected_results"] == "NOT_ACCESSED"
     assert local["B1_builder_history"] == "NOT_ACCESSED"
@@ -129,7 +172,17 @@ def check():
         assert row["publication_status"] == "UNPUBLISHED"
     update = load("docs/standards-lab-evidence/update_references.json")
     refs = {row["id"]: row for row in lab["references"]}
-    assert set(refs) == {"D", "B1", "F", "H2"}
+    assert set(refs) == {"D", "B1", "F", "H2", "H1"}
+    h1 = load("docs/standards-lab-evidence/h1_reference.json")
+    assert refs["H1"] == h1
+    assert h1["observed_result"]["decision"] == "NO_GO_ON_AVAILABLE_EVIDENCE"
+    assert (
+        h1["observed_result"]["normative_changes"] == 0
+        and h1["observed_result"]["patch"] is None
+    )
+    assert h1["observed_result"]["B3_dependent_gate"] == "NOT_COMPLETE"
+    for row in h1["snapshots"]:
+        assert sha(row["snapshot_path"]) == row["sha256"]
     assert refs["F"]["status"] == "COMPLETE_LOCAL_DEMO_REFERENCE_ONLY"
     assert (
         refs["F"]["observed_result"][
@@ -175,7 +228,7 @@ def check():
     assert (
         review["approval_granted"] is False and review["whole_program_status"] == "HOLD"
     )
-    assert set(review["missing_inputs"]) == {"B2", "B3", "C04", "H1"}
+    assert set(review["missing_inputs"]) == {"B2", "B3"}
     links = []
     docs = [
         "docs/STANDARDS_LAB.md",
@@ -204,7 +257,10 @@ def check():
         ["git", "diff", "--name-only", BASE], cwd=ROOT, text=True
     ).splitlines()
     assert all(
-        p in {"README.md", "portfolio.yaml"} or p.startswith("docs/") for p in changed
+        p in {"README.md", "portfolio.yaml"}
+        or p.startswith("docs/")
+        or p in {r["path"] for r in c04_inventory["files"]}
+        for p in changed
     )
     subprocess.run(
         [
@@ -216,6 +272,8 @@ def check():
             ".",
             ":(exclude)docs/standards-lab-evidence/sources/**",
             ":(exclude)docs/standards-lab-evidence/local-refs/**",
+            ":(exclude)experiments/ietf/audit/decision-receipts-04/sources/**",
+            ":(exclude)experiments/ietf/audit/decision-receipts-04/evidence/**",
         ],
         cwd=ROOT,
         check=True,
@@ -229,14 +287,18 @@ def check():
         "experiment_artifact_digests": digest_count,
         "source_snapshots_hashed": source_count,
         "prior_draft_revisions_reacquired_and_matching": 7,
-        "new_revision_bytes_verified": "decision-receipts-04; separate C04 evaluation NOT_RUN",
-        "local_reference_snapshots_hashed": 11,
+        "new_revision_bytes_verified": "decision-receipts-04 exact bytes verified; C04 separately reproduced",
+        "local_reference_snapshots_hashed": 16,
         "F_archive_member_check": "138 hashes verified by collect_update_refs.py; runtime not rerun",
         "H2_artifact_check": "26 exact-commit files, 13 paragraph anchors and 12 normative sections checked; rendering not rerun",
         "relative_document_links_checked": len(links),
-        "pending_states": "B2/B3 retained with enforced isolation NOT_ESTABLISHED; C04 pending, AUDIT outreach HOLD",
+        "pending_states": "B2/B3 retained with enforced isolation NOT_ESTABLISHED; C04 complete, H1 scoped NO-GO; AUDIT NO_OUTREACH_NOW / HOLD",
         "prior_replay_tests": {"A": 59, "C": 16, "E": 30, "total": 105},
-        "runtime_tests_rerun_in_update": 0,
+        "new_C04_tests_reproduced_in_G": 13,
+        "C04_byte_identical_artifacts": 33,
+        "C04_exact_committed_files_verified": 55,
+        "H1_integrity_check": "26 exact-commit files, 25 manifest hashes, 12 source pins and 8 report/run snapshots; no normative rereview",
+        "A_C03_E_tests_rerun_in_update": 0,
         "claim_lint_self_test": "PASS",
         "local_research_README_claim_lint": "PASS",
         "full_live_portfolio_lint": "NOT_RUN",

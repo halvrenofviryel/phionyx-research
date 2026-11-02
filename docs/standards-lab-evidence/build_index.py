@@ -31,6 +31,23 @@ def build():
     }
     http = read("docs/standards-lab-evidence/http_sources.json")["sources"]
     source_map = {r["id"]: r for r in http}
+    c04 = read("docs/standards-lab-evidence/c04_integration.json")
+    c04_replay = read("docs/standards-lab-evidence/c04_replay.json")
+    discovery = read("docs/standards-lab-evidence/audit04_discovery.json")
+    mapping["C04"] = {
+        "task": "C04",
+        "original_commit": c04["original_commit"],
+        "integration_commit": c04["integration_commit"],
+    }
+    paths["C04"] = "experiments/ietf/audit/decision-receipts-04"
+    source_map["draft-gruszka-audit-decision-receipts-04.txt"] = {
+        "id": "draft-gruszka-audit-decision-receipts-04.txt",
+        "status": "AVAILABLE",
+        **{
+            k: discovery[k]
+            for k in ("url", "path", "sha256", "bytes", "accessed_at_utc")
+        },
+    }
     definitions = [
         {
             "id": "A",
@@ -144,6 +161,41 @@ def build():
             "result": "results.json",
         },
     ]
+    definitions.append(
+        {
+            "id": "C04",
+            "name": "Decision-receipts -04 released-CLI vector addendum",
+            "external_targets": ["draft-gruszka-audit-decision-receipts-04"],
+            "external_implementation": definitions[1]["external_implementation"],
+            "why_tested": "Measure the exact -04 F1-F10 CLI exits and new field-rule controls while retaining expected draft procedure results separately.",
+            "reproduction_command": "bash experiments/ietf/audit/decision-receipts-04/reproduce.sh",
+            "prerequisites": "CPython 3.12 / Linux x86_64 locked wheels; frozen C03 committed files; read-only reuse of local C03 venv or fresh C04 venv.",
+            "evidence_class": "INTERNAL_PROBE_OF_EXTERNAL_RELEASE",
+            "class_boundary": "Internal reproduction of the author's reported CLI coverage, not third-party validation or a full draft verifier.",
+            "observed_result": {
+                "vectors": 10,
+                "CLI_exit_2": ["F1", "F2", "F4"],
+                "CLI_exit_0": ["F3", "F5", "F6", "F7", "F8", "F9", "F10"],
+                "negative_controls_exit_2": 4,
+                "positive_controls_exit_0": 2,
+                "tests_passed_in_G": c04_replay["tests_passed"],
+                "byte_identical_artifacts": 33,
+                "normalization": "NONE",
+                "runtime_execution": "NOT_EVALUATED",
+                "effect_observation": "UNOBSERVED",
+                "F10_consumption_enforcement": "NOT_EVALUATED",
+                "new_bug_or_technical_question": False,
+            },
+            "non_claims": [
+                "CLI acceptance measures only supplied inputs; no full draft procedure or section 3.8 conformance.",
+                "F10 consumption, relying-party store, live execution/effect, SCITT/COSE and A.4 behavior NOT_EVALUATED; no enforcement simulated.",
+                "No new bug or unresolved vector ambiguity was found; AUDIT outreach NO_OUTREACH_NOW / HOLD.",
+                "C03 remains frozen and revision-specific; its runtime scenarios are not rerun or upgraded.",
+            ],
+            "source_manifest": "sources/manifest.json",
+            "result": "cases/results.json",
+        }
+    )
     for exp in definitions:
         path = paths[exp["id"]]
         exp.update(
@@ -277,9 +329,13 @@ def build():
             },
         ]
     )
-    definitions[1]["revision_update"] = read(
-        "docs/standards-lab-evidence/audit04_discovery.json"
-    )
+    definitions[1]["revision_update"] = {
+        "historical_discovery": discovery,
+        "current_addendum_status": "COMPLETE_LOCAL",
+        "addendum_id": "C04",
+        "outreach": "NO_OUTREACH_NOW / HOLD",
+    }
+    refs.append(read("docs/standards-lab-evidence/h1_reference.json"))
     pending = [
         {
             "id": name,
@@ -298,14 +354,6 @@ def build():
                 "B3",
                 "No frozen solver/reveal comparison supplied; B1 seal is not a comparison result.",
             ),
-            (
-                "H1",
-                "Coordinator is preparing a separate ACDER-03 evidence gate; no result/commit supplied. Provisional scoped NO-GO due to absent B2/B3 is coordinator context, not a completed G measurement.",
-            ),
-            (
-                "C04",
-                "Decision-receipts -04 observed by coordinator at 2026-11-02T17:36Z; exact bytes hash-verified by G, separate addendum result/commit not supplied. C03 remains revision-specific; AUDIT outreach HOLD.",
-            ),
         ]
     ]
     return {
@@ -316,13 +364,14 @@ def build():
         "publication_status": "UNPUBLISHED",
         "base_commit": initial["base_commit"],
         "update_base_commit": update["update_base_commit"],
-        "integration_mapping": initial["integration_mapping"],
+        "integration_mapping": initial["integration_mapping"] + [mapping["C04"]],
         "counts": {
-            "integrated_experiments": 3,
+            "integrated_experiments": 4,
             "completed_result_references": 2,
             "separate_editorial_candidates": 1,
+            "completed_scoped_review_references": 1,
             "preparation_packages": 1,
-            "pending_results": 4,
+            "pending_results": 2,
             "third_party_validations_added": 0,
         },
         "experiments": definitions,
@@ -340,6 +389,9 @@ def build():
                 "update_state.json",
                 "update_references.json",
                 "audit04_discovery.json",
+                "c04_integration.json",
+                "c04_replay.json",
+                "h1_reference.json",
             ]
         ],
         "non_claims": [

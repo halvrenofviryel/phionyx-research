@@ -86,9 +86,9 @@ linter and unrelated SDK suite were not run; G does not claim those are green.
   acquisition manifest; it is not misreported as a broken release or successful
   raw-byte retrieval.
 - **Unpublished results:** A/C/E links in the Lab are working relative repository
-  paths. D/B1/F are exact repository/commit/local-path references with portable
+  paths. D/B1/F/H1 are exact repository/commit/local-path references with portable
   report/metadata snapshots; H2 has an exact local artifact inventory and no files merged into G. No nonexistent GitHub result commit URL is offered as
-  accessible evidence. The local D, B1 and F snapshot Markdown retains its original
+  accessible evidence. The local D, B1, F and H1 snapshot Markdown retains its original
   context; relative links inside those copied reports are resolved in their
   original repository, not in G's snapshot folder.
 
@@ -111,7 +111,7 @@ not be erased by a blanket “no external evidence” statement:
   named verifier-source deposit; no license is inferred for its other artifacts.
 
 These are attributed historical reports, not G reruns. Different roles/versions
-do not combine into one same-version interoperability claim. A/C/E are internal;
+do not combine into one same-version interoperability claim. A/C03/C04/E are internal;
 D is author-side regression; B1 is preparation; F is a completed same-user-controlled local demo with all SCITT verification
 NOT_EVALUATED; B2/B3 remain pending. H2 is a separate unpublished informative
 candidate, not a normative change or submission. The exact references and G
@@ -145,6 +145,18 @@ At 2026-11-02T17:36Z the coordinator reported decision-receipts -04. G verified
 its [exact raw bytes and supplied digest](standards-lab-evidence/audit04_discovery.json).
 The earlier metadata freshness observation is historical; C03 is not a current
 revision assessment. Its frozen scenarios and counts remain unchanged. C04 is a
-separate pending addendum, without a supplied result or commit. AUDIT outreach is
-HOLD until that assessment. The author-reported §3.8 / Appendix A.5 additions and
-vector coverage are not G measurements; no new -04 experiment was run here.
+separate completed addendum at original `ecaff138be0fd833848b6f27267e555e6b31e7f6`,
+integrated as `23f6b9dea1da6d229ce0acf646822d23d3f5c497`. G reproduced 13 tests
+and 33 byte-identical outputs: F1/F2/F4 exit 2, other seven exit 0, with four negative
+and two positive controls. The original author expectations and measured CLI
+results remain separate. F10 consumption is NOT_EVALUATED; no runtime/effect is
+observed. No new bug or technical question resulted: **NO_OUTREACH_NOW / HOLD**.
+
+H1 is now a completed scoped **NO_GO_ON_AVAILABLE_EVIDENCE** reference at
+`57ab6d0f186f42f6a6788bb7b64b59bcae602424`: zero proposed/normative changes and no
+patch. It does not complete the B3-dependent gate. Only report/metadata snapshots
+are included; [H1 inventory](standards-lab-evidence/h1_reference.json).
+
+The final README pass removes the duplicated phrase “hash-chained hash chain” and
+qualifies the Documentation MCP bullet with signing only when a key is configured.
+This matches the earlier P04 signing correction; no implementation behavior changes.

@@ -3,5 +3,7 @@
   "self_test": "PASS",
   "current_findings": [],
   "preparation_base_findings": [],
-  "scope": "local research README only; not full portfolio gate"
+  "scope": "local research README only; not full portfolio gate",
+  "checked_at_utc": "2026-11-02T18:01:29.557137+00:00",
+  "README_sha256": "670983e91525770b14f02919b420474ea586983a158a2cc590bfb2f50881e95e"
 }

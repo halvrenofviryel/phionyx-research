@@ -1,6 +1,6 @@
 {
   "schema": "local-standards-lab-index-1",
-  "generated_at_utc": "2026-11-02T17:47:16.349936+00:00",
+  "generated_at_utc": "2026-11-02T18:00:17.081568+00:00",
   "scope": "Non-normative local documentation index; not a protocol schema or certification.",
   "approval_granted": false,
   "publication_status": "UNPUBLISHED",
@@ -26,14 +26,20 @@
       "task": "E",
       "original_commit": "9f928980b3027d9dd892dfe297af98635fcd3c18",
       "integration_commit": "275b871349721a8c917691d457c4a6270fe1028f"
+    },
+    {
+      "task": "C04",
+      "original_commit": "ecaff138be0fd833848b6f27267e555e6b31e7f6",
+      "integration_commit": "23f6b9dea1da6d229ce0acf646822d23d3f5c497"
     }
   ],
   "counts": {
-    "integrated_experiments": 3,
+    "integrated_experiments": 4,
     "completed_result_references": 2,
     "separate_editorial_candidates": 1,
+    "completed_scoped_review_references": 1,
     "preparation_packages": 1,
-    "pending_results": 4,
+    "pending_results": 2,
     "third_party_validations_added": 0
   },
   "experiments": [
@@ -203,29 +209,34 @@
         }
       },
       "revision_update": {
-        "reported_by": "coordinator message",
-        "coordinator_observed_at_utc": "2026-11-02T17:36Z",
-        "url": "https://www.ietf.org/archive/id/draft-gruszka-audit-decision-receipts-04.txt",
-        "revision": "04",
-        "expected_sha256": "f5065d91493fb15a4995f85ffd1a71911d01bc9c8b063b1938521e1bfc05c826",
-        "accessed_at_utc": "2026-11-02T17:43:04.190817+00:00",
-        "C03_results_preserved": true,
-        "C04_experiment": "PENDING",
-        "C04_tests_in_G": "NOT_RUN",
-        "status": "EXACT_REVISION_BYTES_VERIFIED",
-        "sandbox_attempt": {
-          "accessed_at_utc": "2026-11-02T17:39:46.679693+00:00",
-          "status": "UNKNOWN",
-          "error": "<urlopen error [Errno -3] Temporary failure in name resolution>"
+        "historical_discovery": {
+          "reported_by": "coordinator message",
+          "coordinator_observed_at_utc": "2026-11-02T17:36Z",
+          "url": "https://www.ietf.org/archive/id/draft-gruszka-audit-decision-receipts-04.txt",
+          "revision": "04",
+          "expected_sha256": "f5065d91493fb15a4995f85ffd1a71911d01bc9c8b063b1938521e1bfc05c826",
+          "accessed_at_utc": "2026-11-02T17:43:04.190817+00:00",
+          "C03_results_preserved": true,
+          "C04_experiment": "PENDING",
+          "C04_tests_in_G": "NOT_RUN",
+          "status": "EXACT_REVISION_BYTES_VERIFIED",
+          "sandbox_attempt": {
+            "accessed_at_utc": "2026-11-02T17:39:46.679693+00:00",
+            "status": "UNKNOWN",
+            "error": "<urlopen error [Errno -3] Temporary failure in name resolution>"
+          },
+          "http_status": 200,
+          "final_url": "https://www.ietf.org/archive/id/draft-gruszka-audit-decision-receipts-04.txt",
+          "sha256": "f5065d91493fb15a4995f85ffd1a71911d01bc9c8b063b1938521e1bfc05c826",
+          "bytes": 127824,
+          "path": "docs/standards-lab-evidence/sources/draft-gruszka-audit-decision-receipts-04.txt",
+          "latest_revision_basis": "Coordinator observation at 2026-11-02T17:36Z; G retrieved exact -04 only, without further revision discovery.",
+          "author_vector_counts": "Coordinator-reported author/package coverage statement only; not a G or C03 measurement.",
+          "AUDIT_outreach": "HOLD_PENDING_C04_ASSESSMENT"
         },
-        "http_status": 200,
-        "final_url": "https://www.ietf.org/archive/id/draft-gruszka-audit-decision-receipts-04.txt",
-        "sha256": "f5065d91493fb15a4995f85ffd1a71911d01bc9c8b063b1938521e1bfc05c826",
-        "bytes": 127824,
-        "path": "docs/standards-lab-evidence/sources/draft-gruszka-audit-decision-receipts-04.txt",
-        "latest_revision_basis": "Coordinator observation at 2026-11-02T17:36Z; G retrieved exact -04 only, without further revision discovery.",
-        "author_vector_counts": "Coordinator-reported author/package coverage statement only; not a G or C03 measurement.",
-        "AUDIT_outreach": "HOLD_PENDING_C04_ASSESSMENT"
+        "current_addendum_status": "COMPLETE_LOCAL",
+        "addendum_id": "C04",
+        "outreach": "NO_OUTREACH_NOW / HOLD"
       }
     },
     {
@@ -351,6 +362,96 @@
         "report": {
           "path": "experiments/ietf/claim-preservation/ser04/RESULTS.md",
           "sha256": "1661144567f707cb0dca7537967778f29434a7749bf7d6f91adfa2a27257d761"
+        }
+      }
+    },
+    {
+      "id": "C04",
+      "name": "Decision-receipts -04 released-CLI vector addendum",
+      "external_targets": [
+        "draft-gruszka-audit-decision-receipts-04"
+      ],
+      "external_implementation": {
+        "repository": "b7n0de/proofbundle",
+        "version": "6.4.0",
+        "commit": "699545521ec5ef479bb84e61fe7461fc79ed558c",
+        "wheel_sha256": "72153d160c2f78647095f029c0946dbfd64a15e006a233a5abc78a3071eebf94",
+        "preview_commit": "8bb289c8b41d32c54734155fc00756231093bc2a",
+        "preview_runtime": "NOT_EVALUATED"
+      },
+      "why_tested": "Measure the exact -04 F1-F10 CLI exits and new field-rule controls while retaining expected draft procedure results separately.",
+      "reproduction_command": "bash experiments/ietf/audit/decision-receipts-04/reproduce.sh",
+      "prerequisites": "CPython 3.12 / Linux x86_64 locked wheels; frozen C03 committed files; read-only reuse of local C03 venv or fresh C04 venv.",
+      "evidence_class": "INTERNAL_PROBE_OF_EXTERNAL_RELEASE",
+      "class_boundary": "Internal reproduction of the author's reported CLI coverage, not third-party validation or a full draft verifier.",
+      "observed_result": {
+        "vectors": 10,
+        "CLI_exit_2": [
+          "F1",
+          "F2",
+          "F4"
+        ],
+        "CLI_exit_0": [
+          "F3",
+          "F5",
+          "F6",
+          "F7",
+          "F8",
+          "F9",
+          "F10"
+        ],
+        "negative_controls_exit_2": 4,
+        "positive_controls_exit_0": 2,
+        "tests_passed_in_G": 13,
+        "byte_identical_artifacts": 33,
+        "normalization": "NONE",
+        "runtime_execution": "NOT_EVALUATED",
+        "effect_observation": "UNOBSERVED",
+        "F10_consumption_enforcement": "NOT_EVALUATED",
+        "new_bug_or_technical_question": false
+      },
+      "non_claims": [
+        "CLI acceptance measures only supplied inputs; no full draft procedure or section 3.8 conformance.",
+        "F10 consumption, relying-party store, live execution/effect, SCITT/COSE and A.4 behavior NOT_EVALUATED; no enforcement simulated.",
+        "No new bug or unresolved vector ambiguity was found; AUDIT outreach NO_OUTREACH_NOW / HOLD.",
+        "C03 remains frozen and revision-specific; its runtime scenarios are not rerun or upgraded."
+      ],
+      "status": "COMPLETE_LOCAL",
+      "publication_status": "UNPUBLISHED",
+      "repository": "halvrenofviryel/phionyx-research",
+      "original_experiment_commit": "ecaff138be0fd833848b6f27267e555e6b31e7f6",
+      "integration_commit": "23f6b9dea1da6d229ce0acf646822d23d3f5c497",
+      "path": "experiments/ietf/audit/decision-receipts-04",
+      "third_party_evidence": false,
+      "report_path": "experiments/ietf/audit/decision-receipts-04/RESULTS.md",
+      "readme_path": "experiments/ietf/audit/decision-receipts-04/README.md",
+      "source_pins": [
+        {
+          "id": "draft-gruszka-audit-decision-receipts-04.txt",
+          "status": "AVAILABLE",
+          "url": "https://www.ietf.org/archive/id/draft-gruszka-audit-decision-receipts-04.txt",
+          "path": "docs/standards-lab-evidence/sources/draft-gruszka-audit-decision-receipts-04.txt",
+          "sha256": "f5065d91493fb15a4995f85ffd1a71911d01bc9c8b063b1938521e1bfc05c826",
+          "bytes": 127824,
+          "accessed_at_utc": "2026-11-02T17:43:04.190817+00:00"
+        }
+      ],
+      "artifacts": {
+        "run_record": {
+          "path": "experiments/ietf/audit/decision-receipts-04/run_record.json",
+          "sha256": "a2e5728aae78fa7d80ab4c3937ea51b045f62c1c021368b32536caf3f0a011e0"
+        },
+        "source_manifest": {
+          "path": "experiments/ietf/audit/decision-receipts-04/sources/manifest.json",
+          "sha256": "dfa3f965716a80b59a1d4e33c77d4aa48eb3dcfc892c604d67c0fedabe1fbfde"
+        },
+        "result": {
+          "path": "experiments/ietf/audit/decision-receipts-04/cases/results.json",
+          "sha256": "8aa29dd0dd45cd3a1090691bb00359557e7c5904d2fc24997e7f0cee3232fcde"
+        },
+        "report": {
+          "path": "experiments/ietf/audit/decision-receipts-04/RESULTS.md",
+          "sha256": "704425fd87da17df11d4aefee279a5bb0fd876841aaa9aa76ea5eb06dc212756"
         }
       }
     }
@@ -981,6 +1082,252 @@
           "verified_against_exact_git_blob": true
         }
       ]
+    },
+    {
+      "id": "H1",
+      "status": "COMPLETE_SCOPED_NO_GO_REFERENCE_ONLY",
+      "checked_at_utc": "2026-11-02T17:58:21.216911+00:00",
+      "repository": "halvrenofviryel/phionyx-research",
+      "local_checkout": "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/h1-acder-evidence-gate/phionyx-research",
+      "original_experiment_commit": "57ab6d0f186f42f6a6788bb7b64b59bcae602424",
+      "integration_commit": null,
+      "publication_status": "UNPUBLISHED",
+      "approval_granted": false,
+      "evidence_class": "AUTHOR_SIDE_EVIDENCE_GATE_REVIEW",
+      "third_party_evidence": false,
+      "observed_result": {
+        "decision": "NO_GO_ON_AVAILABLE_EVIDENCE",
+        "proposed_changes": 0,
+        "normative_changes": 0,
+        "patch": null,
+        "B3_dependent_gate": "NOT_COMPLETE",
+        "G_exact_files_hashed": 26,
+        "G_ledger_hashes_checked": 25,
+        "G_source_pin_hashes_checked": 12,
+        "G_evidence_snapshot_hashes_checked": 8
+      },
+      "scope": "G checks exact committed bytes and attributed decision only; no independent normative review or runtime rerun.",
+      "non_claims": [
+        "Scoped NO-GO does not mean ACDER-02 is defect-free or B3-dependent interoperability review is complete.",
+        "B2/B3 absent; enforced isolation not established. No private answers or builder history read.",
+        "No ACDER patch, normative change, draft submission, adoption or independent external validation."
+      ],
+      "artifacts": [
+        {
+          "path": "research/standards-reentry/2026-11-02/h1/ACDER_03_NO_GO.md",
+          "local_path": "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/h1-acder-evidence-gate/phionyx-research/research/standards-reentry/2026-11-02/h1/ACDER_03_NO_GO.md",
+          "commit": "57ab6d0f186f42f6a6788bb7b64b59bcae602424",
+          "sha256": "88c2490849cc507846a3af3cdeb4ff79229ada5ea33e5f0c44208a778a081524",
+          "bytes": 6485
+        },
+        {
+          "path": "research/standards-reentry/2026-11-02/h1/ARTIFACT_SHA256SUMS",
+          "local_path": "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/h1-acder-evidence-gate/phionyx-research/research/standards-reentry/2026-11-02/h1/ARTIFACT_SHA256SUMS",
+          "commit": "57ab6d0f186f42f6a6788bb7b64b59bcae602424",
+          "sha256": "e17df6028f89d6061786311298e9d771fd250db873b5a8ebc692d395216c02ae",
+          "bytes": 2624
+        },
+        {
+          "path": "research/standards-reentry/2026-11-02/h1/AUDIT_03_TO_04.diff",
+          "local_path": "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/h1-acder-evidence-gate/phionyx-research/research/standards-reentry/2026-11-02/h1/AUDIT_03_TO_04.diff",
+          "commit": "57ab6d0f186f42f6a6788bb7b64b59bcae602424",
+          "sha256": "84b5c5ed3216a82b9f18b7e2177f9faf8655fb5a81eb67c8f2defd995d9952b8",
+          "bytes": 84679
+        },
+        {
+          "path": "research/standards-reentry/2026-11-02/h1/EVIDENCE_LEDGER.json",
+          "local_path": "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/h1-acder-evidence-gate/phionyx-research/research/standards-reentry/2026-11-02/h1/EVIDENCE_LEDGER.json",
+          "commit": "57ab6d0f186f42f6a6788bb7b64b59bcae602424",
+          "sha256": "9f7fe9b4b381bd6151738bf7f9c115fdd2da8699afe412e92de3b0cf714125e0",
+          "bytes": 3686
+        },
+        {
+          "path": "research/standards-reentry/2026-11-02/h1/SOURCE_PINS.json",
+          "local_path": "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/h1-acder-evidence-gate/phionyx-research/research/standards-reentry/2026-11-02/h1/SOURCE_PINS.json",
+          "commit": "57ab6d0f186f42f6a6788bb7b64b59bcae602424",
+          "sha256": "43fd9d00cb5d6ff6ffbd6dc37d9a9e48d6c90492caf5fa97ce39b7419d4852ad",
+          "bytes": 5619
+        },
+        {
+          "path": "research/standards-reentry/2026-11-02/h1/evidence/A/RESULTS.md",
+          "local_path": "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/h1-acder-evidence-gate/phionyx-research/research/standards-reentry/2026-11-02/h1/evidence/A/RESULTS.md",
+          "commit": "57ab6d0f186f42f6a6788bb7b64b59bcae602424",
+          "sha256": "62d85e38dcbaf98d00a53c49b4f2538323d739b3f15ceab003f099ad0396772c",
+          "bytes": 8257
+        },
+        {
+          "path": "research/standards-reentry/2026-11-02/h1/evidence/A/run_record.json",
+          "local_path": "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/h1-acder-evidence-gate/phionyx-research/research/standards-reentry/2026-11-02/h1/evidence/A/run_record.json",
+          "commit": "57ab6d0f186f42f6a6788bb7b64b59bcae602424",
+          "sha256": "f34d9a3ddfffe7f61de77e83601341a7515d2390432525712a4deb3f801b31bd",
+          "bytes": 4597
+        },
+        {
+          "path": "research/standards-reentry/2026-11-02/h1/evidence/C03/RESULTS.md",
+          "local_path": "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/h1-acder-evidence-gate/phionyx-research/research/standards-reentry/2026-11-02/h1/evidence/C03/RESULTS.md",
+          "commit": "57ab6d0f186f42f6a6788bb7b64b59bcae602424",
+          "sha256": "c8b1aca4f19560d0ac80d371b50be8e8a4314093b88ebe6d7c706d05050a6775",
+          "bytes": 7699
+        },
+        {
+          "path": "research/standards-reentry/2026-11-02/h1/evidence/C03/run_record.json",
+          "local_path": "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/h1-acder-evidence-gate/phionyx-research/research/standards-reentry/2026-11-02/h1/evidence/C03/run_record.json",
+          "commit": "57ab6d0f186f42f6a6788bb7b64b59bcae602424",
+          "sha256": "5b770c4edc9af2aa1cedc3d0b74e24cfb006eab98538b8799902612888ae3bc5",
+          "bytes": 5544
+        },
+        {
+          "path": "research/standards-reentry/2026-11-02/h1/evidence/C04/RESULTS.md",
+          "local_path": "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/h1-acder-evidence-gate/phionyx-research/research/standards-reentry/2026-11-02/h1/evidence/C04/RESULTS.md",
+          "commit": "57ab6d0f186f42f6a6788bb7b64b59bcae602424",
+          "sha256": "704425fd87da17df11d4aefee279a5bb0fd876841aaa9aa76ea5eb06dc212756",
+          "bytes": 5936
+        },
+        {
+          "path": "research/standards-reentry/2026-11-02/h1/evidence/C04/run_record.json",
+          "local_path": "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/h1-acder-evidence-gate/phionyx-research/research/standards-reentry/2026-11-02/h1/evidence/C04/run_record.json",
+          "commit": "57ab6d0f186f42f6a6788bb7b64b59bcae602424",
+          "sha256": "a2e5728aae78fa7d80ab4c3937ea51b045f62c1c021368b32536caf3f0a011e0",
+          "bytes": 4336
+        },
+        {
+          "path": "research/standards-reentry/2026-11-02/h1/evidence/F/RESULTS.md",
+          "local_path": "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/h1-acder-evidence-gate/phionyx-research/research/standards-reentry/2026-11-02/h1/evidence/F/RESULTS.md",
+          "commit": "57ab6d0f186f42f6a6788bb7b64b59bcae602424",
+          "sha256": "247db84121c8972f851ed04cfa1fc8f4b2c48e66b7deff01c4e4a757f6c2f5d8",
+          "bytes": 5134
+        },
+        {
+          "path": "research/standards-reentry/2026-11-02/h1/evidence/F/run_record.json",
+          "local_path": "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/h1-acder-evidence-gate/phionyx-research/research/standards-reentry/2026-11-02/h1/evidence/F/run_record.json",
+          "commit": "57ab6d0f186f42f6a6788bb7b64b59bcae602424",
+          "sha256": "f007834e1ede1b66129632710b7e81e7c59d45edfaed870e6a4004eebef8e17e",
+          "bytes": 34892
+        },
+        {
+          "path": "research/standards-reentry/2026-11-02/h1/run_record.json",
+          "local_path": "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/h1-acder-evidence-gate/phionyx-research/research/standards-reentry/2026-11-02/h1/run_record.json",
+          "commit": "57ab6d0f186f42f6a6788bb7b64b59bcae602424",
+          "sha256": "640d9ab4107cbedb21918a53e9cc77ba0e9f66f8bc4fd497e611c683b4f7f810",
+          "bytes": 1317
+        },
+        {
+          "path": "research/standards-reentry/2026-11-02/h1/sources/acder-referencedby.html",
+          "local_path": "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/h1-acder-evidence-gate/phionyx-research/research/standards-reentry/2026-11-02/h1/sources/acder-referencedby.html",
+          "commit": "57ab6d0f186f42f6a6788bb7b64b59bcae602424",
+          "sha256": "21bfe384af2dc25fc982fdb12174ddb4c3308c324224bb9cc2c49b0922a09d77",
+          "bytes": 35496
+        },
+        {
+          "path": "research/standards-reentry/2026-11-02/h1/sources/draft-abak-agent-control-delivery-evidence-02.txt",
+          "local_path": "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/h1-acder-evidence-gate/phionyx-research/research/standards-reentry/2026-11-02/h1/sources/draft-abak-agent-control-delivery-evidence-02.txt",
+          "commit": "57ab6d0f186f42f6a6788bb7b64b59bcae602424",
+          "sha256": "fe3baeb08c8e0979ca64efece098c972827fab483debe0b2bcbfd697bb714782",
+          "bytes": 123860
+        },
+        {
+          "path": "research/standards-reentry/2026-11-02/h1/sources/draft-abak-agent-control-delivery-evidence.metadata.json",
+          "local_path": "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/h1-acder-evidence-gate/phionyx-research/research/standards-reentry/2026-11-02/h1/sources/draft-abak-agent-control-delivery-evidence.metadata.json",
+          "commit": "57ab6d0f186f42f6a6788bb7b64b59bcae602424",
+          "sha256": "3d50183144ff1f1a73c81f69e7d3588ad0ebfdb31a8e93646ac9cb239db56154",
+          "bytes": 2133
+        },
+        {
+          "path": "research/standards-reentry/2026-11-02/h1/sources/draft-gruszka-audit-decision-receipts-03.txt",
+          "local_path": "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/h1-acder-evidence-gate/phionyx-research/research/standards-reentry/2026-11-02/h1/sources/draft-gruszka-audit-decision-receipts-03.txt",
+          "commit": "57ab6d0f186f42f6a6788bb7b64b59bcae602424",
+          "sha256": "c0aae84b82108a3bd40cbbbee33df13c760b5c2e943a205e9efca4c623438245",
+          "bytes": 80358
+        },
+        {
+          "path": "research/standards-reentry/2026-11-02/h1/sources/draft-gruszka-audit-decision-receipts-04.txt",
+          "local_path": "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/h1-acder-evidence-gate/phionyx-research/research/standards-reentry/2026-11-02/h1/sources/draft-gruszka-audit-decision-receipts-04.txt",
+          "commit": "57ab6d0f186f42f6a6788bb7b64b59bcae602424",
+          "sha256": "f5065d91493fb15a4995f85ffd1a71911d01bc9c8b063b1938521e1bfc05c826",
+          "bytes": 127824
+        },
+        {
+          "path": "research/standards-reentry/2026-11-02/h1/sources/draft-gruszka-audit-decision-receipts.metadata.json",
+          "local_path": "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/h1-acder-evidence-gate/phionyx-research/research/standards-reentry/2026-11-02/h1/sources/draft-gruszka-audit-decision-receipts.metadata.json",
+          "commit": "57ab6d0f186f42f6a6788bb7b64b59bcae602424",
+          "sha256": "768efae1ebbc5764f57548cb3cb4dcd038a5c7132a51d8ede6c4ada21568bbeb",
+          "bytes": 2240
+        },
+        {
+          "path": "research/standards-reentry/2026-11-02/h1/sources/draft-he-agentproto-verifier-evidence-03.txt",
+          "local_path": "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/h1-acder-evidence-gate/phionyx-research/research/standards-reentry/2026-11-02/h1/sources/draft-he-agentproto-verifier-evidence-03.txt",
+          "commit": "57ab6d0f186f42f6a6788bb7b64b59bcae602424",
+          "sha256": "c64cb2fd988476a56f82bdc4386a652c5841f7b3723941bffea44e73208ef600",
+          "bytes": 71649
+        },
+        {
+          "path": "research/standards-reentry/2026-11-02/h1/sources/draft-he-agentproto-verifier-evidence.metadata.json",
+          "local_path": "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/h1-acder-evidence-gate/phionyx-research/research/standards-reentry/2026-11-02/h1/sources/draft-he-agentproto-verifier-evidence.metadata.json",
+          "commit": "57ab6d0f186f42f6a6788bb7b64b59bcae602424",
+          "sha256": "68d2f16394ebf5eb147bada903402e04fa0a87efeb4339ff4d75a6c892bf1853",
+          "bytes": 2070
+        },
+        {
+          "path": "research/standards-reentry/2026-11-02/h1/sources/draft-templeman-scitt-measurement-capsule-01.txt",
+          "local_path": "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/h1-acder-evidence-gate/phionyx-research/research/standards-reentry/2026-11-02/h1/sources/draft-templeman-scitt-measurement-capsule-01.txt",
+          "commit": "57ab6d0f186f42f6a6788bb7b64b59bcae602424",
+          "sha256": "d02bb2146fef267050e689375c7db22cb954f02f0a69ff8038382540c5192600",
+          "bytes": 81263
+        },
+        {
+          "path": "research/standards-reentry/2026-11-02/h1/sources/draft-templeman-scitt-measurement-capsule.metadata.json",
+          "local_path": "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/h1-acder-evidence-gate/phionyx-research/research/standards-reentry/2026-11-02/h1/sources/draft-templeman-scitt-measurement-capsule.metadata.json",
+          "commit": "57ab6d0f186f42f6a6788bb7b64b59bcae602424",
+          "sha256": "dd3c2f3de27490d16ea10ae8e74de5b0173946c7bbfbadcb02a537f0a6a7236c",
+          "bytes": 1774
+        },
+        {
+          "path": "research/standards-reentry/2026-11-02/h1/sources/draft-thaha-scitt-agent-execution-evidence-02.txt",
+          "local_path": "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/h1-acder-evidence-gate/phionyx-research/research/standards-reentry/2026-11-02/h1/sources/draft-thaha-scitt-agent-execution-evidence-02.txt",
+          "commit": "57ab6d0f186f42f6a6788bb7b64b59bcae602424",
+          "sha256": "2b1f9f27b04a2c67c358c222827dbdb445c198fd9b8bba2fb56e5a2a3ba6a092",
+          "bytes": 184994
+        },
+        {
+          "path": "research/standards-reentry/2026-11-02/h1/sources/draft-thaha-scitt-agent-execution-evidence.metadata.json",
+          "local_path": "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/h1-acder-evidence-gate/phionyx-research/research/standards-reentry/2026-11-02/h1/sources/draft-thaha-scitt-agent-execution-evidence.metadata.json",
+          "commit": "57ab6d0f186f42f6a6788bb7b64b59bcae602424",
+          "sha256": "2ba61eeb3b815bd709695eddce3a363303e07de34a9de8a36f692afb5d48dc26",
+          "bytes": 1782
+        }
+      ],
+      "snapshots": [
+        {
+          "snapshot_path": "docs/standards-lab-evidence/local-refs/H1/ACDER_03_NO_GO.md",
+          "source_path": "research/standards-reentry/2026-11-02/h1/ACDER_03_NO_GO.md",
+          "sha256": "88c2490849cc507846a3af3cdeb4ff79229ada5ea33e5f0c44208a778a081524",
+          "bytes": 6485
+        },
+        {
+          "snapshot_path": "docs/standards-lab-evidence/local-refs/H1/SOURCE_PINS.json",
+          "source_path": "research/standards-reentry/2026-11-02/h1/SOURCE_PINS.json",
+          "sha256": "43fd9d00cb5d6ff6ffbd6dc37d9a9e48d6c90492caf5fa97ce39b7419d4852ad",
+          "bytes": 5619
+        },
+        {
+          "snapshot_path": "docs/standards-lab-evidence/local-refs/H1/EVIDENCE_LEDGER.json",
+          "source_path": "research/standards-reentry/2026-11-02/h1/EVIDENCE_LEDGER.json",
+          "sha256": "9f7fe9b4b381bd6151738bf7f9c115fdd2da8699afe412e92de3b0cf714125e0",
+          "bytes": 3686
+        },
+        {
+          "snapshot_path": "docs/standards-lab-evidence/local-refs/H1/run_record.json",
+          "source_path": "research/standards-reentry/2026-11-02/h1/run_record.json",
+          "sha256": "640d9ab4107cbedb21918a53e9cc77ba0e9f66f8bc4fd497e611c683b4f7f810",
+          "bytes": 1317
+        },
+        {
+          "snapshot_path": "docs/standards-lab-evidence/local-refs/H1/ARTIFACT_SHA256SUMS",
+          "source_path": "research/standards-reentry/2026-11-02/h1/ARTIFACT_SHA256SUMS",
+          "sha256": "e17df6028f89d6061786311298e9d771fd250db873b5a8ebc692d395216c02ae",
+          "bytes": 2624
+        }
+      ]
     }
   ],
   "pending": [
@@ -998,22 +1345,6 @@
       "result": "NOT_EVALUATED",
       "commit": null,
       "reason": "No frozen solver/reveal comparison supplied; B1 seal is not a comparison result.",
-      "counted_as_success": false
-    },
-    {
-      "id": "H1",
-      "status": "PENDING",
-      "result": "NOT_EVALUATED",
-      "commit": null,
-      "reason": "Coordinator is preparing a separate ACDER-03 evidence gate; no result/commit supplied. Provisional scoped NO-GO due to absent B2/B3 is coordinator context, not a completed G measurement.",
-      "counted_as_success": false
-    },
-    {
-      "id": "C04",
-      "status": "PENDING",
-      "result": "NOT_EVALUATED",
-      "commit": null,
-      "reason": "Decision-receipts -04 observed by coordinator at 2026-11-02T17:36Z; exact bytes hash-verified by G, separate addendum result/commit not supplied. C03 remains revision-specific; AUDIT outreach HOLD.",
       "counted_as_success": false
     }
   ],
@@ -1053,6 +1384,18 @@
     {
       "path": "docs/standards-lab-evidence/audit04_discovery.json",
       "sha256": "979cbaf95ea77b7357211c6afd8608a6d91d7a6d889535c10cae120801b84160"
+    },
+    {
+      "path": "docs/standards-lab-evidence/c04_integration.json",
+      "sha256": "fa8f48e16c29b0f7c51e326fec9be4dd1fa085cac99f0e08313cc27a2ddec716"
+    },
+    {
+      "path": "docs/standards-lab-evidence/c04_replay.json",
+      "sha256": "b746f1e2dd12ed88e26eba658cfcc6e32b4a39c2cba3987c8f1f07c0470e976d"
+    },
+    {
+      "path": "docs/standards-lab-evidence/h1_reference.json",
+      "sha256": "edbfbfcd57f07e008cad88b0f4dcb3fd1a5f509bff1842048b4c198f8e9d3d09"
     }
   ],
   "non_claims": [

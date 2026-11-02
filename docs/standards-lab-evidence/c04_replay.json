@@ -1,0 +1,20 @@
+{
+  "status": "PASS",
+  "command": "bash experiments/ietf/audit/decision-receipts-04/reproduce.sh",
+  "completed_at_utc": "2026-11-02 17:57:09 UTC",
+  "exit_code": 0,
+  "tests_passed": 13,
+  "byte_identical_artifacts": 33,
+  "normalization": "NONE",
+  "frozen_C03_tracked_files_checked": 56,
+  "prior_A_C03_E_tests_rerun": false,
+  "environment": "Read-only reuse of this G clone's existing C03 venv; no new network download or fresh venv run",
+  "stdout_stderr": "No broken requirements found.\nPASS: 56 frozen -03 files byte-identical\ntest_all_seven_base_payloads_and_signatures_match_04 (test_probe04.FailureVectors04.test_all_seven_base_payloads_and_signatures_match_04) ... ok\ntest_approval_reissue_and_consumption_fixtures_are_exact_bytes_only (test_probe04.FailureVectors04.test_approval_reissue_and_consumption_fixtures_are_exact_bytes_only) ... ok\ntest_cross_process_outputs_are_byte_identical_without_normalization (test_probe04.FailureVectors04.test_cross_process_outputs_are_byte_identical_without_normalization) ... ok\ntest_duplicate_members_and_boolean_controls_reach_cli_unchanged (test_probe04.FailureVectors04.test_duplicate_members_and_boolean_controls_reach_cli_unchanged) ... ok\ntest_eight_new_payload_hashes_and_signatures_match_04 (test_probe04.FailureVectors04.test_eight_new_payload_hashes_and_signatures_match_04) ... ok\ntest_exact_dependency_and_unmodified_module_pins (test_probe04.FailureVectors04.test_exact_dependency_and_unmodified_module_pins) ... ok\ntest_expected_inputs_are_separate_from_cli_inputs (test_probe04.FailureVectors04.test_expected_inputs_are_separate_from_cli_inputs) ... ok\ntest_f4_f5_preserve_exact_base_envelope_bytes (test_probe04.FailureVectors04.test_f4_f5_preserve_exact_base_envelope_bytes) ... ok\ntest_f7_is_missing_effect_with_supplied_effect_bytes_not_bad_status (test_probe04.FailureVectors04.test_f7_is_missing_effect_with_supplied_effect_bytes_not_bad_status) ... ok\ntest_f9_approval_lifetime_violation_exists_independently_of_audit_time (test_probe04.FailureVectors04.test_f9_approval_lifetime_violation_exists_independently_of_audit_time) ... ok\ntest_prior_experiment_remains_frozen (test_probe04.FailureVectors04.test_prior_experiment_remains_frozen) ... ok\ntest_source_pins (test_probe04.FailureVectors04.test_source_pins) ... ok\ntest_ten_cli_exits_and_crypto_results (test_probe04.FailureVectors04.test_ten_cli_exits_and_crypto_results) ... ok\n\n----------------------------------------------------------------------\nRan 13 tests in 2.211s\n\nOK\nPASS: 33 frozen -04 artifacts reproduced byte-for-byte without normalization\nPASS: 56 frozen -03 files byte-identical\n",
+  "original_C04_commit": "ecaff138be0fd833848b6f27267e555e6b31e7f6",
+  "integration_commit": "23f6b9dea1da6d229ce0acf646822d23d3f5c497",
+  "runtime_execution": "NOT_EVALUATED",
+  "effect_observation": "UNOBSERVED",
+  "F10_consumption_enforcement": "NOT_EVALUATED",
+  "outreach": "NO_OUTREACH_NOW / HOLD",
+  "approval_granted": false
+}

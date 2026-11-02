@@ -1,12 +1,12 @@
 # Standards Lab
 
 Local, non-normative experiments with explicit evidence boundaries. This review package
-contains **3 reproduced experiments (A/C/E)**, **2 completed result references (D/F)**,
-**1 sealed preparation package (B1)**, **1 separate editorial candidate (H2)**
-and **4 pending results/references (B2/B3/C04/H1)**.
+contains **4 reproduced experiments (A/C03/C04/E)**, **2 completed result references (D/F)**,
+**1 sealed preparation package (B1)**, **1 separate editorial candidate (H2)**,
+**1 completed scoped review reference (H1)** and **2 pending results (B2/B3)**.
 Counts and artifact digests are in [standards_lab.json](standards_lab.json);
 [G replay records](standards-lab-evidence/replay_results.json) support the three replay
-claims. These are internal runs, not independent third-party validation, a population
+claims; the [C04 replay](standards-lab-evidence/c04_replay.json) separately supports the fourth. These are internal runs, not independent third-party validation, a population
 success rate, IETF conformance or endorsement. Pending work contributes no success.
 
 **Publication state: UNPUBLISHED. `approval_granted=false`.** Local experiment commit
@@ -26,6 +26,7 @@ integrity, not independent custody or chronology.
 |---|---|---|---|
 | **A — completeness appraisal**: distinguish valid supplied records from an appraised completeness basis | [verifier-evidence-03](https://www.ietf.org/archive/id/draft-he-agentproto-verifier-evidence-03.txt); internally developed from published text without linked implementation inspection, per original methodology | 12 synthetic vectors: **2 SATISFIED, 1 UNSATISFIED, 8 INDETERMINATE, 1 NOT_EVALUATED**; 59 tests; byte-identical replay | The two positives require a **stipulated finite exhaustive counterparty index and synthetic authority, party control/input-selection, scope and time facts**. No authenticated external basis, real-population completeness, event truth, full draft or EXR-1/CMP-2 exercise conformance. [Results/non-claims](../experiments/ietf/agentproto/verifier-evidence-03/RESULTS.md), [machine results](../experiments/ietf/agentproto/verifier-evidence-03/results.json), [method/reproduction](../experiments/ietf/agentproto/verifier-evidence-03/REPRODUCE.md). |
 | **C — receipt boundaries**: distinguish receipt verification from consumption, execution and effect | [decision-receipts-03](https://www.ietf.org/archive/id/draft-gruszka-audit-decision-receipts-03.txt), SER-04 P1 and released `proofbundle==6.4.0`, commit `699545521ec5ef479bb84e61fe7461fc79ed558c`; internal probe of an external release | 9 scenarios: **6 PARTIALLY_EVALUATED, 3 NOT_EVALUATED**; 7 CLI vectors; 16 tests; 20 byte-identical artifacts | **All execution/effect observations UNOBSERVED**; consumption and §3.5 set-audit axes NOT_EVALUATED. No runtime scenario executed. `execution_proven` reflects digest presence; supplied sequence bounds do not establish population completeness. No replay bug, end-to-end authorization, preview behavior or full draft conformance inferred. [Results/non-claims](../experiments/ietf/audit/decision-receipts-03/RESULTS.md), [axis matrix](../experiments/ietf/audit/decision-receipts-03/cases/scenario_results.json), [method/reproduction](../experiments/ietf/audit/decision-receipts-03/REPRODUCE.md). |
+| **C04 — -04 addendum**: measure the published F1–F10 CLI vectors and field-rule controls | [decision-receipts-04](https://www.ietf.org/archive/id/draft-gruszka-audit-decision-receipts-04.txt), same released `proofbundle==6.4.0`; internal probe | **F1/F2/F4 exit 2; the other 7 exit 0.** Four negative controls exit 2; two positive controls exit 0. **13 tests**, **33 byte-identical outputs**, no normalization | Draft expectations are separate from actual CLI results. **F10 consumption NOT_EVALUATED**, runtime execution NOT_EVALUATED, effects UNOBSERVED. Missing command inputs explain the already documented coverage boundary. No new bug or technical ambiguity; **NO_OUTREACH_NOW / HOLD**. [Results](../experiments/ietf/audit/decision-receipts-04/RESULTS.md), [machine results](../experiments/ietf/audit/decision-receipts-04/cases/results.json), [reproduction](../experiments/ietf/audit/decision-receipts-04/REPRODUCE.md). |
 | **E — claim preservation**: track distinctions across SER, DSSE, digest-only and digest-resolved routes | [CP-00](https://www.ietf.org/archive/id/draft-abak-ai-evaluation-claim-preservation-00.txt), [SER-04](https://www.ietf.org/archive/id/draft-gruszka-signed-evaluation-receipts-04.txt), [mappings-04](https://www.ietf.org/archive/id/draft-gruszka-evaluation-receipt-mappings-04.txt); author-side semantic experiment. [EQR-05](https://www.ietf.org/archive/id/draft-watts-eqr-conformance-05.txt) is context only | **48 requirement×route cells:** 17 PRESERVED / 10 QUALIFIED_LOSS / 17 UNESTABLISHED / 4 NOT_APPLICABLE. Separately, **80 scenario×route observations:** 34 / 17 / 13 / 16 in that order. 30 tests; frozen JSON and Markdown reproduce byte-for-byte | These are bounded questions, not full requirements: PRESERVED is not full CP/SER conformance and NOT_APPLICABLE is not success. **SER Ed25519/selected-key, COSE and SCITT verification NOT_EVALUATED.** Local HMAC probes are separate. No independent interoperability, event truth, model safety or complete populations. [Results/non-claims](../experiments/ietf/claim-preservation/ser04/RESULTS.md), [machine results](../experiments/ietf/claim-preservation/ser04/results.json), [method/reproduction](../experiments/ietf/claim-preservation/ser04/README.md). |
 
 ```sh
@@ -51,9 +52,24 @@ Successful replay does not add unobserved runtime axes.
 and verified SHA-256 `f5065d91493fb15a4995f85ffd1a71911d01bc9c8b063b1938521e1bfc05c826`.
 C remains a frozen **-03-specific** result, not an assessment of the current revision.
 The coordinator reports additions in §3.8 and Appendix A.5; author-reported vector
-coverage is not our measurement. The separate **C04 addendum is PENDING** and
-**AUDIT outreach is HOLD** until assessed. G did not run -04 vectors or expand
-revision discovery; [retrieval and scope record](standards-lab-evidence/audit04_discovery.json).
+coverage is not our measurement. The separate **C04 addendum is now COMPLETE_LOCAL**. Its original commit is
+`ecaff138be0fd833848b6f27267e555e6b31e7f6`, integrated without file changes as
+`23f6b9dea1da6d229ce0acf646822d23d3f5c497`. G verified all 55 committed files and
+reproduced **13 tests and 33 outputs byte-for-byte**, without normalization.
+The 56 frozen C03 files remain unchanged. **AUDIT outreach remains
+NO_OUTREACH_NOW / HOLD** because the reproduced boundary was already described
+and no new bug or technical question was found. The
+[historical discovery record](standards-lab-evidence/audit04_discovery.json) retains
+its then-pending status; [integration inventory](standards-lab-evidence/c04_integration.json)
+and [G replay](standards-lab-evidence/c04_replay.json) give the completed follow-up.
+
+```sh
+bash experiments/ietf/audit/decision-receipts-04/reproduce.sh
+```
+
+C04 uses the frozen C03 file-hash ledger rather than requiring its original Git
+object at runtime. G reused its own local C03 venv read-only; no new network
+source lookup or fresh-venv reproduction was performed by G.
 
 ```sh
 python3 experiments/ietf/claim-preservation/ser04/src/run.py --check
@@ -78,6 +94,7 @@ it is separate from the experiment and integration commits below.
 | S0 source audit, not an implementation experiment | `31f9b7e7cab5a1b556aa1ebab0dc29617e01e5c1` | `5478e8b107552468e440d9f709c18fd780502293` | [baseline](../research/standards-reentry/2026-11-02/baseline.json) |
 | A | `e0ac30203e39949bb52d612eb3496c39ccb85651` | `95139b50ddd6263f7845537879250eca3994a77d` | [source manifest](../experiments/ietf/agentproto/verifier-evidence-03/sources/manifest.json), [run record](../experiments/ietf/agentproto/verifier-evidence-03/run_record.json) |
 | C | `02a44a812699f853ea65fffa21320e7cc8ddb6c7` | `36b1214b72acafd784dcbd7b17cc6d2eb3de93dc` | [source manifest](../experiments/ietf/audit/decision-receipts-03/sources/manifest.json), [run record](../experiments/ietf/audit/decision-receipts-03/run_record.json) |
+| C04 | `ecaff138be0fd833848b6f27267e555e6b31e7f6` | `23f6b9dea1da6d229ce0acf646822d23d3f5c497` | [source manifest](../experiments/ietf/audit/decision-receipts-04/sources/manifest.json), [original run](../experiments/ietf/audit/decision-receipts-04/run_record.json), [G replay](standards-lab-evidence/c04_replay.json) |
 | E | `9f928980b3027d9dd892dfe297af98635fcd3c18` | `275b871349721a8c917691d457c4a6270fe1028f` | [source pins](../experiments/ietf/claim-preservation/ser04/SOURCE_PINS.json), [run record](../experiments/ietf/claim-preservation/ser04/run_record.json) |
 
 [standards_lab.json](standards_lab.json) records SHA-256 for every linked experiment's
@@ -89,7 +106,7 @@ The later decision-receipts -04 discovery above supersedes that earlier freshnes
 observation for C; it does not alter the -03 results. These are time-bounded checks: [fresh HTTP pins](standards-lab-evidence/http_sources.json),
 [six repository pins](standards-lab-evidence/github_sources.json).
 
-## D, F, B1 and H2: separate local references
+## D, F, B1, H1 and H2: separate local references
 
 **D — AIREP explain CLI.** Repository `halvrenofviryel/ai-runtime-evidence-protocol`,
 original commit `0130fcf8e7d70a0f9c4f977957e5de76ca8ef689`, integration commit **none**,
@@ -176,15 +193,25 @@ No H2 files were merged or copied into G. This local candidate is not a submitte
 Internet-Draft, a newly discovered normative requirement, adoption or conformance
 finding; its supporting public artifact URL is still UNKNOWN.
 
+**H1 — completed scoped ACDER-03 NO-GO review.** Exact commit
+`57ab6d0f186f42f6a6788bb7b64b59bcae602424`, local checkout
+`/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/h1-acder-evidence-gate/phionyx-research`.
+The [report snapshot](standards-lab-evidence/local-refs/H1/ACDER_03_NO_GO.md)
+records **NO_GO_ON_AVAILABLE_EVIDENCE: 0 proposed changes, 0 normative changes,
+no patch**. It includes the actual C04 commit and bounded findings. This does not
+complete the B3-dependent interoperability gate or establish that ACDER-02 is
+defect-free. G checked 26 exact-commit files, 25 manifest hashes, 12 public-source
+pins and eight report/run snapshots against the available frozen bytes; it copied
+only five report/metadata files and did not rerun a normative review.
+[Exact inventory and checks](standards-lab-evidence/h1_reference.json).
+
 | Missing input | Status | Consequence |
 |---|---|---|
 | B2 isolated solver | **PENDING / NOT_EVALUATED** | No solver code/output or enforced isolation supplied; same-UID permissions are not isolation evidence. |
 | B3 frozen comparison | **PENDING / NOT_EVALUATED** | No comparison supplied; B1 contributes no agreement count. |
-| H1 ACDER-03 evidence gate | **PENDING reference** | Coordinator preparing a separate local gate; no result/commit supplied. Provisional scoped NO-GO is coordinator context, not a G result. |
-| C04 revision addendum | **PENDING / NOT_EVALUATED** | -04 raw bytes verified, but no addendum result/commit supplied. C03 stays frozen; AUDIT outreach HOLD. |
 
 The pending entries in [standards_lab.json](standards_lab.json) are deliberate omissions,
-not failures converted to success. They do not block review of the reproduced A/C/E index.
+not failures converted to success. They do not block review of the reproduced A/C03/C04/E index.
 
 ## External evidence and publication boundaries
 
@@ -193,11 +220,12 @@ requires an identified external artifact, frozen version, bounded claim and main
 reproduction. It remains unchanged. Its producer result targets v0.1.2 and its consumer
 result targets an earlier v0.2 handoff; these cannot be added into a same-version
 interoperability result. G cites that historical report without rerunning it or
-upgrading its independence attestation. None of A/B1/C/D/E/F qualifies as a new external
+upgrading its independence attestation. None of A/B1/C03/C04/D/E/F/H1/H2 qualifies as a new external
 entry merely because it ran in another Codex task.
 
 The [updated integrity record](standards-lab-evidence/update_validation.json) preserves
-the earlier A/C/E run records; those 105 tests were not unnecessarily repeated.
+the earlier A/C03/E run records; those 105 tests were not repeated. The added C04
+reproduction runs 13 tests and compares 33 outputs; these are separate records.
 
 The [portfolio delta](STANDARDS_PORTFOLIO_DELTA.md) separates current documentation
 from historical publications and gives exact cross-repository patch targets. No

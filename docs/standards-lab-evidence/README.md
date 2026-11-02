@@ -66,4 +66,24 @@ B2/B3 remain pending, with enforced isolation NOT_ESTABLISHED.
 `audit04_discovery.json` records the later coordinator notification and G's
 exact-byte retrieval of decision-receipts -04. The supplied SHA-256 matched.
 Earlier -03 metadata remains as historical evidence; C03 outputs are unchanged.
-C04 is pending and AUDIT outreach is HOLD. No -04 vectors were run by G.
+That record is the historical discovery snapshot. The later `c04_integration.json`
+verifies all 55 exact committed addendum files; `c04_replay.json` records 13 passing
+tests and 33 byte-identical outputs in G, without normalization. The old 105 tests
+were not rerun. F10 consumption stays NOT_EVALUATED; no runtime execution/effect.
+AUDIT is NO_OUTREACH_NOW / HOLD because no new bug or technical question arose.
+
+`h1_reference.json` and `local-refs/H1/` contain a scoped NO-GO reference, not an
+ACDER patch or complete B3-dependent gate. `collect_h1_ref.py` checks 26 committed
+files, 25 manifest hashes, 12 source pins and eight report snapshots, copying only
+five report/metadata files. Source checkouts remain read-only.
+
+`seal_review.py` freezes exact commit/file inventories for four approval units;
+`verify_review.py` checks those Git bytes and that U1's history excludes I outreach,
+D/F implementation code and H2 candidate files. I remains on its separate local
+branch; its optional ignored review copies are not publication content.
+
+The default `python3 -B docs/standards-lab-evidence/verify_review.py` checks U1 and
+labels U2 METADATA_ONLY. It does not require the intentionally unpublished I Git
+objects. Add `--with-local-approval-units` only in the local coordination clone to
+check I raw bytes and ancestry too. `verify_index.py` compares imported C04 bytes
+with the reachable integration commit, not the non-ancestor source commit.

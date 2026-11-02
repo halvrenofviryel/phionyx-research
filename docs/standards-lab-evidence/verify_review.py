@@ -1,5 +1,6 @@
 """Verify exact Git inventories and separation of the local approval units."""
 
+import argparse
 import hashlib
 import json
 import subprocess
@@ -12,7 +13,7 @@ def git(*args):
     return subprocess.check_output(["git", *args], cwd=ROOT)
 
 
-def check():
+def check(with_local_approval_units=False):
     review = json.loads((ROOT / "docs/publication_review.json").read_text())
     assert review["approval_granted"] is False
     assert review["publication_status"] == "UNPUBLISHED"
@@ -35,7 +36,12 @@ def check():
         == u1["commits_since_public_base"]
     )
     checked = {}
-    for name, rows in [("U1", u1["files"]), ("U2", units["U2_outreach"]["files"])]:
+    inventories = [("U1", u1["files"])]
+    if with_local_approval_units:
+        inventories.append(("U2", units["U2_outreach"]["files"]))
+    else:
+        checked["U2"] = "METADATA_ONLY; local I commit bytes not checked"
+    for name, rows in inventories:
         assert len({r["path"] for r in rows}) == len(rows)
         for row in rows:
             data = git("show", row["commit"] + ":" + row["path"])
@@ -67,7 +73,7 @@ def check():
             for p in paths
         )
     u2 = units["U2_outreach"]
-    if u2["commit"]:
+    if u2["commit"] and with_local_approval_units:
         assert (
             subprocess.run(
                 ["git", "merge-base", "--is-ancestor", u2["commit"], content], cwd=ROOT
@@ -111,11 +117,20 @@ def check():
         "U1_commits_without_outreach_DF_code_or_H2_candidate": len(
             u1["commits_since_public_base"]
         ),
-        "U2_not_ancestor_of_U1": True if u2["commit"] else "NOT_PREPARED",
+        "U2_not_ancestor_of_U1": True
+        if u2["commit"] and with_local_approval_units
+        else "NOT_CHECKED_LOCAL_ONLY",
         "approval_granted": False,
         "external_actions": 0,
     }
 
 
 if __name__ == "__main__":
-    print(json.dumps(check(), indent=2))
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--with-local-approval-units",
+        action="store_true",
+        help="Additionally inspect local-only I commit bytes and ancestry; not required for a U1-only checkout",
+    )
+    args = parser.parse_args()
+    print(json.dumps(check(args.with_local_approval_units), indent=2))
