@@ -1,0 +1,31 @@
+{
+  "evaluator_verification_claim": false,
+  "exit_code": 0,
+  "nonclaims": [
+    "external identity",
+    "authority",
+    "event truth",
+    "enforcement",
+    "effect"
+  ],
+  "openssl_version": "OpenSSL 3.0.13 30 Jan 2024 (Library: OpenSSL 3.0.13 30 Jan 2024)",
+  "payload_sha256": "367442440c6811174844b70b0c9baee447535ae7c0d3012c04b14c7658bc7957",
+  "public_key_sha256": "d1afa2264120eb388d828cdf67c06f85d25fa33f90c48b15b346d98b93d86f9c",
+  "schema": "synthetic-ed25519-author-verification-v1",
+  "signature_sha256": "f9d209668f7be1c4df9f69b54749e0ae11786869e68340b369edb4d918e09876",
+  "stdout": "Signature Verified Successfully",
+  "synthetic_fixture_key_only": true,
+  "verify_command": [
+    "openssl",
+    "pkeyutl",
+    "-verify",
+    "-pubin",
+    "-inkey",
+    "/home/toygar/Documents/ChatGPT/STRATEJIK_PLAN/evidence/standards_third_wave_2026-11-02/k1-author/signature_fixture/SYNTHETIC_TEST_ONLY_PUBLIC_KEY.pem",
+    "-rawin",
+    "-in",
+    "/home/toygar/Documents/ChatGPT/STRATEJIK_PLAN/evidence/standards_third_wave_2026-11-02/k1-author/holdout/holdout-07/signed_payload.bin",
+    "-sigfile",
+    "/home/toygar/Documents/ChatGPT/STRATEJIK_PLAN/evidence/standards_third_wave_2026-11-02/k1-author/holdout/holdout-07/signature.bin"
+  ]
+}

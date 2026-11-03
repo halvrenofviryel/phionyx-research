@@ -1,0 +1,27 @@
+{
+  "visible_inputs": [
+    "/input/dev-01/evidence.json",
+    "/input/dev-02/evidence.json",
+    "/input/dev-03/evidence.json",
+    "/input/dev-04/evidence.json",
+    "/input/dev-05/evidence.json",
+    "/input/dev-06/evidence.json",
+    "/input/dev-07/evidence.json",
+    "/input/dev-08/evidence.json",
+    "/input/dev-09/evidence.json",
+    "/input/dev-10/evidence.json",
+    "/input/dev-11/evidence.json",
+    "/input/dev-12/evidence.json"
+  ],
+  "home_entries": [],
+  "environment": {
+    "PATH": "/usr/bin",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PWD": "/tmp",
+    "LC_CTYPE": "C.UTF-8"
+  },
+  "network_namespace": "net:[4026533773]",
+  "proc_net_dev": "Inter-|   Receive                                                |  Transmit\n face |bytes    packets errs drop fifo frame compressed multicast|bytes    packets errs drop fifo colls carrier compressed\n    lo:       0       0    0    0    0     0          0         0        0       0    0    0    0     0       0          0\n",
+  "oracle_path_absent": true,
+  "host_home_absent": true
+}

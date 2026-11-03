@@ -1,0 +1,161 @@
+{
+  "F": "EXCLUDED",
+  "classification": "AUTHOR_SIDE_REFERENCE",
+  "combined_airep_candidate": null,
+  "external_evidence": "NOT_EVALUATED",
+  "final_packet_manifest_sha256": "6fcd887d4fbc72d2ccbb7426dc85f2e24eafbfaa853f895f8a085711b6bf6fdc",
+  "measured_experiments": {
+    "k2": {
+      "external_result": "EXTERNAL_RESULT_NOT_SUPPLIED",
+      "external_roles": "NOT_EVALUATED",
+      "reference_summary": {
+        "counts": {
+          "FAILURE": 0,
+          "INDETERMINATE": 0,
+          "MISSING": 0,
+          "NOT_EVALUATED": 1,
+          "SATISFIED": 37
+        },
+        "status": "INCOMPLETE"
+      },
+      "run_record": "results/k2/run_record.json",
+      "same_first_party_family": true,
+      "status": "LOCAL_CHECKS_COMPLETED",
+      "test_count": 28
+    },
+    "k3": {
+      "D_cli_equals_saved_view": true,
+      "enforcement_native_predicate": "NOT_EVALUATED",
+      "external_roles": "NOT_EVALUATED",
+      "observed_steps": {
+        "effect-unobserved": null,
+        "normal": 4,
+        "receiver-ignores-stop": 4,
+        "receiver-unreachable": 4,
+        "stop-before-start": 0,
+        "stop-during-action": 1
+      },
+      "run_record": "results/k3/run_record.json",
+      "scope": "Real local LangGraph cooperative pause; same-executor observations; no LLM/preemptive cancellation/independent witness",
+      "status": "LOCAL_CHECKS_COMPLETED",
+      "test_count": 13
+    }
+  },
+  "pending_or_not_packaged": [
+    "K1",
+    "A",
+    "B3",
+    "C",
+    "E"
+  ],
+  "public_base": "652e008d18805a1c69492a688e621df91f143287",
+  "publication": "NOT_PERFORMED",
+  "ready_experiments": [
+    "k2",
+    "k3"
+  ],
+  "review_scope": "K2 ea1f39a6 plus separate D0130fcf8+K376ecce0b candidate; full changed-file inventories and patches included",
+  "schema": "k5-replication-validation-report-v1",
+  "source_commit": "bec6b34c55d5a1f3e898997475539c9d54c91580",
+  "source_pins": {
+    "F_included": false,
+    "artifact_hashes": {
+      "bundles/airep-sources.bundle": {
+        "byte_length": 9222409,
+        "sha256": "abc5863eea07e96ae719d225affef07a35f6c13c07ac58281f35bbb4d5dcf2e3"
+      },
+      "bundles/langgraph-wheelhouse.tar.gz": {
+        "byte_length": 19183724,
+        "sha256": "83e30216dfc9d4c32e92f49e00f4c1d067856cb37a32465c967c73ff9fd75439"
+      }
+    },
+    "bundle_refs": {
+      "refs/heads/k2-source": "ea1f39a6da72639a73e601918a6c8bc87bff1d77",
+      "refs/heads/k3-source": "76ecce0b378a6b391850795abf45fb6aca8e1d6b",
+      "refs/tags/v0.2.0-beta.1": "dff7b4eeb14d57525855ae2c1af54d8f38bc9ec8"
+    },
+    "combined_airep_candidate": null,
+    "k2": {
+      "reference_target": {
+        "commit": "8a6c01ecce457aa94330c0ed7219e4c56ebfe771",
+        "normative_basis_sha256": "333977c9e27c57371686b9cfb9c4becda68da43aebf024b04068e32563597b8d",
+        "release": "v0.2.0-beta.1",
+        "wire_version": "0.2"
+      },
+      "runtime_release_commit": "8a6c01ecce457aa94330c0ed7219e4c56ebfe771",
+      "source_commit": "ea1f39a6da72639a73e601918a6c8bc87bff1d77"
+    },
+    "k3": {
+      "D_commit": "0130fcf8e7d70a0f9c4f977957e5de76ca8ef689",
+      "normative_file_hashes": {
+        "spec/airep/v0.2/CONFORMANCE_CLASSES.md": "331f7cabb99cb12aa55f2395f0f073caf58282e0a43756680b9d86bf59e9a9a6",
+        "spec/airep/v0.2/INTEGRITY.md": "2fca9a02ebd8b22807f51742278d7ddfc101e25ca6fd4fa844d6c6a537e98c11",
+        "spec/airep/v0.2/RECONCILIATION.md": "d720ff4139676b913e9d9f9a3a38d57fea586c9a76b1816bdcbf57e1ea39d023",
+        "spec/airep/v0.2/SPEC.md": "b5b33f6bf0265717d889248fa85a6a0390efbe57fb00a74d5c23c6721edf4766"
+      },
+      "runtime": "langgraph==1.2.19",
+      "runtime_lock_sha256": "55232532d5cf5bc6328f2ea9789f991c812c446211a46549e2dfe88a00e08835",
+      "source_commit": "76ecce0b378a6b391850795abf45fb6aca8e1d6b",
+      "wire_version": "0.2"
+    },
+    "package_base": "652e008d18805a1c69492a688e621df91f143287",
+    "package_repository": "https://github.com/halvrenofviryel/phionyx-research",
+    "publication": "LOCAL_ONLY_NOT_AUTHORIZED",
+    "schema": "k5-source-pins-v1"
+  },
+  "status": "LOCAL_PACKAGE_CHECKS_COMPLETED",
+  "toolchain": {
+    "git": "git version 2.43.0",
+    "libc": "glibc 2.39",
+    "node": "v20.19.6",
+    "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]"
+  },
+  "validations": [
+    {
+      "archive": "validation-01-evidence.tar.gz",
+      "archive_byte_length": 191277,
+      "archive_sha256": "c82eb309e674fec538c0100682ab6c5f5ff4983dc2e3f528b5a45b3a984cd8f3",
+      "external_evidence": "NOT_EVALUATED",
+      "file_count": 465,
+      "id": "validation-01",
+      "inventory": "validation-01-inventory.json",
+      "inventory_sha256": "9983c0230e8097a9fe91efe03c301ba608af6cadf9e8d231d2b0820be38b5740",
+      "k2_tests": 28,
+      "k3_tests": 13,
+      "namespace_separation": {
+        "mnt": true,
+        "net": true,
+        "pid": true,
+        "user": true
+      },
+      "note": "Initial successful packet validation",
+      "packet_manifest_sha256": "8cee378e14753b9f8a4c55bfd5dd2591c64756bd2db32a16e588f98250e783d4",
+      "packet_tests": 7,
+      "source_commit": "93f85f307400cf98a949b77732cf4d3374dd336e",
+      "status": "LOCAL_PACKAGE_CHECKS_COMPLETED"
+    },
+    {
+      "archive": "validation-02-evidence.tar.gz",
+      "archive_byte_length": 191338,
+      "archive_sha256": "a101e1be5815f5ea94235a715caaa99f5d1104f232e43caf816eca802b1271bb",
+      "external_evidence": "NOT_EVALUATED",
+      "file_count": 465,
+      "id": "validation-02",
+      "inventory": "validation-02-inventory.json",
+      "inventory_sha256": "e49e9f49e9af6f0b841c71edf73890b8b0e75be8964eb63513addb33e6d22343",
+      "k2_tests": 28,
+      "k3_tests": 13,
+      "namespace_separation": {
+        "mnt": true,
+        "net": true,
+        "pid": true,
+        "user": true
+      },
+      "note": "Final packet after aligning role labels and adding the blank-template boundary test",
+      "packet_manifest_sha256": "6fcd887d4fbc72d2ccbb7426dc85f2e24eafbfaa853f895f8a085711b6bf6fdc",
+      "packet_tests": 8,
+      "source_commit": "bec6b34c55d5a1f3e898997475539c9d54c91580",
+      "status": "LOCAL_PACKAGE_CHECKS_COMPLETED"
+    }
+  ]
+}

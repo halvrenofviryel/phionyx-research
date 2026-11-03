@@ -1,0 +1,1 @@
+{"attempt_id":"attempt-1","boundary_id":"target-entry","clock_id":"mono","content_sha256":"5f306940b466567017f11cc9ef3f372de33170a46738ddb4e971e65c0feee9cb","identity_scope":"scope-dev-07","instruction_id":"instruction-alpha","kind":"receiver_observation","observer_id":"ep-a","outcome":"RECEIVED","target_id":"ep-a","time":3}

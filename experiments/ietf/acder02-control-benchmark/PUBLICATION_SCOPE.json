@@ -1,0 +1,31 @@
+{
+  "schema": "k1-local-publication-scope-v1",
+  "publication_performed": false,
+  "source_base": "652e008d18805a1c69492a688e621df91f143287",
+  "scope": "Only experiments/ietf/acder02-control-benchmark; exact final commit/diff/inventory in central delivery review",
+  "disclosures": [
+    "All24 synthetic evidence cases, latent truths and oracle claims",
+    "Original author protocol/data Git history and authoring recipe",
+    "Original development attempts and measured code versions",
+    "First holdout output including both condition differences",
+    "Machine path/user metadata, timestamps, namespace identifiers and tool versions in logs",
+    "Intentionally public synthetic Ed25519 test private/public key pair inside author-data.bundle; never a real issuer/account credential"
+  ],
+  "not_included": [
+    "Account credential files",
+    "Codex conversation/state/history database",
+    "Original private B1 builder or B1 private answer file",
+    "Any normative draft edit or prior-pilot edit"
+  ],
+  "private_key_pattern_matches": [
+    {
+      "path": "author-bundle:signature_fixture/SYNTHETIC_TEST_ONLY_PRIVATE_KEY.pem",
+      "classification": "KNOWN_SYNTHETIC_PUBLIC_TEST_FIXTURE",
+      "provenance": "authoring_recipe.py168-181 creates a fresh Ed25519 key with openssl genpkey; AUTHORING_NOTES.md explicitly declares intentional public test material without external authority",
+      "derived_public_key_matches": true
+    }
+  ],
+  "other_credential_pattern_matches": [],
+  "scan_limit": "Bounded token/private-key pattern scan, not proof of absence of all possible sensitive metadata",
+  "publication_gate": "Explicit owner approval required; no push, PR, issue, release or IETF submission"
+}

@@ -1,7 +1,8 @@
 # Standards Lab
 
-Local, non-normative experiments with explicit evidence boundaries. This review package
-contains **4 reproduced experiments (A/C03/C04/E)**, **2 completed result references (D/F)**,
+Local, non-normative experiments with explicit evidence boundaries. The historical
+**2 November 2026 U1 review package** contains **4 reproduced experiments
+(A/C03/C04/E)**, **2 completed result references (D/F)**,
 **1 sealed preparation package (B1)**, **1 separate editorial candidate (H2)**,
 **1 completed scoped review reference (H1)** and **2 pending results (B2/B3)**.
 Counts and artifact digests are in [standards_lab.json](standards_lab.json);
@@ -16,7 +17,31 @@ manifests retain their pre-publication state; their `approval_granted=false` and
 `UNPUBLISHED` values are historical. Original source commit IDs remain provenance;
 the integration commits are included in the published U1 history. U2/U3/U4 remain HOLD.
 
-## Reproduce the integrated experiments
+**Local next-publication candidate, 3 November 2026:** K1 and the K2/D/K3/K5
+packet are staged together behind the bounded
+[Control evidence research](CONTROL_EVIDENCE_RESEARCH.md) entry page. This
+candidate is unpublished and adds no external validation, adoption or standards
+status. Its [prepublication review](PREPUBLICATION_REVIEW_2026-11-03.md) is a
+separate record; the historical `standards_lab.json` and U1 evidence remain
+unchanged.
+
+## K1, K2, K3 and K5: local next-publication candidate
+
+| ID | Local evidence | Current boundary |
+|---|---|---|
+| **K1** | 24-case synthetic comparison, 12-case first holdout, frozen evaluator/scorer and one-command replay | Shared unsupported holdout subset: naive ACK 16/18, bounded evaluator 0/18; bounded recall 31/31; condition agreement 52/54. The naive rule is deliberately weak and analytical, not a product ranking. |
+| **K2** | v0.2.0-beta.1 same-version reference harness, 28 tests and eight negative controls | Author-side reference behavior; native status INCOMPLETE with one NOT_EVALUATED item. No external producer or consumer supplied. |
+| **K3** | Six pinned LangGraph 1.2.19 scenarios, 13 tests and raw-event-to-claim traceability | Controlled cooperative pause and local observations. No LLM, preemptive cancellation, durable resume, independent witness or production assurance. |
+| **K5** | Self-contained source/dependency packet; two clean author-side runs and read-only evidence review | 172 packet inputs and 930 archived evidence files verified. External reproduction, independent implementation and adoption remain NOT_EVALUATED. |
+
+K5 distributes the K2 and D/K3 source histories inside its Git bundle. Publishing
+the packet therefore publishes those sources even without a separate AIREP PR.
+The exact source refs, disclosures and excluded B2/B3/H2 units are recorded in the
+prepublication review. The [external impact ledger](EXTERNAL_IMPACT_LEDGER.md)
+keeps earlier v0.1.2 producer and v0.2 consumer evidence separate from these new
+author-side results.
+
+## Historical U1 integrated experiments — 2 November review state
 
 Run each command from the root of this `halvrenofviryel/phionyx-research` checkout.
 Source checkout files and original first-run outputs are preserved; G replay records
@@ -108,7 +133,7 @@ The later decision-receipts -04 discovery above supersedes that earlier freshnes
 observation for C; it does not alter the -03 results. These are time-bounded checks: [fresh HTTP pins](standards-lab-evidence/http_sources.json),
 [six repository pins](standards-lab-evidence/github_sources.json).
 
-## D, F, B1, H1 and H2: separate local references
+## Historical U1 references: D, F, B1, H1 and H2
 
 **D — AIREP explain CLI.** Repository `halvrenofviryel/ai-runtime-evidence-protocol`,
 original commit `0130fcf8e7d70a0f9c4f977957e5de76ca8ef689`, integration commit **none**,
@@ -171,8 +196,10 @@ the `evidence.tar.gz` SHA-256
 `2f6a3457e3d17206e0e9c43a79f7026e678f0385066b8838434c0d65112180b6`,
 all **138 archive members**, and the three archived JSON verification ledgers.
 The [update verification inventory](standards-lab-evidence/update_references.json)
-separates these checks from F's reported executions. No D/F implementation code or
-archive was copied into research. To reproduce **in a disposable copy of exact F**,
+separates these checks from F's reported executions. In the historical U1 package,
+no D/F implementation code or archive was copied into research. The 3 November
+next-publication candidate described above now distributes D/K3 source history
+inside K5; F remains excluded. To reproduce **in a disposable copy of exact F**,
 with its documented Python 3.12/Node 20 bootstrap:
 
 ```sh
@@ -207,13 +234,19 @@ pins and eight report/run snapshots against the available frozen bytes; it copie
 only five report/metadata files and did not rerun a normative review.
 [Exact inventory and checks](standards-lab-evidence/h1_reference.json).
 
-| Missing input | Status | Consequence |
+| Historical U1 missing input | 2 November status | Consequence at that review point |
 |---|---|---|
 | B2 isolated solver | **PENDING / NOT_EVALUATED** | No solver code/output or enforced isolation supplied; same-UID permissions are not isolation evidence. |
 | B3 frozen comparison | **PENDING / NOT_EVALUATED** | No comparison supplied; B1 contributes no agreement count. |
 
 The pending entries in [standards_lab.json](standards_lab.json) are deliberate omissions,
 not failures converted to success. They do not block review of the reproduced A/C03/C04/E index.
+
+**Current program status:** B2/B3 were later completed locally. Their full reveal
+and run-log metadata remain a separate publication decision and are excluded from
+the K1+K2/D/K3/K5 candidate. H2 is preserved as the updated separate candidate
+`317fbdccc506f8c43cce813caf778b8b633a9425`; repository publication and IETF
+submission remain separate owner decisions.
 
 ## External evidence and publication boundaries
 

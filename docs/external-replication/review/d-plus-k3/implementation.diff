@@ -1,0 +1,1624 @@
+diff --git a/examples/v02/EXPLAIN.md b/examples/v02/EXPLAIN.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..04c2d7d7e46b4065ded7a2a6652ca17c684a1b02
+--- /dev/null
++++ b/examples/v02/EXPLAIN.md
+@@ -0,0 +1,95 @@
++# Explain supplied lifecycle evidence
++
++This is a NON-NORMATIVE, first-party explanatory view of the existing
++`0.2-beta.1` reconciliation result. Package version remains `0.2.0-beta.1`;
++wire version remains `0.2`. It is a derived view, not a new AIREP conformance
++layer, artifact family, assurance class or change to reconciliation semantics.
++
++Run from the repository root after the existing dependency setup. Use a fresh
++output directory for the lifecycle generator:
++
++```bash
++python3 examples/v02/run_lifecycle.py --out /tmp/airep-explain-example
++python3 -m tools.airep_v02 explain \
++  --input /tmp/airep-explain-example/lifecycle.json \
++  --bindings /tmp/airep-explain-example/bindings.json \
++  --revocation /tmp/airep-explain-example/revocation.json \
++  --independence-policy /tmp/airep-explain-example/independence.json
++python3 -m tools.airep_v02 explain \
++  --input /tmp/airep-explain-example/variants/no-receipt.json \
++  --bindings /tmp/airep-explain-example/bindings.json \
++  --revocation /tmp/airep-explain-example/revocation.json --json
++```
++
++For a dependency-ready checkout, the committed fixture also works immediately:
++
++```bash
++python3 -m tools.airep_v02 explain --input examples/v02/fixtures/complete.json
++python3 -m tools.airep_v02 explain --input examples/v02/fixtures/complete.json --json
++```
++
++Without trusted operator inputs, authentication is visibly `NOT_EVALUATED`;
++schema/hash admission can still be `SATISFIED`. `--out path` preserves the
++existing refusal to overwrite an output file. Exit zero means evaluation
++completed, including `FAILURE`, `MISSING`, `NOT_EVALUATED` or `INDETERMINATE`.
++Unreadable/invalid run input exits one; CLI usage errors exit two. Input is an
++artifact array, as for `reconcile`; saved reports are not accepted or trusted.
++
++## Reading the matrix
++
++| Field | Meaning in this derived view |
++|---|---|
++| `claim` | NON-NORMATIVE rendering label for the named claim family; never an assurance assertion |
++| `source`, `source_check` | JSON pointer into the equivalent native `reconcile` result and its unchanged check name |
++| `source_status` | Exact native state or summary status; null when there is no native predicate |
++| `explanatory_status` | Normally null; `NOT_EVALUATED` only for a predicate unavailable from the reconciler, explicitly a NON-NORMATIVE rendering label |
++| `basis` | Unchanged check detail, or an explicit explanation of an unavailable predicate |
++| `source_artifact_references` | Native supporting references, preserving empty and ambiguous evidence sets |
++| `context` | Original subject (including Decision/instruction identity), supplied population, occurrence indexes and target window if evaluated; null means no evaluated window available |
++| `limitations` | Per-row qualifications in addition to the view-level limitations |
++
++`artifact_context` preserves each admitted occurrence's declared scope and
++reported timestamp. A timestamp is not a verified event time or a coverage
++window. Ambiguous identities are not resolved by picking one occurrence.
++`record_assurance` preserves every admission and complete class result, including
++failure, withheld, caveat, observer, operator-input digest and profile channels.
++The text renderer prints every field from the same object as JSON mode and
++escapes embedded newlines/control characters in reported text.
++
++The complete fixture reports dispatch, receipt, execution and bound observation,
++yet intended-target coverage remains `NOT_EVALUATED` and the aggregate remains
++`INCOMPLETE`. The native summary vocabulary is `SATISFIED`, `FAILURE` and
++`INCOMPLETE`, not a global PASS/FAIL verdict. Profile PASS/FAIL remains separate
++inside each record's class result. Structural success cannot establish a
++relying-party claim.
++
++The missing-receipt variant keeps dispatch `SATISFIED`, receipt and execution
++evidence `MISSING`, and TOCTOU `NOT_EVALUATED`. This is no proof of non-delivery
++or non-execution. Omitting the independence policy keeps effective observer
++independence unknown and its check `INDETERMINATE`; same-executor observation
++remains evidence without independent corroboration.
++
++## Enforcement, effect and consumer claims
++
++The worker-pause example describes an application enforcement action. In the
++`no-effect.json` variant, execution of that action is reported and its digest
++comparison is `SATISFIED`, while bound Effect evidence is `MISSING`. That report
++does not establish the resulting worker state. The current reconciler has no
++separate enforcement predicate: `explain` therefore marks `enforcement_observed`
++with null native status and explanatory `NOT_EVALUATED`. Failed and suppressed
++execution outcomes retain their native `FAILURE` and explicit event names; they
++are not reinterpreted as successful enforcement.
++
++Similarly, an Effect report supplies observed state without proving causation,
++desired effect or independent corroboration. The view retains effect binding
++and observer checks to qualify it. No consumer claim or acceptance policy is
++evaluated, so `relying_party_claim_support` has explanatory `NOT_EVALUATED` even
++when particular structural checks are satisfied. Neither row declares the
++event or claim false. Separate enforcement or claim-support adjudication cannot
++be represented as a native reconciler result without extending its contract;
++this feature makes no such extension.
++
++These deterministic fixtures and tests are internal regression evidence, not
++third-party independent evidence, deployment interoperability, truth assurance
++or complete population coverage. The source audit is recorded in
++[source-basis.json](../../reports/explain/source-basis.json).
+diff --git a/integrations/langgraph/README.md b/integrations/langgraph/README.md
+new file mode 100644
+index 0000000000000000000000000000000000000000..8cd984b9c9dc3befb482d874217b54abe1c08500
+--- /dev/null
++++ b/integrations/langgraph/README.md
+@@ -0,0 +1,126 @@
++# Local LangGraph runtime evidence
++
++This experimental integration executes **LangGraph Python 1.2.19** locally and
++projects captured events into unchanged AIREP wire **v0.2** artifacts and D's
++non-normative `explain` view. It is first-party runtime integration evidence,
++with deterministic application nodes, not an LLM-agent evaluation, third-party
++interoperability measurement, or a new conformance layer. No frozen v0.1 file,
++normative schema, reconciler, or explain implementation is changed.
++
++## Reproduce
++
++The hash lock targets the measured CPython 3.12 / Linux x86_64 environment.
++Install requires public PyPI access; the experiment itself makes no network
++request and needs no credentials. Wheels for other platforms are not in this
++lock; do not silently discard hashes to claim an identical reproduction.
++
++```bash
++python3 -m venv .venv
++.venv/bin/python -m pip install --require-hashes -r integrations/langgraph/requirements.lock
++.venv/bin/python -m unittest discover -s integrations/langgraph/tests -v
++.venv/bin/python integrations/langgraph/run.py --out /tmp/airep-langgraph-run
++.venv/bin/python -m tools.airep_v02 explain \
++  --input /tmp/airep-langgraph-run/stop-during-action/lifecycle.json \
++  --bindings /tmp/airep-langgraph-run/stop-during-action/bindings.json \
++  --revocation /tmp/airep-langgraph-run/stop-during-action/revocation.json --json
++```
++
++Output paths must be new. `--scenario NAME` can select individual runs.
++The suite checks every installed dependency version against the lock and records
++the installed LangGraph Python source hashes. `dependencies.json` retains exact
++public wheel URLs and hashes from `pip --report`. Other sources are the D commit
++and the integration source hashes recorded in `run_record.json`.
++
++## What actually runs
++
++A spawned process compiles and invokes `StateGraph` with a real
++`InMemorySaver`. One node appends four JSON lines to an isolated output file,
++flushes and `fsync`s each write, and checks a multiprocessing Pipe at cooperative
++boundaries. The issuer writes the actual command bytes to that pipe. The
++receiver logs only bytes it reads. Calling `interrupt()` is a request; execution
++evidence requires both the native `GraphOutput.interrupts` result and matching
++interrupt data in the actual checkpoint snapshot. We use the supported
++`invoke(..., version="v2")` API because this bounded experiment needs final
++state and interrupts, not streamed projections.
++
++The start barrier and the barrier after the first file write make command
++timing reproducible. This is controlled scheduling, not a latency benchmark or
++an uncontrolled race test. `stop-before-start` means the command is sent before
++graph invocation and received at the node's first checkpoint, before any
++business side effect. It does not mean the node is never entered.
++
++| Scenario | Applied condition | Runtime observation to expect |
++|---|---|---|
++| `normal` | No stop command | Graph completes; four file steps; no stop artifacts |
++| `stop-before-start` | Stop sent before graph invocation | Native pause; zero observed file steps |
++| `stop-during-action` | Stop after first file write, before next cooperative check | Native pause; first step remains; later steps absent in local observation |
++| `receiver-unreachable` | Receiver closes its real pipe endpoint before command send | Actual `BrokenPipeError`; no dispatch-success/receipt/stop-execution artifact; business action completes |
++| `receiver-ignores-stop` | Deliberately disabled cooperative handler | Receipt exists, enforcement unavailable, graph completes; failed Execution and authorization/action mismatch remain visible |
++| `effect-unobserved` | Observer intentionally not run after pre-start pause | Native pause Execution exists; no Effect artifact; effect evidence remains MISSING |
++
++For `receiver-unreachable`, closing the IPC receiver is an explicit fault
++injection. It is not a simulated network outage or proof about any remote
++receiver. A failed send is a command attempt, not an issuer `dispatched` event.
++For `receiver-ignores-stop`, the actual no-pause handler path has a different
++action digest and produces `execution_event=failed`; receipt is not promoted to
++successful stop. Business action execution is recorded separately in raw events
++and the output file. An AIREP Execution here refers to the **stop operation**,
++not the append operation.
++
++## Evidence boundaries
++
++`events.jsonl` and per-event JSON files contain captured IPC, node, checkpoint,
++observer, and cleanup events with actual wall/monotonic timestamps. The adapter
++selects evidence from these events, not from a scenario's expected result.
++`event-mapping.json` and each artifact's `evidence` pointers identify exact source
++bytes and hashes. `run_record.json` hashes all emitted artifacts; its companion
++hash covers the record itself. Fresh ephemeral signing keys are generated in
++memory; only public test bindings are saved. Their local trust and active
++revocation status are **stipulated experiment policy**, not external trust or a
++real revocation service. Signatures authenticate these authored reports under
++that policy; they do not establish event truth.
++
++Post-run observations read the actual file twice after the worker exits, with
++a short recorded observation window. The observer uses the same local author,
++code, host, and trust domain, so Effect declares `same_executor`. The window
++shows sampled local state, not independent corroboration, causation, absence of
++all intermediate activity, or future stability. All runs use bounded waits,
++join the worker, and close pipes. Forced termination is only timeout cleanup;
++it is recorded and never projected as successful enforcement. LangGraph's
++worker threads end with that joined process. The in-memory checkpoint is
++discarded on exit; durable restart and resumption are untested.
++
++This is **cooperative pause**, not forced/preemptive cancellation. `interrupt()`
++must be reached inside a node, cannot undo the first file write, and does not
++preempt arbitrary blocking code. A later resume restarts the node; side effects
++before the interrupt could be repeated. The integration deliberately does not
++resume, and does not claim terminal cancellation or idempotent replay.
++
++The worker discards inherited environment names outside a small path/locale
++allowlist without fetching their values, disables LangSmith/LangChain tracing,
++and rejects socket connections before importing LangGraph. No model or provider
++is instantiated, and the harness does not read any API key. Installed transitive
++clients are dependencies, not invoked services.
++This guard is an experiment constraint, not a sandbox against malicious code.
++
++Control authority declares `writable_by_controlled_system=true`: separate local
++process roles are not a security boundary. No independent-observer policy is
++supplied. D's `explain` output remains derived and non-normative:
++`enforcement_observed` and `relying_party_claim_support` remain
++`NOT_EVALUATED`; absent evidence remains MISSING. Even observed cooperative
++pause does not upgrade these unavailable native predicates. Normal execution
++has no stop lifecycle; its empty input honestly yields MISSING evidence.
++
++## Official API/source basis
++
++Checked on 2026-11-02, then confirmed against the installed pinned package:
++
++- [Install LangGraph](https://docs.langchain.com/oss/python/langgraph/install): base runtime installation; provider integrations are separate.
++- [Interrupts](https://docs.langchain.com/oss/python/langgraph/interrupts): node-local interrupt, checkpointer and thread ID, resume and node replay semantics.
++- [Streaming and v2 invoke output](https://docs.langchain.com/oss/python/langgraph/streaming): `GraphOutput.value` and `.interrupts` for v2 invocation.
++- [Interrupt API](https://reference.langchain.com/python/langgraph/types/interrupt): native resumable interrupt and checkpoint requirement.
++- [Pinned LangGraph release](https://pypi.org/project/langgraph/1.2.19/): exact measured distribution, additionally fixed by wheel hash.
++
++The mutable online docs are background context; the lock, source hashes,
++tests, actual recorded outputs, and [RESULTS.md](../../reports/langgraph/RESULTS.md)
++are the measurement basis.
+diff --git a/integrations/langgraph/dependencies.json b/integrations/langgraph/dependencies.json
+new file mode 100644
+index 0000000000000000000000000000000000000000..6bd05bf0556421132dda4f5940ec5d6fa610ffe9
+--- /dev/null
++++ b/integrations/langgraph/dependencies.json
+@@ -0,0 +1,293 @@
++{
++  "python": {
++    "implementation_name": "cpython",
++    "implementation_version": "3.12.3",
++    "os_name": "posix",
++    "platform_machine": "x86_64",
++    "platform_release": "6.11.0-29-generic",
++    "platform_system": "Linux",
++    "platform_version": "#29~24.04.1-Ubuntu SMP PREEMPT_DYNAMIC Thu Jun 26 14:16:59 UTC 2",
++    "python_full_version": "3.12.3",
++    "platform_python_implementation": "CPython",
++    "python_version": "3.12",
++    "sys_platform": "linux"
++  },
++  "packages": [
++    {
++      "name": "annotated-types",
++      "version": "0.8.0",
++      "url": "https://files.pythonhosted.org/packages/99/91/8acff4f5e50511b911bbccb72b8628a49c68ce14148cd9f6431094859a90/annotated_types-0.8.0-py3-none-any.whl",
++      "sha256": "f072f4d804ea359e4eaf198b1af7a8b0943881a87f31bb764f8bf219bb9419e0"
++    },
++    {
++      "name": "anyio",
++      "version": "4.16.0",
++      "url": "https://files.pythonhosted.org/packages/a9/16/7757fb84c819accc7d7e9af5291b261e4abb8627ee040f99e7d35ef2457a/anyio-4.16.0-py3-none-any.whl",
++      "sha256": "c66ae634e0b8228396b801741beb3294326d4b6102f7bba4041c0dfb58c29026"
++    },
++    {
++      "name": "attrs",
++      "version": "26.1.0",
++      "url": "https://files.pythonhosted.org/packages/64/b4/17d4b0b2a2dc85a6df63d1157e028ed19f90d4cd97c36717afef2bc2f395/attrs-26.1.0-py3-none-any.whl",
++      "sha256": "c647aa4a12dfbad9333ca4e71fe62ddc36f4e63b2d260a37a8b83d2f043ac309"
++    },
++    {
++      "name": "certifi",
++      "version": "2026.10.23",
++      "url": "https://files.pythonhosted.org/packages/32/d1/a3652fe2c19134d0d15922177821d863cbd7e842d53a21bbe7e8e3a1b5ac/certifi-2026.10.23-py3-none-any.whl",
++      "sha256": "e9b54de76e530bb6cf0ccd036787103acb58fd42ba930ea8bf948ddbaa2f61d1"
++    },
++    {
++      "name": "cffi",
++      "version": "2.1.1",
++      "url": "https://files.pythonhosted.org/packages/b1/db/dceb9dd5b231e1da801793f8acc9f3c52a7e1afe40bb1aae37e02b0faad5/cffi-2.1.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl",
++      "sha256": "c1453022f490d2459a11819d83ad1d586e9ff65a12ac3e705ffebd46d3685dcf"
++    },
++    {
++      "name": "charset-normalizer",
++      "version": "3.5.2",
++      "url": "https://files.pythonhosted.org/packages/7f/c5/38806a25ab5e65fc178f39affeda20858efafede2fce1ffc2556cfc9fe73/charset_normalizer-3.5.2-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl",
++      "sha256": "3d31298449090ab8d47b7b1b2a555ff73cac7ed438a08b7ac160980c7ebed649"
++    },
++    {
++      "name": "cryptography",
++      "version": "48.0.0",
++      "url": "https://files.pythonhosted.org/packages/d0/c0/7101d3b7215edcdc90c45da544961fd8ed2d6448f77577460fa75a8443f7/cryptography-48.0.0-cp311-abi3-manylinux_2_34_x86_64.whl",
++      "sha256": "bd72e68b06bb1e96913f97dd4901119bc17f39d4586a5adf2d3e47bc2b9d58b5"
++    },
++    {
++      "name": "distro",
++      "version": "1.9.0",
++      "url": "https://files.pythonhosted.org/packages/12/b3/231ffd4ab1fc9d679809f356cebee130ac7daa00d6d6f3206dd4fd137e9e/distro-1.9.0-py3-none-any.whl",
++      "sha256": "7bffd925d65168f85027d8da9af6bddab658135b840670a223589bc0c8ef02b2"
++    },
++    {
++      "name": "h11",
++      "version": "0.16.0",
++      "url": "https://files.pythonhosted.org/packages/04/4b/29cac41a4d98d144bf5f6d33995617b185d14b22401f75ca86f384e87ff1/h11-0.16.0-py3-none-any.whl",
++      "sha256": "63cf8bbe7522de3bf65932fda1d9c2772064ffb3dae62d55932da54b31cb6c86"
++    },
++    {
++      "name": "httpcore",
++      "version": "1.0.9",
++      "url": "https://files.pythonhosted.org/packages/7e/f5/f66802a942d491edb555dd61e3a9961140fd64c90bce1eafd741609d334d/httpcore-1.0.9-py3-none-any.whl",
++      "sha256": "2d400746a40668fc9dec9810239072b40b4484b640a8c38fd654a024c7a1bf55"
++    },
++    {
++      "name": "httpcore2",
++      "version": "2.16.0",
++      "url": "https://files.pythonhosted.org/packages/af/c2/ce417c397afa5181f0e3c6ff01a4d01639414e1adef08730d97571297151/httpcore2-2.16.0-py3-none-any.whl",
++      "sha256": "5c4358319f2602d984ad93182c9fee5160f22e9da7babdda870a5e7c4e2dc34f"
++    },
++    {
++      "name": "httpx",
++      "version": "0.28.1",
++      "url": "https://files.pythonhosted.org/packages/2a/39/e50c7c3a983047577ee07d2a9e53faf5a69493943ec3f6a384bdc792deb2/httpx-0.28.1-py3-none-any.whl",
++      "sha256": "d909fcccc110f8c7faf814ca82a9a4d816bc5a6dbfea25d6591d6985b8ba59ad"
++    },
++    {
++      "name": "httpx2",
++      "version": "2.16.0",
++      "url": "https://files.pythonhosted.org/packages/7b/3d/2e4bc4fd1ef9770871669adb348d612a6e4786b303a23f9935b81c48dd60/httpx2-2.16.0-py3-none-any.whl",
++      "sha256": "fd2c5d7909e8d86fe92d53020c310ca0e4e431b838c207c5754b9bbf0308d49a"
++    },
++    {
++      "name": "idna",
++      "version": "3.20",
++      "url": "https://files.pythonhosted.org/packages/58/a2/bb081bab032533a855d44de1d56f8e8426114ff1ba5d1f07a438a0a654f8/idna-3.20-py3-none-any.whl",
++      "sha256": "ab7ae7122974553370f0bdb919e1a960b2cd1bc1ef0276416d896db81c14582c"
++    },
++    {
++      "name": "jsonpatch",
++      "version": "1.39",
++      "url": "https://files.pythonhosted.org/packages/55/ed/e9c6dc32d9a048b80e2dd2e17983cd23f4fa32ed906c2bad5b9a13eeb487/jsonpatch-1.39-py3-none-any.whl",
++      "sha256": "8c1849545b8b245623274b881e18cf5606dc4f11272cde327d3c1f3997181097"
++    },
++    {
++      "name": "jsonpointer",
++      "version": "3.7",
++      "url": "https://files.pythonhosted.org/packages/17/91/ffedd6ed8952a65dd4497a0c95b4d87f42f5ce3334f01e344027099bc0be/jsonpointer-3.7-py3-none-any.whl",
++      "sha256": "41005d228d8a6ec517b727d2821b7fa16e6bfc7c695ca3339f8331cccaba3887"
++    },
++    {
++      "name": "jsonschema",
++      "version": "4.25.1",
++      "url": "https://files.pythonhosted.org/packages/bf/9c/8c95d856233c1f82500c2450b8c68576b4cf1c871db3afac5c34ff84e6fd/jsonschema-4.25.1-py3-none-any.whl",
++      "sha256": "3fba0169e345c7175110351d456342c364814cfcf3b964ba4587f22915230a63"
++    },
++    {
++      "name": "jsonschema-specifications",
++      "version": "2025.9.1",
++      "url": "https://files.pythonhosted.org/packages/41/45/1a4ed80516f02155c51f51e8cedb3c1902296743db0bbc66608a0db2814f/jsonschema_specifications-2025.9.1-py3-none-any.whl",
++      "sha256": "98802fee3a11ee76ecaca44429fda8a41bff98b00a0f2838151b113f210cc6fe"
++    },
++    {
++      "name": "langchain-core",
++      "version": "1.7.4",
++      "url": "https://files.pythonhosted.org/packages/99/dc/8c0e82e0171187f3425b3f7ef962858991ad731b4618d7e814eb72715091/langchain_core-1.7.4-py3-none-any.whl",
++      "sha256": "20963807aa074366a3820a5d980399009ac05e17b77105c1e847db3ea3b4829f"
++    },
++    {
++      "name": "langchain-protocol",
++      "version": "0.0.20",
++      "url": "https://files.pythonhosted.org/packages/02/4b/f1c99a0b27c5ff8b4b131c0d6e62012c17cc424089efe213767db927afd2/langchain_protocol-0.0.20-py3-none-any.whl",
++      "sha256": "3c935e5e46b0f6f9cb52f45ba7cfa53d1b9fa80c82c4a277d47f03e07f7385b1"
++    },
++    {
++      "name": "langgraph",
++      "version": "1.2.19",
++      "url": "https://files.pythonhosted.org/packages/d7/9e/bd29e368fb16feea8d24270d377d56c34b49afea371717124f19cdfa890c/langgraph-1.2.19-py3-none-any.whl",
++      "sha256": "6094a5cbed52a77d8c74c276fcd2056abde7b2836eab1c7a6b74bacbd1a269b3"
++    },
++    {
++      "name": "langgraph-checkpoint",
++      "version": "4.3.1",
++      "url": "https://files.pythonhosted.org/packages/f3/40/4251d676b5c585d42175c901175d4bff56e22939625e18bcef781fc3e893/langgraph_checkpoint-4.3.1-py3-none-any.whl",
++      "sha256": "215a826935c8db4d9676e79fd95943e5b3847d78604390898e1d98581cc594e5"
++    },
++    {
++      "name": "langgraph-prebuilt",
++      "version": "1.1.1",
++      "url": "https://files.pythonhosted.org/packages/38/26/4da2c6ae8b9fe73c3c09cf32c058415c5041e773fd00219c5e0d76588c23/langgraph_prebuilt-1.1.1-py3-none-any.whl",
++      "sha256": "fae17c22562e501940eb7aa052a15c58a431febbabf33f8ad172e1b44354a7e4"
++    },
++    {
++      "name": "langgraph-sdk",
++      "version": "0.4.11",
++      "url": "https://files.pythonhosted.org/packages/01/88/69899bb20b96b80468e98b90377e605c36658125e7e7fba401868a86138e/langgraph_sdk-0.4.11-py3-none-any.whl",
++      "sha256": "6a65be4a8f825966a07317b8e34e3337cd227b9b58b185f0123fd13c3d0116fa"
++    },
++    {
++      "name": "langsmith",
++      "version": "0.14.17",
++      "url": "https://files.pythonhosted.org/packages/a8/11/4da3faa7fd20c487c4770f14aa2b4247871e787ad305c2ba528fcf0f2bcc/langsmith-0.14.17-py3-none-any.whl",
++      "sha256": "0aa2c79936c93c7cea9c55656f05e21cc5da715fecbdbda439d084adc08429be"
++    },
++    {
++      "name": "orjson",
++      "version": "3.13.0",
++      "url": "https://files.pythonhosted.org/packages/ea/8c/bb07c368abbf4021c4cd01c12edb526e00090f7f750ff1b88da6e6b6c7a6/orjson-3.13.0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
++      "sha256": "bceadfd314bd238f584fc229a4bbaf0e573597e7a026dec5429fbf29fd66c641"
++    },
++    {
++      "name": "ormsgpack",
++      "version": "1.13.0",
++      "url": "https://files.pythonhosted.org/packages/49/f1/1bc3710e6f1b8d4da288d949aa8c04d12d5265c23004799f0b102778ee2c/ormsgpack-1.13.0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
++      "sha256": "8187048ec7b9ec628f985954e2409248acfeb8732e2751305649eaaba7304db7"
++    },
++    {
++      "name": "packaging",
++      "version": "26.3",
++      "url": "https://files.pythonhosted.org/packages/63/34/ba1c580383c9eada3711951fef0795c80b829a078d72188184bcab9dd527/packaging-26.3-py3-none-any.whl",
++      "sha256": "d7193f7c8e4e93f444fde0262bf90af30e16fa0ad0ad44cb553c87339b23cd1c"
++    },
++    {
++      "name": "pycparser",
++      "version": "3.12",
++      "url": "https://files.pythonhosted.org/packages/b6/ae/315bbeee126a769cbde43cf4908acb4b40408d8bf8bbf334dd7368d8dadf/pycparser-3.12-py3-none-any.whl",
++      "sha256": "a076f3f489b39b43ed13563a1dafe42447445bec2e294154ec5c57fcdda4c85e"
++    },
++    {
++      "name": "pydantic",
++      "version": "2.14.2",
++      "url": "https://files.pythonhosted.org/packages/97/01/c71a71258b58659c72504e5fd65b451f6e36e34dc931d0b237ded213c814/pydantic-2.14.2-py3-none-any.whl",
++      "sha256": "7efbf7507b937931cd32a5755acb00ea1cf5ccb1d4e8067a5850d5069e382118"
++    },
++    {
++      "name": "pydantic_core",
++      "version": "2.50.2",
++      "url": "https://files.pythonhosted.org/packages/08/93/2a6556bbdb8e918175af9d849a5d0b367b5644e41939d040f3a7215b1339/pydantic_core-2.50.2-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl",
++      "sha256": "9667637665acba166a7dbbc786f14c50512d3a01f7199e0e1a13b929e92d7c7a"
++    },
++    {
++      "name": "PyYAML",
++      "version": "6.0.3",
++      "url": "https://files.pythonhosted.org/packages/8b/9d/b3589d3877982d4f2329302ef98a8026e7f4443c765c46cfecc8858c6b4b/pyyaml-6.0.3-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl",
++      "sha256": "ba1cc08a7ccde2d2ec775841541641e4548226580ab850948cbfda66a1befcdc"
++    },
++    {
++      "name": "referencing",
++      "version": "0.37.0",
++      "url": "https://files.pythonhosted.org/packages/2c/58/ca301544e1fa93ed4f80d724bf5b194f6e4b945841c5bfd555878eea9fcb/referencing-0.37.0-py3-none-any.whl",
++      "sha256": "381329a9f99628c9069361716891d34ad94af76e461dcb0335825aecc7692231"
++    },
++    {
++      "name": "requests",
++      "version": "2.34.2",
++      "url": "https://files.pythonhosted.org/packages/a0/f4/c67b0b3f1b9245e8d266f0f112c500d50e5b4e83cb6f3b71b6528104182a/requests-2.34.2-py3-none-any.whl",
++      "sha256": "2a0d60c172f83ac6ab31e4554906c0f3b3588d37b5cb939b1c061f4907e278e0"
++    },
++    {
++      "name": "requests-toolbelt",
++      "version": "1.0.0",
++      "url": "https://files.pythonhosted.org/packages/3f/51/d4db610ef29373b879047326cbf6fa98b6c1969d6f6dc423279de2b1be2c/requests_toolbelt-1.0.0-py2.py3-none-any.whl",
++      "sha256": "cccfdd665f0a24fcf4726e690f65639d272bb0637b9b92dfd91a5568ccf6bd06"
++    },
++    {
++      "name": "rpds-py",
++      "version": "2026.9.1",
++      "url": "https://files.pythonhosted.org/packages/1d/6d/b26eb1e75395925b3a142ed351cbed2ec8212f5c9d937aee3df32c701baa/rpds_py-2026.9.1-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
++      "sha256": "addeda51556dac7c1a2f14cda62db8b621cd12afba3091d03a96c72932387eab"
++    },
++    {
++      "name": "sniffio",
++      "version": "1.3.1",
++      "url": "https://files.pythonhosted.org/packages/e9/44/75a9c9421471a6c4805dbf2356f7c181a29c1879239abab1ea2cc8f38b40/sniffio-1.3.1-py3-none-any.whl",
++      "sha256": "2f6da418d1f1e0fddd844478f41680e794e6051915791a034ff65e5f100525a2"
++    },
++    {
++      "name": "tenacity",
++      "version": "9.2.1",
++      "url": "https://files.pythonhosted.org/packages/d6/26/1ff2b0721ac66a3ec5b1402b333110b352ab0a8724052ac279a7b82d40c4/tenacity-9.2.1-py3-none-any.whl",
++      "sha256": "9e56f17539296baab7beabb08b92f6ee3d7be92d8be72d763360677c2ad6580e"
++    },
++    {
++      "name": "truststore",
++      "version": "0.10.5",
++      "url": "https://files.pythonhosted.org/packages/51/e9/3a7820be2bb0fe53b6bc9c3be26d3d1158004e4c3ab953aa6840b955b1e9/truststore-0.10.5-py3-none-any.whl",
++      "sha256": "9aaaedaefaf06d8b206278cf8b5012bc897f485a874503501e12d776df78951c"
++    },
++    {
++      "name": "typing-inspection",
++      "version": "0.4.4",
++      "url": "https://files.pythonhosted.org/packages/67/81/4add07e5172b7ac40d8ed5ff580409a7801a4fe26d529bdd915401dabfbe/typing_inspection-0.4.4-py3-none-any.whl",
++      "sha256": "65b8397ba37ccbce054456aaccddfc91e6e3083c92824df348d96ca832f3f147"
++    },
++    {
++      "name": "typing_extensions",
++      "version": "4.16.0",
++      "url": "https://files.pythonhosted.org/packages/49/d3/b8441a820a491ddfc024b0b0cf0393375b75ea13866d9c66727e54c2fc80/typing_extensions-4.16.0-py3-none-any.whl",
++      "sha256": "481caa481374e813c1b176ada14e97f1f67a4539ce9cfeb3f350d78d6370c2e8"
++    },
++    {
++      "name": "urllib3",
++      "version": "2.8.0",
++      "url": "https://files.pythonhosted.org/packages/92/9d/c4e665119135114480843e7ab388fa94d8480650450e6f8e26b70d323a4c/urllib3-2.8.0-py3-none-any.whl",
++      "sha256": "0cf3cae568d36aa9576b28dfb35f11328f1cb974ca7647d9475ebb86c75ac6e3"
++    },
++    {
++      "name": "uuid_utils",
++      "version": "0.19.0",
++      "url": "https://files.pythonhosted.org/packages/be/45/8238eac588b668e5c500cb187fd74a9f6d984c09f3f3f2fa4161d3c07eb7/uuid_utils-0.19.0-cp310-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl",
++      "sha256": "b8060530a8fa27f11947489c79bc36e6ebb465b2d714945364dc397283309417"
++    },
++    {
++      "name": "websockets",
++      "version": "17.4",
++      "url": "https://files.pythonhosted.org/packages/cb/18/6229d6583031ca81d092a0cd887a13a57b402fb555acc323d39b45967eb7/websockets-17.4-cp312-cp312-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl",
++      "sha256": "9ae1429ee9e52b139167ed0169757806a27ed7307e942e8c62037a9184e9843b"
++    },
++    {
++      "name": "xxhash",
++      "version": "4.0.2",
++      "url": "https://files.pythonhosted.org/packages/b2/c6/3a85fc0b821ed2dfcf6fb7cfdf07e0b261ada40374583a50abb3480f2863/xxhash-4.0.2-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl",
++      "sha256": "7c7c95dba490be3b4e5a2fa5595b4d4f088fe7b8726e5998b8c1d83b1f9eb3e4"
++    },
++    {
++      "name": "zstandard",
++      "version": "0.25.0",
++      "url": "https://files.pythonhosted.org/packages/53/60/7be26e610767316c028a2cbedb9a3beabdbe33e2182c373f71a1c0b88f36/zstandard-0.25.0-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.whl",
++      "sha256": "5a56ba0db2d244117ed744dfa8f6f5b366e14148e00de44723413b2f3938a902"
++    }
++  ]
++}
+diff --git a/integrations/langgraph/requirements.lock b/integrations/langgraph/requirements.lock
+new file mode 100644
+index 0000000000000000000000000000000000000000..8de9aeb777bbeabc04e83eb1aa45bdeb34c577a7
+--- /dev/null
++++ b/integrations/langgraph/requirements.lock
+@@ -0,0 +1,47 @@
++# CPython 3.12 Linux x86_64; exact installed wheel hashes from pip --report.
++annotated-types==0.8.0 --hash=sha256:f072f4d804ea359e4eaf198b1af7a8b0943881a87f31bb764f8bf219bb9419e0
++anyio==4.16.0 --hash=sha256:c66ae634e0b8228396b801741beb3294326d4b6102f7bba4041c0dfb58c29026
++attrs==26.1.0 --hash=sha256:c647aa4a12dfbad9333ca4e71fe62ddc36f4e63b2d260a37a8b83d2f043ac309
++certifi==2026.10.23 --hash=sha256:e9b54de76e530bb6cf0ccd036787103acb58fd42ba930ea8bf948ddbaa2f61d1
++cffi==2.1.1 --hash=sha256:c1453022f490d2459a11819d83ad1d586e9ff65a12ac3e705ffebd46d3685dcf
++charset-normalizer==3.5.2 --hash=sha256:3d31298449090ab8d47b7b1b2a555ff73cac7ed438a08b7ac160980c7ebed649
++cryptography==48.0.0 --hash=sha256:bd72e68b06bb1e96913f97dd4901119bc17f39d4586a5adf2d3e47bc2b9d58b5
++distro==1.9.0 --hash=sha256:7bffd925d65168f85027d8da9af6bddab658135b840670a223589bc0c8ef02b2
++h11==0.16.0 --hash=sha256:63cf8bbe7522de3bf65932fda1d9c2772064ffb3dae62d55932da54b31cb6c86
++httpcore==1.0.9 --hash=sha256:2d400746a40668fc9dec9810239072b40b4484b640a8c38fd654a024c7a1bf55
++httpcore2==2.16.0 --hash=sha256:5c4358319f2602d984ad93182c9fee5160f22e9da7babdda870a5e7c4e2dc34f
++httpx==0.28.1 --hash=sha256:d909fcccc110f8c7faf814ca82a9a4d816bc5a6dbfea25d6591d6985b8ba59ad
++httpx2==2.16.0 --hash=sha256:fd2c5d7909e8d86fe92d53020c310ca0e4e431b838c207c5754b9bbf0308d49a
++idna==3.20 --hash=sha256:ab7ae7122974553370f0bdb919e1a960b2cd1bc1ef0276416d896db81c14582c
++jsonpatch==1.39 --hash=sha256:8c1849545b8b245623274b881e18cf5606dc4f11272cde327d3c1f3997181097
++jsonpointer==3.7 --hash=sha256:41005d228d8a6ec517b727d2821b7fa16e6bfc7c695ca3339f8331cccaba3887
++jsonschema==4.25.1 --hash=sha256:3fba0169e345c7175110351d456342c364814cfcf3b964ba4587f22915230a63
++jsonschema-specifications==2025.9.1 --hash=sha256:98802fee3a11ee76ecaca44429fda8a41bff98b00a0f2838151b113f210cc6fe
++langchain-core==1.7.4 --hash=sha256:20963807aa074366a3820a5d980399009ac05e17b77105c1e847db3ea3b4829f
++langchain-protocol==0.0.20 --hash=sha256:3c935e5e46b0f6f9cb52f45ba7cfa53d1b9fa80c82c4a277d47f03e07f7385b1
++langgraph==1.2.19 --hash=sha256:6094a5cbed52a77d8c74c276fcd2056abde7b2836eab1c7a6b74bacbd1a269b3
++langgraph-checkpoint==4.3.1 --hash=sha256:215a826935c8db4d9676e79fd95943e5b3847d78604390898e1d98581cc594e5
++langgraph-prebuilt==1.1.1 --hash=sha256:fae17c22562e501940eb7aa052a15c58a431febbabf33f8ad172e1b44354a7e4
++langgraph-sdk==0.4.11 --hash=sha256:6a65be4a8f825966a07317b8e34e3337cd227b9b58b185f0123fd13c3d0116fa
++langsmith==0.14.17 --hash=sha256:0aa2c79936c93c7cea9c55656f05e21cc5da715fecbdbda439d084adc08429be
++orjson==3.13.0 --hash=sha256:bceadfd314bd238f584fc229a4bbaf0e573597e7a026dec5429fbf29fd66c641
++ormsgpack==1.13.0 --hash=sha256:8187048ec7b9ec628f985954e2409248acfeb8732e2751305649eaaba7304db7
++packaging==26.3 --hash=sha256:d7193f7c8e4e93f444fde0262bf90af30e16fa0ad0ad44cb553c87339b23cd1c
++pycparser==3.12 --hash=sha256:a076f3f489b39b43ed13563a1dafe42447445bec2e294154ec5c57fcdda4c85e
++pydantic==2.14.2 --hash=sha256:7efbf7507b937931cd32a5755acb00ea1cf5ccb1d4e8067a5850d5069e382118
++pydantic_core==2.50.2 --hash=sha256:9667637665acba166a7dbbc786f14c50512d3a01f7199e0e1a13b929e92d7c7a
++PyYAML==6.0.3 --hash=sha256:ba1cc08a7ccde2d2ec775841541641e4548226580ab850948cbfda66a1befcdc
++referencing==0.37.0 --hash=sha256:381329a9f99628c9069361716891d34ad94af76e461dcb0335825aecc7692231
++requests==2.34.2 --hash=sha256:2a0d60c172f83ac6ab31e4554906c0f3b3588d37b5cb939b1c061f4907e278e0
++requests-toolbelt==1.0.0 --hash=sha256:cccfdd665f0a24fcf4726e690f65639d272bb0637b9b92dfd91a5568ccf6bd06
++rpds-py==2026.9.1 --hash=sha256:addeda51556dac7c1a2f14cda62db8b621cd12afba3091d03a96c72932387eab
++sniffio==1.3.1 --hash=sha256:2f6da418d1f1e0fddd844478f41680e794e6051915791a034ff65e5f100525a2
++tenacity==9.2.1 --hash=sha256:9e56f17539296baab7beabb08b92f6ee3d7be92d8be72d763360677c2ad6580e
++truststore==0.10.5 --hash=sha256:9aaaedaefaf06d8b206278cf8b5012bc897f485a874503501e12d776df78951c
++typing-inspection==0.4.4 --hash=sha256:65b8397ba37ccbce054456aaccddfc91e6e3083c92824df348d96ca832f3f147
++typing_extensions==4.16.0 --hash=sha256:481caa481374e813c1b176ada14e97f1f67a4539ce9cfeb3f350d78d6370c2e8
++urllib3==2.8.0 --hash=sha256:0cf3cae568d36aa9576b28dfb35f11328f1cb974ca7647d9475ebb86c75ac6e3
++uuid_utils==0.19.0 --hash=sha256:b8060530a8fa27f11947489c79bc36e6ebb465b2d714945364dc397283309417
++websockets==17.4 --hash=sha256:9ae1429ee9e52b139167ed0169757806a27ed7307e942e8c62037a9184e9843b
++xxhash==4.0.2 --hash=sha256:7c7c95dba490be3b4e5a2fa5595b4d4f088fe7b8726e5998b8c1d83b1f9eb3e4
++zstandard==0.25.0 --hash=sha256:5a56ba0db2d244117ed744dfa8f6f5b366e14148e00de44723413b2f3938a902
+diff --git a/integrations/langgraph/run.py b/integrations/langgraph/run.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..2fd6dfd464ee755934d9253863f9e40af9de5a48
+--- /dev/null
++++ b/integrations/langgraph/run.py
+@@ -0,0 +1,410 @@
++#!/usr/bin/env python3
++"""Real, local LangGraph execution; no model, provider, or remote service."""
++import argparse
++from datetime import datetime, timezone
++import hashlib
++import importlib.metadata
++import json
++import multiprocessing as mp
++import os
++from pathlib import Path
++import platform
++import socket
++import subprocess
++import sys
++import time
++from typing import TypedDict
++
++ROOT = Path(__file__).resolve().parents[2]
++sys.path.insert(0, str(ROOT))
++
++from cryptography.hazmat.primitives import serialization
++from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
++from tools.airep_v02 import Chain, digest_bytes, digest_json, reference
++from tools.airep_v02.explain import explain, render_text
++from tools.airep_v02.reconcile import reconcile
++from tools.airep_v02.verify import operator_inputs
++
++SCENARIOS = ('normal', 'stop-before-start', 'stop-during-action',
++             'receiver-unreachable', 'receiver-ignores-stop', 'effect-unobserved')
++STEPS = 4
++TIMEOUT = 15.0
++BASE = '0130fcf8e7d70a0f9c4f977957e5de76ca8ef689'
++
++
++def utc():
++    return datetime.now(timezone.utc).isoformat(timespec='microseconds').replace('+00:00', 'Z')
++
++
++def encoded(value):
++    return (json.dumps(value, sort_keys=True, separators=(',', ':'), ensure_ascii=True) + '\n').encode()
++
++
++def save(path, value):
++    path.write_text(json.dumps(value, indent=2, sort_keys=True) + '\n')
++
++
++def event(kind, actor, **data):
++    return dict(kind=kind, actor=actor, timestamp_utc=utc(), monotonic_ns=time.monotonic_ns(), **data)
++
++
++def disable_network():
++    """Fail if a dependency tries outbound traffic; no credential is read."""
++    # Delete by name without fetching values; dependencies cannot inherit keys.
++    for name in tuple(os.environ):
++        if name not in {'PATH', 'LANG', 'LC_ALL', 'TZ', 'PYTHONHASHSEED', 'SYSTEMROOT'}:
++            del os.environ[name]
++    os.environ['LANGSMITH_TRACING'] = 'false'
++    os.environ['LANGCHAIN_TRACING_V2'] = 'false'
++    def denied(*args, **kwargs):
++        raise RuntimeError('Network disabled in local runtime experiment')
++    socket.socket.connect = denied
++    socket.socket.connect_ex = denied
++    socket.create_connection = denied
++
++
++class State(TypedDict):
++    completed_steps: int
++
++
++def worker(directory, scenario, control, telemetry, begin, continue_action):
++    """One spawned process runs the actual installed LangGraph interpreter."""
++    disable_network()
++    try:
++        from langgraph.checkpoint.memory import InMemorySaver
++        from langgraph.graph import END, START, StateGraph
++        from langgraph.types import interrupt
++
++        def emit(kind, **data):
++            telemetry.send(event(kind, 'runtime', **data))
++
++        unavailable = scenario == 'receiver-unreachable'
++        if unavailable:
++            control.close()  # Fault injection: actual pipe endpoint is closed.
++            emit('receiver_endpoint_closed')
++        emit('worker_ready', pid=os.getpid(), langgraph=importlib.metadata.version('langgraph'))
++        if not begin.wait(TIMEOUT):
++            raise TimeoutError('start barrier expired')
++
++        def checkpoint():
++            if unavailable or not control.poll():
++                return
++            raw = control.recv_bytes()
++            command = json.loads(raw)
++            emit('receiver_observed', instruction=command, instruction_digest=digest_bytes(raw))
++            if scenario == 'receiver-ignores-stop':
++                emit('enforcement_unavailable', instruction_id=command['instruction_id'],
++                     attempted_action=command['action'], actual_action={'operation': 'continue-without-pause'},
++                     reason='Deliberately disabled cooperative handler; command was received.')
++                return
++            emit('enforcement_requested', instruction_id=command['instruction_id'], action=command['action'])
++            # Do not catch GraphInterrupt. LangGraph must handle and persist it.
++            interrupt({'instruction_id': command['instruction_id'], 'operation': 'cooperative-pause'})
++
++        def controlled_action(state):
++            emit('node_entered', node='controlled_action')
++            checkpoint()  # Stop before the first business side effect.
++            for step in range(1, STEPS + 1):
++                with (Path(directory) / 'effects.jsonl').open('ab') as stream:
++                    stream.write(encoded({'step': step}))
++                    stream.flush()
++                    os.fsync(stream.fileno())
++                emit('business_step_written', step=step)
++                if step == 1:
++                    emit('action_barrier_reached', completed_steps=step)
++                    if not continue_action.wait(TIMEOUT):
++                        raise TimeoutError('in-action barrier expired')
++                checkpoint()  # Cooperative boundary; cannot preempt a file write.
++            return {'completed_steps': STEPS}
++
++        builder = StateGraph(State)
++        builder.add_node('controlled_action', controlled_action)
++        builder.add_edge(START, 'controlled_action')
++        builder.add_edge('controlled_action', END)
++        graph = builder.compile(checkpointer=InMemorySaver())
++        config = {'configurable': {'thread_id': scenario}}
++        emit('graph_invocation_started')
++        result = graph.invoke({'completed_steps': 0}, config, version='v2')
++        snapshot = graph.get_state(config)
++        if result.interrupts:
++            emit('native_interrupt_observed', interrupts=[{'id': i.id, 'value': i.value} for i in result.interrupts],
++                 checkpoint_next=list(snapshot.next),
++                 checkpoint_interrupts=[i.value for task in snapshot.tasks for i in task.interrupts],
++                 state_value=result.value)
++        else:
++            emit('graph_completed', state_value=result.value, checkpoint_next=list(snapshot.next))
++        emit('worker_finished')
++    except BaseException as exc:
++        telemetry.send(event('worker_error', 'runtime', error=type(exc).__name__, message=str(exc)))
++        raise
++    finally:
++        control.close()
++        telemetry.close()
++
++
++def observe(directory):
++    path = directory / 'effects.jsonl'
++    raw = path.read_bytes() if path.exists() else b''
++    rows = [json.loads(line) for line in raw.splitlines()]
++    return {'file_exists': path.exists(), 'completed_steps': len(rows),
++            'steps': [row['step'] for row in rows], 'file_digest': digest_bytes(raw)}
++
++
++def collect_run(directory, scenario, *, timeout=TIMEOUT):
++    """Barriers order experiments; statuses are derived only from captured events."""
++    if scenario not in SCENARIOS:
++        raise ValueError('unknown scenario')
++    directory.mkdir(parents=True, exist_ok=False)
++    events = []
++    def append(item):
++        item = dict(item, event_id=f'e{len(events)+1:04d}')
++        events.append(item)
++        with (directory / 'events.jsonl').open('ab') as stream:
++            stream.write(encoded(item))
++    ctx = mp.get_context('spawn')
++    receiver, sender = ctx.Pipe(duplex=False)
++    read_events, write_events = ctx.Pipe(duplex=False)
++    begin, continue_action = ctx.Event(), ctx.Event()
++    child = ctx.Process(target=worker, args=(str(directory), scenario, receiver, write_events, begin, continue_action))
++    deadline = time.monotonic() + timeout
++    def until(kind):
++        while True:
++            remaining = deadline - time.monotonic()
++            if remaining <= 0 or not read_events.poll(remaining):
++                raise TimeoutError('waiting for ' + kind)
++            try:
++                item = read_events.recv()
++            except EOFError as exc:
++                raise RuntimeError('runtime telemetry ended before ' + kind) from exc
++            append(item)
++            if item['kind'] == 'worker_error':
++                raise RuntimeError(item['message'])
++            if item['kind'] == kind:
++                return
++    def send_stop():
++        command = {'instruction_id': scenario + '.stop', 'action': {'operation': 'cooperative-pause', 'node': 'controlled_action'}}
++        raw = encoded(command)
++        (directory / 'instruction.json').write_bytes(raw)
++        append(event('decision_recorded', 'issuer', instruction=command, instruction_digest=digest_bytes(raw),
++                     policy='Experiment operator requests cooperative pause at next checkpoint'))
++        append(event('control_command_produced', 'issuer', instruction_digest=digest_bytes(raw)))
++        try:
++            sender.send_bytes(raw)
++        except (BrokenPipeError, OSError) as exc:
++            append(event('delivery_failed', 'issuer', instruction_digest=digest_bytes(raw), error=type(exc).__name__))
++        else:
++            append(event('issuer_dispatched', 'issuer', instruction_digest=digest_bytes(raw)))
++    failure = None
++    started = False
++    try:
++        child.start()
++        started = True
++        receiver.close()
++        write_events.close()
++        until('worker_ready')
++        if scenario in ('stop-before-start', 'effect-unobserved'):
++            send_stop()
++        begin.set()
++        if scenario not in ('stop-before-start', 'effect-unobserved'):
++            until('action_barrier_reached')
++            if scenario != 'normal':
++                send_stop()
++            continue_action.set()
++        until('worker_finished')
++        child.join(max(0, deadline - time.monotonic()))
++        if child.is_alive():
++            raise TimeoutError('runtime process did not exit')
++        if child.exitcode != 0:
++            raise RuntimeError('runtime exit code ' + str(child.exitcode))
++        if scenario == 'effect-unobserved':
++            append(event('observation_disabled', 'harness', reason='Negative control: no post-run effect observer executed'))
++        else:
++            start = observe(directory)
++            window_start = time.monotonic_ns()
++            time.sleep(0.03)
++            end = observe(directory)
++            append(event('effect_observed', 'harness', initial=start, final=end,
++                         window_start_ns=window_start, window_end_ns=time.monotonic_ns(),
++                         stable_between_reads=start == end))
++    except BaseException as exc:
++        failure = exc
++        append(event('harness_error', 'harness', error=type(exc).__name__, message=str(exc)))
++    finally:
++        forced = False
++        if started:
++            if child.is_alive():
++                forced = True
++                child.terminate()  # Safety cleanup, never classified as successful stop.
++                child.join(2)
++                if child.is_alive():
++                    child.kill()
++                    child.join(2)
++            alive, exitcode = child.is_alive(), child.exitcode
++        else:
++            alive, exitcode = False, None
++        for connection in (receiver, sender, read_events, write_events):
++            connection.close()
++        append(event('cleanup_completed', 'harness', worker_alive=alive, worker_exitcode=exitcode,
++                     forced_termination=forced))
++        if started and not alive:
++            child.close()
++        if alive:
++            raise RuntimeError('cleanup failed: child remains alive')
++    event_dir = directory / 'events'
++    event_dir.mkdir()
++    for item in events:
++        (event_dir / (item['event_id'] + '.json')).write_bytes(encoded(item))
++    if failure is not None:
++        raise failure
++    return events
++
++
++def project(events, run_id):
++    """A first-party report adapter, not a claim adjudicator or event authenticator.
++
++    In particular the scenario name NEVER selects an execution outcome.
++    Missing receiver/native-pause/observation events cannot produce that evidence.
++    """
++    keys = {role: Ed25519PrivateKey.generate() for role in ('issuer', 'runtime')}
++    chains = {role: Chain(key, 'langgraph-local.' + role, chain_id=run_id + '.' + role)
++              for role, key in keys.items()}
++    bindings = {'bindings': {}, 'producer_bindings': {}, 'witness_bindings': {}}
++    revocation = {'snapshot_id': run_id + '.local-test', 'bindings': {}}
++    for role, key in keys.items():
++        identity = 'langgraph-local.' + role
++        bindings['bindings'][identity] = {'subject_identity': identity, 'role': 'producer', 'suite': 'ed25519', 'trusted': True,
++            'public_key_hex': key.public_key().public_bytes(serialization.Encoding.Raw, serialization.PublicFormat.Raw).hex()}
++        bindings['producer_bindings'][identity] = identity
++        revocation['bindings'][identity] = {'state': 'active'}
++    artifacts = []
++    mapping = []
++    def evidence(items):
++        return [{'type': 'other', 'ref': 'events/' + item['event_id'] + '.json', 'resolvable': True,
++                 'content_hash': digest_bytes(encoded(item))} for item in items]
++    def emit(role, family, payload, items):
++        result = chains[role].emit(family, dict(payload, evidence=evidence(items)),
++            record_id=run_id + '.' + str(len(artifacts)), timestamp=items[-1]['timestamp_utc'],
++            scope={'covers': ['First-party local experiment report derived from referenced event bytes'],
++                   'does_not_cover': ['Independent corroboration', 'Event truth established by signature',
++                                      'Preemptive cancellation', 'LLM behavior', 'Complete history or production deployment']})
++        artifacts.append(result)
++        mapping.append({'artifact_ref': reference(result), 'source_event_ids': [i['event_id'] for i in items]})
++        return result
++    def find(kind):
++        return next((item for item in events if item['kind'] == kind), None)
++    decision_event = find('decision_recorded')
++    if decision_event is None:
++        return artifacts, mapping, bindings, revocation
++    command = decision_event['instruction']
++    action = command['action']
++    decision = emit('issuer', 'decision', {
++        'input': {'input_ref': 'instruction.json', 'input_digest': decision_event['instruction_digest']},
++        'claim': {'assertion': decision_event['policy'], 'basis': ['local-experiment-operator']},
++        'directive': {'verb': 'release', 'policy_basis': ['local-experiment-operator']},
++        'output': {'result_ref': 'events/' + decision_event['event_id'] + '.json',
++                   'result_digest': digest_bytes(encoded(decision_event))}}, [decision_event])
++    common = {'decision_ref': reference(decision), 'instruction_id': command['instruction_id'],
++              'instruction_digest': decision_event['instruction_digest']}
++    control = dict(common, authorized_action_digest=digest_json(action),
++                   authority={'issuer_id': 'langgraph-local.issuer', 'writable_by_controlled_system': True})
++    for kind, native in [('issuer_dispatched', 'dispatched'), ('delivery_failed', 'delivery_failed')]:
++        item = find(kind)
++        if item:
++            emit('issuer', 'control', dict(control, instruction_digest=item['instruction_digest'],
++                 control_event=native, boundary_side='issuer'), [item])
++    receipt = find('receiver_observed')
++    if receipt:
++        emit('runtime', 'control', dict(control, instruction_digest=receipt['instruction_digest'],
++             control_event='received', boundary_side='receiver'), [receipt])
++    execution = None
++    request, paused, refused = find('enforcement_requested'), find('native_interrupt_observed'), find('enforcement_unavailable')
++    # Receipt must match bytes/identity; a request alone is never execution proof.
++    matched = receipt and receipt['instruction_digest'] == common['instruction_digest'] and receipt['instruction'] == command
++    if matched and request and paused and request['action'] == action and request['instruction_id'] == command['instruction_id']:
++        ids = [i['value'].get('instruction_id') for i in paused['interrupts']]
++        checkpoint_ids = [i.get('instruction_id') for i in paused['checkpoint_interrupts']]
++        if command['instruction_id'] in ids and command['instruction_id'] in checkpoint_ids and paused['checkpoint_next']:
++            execution = emit('runtime', 'execution', dict(common, executed_action_digest=digest_json(action), execution_event='executed'),
++                             [receipt, request, paused])
++    elif matched and refused and refused['instruction_id'] == command['instruction_id']:
++        execution = emit('runtime', 'execution', dict(common, executed_action_digest=digest_json(refused['actual_action']), execution_event='failed'),
++                         [receipt, refused])
++    observation = find('effect_observed')
++    if execution and observation:
++        emit('runtime', 'effect', {'decision_ref': reference(decision), 'execution_ref': reference(execution),
++            'observer_relationship': 'same_executor',
++            'observed_state': {'description': 'Local post-run file observation: ' + json.dumps(observation['final'], sort_keys=True)
++                              + '; stability is bounded to the recorded two-read window; not causation.',
++                               'state_digest': digest_json(observation['final'])}}, [observation])
++    return artifacts, mapping, bindings, revocation
++
++
++def source_basis():
++    paths = sorted((ROOT / 'integrations/langgraph').rglob('*.py'))
++    paths += sorted((ROOT / 'tools/airep_v02').glob('*.py'))
++    paths += [ROOT / 'integrations/langgraph/requirements.lock']
++    return [{'path': str(path.relative_to(ROOT)), 'sha256': hashlib.sha256(path.read_bytes()).hexdigest()} for path in paths]
++
++
++def runtime_basis():
++    locked = []
++    for line in (ROOT / 'integrations/langgraph/requirements.lock').read_text().splitlines():
++        if not line or line.startswith('#'):
++            continue
++        name, rest = line.split('==', 1)
++        version = rest.split()[0]
++        installed = importlib.metadata.version(name)
++        if installed != version:
++            raise RuntimeError(f'Pinned dependency mismatch: {name} expected {version}, found {installed}')
++        locked.append({'name': name, 'version': installed})
++    distribution = importlib.metadata.distribution('langgraph')
++    sources = [{'path': str(p), 'sha256': hashlib.sha256(distribution.locate_file(p).read_bytes()).hexdigest()}
++               for p in distribution.files if str(p).startswith('langgraph/') and str(p).endswith('.py')]
++    return {'dependencies': locked, 'installed_langgraph_source_files': sorted(sources, key=lambda i: i['path'])}
++
++
++def run_suite(out, scenarios=SCENARIOS):
++    out.mkdir(parents=True, exist_ok=False)
++    record = {'base_commit': BASE, 'source_head': subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip(),
++        'source_worktree_status': subprocess.check_output(['git', 'status', '--porcelain'], cwd=ROOT, text=True),
++        'started_utc': utc(), 'python': sys.version, 'platform': platform.platform(), 'argv': sys.argv,
++        'runtime': {'name': 'langgraph', 'version': importlib.metadata.version('langgraph'), **runtime_basis()},
++        'source_basis': source_basis(), 'scenarios': [],
++        'constraints': ['No LLM or provider calls', 'Native LangGraph cooperative interrupt only',
++                        'One local author/trust domain; no independent interop evidence',
++                        'Authority writable by controlled system; no security-isolation claim']}
++    for scenario in scenarios:
++        directory = out / scenario
++        events = collect_run(directory, scenario)
++        artifacts, mapping, bindings, revocation = project(events, scenario)
++        for name, value in [('lifecycle', artifacts), ('event-mapping', mapping), ('bindings', bindings), ('revocation', revocation)]:
++            save(directory / (name + '.json'), value)
++        ops = operator_inputs(bindings=str(directory / 'bindings.json'), revocation=str(directory / 'revocation.json'))
++        report, view = reconcile(artifacts, ops=ops), explain(artifacts, ops=ops)
++        save(directory / 'reconciliation.json', report)
++        save(directory / 'explain.json', view)
++        (directory / 'explain.txt').write_text(render_text(view))
++        observed = next((i['final']['completed_steps'] for i in events if i['kind'] == 'effect_observed'), None)
++        row = {'scenario': scenario, 'observed_steps': observed,
++               'event_kinds': [i['kind'] for i in events], 'reconciliation_summary': report['summary'],
++               'artifact_count': len(artifacts), 'cleanup': events[-1]}
++        record['scenarios'].append(row)
++        print(json.dumps({'scenario': scenario, 'observed_steps': observed, 'artifacts': len(artifacts), 'summary': report['summary']['status']}), flush=True)
++    record['finished_utc'] = utc()
++    record['artifacts'] = [{'path': str(p.relative_to(out)), 'sha256': hashlib.sha256(p.read_bytes()).hexdigest()}
++                           for p in sorted(out.rglob('*')) if p.is_file()]
++    save(out / 'run_record.json', record)
++    (out / 'run_record.sha256').write_text(hashlib.sha256((out / 'run_record.json').read_bytes()).hexdigest() + '  run_record.json\n')
++    return record
++
++
++def main():
++    parser = argparse.ArgumentParser(description=__doc__)
++    parser.add_argument('--out', type=Path, required=True)
++    parser.add_argument('--scenario', choices=SCENARIOS, action='append')
++    args = parser.parse_args()
++    run_suite(args.out, args.scenario or SCENARIOS)
++
++
++if __name__ == '__main__':
++    main()
+diff --git a/integrations/langgraph/tests/test_runtime.py b/integrations/langgraph/tests/test_runtime.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..b1c4e9c15624c2f61584c748de44862bfd6ac9d4
+--- /dev/null
++++ b/integrations/langgraph/tests/test_runtime.py
+@@ -0,0 +1,148 @@
++import json
++import os
++from pathlib import Path
++import subprocess
++import tempfile
++import unittest
++
++MODULE = Path(__file__).resolve().parents[1] / 'run.py'
++# multiprocessing.spawn needs the module to be importable by its actual name.
++import sys
++sys.path.insert(0, str(MODULE.parent))
++import run
++
++
++class RuntimeEvidenceTests(unittest.TestCase):
++    @classmethod
++    def setUpClass(cls):
++        cls.scratch = tempfile.TemporaryDirectory(prefix='airep-langgraph-tests-')
++        cls.root = Path(cls.scratch.name)
++        cls.events = {name: run.collect_run(cls.root / name, name) for name in run.SCENARIOS}
++
++    @classmethod
++    def tearDownClass(cls):
++        cls.scratch.cleanup()
++
++    def kinds(self, scenario):
++        return [e['kind'] for e in self.events[scenario]]
++
++    def artifacts(self, scenario, events=None):
++        return run.project(events if events is not None else self.events[scenario], scenario)[0]
++
++    def test_normal_executes_all_real_file_steps(self):
++        self.assertEqual(run.observe(self.root / 'normal')['steps'], [1, 2, 3, 4])
++        self.assertIn('graph_completed', self.kinds('normal'))
++        self.assertNotIn('native_interrupt_observed', self.kinds('normal'))
++        self.assertEqual(self.artifacts('normal'), [])
++
++    def test_prestart_stop_has_actual_checkpoint_and_zero_side_effects(self):
++        kinds = self.kinds('stop-before-start')
++        self.assertLess(kinds.index('issuer_dispatched'), kinds.index('graph_invocation_started'))
++        self.assertLess(kinds.index('receiver_observed'), kinds.index('native_interrupt_observed'))
++        self.assertNotIn('business_step_written', kinds)
++        paused = next(e for e in self.events['stop-before-start'] if e['kind'] == 'native_interrupt_observed')
++        self.assertEqual(paused['checkpoint_next'], ['controlled_action'])
++        self.assertEqual(run.observe(self.root / 'stop-before-start')['completed_steps'], 0)
++
++    def test_inflight_stop_preserves_completed_side_effect(self):
++        kinds = self.kinds('stop-during-action')
++        self.assertLess(kinds.index('business_step_written'), kinds.index('issuer_dispatched'))
++        self.assertEqual(run.observe(self.root / 'stop-during-action')['steps'], [1])
++        self.assertIn('native_interrupt_observed', kinds)
++        self.assertNotIn('graph_completed', kinds)
++
++    def test_unreachable_receiver_has_real_failure_and_no_fabricated_receipt(self):
++        events = self.events['receiver-unreachable']
++        failed = next(e for e in events if e['kind'] == 'delivery_failed')
++        self.assertEqual(failed['error'], 'BrokenPipeError')
++        artifacts = self.artifacts('receiver-unreachable')
++        self.assertEqual([a['artifact_type'] for a in artifacts], ['decision', 'control'])
++        self.assertEqual(artifacts[1]['control_event'], 'delivery_failed')
++        report = run.reconcile(artifacts)
++        states = {c['check']: c['state'] for c in report['checks']}
++        self.assertEqual(states['receiver_receipt'], 'MISSING')
++        self.assertEqual(states['execution_evidence'], 'MISSING')
++        self.assertEqual(states['issuer_dispatch'], 'MISSING')
++        self.assertEqual(run.observe(self.root / 'receiver-unreachable')['steps'], [1, 2, 3, 4])
++
++    def test_receipt_is_not_enforcement(self):
++        artifacts = self.artifacts('receiver-ignores-stop')
++        execution = next(a for a in artifacts if a['artifact_type'] == 'execution')
++        self.assertEqual(execution['execution_event'], 'failed')
++        checks = {c['check']: c['state'] for c in run.reconcile(artifacts)['checks']}
++        self.assertEqual(checks['receiver_receipt'], 'SATISFIED')
++        self.assertEqual(checks['execution_outcome'], 'FAILURE')
++        self.assertEqual(checks['toctou'], 'FAILURE')
++        self.assertEqual(run.observe(self.root / 'receiver-ignores-stop')['steps'], [1, 2, 3, 4])
++
++    def test_effect_is_not_inferred_from_native_interrupt(self):
++        artifacts = self.artifacts('effect-unobserved')
++        self.assertTrue(any(a['artifact_type'] == 'execution' for a in artifacts))
++        self.assertFalse(any(a['artifact_type'] == 'effect' for a in artifacts))
++        checks = {c['check']: c['state'] for c in run.reconcile(artifacts)['checks']}
++        self.assertEqual(checks['effect_evidence'], 'MISSING')
++
++    def test_omission_controls_cannot_upgrade_missing_stages(self):
++        for missing in ('receiver_observed', 'enforcement_requested', 'native_interrupt_observed'):
++            with self.subTest(missing=missing):
++                events = [e for e in self.events['stop-before-start'] if e['kind'] != missing]
++                artifacts = self.artifacts('stop-before-start', events)
++                self.assertFalse(any(a['artifact_type'] in ('execution', 'effect') for a in artifacts))
++
++    def test_mismatched_runtime_pause_identity_is_not_stop_execution(self):
++        events = json.loads(json.dumps(self.events['stop-before-start']))
++        paused = next(e for e in events if e['kind'] == 'native_interrupt_observed')
++        paused['interrupts'][0]['value']['instruction_id'] = 'another-command'
++        self.assertFalse(any(a['artifact_type'] == 'execution' for a in self.artifacts('stop-before-start', events)))
++
++    def test_event_pointer_hashes_and_frozen_core_admission(self):
++        for scenario, events in self.events.items():
++            for artifact in self.artifacts(scenario):
++                run.reconcile([artifact])  # Exercises the preserved core verifier.
++                from tools.airep_v02.producer import check_core
++                check_core(artifact)
++                for pointer in artifact['evidence']:
++                    self.assertEqual(run.digest_bytes((self.root / scenario / pointer['ref']).read_bytes()), pointer['content_hash'])
++
++    def test_explain_keeps_non_evaluated_and_same_executor_limits(self):
++        view = run.explain(self.artifacts('stop-during-action'))
++        for name in ('enforcement_observed', 'relying_party_claim_support'):
++            row = next(r for r in view['claim_matrix'] if r['claim'] == name)
++            self.assertIsNone(row['source_status'])
++            self.assertEqual(row['explanatory_status'], 'NOT_EVALUATED')
++        effects = [a for a in self.artifacts('stop-during-action') if a['artifact_type'] == 'effect']
++        self.assertEqual(effects[0]['observer_relationship'], 'same_executor')
++
++    def test_all_runs_join_processes_without_forced_stop(self):
++        for events in self.events.values():
++            cleanup = events[-1]
++            self.assertEqual(cleanup['kind'], 'cleanup_completed')
++            self.assertFalse(cleanup['worker_alive'])
++            self.assertFalse(cleanup['forced_termination'])
++            self.assertEqual(cleanup['worker_exitcode'], 0)
++
++    def test_timeout_cleans_up_and_never_becomes_successful_enforcement(self):
++        out = self.root / 'timeout-negative'
++        with self.assertRaises(TimeoutError):
++            run.collect_run(out, 'normal', timeout=0.001)
++        events = [json.loads(line) for line in (out / 'events.jsonl').read_text().splitlines()]
++        self.assertFalse(events[-1]['worker_alive'])
++        self.assertTrue(events[-1]['forced_termination'])
++        self.assertFalse(any(a['artifact_type'] == 'execution' for a in run.project(events, 'timeout')[0]))
++
++    def test_guard_removes_inherited_values_and_refuses_connections(self):
++        script = ('import os, socket, run; run.disable_network(); '
++                  'assert "K3_TEST_SECRET" not in os.environ; '
++                  'assert os.environ["LANGSMITH_TRACING"] == "false"; '
++                  '\ntry: socket.create_connection(("127.0.0.1", 9))'
++                  '\nexcept RuntimeError as exc: assert "Network disabled" in str(exc)'
++                  '\nelse: raise AssertionError("network guard did not reject connection")')
++        # This is an invented test value, not an existing credential.
++        result = subprocess.run([sys.executable, '-c', script], cwd=MODULE.parent,
++                                env={'PATH': os.defpath, 'K3_TEST_SECRET': 'fixture-only'},
++                                capture_output=True, text=True, timeout=10)
++        self.assertEqual(result.returncode, 0, result.stderr)
++
++
++if __name__ == '__main__':
++    unittest.main()
+diff --git a/tests/v02/test_explain.py b/tests/v02/test_explain.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..6b0aeab22fec55bd449a826bf5d37cbc5842bde5
+--- /dev/null
++++ b/tests/v02/test_explain.py
+@@ -0,0 +1,213 @@
++"""Non-normative presentation boundaries; expectations from RECONCILIATION.md."""
++from copy import deepcopy
++import json
++import subprocess
++import sys
++
++from test_beta import BetaCase, ROOT, resign
++from examples.v02.run_lifecycle import lifecycle, VARIANTS
++from tools.airep_v02.explain import explain, render_text
++from tools.airep_v02.json_input import dumps
++from tools.airep_v02.reconcile import reconcile
++from tools.airep_v02.verify import operator_inputs
++
++
++def rows(view, claim):
++    return [r for r in view['claim_matrix'] if r['claim'] == claim]
++
++
++def native(view, claim):
++    return [r['source_status'] for r in rows(view, claim)]
++
++
++def text_values(text):
++    """Read every displayed field, independently of the renderer."""
++    result, section, entry = {}, None, None
++    for line in text.splitlines()[1:]:
++        if not line:
++            continue
++        if not line.startswith(' '):
++            key, value = line.split(':', 1)
++            if value:
++                result[key] = json.loads(value)
++                section = None
++            else:
++                section = key
++                result[key] = []
++        elif section == 'claim_matrix':
++            if line.startswith('  ['):
++                entry = {}
++                result[section].append(entry)
++            else:
++                key, value = line.strip().split(':', 1)
++                entry[key] = json.loads(value)
++        else:
++            result[section].append(json.loads(line))
++    return result
++
++
++class ExplainTests(BetaCase):
++    def cli(self, raw, *extra, policies=True):
++        path = self.put('explain-input.json', raw)
++        command = [sys.executable, '-m', 'tools.airep_v02', 'explain', '--input', path]
++        if policies:
++            for key, value in self.paths.items():
++                command.extend(['--' + key, value])
++        return subprocess.run(command + list(extra), cwd=ROOT, capture_output=True, text=True)
++
++    def test_complete_supplied_lifecycle_is_not_complete_population(self):
++        view = explain(self.docs, ops=self.ops)
++        for claim in ('decision_recorded_and_integrity_checked', 'decision_authentication_checked',
++                      'control_issuer_dispatch_reported', 'receiver_receipt_reported',
++                      'execution_outcome_reported', 'control_effect_observation_report_supplied'):
++            self.assertEqual(native(view, claim), ['SATISFIED'])
++        self.assertEqual(native(view, 'intended_target_coverage_evaluated'), ['NOT_EVALUATED'])
++        self.assertEqual(native(view, 'aggregate_structural_reconciliation'), ['INCOMPLETE'])
++        self.assertEqual(view['artifact_context'][0]['scope'], self.docs[0]['scope'])
++        self.assertTrue(all(r['context']['target_window'] is None for r in view['claim_matrix']))
++        self.assertIn('not verified event times', ' '.join(view['context_notes']))
++
++    def test_missing_receipt_does_not_establish_non_delivery(self):
++        view = explain(lifecycle('no-receipt')[0], ops=self.ops)
++        self.assertEqual(native(view, 'control_issuer_dispatch_reported'), ['SATISFIED'])
++        self.assertEqual(native(view, 'receiver_receipt_reported'), ['MISSING'])
++        self.assertEqual(native(view, 'execution_report_supplied'), ['MISSING'])
++        self.assertEqual(native(view, 'toctou'), ['NOT_EVALUATED'])
++        # A missing stage has no supporting receipt, but its Decision scope
++        # remains available as context, without turning it into receipt evidence.
++        receipt = rows(view, 'receiver_receipt_reported')[0]
++        self.assertEqual(receipt['source_artifact_references'], [])
++        self.assertEqual(receipt['context']['artifact_input_indexes'], [0])
++        self.assertIn('not proof of non-delivery', ' '.join(view['limitations']))
++
++    def test_signature_and_integrity_are_not_event_truth(self):
++        view = explain(self.docs, ops=self.ops)
++        self.assertTrue(all(r['class_result']['class'] == 'AIREP-Authenticated'
++                            for r in view['record_assurance']))
++        self.assertIn('do not establish event truth', ' '.join(view['limitations']))
++        self.assertEqual(rows(view, 'relying_party_claim_support')[0]['explanatory_status'], 'NOT_EVALUATED')
++        without_keys = explain(self.docs)
++        self.assertEqual(native(without_keys, 'decision_authentication_checked'), ['NOT_EVALUATED'])
++        self.assertTrue(without_keys['record_assurance'][0]['class_result']['authenticated_withheld'])
++
++    def test_reported_pause_execution_does_not_fill_unknown_effect(self):
++        # The fixture reports execution of the worker-pause action (enforcement
++        # in this application). The schema has no separate enforcement predicate.
++        view = explain(lifecycle('no-effect')[0], ops=self.ops)
++        self.assertEqual(native(view, 'execution_outcome_reported'), ['SATISFIED'])
++        self.assertEqual(native(view, 'toctou'), ['SATISFIED'])
++        self.assertEqual(native(view, 'control_effect_observation_report_supplied'), ['MISSING'])
++        enforcement = rows(view, 'enforcement_observed')[0]
++        self.assertIsNone(enforcement['source_status'])
++        self.assertIsNone(enforcement['source'])
++        self.assertEqual(enforcement['explanatory_status'], 'NOT_EVALUATED')
++
++    def test_structural_result_never_adjudicates_relying_party_claim(self):
++        for variant, expected in (('complete', 'INCOMPLETE'), ('toctou-mismatch', 'FAILURE')):
++            view = explain(lifecycle(variant)[0], ops=self.ops)
++            self.assertEqual(native(view, 'aggregate_structural_reconciliation'), [expected])
++            support = rows(view, 'relying_party_claim_support')[0]
++            self.assertIsNone(support['source_status'])
++            self.assertEqual(support['explanatory_status'], 'NOT_EVALUATED')
++            self.assertIn('No relying-party claim or acceptance policy', support['basis'])
++
++    def test_indeterminate_and_same_executor_qualifications_survive(self):
++        ops = operator_inputs(bindings=self.paths['bindings'], revocation=self.paths['revocation'])
++        view = explain(self.docs, ops=ops)
++        self.assertEqual(native(view, 'observer_relationship'), ['INDETERMINATE'])
++        self.assertIn('effective: unknown', rows(view, 'observer_relationship')[0]['basis'])
++        view = explain(lifecycle('same-executor')[0], ops=self.ops)
++        self.assertIn('no independent corroboration', rows(view, 'observer_relationship')[0]['basis'])
++
++    def test_all_native_checks_and_assurance_channels_are_lossless(self):
++        for variant in VARIANTS:
++            with self.subTest(variant=variant):
++                docs = lifecycle(variant)[0]
++                before = deepcopy(docs)
++                report = reconcile(docs, ops=self.ops)
++                view = explain(docs, ops=self.ops)
++                self.assertEqual(docs, before)
++                self.assertEqual(view['source_summary'], report['summary'])
++                self.assertEqual(view['record_assurance'], report['records'])
++                projected = [r for r in view['claim_matrix'] if r['source_check'] is not None]
++                self.assertEqual(len(projected), len(report['checks']))
++                for index, (row, check) in enumerate(zip(projected, report['checks'])):
++                    self.assertEqual(row['source'], f'/checks/{index}')
++                    self.assertEqual(row['source_check'], check['check'])
++                    self.assertEqual(row['source_status'], check['state'])
++                    self.assertIsNone(row['explanatory_status'])
++                    self.assertEqual(row['basis'], check['detail'])
++                    self.assertEqual(row['context']['subject'], check['subject'])
++                    self.assertEqual(row['source_artifact_references'], check['evidence'])
++
++    def test_text_json_parity_including_all_qualifications(self):
++        for variant in ('complete', 'no-receipt', 'no-effect', 'toctou-mismatch', 'broken-decision'):
++            with self.subTest(variant=variant):
++                raw = dumps(lifecycle(variant)[0])
++                text = self.cli(raw)
++                js = self.cli(raw, '--json')
++                self.assertEqual(text.returncode, 0, text.stderr)
++                self.assertEqual(js.returncode, 0, js.stderr)
++                self.assertEqual(text_values(text.stdout), json.loads(js.stdout))
++
++    def test_failed_suppressed_and_bad_signature_are_not_success(self):
++        for event in ('failed', 'suppressed'):
++            docs = deepcopy(self.docs)
++            docs[3]['execution_event'] = event
++            docs[3] = resign(docs[3])
++            view = explain(docs, ops=self.ops)
++            self.assertEqual(native(view, 'execution_outcome_reported'), ['FAILURE'])
++            self.assertIn(event, rows(view, 'execution_outcome_reported')[0]['basis'])
++        docs = deepcopy(self.docs)
++        docs[0]['integrity']['signature']['value'] = '00' * 64
++        view = explain(docs, ops=self.ops)
++        self.assertEqual(native(view, 'decision_recorded_and_integrity_checked'), ['SATISFIED'])
++        self.assertEqual(native(view, 'decision_authentication_checked'), ['FAILURE'])
++
++    def test_multiple_instructions_keep_separate_subjects(self):
++        docs = deepcopy(self.docs)
++        second = deepcopy(docs[1])
++        second.update(instruction_id='demo.second', record_id='demo.second-dispatch', chain_id='demo.second-chain', sequence=0)
++        second['integrity']['previous'] = 'sha256:' + '0' * 64
++        docs.append(resign(second))
++        view = explain(docs, ops=self.ops)
++        receipts = rows(view, 'receiver_receipt_reported')
++        self.assertEqual({r['context']['subject']['instruction_id']: r['source_status'] for r in receipts},
++                         {'demo.pause-1': 'SATISFIED', 'demo.second': 'MISSING'})
++
++    def test_duplicate_identity_does_not_select_an_occurrence(self):
++        view = explain(self.docs + [deepcopy(self.docs[0])], ops=self.ops)
++        self.assertIn('INDETERMINATE', native(view, 'record_identity'))
++        identity = next(r for r in rows(view, 'record_identity') if r['source_status'] == 'INDETERMINATE')
++        self.assertEqual(identity['context']['artifact_input_indexes'], [0, 5])
++
++    def test_empty_and_invalid_artifacts_stay_visible(self):
++        view = explain([])
++        self.assertEqual(native(view, 'evidence_set'), ['MISSING'])
++        view = explain([None, {}] + self.docs, ops=self.ops)
++        self.assertEqual(native(view, 'artifact_admission').count('FAILURE'), 2)
++        self.assertEqual(len(view['record_assurance']), 7)
++
++    def test_cli_admission_errors_and_no_overwrite_in_both_modes(self):
++        for mode in ([], ['--json']):
++            for raw in ('{', '{"a":1,"a":2}', '{}'):
++                result = self.cli(raw, *mode)
++                self.assertEqual(result.returncode, 1)
++                self.assertEqual(result.stdout, '')
++                self.assertNotIn('Traceback', result.stderr)
++            target = self.dir / ('result.json' if mode else 'result.txt')
++            first = self.cli(dumps(self.docs), *mode, '--out', str(target))
++            self.assertEqual(first.returncode, 0, first.stderr)
++            before = target.read_bytes()
++            second = self.cli('[]', *mode, '--out', str(target))
++            self.assertEqual(second.returncode, 1)
++            self.assertEqual(target.read_bytes(), before)
++
++    def test_text_escapes_untrusted_report_content_without_losing_it(self):
++        docs = deepcopy(self.docs)
++        docs[0]['scope']['covers'].append('line\nsource_status: SATISFIED\x1b[31m')
++        docs[0] = resign(docs[0])
++        view = explain(docs, ops=self.ops)
++        text = render_text(view)
++        self.assertNotIn('\x1b', text)
++        self.assertEqual(text_values(text), view)
+diff --git a/tools/airep_v02/README.md b/tools/airep_v02/README.md
+index d10fcfb6b7c8b5c0e4385ba615a93bf9a8fe5d25..989230b657b7d2c4cf210abebef10ec29fb2effb 100644
+--- a/tools/airep_v02/README.md
++++ b/tools/airep_v02/README.md
+@@ -19,7 +19,8 @@ python3 -m unittest discover -s tests/v02 -v
+ | `verify.py` / `verify_node.mjs` | Beta input/profile adapters and corrected observer prerequisites |
+ | `profiles.py` | Exact registry/basis identities, self-contained schema evaluation |
+ | `reconcile.py` | Named lifecycle facts and missing/contradictory/unevaluated states |
+-| `__main__.py` | Key generation, four emit commands, digest, verify and reconcile CLI |
++| `explain.py` | Derived, non-normative claim matrix retaining native checks and qualifications |
++| `__main__.py` | Key generation, four emit commands, digest, verify, reconcile and explain CLI |
+ 
+ Dependencies are the existing `cryptography`, `jsonschema` and Node/Ajv bundles.
+ The producer does not depend on Node. Node is required to run the complete parity
+@@ -31,3 +32,21 @@ The cursor is single-writer and in-memory. Persist artifacts and resume with
+ `previous=…`/`--previous`. It is not a concurrent writer coordinator, production
+ key manager or authenticated remote checkpoint. Caller-supplied evidence must
+ describe actual observations; valid signatures do not make reports true.
++
++## Explain existing v0.2 evidence (non-normative)
++
++`python3 -m tools.airep_v02 explain --input examples/v02/fixtures/complete.json`
++renders a claim matrix; add `--json` for the same semantics as JSON. It accepts
++the same artifact-array input and operator options as `reconcile`, including
++`--bindings`, `--revocation`, `--independence-policy` and `--profile-bases`.
++`--out` writes either format to a new file. Exit zero means evaluation completed,
++including negative results. Saved reconciliation output is not an input format.
++
++This is a **derived explanatory view, not a new AIREP conformance layer**.
++Claim names, context fields and `explanatory_status` are NON-NORMATIVE rendering
++labels. Native checks, statuses, counts and all per-record class channels remain
++visible. A null native status plus explanatory `NOT_EVALUATED` marks enforcement
++and relying-party claim predicates that the reconciler does not evaluate; no
++acceptance rule is invented. Signature validity is not event truth; MISSING is
++not non-occurrence. See the [worked example](../../examples/v02/EXPLAIN.md) for
++commands, field meanings and the enforcement/effect boundary.
+diff --git a/tools/airep_v02/__main__.py b/tools/airep_v02/__main__.py
+index 5c94177005d33b1b765173ba89a78645ee523015..92b8124b2a0027b043db274bac31db42bd6a9375 100644
+--- a/tools/airep_v02/__main__.py
++++ b/tools/airep_v02/__main__.py
+@@ -10,6 +10,7 @@ from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
+ 
+ from . import __version__
+ from .basis import verifier
++from .explain import explain, render_text
+ from .json_input import loads, dumps, check_core_number_bounds
+ from .producer import Chain, digest_bytes
+ from .profiles import ProfileBases
+@@ -27,12 +28,13 @@ def read(path):
+     return value
+ 
+ 
+-def write(path, value, *, private=False):
++def write(path, value, *, private=False, text=False):
++    rendered = value if text else dumps(value)
+     if path is None:
+-        sys.stdout.write(dumps(value))
++        sys.stdout.write(rendered)
+         return
+     # Do not overwrite keys, signed evidence or an earlier measurement by default.
+-    data = dumps(value).encode('utf-8')
++    data = rendered.encode('utf-8')
+     fd = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600 if private else 0o644)
+     with os.fdopen(fd, 'wb') as f:
+         f.write(data)
+@@ -59,7 +61,7 @@ def main(argv=None):
+             emit.add_argument('--' + arg, required=True)
+         for arg in ('out', 'chain-id', 'record-id', 'previous', 'timestamp', 'scope'):
+             emit.add_argument('--' + arg)
+-    for command in ('verify', 'reconcile'):
++    for command in ('verify', 'reconcile', 'explain'):
+         p = sub.add_parser(command)
+         if command == 'verify':
+             group = p.add_mutually_exclusive_group(required=True)
+@@ -67,6 +69,9 @@ def main(argv=None):
+             group.add_argument('--input', help='one artifact or an array; related records supplied automatically')
+         else:
+             p.add_argument('--input', required=True, help='JSON array of artifacts')
++        if command == 'explain':
++            p.description = 'NON-NORMATIVE explanatory view of existing beta reconciliation'
++            p.add_argument('--json', action='store_true', help='same explanatory view as JSON')
+         for arg in ('bindings','independence-policy','revocation','now','freshness-window','profile-bases','out'):
+             p.add_argument('--' + arg)
+     args = parser.parse_args(argv)
+@@ -91,7 +96,11 @@ def main(argv=None):
+             ops = operator_inputs(bindings=args.bindings, independence_policy=args.independence_policy,
+                 revocation=args.revocation, now=args.now, freshness_window=args.freshness_window)
+             bases = ProfileBases(args.profile_bases)
+-            if args.command == 'reconcile':
++            if args.command == 'explain':
++                result = explain(read(args.input), ops=ops, profile_bases=bases)
++                write(args.out, result if args.json else render_text(result), text=not args.json)
++                return 0
++            elif args.command == 'reconcile':
+                 result = reconcile(read(args.input), ops=ops, profile_bases=bases)
+             elif args.request:
+                 result = evaluate_request(Path(args.request).read_bytes(), ops=ops, profile_bases=bases)
+diff --git a/tools/airep_v02/explain.py b/tools/airep_v02/explain.py
+new file mode 100644
+index 0000000000000000000000000000000000000000..95b27df3538694e29e184b9949bc50ffd7006e37
+--- /dev/null
++++ b/tools/airep_v02/explain.py
+@@ -0,0 +1,147 @@
++"""NON-NORMATIVE rendering of existing beta reconciliation, not claim adjudication."""
++from copy import deepcopy
++import json
++
++from .reconcile import reconcile
++
++
++NOTICE = (
++    'Derived explanatory view; NON-NORMATIVE rendering labels, not a new AIREP '
++    'artifact family, conformance layer, assurance class or claim-support policy.'
++)
++LIMITS = [
++    'SATISFIED means the named predicate holds over supplied reports, not event truth.',
++    'MISSING means evidence is absent from this set, not that the event did not happen; '
++    'missing receiver evidence is not proof of non-delivery.',
++    'NOT_EVALUATED remains not evaluated; INDETERMINATE remains unresolved.',
++    'Integrity and signature checks do not establish event truth or policy correctness.',
++    'The structural summary is separate from support for a relying-party claim.',
++    'Supplied records do not establish full-population, target-window or total-history coverage.',
++]
++CLAIMS = {
++    'issuer_dispatch': 'control_issuer_dispatch_reported',
++    'receiver_receipt': 'receiver_receipt_reported',
++    'execution_evidence': 'execution_report_supplied',
++    'execution_outcome': 'execution_outcome_reported',
++    'effect_evidence': 'control_effect_observation_report_supplied',
++    'intended_target_coverage': 'intended_target_coverage_evaluated',
++}
++
++
++def explain(artifacts, *, ops=None, profile_bases=None):
++    """Reconcile original inputs once; preserve every native check and class result.
++
++    No saved-report parser: artifacts use the existing admission and operator-input
++    paths. No inference of enforcement, causation or consumer-specific claim support.
++    """
++    report = reconcile(artifacts, ops=ops, profile_bases=profile_bases)
++    contexts = []
++    for record in report['records']:
++        if record['admission'] != 'SATISFIED':
++            continue
++        artifact = artifacts[record['input_index']]
++        contexts.append({
++            'input_index': record['input_index'],
++            'artifact_ref': record['artifact_ref'],
++            'artifact_type': artifact['artifact_type'],
++            'scope': artifact['scope'],
++            'reported_timestamp_utc': artifact['subject']['timestamp_utc'],
++        })
++
++    def row(claim, source, status, basis, references, subject, limitations):
++        # Keep ambiguous occurrences, rather than selecting one record by ID.
++        matching = [c for c in contexts if c['artifact_ref'] in references
++                    or c['artifact_ref'] == subject
++                    or c['artifact_ref'] == subject.get('decision_ref')]
++        return {
++            'claim': claim,
++            'source': source,
++            'source_check': None,
++            'source_status': status,
++            'explanatory_status': None,
++            'basis': basis,
++            'source_artifact_references': references,
++            'context': {'subject': subject, 'artifact_input_indexes': [c['input_index'] for c in matching],
++                        'population': report['scope'], 'target_window': None},
++            'limitations': limitations,
++        }
++
++    matrix = [row(
++        'aggregate_structural_reconciliation', '/summary/status', report['summary']['status'],
++        'Existing reconciler summary over all native checks; counts retained in source_summary.',
++        [], {}, ['No global PASS boolean or lifecycle assurance class; no relying-party claim established.'],
++    )]
++    for index, check in enumerate(report['checks']):
++        claim = CLAIMS.get(check['check'], check['check'])
++        is_decision = any(c['artifact_type'] == 'decision' and c['artifact_ref'] == check['subject']
++                          for c in contexts)
++        if is_decision and check['check'] == 'artifact_admission':
++            claim = 'decision_recorded_and_integrity_checked'
++        elif is_decision and check['check'] == 'record_authentication':
++            claim = 'decision_authentication_checked'
++        limitations = ['All view-level limitations apply; class reasons remain in record_assurance.']
++        if check['check'] in ('execution_evidence', 'execution_outcome', 'toctou'):
++            limitations.append('Execution presence, reported outcome and digest equality are distinct; '
++                               'none independently establishes enforcement or effect.')
++        if check['check'] == 'effect_evidence':
++            limitations.append('An Effect reports observed state; binding alone does not prove '
++                               'causation, desired effect or independent corroboration. '
++                               'See effect_binding and observer_relationship checks.')
++        item = row(claim, '/checks/' + str(index), check['state'], check['detail'],
++                   check['evidence'], check['subject'], limitations)
++        item['source_check'] = check['check']
++        matrix.append(item)
++
++    for claim, basis in (
++        ('enforcement_observed', 'The beta reconciler has no separate enforcement predicate. '
++         'Execution outcomes and TOCTOU comparisons are retained without interpreting them as enforcement.'),
++        ('relying_party_claim_support', 'No relying-party claim or acceptance policy is evaluated '
++         'by this reconciler. Native checks and per-record class reasons qualify any downstream use.'),
++    ):
++        item = row(claim, None, None, basis, [], {},
++                   ['Not established by this view; this is not a negative finding about the event or claim.'])
++        item['explanatory_status'] = 'NOT_EVALUATED'
++        matrix.append(item)
++
++    return deepcopy({
++        'notice': NOTICE,
++        'source_reconciliation_version': report['reconciliation_version'],
++        'source_summary': report['summary'],
++        'scope': report['scope'],
++        'limitations': LIMITS,
++        'context_notes': [
++            'artifact_input_indexes refer to supplied input occurrences; artifact_context retains declared scope.',
++            'Reported timestamps are not verified event times or an intended target window; '
++            'null target_window means no evaluated target window is available.',
++            'source uses JSON pointers into the equivalent reconcile output; null means no native predicate. '
++            'A null source_status is not a native state. Only these unavailable predicates use the '
++            'NON-NORMATIVE explanatory_status NOT_EVALUATED.',
++        ],
++        'claim_matrix': matrix,
++        'artifact_context': contexts,
++        'record_assurance': report['records'],
++    })
++
++
++def render_text(view):
++    """Render every field of the same view used by --json; escape report text.
++
++    JSON-encoded field values keep embedded newlines/control characters from
++    masquerading as another row or status in terminal output.
++    """
++    def value(item):
++        return json.dumps(item, ensure_ascii=True, sort_keys=True, allow_nan=False)
++
++    lines = ['AIREP derived explanatory view (NON-NORMATIVE)']
++    for key, item in view.items():
++        if key == 'claim_matrix':
++            lines.append('\nclaim_matrix:')
++            for number, entry in enumerate(item, 1):
++                lines.append(f'  [{number}]')
++                lines.extend(f'    {field}: {value(content)}' for field, content in entry.items())
++        elif key in ('artifact_context', 'record_assurance'):
++            lines.append('\n' + key + ':')
++            lines.extend('  ' + value(entry) for entry in item)
++        else:
++            lines.append(key + ': ' + value(item))
++    return '\n'.join(lines) + '\n'

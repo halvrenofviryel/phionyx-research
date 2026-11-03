@@ -1,0 +1,22 @@
+{
+  "case_id": "holdout-08",
+  "claim_truth": {
+    "q-effect": false,
+    "q-enforcement": true,
+    "q-integrity": true,
+    "q-mediation": true,
+    "q-receipt": true
+  },
+  "latent_facts": [
+    {
+      "fact": "target applied declared control semantics",
+      "value": true
+    },
+    {
+      "fact": "requested effect actually occurred without exposed observation",
+      "value": false
+    }
+  ],
+  "schema": "acder02-synthetic-latent-truth-v1",
+  "status": "Authored synthetic scenario specification, not measured runtime ground truth."
+}

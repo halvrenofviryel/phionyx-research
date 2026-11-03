@@ -1,0 +1,144 @@
+{
+  "case_id": "holdout-02",
+  "instructions": [
+    {
+      "content_sha256": "b3e4999c48dd6287aab571a279fe36e273d423f09bdbb610be29134ffe452038",
+      "content_utf8": "{\"control\":\"revoke\",\"task\":\"task-holdout-02\"}",
+      "identity_scope": "scope-holdout-02",
+      "instruction_id": "instruction-beta",
+      "resolution": {
+        "candidates": [
+          "ep-b"
+        ],
+        "coverage": {
+          "evidence_refs": [
+            "profile:synthetic-deployment-inventory"
+          ],
+          "status": "VERIFIED"
+        },
+        "excluded": [],
+        "status": "CLOSED"
+      }
+    }
+  ],
+  "population": {
+    "cutoff": {
+      "clock_id": "mono",
+      "time": 10
+    },
+    "exclusion_rule": {
+      "evidence_available": true,
+      "frozen_time": 0,
+      "permitted_inputs": [
+        "issuer_metadata",
+        "target_resolution"
+      ],
+      "rule_id": "target-exclusion-v1",
+      "version": "1"
+    },
+    "included_instruction_ids": [
+      "instruction-beta"
+    ],
+    "inclusion_rule": {
+      "evidence_available": true,
+      "frozen_time": 0,
+      "permitted_inputs": [
+        "instruction_id"
+      ],
+      "rule_id": "issuer-inclusion-v1",
+      "version": "1"
+    },
+    "manifest_id": "manifest-holdout-02",
+    "manifest_instruction_ids": [
+      "instruction-beta"
+    ]
+  },
+  "profile_id": "acder02-control-benchmark-v1",
+  "queries": [
+    {
+      "claim_id": "q-integrity",
+      "kind": "envelope_integrity",
+      "scope": {
+        "clock_id": "mono",
+        "cutoff": 10,
+        "target_id": "ep-b"
+      },
+      "subject": {
+        "record_ids": [
+          "r-receiver",
+          "r-enforcement"
+        ]
+      }
+    },
+    {
+      "claim_id": "q-issuer",
+      "kind": "issuer_dispatched",
+      "scope": {
+        "clock_id": "mono",
+        "cutoff": 10,
+        "target_id": "ep-b"
+      },
+      "subject": {
+        "instruction_id": "instruction-beta"
+      }
+    },
+    {
+      "claim_id": "q-receipt",
+      "kind": "receiver_receipt",
+      "scope": {
+        "boundary_id": "target-entry",
+        "clock_id": "mono",
+        "cutoff": 10,
+        "target_id": "ep-b"
+      },
+      "subject": {
+        "instruction_id": "instruction-beta"
+      }
+    },
+    {
+      "claim_id": "q-all",
+      "kind": "all_required_delivery",
+      "scope": {
+        "clock_id": "mono",
+        "cutoff": 10,
+        "population_scope": "manifest",
+        "target_id": "ep-b",
+        "target_ids": [
+          "ep-b"
+        ]
+      },
+      "subject": {
+        "instruction_ids": [
+          "instruction-beta"
+        ]
+      }
+    },
+    {
+      "claim_id": "q-enforcement",
+      "kind": "enforcement_applied",
+      "scope": {
+        "boundary_id": "target-entry",
+        "clock_id": "mono",
+        "cutoff": 10,
+        "effective_time": 5,
+        "target_id": "ep-b"
+      },
+      "subject": {
+        "instruction_id": "instruction-beta"
+      }
+    }
+  ],
+  "records": [
+    {
+      "payload_sha256": "fc74c410009e64941e5024510fcf97c48eaa275c611a29ba9385a6c72bafe2b3",
+      "payload_utf8": "{\"attempt_id\":\"attempt-1\",\"boundary_id\":\"target-entry\",\"clock_id\":\"mono\",\"content_sha256\":\"b3e4999c48dd6287aab571a279fe36e273d423f09bdbb610be29134ffe452038\",\"identity_scope\":\"scope-holdout-02\",\"instruction_id\":\"instruction-beta\",\"kind\":\"receiver_observation\",\"observer_id\":\"ep-b\",\"outcome\":\"RECEIVED\",\"target_id\":\"ep-b\",\"time\":3}",
+      "record_id": "r-receiver"
+    },
+    {
+      "payload_sha256": "39bc0658933ed8157a78b47bf301335fbe1e046022937e61f37e551b1b30a3d9",
+      "payload_utf8": "{\"attempt_id\":\"attempt-1\",\"boundary_id\":\"target-entry\",\"clock_id\":\"mono\",\"content_sha256\":\"b3e4999c48dd6287aab571a279fe36e273d423f09bdbb610be29134ffe452038\",\"effective_time\":5,\"identity_scope\":\"scope-holdout-02\",\"instruction_id\":\"instruction-beta\",\"kind\":\"enforcement\",\"observer_id\":\"ep-b\",\"outcome\":\"APPLIED\",\"target_id\":\"ep-b\",\"time\":5}",
+      "record_id": "r-enforcement"
+    }
+  ],
+  "schema": "acder02-control-benchmark-evidence-v1"
+}

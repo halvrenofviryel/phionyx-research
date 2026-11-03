@@ -1,0 +1,22 @@
+{
+  "case_id": "dev-03",
+  "claim_truth": {
+    "q-all": false,
+    "q-integrity": true,
+    "q-issuer": true,
+    "q-mediation": false,
+    "q-receipt": true
+  },
+  "latent_facts": [
+    {
+      "fact": "an additional required path exists outside the observed target",
+      "value": true
+    },
+    {
+      "fact": "observed target received control",
+      "value": true
+    }
+  ],
+  "schema": "acder02-synthetic-latent-truth-v1",
+  "status": "Authored synthetic scenario specification, not measured runtime ground truth."
+}

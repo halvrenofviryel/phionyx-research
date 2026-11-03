@@ -1,0 +1,130 @@
+{
+  "case_id": "holdout-10",
+  "instructions": [
+    {
+      "content_sha256": "0fd48f1ca7cf5293a10ad0f9746f417adf33f56da5649f14e34f53857bb867b8",
+      "content_utf8": "{\"control\":\"revoke\",\"task\":\"task-holdout-10\"}",
+      "identity_scope": "scope-holdout-10",
+      "instruction_id": "instruction-beta",
+      "resolution": {
+        "candidates": [
+          "ep-b"
+        ],
+        "coverage": {
+          "evidence_refs": [
+            "profile:synthetic-deployment-inventory"
+          ],
+          "status": "VERIFIED"
+        },
+        "excluded": [],
+        "status": "CLOSED"
+      }
+    }
+  ],
+  "population": {
+    "cutoff": {
+      "clock_id": "mono",
+      "time": 10
+    },
+    "exclusion_rule": {
+      "evidence_available": true,
+      "frozen_time": 0,
+      "permitted_inputs": [
+        "issuer_metadata",
+        "target_resolution"
+      ],
+      "rule_id": "target-exclusion-v1",
+      "version": "1"
+    },
+    "included_instruction_ids": [
+      "instruction-beta"
+    ],
+    "inclusion_rule": {
+      "evidence_available": true,
+      "frozen_time": 0,
+      "permitted_inputs": [
+        "instruction_id"
+      ],
+      "rule_id": "issuer-inclusion-v1",
+      "version": "1"
+    },
+    "manifest_id": "manifest-holdout-10",
+    "manifest_instruction_ids": [
+      "instruction-beta"
+    ]
+  },
+  "profile_id": "acder02-control-benchmark-v1",
+  "queries": [
+    {
+      "claim_id": "q-integrity",
+      "kind": "envelope_integrity",
+      "scope": {
+        "clock_id": "mono",
+        "cutoff": 10,
+        "target_id": "ep-b"
+      },
+      "subject": {
+        "record_ids": [
+          "r-issuer",
+          "r-deadline"
+        ]
+      }
+    },
+    {
+      "claim_id": "q-issuer",
+      "kind": "issuer_dispatched",
+      "scope": {
+        "clock_id": "mono",
+        "cutoff": 10,
+        "target_id": "ep-b"
+      },
+      "subject": {
+        "instruction_id": "instruction-beta"
+      }
+    },
+    {
+      "claim_id": "q-receipt",
+      "kind": "receiver_receipt",
+      "scope": {
+        "boundary_id": "target-entry",
+        "clock_id": "mono",
+        "cutoff": 10,
+        "target_id": "ep-b"
+      },
+      "subject": {
+        "instruction_id": "instruction-beta"
+      }
+    },
+    {
+      "claim_id": "q-all",
+      "kind": "all_required_delivery",
+      "scope": {
+        "clock_id": "mono",
+        "cutoff": 10,
+        "population_scope": "manifest",
+        "target_id": "ep-b",
+        "target_ids": [
+          "ep-b"
+        ]
+      },
+      "subject": {
+        "instruction_ids": [
+          "instruction-beta"
+        ]
+      }
+    }
+  ],
+  "records": [
+    {
+      "payload_sha256": "0ca8a26a94a102fda52a6c860538bd9da7273184b6bd4c400559130a3c06dd1f",
+      "payload_utf8": "{\"attempt_id\":\"attempt-1\",\"boundary_id\":\"issuer-egress\",\"clock_id\":\"mono\",\"content_sha256\":\"0fd48f1ca7cf5293a10ad0f9746f417adf33f56da5649f14e34f53857bb867b8\",\"identity_scope\":\"scope-holdout-10\",\"instruction_id\":\"instruction-beta\",\"kind\":\"issuer_emission\",\"observer_id\":\"issuer\",\"outcome\":\"EMITTED\",\"resolution_ref\":\"instruction-beta#resolution\",\"target_ids\":[\"ep-b\"],\"time\":1}",
+      "record_id": "r-issuer"
+    },
+    {
+      "payload_sha256": "337dda40ff709008b0f9eac3d5955be58ccc79210cb6d615cb9c46a6aa31212b",
+      "payload_utf8": "{\"attempt_id\":\"attempt-1\",\"boundary_id\":\"reconciliation-cutoff\",\"clock_id\":\"mono\",\"content_sha256\":\"0fd48f1ca7cf5293a10ad0f9746f417adf33f56da5649f14e34f53857bb867b8\",\"deadline_time\":10,\"identity_scope\":\"scope-holdout-10\",\"instruction_id\":\"instruction-beta\",\"kind\":\"deadline\",\"observed_condition\":\"NO_MATCHING_RECEIPT_AT_CUTOFF\",\"observer_id\":\"reconciler\",\"target_id\":\"ep-b\",\"time\":10}",
+      "record_id": "r-deadline"
+    }
+  ],
+  "schema": "acder02-control-benchmark-evidence-v1"
+}

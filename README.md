@@ -38,7 +38,17 @@ Or one command end-to-end (fresh venv → install → smoke flow):
 bash <(curl -sSL https://raw.githubusercontent.com/halvrenofviryel/phionyx-research/main/scripts/demo.sh)
 ```
 
-Most AI frameworks let the LLM decide. Phionyx doesn't. Phionyx routes every response through its governance pipeline — safety gates, ethics checks, and structured state tracking — built on a canonical 46-block contract (v3.8.0), before it reaches the user.
+> **Control-evidence research candidate.** The bounded K1 comparison and the
+> self-contained K2/K3 reproduction packet are indexed in
+> [Control evidence research](docs/CONTROL_EVIDENCE_RESEARCH.md). These are
+> author-side research artifacts, not third-party validation, production assurance
+> or standards-body endorsement.
+
+Phionyx routes model output through a governance pipeline — safety gates, ethics
+checks and structured state tracking — built on a canonical 46-block contract
+(v3.8.0), before it reaches the user. Other frameworks expose different control
+and persistence mechanisms; the repository does not claim that the table below is
+a measured comparison with all of them.
 
 Concretely, a governed action carries **policy + a state transition + an abstain / block / rewrite decision + a replayable evidence record** in one inspectable trace. This sits **alongside** the emerging agent-governance tooling — signed action receipts, agent audit / replay, enterprise control planes — not against it; the contribution is that combination, plus a runnable demo that governs *its own* development the same way.
 
@@ -52,16 +62,16 @@ The substrate is demonstrable in seconds **without an LLM, server, or API key** 
 
 ---
 
-## What Makes This Different
+## What This Repository Implements
 
-| Feature | Typical LLM Framework | Phionyx |
-|---------|----------------------|---------|
-| LLM role | Decision maker | Sensor (output is measurement, not truth) |
-| Response control | Post-hoc filtering | Pre-response governance (46-block pipeline) |
-| State tracking | Stateless or conversation history | Structured state vector (A, V, H, phi, entropy) |
-| Safety | Optional guardrails | Mandatory gates (kill switch, ethics, HITL) |
-| Determinism | Non-deterministic | Reproducible evidence path |
-| Memory | RAG / vector search | Impact-weighted semantic time eviction |
+| Property | Current implementation | Evidence boundary |
+|---------|------------------------|-------------------|
+| Model role | Treats model output as an input measurement to a deterministic governance path | Does not make the model deterministic or improve model accuracy |
+| Response control | Pre-response gates composed from the 46-block contract | Demo and reference behavior; no regulated-deployment claim |
+| State tracking | Structured state vector (A, V, H, phi, entropy) | Experimental telemetry, not a validated clinical or psychometric model |
+| Safety controls | Kill switch, ethics checks and human-review queue | No third-party security audit or safety certification |
+| Evidence path | Replayable records and optional signatures | Integrity and replay do not establish event truth or complete observation |
+| Memory | Impact-weighted semantic-time eviction | First-party fixture benchmark; no production workload result |
 
 ---
 

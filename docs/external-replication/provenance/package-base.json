@@ -1,0 +1,10 @@
+{
+  "F_included": false,
+  "branch": "codex/phionyx-external-replication-pack",
+  "fetch_command": "git fetch origin main",
+  "fetched_origin_main": "652e008d18805a1c69492a688e621df91f143287",
+  "local_base": "652e008d18805a1c69492a688e621df91f143287",
+  "repository": "https://github.com/halvrenofviryel/phionyx-research",
+  "requested_public_main": "652e008d18805a1c69492a688e621df91f143287",
+  "source_strategy": "Separate complete-history bundle refs; no merged AIREP candidate"
+}

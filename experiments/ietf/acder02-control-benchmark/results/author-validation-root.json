@@ -1,0 +1,34 @@
+{
+  "checks": [
+    "evidence JSON schema",
+    "input/oracle/latent separation and keys",
+    "source exact hash",
+    "all envelope and instruction hashes",
+    "author oracle evidence references",
+    "oracle bookkeeping conservation",
+    "actual synthetic Ed25519 verification",
+    "tampered signed payload rejection",
+    "preregistered tracked bytes unchanged"
+  ],
+  "counts": {
+    "development_cases": 12,
+    "development_claims": 53,
+    "holdout_cases": 12,
+    "holdout_claims": 54,
+    "signature_tamper_rejections": 2,
+    "verified_signatures": 2
+  },
+  "environment": {
+    "jsonschema": "4.10.3",
+    "python": "3.12.3"
+  },
+  "errors": [],
+  "not_performed": [
+    "comparator execution",
+    "measurement",
+    "derivation of oracle labels from evaluator logic"
+  ],
+  "schema": "k1-author-structural-validation-v1",
+  "status": "PASS",
+  "validator_sha256": "80b4a429a848494164892e4f3dd5048707a6426c19d83ea7ed8b82ab36cea1e3"
+}

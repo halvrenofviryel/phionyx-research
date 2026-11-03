@@ -1,0 +1,195 @@
+{
+  "case_id": "dev-08",
+  "claims": [
+    {
+      "ambiguity_reason": null,
+      "ambiguous": false,
+      "claim_id": "q-integrity",
+      "conditions": [],
+      "draft_clauses": [
+        "5.2",
+        "5.13"
+      ],
+      "evidence_basis": [
+        "record:r-issuer",
+        "record:r-receiver",
+        "record:r-enforcement"
+      ],
+      "justified_state": "SUPPORTED",
+      "kind": "envelope_integrity",
+      "known_nonclaims": [
+        "event truth",
+        "authority",
+        "execution",
+        "effect"
+      ],
+      "latent_truth_ref": "latent_truth.json#/claim_truth/q-integrity",
+      "missing_evidence": [],
+      "qualification": "FULLY_SUPPORTED",
+      "rationale": "Each referenced envelope contains the exact payload UTF-8 bytes whose SHA256 is stated. This is a byte-integrity statement, not validation of the event assertion."
+    },
+    {
+      "ambiguity_reason": null,
+      "ambiguous": false,
+      "claim_id": "q-receipt",
+      "conditions": [],
+      "draft_clauses": [
+        "4.3",
+        "5.4",
+        "5.5",
+        "6.1"
+      ],
+      "evidence_basis": [
+        "record:r-receiver"
+      ],
+      "justified_state": "SUPPORTED",
+      "kind": "receiver_receipt",
+      "known_nonclaims": [
+        "issuer dispatch",
+        "enforcement",
+        "execution",
+        "effect"
+      ],
+      "latent_truth_ref": "latent_truth.json#/claim_truth/q-receipt",
+      "missing_evidence": [],
+      "qualification": "FULLY_SUPPORTED",
+      "rationale": "A valid bound receipt is present."
+    },
+    {
+      "ambiguity_reason": null,
+      "ambiguous": false,
+      "claim_id": "q-enforcement",
+      "conditions": [],
+      "draft_clauses": [
+        "4.4",
+        "5.6"
+      ],
+      "evidence_basis": [
+        "record:r-enforcement"
+      ],
+      "justified_state": "SUPPORTED",
+      "kind": "enforcement_applied",
+      "known_nonclaims": [
+        "independent effect",
+        "execution completion",
+        "other targets"
+      ],
+      "latent_truth_ref": "latent_truth.json#/claim_truth/q-enforcement",
+      "missing_evidence": [],
+      "qualification": "FULLY_SUPPORTED",
+      "rationale": "The target reports APPLIED at its stated local effective boundary. This is not an independent effect observation."
+    },
+    {
+      "ambiguity_reason": null,
+      "ambiguous": false,
+      "claim_id": "q-effect",
+      "conditions": [
+        "missing_effect_observation"
+      ],
+      "draft_clauses": [
+        "4.5",
+        "5.7",
+        "9.4"
+      ],
+      "evidence_basis": [
+        "input:records"
+      ],
+      "justified_state": "INDETERMINATE",
+      "kind": "effect_observed",
+      "known_nonclaims": [
+        "unobserved operations",
+        "all deployment paths",
+        "reversal of prior effect"
+      ],
+      "latent_truth_ref": "latent_truth.json#/claim_truth/q-effect",
+      "missing_evidence": [
+        "matching predicate/operation/window observation"
+      ],
+      "qualification": "NOT_SUPPORTED",
+      "rationale": "An attributable APPLIED assertion supplies no observation of the requested runtime-state predicate/window."
+    },
+    {
+      "ambiguity_reason": null,
+      "ambiguous": false,
+      "claim_id": "q-mediation",
+      "conditions": [
+        "coverage_declared_only"
+      ],
+      "draft_clauses": [
+        "4.2",
+        "5.15",
+        "6.6"
+      ],
+      "evidence_basis": [
+        "input:instructions/0/resolution/coverage",
+        "record:r-issuer",
+        "record:r-receiver"
+      ],
+      "justified_state": "INDETERMINATE",
+      "kind": "complete_mediation",
+      "known_nonclaims": [
+        "effect",
+        "external deployment coverage"
+      ],
+      "latent_truth_ref": "latent_truth.json#/claim_truth/q-mediation",
+      "missing_evidence": [
+        "accepted coverage evidence"
+      ],
+      "qualification": "CONDITIONALLY_SUPPORTED",
+      "rationale": "Named-target delivery is confirmed, but deployment coverage is only declared. The permitted conditional qualification names the missing coverage predicate."
+    }
+  ],
+  "derivation": "Independent author judgments from -02 clauses, frozen profile and visible evidence; not evaluator output.",
+  "reconciliation": {
+    "aggregate_claim": {
+      "conditions": [],
+      "qualification": "FULLY_SUPPORTED"
+    },
+    "draft_clauses": [
+      "5.4",
+      "5.10",
+      "5.11",
+      "6.1",
+      "6.2",
+      "6.4",
+      "6.5",
+      "6.6"
+    ],
+    "instruction_accounting": {
+      "all_excluded": 0,
+      "target_resolution_unclosed": 0,
+      "terminal_empty": 0,
+      "total": 1,
+      "with_obligations": 1
+    },
+    "obligation_counts": {
+      "CONFIRMED": 1,
+      "CONFLICT": 0,
+      "EXPLICIT_FAILURE": 0,
+      "INDETERMINATE": 0,
+      "INVALID": 0,
+      "SUBSTITUTION": 0,
+      "UNCONFIRMED": 0,
+      "total": 1
+    },
+    "obligations": [
+      {
+        "disposition": "CONFIRMED",
+        "instruction_id": "instruction-alpha",
+        "target_id": "ep-a"
+      }
+    ],
+    "rationale": "Delivery is confirmed and structural accounting passes; effect remains a separate missing evidence dimension.",
+    "receiver_record_counts": {
+      "conflict": 0,
+      "duplicate": 0,
+      "invalid": 0,
+      "matched": 1,
+      "orphan": 0,
+      "substitution": 0,
+      "total": 1
+    },
+    "structural_result": "PASS"
+  },
+  "schema": "acder02-control-benchmark-oracle-v1"
+}

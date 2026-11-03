@@ -1,0 +1,26 @@
+K1 independent arithmetic audit: PASS
+No production scorer/comparator was read, imported or executed. No frozen source, oracle, prediction, score or existing metadata was changed.
+Source: development-03 (53 claims) + holdout-first (54 claims) = 107 distinct claims in 24 cases.
+Applicability is fixed by PROFILE; ambiguity exclusion is claim-only. Integrity is excluded only from stronger-support metrics.
+Saved-score checks: {"confusion_matrices": 72, "metric_fractions_and_rates": 576, "scalar_counts": 720, "single_split_report_total_groups": 72}; zero mismatches.
+
+Split | Comparator | Applicable | Unsupported stronger | Useful support recall | Semantic false | State | Qualification | Conditions
+development | acder_bounded | 53 | 0/23 | 30/30 | 0/33 | 53/53 | 53/53 | 53/53
+development | integrity_only | 12 | 0/0 | 12/12 | 0/12 | 12/12 | 12/12 | 12/12
+development | naive_ack | 28 | 16/18 | 10/10 | 13/26 | 12/28 | 12/28 | 10/28
+holdout | acder_bounded | 54 | 0/23 | 31/31 | 0/36 | 54/54 | 54/54 | 52/54
+holdout | integrity_only | 12 | 0/0 | 12/12 | 0/12 | 12/12 | 12/12 | 12/12
+holdout | naive_ack | 29 | 16/18 | 11/11 | 12/27 | 13/29 | 13/29 | 11/29
+total | acder_bounded | 107 | 0/46 | 61/61 | 0/69 | 107/107 | 107/107 | 105/107
+total | integrity_only | 24 | 0/0 | 24/24 | 0/24 | 24/24 | 24/24 | 24/24
+total | naive_ack | 57 | 32/36 | 21/21 | 25/53 | 25/57 | 25/57 | 21/57
+
+Holdout B/C paired common applicability: 29 queries across all_required_delivery, effect_observed, enforcement_applied, receiver_receipt.
+Among the same 18 oracle-not-SUPPORTED queries: C 0/18 unsupported support; naive ACK B 16/18.
+C holdout state 54/54, qualification 54/54, conditions 52/54. Both original condition differences are preserved:
+holdout-05 q-all: expected ["missing_receiver_observation"]; predicted ["unconfirmed_required_target"]
+holdout-12 q-enforcement: expected ["semantic_mapping_not_lossless"]; predicted ["source_state_does_not_establish_applied"]
+
+All per-kind denominators, all eight metric fractions/rates, fixed confusion matrices, paired per-kind counts and input hashes are in ARITHMETIC_AUDIT.json.
+The audit is independent arithmetic within the same owner/team, not third-party evidence. No post-holdout correction or tuning was performed.
+ARITHMETIC_AUDIT.json SHA-256: 7c70ad6b32e58eadb98d6b82f51786a4fb54e2970f0f67ce80cea3253816b7ea

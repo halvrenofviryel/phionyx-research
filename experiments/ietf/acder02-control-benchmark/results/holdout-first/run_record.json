@@ -1,0 +1,119 @@
+{
+  "argv": [
+    "bwrap",
+    "--unshare-all",
+    "--die-with-parent",
+    "--new-session",
+    "--ro-bind",
+    "/usr",
+    "/usr",
+    "--symlink",
+    "usr/bin",
+    "/bin",
+    "--symlink",
+    "usr/lib",
+    "/lib",
+    "--symlink",
+    "usr/lib64",
+    "/lib64",
+    "--proc",
+    "/proc",
+    "--dev",
+    "/dev",
+    "--tmpfs",
+    "/tmp",
+    "--dir",
+    "/home",
+    "--ro-bind",
+    "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/k1-control-failure-benchmark/phionyx-research/experiments/ietf/acder02-control-benchmark/src/evaluate.py",
+    "/evaluate.py",
+    "--ro-bind",
+    "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/k1-control-failure-benchmark/phionyx-research/experiments/ietf/acder02-control-benchmark/PROFILE.json",
+    "/profile.json",
+    "--ro-bind",
+    "/tmp/k1-evidence-only-pnac665o/input",
+    "/input",
+    "--bind",
+    "/tmp/phionyx-k1-holdout-first",
+    "/output",
+    "--clearenv",
+    "--setenv",
+    "PATH",
+    "/usr/bin",
+    "--setenv",
+    "PYTHONDONTWRITEBYTECODE",
+    "1",
+    "--chdir",
+    "/tmp",
+    "/usr/bin/python3",
+    "-B",
+    "/evaluate.py",
+    "--evidence-dir",
+    "/input",
+    "--profile",
+    "/profile.json",
+    "--output",
+    "/output/predictions.json"
+  ],
+  "code_sha256": "3d14d8c60a3510af66bf17d4245bc99cbb8bef159b8a18f3fe8ec2305e4231bd",
+  "evidence_count": 12,
+  "finished_utc": "2026-11-02T20:34:12.407433+00:00",
+  "input_hashes": [
+    {
+      "path": "scenarios/holdout/holdout-01/evidence.json",
+      "sha256": "84cdcac97d2e9662948f8987c33df20593d00eb56cba9ca1c9d51ab977d399a9"
+    },
+    {
+      "path": "scenarios/holdout/holdout-02/evidence.json",
+      "sha256": "b3e1458483e5dabc78363428ce408dc1043887c5d2c130580a8bf357de63d38b"
+    },
+    {
+      "path": "scenarios/holdout/holdout-03/evidence.json",
+      "sha256": "67d27d86b41740c1870bc809fd24d9e33b8d4e31dc9f620b896e3ade934a920a"
+    },
+    {
+      "path": "scenarios/holdout/holdout-04/evidence.json",
+      "sha256": "8eb7f7a709e39743848289b805f1f8411a692a9a5f5e11fdbb7847e26bc4de4a"
+    },
+    {
+      "path": "scenarios/holdout/holdout-05/evidence.json",
+      "sha256": "f8e929a3df1eccbe871a1f307aaed60dceb9ffb85073856c64ea55bd57720c23"
+    },
+    {
+      "path": "scenarios/holdout/holdout-06/evidence.json",
+      "sha256": "e15db8395f4fc06c26f6a8bf2a8f6cad51fbfc6448f61e4dcb6edbb74b4edc4a"
+    },
+    {
+      "path": "scenarios/holdout/holdout-07/evidence.json",
+      "sha256": "17d4f9d7077402539d446d21f9f91db6f4470274e479587e59b5472edf1fb220"
+    },
+    {
+      "path": "scenarios/holdout/holdout-08/evidence.json",
+      "sha256": "e749ed74c89768869d0fbf990b26bc185ae7b5abb9c26d840d9a2cbbce1e361f"
+    },
+    {
+      "path": "scenarios/holdout/holdout-09/evidence.json",
+      "sha256": "c536c41d68be6a63afae651d66993033b163b5286da2ecc4f43d9f84b4667cab"
+    },
+    {
+      "path": "scenarios/holdout/holdout-10/evidence.json",
+      "sha256": "e5cdb3dd0c4addc35e4a8004f7b5befe9424bb7acaa2951b223004f7ab582b11"
+    },
+    {
+      "path": "scenarios/holdout/holdout-11/evidence.json",
+      "sha256": "e9acf371b6745e77f94a97e00d58dc6178adcdee2c83da2f89a8c1df1039a935"
+    },
+    {
+      "path": "scenarios/holdout/holdout-12/evidence.json",
+      "sha256": "f558834df108cf1ec35e615a17d01e6d847a8d5e529fd2e2fe09d00b171a008b"
+    }
+  ],
+  "network": "unshared; no external interface",
+  "oracle_mounted": false,
+  "predictions_sha256": "9206cbea999903aa5879110f9318badb33fcc4f8a6074e3e19eeba9b62f4d97f",
+  "profile_sha256": "8c27cd685289028261ff5c035a6d9643c58412954bff8ebee7ffaa485c9e8a54",
+  "returncode": 0,
+  "schema": "acder-benchmark-isolated-run-v1",
+  "split": "holdout",
+  "started_utc": "2026-11-02T20:34:12.335441+00:00"
+}

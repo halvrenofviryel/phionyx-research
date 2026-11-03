@@ -1,0 +1,80 @@
+name: Research Artifact Integrity
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/research-artifacts.yml"
+      - ".gitattributes"
+      - "docs/CONTROL_EVIDENCE_RESEARCH.md"
+      - "docs/EXTERNAL_IMPACT_LEDGER.md"
+      - "docs/PREPUBLICATION_FILE_MANIFEST.json"
+      - "docs/PREPUBLICATION_REVIEW_2026-11-03.md"
+      - "docs/PUBLICATION_PR_DRAFT_2026-11-03.md"
+      - "docs/PUBLICATION_STATUS.md"
+      - "docs/external_impact_ledger.json"
+      - "docs/external-replication/**"
+      - "experiments/ietf/acder02-control-benchmark/**"
+      - "reports/external-replication/**"
+      - "tools/build_prepublication_manifest.py"
+      - "tools/verify_prepublication_candidate.py"
+  pull_request:
+    branches: [main]
+    paths:
+      - ".github/workflows/research-artifacts.yml"
+      - ".gitattributes"
+      - "docs/CONTROL_EVIDENCE_RESEARCH.md"
+      - "docs/EXTERNAL_IMPACT_LEDGER.md"
+      - "docs/PREPUBLICATION_FILE_MANIFEST.json"
+      - "docs/PREPUBLICATION_REVIEW_2026-11-03.md"
+      - "docs/PUBLICATION_PR_DRAFT_2026-11-03.md"
+      - "docs/PUBLICATION_STATUS.md"
+      - "docs/external_impact_ledger.json"
+      - "docs/external-replication/**"
+      - "experiments/ietf/acder02-control-benchmark/**"
+      - "reports/external-replication/**"
+      - "tools/build_prepublication_manifest.py"
+      - "tools/verify_prepublication_candidate.py"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: verify frozen research packet
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout complete source history
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install the recorded namespace runner
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes bubblewrap
+          if [ -e /proc/sys/kernel/apparmor_restrict_unprivileged_userns ]; then
+            sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
+          fi
+
+      - name: Verify publication state, source ancestry and exact manifest
+        run: python3 tools/verify_prepublication_candidate.py
+
+      - name: Reproduce the frozen K1 comparison and its 44 tests
+        run: >-
+          python3 -B experiments/ietf/acder02-control-benchmark/reproduce.py
+          --out "${RUNNER_TEMP}/acder02-control-benchmark"
+
+      - name: Verify all 172 K5 packet inputs without executing dependencies
+        working-directory: docs/external-replication
+        run: python3 run.py --check-package

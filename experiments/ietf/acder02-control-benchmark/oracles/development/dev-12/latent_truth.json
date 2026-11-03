@@ -1,0 +1,21 @@
+{
+  "case_id": "dev-12",
+  "claim_truth": {
+    "q-enforcement": false,
+    "q-integrity": true,
+    "q-receipt": true,
+    "q-semantics": false
+  },
+  "latent_facts": [
+    {
+      "fact": "source target applied the control",
+      "value": false
+    },
+    {
+      "fact": "gateway altered source meaning",
+      "value": true
+    }
+  ],
+  "schema": "acder02-synthetic-latent-truth-v1",
+  "status": "Authored synthetic scenario specification, not measured runtime ground truth."
+}

@@ -1,0 +1,25 @@
+{
+  "case_id": "holdout-06",
+  "claim_truth": {
+    "q-all": false,
+    "q-integrity": true,
+    "q-population": true,
+    "q-receipt": true
+  },
+  "latent_facts": [
+    {
+      "fact": "observed target received",
+      "value": true
+    },
+    {
+      "fact": "other required target received",
+      "value": false
+    },
+    {
+      "fact": "all issuer instructions retained",
+      "value": true
+    }
+  ],
+  "schema": "acder02-synthetic-latent-truth-v1",
+  "status": "Authored synthetic scenario specification, not measured runtime ground truth."
+}

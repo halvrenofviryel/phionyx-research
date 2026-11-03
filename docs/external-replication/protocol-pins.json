@@ -1,0 +1,46 @@
+{
+  "F_included": false,
+  "artifact_hashes": {
+    "bundles/airep-sources.bundle": {
+      "byte_length": 9222409,
+      "sha256": "abc5863eea07e96ae719d225affef07a35f6c13c07ac58281f35bbb4d5dcf2e3"
+    },
+    "bundles/langgraph-wheelhouse.tar.gz": {
+      "byte_length": 19183724,
+      "sha256": "83e30216dfc9d4c32e92f49e00f4c1d067856cb37a32465c967c73ff9fd75439"
+    }
+  },
+  "bundle_refs": {
+    "refs/heads/k2-source": "ea1f39a6da72639a73e601918a6c8bc87bff1d77",
+    "refs/heads/k3-source": "76ecce0b378a6b391850795abf45fb6aca8e1d6b",
+    "refs/tags/v0.2.0-beta.1": "dff7b4eeb14d57525855ae2c1af54d8f38bc9ec8"
+  },
+  "combined_airep_candidate": null,
+  "k2": {
+    "reference_target": {
+      "commit": "8a6c01ecce457aa94330c0ed7219e4c56ebfe771",
+      "normative_basis_sha256": "333977c9e27c57371686b9cfb9c4becda68da43aebf024b04068e32563597b8d",
+      "release": "v0.2.0-beta.1",
+      "wire_version": "0.2"
+    },
+    "runtime_release_commit": "8a6c01ecce457aa94330c0ed7219e4c56ebfe771",
+    "source_commit": "ea1f39a6da72639a73e601918a6c8bc87bff1d77"
+  },
+  "k3": {
+    "D_commit": "0130fcf8e7d70a0f9c4f977957e5de76ca8ef689",
+    "normative_file_hashes": {
+      "spec/airep/v0.2/CONFORMANCE_CLASSES.md": "331f7cabb99cb12aa55f2395f0f073caf58282e0a43756680b9d86bf59e9a9a6",
+      "spec/airep/v0.2/INTEGRITY.md": "2fca9a02ebd8b22807f51742278d7ddfc101e25ca6fd4fa844d6c6a537e98c11",
+      "spec/airep/v0.2/RECONCILIATION.md": "d720ff4139676b913e9d9f9a3a38d57fea586c9a76b1816bdcbf57e1ea39d023",
+      "spec/airep/v0.2/SPEC.md": "b5b33f6bf0265717d889248fa85a6a0390efbe57fb00a74d5c23c6721edf4766"
+    },
+    "runtime": "langgraph==1.2.19",
+    "runtime_lock_sha256": "55232532d5cf5bc6328f2ea9789f991c812c446211a46549e2dfe88a00e08835",
+    "source_commit": "76ecce0b378a6b391850795abf45fb6aca8e1d6b",
+    "wire_version": "0.2"
+  },
+  "package_base": "652e008d18805a1c69492a688e621df91f143287",
+  "package_repository": "https://github.com/halvrenofviryel/phionyx-research",
+  "publication": "LOCAL_ONLY_NOT_AUTHORIZED",
+  "schema": "k5-source-pins-v1"
+}

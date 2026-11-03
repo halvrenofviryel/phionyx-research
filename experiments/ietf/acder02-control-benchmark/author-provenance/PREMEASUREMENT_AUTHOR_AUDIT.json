@@ -1,0 +1,25 @@
+{
+  "comparator_executions_before_freeze": 0,
+  "measurement_outputs_seen": 0,
+  "profile_and_metric_changes_since_preregistration": false,
+  "rule": "These are recorded authoring corrections before the case/oracle freeze, not postmeasurement oracle tuning.",
+  "schema": "k1-premeasurement-author-audit-v1",
+  "static_draft_corrections": [
+    {
+      "change": "Replaced dangling absent receiver reference by input:records; justified state unchanged. Author and parent static inspection independently noticed it.",
+      "item": "development/dev-01 q-enforcement evidence_basis"
+    },
+    {
+      "change": "Positive provider-entry evidence for the same operation, accepted clock and requested window supports REFUTED. Corrected before any comparator execution.",
+      "item": "development/dev-09 exact-window negative effect proposition"
+    },
+    {
+      "change": "Added separate scoped complete-mediation query to exercise already-frozen coverage/qualification contract before any comparator execution; 24-case selection unchanged.",
+      "item": "category-08 query selection"
+    },
+    {
+      "change": "An abstract variant description in author coordination could hint at one withheld draft. That draft was withdrawn and replaced before case freeze without seeing any comparator output. Final holdout content/expected values were not disclosed. This does not create external independence.",
+      "item": "unfrozen holdout draft hygiene"
+    }
+  ]
+}

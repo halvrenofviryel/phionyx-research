@@ -1,0 +1,22 @@
+{
+  "D_changed_files": [
+    "examples/v02/EXPLAIN.md",
+    "reports/explain/source-basis.json",
+    "reports/explain/validation.json",
+    "tests/v02/test_explain.py",
+    "tools/airep_v02/README.md",
+    "tools/airep_v02/__main__.py",
+    "tools/airep_v02/explain.py"
+  ],
+  "D_commit": "0130fcf8e7d70a0f9c4f977957e5de76ca8ef689",
+  "F_included": false,
+  "candidate": "76ecce0b378a6b391850795abf45fb6aca8e1d6b",
+  "candidate_publicly_available": false,
+  "changed_files": 371,
+  "complete_diff_sha256": "6c6f334b179033c194b4989a650710578b0646a68db38ec619e1bea9081ab460",
+  "implementation_diff_sha256": "553e350ab48a3956c5f7a2eb1b2b7a3b35967b9b5c2089261318a05a9a160ef3",
+  "lane": "d-plus-k3",
+  "public_base": "075aff5610731736405951ecf3b7c4bfc3cc0f07",
+  "source_repository": "https://github.com/halvrenofviryel/ai-runtime-evidence-protocol",
+  "source_transport": "bundles/airep-sources.bundle"
+}

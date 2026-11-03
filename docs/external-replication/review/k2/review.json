@@ -1,0 +1,12 @@
+{
+  "F_included": false,
+  "candidate": "ea1f39a6da72639a73e601918a6c8bc87bff1d77",
+  "candidate_publicly_available": false,
+  "changed_files": 141,
+  "complete_diff_sha256": "4296ed57b423f43e573ababc29c4085e9a78594eea7dac84a31fdabe876f1159",
+  "implementation_diff_sha256": "db03116617aafc0e9c9f077648a7bbac1dd625adfc99ba8dc0ebf60ef5e27bfb",
+  "lane": "k2",
+  "public_base": "075aff5610731736405951ecf3b7c4bfc3cc0f07",
+  "source_repository": "https://github.com/halvrenofviryel/ai-runtime-evidence-protocol",
+  "source_transport": "bundles/airep-sources.bundle"
+}

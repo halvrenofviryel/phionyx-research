@@ -1,0 +1,52 @@
+{
+  "acquisition": "DEPENDENCY_ACQUISITION_ONLY - NOT AN OFFICIAL REPRODUCTION RUN",
+  "aggregate_rule": "sha256 of the concatenation, in ASCII-ascending order of package-name strings, of UTF-8 lines '<sha256>  <tarball-filename>\\n'. The sort key is the package name, NOT the assembled line and NOT the hash prefix; each line is built AFTER the sort.",
+  "aggregate_sha256": "50826cb483e2fdf475b1c8c2067d8742ae7e7fb8c1416c82ed4b5fdb7fd5c912",
+  "bundle": "AIREP v0.2 class-verification - Node offline dependency bundle",
+  "closure_is_exact": true,
+  "lock_source": "verifier_node_r2/package-lock.json (frozen)",
+  "node_baseline": "v20.19.6",
+  "packages": {
+    "ajv": {
+      "bytes": 217611,
+      "integrity_sha512_sri": "sha512-Thbli+OlOj+iMPYFBVBfJ3OmCAnaSyNn4M1vz9T6Gka5Jt9ba/HIR56joy65tY6kx/FCF5VXNB819Y7/GUrBGA==",
+      "resolved": "https://registry.npmjs.org/ajv/-/ajv-8.20.0.tgz",
+      "sha256": "b2f0b3a893bbb8cc5efb6814f08b1499e19e31d5dd73683f5893382f48f6e7b3",
+      "tarball": "ajv-8.20.0.tgz",
+      "version": "8.20.0"
+    },
+    "fast-deep-equal": {
+      "bytes": 3656,
+      "integrity_sha512_sri": "sha512-f3qQ9oQy9j2AhBe/H9VC91wLmKBCCU/gDOnKNAYG5hswO7BLKj09Hc5HYNz9cGI++xlpDCIgDaitVs03ATR84Q==",
+      "resolved": "https://registry.npmjs.org/fast-deep-equal/-/fast-deep-equal-3.1.3.tgz",
+      "sha256": "b019a0980f27638dc3f85836b0e478f188e00d7a6e5852c0819fa86f56e47b8f",
+      "tarball": "fast-deep-equal-3.1.3.tgz",
+      "version": "3.1.3"
+    },
+    "fast-uri": {
+      "bytes": 42968,
+      "integrity_sha512_sri": "sha512-7Ical1vFEMr0onbVzEDIreM22I4khW+fzyQPwvAFWBp1iwdshSZRsL4jjRvPG9JP1uiqMHRto+YU6R2/CzDz5Q==",
+      "resolved": "https://registry.npmjs.org/fast-uri/-/fast-uri-3.1.6.tgz",
+      "sha256": "264af0e32c4b7b7bcb9ce5b4623c82469ee3e69ba5d171920f1762d626db1064",
+      "tarball": "fast-uri-3.1.6.tgz",
+      "version": "3.1.6"
+    },
+    "json-schema-traverse": {
+      "bytes": 6074,
+      "integrity_sha512_sri": "sha512-NM8/P9n3XjXhIZn1lLhkFaACTOURQXjWhV4BA/RnOv8xvgqtqpAX9IO4mRQxSx1Rlo4tqzeqb0sOlruaOy3dug==",
+      "resolved": "https://registry.npmjs.org/json-schema-traverse/-/json-schema-traverse-1.0.0.tgz",
+      "sha256": "023222622df29fc274bde5d3590e47aa1d4a8e3c1d6e2aba029948ed79799b21",
+      "tarball": "json-schema-traverse-1.0.0.tgz",
+      "version": "1.0.0"
+    },
+    "require-from-string": {
+      "bytes": 1816,
+      "integrity_sha512_sri": "sha512-Xf0nWe6RseziFMu+Ap9biiUbmplq6S9/p+7w7YXP/JBHhrUDDUhwa+vANyubuqfZWTveU//DYVGsDG7RKL/vEw==",
+      "resolved": "https://registry.npmjs.org/require-from-string/-/require-from-string-2.0.2.tgz",
+      "sha256": "cb694a4965908f7775a0c757f00cf4e624d193cd71d77988fbcca0f597b88d82",
+      "tarball": "require-from-string-2.0.2.tgz",
+      "version": "2.0.2"
+    }
+  },
+  "purpose": "Materialize verifier_node_r2/node_modules with NO network and NO system-ajv fallback."
+}

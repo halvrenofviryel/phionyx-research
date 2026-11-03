@@ -1,0 +1,19 @@
+{
+  "schema": "acder-benchmark-data-freeze-v1",
+  "author_commit": "c6123b4309801c0bf007c0a3d95f6c2bc0820ac5",
+  "protocol_commit": "c8c5889c5a96df92febf8ba44888479dd320e646",
+  "benchmark_prereg_commit": "9a1d931156b0e8f92bde0fe9fc65a32b3958f02c",
+  "recorded_utc": "2026-11-02T20:25:14.465691+00:00",
+  "development_cases": 12,
+  "development_claims": 53,
+  "holdout_cases": 12,
+  "holdout_claims": 54,
+  "holdout_content_read_by_evaluator_author": false,
+  "comparators_executed": false,
+  "manifests": {
+    "DEVELOPMENT_MANIFEST.json": "73f91b85e43afcbf8c252d12aeacfa1bd240a30b88090900fa23516a8712084c",
+    "HOLDOUT_MANIFEST.json": "743b415ffa971bc90c95c420fe6c155db13fa5315f20aac5bc03ab0659371f23",
+    "ARTIFACT_MANIFEST.json": "2e874c7624d76ddb9bbdde3c017d7456700bbe382b44a678619ac5226081a290"
+  },
+  "layout": "author split/case/evidence.json -> scenarios/split/case/evidence.json; other case files -> oracles/split/case/; holdout copied only after logic freeze"
+}

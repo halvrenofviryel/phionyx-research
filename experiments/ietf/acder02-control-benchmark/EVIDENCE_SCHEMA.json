@@ -1,0 +1,208 @@
+{
+  "$id": "acder02-control-benchmark-evidence-v1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "case_id": {
+      "type": "string"
+    },
+    "instructions": {
+      "items": {
+        "properties": {
+          "content_sha256": {
+            "pattern": "^[0-9a-f]{64}$",
+            "type": "string"
+          },
+          "content_utf8": {
+            "type": "string"
+          },
+          "identity_scope": {
+            "type": "string"
+          },
+          "instruction_id": {
+            "type": "string"
+          },
+          "resolution": {
+            "properties": {
+              "candidates": {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              "coverage": {
+                "required": [
+                  "status",
+                  "evidence_refs"
+                ],
+                "type": "object"
+              },
+              "excluded": {
+                "type": "array"
+              },
+              "status": {
+                "enum": [
+                  "CLOSED",
+                  "UNCLOSED"
+                ]
+              }
+            },
+            "required": [
+              "status",
+              "candidates",
+              "excluded",
+              "coverage"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "instruction_id",
+          "identity_scope",
+          "content_utf8",
+          "content_sha256",
+          "resolution"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "population": {
+      "properties": {
+        "cutoff": {
+          "type": "object"
+        },
+        "exclusion_rule": {
+          "type": "object"
+        },
+        "included_instruction_ids": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "inclusion_rule": {
+          "type": "object"
+        },
+        "manifest_id": {
+          "type": "string"
+        },
+        "manifest_instruction_ids": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "manifest_id",
+        "manifest_instruction_ids",
+        "included_instruction_ids",
+        "inclusion_rule",
+        "exclusion_rule",
+        "cutoff"
+      ],
+      "type": "object"
+    },
+    "profile_id": {
+      "const": "acder02-control-benchmark-v1"
+    },
+    "queries": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "claim_id": {
+            "type": "string"
+          },
+          "kind": {
+            "enum": [
+              "envelope_integrity",
+              "issuer_dispatched",
+              "receiver_receipt",
+              "all_required_delivery",
+              "enforcement_applied",
+              "execution_observed",
+              "effect_observed",
+              "ordering",
+              "population_complete",
+              "complete_mediation",
+              "semantic_preservation"
+            ]
+          },
+          "scope": {
+            "type": "object"
+          },
+          "subject": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "claim_id",
+          "kind",
+          "subject",
+          "scope"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "records": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "payload_sha256": {
+            "pattern": "^[0-9a-f]{64}$",
+            "type": "string"
+          },
+          "payload_utf8": {
+            "type": "string"
+          },
+          "record_id": {
+            "type": "string"
+          },
+          "signature": {
+            "properties": {
+              "algorithm": {
+                "const": "Ed25519"
+              },
+              "public_key_pem": {
+                "type": "string"
+              },
+              "signature_hex": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "algorithm",
+              "public_key_pem",
+              "signature_hex"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "record_id",
+          "payload_utf8",
+          "payload_sha256"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "schema": {
+      "const": "acder02-control-benchmark-evidence-v1"
+    }
+  },
+  "required": [
+    "schema",
+    "case_id",
+    "profile_id",
+    "population",
+    "instructions",
+    "records",
+    "queries"
+  ],
+  "type": "object"
+}

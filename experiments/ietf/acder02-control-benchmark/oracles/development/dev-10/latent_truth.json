@@ -1,0 +1,17 @@
+{
+  "case_id": "dev-10",
+  "claim_truth": {
+    "q-all": true,
+    "q-integrity": true,
+    "q-issuer": true,
+    "q-receipt": true
+  },
+  "latent_facts": [
+    {
+      "fact": "target received despite missing acknowledgement",
+      "value": true
+    }
+  ],
+  "schema": "acder02-synthetic-latent-truth-v1",
+  "status": "Authored synthetic scenario specification, not measured runtime ground truth."
+}

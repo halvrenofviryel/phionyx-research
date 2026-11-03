@@ -1,0 +1,2228 @@
+[
+  {
+    "byte_length": 5611,
+    "path": "examples/v02/EXPLAIN.md",
+    "sha256": "ab8338f3528eecd855a1ea0a96a8c1cd8a5c40052d53021b9ef30bc893b54767",
+    "status": "A"
+  },
+  {
+    "byte_length": 8182,
+    "path": "integrations/langgraph/README.md",
+    "sha256": "af4fc7ea4fcd527254df7e6862fea13276eb75fd1b5282eb123d9b68bb5259a9",
+    "status": "A"
+  },
+  {
+    "byte_length": 15250,
+    "path": "integrations/langgraph/dependencies.json",
+    "sha256": "a273052bd21a27cd184dfc315b8f542e222a06fac03a137ec07a7af927c9f358",
+    "status": "A"
+  },
+  {
+    "byte_length": 4573,
+    "path": "integrations/langgraph/requirements.lock",
+    "sha256": "55232532d5cf5bc6328f2ea9789f991c812c446211a46549e2dfe88a00e08835",
+    "status": "A"
+  },
+  {
+    "byte_length": 21202,
+    "path": "integrations/langgraph/run.py",
+    "sha256": "4f28f08a223cf02f230e0aa2b35d122f6b3974b8059977340060485324e3ad00",
+    "status": "A"
+  },
+  {
+    "byte_length": 8236,
+    "path": "integrations/langgraph/tests/test_runtime.py",
+    "sha256": "199e6bc88a72ade959df7260f91d50e3d49e08bf6c20b9a7fb9c64d23d02eeac",
+    "status": "A"
+  },
+  {
+    "byte_length": 14955,
+    "path": "reports/explain/source-basis.json",
+    "sha256": "6d00c376e6ccd2710e51d4e87e1b10f01d71ee691ec7b56077e47ebb906f4f6a",
+    "status": "A"
+  },
+  {
+    "byte_length": 5420,
+    "path": "reports/explain/validation.json",
+    "sha256": "031ac7a31bc329e5c1bcd19f382cc21075adad528aeb8255c150884415d94169",
+    "status": "A"
+  },
+  {
+    "byte_length": 9416,
+    "path": "reports/langgraph/RESULTS.md",
+    "sha256": "9831c82f74de371b22c81c43d0a1c213bb12e84af3f8550f9bbd3d1a2d3093cc",
+    "status": "A"
+  },
+  {
+    "byte_length": 37841,
+    "path": "reports/langgraph/SHA256SUMS",
+    "sha256": "5d68a8f097c2a5049ecbcbdaa08e4c56d5fc3399a29ec33b6dc34bf510299384",
+    "status": "A"
+  },
+  {
+    "byte_length": 511,
+    "path": "reports/langgraph/audit.json",
+    "sha256": "5fd1b6244cfdaf654a1c41ff81a8d90efff8da7e1bc777f11ac0d9d5e8a799af",
+    "status": "A"
+  },
+  {
+    "byte_length": 57,
+    "path": "reports/langgraph/beta-check/01.log",
+    "sha256": "56d8a85f918921939f8d29bc49a57cc7548c2f4bec8234d47e934257f66234bf",
+    "status": "A"
+  },
+  {
+    "byte_length": 9,
+    "path": "reports/langgraph/beta-check/02.log",
+    "sha256": "89abdb6ecfed00022752dc543087c9a6d28dd27f75417dfe1f17ac06065cc968",
+    "status": "A"
+  },
+  {
+    "byte_length": 477,
+    "path": "reports/langgraph/beta-check/03.log",
+    "sha256": "a6d31da4dc73e66b954ba961cab3db89b65cea4e72f5ec215f32ad21b1af04ec",
+    "status": "A"
+  },
+  {
+    "byte_length": 1522,
+    "path": "reports/langgraph/beta-check/04.log",
+    "sha256": "0df61d69d1b821dab43ac90c09fdf57afe16f0b616ea3036927189a12acc022d",
+    "status": "A"
+  },
+  {
+    "byte_length": 5462,
+    "path": "reports/langgraph/beta-check/05.log",
+    "sha256": "f6062c7f8a19d3423ce70abafdd2bdac743363cbc7033a5b3f3f03848983dca4",
+    "status": "A"
+  },
+  {
+    "byte_length": 0,
+    "path": "reports/langgraph/beta-check/06.log",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "status": "A"
+  },
+  {
+    "byte_length": 101,
+    "path": "reports/langgraph/beta-check/07.log",
+    "sha256": "8bd1ec8a8a58e55c247af5eda730f5ac3cd73b098a4621c380e381827e81c282",
+    "status": "A"
+  },
+  {
+    "byte_length": 119,
+    "path": "reports/langgraph/beta-check/08.log",
+    "sha256": "c3981d6ece68cd815fb7461661cc3fe5ac14d7443dc4e0de1fe13f71272ae9d9",
+    "status": "A"
+  },
+  {
+    "byte_length": 89,
+    "path": "reports/langgraph/beta-check/09.log",
+    "sha256": "4822d01dbbe060e012f6f0a0aecafa2216a7692952766a6345ac7bc3c8dcbffb",
+    "status": "A"
+  },
+  {
+    "byte_length": 869,
+    "path": "reports/langgraph/beta-check/10.log",
+    "sha256": "0e83dd2ebf425fe3792236ba67e69740f03b253e54b35aa3c08fa858dce22b5c",
+    "status": "A"
+  },
+  {
+    "byte_length": 112,
+    "path": "reports/langgraph/beta-check/11.log",
+    "sha256": "5ee48090f6f072cbee4363fe2b3da2e222c2bcaa550e36f5c3c662bfa6ab2e50",
+    "status": "A"
+  },
+  {
+    "byte_length": 2340,
+    "path": "reports/langgraph/beta-check/12.log",
+    "sha256": "9f1a397f3102d3bd75ca4c97e94de448cefc2c9dbb79f4409920f9e1aeb10731",
+    "status": "A"
+  },
+  {
+    "byte_length": 3770,
+    "path": "reports/langgraph/beta-check/13.log",
+    "sha256": "3f1c0fd5bece3e47d2e4f20c0396833d233a54e2cbe6551bdb4364a8b891d181",
+    "status": "A"
+  },
+  {
+    "byte_length": 38,
+    "path": "reports/langgraph/beta-check/14.log",
+    "sha256": "a27b22dc447f914758e5a7feabcaed188508fa4d48f5a13571d94b12f2a41e35",
+    "status": "A"
+  },
+  {
+    "byte_length": 0,
+    "path": "reports/langgraph/beta-check/15.log",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "status": "A"
+  },
+  {
+    "byte_length": 36,
+    "path": "reports/langgraph/beta-check/16.log",
+    "sha256": "dc44c22f5e7a23d29326dc95495fd473a5970f59a3ebc05be4721a6e4713625c",
+    "status": "A"
+  },
+  {
+    "byte_length": 124,
+    "path": "reports/langgraph/beta-check/17.log",
+    "sha256": "c8890caa38019b7e20f90585667321062cf98b3a0cd17e2c32c50dbef06dede4",
+    "status": "A"
+  },
+  {
+    "byte_length": 101,
+    "path": "reports/langgraph/beta-check/18.log",
+    "sha256": "e29cce7e37e26061205abea9c7da55aacf06d70308f5ffd97c6de8f86f894f8b",
+    "status": "A"
+  },
+  {
+    "byte_length": 0,
+    "path": "reports/langgraph/beta-check/19.log",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "status": "A"
+  },
+  {
+    "byte_length": 0,
+    "path": "reports/langgraph/beta-check/20.log",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "status": "A"
+  },
+  {
+    "byte_length": 62,
+    "path": "reports/langgraph/beta-check/21.log",
+    "sha256": "4834d2807f732738b460da9530f107ea86419a77bb74848e98eb576ea0100e47",
+    "status": "A"
+  },
+  {
+    "byte_length": 42,
+    "path": "reports/langgraph/beta-check/22.log",
+    "sha256": "cdba12581eb256d0919722897c8e5fbfa47036381ab385b4a030292cd9a2515e",
+    "status": "A"
+  },
+  {
+    "byte_length": 6332,
+    "path": "reports/langgraph/beta-check/23.log",
+    "sha256": "b3d8785e45754a02cc0fb31846266d8f5826a85d6ee4f490c5140c558fd868c7",
+    "status": "A"
+  },
+  {
+    "byte_length": 25,
+    "path": "reports/langgraph/beta-check/24.log",
+    "sha256": "00edcb369e4ee827ef7e32073b675f0bdcca9f8a335f7286d5974c2986603d42",
+    "status": "A"
+  },
+  {
+    "byte_length": 1309,
+    "path": "reports/langgraph/beta-check/25.log",
+    "sha256": "dc1c9fad171498375c1b225260d2b308acd84a551b601785bb7231029640e7c2",
+    "status": "A"
+  },
+  {
+    "byte_length": 314,
+    "path": "reports/langgraph/beta-check/26.log",
+    "sha256": "62c75954a0ece24272576e30f695b26e423bc10d9c8f9e1da4638c767ef07185",
+    "status": "A"
+  },
+  {
+    "byte_length": 31,
+    "path": "reports/langgraph/beta-check/27.log",
+    "sha256": "e7c1f3257803fabc0d3f29bd69a8ed4aed08f590fadaf0c99c9fcab31315853b",
+    "status": "A"
+  },
+  {
+    "byte_length": 3801,
+    "path": "reports/langgraph/beta-check/28.log",
+    "sha256": "65d127bb1b3b8acdce19edff6019cae45ade3160f04cbf1774d07cca2d0e54ce",
+    "status": "A"
+  },
+  {
+    "byte_length": 4692,
+    "path": "reports/langgraph/beta-check/29.log",
+    "sha256": "56c33f0ca245e0301b4b358ebb32a708227ab3bc591e9e3e304f0d754cfb111a",
+    "status": "A"
+  },
+  {
+    "byte_length": 5731,
+    "path": "reports/langgraph/beta-check/30.log",
+    "sha256": "9c002274034369a501322eafb0b19c140e78b8619b4434f740e372df65e6d98e",
+    "status": "A"
+  },
+  {
+    "byte_length": 2202,
+    "path": "reports/langgraph/beta-check/31.log",
+    "sha256": "d82496f636420d8b7da37a40bc03a49ac04637d5b25a081db1c77f5495f4aa83",
+    "status": "A"
+  },
+  {
+    "byte_length": 1741,
+    "path": "reports/langgraph/beta-check/32.log",
+    "sha256": "390c64e26b37d2109400909eb0b81d67efaf2c0682c1e735a91e48df2fe3bd71",
+    "status": "A"
+  },
+  {
+    "byte_length": 3235,
+    "path": "reports/langgraph/beta-check/33.log",
+    "sha256": "b4ea0a54eaf52beb1778eae73a0a3ae6c53ecf1f91311f4abc93f09f9550df58",
+    "status": "A"
+  },
+  {
+    "byte_length": 4548,
+    "path": "reports/langgraph/beta-check/34.log",
+    "sha256": "870d8197c3ac9950bdf5cf8a4ed719aafabdbd5799ba62d70d8083ae2a84cc9b",
+    "status": "A"
+  },
+  {
+    "byte_length": 11564,
+    "path": "reports/langgraph/beta-check/35.log",
+    "sha256": "c619e24cce0095c259603d58c9a0257a819f953339c0277c1a9a05e6efa5ac59",
+    "status": "A"
+  },
+  {
+    "byte_length": 1477,
+    "path": "reports/langgraph/beta-check/36.log",
+    "sha256": "9833e1d5a1fee2cafe3af5bcb23ca0e07512c65f05247f8f65bdbd8f3b8a3628",
+    "status": "A"
+  },
+  {
+    "byte_length": 1238,
+    "path": "reports/langgraph/beta-check/37.log",
+    "sha256": "e6d92c43a6e2984a7374973e4309514f315d90b3684b856e674f6115c6414b55",
+    "status": "A"
+  },
+  {
+    "byte_length": 1188,
+    "path": "reports/langgraph/beta-check/38.log",
+    "sha256": "93243a2afc91d77879af8d5432ef4aed6b247064dd1042f8b375b8512aaa92be",
+    "status": "A"
+  },
+  {
+    "byte_length": 2417,
+    "path": "reports/langgraph/beta-check/39.log",
+    "sha256": "6a1b2e0a24718830ec89d6eb554c32bc0f6570cb609fe481089c6abf50aa8ae4",
+    "status": "A"
+  },
+  {
+    "byte_length": 1409,
+    "path": "reports/langgraph/beta-check/40.log",
+    "sha256": "da2028110e49652471d4656045a116dd2c8948aa6a3cf024e24155d47a938ef3",
+    "status": "A"
+  },
+  {
+    "byte_length": 180,
+    "path": "reports/langgraph/beta-check/41.log",
+    "sha256": "ee8736eff2d0b4100301d01f62806623e356621426a05b4b73f8cc6f42992a21",
+    "status": "A"
+  },
+  {
+    "byte_length": 325,
+    "path": "reports/langgraph/beta-check/42.log",
+    "sha256": "29bab08d6494201b0ebcb65b9702ee5599059e986ac6adc2f5d40d9cc6db3235",
+    "status": "A"
+  },
+  {
+    "byte_length": 1152,
+    "path": "reports/langgraph/beta-check/43.log",
+    "sha256": "bcecba02aa0ad8b4c7e09935ed81d65f1f597fd983c685c83f9ebf72a7e58690",
+    "status": "A"
+  },
+  {
+    "byte_length": 80,
+    "path": "reports/langgraph/beta-check/44.log",
+    "sha256": "70f985a133f9e4f4bbe0ff533a321a50c87ff5a616f7882c53ceb194873c1647",
+    "status": "A"
+  },
+  {
+    "byte_length": 1016,
+    "path": "reports/langgraph/beta-check/45.log",
+    "sha256": "7f1bb4aecd6080b013b441812c8a414ea4541e37c99524189bdab8098c49f747",
+    "status": "A"
+  },
+  {
+    "byte_length": 7461,
+    "path": "reports/langgraph/beta-check/46.log",
+    "sha256": "a21b065cc654d0f8866e065d8745cac9343e541742851301c84f52fd7f4af4fc",
+    "status": "A"
+  },
+  {
+    "byte_length": 1895,
+    "path": "reports/langgraph/beta-check/47.log",
+    "sha256": "08543a733b09b09a58c53fb72a6aa5eb418d42f952ccc0f72468358a79dcf5cc",
+    "status": "A"
+  },
+  {
+    "byte_length": 10642,
+    "path": "reports/langgraph/beta-check/48.log",
+    "sha256": "f535118b7f2a4bb99d0a30430701695fc96c35604b61932c6b9c8c80ff573ec7",
+    "status": "A"
+  },
+  {
+    "byte_length": 3074,
+    "path": "reports/langgraph/beta-check/49.log",
+    "sha256": "f988d629a0685334ec9158afde3c11f635d3c4b5a7efd50cc0e4074fca2ef3ba",
+    "status": "A"
+  },
+  {
+    "byte_length": 936,
+    "path": "reports/langgraph/beta-check/50.log",
+    "sha256": "430592260a170ebbaab3c65e38377972accc63c3488775037c277d9e28ca4b1c",
+    "status": "A"
+  },
+  {
+    "byte_length": 920,
+    "path": "reports/langgraph/beta-check/51.log",
+    "sha256": "116dd9c4d9225d5aeaeba80e5bf224bc68f919130a41fd3c3bd2d303b6fcaeb8",
+    "status": "A"
+  },
+  {
+    "byte_length": 336,
+    "path": "reports/langgraph/beta-check/52.log",
+    "sha256": "5e9d2c055279283d8007a3c45394ad6c7597effba610ce2ebf862aa5c24de863",
+    "status": "A"
+  },
+  {
+    "byte_length": 372,
+    "path": "reports/langgraph/beta-check/53.log",
+    "sha256": "bab0dc58f6601d5b6d76a919695f4c54afc4a27c86bec1c39e9cf5a2faa49b59",
+    "status": "A"
+  },
+  {
+    "byte_length": 841,
+    "path": "reports/langgraph/beta-check/54.log",
+    "sha256": "85e24fd507ad977cb6b2c79e4db76d7929bf1ba82494146db327b01cea1b2ffb",
+    "status": "A"
+  },
+  {
+    "byte_length": 42846,
+    "path": "reports/langgraph/beta-check/55.log",
+    "sha256": "fb26aacf97499a183abb77b0cf0c800817f1fc0ba7361a9781bfb3f020507b25",
+    "status": "A"
+  },
+  {
+    "byte_length": 80,
+    "path": "reports/langgraph/beta-check/56.log",
+    "sha256": "70f985a133f9e4f4bbe0ff533a321a50c87ff5a616f7882c53ceb194873c1647",
+    "status": "A"
+  },
+  {
+    "byte_length": 23390,
+    "path": "reports/langgraph/beta-check/parity.json",
+    "sha256": "c5c3389fbc5edd05042543edd8dda04ebf03c32cd286dcb48b23f076ce638108",
+    "status": "A"
+  },
+  {
+    "byte_length": 1741,
+    "path": "reports/langgraph/beta-check/parity.txt",
+    "sha256": "390c64e26b37d2109400909eb0b81d67efaf2c0682c1e735a91e48df2fe3bd71",
+    "status": "A"
+  },
+  {
+    "byte_length": 20300,
+    "path": "reports/langgraph/beta-check/results.json",
+    "sha256": "c0f3302852d5c9ae4fe3fb4c7095a1bdcc541191e7b30e068cb3aec124caf815",
+    "status": "A"
+  },
+  {
+    "byte_length": 20819,
+    "path": "reports/langgraph/beta-check/source-basis.json",
+    "sha256": "9de6f277c4c3b76aca3ef9f10d8fc3ea48155d3c328ec6890a316e1ae7e262ef",
+    "status": "A"
+  },
+  {
+    "byte_length": 115,
+    "path": "reports/langgraph/logs/01.log",
+    "sha256": "38c160462062c8ca2220c609741edc3bb6de1b05a7ff640baf0c3b7ca26f77bd",
+    "status": "A"
+  },
+  {
+    "byte_length": 8244,
+    "path": "reports/langgraph/logs/02.log",
+    "sha256": "c7388f1b7d9e57dc6cad8e105e0f9c51b6b0402a7042bf5e6aa6086ad3938c52",
+    "status": "A"
+  },
+  {
+    "byte_length": 1901,
+    "path": "reports/langgraph/logs/03.log",
+    "sha256": "25746032528c07d8df37e6d62048ee4908dc42354d994fc98201d8fee145c07d",
+    "status": "A"
+  },
+  {
+    "byte_length": 570,
+    "path": "reports/langgraph/logs/04.log",
+    "sha256": "8be1d8d95ce92685d0eaf043bb8a259b8af9b6454325b966febeb4289097ee20",
+    "status": "A"
+  },
+  {
+    "byte_length": 401,
+    "path": "reports/langgraph/logs/05.log",
+    "sha256": "9162ef7fc1590ea0fa78e5bdb54ef8ba395473ed4f4698c279006d714080baf0",
+    "status": "A"
+  },
+  {
+    "byte_length": 1136,
+    "path": "reports/langgraph/logs/06.log",
+    "sha256": "735353c353ae90e53c6fd24837f56b66887da3fa2c3446d838a66e0430c81df8",
+    "status": "A"
+  },
+  {
+    "byte_length": 7804,
+    "path": "reports/langgraph/logs/07.log",
+    "sha256": "1b9ccfa54026b1b7aeacad87f8ee303dadc296995421a145c13c7295eca37203",
+    "status": "A"
+  },
+  {
+    "byte_length": 0,
+    "path": "reports/langgraph/logs/08.log",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "status": "A"
+  },
+  {
+    "byte_length": 2064,
+    "path": "reports/langgraph/logs/09.log",
+    "sha256": "5b865d9e4e78e55925c0942c6481fbec90ae33e07034839ed395a367e8e36827",
+    "status": "A"
+  },
+  {
+    "byte_length": 570,
+    "path": "reports/langgraph/logs/10.log",
+    "sha256": "8be1d8d95ce92685d0eaf043bb8a259b8af9b6454325b966febeb4289097ee20",
+    "status": "A"
+  },
+  {
+    "byte_length": 49247,
+    "path": "reports/langgraph/logs/11-explain-cli.json",
+    "sha256": "c9047c8cdf8e0880db011e019c741c352da1e04227a50cc28f771e30f623e66f",
+    "status": "A"
+  },
+  {
+    "byte_length": 7009,
+    "path": "reports/langgraph/run_record.json",
+    "sha256": "ebe1015565e47eb7ef9d53d411ebeeb8da5724e457cedb72161112c7512f84a6",
+    "status": "A"
+  },
+  {
+    "byte_length": 708,
+    "path": "reports/langgraph/runtime-final/effect-unobserved/bindings.json",
+    "sha256": "35502a88d0314a8d908b0d15b25497723e541242c32eca55a41e853aced3e4cf",
+    "status": "A"
+  },
+  {
+    "byte_length": 719,
+    "path": "reports/langgraph/runtime-final/effect-unobserved/event-mapping.json",
+    "sha256": "3f9db805cc1d251c643104faea7dd82551a6a2a5bc49a87e265c4076681afaa5",
+    "status": "A"
+  },
+  {
+    "byte_length": 3057,
+    "path": "reports/langgraph/runtime-final/effect-unobserved/events.jsonl",
+    "sha256": "b0b37d185b94b88dd85f46dcdadffb3ce8ad56447f01d7814a3900df1cb27374",
+    "status": "A"
+  },
+  {
+    "byte_length": 171,
+    "path": "reports/langgraph/runtime-final/effect-unobserved/events/e0001.json",
+    "sha256": "dec32ddefe5d40b42c8a960f807c98a86635621ca5d13d39d6106c38980c020e",
+    "status": "A"
+  },
+  {
+    "byte_length": 441,
+    "path": "reports/langgraph/runtime-final/effect-unobserved/events/e0002.json",
+    "sha256": "31f18481dea9997393aa3951fb623171f440124da790cec1149dff1d297d6917",
+    "status": "A"
+  },
+  {
+    "byte_length": 243,
+    "path": "reports/langgraph/runtime-final/effect-unobserved/events/e0003.json",
+    "sha256": "ec70abe27ac23184fb81790930abf63381d5b4b237b4411383436a6605f705e2",
+    "status": "A"
+  },
+  {
+    "byte_length": 236,
+    "path": "reports/langgraph/runtime-final/effect-unobserved/events/e0004.json",
+    "sha256": "298872011376ce864212644508ec1086f97da6dd8f495044ef83427c69bf12df",
+    "status": "A"
+  },
+  {
+    "byte_length": 149,
+    "path": "reports/langgraph/runtime-final/effect-unobserved/events/e0005.json",
+    "sha256": "1ab61d5c0ff59fb758c7c07a4502fe590590dd59f3a466ff72da205316288ae9",
+    "status": "A"
+  },
+  {
+    "byte_length": 164,
+    "path": "reports/langgraph/runtime-final/effect-unobserved/events/e0006.json",
+    "sha256": "15b1d30fad8b2d7dc6cb2da4e0e699cb050dde28e3ac4c3e7fb502ff894bce66",
+    "status": "A"
+  },
+  {
+    "byte_length": 365,
+    "path": "reports/langgraph/runtime-final/effect-unobserved/events/e0007.json",
+    "sha256": "c54bae2cfaf4cbd01d3b9ace28391b8880b76e3c400fcd14c0f51dabe5b21278",
+    "status": "A"
+  },
+  {
+    "byte_length": 258,
+    "path": "reports/langgraph/runtime-final/effect-unobserved/events/e0008.json",
+    "sha256": "7d9f5a2d6b93192562de9f917a0f8b143bab78a0542acd9ffbc7da06257aa17f",
+    "status": "A"
+  },
+  {
+    "byte_length": 469,
+    "path": "reports/langgraph/runtime-final/effect-unobserved/events/e0009.json",
+    "sha256": "373b2054d1fb8d2c276d1f4729a87de26e769d049c1334effbd7fdf6d67ee361",
+    "status": "A"
+  },
+  {
+    "byte_length": 140,
+    "path": "reports/langgraph/runtime-final/effect-unobserved/events/e0010.json",
+    "sha256": "864ec78155cf2566dea81ab49c764e781f5684bfa905dc439724ee39f3149b42",
+    "status": "A"
+  },
+  {
+    "byte_length": 211,
+    "path": "reports/langgraph/runtime-final/effect-unobserved/events/e0011.json",
+    "sha256": "970db0fdccd8e8924aa76fc8e5247a0bb806dbcc3ebb3841716f058fba4393fb",
+    "status": "A"
+  },
+  {
+    "byte_length": 210,
+    "path": "reports/langgraph/runtime-final/effect-unobserved/events/e0012.json",
+    "sha256": "f5f0e244950eedc6d3e5e945502126a0ad2e792802f8e0c8529ed96ef1172a28",
+    "status": "A"
+  },
+  {
+    "byte_length": 39669,
+    "path": "reports/langgraph/runtime-final/effect-unobserved/explain.json",
+    "sha256": "228ff4f853c62b073f5ca16c6165a73c714c241cac2a2600f39331731f1eac52",
+    "status": "A"
+  },
+  {
+    "byte_length": 30701,
+    "path": "reports/langgraph/runtime-final/effect-unobserved/explain.txt",
+    "sha256": "ab6942b25b664f0ed12ae58cc6498041b37e0d8472c6530fb708e58ee55d1ea6",
+    "status": "A"
+  },
+  {
+    "byte_length": 114,
+    "path": "reports/langgraph/runtime-final/effect-unobserved/instruction.json",
+    "sha256": "99080e77c74f153481940c95d8f0d974c9a98e02a6e4460c697a1d9338e94682",
+    "status": "A"
+  },
+  {
+    "byte_length": 7717,
+    "path": "reports/langgraph/runtime-final/effect-unobserved/lifecycle.json",
+    "sha256": "fa8cbdce853f63cb7ac4925b065b27532e8e68d74493021b133b0fe53c09557a",
+    "status": "A"
+  },
+  {
+    "byte_length": 18568,
+    "path": "reports/langgraph/runtime-final/effect-unobserved/reconciliation.json",
+    "sha256": "51d45594a9964a859ccc30d5030a50a3106da0e75376cb80da58c7aba3140256",
+    "status": "A"
+  },
+  {
+    "byte_length": 199,
+    "path": "reports/langgraph/runtime-final/effect-unobserved/revocation.json",
+    "sha256": "c000f35f860eebebe65a3d99250bd0427292c4e2833327028a68c3133a39ad2f",
+    "status": "A"
+  },
+  {
+    "byte_length": 708,
+    "path": "reports/langgraph/runtime-final/normal/bindings.json",
+    "sha256": "962b098bbf3c5f963addb13b2c8be6f72d92f7c6987807022126635094d9129d",
+    "status": "A"
+  },
+  {
+    "byte_length": 44,
+    "path": "reports/langgraph/runtime-final/normal/effects.jsonl",
+    "sha256": "f961b1ca5363f2179d1258e27efc474b0cbefde233546181a12ffcf82c46d34c",
+    "status": "A"
+  },
+  {
+    "byte_length": 3,
+    "path": "reports/langgraph/runtime-final/normal/event-mapping.json",
+    "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+    "status": "A"
+  },
+  {
+    "byte_length": 2362,
+    "path": "reports/langgraph/runtime-final/normal/events.jsonl",
+    "sha256": "a3946a4847f743df5f47d7ec7a47f8f6e62f9359223b1ca63e6c6e45675d1e0f",
+    "status": "A"
+  },
+  {
+    "byte_length": 171,
+    "path": "reports/langgraph/runtime-final/normal/events/e0001.json",
+    "sha256": "51904dddb900f2df9e5fbb8526ef9c0207bcf46165d052fe74ac8056fe5551ae",
+    "status": "A"
+  },
+  {
+    "byte_length": 149,
+    "path": "reports/langgraph/runtime-final/normal/events/e0002.json",
+    "sha256": "de2c69113c9b41f817cf603972a7e43262aed0a214a5271bd755341f30139f06",
+    "status": "A"
+  },
+  {
+    "byte_length": 164,
+    "path": "reports/langgraph/runtime-final/normal/events/e0003.json",
+    "sha256": "720e84f64eb1a2f27a38718021525258379b9c19fdaa7d0f90445a65bfb42ab2",
+    "status": "A"
+  },
+  {
+    "byte_length": 155,
+    "path": "reports/langgraph/runtime-final/normal/events/e0004.json",
+    "sha256": "2f2873c06b90a2c936eb289623b3ef188ebb76e45bdfabf42032b9ab10fc5306",
+    "status": "A"
+  },
+  {
+    "byte_length": 167,
+    "path": "reports/langgraph/runtime-final/normal/events/e0005.json",
+    "sha256": "d3e79465facc0aa02c8dc6a9842d21594107ce0fd20b61d0472fd1b88c2ddf13",
+    "status": "A"
+  },
+  {
+    "byte_length": 155,
+    "path": "reports/langgraph/runtime-final/normal/events/e0006.json",
+    "sha256": "59d73c7b6fd0fef58b54a02bbfbb3b7a745131e14e0d36bcb8cd889953edaee6",
+    "status": "A"
+  },
+  {
+    "byte_length": 155,
+    "path": "reports/langgraph/runtime-final/normal/events/e0007.json",
+    "sha256": "48b1365d57504a426bb4abccf37778d4835bca3f1d8f5261449ecf6ac0902bd6",
+    "status": "A"
+  },
+  {
+    "byte_length": 155,
+    "path": "reports/langgraph/runtime-final/normal/events/e0008.json",
+    "sha256": "1e95bf03502f7ad6928d17a93ffc7a25b4b2b14c7ab6d4d50738373e5a8598a5",
+    "status": "A"
+  },
+  {
+    "byte_length": 197,
+    "path": "reports/langgraph/runtime-final/normal/events/e0009.json",
+    "sha256": "62e929671c8493408669b5122c8d3b3c8beedcd692fe43ad848fb8faed849865",
+    "status": "A"
+  },
+  {
+    "byte_length": 140,
+    "path": "reports/langgraph/runtime-final/normal/events/e0010.json",
+    "sha256": "f9132ca39ac1c46d811f828c6429ae5583b911a58c4492caef1df8c5eaf85f9f",
+    "status": "A"
+  },
+  {
+    "byte_length": 544,
+    "path": "reports/langgraph/runtime-final/normal/events/e0011.json",
+    "sha256": "57438097310ba627c95919a6a19275f111dade28e4ecd5b1da1e8a61240a28bd",
+    "status": "A"
+  },
+  {
+    "byte_length": 210,
+    "path": "reports/langgraph/runtime-final/normal/events/e0012.json",
+    "sha256": "135fd0aa40769d74a4a1b74f651345c0c21af0364735cc060cd31fbb679c83a7",
+    "status": "A"
+  },
+  {
+    "byte_length": 5137,
+    "path": "reports/langgraph/runtime-final/normal/explain.json",
+    "sha256": "d51ebd583ab30a5ff4f5e50ed1ebf44fa3dcf58e73362e837e5a4f95262606bc",
+    "status": "A"
+  },
+  {
+    "byte_length": 4501,
+    "path": "reports/langgraph/runtime-final/normal/explain.txt",
+    "sha256": "66859b4346bae111bc610f5f3cdaebb169b2c87c374e9a3254a4988a66feaf4b",
+    "status": "A"
+  },
+  {
+    "byte_length": 3,
+    "path": "reports/langgraph/runtime-final/normal/lifecycle.json",
+    "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+    "status": "A"
+  },
+  {
+    "byte_length": 743,
+    "path": "reports/langgraph/runtime-final/normal/reconciliation.json",
+    "sha256": "a25679a4e4a57fe5f2df6165ebd1b2308c22b76a24d63ff8b8808467037702c2",
+    "status": "A"
+  },
+  {
+    "byte_length": 188,
+    "path": "reports/langgraph/runtime-final/normal/revocation.json",
+    "sha256": "1f58af076db5a14cfd218527a000568004cb1ddbc925c0015a98fb4f282061de",
+    "status": "A"
+  },
+  {
+    "byte_length": 708,
+    "path": "reports/langgraph/runtime-final/receiver-ignores-stop/bindings.json",
+    "sha256": "b394988d5d23045aa8f2f64e04c0a871dc204f6dc3cf397b0d29a70a8c36529f",
+    "status": "A"
+  },
+  {
+    "byte_length": 44,
+    "path": "reports/langgraph/runtime-final/receiver-ignores-stop/effects.jsonl",
+    "sha256": "f961b1ca5363f2179d1258e27efc474b0cbefde233546181a12ffcf82c46d34c",
+    "status": "A"
+  },
+  {
+    "byte_length": 916,
+    "path": "reports/langgraph/runtime-final/receiver-ignores-stop/event-mapping.json",
+    "sha256": "2411b85c0e2761b016e68f611ef4bfa9996f8d842a2824264d66b45c59bd507c",
+    "status": "A"
+  },
+  {
+    "byte_length": 4060,
+    "path": "reports/langgraph/runtime-final/receiver-ignores-stop/events.jsonl",
+    "sha256": "6b925765d7becb8d046fa48a26e8b6fc901d22a9d9c659dfab5d977710f3a59f",
+    "status": "A"
+  },
+  {
+    "byte_length": 171,
+    "path": "reports/langgraph/runtime-final/receiver-ignores-stop/events/e0001.json",
+    "sha256": "8746e4de6cfd00315f4d1d9d123dbbc0f19e0797c8e8534d7eae3c317a2c922f",
+    "status": "A"
+  },
+  {
+    "byte_length": 149,
+    "path": "reports/langgraph/runtime-final/receiver-ignores-stop/events/e0002.json",
+    "sha256": "6cea6b10d2e42bcd36c645af73c0b50559f8e9c8f6d1cbc3389549e359f181f9",
+    "status": "A"
+  },
+  {
+    "byte_length": 164,
+    "path": "reports/langgraph/runtime-final/receiver-ignores-stop/events/e0003.json",
+    "sha256": "b7a80b99fc515b4a6179c82b2e5fcca66b5b2b387c535a5507462c1c94a5f181",
+    "status": "A"
+  },
+  {
+    "byte_length": 155,
+    "path": "reports/langgraph/runtime-final/receiver-ignores-stop/events/e0004.json",
+    "sha256": "978ebad8549f24251fa3361b2219210ab3b07ebeded27d20e5833e1e21ccdc1a",
+    "status": "A"
+  },
+  {
+    "byte_length": 167,
+    "path": "reports/langgraph/runtime-final/receiver-ignores-stop/events/e0005.json",
+    "sha256": "16767162f876ff25b0ae89ab455fb554c3598310aadf86a584845b55d2a8e710",
+    "status": "A"
+  },
+  {
+    "byte_length": 445,
+    "path": "reports/langgraph/runtime-final/receiver-ignores-stop/events/e0006.json",
+    "sha256": "eeb6c2f95e1bd60fb0f0ffb45f8b84032e0a6be4f19db0d4f885cca76f8100a1",
+    "status": "A"
+  },
+  {
+    "byte_length": 243,
+    "path": "reports/langgraph/runtime-final/receiver-ignores-stop/events/e0007.json",
+    "sha256": "324afc8735db41aa08efba82d77f955e3e17185190bddaa0d9a924087aae9a5f",
+    "status": "A"
+  },
+  {
+    "byte_length": 236,
+    "path": "reports/langgraph/runtime-final/receiver-ignores-stop/events/e0008.json",
+    "sha256": "bbc3dc7e8359adf43014f4ef586d827e00cf8c978f3915e4b31b5f720143c567",
+    "status": "A"
+  },
+  {
+    "byte_length": 369,
+    "path": "reports/langgraph/runtime-final/receiver-ignores-stop/events/e0009.json",
+    "sha256": "33e0846d1a2f0525c5bbe92e16e1ae1057cbce5ce51ed92e20475f18410477d4",
+    "status": "A"
+  },
+  {
+    "byte_length": 405,
+    "path": "reports/langgraph/runtime-final/receiver-ignores-stop/events/e0010.json",
+    "sha256": "347f6240b50f3cfc61abe8ec38cf41880da3a5927fb52f5e8087fe2fbc03d909",
+    "status": "A"
+  },
+  {
+    "byte_length": 155,
+    "path": "reports/langgraph/runtime-final/receiver-ignores-stop/events/e0011.json",
+    "sha256": "ce6972876e1e104a5dc36d4540150340abe6eb369c0ab58f4b4161f110d4b97e",
+    "status": "A"
+  },
+  {
+    "byte_length": 155,
+    "path": "reports/langgraph/runtime-final/receiver-ignores-stop/events/e0012.json",
+    "sha256": "47222a494b5aacc6987d1b016408bcf9d4eb7db943b30842baec7ea2de24d0e0",
+    "status": "A"
+  },
+  {
+    "byte_length": 155,
+    "path": "reports/langgraph/runtime-final/receiver-ignores-stop/events/e0013.json",
+    "sha256": "2613e159a9aec8b383ed70f8dd94577afa407f14f52bbbf5a8c11ee081ad7e1b",
+    "status": "A"
+  },
+  {
+    "byte_length": 197,
+    "path": "reports/langgraph/runtime-final/receiver-ignores-stop/events/e0014.json",
+    "sha256": "cfec81c3849a6ae0f9ad041fe695916c7e49f0dad501571f4ddac1367c656a24",
+    "status": "A"
+  },
+  {
+    "byte_length": 140,
+    "path": "reports/langgraph/runtime-final/receiver-ignores-stop/events/e0015.json",
+    "sha256": "362d268bfeee063559909bcbeed864ffaabf522e09cb38011ecf974df111bc7b",
+    "status": "A"
+  },
+  {
+    "byte_length": 544,
+    "path": "reports/langgraph/runtime-final/receiver-ignores-stop/events/e0016.json",
+    "sha256": "e0f2f6ed05efbc99f189be4d3a362dc9a9eca9adfaf489c88c0d8a6af3d09e90",
+    "status": "A"
+  },
+  {
+    "byte_length": 210,
+    "path": "reports/langgraph/runtime-final/receiver-ignores-stop/events/e0017.json",
+    "sha256": "5d65c2c6c4c70175601714346e0121f8e9769a4988f851fa2f2dbb1d66f849d3",
+    "status": "A"
+  },
+  {
+    "byte_length": 49856,
+    "path": "reports/langgraph/runtime-final/receiver-ignores-stop/explain.json",
+    "sha256": "c38bec92f4943b933a1f3d9efa1108729f23231936748bf54a5121c72a7bc3ed",
+    "status": "A"
+  },
+  {
+    "byte_length": 38602,
+    "path": "reports/langgraph/runtime-final/receiver-ignores-stop/explain.txt",
+    "sha256": "e3e46d332eaff896c92a7861aff950f6eb4505b75886f3ff3a6eaac900f92bd8",
+    "status": "A"
+  },
+  {
+    "byte_length": 118,
+    "path": "reports/langgraph/runtime-final/receiver-ignores-stop/instruction.json",
+    "sha256": "8b4e4fcaba2940fdeb15fc4d103262e59e67e43d491dca7e398f4a181225027e",
+    "status": "A"
+  },
+  {
+    "byte_length": 9600,
+    "path": "reports/langgraph/runtime-final/receiver-ignores-stop/lifecycle.json",
+    "sha256": "72538c272636d526bc8dc8b5e8a6913ffbbdb45cf1b6a05d48d7cd5c35dfc4d8",
+    "status": "A"
+  },
+  {
+    "byte_length": 24261,
+    "path": "reports/langgraph/runtime-final/receiver-ignores-stop/reconciliation.json",
+    "sha256": "0ffb8330a1f62d582229628b5cc1a23a9d70d5de3cc31df3d1a87ed2a3f1b789",
+    "status": "A"
+  },
+  {
+    "byte_length": 203,
+    "path": "reports/langgraph/runtime-final/receiver-ignores-stop/revocation.json",
+    "sha256": "fcebb154276b185bcb5aeaa49b62a80f5a69f0e4047de810185a1724d06d738e",
+    "status": "A"
+  },
+  {
+    "byte_length": 708,
+    "path": "reports/langgraph/runtime-final/receiver-unreachable/bindings.json",
+    "sha256": "2e0caea48aba047ac4097e9226cae3e921e0bab5931da0361592564912a74d68",
+    "status": "A"
+  },
+  {
+    "byte_length": 44,
+    "path": "reports/langgraph/runtime-final/receiver-unreachable/effects.jsonl",
+    "sha256": "f961b1ca5363f2179d1258e27efc474b0cbefde233546181a12ffcf82c46d34c",
+    "status": "A"
+  },
+  {
+    "byte_length": 357,
+    "path": "reports/langgraph/runtime-final/receiver-unreachable/event-mapping.json",
+    "sha256": "f002644fda790ab58783131f1057d31e7e48f1e170e65565258897c93bceda93",
+    "status": "A"
+  },
+  {
+    "byte_length": 3458,
+    "path": "reports/langgraph/runtime-final/receiver-unreachable/events.jsonl",
+    "sha256": "159e48aa5840b38ab367edd20d8f3f76c1c78c06bf91e2f0a7275ad586ec0aa2",
+    "status": "A"
+  },
+  {
+    "byte_length": 149,
+    "path": "reports/langgraph/runtime-final/receiver-unreachable/events/e0001.json",
+    "sha256": "6f561ede010f3d46674cacd385908196626a0ddb592374f5722959ce880c0730",
+    "status": "A"
+  },
+  {
+    "byte_length": 171,
+    "path": "reports/langgraph/runtime-final/receiver-unreachable/events/e0002.json",
+    "sha256": "c3d0054a773021c6b3a19a56199bcec0c392c2f7c973005cb5c19f6f0d85d39c",
+    "status": "A"
+  },
+  {
+    "byte_length": 149,
+    "path": "reports/langgraph/runtime-final/receiver-unreachable/events/e0003.json",
+    "sha256": "78b1e156fbcda00d9a992405bc90429067d781c464786dcd56eb19cd139cb70b",
+    "status": "A"
+  },
+  {
+    "byte_length": 164,
+    "path": "reports/langgraph/runtime-final/receiver-unreachable/events/e0004.json",
+    "sha256": "6a35f1da920dfc33d36d1413a88f82e3f06d3f65b349e5898c183d75970674bc",
+    "status": "A"
+  },
+  {
+    "byte_length": 155,
+    "path": "reports/langgraph/runtime-final/receiver-unreachable/events/e0005.json",
+    "sha256": "9f417cb261139c6f7b7d5c0222ef0201a419a64c952d18a9e228d377fa8ed504",
+    "status": "A"
+  },
+  {
+    "byte_length": 167,
+    "path": "reports/langgraph/runtime-final/receiver-unreachable/events/e0006.json",
+    "sha256": "7805eb5bd6e8bcc234bf59de99e5a45d98a86547a9c319c114daaedc0c1de1be",
+    "status": "A"
+  },
+  {
+    "byte_length": 444,
+    "path": "reports/langgraph/runtime-final/receiver-unreachable/events/e0007.json",
+    "sha256": "4fc8da4f89e8482041f7eaab59b4e63e550fc3228adcba026b0bc6f278a226c5",
+    "status": "A"
+  },
+  {
+    "byte_length": 243,
+    "path": "reports/langgraph/runtime-final/receiver-unreachable/events/e0008.json",
+    "sha256": "ea474ded0689fcbc7a82d4824206bf889d86c2feaae5a559bad1c372a889fbb0",
+    "status": "A"
+  },
+  {
+    "byte_length": 260,
+    "path": "reports/langgraph/runtime-final/receiver-unreachable/events/e0009.json",
+    "sha256": "a0a65a07b0869af3d4b477722134ca4d4ae2751c8b145b600fbd179c23d2ab76",
+    "status": "A"
+  },
+  {
+    "byte_length": 155,
+    "path": "reports/langgraph/runtime-final/receiver-unreachable/events/e0010.json",
+    "sha256": "dd384121848799dc04832c796ed99488693b2a0aa2d8d51ee09419743d06c43b",
+    "status": "A"
+  },
+  {
+    "byte_length": 155,
+    "path": "reports/langgraph/runtime-final/receiver-unreachable/events/e0011.json",
+    "sha256": "d04a7b42bf0fb6e2d032fb1c05de7aae35e7cf74e223329cecc59c861f1bafd4",
+    "status": "A"
+  },
+  {
+    "byte_length": 155,
+    "path": "reports/langgraph/runtime-final/receiver-unreachable/events/e0012.json",
+    "sha256": "26f3b400f80c94c7df8146fea3f854c88c504563c58f295b1cd3d005769636c0",
+    "status": "A"
+  },
+  {
+    "byte_length": 197,
+    "path": "reports/langgraph/runtime-final/receiver-unreachable/events/e0013.json",
+    "sha256": "0864d7264529b847fc4aef59d6300d22866e1920bb5a0918a4993791dfd64a38",
+    "status": "A"
+  },
+  {
+    "byte_length": 140,
+    "path": "reports/langgraph/runtime-final/receiver-unreachable/events/e0014.json",
+    "sha256": "4322bd51aaa97c72dd5a397ec8ace0c1dee6a572d7db5bdf0376173a813b1a7f",
+    "status": "A"
+  },
+  {
+    "byte_length": 544,
+    "path": "reports/langgraph/runtime-final/receiver-unreachable/events/e0015.json",
+    "sha256": "c766da06ce94b93b2a2e2e7330f58c4579f0468c5a482f931798a29d3f28d12b",
+    "status": "A"
+  },
+  {
+    "byte_length": 210,
+    "path": "reports/langgraph/runtime-final/receiver-unreachable/events/e0016.json",
+    "sha256": "9aa38ecd2df9e95ae081f8246ba68d4b8db1a80b3b14f9e7d35e2aa136e2b76e",
+    "status": "A"
+  },
+  {
+    "byte_length": 24834,
+    "path": "reports/langgraph/runtime-final/receiver-unreachable/explain.json",
+    "sha256": "cd4eac3be6e8a3a137c33178fad79389beb31d0390469a5c2670b6f192b03379",
+    "status": "A"
+  },
+  {
+    "byte_length": 19616,
+    "path": "reports/langgraph/runtime-final/receiver-unreachable/explain.txt",
+    "sha256": "de654c53ed26a5f0fca3ef151d3605ff9a68673f9859d48df527f8f54901e056",
+    "status": "A"
+  },
+  {
+    "byte_length": 117,
+    "path": "reports/langgraph/runtime-final/receiver-unreachable/instruction.json",
+    "sha256": "e363b20d9d673e93720cbde089c90d41b56f9edf739e72bbeaa740b0302740b5",
+    "status": "A"
+  },
+  {
+    "byte_length": 3781,
+    "path": "reports/langgraph/runtime-final/receiver-unreachable/lifecycle.json",
+    "sha256": "db5da8fb28be683078f5dee83dd9a4cdfaae7bd6b4a257411b9d0e7a055a44d5",
+    "status": "A"
+  },
+  {
+    "byte_length": 10684,
+    "path": "reports/langgraph/runtime-final/receiver-unreachable/reconciliation.json",
+    "sha256": "0e2c89964e4444b12ff93511e2edc4009799df63cf899eb0c07003f9aa9551ca",
+    "status": "A"
+  },
+  {
+    "byte_length": 202,
+    "path": "reports/langgraph/runtime-final/receiver-unreachable/revocation.json",
+    "sha256": "6662153394378e34eee3f246eb93420f0d1f5cddf001a9d9e1b1a24ac27cb90b",
+    "status": "A"
+  },
+  {
+    "byte_length": 45277,
+    "path": "reports/langgraph/runtime-final/run_record.json",
+    "sha256": "105d082c99e37185520b2d4402032d2f10ed2950936d2a1317c89c931bb99c96",
+    "status": "A"
+  },
+  {
+    "byte_length": 82,
+    "path": "reports/langgraph/runtime-final/run_record.sha256",
+    "sha256": "6667c824b6dc30e6cc694cccd2e82b716150ac27c79c74dfbac36197c1d3f775",
+    "status": "A"
+  },
+  {
+    "byte_length": 708,
+    "path": "reports/langgraph/runtime-final/stop-before-start/bindings.json",
+    "sha256": "06e65969bc3901a9f36bb2808510ac0278c41154ae73d2abe3810a5b3735fa63",
+    "status": "A"
+  },
+  {
+    "byte_length": 891,
+    "path": "reports/langgraph/runtime-final/stop-before-start/event-mapping.json",
+    "sha256": "69b07747dc939d9fa4a4729e24cbe51b1b387f53033c3dffba03097cc678a924",
+    "status": "A"
+  },
+  {
+    "byte_length": 3378,
+    "path": "reports/langgraph/runtime-final/stop-before-start/events.jsonl",
+    "sha256": "ba3d0724554f0a95667932470118ffea1dda7e84e6029d68ebd7d94387dfa6c2",
+    "status": "A"
+  },
+  {
+    "byte_length": 171,
+    "path": "reports/langgraph/runtime-final/stop-before-start/events/e0001.json",
+    "sha256": "f40b3d30dc63d053c0aae1b4e859822b1b1bf65614a17b22d0d5fc4e0872a81f",
+    "status": "A"
+  },
+  {
+    "byte_length": 441,
+    "path": "reports/langgraph/runtime-final/stop-before-start/events/e0002.json",
+    "sha256": "1294240726b9bfc85cf490b5d8d2e5b636d025f266a4c0218d7e76618f0b0cfa",
+    "status": "A"
+  },
+  {
+    "byte_length": 243,
+    "path": "reports/langgraph/runtime-final/stop-before-start/events/e0003.json",
+    "sha256": "af9b20518af045b9bb5aa1f66a922469b78f38453dea194db393c5b43dcec1dd",
+    "status": "A"
+  },
+  {
+    "byte_length": 236,
+    "path": "reports/langgraph/runtime-final/stop-before-start/events/e0004.json",
+    "sha256": "2f8e5730f5395d2d279131dfdbefac47498997de052c5f46d9bbe2d0934e32df",
+    "status": "A"
+  },
+  {
+    "byte_length": 149,
+    "path": "reports/langgraph/runtime-final/stop-before-start/events/e0005.json",
+    "sha256": "07eecafba04fbf6a61be17bdb19f2b1f44013a2b3e3a0164ab96c0080c7f93b6",
+    "status": "A"
+  },
+  {
+    "byte_length": 164,
+    "path": "reports/langgraph/runtime-final/stop-before-start/events/e0006.json",
+    "sha256": "3a6a076a302bbe59ac4fcbc75fefcc96cd2996a7544efa018e22e51ec1ca0614",
+    "status": "A"
+  },
+  {
+    "byte_length": 365,
+    "path": "reports/langgraph/runtime-final/stop-before-start/events/e0007.json",
+    "sha256": "135cb7006d3f8596568224cfc83b31ae85409d5dd9ee129ed6fb94bce3a170fb",
+    "status": "A"
+  },
+  {
+    "byte_length": 258,
+    "path": "reports/langgraph/runtime-final/stop-before-start/events/e0008.json",
+    "sha256": "3fcf6eacf5fb264b860147333bddb0d938cf1b6f50db06024f8306683a57ee44",
+    "status": "A"
+  },
+  {
+    "byte_length": 469,
+    "path": "reports/langgraph/runtime-final/stop-before-start/events/e0009.json",
+    "sha256": "b3f6fe5eab4c321b16146d596aed779b2083beb809666e4839561a2f2a821044",
+    "status": "A"
+  },
+  {
+    "byte_length": 140,
+    "path": "reports/langgraph/runtime-final/stop-before-start/events/e0010.json",
+    "sha256": "90223125e04f6d49a373e7d617c0c39a01c173cfaf5ccf790f05aff50cd50110",
+    "status": "A"
+  },
+  {
+    "byte_length": 532,
+    "path": "reports/langgraph/runtime-final/stop-before-start/events/e0011.json",
+    "sha256": "9a8b2556028e3b18e66733be9f5fce666456747fe0601c11ff8a8052d590abc0",
+    "status": "A"
+  },
+  {
+    "byte_length": 210,
+    "path": "reports/langgraph/runtime-final/stop-before-start/events/e0012.json",
+    "sha256": "b2a980029422eca73a8b4b6db901d544b90c7610767fe2b38402f6a91d0e7467",
+    "status": "A"
+  },
+  {
+    "byte_length": 49040,
+    "path": "reports/langgraph/runtime-final/stop-before-start/explain.json",
+    "sha256": "afa4618f145f7e33241035e34d059997dbeaa6ef62b112a9ee9287b9efba404c",
+    "status": "A"
+  },
+  {
+    "byte_length": 37786,
+    "path": "reports/langgraph/runtime-final/stop-before-start/explain.txt",
+    "sha256": "0cf5a6ae4cae535fa7f7816035fc2b0358b5ff02a11aaf8a5a45e502a2a95f8f",
+    "status": "A"
+  },
+  {
+    "byte_length": 114,
+    "path": "reports/langgraph/runtime-final/stop-before-start/instruction.json",
+    "sha256": "36fa38f7b7ff9bdcc9cce39dc226ab3be32cf9c8cd564508d88f29f5885ba79c",
+    "status": "A"
+  },
+  {
+    "byte_length": 9705,
+    "path": "reports/langgraph/runtime-final/stop-before-start/lifecycle.json",
+    "sha256": "d732c65a2b579bdca4367c94ad6ca18abd13bbf247f6f6e0415c996ca9b30772",
+    "status": "A"
+  },
+  {
+    "byte_length": 23482,
+    "path": "reports/langgraph/runtime-final/stop-before-start/reconciliation.json",
+    "sha256": "b96186cb4b94f9536a173d734f1103c385de9c50b941f484736089a0c0bcbb9e",
+    "status": "A"
+  },
+  {
+    "byte_length": 199,
+    "path": "reports/langgraph/runtime-final/stop-before-start/revocation.json",
+    "sha256": "3e4c523afa54c87c18be44df03bc0942a608b2a9c13c7710723c970ca96e776f",
+    "status": "A"
+  },
+  {
+    "byte_length": 708,
+    "path": "reports/langgraph/runtime-final/stop-during-action/bindings.json",
+    "sha256": "7b68e020beae863e7f111c4b5f11b88240677a13ed71cb3c5912e51030c04c0e",
+    "status": "A"
+  },
+  {
+    "byte_length": 11,
+    "path": "reports/langgraph/runtime-final/stop-during-action/effects.jsonl",
+    "sha256": "ca725775221aaf11b9a03b29ada2183a826f5df4f38d1e2a6f51223b11884132",
+    "status": "A"
+  },
+  {
+    "byte_length": 901,
+    "path": "reports/langgraph/runtime-final/stop-during-action/event-mapping.json",
+    "sha256": "9c1dc444711494cb0f51338f3825d6db7cc9177e20946d688993616566065bdb",
+    "status": "A"
+  },
+  {
+    "byte_length": 3705,
+    "path": "reports/langgraph/runtime-final/stop-during-action/events.jsonl",
+    "sha256": "d3a931f0447b0349f846e7a5ec6ba37d133eb4df6c30a00389109e0925aa2c93",
+    "status": "A"
+  },
+  {
+    "byte_length": 171,
+    "path": "reports/langgraph/runtime-final/stop-during-action/events/e0001.json",
+    "sha256": "c8af25fb8de7f68f3e0328a36cd80acae748e5f1dd0d36036baf31d7c7a9ed6d",
+    "status": "A"
+  },
+  {
+    "byte_length": 149,
+    "path": "reports/langgraph/runtime-final/stop-during-action/events/e0002.json",
+    "sha256": "ee10b72ba37dd0278c0cb778694fd78c034140cc8aeac12f9c86dc2930942f56",
+    "status": "A"
+  },
+  {
+    "byte_length": 164,
+    "path": "reports/langgraph/runtime-final/stop-during-action/events/e0003.json",
+    "sha256": "59ef246a3379816eb90395f0b1d7c548696753fa23bb718b26f8c491bfcb6da4",
+    "status": "A"
+  },
+  {
+    "byte_length": 155,
+    "path": "reports/langgraph/runtime-final/stop-during-action/events/e0004.json",
+    "sha256": "79d5b2ddb73967bb3c4511f71914b92521291cb2623b0797bb25c2cbd33718d4",
+    "status": "A"
+  },
+  {
+    "byte_length": 167,
+    "path": "reports/langgraph/runtime-final/stop-during-action/events/e0005.json",
+    "sha256": "a3b577646da3a1960908725caaa9ac205b295c7b2c8032609244e8ccf1affe56",
+    "status": "A"
+  },
+  {
+    "byte_length": 442,
+    "path": "reports/langgraph/runtime-final/stop-during-action/events/e0006.json",
+    "sha256": "44a200874d4534af699a72f5b96bcd68dd7b049cbc85b1cfcef0b2357c148026",
+    "status": "A"
+  },
+  {
+    "byte_length": 243,
+    "path": "reports/langgraph/runtime-final/stop-during-action/events/e0007.json",
+    "sha256": "8e7e7a221fbf32521a2164e8278f6b409113294af4542fea419a27de17f48eac",
+    "status": "A"
+  },
+  {
+    "byte_length": 236,
+    "path": "reports/langgraph/runtime-final/stop-during-action/events/e0008.json",
+    "sha256": "fe03cb57d0fa8ee9f97c35bd709c7b42722a0632bf3bb816b9ddf97dd77b78c1",
+    "status": "A"
+  },
+  {
+    "byte_length": 366,
+    "path": "reports/langgraph/runtime-final/stop-during-action/events/e0009.json",
+    "sha256": "a03cb8b7be59f58b7e849327028bc7591d69437d2259f8eb121b2f912a40c63d",
+    "status": "A"
+  },
+  {
+    "byte_length": 259,
+    "path": "reports/langgraph/runtime-final/stop-during-action/events/e0010.json",
+    "sha256": "a1c484fb117867a819f0a3af022a154094a9148e90e5ab3c93d2abcdcf62ff64",
+    "status": "A"
+  },
+  {
+    "byte_length": 471,
+    "path": "reports/langgraph/runtime-final/stop-during-action/events/e0011.json",
+    "sha256": "aa6f0ccb2420a34a09d5557780a9568e87e72388ddee76b2fb3e15ab10fa84ef",
+    "status": "A"
+  },
+  {
+    "byte_length": 140,
+    "path": "reports/langgraph/runtime-final/stop-during-action/events/e0012.json",
+    "sha256": "4331f1163057f6e45e4daad330c2bb95a816bbd9339458178d9c1f02a2703e2c",
+    "status": "A"
+  },
+  {
+    "byte_length": 532,
+    "path": "reports/langgraph/runtime-final/stop-during-action/events/e0013.json",
+    "sha256": "41b7d58298f8274fe475d37e50626af4edcaaec64a293cf4413af330df66eeef",
+    "status": "A"
+  },
+  {
+    "byte_length": 210,
+    "path": "reports/langgraph/runtime-final/stop-during-action/events/e0014.json",
+    "sha256": "9f87fcc8b9abfa1b0290d8ea861f07dfb3e587109d8f03d4851e73e68af05030",
+    "status": "A"
+  },
+  {
+    "byte_length": 49247,
+    "path": "reports/langgraph/runtime-final/stop-during-action/explain.json",
+    "sha256": "f4be731a89b26faa33837efb474d2299957fb7de2116703ebe1a9921d4df6595",
+    "status": "A"
+  },
+  {
+    "byte_length": 37993,
+    "path": "reports/langgraph/runtime-final/stop-during-action/explain.txt",
+    "sha256": "c7331e81078fbb260cadcd04ad67610ca3311c86d899e39d28d7fcef941d907b",
+    "status": "A"
+  },
+  {
+    "byte_length": 115,
+    "path": "reports/langgraph/runtime-final/stop-during-action/instruction.json",
+    "sha256": "d1bf8c97dda601faaf8af1014dbddc3d8faec369656c9c61f44979a81741c40e",
+    "status": "A"
+  },
+  {
+    "byte_length": 9728,
+    "path": "reports/langgraph/runtime-final/stop-during-action/lifecycle.json",
+    "sha256": "03bd9e215261246f74a113ff03d47336ef966c07d3d6bec748ba90acdd67504c",
+    "status": "A"
+  },
+  {
+    "byte_length": 23679,
+    "path": "reports/langgraph/runtime-final/stop-during-action/reconciliation.json",
+    "sha256": "96adef7b0e2e0a23bf3329e8e66a3d7fdaa3e88298fcba73621b0bde1f39e0e8",
+    "status": "A"
+  },
+  {
+    "byte_length": 200,
+    "path": "reports/langgraph/runtime-final/stop-during-action/revocation.json",
+    "sha256": "3dbbbbc43d0863bee1f5008f39ab3bae69178a8bf767316db08b1542393bc2fc",
+    "status": "A"
+  },
+  {
+    "byte_length": 708,
+    "path": "reports/langgraph/runtime/effect-unobserved/bindings.json",
+    "sha256": "a981d5f629ffa9ce75d69c835a41165652db0d31e951bcd99a0d836695097177",
+    "status": "A"
+  },
+  {
+    "byte_length": 719,
+    "path": "reports/langgraph/runtime/effect-unobserved/event-mapping.json",
+    "sha256": "3f9db805cc1d251c643104faea7dd82551a6a2a5bc49a87e265c4076681afaa5",
+    "status": "A"
+  },
+  {
+    "byte_length": 3057,
+    "path": "reports/langgraph/runtime/effect-unobserved/events.jsonl",
+    "sha256": "189fe8ce4732128aa0bbba377e7a4273312694580d7d77ac6ef8029a8a7bdc0d",
+    "status": "A"
+  },
+  {
+    "byte_length": 171,
+    "path": "reports/langgraph/runtime/effect-unobserved/events/e0001.json",
+    "sha256": "a6f3d3963abef7d6a70578d4018d2527067a6d1f08207c30d3340105ad1a28fd",
+    "status": "A"
+  },
+  {
+    "byte_length": 441,
+    "path": "reports/langgraph/runtime/effect-unobserved/events/e0002.json",
+    "sha256": "6547bf94ee249176c8f82c0ef48480100b4268009d5611fca1c67b3bc21da0c9",
+    "status": "A"
+  },
+  {
+    "byte_length": 243,
+    "path": "reports/langgraph/runtime/effect-unobserved/events/e0003.json",
+    "sha256": "836795dd39ab4520cfb8e2561fba84d5069ef43fb86c7cfc2bd5a727d5a15325",
+    "status": "A"
+  },
+  {
+    "byte_length": 236,
+    "path": "reports/langgraph/runtime/effect-unobserved/events/e0004.json",
+    "sha256": "c8fc1b543f3db1d4151b30187c23cb0a81652fbd7f751b6074a0c41696934e7d",
+    "status": "A"
+  },
+  {
+    "byte_length": 149,
+    "path": "reports/langgraph/runtime/effect-unobserved/events/e0005.json",
+    "sha256": "3f966c99c20a528dfaf4e780bfe196e8200f76e1bd69a3c77fa9e7db0f1435d5",
+    "status": "A"
+  },
+  {
+    "byte_length": 164,
+    "path": "reports/langgraph/runtime/effect-unobserved/events/e0006.json",
+    "sha256": "30633e3354937855949db328553a8adf70a6ceff1fc38181e313fb316cf26875",
+    "status": "A"
+  },
+  {
+    "byte_length": 365,
+    "path": "reports/langgraph/runtime/effect-unobserved/events/e0007.json",
+    "sha256": "f314377ff6fd182a735f810b949db3f5efecd536fe87c6d8d0b4557a05795e68",
+    "status": "A"
+  },
+  {
+    "byte_length": 258,
+    "path": "reports/langgraph/runtime/effect-unobserved/events/e0008.json",
+    "sha256": "a949d6fbf17119ce1168331bcfee1d465b7830731486865194f232ff93d44b58",
+    "status": "A"
+  },
+  {
+    "byte_length": 469,
+    "path": "reports/langgraph/runtime/effect-unobserved/events/e0009.json",
+    "sha256": "606db94f23dbe7a73023355c6052f137c98c4fd2a1c671f084b31d25a9ee2b9a",
+    "status": "A"
+  },
+  {
+    "byte_length": 140,
+    "path": "reports/langgraph/runtime/effect-unobserved/events/e0010.json",
+    "sha256": "ff4764aae0afa51f41a56c8087b96195c7f8d8406a05c1901cfd570ead39e906",
+    "status": "A"
+  },
+  {
+    "byte_length": 211,
+    "path": "reports/langgraph/runtime/effect-unobserved/events/e0011.json",
+    "sha256": "90a5dc8c6b6224a14da8e62ca4efac444855c9f489536416e959029ddf788da6",
+    "status": "A"
+  },
+  {
+    "byte_length": 210,
+    "path": "reports/langgraph/runtime/effect-unobserved/events/e0012.json",
+    "sha256": "52026fd37ca337c6a8d5d92eb491d605f2b2ef06330217ac43518e4410bf8ec2",
+    "status": "A"
+  },
+  {
+    "byte_length": 39669,
+    "path": "reports/langgraph/runtime/effect-unobserved/explain.json",
+    "sha256": "0444fb6cbbff1942da1421791c868005ceeb837292ca6d7c8fbecf2e22e88864",
+    "status": "A"
+  },
+  {
+    "byte_length": 30701,
+    "path": "reports/langgraph/runtime/effect-unobserved/explain.txt",
+    "sha256": "e25e291907e3654d6bcb8aff9951d9cf6179d0b9319f71b46a84778bebd666a8",
+    "status": "A"
+  },
+  {
+    "byte_length": 114,
+    "path": "reports/langgraph/runtime/effect-unobserved/instruction.json",
+    "sha256": "99080e77c74f153481940c95d8f0d974c9a98e02a6e4460c697a1d9338e94682",
+    "status": "A"
+  },
+  {
+    "byte_length": 7717,
+    "path": "reports/langgraph/runtime/effect-unobserved/lifecycle.json",
+    "sha256": "72d6c46475f457ea118480950b36a7714665ae2abfc24c80abe663d2b9e2e2ed",
+    "status": "A"
+  },
+  {
+    "byte_length": 18568,
+    "path": "reports/langgraph/runtime/effect-unobserved/reconciliation.json",
+    "sha256": "52a1f8fd7c48ef115e24b8e003d88d6097c63de749619bb11c66658fd19ae444",
+    "status": "A"
+  },
+  {
+    "byte_length": 199,
+    "path": "reports/langgraph/runtime/effect-unobserved/revocation.json",
+    "sha256": "c000f35f860eebebe65a3d99250bd0427292c4e2833327028a68c3133a39ad2f",
+    "status": "A"
+  },
+  {
+    "byte_length": 708,
+    "path": "reports/langgraph/runtime/normal/bindings.json",
+    "sha256": "2a7150c886eff394a7845f1387caa60373491c37d479bdd5778d3d14a4971267",
+    "status": "A"
+  },
+  {
+    "byte_length": 44,
+    "path": "reports/langgraph/runtime/normal/effects.jsonl",
+    "sha256": "f961b1ca5363f2179d1258e27efc474b0cbefde233546181a12ffcf82c46d34c",
+    "status": "A"
+  },
+  {
+    "byte_length": 3,
+    "path": "reports/langgraph/runtime/normal/event-mapping.json",
+    "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+    "status": "A"
+  },
+  {
+    "byte_length": 2362,
+    "path": "reports/langgraph/runtime/normal/events.jsonl",
+    "sha256": "05ea878dbb22e1d109b36638055befbc9fbf0020989a34241413c9e01f4730cc",
+    "status": "A"
+  },
+  {
+    "byte_length": 171,
+    "path": "reports/langgraph/runtime/normal/events/e0001.json",
+    "sha256": "30d2f3a7a049e685b8a1a043ef8778108506317c0f2dc37117552afb03499181",
+    "status": "A"
+  },
+  {
+    "byte_length": 149,
+    "path": "reports/langgraph/runtime/normal/events/e0002.json",
+    "sha256": "27af5f1ed8c5ebe65d5ffcedb3fcfda71f762744e361415b19f14c08238702ae",
+    "status": "A"
+  },
+  {
+    "byte_length": 164,
+    "path": "reports/langgraph/runtime/normal/events/e0003.json",
+    "sha256": "3e6f4b9ef8448db44fd283d9ba49c822d2c129d24fd9a3dd992124824919536a",
+    "status": "A"
+  },
+  {
+    "byte_length": 155,
+    "path": "reports/langgraph/runtime/normal/events/e0004.json",
+    "sha256": "34bcb345ae4be7074e828be20196c0611ed2ca5d49a36979a28d511067785e94",
+    "status": "A"
+  },
+  {
+    "byte_length": 167,
+    "path": "reports/langgraph/runtime/normal/events/e0005.json",
+    "sha256": "0fc5c2f071a9512b130c314013912c06020929337618bd99dfab479a34c4c39b",
+    "status": "A"
+  },
+  {
+    "byte_length": 155,
+    "path": "reports/langgraph/runtime/normal/events/e0006.json",
+    "sha256": "12f86e8221e5b7b9aadd6cf8e18e33ad4620249daf4123d9b9615fbeac0c2bc0",
+    "status": "A"
+  },
+  {
+    "byte_length": 155,
+    "path": "reports/langgraph/runtime/normal/events/e0007.json",
+    "sha256": "a9643fc1a5b1f2aee13fb0baa2f15c635dc63c903ab2a99828482936e92a89da",
+    "status": "A"
+  },
+  {
+    "byte_length": 155,
+    "path": "reports/langgraph/runtime/normal/events/e0008.json",
+    "sha256": "e1aa17acb862b9a906645ffe0fee119a547bdf7d7975f5200fcb0c925cfb9be9",
+    "status": "A"
+  },
+  {
+    "byte_length": 197,
+    "path": "reports/langgraph/runtime/normal/events/e0009.json",
+    "sha256": "e81099ce818298f4e78de5cb7608a23c7cc4ea799168128b5073880beba37070",
+    "status": "A"
+  },
+  {
+    "byte_length": 140,
+    "path": "reports/langgraph/runtime/normal/events/e0010.json",
+    "sha256": "0f0a1d9196108ce0879c6aea53566c3a8794143b3e8438843b14d76f814c1d3f",
+    "status": "A"
+  },
+  {
+    "byte_length": 544,
+    "path": "reports/langgraph/runtime/normal/events/e0011.json",
+    "sha256": "9c906d132053b634e207c8f76f000cce59796e6eb92cf463bff3ddc8948c112d",
+    "status": "A"
+  },
+  {
+    "byte_length": 210,
+    "path": "reports/langgraph/runtime/normal/events/e0012.json",
+    "sha256": "d92969fcc1c0f3fec87f9bfc9293833fbf99e83afa5b525e8155f03bd686038f",
+    "status": "A"
+  },
+  {
+    "byte_length": 5137,
+    "path": "reports/langgraph/runtime/normal/explain.json",
+    "sha256": "d51ebd583ab30a5ff4f5e50ed1ebf44fa3dcf58e73362e837e5a4f95262606bc",
+    "status": "A"
+  },
+  {
+    "byte_length": 4501,
+    "path": "reports/langgraph/runtime/normal/explain.txt",
+    "sha256": "66859b4346bae111bc610f5f3cdaebb169b2c87c374e9a3254a4988a66feaf4b",
+    "status": "A"
+  },
+  {
+    "byte_length": 3,
+    "path": "reports/langgraph/runtime/normal/lifecycle.json",
+    "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+    "status": "A"
+  },
+  {
+    "byte_length": 743,
+    "path": "reports/langgraph/runtime/normal/reconciliation.json",
+    "sha256": "a25679a4e4a57fe5f2df6165ebd1b2308c22b76a24d63ff8b8808467037702c2",
+    "status": "A"
+  },
+  {
+    "byte_length": 188,
+    "path": "reports/langgraph/runtime/normal/revocation.json",
+    "sha256": "1f58af076db5a14cfd218527a000568004cb1ddbc925c0015a98fb4f282061de",
+    "status": "A"
+  },
+  {
+    "byte_length": 708,
+    "path": "reports/langgraph/runtime/receiver-ignores-stop/bindings.json",
+    "sha256": "da233bb2c93689bff5e228c280080aaf19522ce8c02e6af01074b20a93d7e368",
+    "status": "A"
+  },
+  {
+    "byte_length": 44,
+    "path": "reports/langgraph/runtime/receiver-ignores-stop/effects.jsonl",
+    "sha256": "f961b1ca5363f2179d1258e27efc474b0cbefde233546181a12ffcf82c46d34c",
+    "status": "A"
+  },
+  {
+    "byte_length": 916,
+    "path": "reports/langgraph/runtime/receiver-ignores-stop/event-mapping.json",
+    "sha256": "2411b85c0e2761b016e68f611ef4bfa9996f8d842a2824264d66b45c59bd507c",
+    "status": "A"
+  },
+  {
+    "byte_length": 4060,
+    "path": "reports/langgraph/runtime/receiver-ignores-stop/events.jsonl",
+    "sha256": "23b3bb8c39c16b3ebc9e264c69f72e122da4badbe003e58264e8b620916f0269",
+    "status": "A"
+  },
+  {
+    "byte_length": 171,
+    "path": "reports/langgraph/runtime/receiver-ignores-stop/events/e0001.json",
+    "sha256": "a8acb064e1b7048910e5f6eaef1c2bb3a9accb2ec3c6f565b7a4220675ceea7d",
+    "status": "A"
+  },
+  {
+    "byte_length": 149,
+    "path": "reports/langgraph/runtime/receiver-ignores-stop/events/e0002.json",
+    "sha256": "ca8a25344cba1ebf772759c0f3095e1f12b8077b942422ecf4b2ccc71e4d8015",
+    "status": "A"
+  },
+  {
+    "byte_length": 164,
+    "path": "reports/langgraph/runtime/receiver-ignores-stop/events/e0003.json",
+    "sha256": "677b8b9fd0b99f00c0c6d6cea1256ab24c33a6b9da95f310b2404cd22fa8fd2d",
+    "status": "A"
+  },
+  {
+    "byte_length": 155,
+    "path": "reports/langgraph/runtime/receiver-ignores-stop/events/e0004.json",
+    "sha256": "6ae4b2c52ab1db987f990aa82038fc21fc266c4ea334f47b6bc016f6e866f004",
+    "status": "A"
+  },
+  {
+    "byte_length": 167,
+    "path": "reports/langgraph/runtime/receiver-ignores-stop/events/e0005.json",
+    "sha256": "4082e7ce8693a8453c3e56b3655544c85871b44657e74d188c39a1c0d7577c27",
+    "status": "A"
+  },
+  {
+    "byte_length": 445,
+    "path": "reports/langgraph/runtime/receiver-ignores-stop/events/e0006.json",
+    "sha256": "b0672ba9a7dbf5ac1d68b75416be3ef8c3cb190faf203392274aa753103bf293",
+    "status": "A"
+  },
+  {
+    "byte_length": 243,
+    "path": "reports/langgraph/runtime/receiver-ignores-stop/events/e0007.json",
+    "sha256": "192910d7a60b112fe696c60e920178832c3f6a98d5df5711250337bb132c633c",
+    "status": "A"
+  },
+  {
+    "byte_length": 236,
+    "path": "reports/langgraph/runtime/receiver-ignores-stop/events/e0008.json",
+    "sha256": "ecf4314383992a2139b7bc72778345029efec24f52aeb4d99437d9e26974c917",
+    "status": "A"
+  },
+  {
+    "byte_length": 369,
+    "path": "reports/langgraph/runtime/receiver-ignores-stop/events/e0009.json",
+    "sha256": "a1529c6ba9efa8b84381a000fdf484f187175a2906ff315f635db87f4368149b",
+    "status": "A"
+  },
+  {
+    "byte_length": 405,
+    "path": "reports/langgraph/runtime/receiver-ignores-stop/events/e0010.json",
+    "sha256": "04bbd1f6aabe783df82b1deb213dab9b036687f146d1852a6291fdb657a892b1",
+    "status": "A"
+  },
+  {
+    "byte_length": 155,
+    "path": "reports/langgraph/runtime/receiver-ignores-stop/events/e0011.json",
+    "sha256": "fa99226935d1b430aa6f1fcfc12c2022d9645ddd078ab86636bc62c751842d37",
+    "status": "A"
+  },
+  {
+    "byte_length": 155,
+    "path": "reports/langgraph/runtime/receiver-ignores-stop/events/e0012.json",
+    "sha256": "3dfd47ccf390d35364e679fca25d4be8597ece4e2ffe8729b481c9595d13df42",
+    "status": "A"
+  },
+  {
+    "byte_length": 155,
+    "path": "reports/langgraph/runtime/receiver-ignores-stop/events/e0013.json",
+    "sha256": "5f50386e1fbe8dc414c1a06649bb80dbdd16973b34e7907a384bef424b7e6434",
+    "status": "A"
+  },
+  {
+    "byte_length": 197,
+    "path": "reports/langgraph/runtime/receiver-ignores-stop/events/e0014.json",
+    "sha256": "03ae1c170b398be857ca8f500d479fca7662c4a7e4a3fba0d796df1b4846bda8",
+    "status": "A"
+  },
+  {
+    "byte_length": 140,
+    "path": "reports/langgraph/runtime/receiver-ignores-stop/events/e0015.json",
+    "sha256": "c6330c07c501983c564389c370eada79089fdba234c4a98d291325799c176bc1",
+    "status": "A"
+  },
+  {
+    "byte_length": 544,
+    "path": "reports/langgraph/runtime/receiver-ignores-stop/events/e0016.json",
+    "sha256": "91268b7df309e652e8767795b1f199279c66ef8ca279562e74c25a436a4ebc2b",
+    "status": "A"
+  },
+  {
+    "byte_length": 210,
+    "path": "reports/langgraph/runtime/receiver-ignores-stop/events/e0017.json",
+    "sha256": "5590bb79c212e29ebe35694af1c3c799fb08d6acab6264d438ac3999ba21dea2",
+    "status": "A"
+  },
+  {
+    "byte_length": 49856,
+    "path": "reports/langgraph/runtime/receiver-ignores-stop/explain.json",
+    "sha256": "e48df1838013904cc8cc0375c3deaa86acfa3bd8aa520662a1a2e11fb18f69e0",
+    "status": "A"
+  },
+  {
+    "byte_length": 38602,
+    "path": "reports/langgraph/runtime/receiver-ignores-stop/explain.txt",
+    "sha256": "73151fa880f1eba965ab2a4aca9c137142f29860d0165661884715f4cc13b1c0",
+    "status": "A"
+  },
+  {
+    "byte_length": 118,
+    "path": "reports/langgraph/runtime/receiver-ignores-stop/instruction.json",
+    "sha256": "8b4e4fcaba2940fdeb15fc4d103262e59e67e43d491dca7e398f4a181225027e",
+    "status": "A"
+  },
+  {
+    "byte_length": 9600,
+    "path": "reports/langgraph/runtime/receiver-ignores-stop/lifecycle.json",
+    "sha256": "5fb5a48e0381cd5047d97aef1c303ab4fe25943927691a09bf0c93892a51b4e3",
+    "status": "A"
+  },
+  {
+    "byte_length": 24261,
+    "path": "reports/langgraph/runtime/receiver-ignores-stop/reconciliation.json",
+    "sha256": "a8d4b32e1744509bc8f2be340bc19856c0c7bef1deb27e343c2e6ec6616ec469",
+    "status": "A"
+  },
+  {
+    "byte_length": 203,
+    "path": "reports/langgraph/runtime/receiver-ignores-stop/revocation.json",
+    "sha256": "fcebb154276b185bcb5aeaa49b62a80f5a69f0e4047de810185a1724d06d738e",
+    "status": "A"
+  },
+  {
+    "byte_length": 708,
+    "path": "reports/langgraph/runtime/receiver-unreachable/bindings.json",
+    "sha256": "65e154fda1e3d6853131382afa88dc2bf84d70bc9d679c5723d04cd11ae9a0a0",
+    "status": "A"
+  },
+  {
+    "byte_length": 44,
+    "path": "reports/langgraph/runtime/receiver-unreachable/effects.jsonl",
+    "sha256": "f961b1ca5363f2179d1258e27efc474b0cbefde233546181a12ffcf82c46d34c",
+    "status": "A"
+  },
+  {
+    "byte_length": 357,
+    "path": "reports/langgraph/runtime/receiver-unreachable/event-mapping.json",
+    "sha256": "f002644fda790ab58783131f1057d31e7e48f1e170e65565258897c93bceda93",
+    "status": "A"
+  },
+  {
+    "byte_length": 3458,
+    "path": "reports/langgraph/runtime/receiver-unreachable/events.jsonl",
+    "sha256": "d7864efc3ec8e25e16144407bd927ba9694f9b878a76e37611999aab7ecdbf61",
+    "status": "A"
+  },
+  {
+    "byte_length": 149,
+    "path": "reports/langgraph/runtime/receiver-unreachable/events/e0001.json",
+    "sha256": "20782ca025b821d08d9e2bda46c2a3fe91972145b96b29d72c4a89e909ec7587",
+    "status": "A"
+  },
+  {
+    "byte_length": 171,
+    "path": "reports/langgraph/runtime/receiver-unreachable/events/e0002.json",
+    "sha256": "96fa99007b4a2457b01b0f065f1b16454894bb2079adf2ef35ab31755b37c312",
+    "status": "A"
+  },
+  {
+    "byte_length": 149,
+    "path": "reports/langgraph/runtime/receiver-unreachable/events/e0003.json",
+    "sha256": "c17018d89be262606766aea1d9b0418128093f39339ba4ec2c7c5f44bccb5580",
+    "status": "A"
+  },
+  {
+    "byte_length": 164,
+    "path": "reports/langgraph/runtime/receiver-unreachable/events/e0004.json",
+    "sha256": "c7b39cb471a4c88ea0ce238069f3ac36141b2376f33861e8db52a8eaecad776f",
+    "status": "A"
+  },
+  {
+    "byte_length": 155,
+    "path": "reports/langgraph/runtime/receiver-unreachable/events/e0005.json",
+    "sha256": "d6e92f4e3d85d30d8b29d6a032904425344233252460fdf5b8fe30f7d42777c3",
+    "status": "A"
+  },
+  {
+    "byte_length": 167,
+    "path": "reports/langgraph/runtime/receiver-unreachable/events/e0006.json",
+    "sha256": "dffaaf32eee556890b883a07820dcc14f4319d5e0cae53cd8c534969e0877fc2",
+    "status": "A"
+  },
+  {
+    "byte_length": 444,
+    "path": "reports/langgraph/runtime/receiver-unreachable/events/e0007.json",
+    "sha256": "ac60534682467713a7b49fa0286820df91ba56f473dbb0bb61197fc83c7bc585",
+    "status": "A"
+  },
+  {
+    "byte_length": 243,
+    "path": "reports/langgraph/runtime/receiver-unreachable/events/e0008.json",
+    "sha256": "1593f6b47f3c7fb6d5ff7e27d792cd2d585f3a5ebe32dd4346ed2cf9ee50bdef",
+    "status": "A"
+  },
+  {
+    "byte_length": 260,
+    "path": "reports/langgraph/runtime/receiver-unreachable/events/e0009.json",
+    "sha256": "0e626d8a977155e1cec9627b2493d2ee98a8e7fac6a75f63e554c369689dce70",
+    "status": "A"
+  },
+  {
+    "byte_length": 155,
+    "path": "reports/langgraph/runtime/receiver-unreachable/events/e0010.json",
+    "sha256": "4486cc9df1c59aefe7e6d6621bdef9c015a09e1d43a0a278e34de381464c38f3",
+    "status": "A"
+  },
+  {
+    "byte_length": 155,
+    "path": "reports/langgraph/runtime/receiver-unreachable/events/e0011.json",
+    "sha256": "ecd7c438c62bfbe02f8b31ca5ed8b1d1caa1ffa6ae79b08ef5ebd6e6f8215d79",
+    "status": "A"
+  },
+  {
+    "byte_length": 155,
+    "path": "reports/langgraph/runtime/receiver-unreachable/events/e0012.json",
+    "sha256": "5bd82ffd4c4542f6a6593861154968f46866669ad388fedf7d8ec291101c9512",
+    "status": "A"
+  },
+  {
+    "byte_length": 197,
+    "path": "reports/langgraph/runtime/receiver-unreachable/events/e0013.json",
+    "sha256": "380f6ddcdd5ef63cb1e6631cc088d5b2b58fc8137abb84604d61cf9e1c177820",
+    "status": "A"
+  },
+  {
+    "byte_length": 140,
+    "path": "reports/langgraph/runtime/receiver-unreachable/events/e0014.json",
+    "sha256": "7ada60d1a273db54b1ec9e6db1905cf692ec78752b6c8954a71ee923547489dd",
+    "status": "A"
+  },
+  {
+    "byte_length": 544,
+    "path": "reports/langgraph/runtime/receiver-unreachable/events/e0015.json",
+    "sha256": "15db174adfc4901026f8379ca619a62dcd8cf4317ca3b8e854527f2ca5b696d3",
+    "status": "A"
+  },
+  {
+    "byte_length": 210,
+    "path": "reports/langgraph/runtime/receiver-unreachable/events/e0016.json",
+    "sha256": "86a89f1d296ee75730dc95f36fefe139ba7313e7fdbdebcd57420573119b3fa6",
+    "status": "A"
+  },
+  {
+    "byte_length": 24834,
+    "path": "reports/langgraph/runtime/receiver-unreachable/explain.json",
+    "sha256": "662eb8ed749e96d281e3e7dd29be96586c79bc806caa49fc2cd5190893350f1e",
+    "status": "A"
+  },
+  {
+    "byte_length": 19616,
+    "path": "reports/langgraph/runtime/receiver-unreachable/explain.txt",
+    "sha256": "579c09c0a91f6f310c0050c9ed1e70bafe28e50a2a85aa531a21d0b29674dbc5",
+    "status": "A"
+  },
+  {
+    "byte_length": 117,
+    "path": "reports/langgraph/runtime/receiver-unreachable/instruction.json",
+    "sha256": "e363b20d9d673e93720cbde089c90d41b56f9edf739e72bbeaa740b0302740b5",
+    "status": "A"
+  },
+  {
+    "byte_length": 3781,
+    "path": "reports/langgraph/runtime/receiver-unreachable/lifecycle.json",
+    "sha256": "86088c41fd8add9e178e2f7b8a51286a49e91141089473b3ea7f11e212543d92",
+    "status": "A"
+  },
+  {
+    "byte_length": 10684,
+    "path": "reports/langgraph/runtime/receiver-unreachable/reconciliation.json",
+    "sha256": "71b850f265fb034d5435cf46331ef4ddb9864621f2acfa2ca9307f3d6e05d0d9",
+    "status": "A"
+  },
+  {
+    "byte_length": 202,
+    "path": "reports/langgraph/runtime/receiver-unreachable/revocation.json",
+    "sha256": "6662153394378e34eee3f246eb93420f0d1f5cddf001a9d9e1b1a24ac27cb90b",
+    "status": "A"
+  },
+  {
+    "byte_length": 45271,
+    "path": "reports/langgraph/runtime/run_record.json",
+    "sha256": "3f5636edfb1de64c05f8ac00b58e91e3b0cdd3a115c563ef788d31c56d09c7e3",
+    "status": "A"
+  },
+  {
+    "byte_length": 82,
+    "path": "reports/langgraph/runtime/run_record.sha256",
+    "sha256": "ba4bd0eeca0129d23a07eeecf2994171b345f58834f95915a6ef4ee059e08305",
+    "status": "A"
+  },
+  {
+    "byte_length": 708,
+    "path": "reports/langgraph/runtime/stop-before-start/bindings.json",
+    "sha256": "835ddeb3a282f71b9684c2e0ec6a43b109cd0da879403a792b37309ec1894b75",
+    "status": "A"
+  },
+  {
+    "byte_length": 891,
+    "path": "reports/langgraph/runtime/stop-before-start/event-mapping.json",
+    "sha256": "69b07747dc939d9fa4a4729e24cbe51b1b387f53033c3dffba03097cc678a924",
+    "status": "A"
+  },
+  {
+    "byte_length": 3378,
+    "path": "reports/langgraph/runtime/stop-before-start/events.jsonl",
+    "sha256": "30b0650bac849d6ceb2a374bb18cddb4e2e0cd03c2a4e9d94f8a4226f506a320",
+    "status": "A"
+  },
+  {
+    "byte_length": 171,
+    "path": "reports/langgraph/runtime/stop-before-start/events/e0001.json",
+    "sha256": "d3ca8b8691d76a66273b6a858262dbbdeb442b20e68fb77d7381c615c4f82084",
+    "status": "A"
+  },
+  {
+    "byte_length": 441,
+    "path": "reports/langgraph/runtime/stop-before-start/events/e0002.json",
+    "sha256": "1e0de8b4c9b2f680ce1942092871e46eee6553c373d7bc579d965ddcef2c859d",
+    "status": "A"
+  },
+  {
+    "byte_length": 243,
+    "path": "reports/langgraph/runtime/stop-before-start/events/e0003.json",
+    "sha256": "5bb95fae6e3b4b5e55fb4e7d431382644bb254fff7662885edfc2bfbe70bf0e6",
+    "status": "A"
+  },
+  {
+    "byte_length": 236,
+    "path": "reports/langgraph/runtime/stop-before-start/events/e0004.json",
+    "sha256": "f78628d0048caaed3dd98f3ca41afbf4ef37d1f2acc3ebc8378b7048246ea1fa",
+    "status": "A"
+  },
+  {
+    "byte_length": 149,
+    "path": "reports/langgraph/runtime/stop-before-start/events/e0005.json",
+    "sha256": "de4a1b59f39fb91fff34c8a9a370897143d941bf65ef5c0df2780db809d5100c",
+    "status": "A"
+  },
+  {
+    "byte_length": 164,
+    "path": "reports/langgraph/runtime/stop-before-start/events/e0006.json",
+    "sha256": "81ff0d54fde7dd7920b3a16458f59d464c76266d3b91c96052a5b2986d59848c",
+    "status": "A"
+  },
+  {
+    "byte_length": 365,
+    "path": "reports/langgraph/runtime/stop-before-start/events/e0007.json",
+    "sha256": "90b5bd24dd4e626eef23d8e501705a66ff7a06177111d0e6c09722040a271d00",
+    "status": "A"
+  },
+  {
+    "byte_length": 258,
+    "path": "reports/langgraph/runtime/stop-before-start/events/e0008.json",
+    "sha256": "b9e353a4752d1570e48d05fb5923e84863ee8bc84f928a31407f9ad63ea1562e",
+    "status": "A"
+  },
+  {
+    "byte_length": 469,
+    "path": "reports/langgraph/runtime/stop-before-start/events/e0009.json",
+    "sha256": "47abf2f6fb203689cae149b18daf99a0313efe596bf83c0ae19ca2d9c2cddf2b",
+    "status": "A"
+  },
+  {
+    "byte_length": 140,
+    "path": "reports/langgraph/runtime/stop-before-start/events/e0010.json",
+    "sha256": "c2ea3502d8a0748afbd8465347b9ddcfca3e2964b8e80bf7b4855484767cb350",
+    "status": "A"
+  },
+  {
+    "byte_length": 532,
+    "path": "reports/langgraph/runtime/stop-before-start/events/e0011.json",
+    "sha256": "b7946fd6a61f085add8e4f2851cce019867255a9b195c59a3e47471fbee3b170",
+    "status": "A"
+  },
+  {
+    "byte_length": 210,
+    "path": "reports/langgraph/runtime/stop-before-start/events/e0012.json",
+    "sha256": "22db16c9d50d074330dbbca9a750a3f3ecb1afb83db0a2a139a4c0d33dbb6985",
+    "status": "A"
+  },
+  {
+    "byte_length": 49040,
+    "path": "reports/langgraph/runtime/stop-before-start/explain.json",
+    "sha256": "89f9a57a07f9ce6fe0833c21cfa40db8162a30f50d00a6bf1e3ab786a7cbbaa8",
+    "status": "A"
+  },
+  {
+    "byte_length": 37786,
+    "path": "reports/langgraph/runtime/stop-before-start/explain.txt",
+    "sha256": "6e19db4c9bc0ed51b49edcda67fb83eae83d57c8f735d0b01eb3f3814dde3f91",
+    "status": "A"
+  },
+  {
+    "byte_length": 114,
+    "path": "reports/langgraph/runtime/stop-before-start/instruction.json",
+    "sha256": "36fa38f7b7ff9bdcc9cce39dc226ab3be32cf9c8cd564508d88f29f5885ba79c",
+    "status": "A"
+  },
+  {
+    "byte_length": 9705,
+    "path": "reports/langgraph/runtime/stop-before-start/lifecycle.json",
+    "sha256": "82e1b7e0903e82645774f74c6fd1bf1cdca18d8a37ac7383fe4e4b62a78edaf6",
+    "status": "A"
+  },
+  {
+    "byte_length": 23482,
+    "path": "reports/langgraph/runtime/stop-before-start/reconciliation.json",
+    "sha256": "71e20421c50a5453988715084d0cf86f3739e6b4290d974792ea9e9d22b7f7f3",
+    "status": "A"
+  },
+  {
+    "byte_length": 199,
+    "path": "reports/langgraph/runtime/stop-before-start/revocation.json",
+    "sha256": "3e4c523afa54c87c18be44df03bc0942a608b2a9c13c7710723c970ca96e776f",
+    "status": "A"
+  },
+  {
+    "byte_length": 708,
+    "path": "reports/langgraph/runtime/stop-during-action/bindings.json",
+    "sha256": "914d8c41f0dd4ae53a03266ff5dafa18d29cada291a78e637f43f6d758e8fe26",
+    "status": "A"
+  },
+  {
+    "byte_length": 11,
+    "path": "reports/langgraph/runtime/stop-during-action/effects.jsonl",
+    "sha256": "ca725775221aaf11b9a03b29ada2183a826f5df4f38d1e2a6f51223b11884132",
+    "status": "A"
+  },
+  {
+    "byte_length": 901,
+    "path": "reports/langgraph/runtime/stop-during-action/event-mapping.json",
+    "sha256": "9c1dc444711494cb0f51338f3825d6db7cc9177e20946d688993616566065bdb",
+    "status": "A"
+  },
+  {
+    "byte_length": 3705,
+    "path": "reports/langgraph/runtime/stop-during-action/events.jsonl",
+    "sha256": "d2ecf2e44a6bf20045e15756ae01f9b82ada2a2aa815608ae79fab77e3d0501b",
+    "status": "A"
+  },
+  {
+    "byte_length": 171,
+    "path": "reports/langgraph/runtime/stop-during-action/events/e0001.json",
+    "sha256": "a81c419266835c1e73a8ee64966615deaee595f71049b07b357c5ac0bc8ace12",
+    "status": "A"
+  },
+  {
+    "byte_length": 149,
+    "path": "reports/langgraph/runtime/stop-during-action/events/e0002.json",
+    "sha256": "7af7b7204644f9bdd1be2a70aa81a56d38b5bec4f1d0eb7da62054357f8883c1",
+    "status": "A"
+  },
+  {
+    "byte_length": 164,
+    "path": "reports/langgraph/runtime/stop-during-action/events/e0003.json",
+    "sha256": "cd424867deab22fbe2cea4809b1e3b19b2b83754f75b4848c8ba6f6fdc05291a",
+    "status": "A"
+  },
+  {
+    "byte_length": 155,
+    "path": "reports/langgraph/runtime/stop-during-action/events/e0004.json",
+    "sha256": "3128c633fb9128ee3d2c62f4e56dcbf0c3a3c5c3cdac0d2917e638d4c8c8ce92",
+    "status": "A"
+  },
+  {
+    "byte_length": 167,
+    "path": "reports/langgraph/runtime/stop-during-action/events/e0005.json",
+    "sha256": "badcce9613c96f64a951f756496f7fcea3fdbaa6eb63f9b8f643dd0f9b1c77e1",
+    "status": "A"
+  },
+  {
+    "byte_length": 442,
+    "path": "reports/langgraph/runtime/stop-during-action/events/e0006.json",
+    "sha256": "b250017a217fd0006f7e5507f3c20906d99fcafb4cae4ba8256af28ee07dda00",
+    "status": "A"
+  },
+  {
+    "byte_length": 243,
+    "path": "reports/langgraph/runtime/stop-during-action/events/e0007.json",
+    "sha256": "936c1b50370c7b784a8b2afc3444aeb1ae834d36199872bb491dfb2a996832d3",
+    "status": "A"
+  },
+  {
+    "byte_length": 236,
+    "path": "reports/langgraph/runtime/stop-during-action/events/e0008.json",
+    "sha256": "e964f3b309dcb963ba2eb9f912f12362ef7d7648e725df008b7070c0d0a6b54f",
+    "status": "A"
+  },
+  {
+    "byte_length": 366,
+    "path": "reports/langgraph/runtime/stop-during-action/events/e0009.json",
+    "sha256": "e0a6e0debec394c0f03bfd07e0218c5ee01d98b6e0e3a18e8fce8e243340900d",
+    "status": "A"
+  },
+  {
+    "byte_length": 259,
+    "path": "reports/langgraph/runtime/stop-during-action/events/e0010.json",
+    "sha256": "3e83bc8f1a792ba2b4de410b5648a258131efab143e12c11135d0d48044396bf",
+    "status": "A"
+  },
+  {
+    "byte_length": 471,
+    "path": "reports/langgraph/runtime/stop-during-action/events/e0011.json",
+    "sha256": "7cd8f1edd2d56501a885817f7fe988eae2f8bc5dfae346058fbeab8e5c5da8de",
+    "status": "A"
+  },
+  {
+    "byte_length": 140,
+    "path": "reports/langgraph/runtime/stop-during-action/events/e0012.json",
+    "sha256": "8f7f7312ee9610a0557e2d90874dd3314e17d541df01d663e6b0c0970c51c792",
+    "status": "A"
+  },
+  {
+    "byte_length": 532,
+    "path": "reports/langgraph/runtime/stop-during-action/events/e0013.json",
+    "sha256": "79fd4203ff2704d9e4cf6fe8c1035ea69d0e35213acfee635ea496df1f67e07e",
+    "status": "A"
+  },
+  {
+    "byte_length": 210,
+    "path": "reports/langgraph/runtime/stop-during-action/events/e0014.json",
+    "sha256": "68816cc9cc96263fdf0da4fd89bcc983fef3082cef4e0fc5da649b729b304da6",
+    "status": "A"
+  },
+  {
+    "byte_length": 49247,
+    "path": "reports/langgraph/runtime/stop-during-action/explain.json",
+    "sha256": "8fdb74c0db7cd9025039b8930b113f2f729035b720f5c6c0d80129db533e15b4",
+    "status": "A"
+  },
+  {
+    "byte_length": 37993,
+    "path": "reports/langgraph/runtime/stop-during-action/explain.txt",
+    "sha256": "e502c923165c17995d327831a86b5e732871739bb8d79488b9c8a7487b72d77e",
+    "status": "A"
+  },
+  {
+    "byte_length": 115,
+    "path": "reports/langgraph/runtime/stop-during-action/instruction.json",
+    "sha256": "d1bf8c97dda601faaf8af1014dbddc3d8faec369656c9c61f44979a81741c40e",
+    "status": "A"
+  },
+  {
+    "byte_length": 9728,
+    "path": "reports/langgraph/runtime/stop-during-action/lifecycle.json",
+    "sha256": "0362b6766e2af449d38c05e97581138882af3ba811c5af2309ce070e65595710",
+    "status": "A"
+  },
+  {
+    "byte_length": 23679,
+    "path": "reports/langgraph/runtime/stop-during-action/reconciliation.json",
+    "sha256": "942ba72565a2069147db141bcb43ab9291fbaa25e01144124b5670de9e5524ac",
+    "status": "A"
+  },
+  {
+    "byte_length": 200,
+    "path": "reports/langgraph/runtime/stop-during-action/revocation.json",
+    "sha256": "3dbbbbc43d0863bee1f5008f39ab3bae69178a8bf767316db08b1542393bc2fc",
+    "status": "A"
+  },
+  {
+    "byte_length": 11713,
+    "path": "tests/v02/test_explain.py",
+    "sha256": "0add25bba70eb08731cd41c38e2ab5e5f90827e7f8cda9e8048d1a00ba7e2302",
+    "status": "A"
+  },
+  {
+    "byte_length": 3065,
+    "path": "tools/airep_v02/README.md",
+    "sha256": "2c882b7ea62349a50d2d83ad1ef8ea8a6a3cdc0d43a8faef5711d9ed206d42f9",
+    "status": "M"
+  },
+  {
+    "byte_length": 6779,
+    "path": "tools/airep_v02/__main__.py",
+    "sha256": "c73f4e9e89a62bc4db778d27a6b49a888d64b0adb25fc92d1dd0554b17b6e7b2",
+    "status": "M"
+  },
+  {
+    "byte_length": 7480,
+    "path": "tools/airep_v02/explain.py",
+    "sha256": "176952c4bb098b558719736e0ec067a5d8572135732c4e4c77eee479d190bb89",
+    "status": "A"
+  }
+]

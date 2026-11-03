@@ -1,0 +1,119 @@
+{
+  "argv": [
+    "bwrap",
+    "--unshare-all",
+    "--die-with-parent",
+    "--new-session",
+    "--ro-bind",
+    "/usr",
+    "/usr",
+    "--symlink",
+    "usr/bin",
+    "/bin",
+    "--symlink",
+    "usr/lib",
+    "/lib",
+    "--symlink",
+    "usr/lib64",
+    "/lib64",
+    "--proc",
+    "/proc",
+    "--dev",
+    "/dev",
+    "--tmpfs",
+    "/tmp",
+    "--dir",
+    "/home",
+    "--ro-bind",
+    "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/k1-control-failure-benchmark/phionyx-research/experiments/ietf/acder02-control-benchmark/src/evaluate.py",
+    "/evaluate.py",
+    "--ro-bind",
+    "/home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/k1-control-failure-benchmark/phionyx-research/experiments/ietf/acder02-control-benchmark/PROFILE.json",
+    "/profile.json",
+    "--ro-bind",
+    "/tmp/k1-evidence-only-xicyxl5r/input",
+    "/input",
+    "--bind",
+    "/tmp/phionyx-k1-development-01",
+    "/output",
+    "--clearenv",
+    "--setenv",
+    "PATH",
+    "/usr/bin",
+    "--setenv",
+    "PYTHONDONTWRITEBYTECODE",
+    "1",
+    "--chdir",
+    "/tmp",
+    "/usr/bin/python3",
+    "-B",
+    "/evaluate.py",
+    "--evidence-dir",
+    "/input",
+    "--profile",
+    "/profile.json",
+    "--output",
+    "/output/predictions.json"
+  ],
+  "code_sha256": "faa32e05ea5cef74ce48df06e8260d7a562080ab1ff529972afc3b6805ef4d07",
+  "evidence_count": 12,
+  "finished_utc": "2026-11-02T20:25:28.074242+00:00",
+  "input_hashes": [
+    {
+      "path": "scenarios/development/dev-01/evidence.json",
+      "sha256": "da7eb2376524904ed0a57f4ff5daa84c80827936e4b2b1a7b214d47fb4ed28a1"
+    },
+    {
+      "path": "scenarios/development/dev-02/evidence.json",
+      "sha256": "ab1256d001e4489f3e3f3608f3c8ead6201b4b4f67d0c900cd0843729b0285c6"
+    },
+    {
+      "path": "scenarios/development/dev-03/evidence.json",
+      "sha256": "a8e11d2bd1de8ba4d04d07af1ff890d06d92e8d63b27a4fa72f54f16c7a5dcd6"
+    },
+    {
+      "path": "scenarios/development/dev-04/evidence.json",
+      "sha256": "82e31d869082817125efd542ae5bd16f0f2aa6eee1b3dfa2e151a9179c3afbf6"
+    },
+    {
+      "path": "scenarios/development/dev-05/evidence.json",
+      "sha256": "78da3c78ed8fad596b7e1a9cbf2c4a4767d193550e357fd625f9f9037b33439d"
+    },
+    {
+      "path": "scenarios/development/dev-06/evidence.json",
+      "sha256": "0386444b9c7c7657f18f219e903c1d6f4cbba944262d6bfc606a5117299ec94c"
+    },
+    {
+      "path": "scenarios/development/dev-07/evidence.json",
+      "sha256": "ead1fa39a22e96f57c8dbffbbe4cc782bc4ab0935524ae7aad92a41b10ef00f2"
+    },
+    {
+      "path": "scenarios/development/dev-08/evidence.json",
+      "sha256": "c08992273a973bf70b38da4d8431b115ff3861c4925e117b851730fd8c695c55"
+    },
+    {
+      "path": "scenarios/development/dev-09/evidence.json",
+      "sha256": "768c01c3a7d2535e1f37b696ee5f823ec232e07fe87ba0a22c5d56b7d6f04f3a"
+    },
+    {
+      "path": "scenarios/development/dev-10/evidence.json",
+      "sha256": "bc7101a4d9b216543b77b9977b6cabbd2eef6eb9f7a9305b3aa4e799230938db"
+    },
+    {
+      "path": "scenarios/development/dev-11/evidence.json",
+      "sha256": "d13a37cd327f52ac167711aeae9a88a8d11e903f819ff52c5a0c57c30e45cbd8"
+    },
+    {
+      "path": "scenarios/development/dev-12/evidence.json",
+      "sha256": "73580ed98553dd8836e1b4a5df65f2e9b1a19aaae4a52e44322e9c23b070ab01"
+    }
+  ],
+  "network": "unshared; no external interface",
+  "oracle_mounted": false,
+  "predictions_sha256": "ec427a864484478e18810c9c12d5b56f671911d607ec5af35bf5636c5f5fa2ac",
+  "profile_sha256": "8c27cd685289028261ff5c035a6d9643c58412954bff8ebee7ffaa485c9e8a54",
+  "returncode": 0,
+  "schema": "acder-benchmark-isolated-run-v1",
+  "split": "development",
+  "started_utc": "2026-11-02T20:25:27.992965+00:00"
+}

@@ -1,0 +1,55 @@
+{
+  "schema": "acder-control-benchmark-source-pins-v1",
+  "draft": {
+    "url": "https://www.ietf.org/archive/id/draft-abak-agent-control-delivery-evidence-02.txt",
+    "revision": "draft-abak-agent-control-delivery-evidence-02",
+    "sha256": "fe3baeb08c8e0979ca64efece098c972827fab483debe0b2bcbfd697bb714782",
+    "bytes": 123860,
+    "retrieved_at_utc": "2026-11-02T20:04:34.985110+00:00"
+  },
+  "base_commit": "652e008d18805a1c69492a688e621df91f143287",
+  "initial_worktree_clean": true,
+  "user_plan_sha256": "9a8e82d94ebbc474cbf301af4a9fadfb19b352d25427c68b804995e66806ccfe",
+  "B3": {
+    "freeze_commit": "b733e060523b04a554a813321abc4e5ef71fda72",
+    "comparison_commit": "9caa50a8561c0bd3b580029010c96fcd25c3d585",
+    "results_used_for_new_test_design": false,
+    "artifacts": [
+      {
+        "path": "freeze.json",
+        "sha256": "7531b225bc90b79d44a8557c0d263ac80bb0cea17f478bcd98c8364405afeb0c",
+        "bytes": 11897
+      },
+      {
+        "path": "comparison/comparison.json",
+        "sha256": "6b95c82daa77ed5bc8ba099ac179a70ce12751be737be9c17bf05581130279cf",
+        "bytes": 3790
+      },
+      {
+        "path": "public/commitment.json",
+        "sha256": "cda835db77dc737694786bb73cee63977cff468279edfba1c62ea05a7f6aa7c7",
+        "bytes": 370
+      },
+      {
+        "path": "solver/solver_results.json",
+        "sha256": "19604777f6a2080a302e92ab805ba34bb42a9c6572bf567b0c5ffdf312daddae",
+        "bytes": 23462
+      },
+      {
+        "path": "solver/freeze_manifest.json",
+        "sha256": "84ba09ca7ce8383fb018ff2e7f9e1bc7bae400a6eaf249720aa0a43b901c5310",
+        "bytes": 1546
+      },
+      {
+        "path": "RESULTS.md",
+        "sha256": "1bd265e6f90c34e76f560d7a7a58aff4915e7481bdde8b6bb67a16a85fcac0aa",
+        "bytes": 6023
+      }
+    ],
+    "hash_only_read_for_new_benchmark_provenance": true
+  },
+  "pilot": {
+    "commit": "8f27f70ed542d1382e915626b69a1c9850284fc9",
+    "status": "frozen prior study; not new evaluation holdout"
+  }
+}

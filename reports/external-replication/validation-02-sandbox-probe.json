@@ -1,0 +1,33 @@
+{
+  "classification": "AUTHOR_SIDE_REFERENCE",
+  "cwd": "/packet",
+  "environment": {
+    "HOME": "/work/home",
+    "LANG": "C.UTF-8",
+    "PATH": "/usr/bin:/bin",
+    "PWD": "/packet",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "external_evidence": "NOT_EVALUATED",
+  "hidden_host_roots": {
+    "/etc": true,
+    "/home": true,
+    "/root": true,
+    "/run": true,
+    "/var": true
+  },
+  "mountinfo": "9280 7731 0:126 /newroot / rw,nosuid,nodev,relatime - tmpfs tmpfs rw,uid=1000,gid=1000,inode64\n9281 9280 259:4 /usr /usr ro,nosuid,nodev,relatime master:1 - ext4 /dev/nvme0n1p4 rw\n9282 9280 0:147 / /proc rw,nosuid,nodev,noexec,relatime - proc proc rw\n9283 9280 0:148 / /dev rw,nosuid,nodev,relatime - tmpfs tmpfs rw,mode=755,uid=1000,gid=1000,inode64\n9284 9283 0:6 /null /dev/null rw,nosuid,relatime master:2 - devtmpfs udev rw,size=16036772k,nr_inodes=4009193,mode=755,inode64\n9285 9283 0:6 /zero /dev/zero rw,nosuid,relatime master:2 - devtmpfs udev rw,size=16036772k,nr_inodes=4009193,mode=755,inode64\n9286 9283 0:6 /full /dev/full rw,nosuid,relatime master:2 - devtmpfs udev rw,size=16036772k,nr_inodes=4009193,mode=755,inode64\n9287 9283 0:6 /random /dev/random rw,nosuid,relatime master:2 - devtmpfs udev rw,size=16036772k,nr_inodes=4009193,mode=755,inode64\n9288 9283 0:6 /urandom /dev/urandom rw,nosuid,relatime master:2 - devtmpfs udev rw,size=16036772k,nr_inodes=4009193,mode=755,inode64\n9289 9283 0:6 /tty /dev/tty rw,nosuid,relatime master:2 - devtmpfs udev rw,size=16036772k,nr_inodes=4009193,mode=755,inode64\n9290 9283 0:149 / /dev/pts rw,nosuid,noexec,relatime - devpts devpts rw,mode=620,ptmxmode=666\n9291 9280 0:150 / /tmp rw,nosuid,nodev,relatime - tmpfs tmpfs rw,mode=755,uid=1000,gid=1000,inode64\n9292 9281 259:4 /home/toygar/.nvm/versions/node/v20.19.6/bin/node /usr/bin/node ro,nosuid,nodev,relatime master:1 - ext4 /dev/nvme0n1p4 rw\n9293 9280 259:4 /home/toygar/Documents/ChatGPT/AACDE/standards-reentry/2026-11-02/k5-external-replication/phionyx-research/docs/external-replication /packet ro,nosuid,nodev,relatime master:1 - ext4 /dev/nvme0n1p4 rw\n9294 9280 259:4 /tmp/k5-clean-validation-02 /work rw,nosuid,nodev,relatime master:1 - ext4 /dev/nvme0n1p4 rw\n",
+  "namespaces": {
+    "mnt": "mnt:[4026534150]",
+    "net": "net:[4026534157]",
+    "pid": "pid:[4026534155]",
+    "user": "user:[4026534218]"
+  },
+  "network_devices": "Inter-|   Receive                                                |  Transmit\n face |bytes    packets errs drop fifo frame compressed multicast|bytes    packets errs drop fifo colls carrier compressed\n    lo:       0       0    0    0    0     0          0         0        0       0    0    0    0     0       0          0\n",
+  "pid": 2,
+  "proc_pids": [
+    "1",
+    "2"
+  ],
+  "uid": 1000
+}

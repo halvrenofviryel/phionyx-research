@@ -1,0 +1,41 @@
+{
+  "schema": "k1-scorer-shared-input-pins-v1",
+  "author_protocol_commit": "c8c5889c5a96df92febf8ba44888479dd320e646",
+  "root_preregistration_commit_prefix_reported": "9a1d931",
+  "files": [
+    {
+      "path": "../k1-author/PROFILE.json",
+      "bytes": 13946,
+      "sha256": "8c27cd685289028261ff5c035a6d9643c58412954bff8ebee7ffaa485c9e8a54"
+    },
+    {
+      "path": "../k1-author/BENCHMARK_PROTOCOL.md",
+      "bytes": 8360,
+      "sha256": "183565d841f282211f214fbef8f4371faf63e5853df9a100f827bb8a283e49de"
+    },
+    {
+      "path": "../k1-author/CONTRACT.md",
+      "bytes": 2322,
+      "sha256": "57cd437e03e184aebc83de33835c8408b503d2d1ab27f1dc05f871613f75fafc"
+    },
+    {
+      "path": "../k1-author/EVIDENCE_SCHEMA.json",
+      "bytes": 4787,
+      "sha256": "9bbc6511814bd24a3ff1b31cf1a260a7c87f0b8dc2afd64dcfcf4f45ecbbd555"
+    },
+    {
+      "path": "../k1-author/CLAIM_OUTPUT_SCHEMA.json",
+      "bytes": 1708,
+      "sha256": "fd47e4a3d517748a17358112cea45bdd6116b6cca970798b91b01327adaf687c"
+    },
+    {
+      "path": "../k1-author/SCENARIO_SELECTION.json",
+      "bytes": 3353,
+      "sha256": "8cf277d7d7edf246a497394ef33c01ac32a98735d9402bbb6602c51add948b7b"
+    }
+  ],
+  "additional_input": "Author agent supplied oracle/latent key shapes without case values",
+  "author_case_generator_or_oracle_content_read": false,
+  "data_freeze_notified_but_not_read": "c6123b4309801c0bf007c0a3d95f6c2bc0820ac5",
+  "metadata_lookup_note": "Initial author commit lookup in outer workspace repository failed; resolved exact author commit in author repository. Test suite had independently passed."
+}

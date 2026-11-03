@@ -1,0 +1,124 @@
+{
+  "case_id": "dev-02",
+  "instructions": [
+    {
+      "content_sha256": "2acc07f22f1e25ff8588a7bedb576aaaae27fa018adc1c12e92c5349a623d651",
+      "content_utf8": "{\"control\":\"freeze\",\"task\":\"task-dev-02\"}",
+      "identity_scope": "scope-dev-02",
+      "instruction_id": "instruction-alpha",
+      "resolution": {
+        "candidates": [
+          "ep-a"
+        ],
+        "coverage": {
+          "evidence_refs": [
+            "profile:synthetic-deployment-inventory"
+          ],
+          "status": "VERIFIED"
+        },
+        "excluded": [],
+        "status": "CLOSED"
+      }
+    }
+  ],
+  "population": {
+    "cutoff": {
+      "clock_id": "mono",
+      "time": 10
+    },
+    "exclusion_rule": {
+      "evidence_available": true,
+      "frozen_time": 0,
+      "permitted_inputs": [
+        "issuer_metadata",
+        "target_resolution"
+      ],
+      "rule_id": "target-exclusion-v1",
+      "version": "1"
+    },
+    "included_instruction_ids": [
+      "instruction-alpha"
+    ],
+    "inclusion_rule": {
+      "evidence_available": true,
+      "frozen_time": 0,
+      "permitted_inputs": [
+        "instruction_id"
+      ],
+      "rule_id": "issuer-inclusion-v1",
+      "version": "1"
+    },
+    "manifest_id": "manifest-dev-02",
+    "manifest_instruction_ids": [
+      "instruction-alpha"
+    ]
+  },
+  "profile_id": "acder02-control-benchmark-v1",
+  "queries": [
+    {
+      "claim_id": "q-integrity",
+      "kind": "envelope_integrity",
+      "scope": {
+        "clock_id": "mono",
+        "cutoff": 10,
+        "target_id": "ep-a"
+      },
+      "subject": {
+        "record_ids": [
+          "r-receiver"
+        ]
+      }
+    },
+    {
+      "claim_id": "q-issuer",
+      "kind": "issuer_dispatched",
+      "scope": {
+        "clock_id": "mono",
+        "cutoff": 10,
+        "target_id": "ep-a"
+      },
+      "subject": {
+        "instruction_id": "instruction-alpha"
+      }
+    },
+    {
+      "claim_id": "q-receipt",
+      "kind": "receiver_receipt",
+      "scope": {
+        "boundary_id": "target-entry",
+        "clock_id": "mono",
+        "cutoff": 10,
+        "target_id": "ep-a"
+      },
+      "subject": {
+        "instruction_id": "instruction-alpha"
+      }
+    },
+    {
+      "claim_id": "q-all",
+      "kind": "all_required_delivery",
+      "scope": {
+        "clock_id": "mono",
+        "cutoff": 10,
+        "population_scope": "manifest",
+        "target_id": "ep-a",
+        "target_ids": [
+          "ep-a"
+        ]
+      },
+      "subject": {
+        "instruction_ids": [
+          "instruction-alpha"
+        ]
+      }
+    }
+  ],
+  "records": [
+    {
+      "payload_sha256": "1869dcde83247931a5e26ad26f2150f12c87bf70483a82d45146eae1383dc9d6",
+      "payload_utf8": "{\"attempt_id\":\"attempt-1\",\"boundary_id\":\"target-entry\",\"clock_id\":\"mono\",\"content_sha256\":\"2acc07f22f1e25ff8588a7bedb576aaaae27fa018adc1c12e92c5349a623d651\",\"identity_scope\":\"scope-dev-02\",\"instruction_id\":\"instruction-alpha\",\"kind\":\"receiver_observation\",\"observer_id\":\"ep-a\",\"outcome\":\"RECEIVED\",\"target_id\":\"ep-a\",\"time\":3}",
+      "record_id": "r-receiver"
+    }
+  ],
+  "schema": "acder02-control-benchmark-evidence-v1"
+}
