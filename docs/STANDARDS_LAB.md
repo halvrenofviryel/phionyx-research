@@ -16,6 +16,30 @@ manifests retain their pre-publication state; their `approval_granted=false` and
 `UNPUBLISHED` values are historical. Original source commit IDs remain provenance;
 the integration commits are included in the published U1 history. U2/U3/U4 remain HOLD.
 
+**Local next-publication candidate, 3 November 2026:** K1 and the K2/D/K3/K5
+packet are staged together behind the bounded
+[Control evidence research](CONTROL_EVIDENCE_RESEARCH.md) entry page. This
+candidate is unpublished and adds no external validation, adoption or standards
+status. Its [prepublication review](PREPUBLICATION_REVIEW_2026-11-03.md) is a
+separate record; the historical `standards_lab.json` and U1 evidence remain
+unchanged.
+
+## K1, K2, K3 and K5: local next-publication candidate
+
+| ID | Local evidence | Current boundary |
+|---|---|---|
+| **K1** | 24-case synthetic comparison, 12-case first holdout, frozen evaluator/scorer and one-command replay | Shared unsupported holdout subset: naive ACK 16/18, bounded evaluator 0/18; bounded recall 31/31; condition agreement 52/54. The naive rule is deliberately weak and analytical, not a product ranking. |
+| **K2** | v0.2.0-beta.1 same-version reference harness, 28 tests and eight negative controls | Author-side reference behavior; native status INCOMPLETE with one NOT_EVALUATED item. No external producer or consumer supplied. |
+| **K3** | Six pinned LangGraph 1.2.19 scenarios, 13 tests and raw-event-to-claim traceability | Controlled cooperative pause and local observations. No LLM, preemptive cancellation, durable resume, independent witness or production assurance. |
+| **K5** | Self-contained source/dependency packet; two clean author-side runs and read-only evidence review | 172 packet inputs and 930 archived evidence files verified. External reproduction, independent implementation and adoption remain NOT_EVALUATED. |
+
+K5 distributes the K2 and D/K3 source histories inside its Git bundle. Publishing
+the packet therefore publishes those sources even without a separate AIREP PR.
+The exact source refs, disclosures and excluded B2/B3/H2 units are recorded in the
+prepublication review. The [external impact ledger](EXTERNAL_IMPACT_LEDGER.md)
+keeps earlier v0.1.2 producer and v0.2 consumer evidence separate from these new
+author-side results.
+
 ## Reproduce the integrated experiments
 
 Run each command from the root of this `halvrenofviryel/phionyx-research` checkout.

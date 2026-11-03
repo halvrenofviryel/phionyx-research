@@ -1,0 +1,60 @@
+{
+  "schema": "phionyx-external-impact-ledger-v1",
+  "updated": "2026-11-03",
+  "publication_status": "PREPUBLICATION_LOCAL_CANDIDATE",
+  "rules": {
+    "author_side_rerun_is_external": false,
+    "public_availability_is_adoption": false,
+    "cross_version_results_are_interoperability": false,
+    "credit_requires_permission": true
+  },
+  "entries": [
+    {
+      "id": "airep-v0.1.2-external-producer",
+      "actor": "Emek Can Dogru",
+      "organization": null,
+      "target": "AIREP v0.1.2 commit 44387bd43cc06ba656eaa7ff670be5c8e3220aca",
+      "role": "EXTERNAL_PRODUCER",
+      "status": "MAINTAINER_REPRODUCED",
+      "source": "https://github.com/dogrucanemek-alt/airep-independent-producer/commit/31e12be987105d2ba93ab2abe6135d9e6d5374d2",
+      "same_version_interoperability": false,
+      "adoption": false
+    },
+    {
+      "id": "airep-v0.2-external-consumer",
+      "actor": "Joel Hillier",
+      "organization": "Certisyn, Inc.",
+      "target": "AIREP v0.2 Independent-Verifier Corpus v0.1",
+      "role": "EXTERNAL_CONSUMER_VERIFIER",
+      "status": "MAINTAINER_REPRODUCED",
+      "source": "AIREP EXTERNAL_EVIDENCE.md at public commit 075aff5610731736405951ecf3b7c4bfc3cc0f07",
+      "same_version_interoperability": false,
+      "adoption": false
+    },
+    {
+      "id": "k2-beta1-external-role",
+      "target": "AIREP v0.2.0-beta.1 commit 8a6c01ecce457aa94330c0ed7219e4c56ebfe771",
+      "role": "EXTERNAL_PRODUCER_OR_CONSUMER",
+      "status": "NOT_EVALUATED",
+      "packet": "docs/external-replication",
+      "same_version_interoperability": false,
+      "adoption": false
+    },
+    {
+      "id": "k3-external-reproduction",
+      "target": "LangGraph 1.2.19 runtime experiment at AIREP source commit 76ecce0b378a6b391850795abf45fb6aca8e1d6b",
+      "role": "EXTERNAL_REPRODUCER",
+      "status": "NOT_EVALUATED",
+      "packet": "docs/external-replication",
+      "same_version_interoperability": false,
+      "adoption": false
+    }
+  ],
+  "aggregate": {
+    "same_version_external_interoperability": "NOT_ESTABLISHED",
+    "external_reproduction_of_k1_k2_k3": "NOT_EVALUATED",
+    "product_adoption": "NOT_EVALUATED",
+    "merged_upstream_impact": "NOT_EVALUATED",
+    "standards_adoption_or_endorsement": "NOT_ESTABLISHED"
+  }
+}

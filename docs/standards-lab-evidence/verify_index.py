@@ -259,12 +259,32 @@ def check():
     changed = subprocess.check_output(
         ["git", "diff", "--name-only", BASE], cwd=ROOT, text=True
     ).splitlines()
-    assert all(
-        p in {"README.md", "portfolio.yaml"}
-        or p.startswith("docs/")
-        or p in {r["path"] for r in c04_inventory["files"]}
-        for p in changed
-    )
+    candidate_manifest_path = "docs/PREPUBLICATION_FILE_MANIFEST.json"
+    if (ROOT / candidate_manifest_path).exists():
+        candidate_manifest = load(candidate_manifest_path)
+        assert candidate_manifest["schema"] == "phionyx-prepublication-file-manifest-v1"
+        assert candidate_manifest["historical_lab_base"] == BASE
+        manifest_files = candidate_manifest["files"]
+        assert [row["path"] for row in manifest_files] == sorted(
+            row["path"] for row in manifest_files
+        )
+        assert len({row["path"] for row in manifest_files}) == len(manifest_files)
+        for row in manifest_files:
+            path = ROOT / row["path"]
+            assert path.is_file(), row["path"]
+            assert path.stat().st_size == row["bytes"], row["path"]
+            assert sha(row["path"]) == row["sha256"], row["path"]
+        assert set(changed) == {
+            candidate_manifest_path,
+            *(row["path"] for row in manifest_files),
+        }
+    else:
+        assert all(
+            p in {"README.md", "portfolio.yaml"}
+            or p.startswith("docs/")
+            or p in {r["path"] for r in c04_inventory["files"]}
+            for p in changed
+        )
     subprocess.run(
         [
             "git",

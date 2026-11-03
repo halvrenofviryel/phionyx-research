@@ -54,3 +54,12 @@ independent-validation claims remain subject to the existing gate.
 The 118 experiment tests were run separately during review; the existing core CI
 does not automatically run those suites. C03 uses its documented post-evaluation
 normalization of process-local origin tokens; C04 reproduces without normalization.
+
+## Local next-publication candidate — 3 November 2026
+
+K1 plus the K2/D/K3/K5 self-service packet have been combined in a local
+prepublication branch with a bounded landing page, initial external-impact ledger,
+disclosure review and PR draft. The candidate is **UNPUBLISHED** and requires a new,
+explicit owner approval. It does not modify the historical U1 approval or authorize
+U2/U3/U4, B2/B3, H2, outreach, release or Internet-Draft submission. See
+[the current prepublication review](PREPUBLICATION_REVIEW_2026-11-03.md).
