@@ -28,7 +28,9 @@ commit. Approval to merge is not itself a claim that the merge has completed.
 | U3 — AIREP D/F implementation | HOLD; only the attributed report snapshots are included in U1. |
 | U4 — H2 CP-01 candidate | HOLD; no draft submission or candidate publication authorized. |
 
-B2/B3 remain pending. No private answer reveal, release, hosting, external outreach
+In this historical U1 record, B2/B3 remained pending. They were subsequently
+completed locally; their reveal and log-bearing publication unit still requires a
+separate decision. No private answer reveal, release, hosting, external outreach
 or Internet-Draft submission is authorized by the U1 merge instruction.
 
 ## Historical evidence and review corrections
@@ -61,5 +63,6 @@ K1 plus the K2/D/K3/K5 self-service packet have been combined in a local
 prepublication branch with a bounded landing page, initial external-impact ledger,
 disclosure review and PR draft. The candidate is **UNPUBLISHED** and requires a new,
 explicit owner approval. It does not modify the historical U1 approval or authorize
-U2/U3/U4, B2/B3, H2, outreach, release or Internet-Draft submission. See
+U2/U3/U4, the separate B2/B3 publication unit, H2, outreach, release or
+Internet-Draft submission. See
 [the current prepublication review](PREPUBLICATION_REVIEW_2026-11-03.md).

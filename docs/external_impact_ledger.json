@@ -1,22 +1,29 @@
 {
-  "schema": "phionyx-external-impact-ledger-v1",
+  "schema": "phionyx-external-impact-ledger-v2",
   "updated": "2026-11-03",
   "publication_status": "PREPUBLICATION_LOCAL_CANDIDATE",
+  "k6_status": "INITIAL_LEDGER_COMPLETE_MONITORING_OPEN",
   "rules": {
     "author_side_rerun_is_external": false,
     "public_availability_is_adoption": false,
+    "bibliographic_reference_is_technical_use": false,
     "cross_version_results_are_interoperability": false,
     "credit_requires_permission": true
   },
   "entries": [
     {
       "id": "airep-v0.1.2-external-producer",
-      "actor": "Emek Can Dogru",
+      "actor": "Emek Can Doğru",
       "organization": null,
       "target": "AIREP v0.1.2 commit 44387bd43cc06ba656eaa7ff670be5c8e3220aca",
       "role": "EXTERNAL_PRODUCER",
       "status": "MAINTAINER_REPRODUCED",
+      "evidence_grade": "EXTERNAL_IMPLEMENTATION_MAINTAINER_REPRODUCED",
+      "evidence_recorded_at": "2026-09-02T19:12:35+03:00",
       "source": "https://github.com/dogrucanemek-alt/airep-independent-producer/commit/31e12be987105d2ba93ab2abe6135d9e6d5374d2",
+      "registry_source": "https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/blob/075aff5610731736405951ecf3b7c4bfc3cc0f07/EXTERNAL_EVIDENCE.md",
+      "bibliographic_reference": false,
+      "technical_use": true,
       "same_version_interoperability": false,
       "adoption": false
     },
@@ -27,7 +34,11 @@
       "target": "AIREP v0.2 Independent-Verifier Corpus v0.1",
       "role": "EXTERNAL_CONSUMER_VERIFIER",
       "status": "MAINTAINER_REPRODUCED",
-      "source": "AIREP EXTERNAL_EVIDENCE.md at public commit 075aff5610731736405951ecf3b7c4bfc3cc0f07",
+      "evidence_grade": "EXTERNAL_IMPLEMENTATION_MAINTAINER_REPRODUCED",
+      "evidence_recorded_at": "2026-09-02T19:12:35+03:00",
+      "source": "https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/blob/075aff5610731736405951ecf3b7c4bfc3cc0f07/EXTERNAL_EVIDENCE.md",
+      "bibliographic_reference": false,
+      "technical_use": true,
       "same_version_interoperability": false,
       "adoption": false
     },
@@ -36,7 +47,11 @@
       "target": "AIREP v0.2.0-beta.1 commit 8a6c01ecce457aa94330c0ed7219e4c56ebfe771",
       "role": "EXTERNAL_PRODUCER_OR_CONSUMER",
       "status": "NOT_EVALUATED",
-      "packet": "docs/external-replication",
+      "evidence_grade": "AUTHOR_SIDE_SELF_SERVICE_PACKET",
+      "evidence_recorded_at": "2026-11-03",
+      "source": "docs/external-replication",
+      "bibliographic_reference": false,
+      "technical_use": false,
       "same_version_interoperability": false,
       "adoption": false
     },
@@ -45,11 +60,22 @@
       "target": "LangGraph 1.2.19 runtime experiment at AIREP source commit 76ecce0b378a6b391850795abf45fb6aca8e1d6b",
       "role": "EXTERNAL_REPRODUCER",
       "status": "NOT_EVALUATED",
-      "packet": "docs/external-replication",
+      "evidence_grade": "AUTHOR_SIDE_SELF_SERVICE_PACKET",
+      "evidence_recorded_at": "2026-11-03",
+      "source": "docs/external-replication",
+      "bibliographic_reference": false,
+      "technical_use": false,
       "same_version_interoperability": false,
       "adoption": false
     }
   ],
+  "reassessment": {
+    "T1_reproducible_original_result": "MET_LOCAL",
+    "T2_same_version_external_interoperability": "NOT_MET",
+    "T3_real_runtime_evidence": "MET_BOUNDED_LOCAL",
+    "T4_substantive_external_uptake": "NOT_MET_FOR_CURRENT_PACKET",
+    "global_top10_reassessment": "HOLD_NO_SUPPORTED_RANKING_CLAIM"
+  },
   "aggregate": {
     "same_version_external_interoperability": "NOT_ESTABLISHED",
     "external_reproduction_of_k1_k2_k3": "NOT_EVALUATED",

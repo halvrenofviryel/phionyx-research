@@ -61,9 +61,17 @@ def main() -> None:
 
     ledger = json.loads((ROOT / "docs/external_impact_ledger.json").read_text())
     assert ledger["publication_status"] == "PREPUBLICATION_LOCAL_CANDIDATE"
+    assert ledger["k6_status"] == "INITIAL_LEDGER_COMPLETE_MONITORING_OPEN"
     assert ledger["aggregate"]["same_version_external_interoperability"] == "NOT_ESTABLISHED"
     assert ledger["aggregate"]["external_reproduction_of_k1_k2_k3"] == "NOT_EVALUATED"
     assert all(not entry["adoption"] for entry in ledger["entries"])
+    assert ledger["reassessment"] == {
+        "T1_reproducible_original_result": "MET_LOCAL",
+        "T2_same_version_external_interoperability": "NOT_MET",
+        "T3_real_runtime_evidence": "MET_BOUNDED_LOCAL",
+        "T4_substantive_external_uptake": "NOT_MET_FOR_CURRENT_PACKET",
+        "global_top10_reassessment": "HOLD_NO_SUPPORTED_RANKING_CLAIM",
+    }
 
     review = (ROOT / "docs/PREPUBLICATION_REVIEW_2026-11-03.md").read_text()
     assert "READY_FOR_OWNER_REVIEW / UNPUBLISHED" in review
