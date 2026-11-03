@@ -1287,8 +1287,8 @@
     },
     {
       "path": "docs/standards-lab-evidence/verify_index.py",
-      "bytes": 15050,
-      "sha256": "4c055488a6ed18215a1933359ea0abaecb2a41818d25c4546d4adb8f5748b25e"
+      "bytes": 15494,
+      "sha256": "9c271a708bb853dd33c1e5e38a69b87c3af9c90b792d1b38c5b25f3e052d78fa"
     },
     {
       "path": "docs/standards-lab-evidence/verify_review.py",
@@ -2517,8 +2517,8 @@
     },
     {
       "path": "tools/verify_prepublication_candidate.py",
-      "bytes": 3476,
-      "sha256": "c5ef788eb68742fde038712cea3c2215b3d43c413b07e31d39a34440dc838aa2"
+      "bytes": 4145,
+      "sha256": "43ab5f137e017a5a9f8a5995f4e0b255749e3cda369bb34ec7bc153c9fceb8bb"
     }
   ]
 }
