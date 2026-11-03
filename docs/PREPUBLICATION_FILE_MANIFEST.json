@@ -17,8 +17,8 @@
     },
     {
       "path": "docs/EXTERNAL_IMPACT_LEDGER.md",
-      "bytes": 1596,
-      "sha256": "6c23252c1458c23eea19be82834370604c980de2b3694462453db9bbddc3b435"
+      "bytes": 2631,
+      "sha256": "22dc08ed5a7ba1521b30b8a38239100ca2e424197ba4b76415f514241349c583"
     },
     {
       "path": "docs/PREPUBLICATION_REVIEW_2026-11-03.md",
@@ -42,13 +42,13 @@
     },
     {
       "path": "docs/PUBLICATION_STATUS.md",
-      "bytes": 3933,
-      "sha256": "9809779b5624a483c2d42284c27548e5ac5284b88df490dfd10de61dd22b9ead"
+      "bytes": 4119,
+      "sha256": "e244d96eb30e5d2a57828eb5f509881bfa5ccbfd715b82994c3048f69f231cd4"
     },
     {
       "path": "docs/STANDARDS_LAB.md",
-      "bytes": 22057,
-      "sha256": "77ab918ff5452396412b5fa26c2fcfed53327774688ce4abfb531332b98a864f"
+      "bytes": 22682,
+      "sha256": "574fa0587e1521e34dcf1b72725f703eb56f2e3c8d959d85e0877dedce67bcf7"
     },
     {
       "path": "docs/STANDARDS_PORTFOLIO_DELTA.md",
@@ -922,8 +922,8 @@
     },
     {
       "path": "docs/external_impact_ledger.json",
-      "bytes": 2268,
-      "sha256": "5396d7864d5782ee3009879b5f00a552127909a6b8f980cc4ef2235e410b7faa"
+      "bytes": 3660,
+      "sha256": "1fd4edd23878bedbd0798ba8c081afb0578414a453191a8e107cbdeeb5051053"
     },
     {
       "path": "docs/publication_review.json",
@@ -2517,8 +2517,8 @@
     },
     {
       "path": "tools/verify_prepublication_candidate.py",
-      "bytes": 4145,
-      "sha256": "43ab5f137e017a5a9f8a5995f4e0b255749e3cda369bb34ec7bc153c9fceb8bb"
+      "bytes": 4587,
+      "sha256": "411754afb8356e91b605ff2a45f12c6a55c2625b20908bd7894c2867f07463a4"
     }
   ]
 }
