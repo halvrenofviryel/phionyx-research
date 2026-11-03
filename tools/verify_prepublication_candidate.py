@@ -60,6 +60,7 @@ def main() -> None:
     )
 
     ledger = json.loads((ROOT / "docs/external_impact_ledger.json").read_text())
+    assert ledger["schema"] == "phionyx-external-impact-ledger-v2"
     assert ledger["publication_status"] == "PREPUBLICATION_LOCAL_CANDIDATE"
     assert ledger["k6_status"] == "INITIAL_LEDGER_COMPLETE_MONITORING_OPEN"
     assert ledger["aggregate"]["same_version_external_interoperability"] == "NOT_ESTABLISHED"
