@@ -76,6 +76,25 @@ def main() -> None:
     ):
         assert phrase in landing, f"landing page lost boundary: {phrase}"
 
+    authored_surfaces = [
+        "README.md",
+        "docs/CONTROL_EVIDENCE_RESEARCH.md",
+        "docs/EXTERNAL_IMPACT_LEDGER.md",
+        "docs/PREPUBLICATION_REVIEW_2026-11-03.md",
+        "docs/PUBLICATION_PR_DRAFT_2026-11-03.md",
+        "docs/PUBLICATION_STATUS.md",
+        "docs/STANDARDS_LAB.md",
+        "docs/external_impact_ledger.json",
+        "experiments/ietf/acder02-control-benchmark/README.md",
+        "tools/build_prepublication_manifest.py",
+        "tools/verify_prepublication_candidate.py",
+    ]
+    subprocess.run(
+        ["git", "diff", "--check", K5_FINAL, "HEAD", "--", *authored_surfaces],
+        cwd=ROOT,
+        check=True,
+    )
+
     tracked = set(git("ls-files").splitlines())
     for path in required:
         assert path in tracked, f"required file is not tracked: {path}"

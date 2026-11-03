@@ -285,19 +285,30 @@ def check():
             or p in {r["path"] for r in c04_inventory["files"]}
             for p in changed
         )
+    diff_check = [
+        "git",
+        "diff",
+        "--check",
+        BASE,
+        "--",
+        ".",
+        ":(exclude)docs/standards-lab-evidence/sources/**",
+        ":(exclude)docs/standards-lab-evidence/local-refs/**",
+        ":(exclude)experiments/ietf/audit/decision-receipts-04/sources/**",
+        ":(exclude)experiments/ietf/audit/decision-receipts-04/evidence/**",
+    ]
+    if candidate_manifest.exists():
+        # These directories preserve byte-exact upstream licence/METADATA files
+        # and review diffs. Original whitespace is covered by the exact candidate
+        # manifest and the packet's own MANIFEST.json rather than normalized.
+        diff_check.extend(
+            [
+                ":(exclude)docs/external-replication/**",
+                ":(exclude)reports/external-replication/**",
+            ]
+        )
     subprocess.run(
-        [
-            "git",
-            "diff",
-            "--check",
-            BASE,
-            "--",
-            ".",
-            ":(exclude)docs/standards-lab-evidence/sources/**",
-            ":(exclude)docs/standards-lab-evidence/local-refs/**",
-            ":(exclude)experiments/ietf/audit/decision-receipts-04/sources/**",
-            ":(exclude)experiments/ietf/audit/decision-receipts-04/evidence/**",
-        ],
+        diff_check,
         cwd=ROOT,
         check=True,
     )
