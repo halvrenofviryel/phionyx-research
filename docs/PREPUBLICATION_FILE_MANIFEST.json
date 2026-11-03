@@ -1287,8 +1287,8 @@
     },
     {
       "path": "docs/standards-lab-evidence/verify_index.py",
-      "bytes": 15494,
-      "sha256": "9c271a708bb853dd33c1e5e38a69b87c3af9c90b792d1b38c5b25f3e052d78fa"
+      "bytes": 15508,
+      "sha256": "ea5930974c4312201de27d1b54db5649b538023e79e7a254c1ba7a17ecad53fe"
     },
     {
       "path": "docs/standards-lab-evidence/verify_review.py",
