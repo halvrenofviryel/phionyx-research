@@ -1,0 +1,10 @@
+# Keep generated evidence and sealed archives in the repository while making the
+# review surface focus on authored source and explanatory documents.
+docs/external-replication/bundles/*.bundle binary
+docs/external-replication/bundles/*.tar.gz binary
+docs/external-replication/review/**/*.gz binary
+reports/external-replication/*.tar.gz binary
+
+docs/external-replication/evidence/** linguist-generated=true
+reports/external-replication/** linguist-generated=true
+experiments/ietf/acder02-control-benchmark/results/** linguist-generated=true

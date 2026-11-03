@@ -1,4 +1,9 @@
-# Pull request draft — not submitted
+# Pull request source — used for draft PR #108
+
+This preparation copy supplied the title and body for
+[PR #108](https://github.com/halvrenofviryel/phionyx-research/pull/108). The live
+PR is authoritative for current metadata, checks, reviews and merge status. No
+merge, release, outreach or standards submission is authorized by this record.
 
 ## Title
 

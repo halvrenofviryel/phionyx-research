@@ -1,7 +1,18 @@
 {
-  "schema": "phionyx-external-impact-ledger-v2",
+  "schema": "phionyx-external-impact-ledger-v3",
   "updated": "2026-11-03",
-  "publication_status": "PREPUBLICATION_LOCAL_CANDIDATE",
+  "publication_status": "PUBLIC_DRAFT_PR_OPEN",
+  "publication_event": {
+    "repository": "halvrenofviryel/phionyx-research",
+    "branch": "codex/prepublication-k1-k5",
+    "initial_public_head": "a10a2fc83cf2d9a075d7ff26d67b50205c0bb174",
+    "pull_request": 108,
+    "url": "https://github.com/halvrenofviryel/phionyx-research/pull/108",
+    "merge_performed": false,
+    "release_performed": false,
+    "outreach_performed": false,
+    "standards_submission_performed": false
+  },
   "k6_status": "INITIAL_LEDGER_COMPLETE_MONITORING_OPEN",
   "rules": {
     "author_side_rerun_is_external": false,

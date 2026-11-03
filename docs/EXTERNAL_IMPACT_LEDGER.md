@@ -6,6 +6,12 @@ author-side rerun is not counted as external uptake.
 
 The machine-readable record is [external_impact_ledger.json](external_impact_ledger.json).
 
+The K1 plus K2/D/K3/K5 packet is publicly reviewable in
+[draft PR #108](https://github.com/halvrenofviryel/phionyx-research/pull/108).
+Public availability changes the delivery state only; it does not add an external
+reproducer, implementation, interoperability result, adoption event or standards
+endorsement. Merge and release have not been performed.
+
 | Evidence | Evidence record date | Frozen target | Grade and role | What it establishes |
 |---|---|---|---|---|
 | Emek Can Doğru independent producer | 2026-09-02 | AIREP v0.1.2 | Maintainer-reproduced external producer | One independently authored producer was accepted by both pinned v0.1.2 verifiers |

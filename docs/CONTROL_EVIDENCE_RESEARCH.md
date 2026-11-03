@@ -69,6 +69,6 @@ the [external impact ledger](EXTERNAL_IMPACT_LEDGER.md).
 5. Use the blank external submission template only for a genuinely separate run
    or implementation; author-side reruns remain author-side evidence.
 
-Publication, outreach and standards submission are separate owner decisions. The
-exact prepublication scope and unresolved approvals are recorded in
+Merge, release, outreach and standards submission are separate owner decisions.
+The exact approved public-PR scope and remaining gates are recorded in
 [PREPUBLICATION_REVIEW_2026-11-03.md](PREPUBLICATION_REVIEW_2026-11-03.md).

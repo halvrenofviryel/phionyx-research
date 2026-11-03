@@ -1,10 +1,30 @@
 {
-  "schema": "phionyx-prepublication-file-manifest-v1",
+  "schema": "phionyx-prepublication-file-manifest-v2",
   "generated": "2026-11-03",
   "historical_lab_base": "275b871349721a8c917691d457c4a6270fe1028f",
-  "publication_performed": false,
-  "approval_granted": false,
+  "lifecycle_state": "PUBLIC_DRAFT_PR_OPEN",
+  "publication_performed": true,
+  "publication_scope": "PUBLIC_BRANCH_AND_DRAFT_PR_ONLY",
+  "approval_granted": true,
+  "approval_scope": "PUBLIC_PUSH_AND_DRAFT_PR_ONLY",
+  "merge_approval_granted": false,
+  "pull_request": {
+    "number": 108,
+    "url": "https://github.com/halvrenofviryel/phionyx-research/pull/108",
+    "branch": "codex/prepublication-k1-k5",
+    "initial_public_head": "a10a2fc83cf2d9a075d7ff26d67b50205c0bb174"
+  },
   "files": [
+    {
+      "path": ".gitattributes",
+      "bytes": 540,
+      "sha256": "e3d692534089f24d7d64b62e673e7dd232645f7a2f048fce37fc34f596edf631"
+    },
+    {
+      "path": ".github/workflows/research-artifacts.yml",
+      "bytes": 2703,
+      "sha256": "1841e0edf5bc1bea037d5f209e2854e4700378a6264fe6101f593a708c1d3223"
+    },
     {
       "path": "README.md",
       "bytes": 31306,
@@ -12,18 +32,18 @@
     },
     {
       "path": "docs/CONTROL_EVIDENCE_RESEARCH.md",
-      "bytes": 3965,
-      "sha256": "b4833bc199d5252ffb29badfb7c68f489f5f636eb37416497876b49ca7758ff2"
+      "bytes": 3967,
+      "sha256": "6ddd1c03a41a4768234c172e664f6ff46418e43f73b4dacda37db2128228cbd5"
     },
     {
       "path": "docs/EXTERNAL_IMPACT_LEDGER.md",
-      "bytes": 2631,
-      "sha256": "22dc08ed5a7ba1521b30b8a38239100ca2e424197ba4b76415f514241349c583"
+      "bytes": 2985,
+      "sha256": "dbdccd88e3585992a371d2eb5901eada028beba0c8365af5656c0438e2709bbf"
     },
     {
       "path": "docs/PREPUBLICATION_REVIEW_2026-11-03.md",
-      "bytes": 3235,
-      "sha256": "aad7e33ede69aa7515ed63c59373aeb6f8eb7314a8b159fe0c17eb4dcd5a49bb"
+      "bytes": 3600,
+      "sha256": "59263d598b2c01297417990724f360ed40dc3bf8d93f9dc9cec629a0287475e0"
     },
     {
       "path": "docs/PUBLICATION_PR_DRAFT.md",
@@ -32,8 +52,8 @@
     },
     {
       "path": "docs/PUBLICATION_PR_DRAFT_2026-11-03.md",
-      "bytes": 2060,
-      "sha256": "d20fd72bfb77dc8585b4890bb39ef766001a5d78aa8a3b2fa6250515688f3b2d"
+      "bytes": 2365,
+      "sha256": "2549823be439fd824960b9fba77aea6d804b62b02d2e69bb77e16aa6b960bab8"
     },
     {
       "path": "docs/PUBLICATION_REVIEW.md",
@@ -42,8 +62,8 @@
     },
     {
       "path": "docs/PUBLICATION_STATUS.md",
-      "bytes": 4119,
-      "sha256": "e244d96eb30e5d2a57828eb5f509881bfa5ccbfd715b82994c3048f69f231cd4"
+      "bytes": 4440,
+      "sha256": "ffb97b32e8b097c3e5d1ba281dbf4c370115b0d83d7648f14be23780a8c11b63"
     },
     {
       "path": "docs/STANDARDS_LAB.md",
@@ -922,8 +942,8 @@
     },
     {
       "path": "docs/external_impact_ledger.json",
-      "bytes": 3660,
-      "sha256": "1fd4edd23878bedbd0798ba8c081afb0578414a453191a8e107cbdeeb5051053"
+      "bytes": 4088,
+      "sha256": "78b14d1fb59a11acad1b909dc0cdb2eac9ec56e853c350b60e5f64a2488c02bd"
     },
     {
       "path": "docs/publication_review.json",
@@ -2512,13 +2532,13 @@
     },
     {
       "path": "tools/build_prepublication_manifest.py",
-      "bytes": 1413,
-      "sha256": "43fb8bb56324dc123f45e06cbd0f4b3035c289ac7e80e95fff6d959df006ddb6"
+      "bytes": 2122,
+      "sha256": "4214d43a5489745abcf805b416e4e2e5636dc61b9f5c3d02351ee82cfddbef4e"
     },
     {
       "path": "tools/verify_prepublication_candidate.py",
-      "bytes": 4654,
-      "sha256": "244b0ec2a05b6bef5683594421a5fe6583c4a2ff0cf76c0a0f170e06d79ff035"
+      "bytes": 6991,
+      "sha256": "53a00064d0c77a0923f277cfba3abc97b7acd19ea563bf9477d5c54a4ea5a58f"
     }
   ]
 }

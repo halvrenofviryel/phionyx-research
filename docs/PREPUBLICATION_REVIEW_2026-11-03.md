@@ -1,8 +1,12 @@
 # Prepublication review — 3 November 2026
 
-Status: **READY_FOR_OWNER_REVIEW / UNPUBLISHED**. This record does not grant
-publication permission. No push, pull request, issue, release, external message
-or standards submission has been performed.
+Status: **HISTORICAL PREPUBLICATION SNAPSHOT**. At this snapshot, the candidate
+was ready for owner review, no publication permission had yet been granted, and no
+push, pull request, issue, release, external message or standards submission had
+been performed. The owner later approved this exact unit and its disclosures for
+a public branch and draft PR. That approval produced
+[PR #108](https://github.com/halvrenofviryel/phionyx-research/pull/108); it did not
+authorize merge, release, outreach or standards submission.
 
 ## Recommended first publication unit
 
@@ -56,9 +60,9 @@ same-version interoperability, adopted standard or IETF-endorsed work.
 External results from Emek Can Doğru and Joel Hillier/Certisyn remain separately
 credited, version-bounded evidence. They are not validators of this new package.
 
-## Remaining owner gate
+## Gate disposition
 
-The technical candidate can be reviewed and reproduced locally. Public push and
-PR creation require explicit owner approval of this exact combined unit and the
-disclosures above. PR merge, release, outreach and any IETF submission remain
-separate later decisions.
+At this snapshot, public push and PR creation required explicit owner approval of
+the exact combined unit and the disclosures above. That bounded approval was later
+granted and consumed for the public branch and draft PR #108. PR merge, release,
+outreach and any IETF submission remain separate later decisions.
