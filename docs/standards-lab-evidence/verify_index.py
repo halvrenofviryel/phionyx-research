@@ -297,7 +297,7 @@ def check():
         ":(exclude)experiments/ietf/audit/decision-receipts-04/sources/**",
         ":(exclude)experiments/ietf/audit/decision-receipts-04/evidence/**",
     ]
-    if candidate_manifest.exists():
+    if (ROOT / candidate_manifest_path).exists():
         # These directories preserve byte-exact upstream licence/METADATA files
         # and review diffs. Original whitespace is covered by the exact candidate
         # manifest and the packet's own MANIFEST.json rather than normalized.
