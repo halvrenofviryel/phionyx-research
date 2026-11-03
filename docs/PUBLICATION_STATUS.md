@@ -57,17 +57,18 @@ The 118 experiment tests were run separately during review; the existing core CI
 does not automatically run those suites. C03 uses its documented post-evaluation
 normalization of process-local origin tokens; C04 reproduces without normalization.
 
-## Public draft PR #108 — 3 November 2026
+## Public PR #108 — ready for review — 3 November 2026
 
 The owner approved the exact K1 plus K2/D/K3/K5 unit and its disclosures for a
-public branch and draft pull request. Initial public head
+public branch and pull request. Initial public head
 `a10a2fc83cf2d9a075d7ff26d67b50205c0bb174` was pushed to
 `codex/prepublication-k1-k5`, and
 [PR #108](https://github.com/halvrenofviryel/phionyx-research/pull/108) was opened
-against `main`. The live PR is the authority for its current head, checks, review
-state and merge disposition.
+against `main` as a draft. After the merge-preparation fixes and successful CI,
+the PR was marked ready for review. The live PR is the authority for its current
+head, checks, review state and merge disposition.
 
-The public branch and draft PR do not establish external reproduction, adoption,
+The public branch and PR do not establish external reproduction, adoption,
 standards endorsement or any stronger technical claim. They do not authorize the
 separate B2/B3 publication unit, H2 submission, outreach, release or merge. The
 [prepublication review](PREPUBLICATION_REVIEW_2026-11-03.md) is retained as the

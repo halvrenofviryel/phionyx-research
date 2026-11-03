@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build the exact file manifest used by the public draft-PR review."""
+"""Build the exact file manifest used by the public PR review."""
 
 from __future__ import annotations
 
@@ -46,11 +46,11 @@ def main() -> None:
         "schema": "phionyx-prepublication-file-manifest-v2",
         "generated": "2026-11-03",
         "historical_lab_base": BASE,
-        "lifecycle_state": "PUBLIC_DRAFT_PR_OPEN",
+        "lifecycle_state": "PUBLIC_PR_READY_FOR_REVIEW",
         "publication_performed": True,
-        "publication_scope": "PUBLIC_BRANCH_AND_DRAFT_PR_ONLY",
+        "publication_scope": "PUBLIC_BRANCH_AND_PR_ONLY",
         "approval_granted": True,
-        "approval_scope": "PUBLIC_PUSH_AND_DRAFT_PR_ONLY",
+        "approval_scope": "PUBLIC_PUSH_PR_AND_PREMERGE_PREPARATION",
         "merge_approval_granted": False,
         "pull_request": {
             "number": 108,

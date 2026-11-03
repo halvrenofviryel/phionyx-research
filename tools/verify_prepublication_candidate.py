@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Verify the bounded public draft-PR candidate and its frozen evidence."""
+"""Verify the bounded public PR candidate and its frozen evidence."""
 
 from __future__ import annotations
 
@@ -73,7 +73,7 @@ def main() -> None:
 
     ledger = json.loads((ROOT / "docs/external_impact_ledger.json").read_text())
     assert ledger["schema"] == "phionyx-external-impact-ledger-v3"
-    assert ledger["publication_status"] == "PUBLIC_DRAFT_PR_OPEN"
+    assert ledger["publication_status"] == "PUBLIC_PR_READY_FOR_REVIEW"
     assert ledger["publication_event"] == {
         "repository": "halvrenofviryel/phionyx-research",
         "branch": "codex/prepublication-k1-k5",
@@ -104,7 +104,7 @@ def main() -> None:
     assert "did not authorize merge" in review_words
 
     status = (ROOT / "docs/PUBLICATION_STATUS.md").read_text()
-    assert "Public draft PR #108" in status
+    assert "Public PR #108 — ready for review" in status
     assert "a10a2fc83cf2d9a075d7ff26d67b50205c0bb174" in status
     assert "do not authorize" in status
 
@@ -119,9 +119,9 @@ def main() -> None:
     manifest_path = ROOT / "docs/PREPUBLICATION_FILE_MANIFEST.json"
     manifest = json.loads(manifest_path.read_text())
     assert manifest["schema"] == "phionyx-prepublication-file-manifest-v2"
-    assert manifest["lifecycle_state"] == "PUBLIC_DRAFT_PR_OPEN"
-    assert manifest["publication_scope"] == "PUBLIC_BRANCH_AND_DRAFT_PR_ONLY"
-    assert manifest["approval_scope"] == "PUBLIC_PUSH_AND_DRAFT_PR_ONLY"
+    assert manifest["lifecycle_state"] == "PUBLIC_PR_READY_FOR_REVIEW"
+    assert manifest["publication_scope"] == "PUBLIC_BRANCH_AND_PR_ONLY"
+    assert manifest["approval_scope"] == "PUBLIC_PUSH_PR_AND_PREMERGE_PREPARATION"
     assert manifest["merge_approval_granted"] is False
     assert manifest["pull_request"]["number"] == 108
 
@@ -164,7 +164,7 @@ def main() -> None:
         assert path in tracked, f"required file is not tracked: {path}"
 
     print(
-        "PUBLIC_DRAFT_PR_CANDIDATE_OK: required files, source ancestry, exact "
+        "PUBLIC_PR_MERGE_CANDIDATE_OK: required files, source ancestry, exact "
         "manifest, packet identity, approval scope and impact states verified"
     )
 

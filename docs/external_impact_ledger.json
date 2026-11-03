@@ -1,7 +1,7 @@
 {
   "schema": "phionyx-external-impact-ledger-v3",
   "updated": "2026-11-03",
-  "publication_status": "PUBLIC_DRAFT_PR_OPEN",
+  "publication_status": "PUBLIC_PR_READY_FOR_REVIEW",
   "publication_event": {
     "repository": "halvrenofviryel/phionyx-research",
     "branch": "codex/prepublication-k1-k5",

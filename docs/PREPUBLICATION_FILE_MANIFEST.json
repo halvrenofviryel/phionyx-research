@@ -2,11 +2,11 @@
   "schema": "phionyx-prepublication-file-manifest-v2",
   "generated": "2026-11-03",
   "historical_lab_base": "275b871349721a8c917691d457c4a6270fe1028f",
-  "lifecycle_state": "PUBLIC_DRAFT_PR_OPEN",
+  "lifecycle_state": "PUBLIC_PR_READY_FOR_REVIEW",
   "publication_performed": true,
-  "publication_scope": "PUBLIC_BRANCH_AND_DRAFT_PR_ONLY",
+  "publication_scope": "PUBLIC_BRANCH_AND_PR_ONLY",
   "approval_granted": true,
-  "approval_scope": "PUBLIC_PUSH_AND_DRAFT_PR_ONLY",
+  "approval_scope": "PUBLIC_PUSH_PR_AND_PREMERGE_PREPARATION",
   "merge_approval_granted": false,
   "pull_request": {
     "number": 108,
@@ -37,8 +37,8 @@
     },
     {
       "path": "docs/EXTERNAL_IMPACT_LEDGER.md",
-      "bytes": 2985,
-      "sha256": "dbdccd88e3585992a371d2eb5901eada028beba0c8365af5656c0438e2709bbf"
+      "bytes": 3013,
+      "sha256": "403eb88045afae7390aa61b0651df6231f8147089b65ad05d2f771defa5d99f4"
     },
     {
       "path": "docs/PREPUBLICATION_REVIEW_2026-11-03.md",
@@ -62,8 +62,8 @@
     },
     {
       "path": "docs/PUBLICATION_STATUS.md",
-      "bytes": 4440,
-      "sha256": "ffb97b32e8b097c3e5d1ba281dbf4c370115b0d83d7648f14be23780a8c11b63"
+      "bytes": 4543,
+      "sha256": "56385eda83c86d393dd55600309718d334a79155d0fb03c73ea58c37cf512267"
     },
     {
       "path": "docs/STANDARDS_LAB.md",
@@ -942,8 +942,8 @@
     },
     {
       "path": "docs/external_impact_ledger.json",
-      "bytes": 4088,
-      "sha256": "78b14d1fb59a11acad1b909dc0cdb2eac9ec56e853c350b60e5f64a2488c02bd"
+      "bytes": 4094,
+      "sha256": "63b4f6208c1d2f1481f20637708d91c7911f3f2f45f9a2c4deea3f387a3722fc"
     },
     {
       "path": "docs/publication_review.json",
@@ -2532,13 +2532,13 @@
     },
     {
       "path": "tools/build_prepublication_manifest.py",
-      "bytes": 2122,
-      "sha256": "4214d43a5489745abcf805b416e4e2e5636dc61b9f5c3d02351ee82cfddbef4e"
+      "bytes": 2126,
+      "sha256": "83b4a748e0eae39aa3011691e948a874dcb96f9c2ad102a1f3c8ab0082a23cd1"
     },
     {
       "path": "tools/verify_prepublication_candidate.py",
-      "bytes": 7514,
-      "sha256": "8929f4725fc517b262b0ec864f8cec919e2a00b83294379ce2fe0cf57a0c0690"
+      "bytes": 7539,
+      "sha256": "b5191b8f36b6b7563517118809aa201412c24d01efa8f1aad3b4e93017d1e922"
     }
   ]
 }
