@@ -13,7 +13,6 @@ ROOT = Path(__file__).resolve().parents[1]
 BASE = "652e008d18805a1c69492a688e621df91f143287"
 K5_TESTED = "bec6b34c55d5a1f3e898997475539c9d54c91580"
 K5_FINAL = "92c17a237bcc73c3ac69dbb879e1f358c705a739"
-K1_FINAL = "a7afc505ece2948966b510aefe595f13403c0232"
 
 
 def git(*args: str) -> str:
@@ -56,13 +55,21 @@ def main() -> None:
     ).splitlines()
     assert current_packet_diff == [], f"frozen K5 packet/report changed: {current_packet_diff}"
 
-    k1_diff = git(
-        "diff", "--name-only", K1_FINAL, "HEAD", "--",
-        "experiments/ietf/acder02-control-benchmark"
-    ).splitlines()
-    assert k1_diff == ["experiments/ietf/acder02-control-benchmark/README.md"], (
-        f"unexpected change to frozen K1 subtree: {k1_diff}"
-    )
+    k1_root = ROOT / "experiments/ietf/acder02-control-benchmark"
+    k1_manifest = json.loads((k1_root / "PACKAGE_MANIFEST.json").read_text())
+    assert k1_manifest["schema"] == "acder-benchmark-final-package-v1"
+    assert k1_manifest["file_count"] == len(k1_manifest["files"]) == 169
+    for row in k1_manifest["files"]:
+        data = (k1_root / row["path"]).read_bytes()
+        assert row["bytes"] == len(data), f"K1 package byte count differs: {row['path']}"
+        assert row["sha256"] == hashlib.sha256(data).hexdigest(), (
+            f"K1 package hash differs: {row['path']}"
+        )
+    k1_pins = json.loads((k1_root / "SOURCE_PINS.json").read_text())
+    assert k1_pins["base_commit"] == BASE
+    assert (
+        k1_root / "results/EXPECTED_SEMANTIC_SHA256"
+    ).read_text().strip() == "f73be47c6b2e61411b4c18466e0bb7ed85fce06aa415dc7ef23b3b86a397aacb"
 
     ledger = json.loads((ROOT / "docs/external_impact_ledger.json").read_text())
     assert ledger["schema"] == "phionyx-external-impact-ledger-v3"

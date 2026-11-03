@@ -2537,8 +2537,8 @@
     },
     {
       "path": "tools/verify_prepublication_candidate.py",
-      "bytes": 6991,
-      "sha256": "53a00064d0c77a0923f277cfba3abc97b7acd19ea563bf9477d5c54a4ea5a58f"
+      "bytes": 7514,
+      "sha256": "8929f4725fc517b262b0ec864f8cec919e2a00b83294379ce2fe0cf57a0c0690"
     }
   ]
 }
