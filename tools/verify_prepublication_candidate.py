@@ -94,7 +94,9 @@ def main() -> None:
 
     ledger = json.loads((ROOT / "docs/external_impact_ledger.json").read_text())
     assert ledger["schema"] == "phionyx-external-impact-ledger-v3"
-    assert ledger["publication_status"] == "RELEASE_AND_ZENODO_PUBLISHED"
+    assert ledger["publication_status"] == (
+        "RELEASE_ZENODO_HUGGING_FACE_SUBSTACK_AND_PHIONYX_AI_PUBLISHED"
+    )
     assert ledger["publication_event"] == {
         "repository": "halvrenofviryel/phionyx-research",
         "branch": "codex/prepublication-k1-k5",
@@ -114,7 +116,35 @@ def main() -> None:
         "zenodo_record": "https://zenodo.org/records/23960852",
         "version_doi": VERSION_DOI,
         "concept_doi": CONCEPT_DOI,
-        "outreach_performed": False,
+        "outreach_performed": True,
+        "hugging_face_article": {
+            "published_at": "2026-11-04T19:28:58Z",
+            "url": (
+                "https://huggingface.co/blog/phionyx/"
+                "when-an-ai-agent-says-stop-what-evidence-proves-th"
+            ),
+            "classification": "AUTHOR_SIDE_TECHNICAL_COMMUNICATION",
+        },
+        "substack_update": {
+            "published_at": "2026-11-04T19:58:27Z",
+            "url": (
+                "https://phionyxresearch.substack.com/p/"
+                "what-did-the-ai-decide-and-what-does"
+            ),
+            "classification": "DATED_AUTHOR_SIDE_CORRECTION",
+        },
+        "phionyx_ai_update": {
+            "deployed_at": "2026-11-04T20:20:05Z",
+            "research_url": "https://phionyx.ai/research",
+            "publications_url": "https://phionyx.ai/publications",
+            "pull_request": "https://github.com/halvrenofviryel/Viryel/pull/46",
+            "merge_commit": "0e0c020706c59b2935e0e235169b6cfbc89174e6",
+            "deployment_run": (
+                "https://github.com/halvrenofviryel/Viryel/actions/runs/"
+                "41905427702"
+            ),
+            "classification": "AUTHOR_SIDE_RESEARCH_DISCOVERY_PAGE",
+        },
         "standards_submission_performed": False,
     }
     assert ledger["k6_status"] == "INITIAL_LEDGER_COMPLETE_MONITORING_OPEN"
@@ -150,7 +180,8 @@ def main() -> None:
     ):
         assert phrase in landing, f"landing page lost boundary: {phrase}"
     assert VERSION_DOI in landing
-    assert "Outreach\nand standards submission remain separate owner decisions" in landing
+    assert "Hugging Face Community Article" in landing
+    assert "IETF\nsubmission remains a separate user-performed action" in landing
 
     manifest_path = ROOT / "docs/PREPUBLICATION_FILE_MANIFEST.json"
     manifest = json.loads(manifest_path.read_text())

@@ -97,4 +97,50 @@ DOI [`10.5281/zenodo.23960851`](https://doi.org/10.5281/zenodo.23960851).
 
 The release and DOI improve stable availability and citation. They do not add
 external reproduction, same-version interoperability, adoption or standards
-endorsement. Outreach and IETF submission remain separate actions.
+endorsement.
+
+## Hugging Face technical article and ORCID record — completed — 4 November 2026
+
+The owner approved and published the bounded technical article
+[“When an AI Agent Says STOP, What Evidence Proves That It Actually Stopped?”](https://huggingface.co/blog/phionyx/when-an-ai-agent-says-stop-what-evidence-proves-th).
+The article links the exact GitHub release and version DOI, states the
+first-party controlled-study boundary, and does not present `16/18` as a
+real-world failure rate or product comparison. Zenodo record `23960852` was
+also added to the author’s public
+[ORCID record](https://orcid.org/0009-0002-3718-4010).
+
+These discovery and identity records do not add external reproduction,
+same-version interoperability, adoption or standards endorsement. IETF
+submission remains a separate user-performed action.
+
+## Substack dated correction — completed — 4 November 2026
+
+The existing article
+[“What did the AI decide — and what does the evidence not cover?”](https://phionyxresearch.substack.com/p/what-did-the-ai-decide-and-what-does)
+now opens with a dated correction. The note records the first-party
+`v0.2.0-beta.1` producer, links the beta release, exact control-evidence study,
+version DOI and Hugging Face article, and preserves the boundary that
+same-version third-party producer-to-consumer interoperability and independent
+validation have not been established. The original historical body remains in
+place.
+
+This author-side correction improves accuracy and discovery. It does not add
+external reproduction, interoperability, adoption or standards endorsement.
+
+## phionyx.ai research and publication cards — completed — 4 November 2026
+
+Viryel
+[PR #46](https://github.com/halvrenofviryel/Viryel/pull/46) merged after all
+17 hosted checks passed. Its `main` commit
+[`0e0c0207`](https://github.com/halvrenofviryel/Viryel/commit/0e0c020706c59b2935e0e235169b6cfbc89174e6)
+was deployed by the
+[Phionyx Website Deploy run](https://github.com/halvrenofviryel/Viryel/actions/runs/41905427702).
+The live [research](https://phionyx.ai/research) card states the `16 of 18`
+comparison, `0 of 18` bounded result and 31 evidenced claims together with the
+synthetic, author-side, non-production and non-independent boundaries. The
+[publications](https://phionyx.ai/publications) page lists the exact version DOI
+and reproducibility package.
+
+Both live routes returned HTTP 200 after deployment and exposed the expected
+release, DOI and article links. These author-side discovery pages do not add
+external reproduction, interoperability, adoption or standards endorsement.

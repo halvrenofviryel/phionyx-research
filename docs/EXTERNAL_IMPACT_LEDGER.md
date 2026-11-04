@@ -16,6 +16,23 @@ endorsement. The versioned release and DOI were published on 4 November 2026:
 and [Zenodo DOI `10.5281/zenodo.23960852`](https://doi.org/10.5281/zenodo.23960852).
 That improves stable availability and citability; it does not change any
 external-reproduction, interoperability, adoption or endorsement grade.
+The bounded technical explanation was published as a
+[Hugging Face Community Article](https://huggingface.co/blog/phionyx/when-an-ai-agent-says-stop-what-evidence-proves-th)
+on 4 November 2026. That is an author-side communication event, not outside
+reproduction or validation.
+The existing
+[Substack article](https://phionyxresearch.substack.com/p/what-did-the-ai-decide-and-what-does)
+received a dated correction on the same day. It now points to the beta producer,
+the exact study release, the version DOI and the technical article while
+retaining the original historical text. This is a correction and discovery
+event; it does not change the evidence grade.
+The bounded result is also listed on the live
+[phionyx.ai research](https://phionyx.ai/research) and
+[publications](https://phionyx.ai/publications) pages. Deployment from Viryel
+[PR #46](https://github.com/halvrenofviryel/Viryel/pull/46) completed on 4
+November 2026. The research card states the synthetic, author-side and
+non-production limits and links the exact release, DOI and technical article.
+This is an author-side discovery surface, not external validation or adoption.
 
 | Evidence | Evidence record date | Frozen target | Grade and role | What it establishes |
 |---|---|---|---|---|

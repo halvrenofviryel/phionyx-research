@@ -1,7 +1,7 @@
 {
   "schema": "phionyx-external-impact-ledger-v3",
   "updated": "2026-11-04",
-  "publication_status": "RELEASE_AND_ZENODO_PUBLISHED",
+  "publication_status": "RELEASE_ZENODO_HUGGING_FACE_SUBSTACK_AND_PHIONYX_AI_PUBLISHED",
   "publication_event": {
     "repository": "halvrenofviryel/phionyx-research",
     "branch": "codex/prepublication-k1-k5",
@@ -18,7 +18,26 @@
     "zenodo_record": "https://zenodo.org/records/23960852",
     "version_doi": "10.5281/zenodo.23960852",
     "concept_doi": "10.5281/zenodo.23960851",
-    "outreach_performed": false,
+    "outreach_performed": true,
+    "hugging_face_article": {
+      "published_at": "2026-11-04T19:28:58Z",
+      "url": "https://huggingface.co/blog/phionyx/when-an-ai-agent-says-stop-what-evidence-proves-th",
+      "classification": "AUTHOR_SIDE_TECHNICAL_COMMUNICATION"
+    },
+    "substack_update": {
+      "published_at": "2026-11-04T19:58:27Z",
+      "url": "https://phionyxresearch.substack.com/p/what-did-the-ai-decide-and-what-does",
+      "classification": "DATED_AUTHOR_SIDE_CORRECTION"
+    },
+    "phionyx_ai_update": {
+      "deployed_at": "2026-11-04T20:20:05Z",
+      "research_url": "https://phionyx.ai/research",
+      "publications_url": "https://phionyx.ai/publications",
+      "pull_request": "https://github.com/halvrenofviryel/Viryel/pull/46",
+      "merge_commit": "0e0c020706c59b2935e0e235169b6cfbc89174e6",
+      "deployment_run": "https://github.com/halvrenofviryel/Viryel/actions/runs/41905427702",
+      "classification": "AUTHOR_SIDE_RESEARCH_DISCOVERY_PAGE"
+    },
     "standards_submission_performed": false
   },
   "k6_status": "INITIAL_LEDGER_COMPLETE_MONITORING_OPEN",

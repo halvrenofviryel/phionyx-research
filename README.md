@@ -11,8 +11,8 @@ Beyond governance, Phionyx Core ships a **physics module** that produces determi
 > turn can produce an offline-checkable **Reasoned Governance Envelope (RGE)**;
 > signing requires a configured key. RGE is a
 > Phionyx profile developed alongside the **[AI Runtime Evidence Protocol (AIREP)](https://github.com/halvrenofviryel/ai-runtime-evidence-protocol)**,
-> an experimental, vendor-neutral open format; a released conformant projection into AIREP
-> is not yet implemented. See
+> an experimental, vendor-neutral open format. A private experimental Decision-only
+> projection has been implemented, but no released conformant full-family bridge exists. See
 > [Runtime evidence format (AIREP)](#runtime-evidence-format-airep) for what a record
 > contains and how anyone can verify one.
 
@@ -274,11 +274,13 @@ to trust prose: the pack itself is the evidence.
 
 ## Runtime evidence format (AIREP)
 
-The records Phionyx emits are **Reasoned Governance Envelopes (RGE)**, developed alongside the **[AI Runtime Evidence Protocol (AIREP)](https://github.com/halvrenofviryel/ai-runtime-evidence-protocol)**. A released conformant projection from RGE into AIREP is not yet implemented; raw RGE records are not AIREP records.
+The records Phionyx emits are **Reasoned Governance Envelopes (RGE)**, developed alongside the **[AI Runtime Evidence Protocol (AIREP)](https://github.com/halvrenofviryel/ai-runtime-evidence-protocol)**. A private experimental Decision-only RGE v0.2 → AIREP v0.2.0-alpha.1 projection has been implemented. It is not a released conformant bridge, does not project Control, Execution or Effect, and has not been independently rerun. Raw RGE records are not AIREP records.
 
 AIREP is **experimental**, a proposed open format rather than a ratified standard. Its current v0.2 implementation target separates **Decision, Control, Execution and Effect** artifacts. The earlier v0.1 decision-record line remains frozen and supported. A valid signature or structural verification does not establish event truth, complete target coverage or enforcement. See the [current specification and implementation status](https://github.com/halvrenofviryel/ai-runtime-evidence-protocol#readme) for version-specific fields, assurance classes and commands.
 
 External implementation results are version- and role-specific: a producer measured against frozen v0.1.2 and a consumer/verifier measured against an earlier v0.2 handoff. They do not establish same-version producer-to-consumer interoperability. The [external-evidence record](https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/blob/075aff5610731736405951ecf3b7c4bfc3cc0f07/EXTERNAL_EVIDENCE.md) preserves those boundaries. Local experiments in this repository do not add third-party AIREP evidence.
+
+The first-party [control-evidence study](docs/CONTROL_EVIDENCE_RESEARCH.md) separates control receipt, execution and observed effect across a frozen synthetic comparison and six controlled LangGraph scenarios. The exact `v1.0.0` archive is available from the [GitHub release](https://github.com/halvrenofviryel/phionyx-research/releases/tag/control-evidence-study-v1.0.0) and [Zenodo DOI `10.5281/zenodo.23960852`](https://doi.org/10.5281/zenodo.23960852). Publication does not convert those author-side results into independent validation or a production failure rate.
 
 - Spec: CC-BY-4.0 · Reference code: Apache-2.0
 - DOI: concept [10.5281/zenodo.20475136](https://doi.org/10.5281/zenodo.20475136) · v0.1 [10.5281/zenodo.20475137](https://doi.org/10.5281/zenodo.20475137)
