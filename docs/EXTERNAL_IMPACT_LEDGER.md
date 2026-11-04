@@ -11,7 +11,11 @@ The K1 plus K2/D/K3/K5 packet was merged into public `main` by
 [`54682cfd`](https://github.com/halvrenofviryel/phionyx-research/commit/54682cfd312dc8c7935e926539811cfc29ea6568).
 Public availability changes the delivery state only; it does not add an external
 reproducer, implementation, interoperability result, adoption event or standards
-endorsement. A dedicated release and DOI have not been performed.
+endorsement. The versioned release and DOI were published on 4 November 2026:
+[GitHub release](https://github.com/halvrenofviryel/phionyx-research/releases/tag/control-evidence-study-v1.0.0)
+and [Zenodo DOI `10.5281/zenodo.23960852`](https://doi.org/10.5281/zenodo.23960852).
+That improves stable availability and citability; it does not change any
+external-reproduction, interoperability, adoption or endorsement grade.
 
 | Evidence | Evidence record date | Frozen target | Grade and role | What it establishes |
 |---|---|---|---|---|

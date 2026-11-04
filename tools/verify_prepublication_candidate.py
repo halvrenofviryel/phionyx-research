@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Verify the published control-evidence packet and sealed PR #108 evidence."""
+"""Verify the published control-evidence packet and its historical seals."""
 
 from __future__ import annotations
 
@@ -15,6 +15,9 @@ K5_TESTED = "bec6b34c55d5a1f3e898997475539c9d54c91580"
 K5_FINAL = "92c17a237bcc73c3ac69dbb879e1f358c705a739"
 SEALED_CANDIDATE = "7010b6d699f82a8719ed1d7269f5bfdb07089238"
 PUBLICATION_MERGE = "54682cfd312dc8c7935e926539811cfc29ea6568"
+RELEASE_MERGE = "a5956f6d575c431745f902a242b1a25262fed89d"
+VERSION_DOI = "10.5281/zenodo.23960852"
+CONCEPT_DOI = "10.5281/zenodo.23960851"
 
 
 def git(*args: str) -> str:
@@ -58,7 +61,7 @@ def main() -> None:
         assert subprocess.run(
             ["git", "merge-base", "--is-ancestor", source, "HEAD"], cwd=ROOT
         ).returncode == 0, f"source commit not retained: {source}"
-    for source in (SEALED_CANDIDATE, PUBLICATION_MERGE):
+    for source in (SEALED_CANDIDATE, PUBLICATION_MERGE, RELEASE_MERGE):
         assert subprocess.run(
             ["git", "merge-base", "--is-ancestor", source, "HEAD"], cwd=ROOT
         ).returncode == 0, f"publication commit not retained: {source}"
@@ -91,7 +94,7 @@ def main() -> None:
 
     ledger = json.loads((ROOT / "docs/external_impact_ledger.json").read_text())
     assert ledger["schema"] == "phionyx-external-impact-ledger-v3"
-    assert ledger["publication_status"] == "MERGED_TO_MAIN"
+    assert ledger["publication_status"] == "RELEASE_AND_ZENODO_PUBLISHED"
     assert ledger["publication_event"] == {
         "repository": "halvrenofviryel/phionyx-research",
         "branch": "codex/prepublication-k1-k5",
@@ -101,7 +104,16 @@ def main() -> None:
         "merge_performed": True,
         "merge_commit": PUBLICATION_MERGE,
         "merged_at": "2026-11-03T19:47:05Z",
-        "release_performed": False,
+        "release_performed": True,
+        "release_tag": "control-evidence-study-v1.0.0",
+        "release_commit": RELEASE_MERGE,
+        "release_url": (
+            "https://github.com/halvrenofviryel/phionyx-research/releases/tag/"
+            "control-evidence-study-v1.0.0"
+        ),
+        "zenodo_record": "https://zenodo.org/records/23960852",
+        "version_doi": VERSION_DOI,
+        "concept_doi": CONCEPT_DOI,
         "outreach_performed": False,
         "standards_submission_performed": False,
     }
@@ -125,8 +137,11 @@ def main() -> None:
 
     status = (ROOT / "docs/PUBLICATION_STATUS.md").read_text()
     assert "Public PR #108 — merged" in status
+    assert "Public release and Zenodo deposit — completed" in status
     assert "a10a2fc83cf2d9a075d7ff26d67b50205c0bb174" in status
     assert PUBLICATION_MERGE in status
+    assert RELEASE_MERGE in status
+    assert VERSION_DOI in status
 
     landing = (ROOT / "docs/CONTROL_EVIDENCE_RESEARCH.md").read_text()
     for phrase in (
@@ -134,7 +149,8 @@ def main() -> None:
         "same-version external interoperability",
     ):
         assert phrase in landing, f"landing page lost boundary: {phrase}"
-    assert "dedicated release/DOI, outreach and standards" in landing
+    assert VERSION_DOI in landing
+    assert "Outreach\nand standards submission remain separate owner decisions" in landing
 
     manifest_path = ROOT / "docs/PREPUBLICATION_FILE_MANIFEST.json"
     manifest = json.loads(manifest_path.read_text())

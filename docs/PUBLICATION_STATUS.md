@@ -79,3 +79,22 @@ B2/B3 publication unit, H2 submission, outreach or release. The
 [prepublication review](PREPUBLICATION_REVIEW_2026-11-03.md) is retained as the
 historical approval snapshot; its pre-merge flags are not current lifecycle
 state. Dedicated release/DOI and external communication remain separate gates.
+
+## Public release and Zenodo deposit — completed — 4 November 2026
+
+The owner subsequently approved the release and Zenodo actions. Release
+preparation [PR #109](https://github.com/halvrenofviryel/phionyx-research/pull/109)
+merged as exact commit
+[`a5956f6d575c431745f902a242b1a25262fed89d`](https://github.com/halvrenofviryel/phionyx-research/commit/a5956f6d575c431745f902a242b1a25262fed89d)
+with all merge-triggered checks passing. Annotated tag
+`control-evidence-study-v1.0.0` and the
+[GitHub release](https://github.com/halvrenofviryel/phionyx-research/releases/tag/control-evidence-study-v1.0.0)
+target that commit. The three verified release assets were deposited without
+modification in [Zenodo record 23960852](https://zenodo.org/records/23960852),
+which assigned version DOI
+[`10.5281/zenodo.23960852`](https://doi.org/10.5281/zenodo.23960852) and concept
+DOI [`10.5281/zenodo.23960851`](https://doi.org/10.5281/zenodo.23960851).
+
+The release and DOI improve stable availability and citation. They do not add
+external reproduction, same-version interoperability, adoption or standards
+endorsement. Outreach and IETF submission remain separate actions.

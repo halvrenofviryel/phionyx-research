@@ -4,9 +4,10 @@
   "name": "Control Delivery Is Not Execution: A Reproducible AIREP Boundary Study",
   "description": "A frozen synthetic ACK-promotion comparison and an offline AIREP v0.2.0-beta.1/LangGraph runtime evidence packet with explicit claim boundaries.",
   "version": "1.0.0",
-  "datePublished": "2026-11-03",
+  "identifier": "https://doi.org/10.5281/zenodo.23960852",
+  "datePublished": "2026-11-04",
   "codeRepository": "https://github.com/halvrenofviryel/phionyx-research",
-  "url": "https://github.com/halvrenofviryel/phionyx-research/tree/main/studies/control-evidence-2026-11",
+  "url": "https://doi.org/10.5281/zenodo.23960852",
   "license": "https://spdx.org/licenses/AGPL-3.0-or-later",
   "author": [
     {

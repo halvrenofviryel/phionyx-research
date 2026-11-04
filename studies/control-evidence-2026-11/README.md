@@ -16,10 +16,16 @@ The immutable merge commit is
 
 ## Current release state
 
-The source is public and the versioned release metadata is prepared. The
-dedicated GitHub release and Zenodo DOI have **not yet been issued**. Until they
-exist, cite the immutable merge commit and use the citation files in this
-directory. Do not invent or reserve a DOI in downstream references.
+Version `1.0.0` was published on 4 November 2026 from release-preparation merge
+commit
+[`a5956f6d575c431745f902a242b1a25262fed89d`](https://github.com/halvrenofviryel/phionyx-research/commit/a5956f6d575c431745f902a242b1a25262fed89d).
+The exact assets are attached to the
+[GitHub release](https://github.com/halvrenofviryel/phionyx-research/releases/tag/control-evidence-study-v1.0.0)
+and deposited in [Zenodo](https://zenodo.org/records/23960852). Cite version DOI
+[`10.5281/zenodo.23960852`](https://doi.org/10.5281/zenodo.23960852) for this
+release; concept DOI
+[`10.5281/zenodo.23960851`](https://doi.org/10.5281/zenodo.23960851) resolves to
+the latest version in the record series.
 
 ## Main results
 
@@ -80,10 +86,10 @@ Keep these three objects separate:
    protocol and its evidence model.
 2. Name the exact implementation target, AIREP `v0.2.0-beta.1` commit
    `8a6c01ecce457aa94330c0ed7219e4c56ebfe771`.
-3. Cite this study for the K1/K2/K3/K5 experimental results. Replace the current
-   immutable-commit citation with the dedicated study DOI after deposit.
+3. Cite this study for the K1/K2/K3/K5 experimental results with version DOI
+   `10.5281/zenodo.23960852`.
 
-Machine-readable drafts are provided as [CITATION.cff](CITATION.cff),
+Machine-readable metadata is provided as [CITATION.cff](CITATION.cff),
 [CITATION.bib](CITATION.bib), [codemeta.json](codemeta.json) and
 [zenodo.json](zenodo.json).
 
