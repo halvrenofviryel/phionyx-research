@@ -38,8 +38,9 @@ Or one command end-to-end (fresh venv → install → smoke flow):
 bash <(curl -sSL https://raw.githubusercontent.com/halvrenofviryel/phionyx-research/main/scripts/demo.sh)
 ```
 
-> **Control-evidence research candidate.** The bounded K1 comparison and the
-> self-contained K2/K3 reproduction packet are indexed in
+> **Published control-evidence study.** The bounded K1 comparison and the
+> self-contained K2/K3 reproduction packet were merged on 3 November 2026 in
+> [PR #108](https://github.com/halvrenofviryel/phionyx-research/pull/108) and are indexed in
 > [Control evidence research](docs/CONTROL_EVIDENCE_RESEARCH.md). These are
 > author-side research artifacts, not third-party validation, production assurance
 > or standards-body endorsement.

@@ -1,6 +1,13 @@
 # Control evidence research
 
-This publication candidate studies one practical distinction: a control request,
+**Publication status:** published in `main` on 3 November 2026 by
+[PR #108](https://github.com/halvrenofviryel/phionyx-research/pull/108), merge
+commit [`54682cfd312dc8c7935e926539811cfc29ea6568`](https://github.com/halvrenofviryel/phionyx-research/commit/54682cfd312dc8c7935e926539811cfc29ea6568).
+The merge makes the author-side packet publicly inspectable; it does not turn it
+into independent evidence. A dedicated versioned research release and DOI have
+not yet been issued.
+
+This study examines one practical distinction: a control request,
 its receipt, its enforcement, its execution and an observed effect are separate
 claims. A valid hash, signature or acknowledgement cannot by itself upgrade the
 others.
@@ -60,6 +67,18 @@ producer result and the v0.2 consumer/verifier result target different frozen
 packages and cannot be combined into a same-version interoperability claim. See
 the [external impact ledger](EXTERNAL_IMPACT_LEDGER.md).
 
+## Cite and reuse
+
+Until the dedicated study DOI is issued, cite the immutable merge commit above
+and identify the exact AIREP target as `v0.2.0-beta.1` commit
+`8a6c01ecce457aa94330c0ed7219e4c56ebfe771`. The study-specific citation files
+and deposit metadata are under
+[`studies/control-evidence-2026-11/`](../studies/control-evidence-2026-11/).
+For the protocol itself, cite
+[*AIREP: A Protocol for Per-Decision Evidence in AI Runtime Governance*](https://doi.org/10.48550/arXiv.2608.21363).
+Protocol, implementation target and experimental result are separate citation
+objects.
+
 ## Review order
 
 1. Read this page and the two short artifact entry pages.
@@ -69,6 +88,8 @@ the [external impact ledger](EXTERNAL_IMPACT_LEDGER.md).
 5. Use the blank external submission template only for a genuinely separate run
    or implementation; author-side reruns remain author-side evidence.
 
-Merge, release, outreach and standards submission are separate owner decisions.
-The exact approved public-PR scope and remaining gates are recorded in
-[PREPUBLICATION_REVIEW_2026-11-03.md](PREPUBLICATION_REVIEW_2026-11-03.md).
+The source packet has been merged. A dedicated release/DOI, outreach and standards
+submission remain separate owner decisions. The historical prepublication scope
+is retained in
+[PREPUBLICATION_REVIEW_2026-11-03.md](PREPUBLICATION_REVIEW_2026-11-03.md), while
+the current publication event is recorded in [PUBLICATION_STATUS.md](PUBLICATION_STATUS.md).

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Verify the bounded public PR candidate and its frozen evidence."""
+"""Verify the published control-evidence packet and sealed PR #108 evidence."""
 
 from __future__ import annotations
 
@@ -13,10 +13,16 @@ ROOT = Path(__file__).resolve().parents[1]
 BASE = "652e008d18805a1c69492a688e621df91f143287"
 K5_TESTED = "bec6b34c55d5a1f3e898997475539c9d54c91580"
 K5_FINAL = "92c17a237bcc73c3ac69dbb879e1f358c705a739"
+SEALED_CANDIDATE = "7010b6d699f82a8719ed1d7269f5bfdb07089238"
+PUBLICATION_MERGE = "54682cfd312dc8c7935e926539811cfc29ea6568"
 
 
 def git(*args: str) -> str:
     return subprocess.check_output(["git", *args], cwd=ROOT, text=True).strip()
+
+
+def git_bytes(revision: str, path: str) -> bytes:
+    return subprocess.check_output(["git", "show", f"{revision}:{path}"], cwd=ROOT)
 
 
 def main() -> None:
@@ -31,6 +37,14 @@ def main() -> None:
         "docs/external-replication/START_HERE.md",
         "experiments/ietf/acder02-control-benchmark/README.md",
         "experiments/ietf/acder02-control-benchmark/RESULTS.md",
+        "studies/control-evidence-2026-11/README.md",
+        "studies/control-evidence-2026-11/CITATION.cff",
+        "studies/control-evidence-2026-11/CITATION.bib",
+        "studies/control-evidence-2026-11/codemeta.json",
+        "studies/control-evidence-2026-11/zenodo.json",
+        "studies/control-evidence-2026-11/RELEASE_NOTES.md",
+        "studies/control-evidence-2026-11/build_release.py",
+        "studies/control-evidence-2026-11/verify_release.py",
         ".gitattributes",
         ".github/workflows/research-artifacts.yml",
     ]
@@ -44,6 +58,10 @@ def main() -> None:
         assert subprocess.run(
             ["git", "merge-base", "--is-ancestor", source, "HEAD"], cwd=ROOT
         ).returncode == 0, f"source commit not retained: {source}"
+    for source in (SEALED_CANDIDATE, PUBLICATION_MERGE):
+        assert subprocess.run(
+            ["git", "merge-base", "--is-ancestor", source, "HEAD"], cwd=ROOT
+        ).returncode == 0, f"publication commit not retained: {source}"
 
     packet_diff = git(
         "diff", "--name-only", K5_TESTED, K5_FINAL, "--", "docs/external-replication"
@@ -73,14 +91,16 @@ def main() -> None:
 
     ledger = json.loads((ROOT / "docs/external_impact_ledger.json").read_text())
     assert ledger["schema"] == "phionyx-external-impact-ledger-v3"
-    assert ledger["publication_status"] == "PUBLIC_PR_READY_FOR_REVIEW"
+    assert ledger["publication_status"] == "MERGED_TO_MAIN"
     assert ledger["publication_event"] == {
         "repository": "halvrenofviryel/phionyx-research",
         "branch": "codex/prepublication-k1-k5",
         "initial_public_head": "a10a2fc83cf2d9a075d7ff26d67b50205c0bb174",
         "pull_request": 108,
         "url": "https://github.com/halvrenofviryel/phionyx-research/pull/108",
-        "merge_performed": False,
+        "merge_performed": True,
+        "merge_commit": PUBLICATION_MERGE,
+        "merged_at": "2026-11-03T19:47:05Z",
         "release_performed": False,
         "outreach_performed": False,
         "standards_submission_performed": False,
@@ -104,9 +124,9 @@ def main() -> None:
     assert "did not authorize merge" in review_words
 
     status = (ROOT / "docs/PUBLICATION_STATUS.md").read_text()
-    assert "Public PR #108 — ready for review" in status
+    assert "Public PR #108 — merged" in status
     assert "a10a2fc83cf2d9a075d7ff26d67b50205c0bb174" in status
-    assert "do not authorize" in status
+    assert PUBLICATION_MERGE in status
 
     landing = (ROOT / "docs/CONTROL_EVIDENCE_RESEARCH.md").read_text()
     for phrase in (
@@ -114,7 +134,7 @@ def main() -> None:
         "same-version external interoperability",
     ):
         assert phrase in landing, f"landing page lost boundary: {phrase}"
-    assert "Merge, release, outreach and standards submission" in landing
+    assert "dedicated release/DOI, outreach and standards" in landing
 
     manifest_path = ROOT / "docs/PREPUBLICATION_FILE_MANIFEST.json"
     manifest = json.loads(manifest_path.read_text())
@@ -126,13 +146,17 @@ def main() -> None:
     assert manifest["pull_request"]["number"] == 108
 
     manifest_name = manifest_path.relative_to(ROOT).as_posix()
-    changed = set(git("diff", "--name-only", manifest["historical_lab_base"], "--").splitlines())
-    changed.update(git("ls-files", "--others", "--exclude-standard").splitlines())
+    changed = set(
+        git(
+            "diff", "--name-only", manifest["historical_lab_base"],
+            SEALED_CANDIDATE, "--"
+        ).splitlines()
+    )
     changed.discard(manifest_name)
     rows = {row["path"]: row for row in manifest["files"]}
     assert set(rows) == changed, "manifest paths differ from the exact candidate diff"
     for name, row in rows.items():
-        data = (ROOT / name).read_bytes()
+        data = git_bytes(SEALED_CANDIDATE, name)
         assert row["bytes"] == len(data), f"manifest byte count differs: {name}"
         assert row["sha256"] == hashlib.sha256(data).hexdigest(), (
             f"manifest hash differs: {name}"
@@ -148,6 +172,14 @@ def main() -> None:
         "docs/STANDARDS_LAB.md",
         "docs/external_impact_ledger.json",
         "experiments/ietf/acder02-control-benchmark/README.md",
+        "studies/control-evidence-2026-11/README.md",
+        "studies/control-evidence-2026-11/CITATION.cff",
+        "studies/control-evidence-2026-11/CITATION.bib",
+        "studies/control-evidence-2026-11/codemeta.json",
+        "studies/control-evidence-2026-11/zenodo.json",
+        "studies/control-evidence-2026-11/RELEASE_NOTES.md",
+        "studies/control-evidence-2026-11/build_release.py",
+        "studies/control-evidence-2026-11/verify_release.py",
         "tools/build_prepublication_manifest.py",
         "tools/verify_prepublication_candidate.py",
         ".gitattributes",
@@ -164,8 +196,8 @@ def main() -> None:
         assert path in tracked, f"required file is not tracked: {path}"
 
     print(
-        "PUBLIC_PR_MERGE_CANDIDATE_OK: required files, source ancestry, exact "
-        "manifest, packet identity, approval scope and impact states verified"
+        "PUBLISHED_CONTROL_EVIDENCE_PACKET_OK: required files, source ancestry, "
+        "sealed PR manifest, frozen packet identity and current impact states verified"
     )
 
 

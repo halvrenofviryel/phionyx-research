@@ -1,0 +1,56 @@
+cff-version: 1.2.0
+message: >-
+  If you use the Control Delivery Is Not Execution study, cite this study and
+  separately identify the exact AIREP version used.
+title: "Control Delivery Is Not Execution: A Reproducible AIREP Boundary Study"
+type: dataset
+version: 1.0.0
+date-released: 2026-11-03
+authors:
+  - family-names: Abak
+    given-names: Ali Toygar
+    orcid: "https://orcid.org/0009-0002-3718-4010"
+repository-code: "https://github.com/halvrenofviryel/phionyx-research"
+url: "https://github.com/halvrenofviryel/phionyx-research/tree/main/studies/control-evidence-2026-11"
+license: AGPL-3.0-or-later
+keywords:
+  - AI runtime evidence
+  - control delivery
+  - execution evidence
+  - observed effects
+  - reproducibility
+  - AIREP
+abstract: >-
+  A reproducible author-side study separating control request, receipt,
+  execution and observed effect claims. It combines a frozen synthetic
+  ACK-promotion comparison with an offline AIREP v0.2.0-beta.1 reference and
+  LangGraph runtime packet. It does not establish external interoperability,
+  production safety, adoption or standards endorsement.
+preferred-citation:
+  type: dataset
+  title: "Control Delivery Is Not Execution: A Reproducible AIREP Boundary Study"
+  authors:
+    - family-names: Abak
+      given-names: Ali Toygar
+      orcid: "https://orcid.org/0009-0002-3718-4010"
+  year: 2026
+  version: 1.0.0
+  url: "https://github.com/halvrenofviryel/phionyx-research/commit/54682cfd312dc8c7935e926539811cfc29ea6568"
+references:
+  - type: article
+    title: "AIREP: A Protocol for Per-Decision Evidence in AI Runtime Governance"
+    authors:
+      - family-names: Abak
+        given-names: Ali Toygar
+        orcid: "https://orcid.org/0009-0002-3718-4010"
+    year: 2026
+    doi: 10.48550/arXiv.2608.21363
+    url: "https://arxiv.org/abs/2608.21363"
+  - type: software
+    title: "AI Runtime Evidence Protocol v0.2.0-beta.1"
+    authors:
+      - family-names: Abak
+        given-names: Ali Toygar
+    version: 0.2.0-beta.1
+    date-released: 2026-09-09
+    url: "https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/releases/tag/v0.2.0-beta.1"

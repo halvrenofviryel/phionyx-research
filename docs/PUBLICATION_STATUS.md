@@ -57,7 +57,7 @@ The 118 experiment tests were run separately during review; the existing core CI
 does not automatically run those suites. C03 uses its documented post-evaluation
 normalization of process-local origin tokens; C04 reproduces without normalization.
 
-## Public PR #108 — ready for review — 3 November 2026
+## Public PR #108 — merged — 3 November 2026
 
 The owner approved the exact K1 plus K2/D/K3/K5 unit and its disclosures for a
 public branch and pull request. Initial public head
@@ -65,12 +65,17 @@ public branch and pull request. Initial public head
 `codex/prepublication-k1-k5`, and
 [PR #108](https://github.com/halvrenofviryel/phionyx-research/pull/108) was opened
 against `main` as a draft. After the merge-preparation fixes and successful CI,
-the PR was marked ready for review. The live PR is the authority for its current
-head, checks, review state and merge disposition.
+the PR was marked ready for review and merged at `2026-11-03T19:47:05Z`.
+Merge commit
+[`54682cfd312dc8c7935e926539811cfc29ea6568`](https://github.com/halvrenofviryel/phionyx-research/commit/54682cfd312dc8c7935e926539811cfc29ea6568)
+has the previous public `main` and exact reviewed head
+`7010b6d699f82a8719ed1d7269f5bfdb07089238` as parents. The merge-triggered CI,
+claim-language gate and research-artifact integrity workflow all passed. The live
+PR is the authority for the event and checks.
 
-The public branch and PR do not establish external reproduction, adoption,
-standards endorsement or any stronger technical claim. They do not authorize the
-separate B2/B3 publication unit, H2 submission, outreach, release or merge. The
+The public merge does not establish external reproduction, adoption, standards
+endorsement or any stronger technical claim. It does not authorize the separate
+B2/B3 publication unit, H2 submission, outreach or release. The
 [prepublication review](PREPUBLICATION_REVIEW_2026-11-03.md) is retained as the
-historical approval snapshot; the current merge gate is recorded here and in the
-live PR.
+historical approval snapshot; its pre-merge flags are not current lifecycle
+state. Dedicated release/DOI and external communication remain separate gates.

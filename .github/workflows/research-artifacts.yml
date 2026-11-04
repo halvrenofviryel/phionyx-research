@@ -16,6 +16,7 @@ on:
       - "docs/external-replication/**"
       - "experiments/ietf/acder02-control-benchmark/**"
       - "reports/external-replication/**"
+      - "studies/control-evidence-2026-11/**"
       - "tools/build_prepublication_manifest.py"
       - "tools/verify_prepublication_candidate.py"
   pull_request:
@@ -33,6 +34,7 @@ on:
       - "docs/external-replication/**"
       - "experiments/ietf/acder02-control-benchmark/**"
       - "reports/external-replication/**"
+      - "studies/control-evidence-2026-11/**"
       - "tools/build_prepublication_manifest.py"
       - "tools/verify_prepublication_candidate.py"
 
@@ -45,7 +47,7 @@ concurrency:
 
 jobs:
   verify:
-    name: verify frozen research packet
+    name: verify published research packet
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
@@ -67,8 +69,28 @@ jobs:
             sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
           fi
 
-      - name: Verify publication state, source ancestry and exact manifest
+      - name: Verify publication state, source ancestry and sealed manifest
         run: python3 tools/verify_prepublication_candidate.py
+
+      - name: Check release metadata syntax
+        run: |
+          python3 -m json.tool studies/control-evidence-2026-11/codemeta.json >/dev/null
+          python3 -m json.tool studies/control-evidence-2026-11/zenodo.json >/dev/null
+
+      - name: Build and verify the deterministic study archive twice
+        run: |
+          first="${RUNNER_TEMP}/control-evidence-release-a"
+          second="${RUNNER_TEMP}/control-evidence-release-b"
+          archive="control-evidence-study-v1.0.0.tar.gz"
+          manifest="control-evidence-study-v1.0.0.manifest.json"
+          checksum="control-evidence-study-v1.0.0.tar.gz.sha256"
+          python3 studies/control-evidence-2026-11/build_release.py --out-dir "$first"
+          python3 studies/control-evidence-2026-11/build_release.py --out-dir "$second"
+          cmp "$first/$archive" "$second/$archive"
+          cmp "$first/$manifest" "$second/$manifest"
+          cmp "$first/$checksum" "$second/$checksum"
+          python3 studies/control-evidence-2026-11/verify_release.py "$first/$archive"
+          python3 studies/control-evidence-2026-11/verify_release.py "$second/$archive"
 
       - name: Reproduce the frozen K1 comparison and its 44 tests
         run: >-

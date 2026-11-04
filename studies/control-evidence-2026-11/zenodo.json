@@ -1,0 +1,42 @@
+{
+  "title": "Control Delivery Is Not Execution: A Reproducible AIREP Boundary Study",
+  "upload_type": "dataset",
+  "description": "A reproducible author-side study separating control request, receipt, execution and observed effect claims. The deposit combines a frozen 24-case synthetic ACK-promotion comparison with an offline AIREP v0.2.0-beta.1 reference lane and six controlled LangGraph runtime scenarios. It does not establish third-party validation, production safety, same-version external interoperability, adoption or standards endorsement.",
+  "creators": [
+    {
+      "name": "Abak, Ali Toygar",
+      "orcid": "0009-0002-3718-4010"
+    }
+  ],
+  "publication_date": "2026-11-03",
+  "version": "1.0.0",
+  "access_right": "open",
+  "license": "other-open",
+  "keywords": [
+    "AI runtime evidence",
+    "control delivery",
+    "execution evidence",
+    "observed effects",
+    "AIREP",
+    "LangGraph",
+    "reproducibility"
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "https://doi.org/10.48550/arXiv.2608.21363",
+      "relation": "references",
+      "resource_type": "publication-article"
+    },
+    {
+      "identifier": "https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/releases/tag/v0.2.0-beta.1",
+      "relation": "references",
+      "resource_type": "software"
+    },
+    {
+      "identifier": "https://github.com/halvrenofviryel/phionyx-research/commit/54682cfd312dc8c7935e926539811cfc29ea6568",
+      "relation": "isSupplementTo",
+      "resource_type": "dataset"
+    }
+  ],
+  "notes": "The archive contains multiple upstream dependency and source licences. See docs/external-replication/LICENSE_AND_DATA_HANDLING.md and the included licence inventory; the single metadata licence field does not replace per-file terms. Dedicated DOI not yet issued."
+}
