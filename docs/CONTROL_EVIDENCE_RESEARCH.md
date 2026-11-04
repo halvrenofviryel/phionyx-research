@@ -91,8 +91,11 @@ objects.
 5. Use the blank external submission template only for a genuinely separate run
    or implementation; author-side reruns remain author-side evidence.
 
-The source packet, versioned release and Zenodo DOI have been published. Outreach
-and standards submission remain separate owner decisions. The historical
+The source packet, versioned release and Zenodo DOI have been published. The
+bounded technical explanation is available as a
+[Hugging Face Community Article](https://huggingface.co/blog/phionyx/when-an-ai-agent-says-stop-what-evidence-proves-th).
+This author-side communication does not change the evidence grade. IETF
+submission remains a separate user-performed action. The historical
 prepublication scope is retained in
 [PREPUBLICATION_REVIEW_2026-11-03.md](PREPUBLICATION_REVIEW_2026-11-03.md), while
 the current publication event is recorded in [PUBLICATION_STATUS.md](PUBLICATION_STATUS.md).
