@@ -5,14 +5,14 @@ message: >-
 title: "Control Delivery Is Not Execution: A Reproducible AIREP Boundary Study"
 type: dataset
 version: 1.0.0
-date-released: 2026-11-03
+date-released: 2026-11-04
+doi: 10.5281/zenodo.23960852
 authors:
   - family-names: Abak
     given-names: Ali Toygar
     orcid: "https://orcid.org/0009-0002-3718-4010"
 repository-code: "https://github.com/halvrenofviryel/phionyx-research"
-url: "https://github.com/halvrenofviryel/phionyx-research/tree/main/studies/control-evidence-2026-11"
-license: AGPL-3.0-or-later
+url: "https://doi.org/10.5281/zenodo.23960852"
 keywords:
   - AI runtime evidence
   - control delivery
@@ -35,7 +35,8 @@ preferred-citation:
       orcid: "https://orcid.org/0009-0002-3718-4010"
   year: 2026
   version: 1.0.0
-  url: "https://github.com/halvrenofviryel/phionyx-research/commit/54682cfd312dc8c7935e926539811cfc29ea6568"
+  doi: 10.5281/zenodo.23960852
+  url: "https://doi.org/10.5281/zenodo.23960852"
 references:
   - type: article
     title: "AIREP: A Protocol for Per-Decision Evidence in AI Runtime Governance"

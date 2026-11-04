@@ -4,8 +4,10 @@
 [PR #108](https://github.com/halvrenofviryel/phionyx-research/pull/108), merge
 commit [`54682cfd312dc8c7935e926539811cfc29ea6568`](https://github.com/halvrenofviryel/phionyx-research/commit/54682cfd312dc8c7935e926539811cfc29ea6568).
 The merge makes the author-side packet publicly inspectable; it does not turn it
-into independent evidence. A dedicated versioned research release and DOI have
-not yet been issued.
+into independent evidence. Version `1.0.0` was subsequently published from exact
+release merge commit `a5956f6d575c431745f902a242b1a25262fed89d` as a
+[GitHub release](https://github.com/halvrenofviryel/phionyx-research/releases/tag/control-evidence-study-v1.0.0)
+and [Zenodo record](https://zenodo.org/records/23960852).
 
 This study examines one practical distinction: a control request,
 its receipt, its enforcement, its execution and an observed effect are separate
@@ -69,8 +71,9 @@ the [external impact ledger](EXTERNAL_IMPACT_LEDGER.md).
 
 ## Cite and reuse
 
-Until the dedicated study DOI is issued, cite the immutable merge commit above
-and identify the exact AIREP target as `v0.2.0-beta.1` commit
+For the experimental results, cite version DOI
+[`10.5281/zenodo.23960852`](https://doi.org/10.5281/zenodo.23960852) and identify
+the exact AIREP target as `v0.2.0-beta.1` commit
 `8a6c01ecce457aa94330c0ed7219e4c56ebfe771`. The study-specific citation files
 and deposit metadata are under
 [`studies/control-evidence-2026-11/`](../studies/control-evidence-2026-11/).
@@ -88,8 +91,8 @@ objects.
 5. Use the blank external submission template only for a genuinely separate run
    or implementation; author-side reruns remain author-side evidence.
 
-The source packet has been merged. A dedicated release/DOI, outreach and standards
-submission remain separate owner decisions. The historical prepublication scope
-is retained in
+The source packet, versioned release and Zenodo DOI have been published. Outreach
+and standards submission remain separate owner decisions. The historical
+prepublication scope is retained in
 [PREPUBLICATION_REVIEW_2026-11-03.md](PREPUBLICATION_REVIEW_2026-11-03.md), while
 the current publication event is recorded in [PUBLICATION_STATUS.md](PUBLICATION_STATUS.md).

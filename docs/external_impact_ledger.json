@@ -1,7 +1,7 @@
 {
   "schema": "phionyx-external-impact-ledger-v3",
   "updated": "2026-11-04",
-  "publication_status": "MERGED_TO_MAIN",
+  "publication_status": "RELEASE_AND_ZENODO_PUBLISHED",
   "publication_event": {
     "repository": "halvrenofviryel/phionyx-research",
     "branch": "codex/prepublication-k1-k5",
@@ -11,7 +11,13 @@
     "merge_performed": true,
     "merge_commit": "54682cfd312dc8c7935e926539811cfc29ea6568",
     "merged_at": "2026-11-03T19:47:05Z",
-    "release_performed": false,
+    "release_performed": true,
+    "release_tag": "control-evidence-study-v1.0.0",
+    "release_commit": "a5956f6d575c431745f902a242b1a25262fed89d",
+    "release_url": "https://github.com/halvrenofviryel/phionyx-research/releases/tag/control-evidence-study-v1.0.0",
+    "zenodo_record": "https://zenodo.org/records/23960852",
+    "version_doi": "10.5281/zenodo.23960852",
+    "concept_doi": "10.5281/zenodo.23960851",
     "outreach_performed": false,
     "standards_submission_performed": false
   },

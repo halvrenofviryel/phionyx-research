@@ -1,14 +1,14 @@
 {
   "title": "Control Delivery Is Not Execution: A Reproducible AIREP Boundary Study",
   "upload_type": "dataset",
-  "description": "A reproducible author-side study separating control request, receipt, execution and observed effect claims. The deposit combines a frozen 24-case synthetic ACK-promotion comparison with an offline AIREP v0.2.0-beta.1 reference lane and six controlled LangGraph runtime scenarios. It does not establish third-party validation, production safety, same-version external interoperability, adoption or standards endorsement.",
+  "description": "This dataset and software artifact evaluates a narrow AIREP boundary: whether successful evidence delivery alone establishes that a consumer executed, interpreted, or enforced the delivered control. Across reproducible consumer variants, the study records delivery outcomes separately from consumer-side execution evidence. The bounded result is that delivery success establishes transport to the consumer boundary, while execution and enforcement require independent consumer-side evidence. The release does not claim universal interoperability, production security, or conformance of arbitrary consumers.",
   "creators": [
     {
       "name": "Abak, Ali Toygar",
       "orcid": "0009-0002-3718-4010"
     }
   ],
-  "publication_date": "2026-11-03",
+  "publication_date": "2026-11-04",
   "version": "1.0.0",
   "access_right": "open",
   "license": "other-open",
@@ -23,9 +23,14 @@
   ],
   "related_identifiers": [
     {
+      "identifier": "https://github.com/halvrenofviryel/phionyx-research/releases/tag/control-evidence-study-v1.0.0",
+      "relation": "isIdenticalTo",
+      "resource_type": "dataset"
+    },
+    {
       "identifier": "https://doi.org/10.48550/arXiv.2608.21363",
       "relation": "references",
-      "resource_type": "publication-article"
+      "resource_type": "publication-preprint"
     },
     {
       "identifier": "https://github.com/halvrenofviryel/ai-runtime-evidence-protocol/releases/tag/v0.2.0-beta.1",
@@ -33,10 +38,10 @@
       "resource_type": "software"
     },
     {
-      "identifier": "https://github.com/halvrenofviryel/phionyx-research/commit/54682cfd312dc8c7935e926539811cfc29ea6568",
-      "relation": "isSupplementTo",
-      "resource_type": "dataset"
+      "identifier": "https://github.com/halvrenofviryel/phionyx-research/commit/a5956f6d575c431745f902a242b1a25262fed89d",
+      "relation": "isDerivedFrom",
+      "resource_type": "software"
     }
   ],
-  "notes": "The archive contains multiple upstream dependency and source licences. See docs/external-replication/LICENSE_AND_DATA_HANDLING.md and the included licence inventory; the single metadata licence field does not replace per-file terms. Dedicated DOI not yet issued."
+  "notes": "Published as Zenodo record 23960852 with version DOI 10.5281/zenodo.23960852 and concept DOI 10.5281/zenodo.23960851. The archive contains multiple upstream dependency and source licences. See docs/external-replication/LICENSE_AND_DATA_HANDLING.md and the included licence inventory; the single metadata licence field does not replace per-file terms."
 }
