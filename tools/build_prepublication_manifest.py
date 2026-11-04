@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build the exact file manifest used by the public PR review."""
+"""Rebuild the sealed PR #108 review manifest from its candidate commit."""
 
 from __future__ import annotations
 
@@ -11,18 +11,20 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 BASE = "275b871349721a8c917691d457c4a6270fe1028f"
+SEALED_CANDIDATE = "7010b6d699f82a8719ed1d7269f5bfdb07089238"
 OUTPUT = ROOT / "docs/PREPUBLICATION_FILE_MANIFEST.json"
+
+
+def git_bytes(path: str) -> bytes:
+    return subprocess.check_output(
+        ["git", "show", f"{SEALED_CANDIDATE}:{path}"], cwd=ROOT
+    )
 
 
 def main() -> None:
     changed = set(
         subprocess.check_output(
-            ["git", "diff", "--name-only", BASE, "--"], cwd=ROOT, text=True
-        ).splitlines()
-    )
-    changed.update(
-        subprocess.check_output(
-            ["git", "ls-files", "--others", "--exclude-standard"],
+            ["git", "diff", "--name-only", BASE, SEALED_CANDIDATE, "--"],
             cwd=ROOT,
             text=True,
         ).splitlines()
@@ -31,10 +33,7 @@ def main() -> None:
     for name in sorted(changed):
         if name == OUTPUT.relative_to(ROOT).as_posix():
             continue
-        path = ROOT / name
-        if not path.is_file():
-            raise SystemExit(f"manifest supports files only: {name}")
-        data = path.read_bytes()
+        data = git_bytes(name)
         rows.append(
             {
                 "path": name,
