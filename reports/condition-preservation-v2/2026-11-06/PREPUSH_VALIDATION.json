@@ -1,0 +1,18 @@
+{
+  "scope": "Pre-push rerun; pending additions are evidence and CI only. No behavior source changed.",
+  "source_code_commit": "a327dbd6fe1a2d7bda6f1ffb46e45fd61af391cd",
+  "tests": [
+    {
+      "log": "prepush-k1-frozen.txt",
+      "name": "k1-frozen",
+      "passed": 44,
+      "sha256": "50b4f0f894fa1585a75614264ccc9d3a90ab891a4321f0c81f6e636faeb6570a"
+    },
+    {
+      "log": "prepush-k1-v2.txt",
+      "name": "k1-v2",
+      "passed": 10,
+      "sha256": "6e9200f1622a5bd613506ae35b68bf0a0907706c9375038e24842a960102e673"
+    }
+  ]
+}
