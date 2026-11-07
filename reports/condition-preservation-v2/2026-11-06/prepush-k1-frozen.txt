@@ -1,0 +1,49 @@
+test_aggregate_query_uses_its_own_cutoff (test_evaluate.EvaluatorTests.test_aggregate_query_uses_its_own_cutoff) ... ok
+test_baselines_do_not_need_acder_population_reconciliation (test_evaluate.EvaluatorTests.test_baselines_do_not_need_acder_population_reconciliation) ... ok
+test_content_substitution_retained_and_fails_structure (test_evaluate.EvaluatorTests.test_content_substitution_retained_and_fails_structure) ... ok
+test_contradictory_receipt_is_not_supported (test_evaluate.EvaluatorTests.test_contradictory_receipt_is_not_supported) ... ok
+test_digest_checks_exact_bytes_not_reserialization (test_evaluate.EvaluatorTests.test_digest_checks_exact_bytes_not_reserialization) ... ok
+test_duplicate_envelope_identity_is_rejected (test_evaluate.EvaluatorTests.test_duplicate_envelope_identity_is_rejected) ... ok
+test_each_scenario_deterministic_scoped_and_conserved (test_evaluate.EvaluatorTests.test_each_scenario_deterministic_scoped_and_conserved) ... ok
+test_effect_and_enforcement_scope_not_interchangeable (test_evaluate.EvaluatorTests.test_effect_and_enforcement_scope_not_interchangeable) ... ok
+test_effect_boundary_and_method_are_not_substituted (test_evaluate.EvaluatorTests.test_effect_boundary_and_method_are_not_substituted) ... ok
+test_effect_positive_then_missing_mutation (test_evaluate.EvaluatorTests.test_effect_positive_then_missing_mutation) ... ok
+test_empty_targets_cannot_bypass_observer_binding (test_evaluate.EvaluatorTests.test_empty_targets_cannot_bypass_observer_binding) ... ok
+test_instruction_id_is_not_lookup_of_answer (test_evaluate.EvaluatorTests.test_instruction_id_is_not_lookup_of_answer) ... ok
+test_missing_issuer_does_not_erase_receiver (test_evaluate.EvaluatorTests.test_missing_issuer_does_not_erase_receiver) ... ok
+test_missing_receiver_is_not_failed_delivery (test_evaluate.EvaluatorTests.test_missing_receiver_is_not_failed_delivery) ... ok
+test_no_ack_does_not_imply_no_delivery (test_evaluate.EvaluatorTests.test_no_ack_does_not_imply_no_delivery) ... ok
+test_ordering_cutoff_and_authority_are_preserved (test_evaluate.EvaluatorTests.test_ordering_cutoff_and_authority_are_preserved) ... ok
+test_output_mount_rejects_preexisting_data (test_evaluate.EvaluatorTests.test_output_mount_rejects_preexisting_data) ... ok
+test_positive_effect_and_counterexample_do_not_yield_support (test_evaluate.EvaluatorTests.test_positive_effect_and_counterexample_do_not_yield_support) ... ok
+test_positive_entry_refutes_only_exact_no_entry_window (test_evaluate.EvaluatorTests.test_positive_entry_refutes_only_exact_no_entry_window) ... ok
+test_semantic_missing_provenance_is_not_refutation (test_evaluate.EvaluatorTests.test_semantic_missing_provenance_is_not_refutation) ... ok
+test_semantic_source_authority_preserved (test_evaluate.EvaluatorTests.test_semantic_source_authority_preserved) ... ok
+test_target_substitution_cannot_confirm_receipt (test_evaluate.EvaluatorTests.test_target_substitution_cannot_confirm_receipt) ... ok
+test_unclosed_resolution_no_vacuous_success (test_evaluate.EvaluatorTests.test_unclosed_resolution_no_vacuous_success) ... ok
+test_valid_signature_does_not_imply_execution (test_evaluate.EvaluatorTests.test_valid_signature_does_not_imply_execution) ... ok
+test_actual_subprocess_loader_and_first_result_preservation (test_score.CLITests.test_actual_subprocess_loader_and_first_result_preservation) ... ok
+test_duplicate_json_keys_rejected (test_score.CLITests.test_duplicate_json_keys_rejected) ... ok
+test_loader_does_not_open_neighbor_subtree (test_score.CLITests.test_loader_does_not_open_neighbor_subtree) ... ok
+test_loader_refuses_case_identity_or_claim_inventory_mismatch (test_score.CLITests.test_loader_refuses_case_identity_or_claim_inventory_mismatch) ... ok
+test_missing_claim_fails_without_output_artifact (test_score.CLITests.test_missing_claim_fails_without_output_artifact) ... ok
+test_non_object_author_file_is_an_input_error (test_score.CLITests.test_non_object_author_file_is_an_input_error) ... ok
+test_aggregate_prose_unscored_and_counts_type_sensitive (test_score.MetricTests.test_aggregate_prose_unscored_and_counts_type_sensitive) ... ok
+test_ambiguity_and_latent_types_are_explicit (test_score.MetricTests.test_ambiguity_and_latent_types_are_explicit) ... ok
+test_ambiguity_excludes_only_one_claim_not_structural_case (test_score.MetricTests.test_ambiguity_excludes_only_one_claim_not_structural_case) ... ok
+test_condition_order_is_not_a_difference (test_score.MetricTests.test_condition_order_is_not_a_difference) ... ok
+test_fixed_applicability_prevents_na_denominator_escape (test_score.MetricTests.test_fixed_applicability_prevents_na_denominator_escape) ... ok
+test_fixed_nonapplicability_and_integrity_are_distinct (test_score.MetricTests.test_fixed_nonapplicability_and_integrity_are_distinct) ... ok
+test_frozen_numerators_distinguish_epistemic_and_latent_errors (test_score.MetricTests.test_frozen_numerators_distinguish_epistemic_and_latent_errors) ... ok
+test_input_objects_are_not_mutated (test_score.MetricTests.test_input_objects_are_not_mutated) ... ok
+test_missing_duplicate_unknown_and_malformed_claims_fail_closed (test_score.MetricTests.test_missing_duplicate_unknown_and_malformed_claims_fail_closed) ... ok
+test_no_truth_is_not_false_and_unknown_is_not_semantic_error (test_score.MetricTests.test_no_truth_is_not_false_and_unknown_is_not_semantic_error) ... ok
+test_qualification_and_conditions_scored_independently (test_score.MetricTests.test_qualification_and_conditions_scored_independently) ... ok
+test_split_kind_and_total_partitions (test_score.MetricTests.test_split_kind_and_total_partitions) ... ok
+test_structural_missing_fields_and_wrong_target_remain_visible (test_score.MetricTests.test_structural_missing_fields_and_wrong_target_remain_visible) ... ok
+test_subset_of_comparators_is_explicitly_incomplete (test_score.MetricTests.test_subset_of_comparators_is_explicitly_incomplete) ... ok
+
+----------------------------------------------------------------------
+Ran 44 tests in 0.197s
+
+OK

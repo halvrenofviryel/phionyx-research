@@ -1,0 +1,15 @@
+test_all_known_claim_states_qualifications_and_accounting_unchanged (test_conditions.Conditions.test_all_known_claim_states_qualifications_and_accounting_unchanged) ... ok
+test_conflicting_positive_negative_keeps_mapping_cause (test_conditions.Conditions.test_conflicting_positive_negative_keeps_mapping_cause) ... ok
+test_invalid_and_substituted_receiver_causes_accumulate (test_conditions.Conditions.test_invalid_and_substituted_receiver_causes_accumulate) ... ok
+test_known_missing_receiver_and_obligation_remain_distinct (test_conditions.Conditions.test_known_missing_receiver_and_obligation_remain_distinct) ... ok
+test_known_refusal_keeps_both_causes_and_references (test_conditions.Conditions.test_known_refusal_keeps_both_causes_and_references) ... ok
+test_label_renaming_and_record_order_do_not_control_decision (test_conditions.Conditions.test_label_renaming_and_record_order_do_not_control_decision) ... ok
+test_native_outcomes_crossed_with_mapping_loss (test_conditions.Conditions.test_native_outcomes_crossed_with_mapping_loss) ... ok
+test_other_target_not_mistaken_for_missing_event_globally (test_conditions.Conditions.test_other_target_not_mistaken_for_missing_event_globally) ... ok
+test_query_cutoff_uses_v2_cause_collection (test_conditions.Conditions.test_query_cutoff_uses_v2_cause_collection) ... ok
+test_unrelated_transform_cannot_supply_cause (test_conditions.Conditions.test_unrelated_transform_cannot_supply_cause) ... ok
+
+----------------------------------------------------------------------
+Ran 10 tests in 0.010s
+
+OK

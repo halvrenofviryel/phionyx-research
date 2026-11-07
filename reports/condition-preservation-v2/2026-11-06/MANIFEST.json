@@ -1,0 +1,13 @@
+{
+  "files": {
+    "PREPUSH_VALIDATION.json": "a457f455d16194af4cdb56ac33d4881bd303ab923ef7e57d89743bb769b5e7e3",
+    "README.md": "233783fa9a36bdf34ecf9d2bf66a58e686147d8c9ad2cb6c26cd954127c2be02",
+    "comparison.json": "3e4a8001d303dd8bb8f14344ef43d0bfc6edd75899c7ccd1c64370972e2f6f52",
+    "frozen-tests.txt": "f235dd74aa1fc88cd96772d03fbb01fcc387db1072ecdd12409ad88156965127",
+    "predictions.json": "234af114e78d9e98bab1a05decd1b13e3002be45244d462f1a10f097763119fc",
+    "prepush-k1-frozen.txt": "50b4f0f894fa1585a75614264ccc9d3a90ab891a4321f0c81f6e636faeb6570a",
+    "prepush-k1-v2.txt": "6e9200f1622a5bd613506ae35b68bf0a0907706c9375038e24842a960102e673",
+    "v2-tests.txt": "b3422b145032ac3a56ce40c0e8bbe6f04030fe26a1ce1f5388afec7a5b7cbee0"
+  },
+  "measured_source_commit": "a327dbd6fe1a2d7bda6f1ffb46e45fd61af391cd"
+}
